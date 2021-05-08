@@ -31,7 +31,7 @@ public class TestSimpleController extends BaseControllerTest {
 	public void testGet() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("GET");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!</body></html>", writer.toString());
@@ -41,7 +41,7 @@ public class TestSimpleController extends BaseControllerTest {
 	public void testPost() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("POST");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("/index.jsp", MockResponse.getRequestDispatcheResult(request));
@@ -53,7 +53,7 @@ public class TestSimpleController extends BaseControllerTest {
 		when(request.getMethod()).thenReturn("PUT");
 		os = MockResponse.streamFactory(response);
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertNotNull("servletOutputStream.getContent：" + os.toString());
@@ -64,7 +64,7 @@ public class TestSimpleController extends BaseControllerTest {
 	public void testDelete() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("DELETE");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("{\"name\":\"Jack\"}", writer.toString());

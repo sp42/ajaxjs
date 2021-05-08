@@ -48,7 +48,7 @@ public class TestSubPathController extends BaseControllerTest {
 		response = mock(HttpServletResponse.class);
 		writer = MockResponse.writerFactory(response);
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!</body></html>", writer.toString());
@@ -59,7 +59,7 @@ public class TestSubPathController extends BaseControllerTest {
 		when(request.getMethod()).thenReturn("GET");
 		when(request.getParameter("name")).thenReturn("Jack");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello Jack</body></html>", writer.toString());
@@ -70,7 +70,7 @@ public class TestSubPathController extends BaseControllerTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(request.getParameter("name")).thenReturn("Jack");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello Jack</body></html>", writer.toString());
@@ -81,7 +81,7 @@ public class TestSubPathController extends BaseControllerTest {
 		when(request.getMethod()).thenReturn("PUT");
 		when(request.getParameter("name")).thenReturn("Jack");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("hi,Jack", writer.toString());
@@ -91,7 +91,7 @@ public class TestSubPathController extends BaseControllerTest {
 	public void testDelete() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("DELETE");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("{\"name\":\"Jack\"}", writer.toString());

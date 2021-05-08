@@ -30,7 +30,7 @@ public class TestOverrideController extends TestSimpleController {
 	public void testGet() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("GET");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 		
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!(@Override)</body></html>", writer.toString());
@@ -42,7 +42,7 @@ public class TestOverrideController extends TestSimpleController {
 	public void testPost() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("POST");
 		
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 		
 //		assertEquals("hihi", writer.toString());

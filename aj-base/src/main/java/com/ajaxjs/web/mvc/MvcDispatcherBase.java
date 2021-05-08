@@ -40,6 +40,7 @@ public class MvcDispatcherBase {
 	public static void init(ServletContext ctx) {
 		for (Class<?> clz : ComponentMgr.clzs) {
 			if (IController.class.isAssignableFrom(clz)) {
+				System.out.println(clz);
 				add((Class<? extends IController>) clz);// 添加到集合中去
 			}
 		}
@@ -47,7 +48,7 @@ public class MvcDispatcherBase {
 
 	private static Boolean isEnableSecurityIO;
 
-	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> dispatcher = (req, resp) -> {
+	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> DISPATCHER = (req, resp) -> {
 		if (isEnableSecurityIO == null)
 			isEnableSecurityIO = ConfigService.getValueAsBool("security.isEnableSecurityIO");
 
@@ -57,7 +58,7 @@ public class MvcDispatcherBase {
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
 
-//		LOGGER.info("uri: {0}", uri);
+		LOGGER.info("uri: {0}", uri);
 		try {
 			action = IController.findTreeByPath(uri);
 		} catch (Throwable e) {

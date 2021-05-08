@@ -46,13 +46,13 @@ public class TestController {
 		// GET List
 		when(req.getMethod()).thenReturn("GET");
 
-		MvcDispatcherBase.dispatcher.apply(req, resp);
+		MvcDispatcherBase.DISPATCHER.apply(req, resp);
 		chain.doFilter(req, resp);
 		assertEquals("<html><meta charset=\"utf-8\" /><body>hihi</body></html>", writer.toString());
 
 		// GET Info
 		when(req.getRequestURI()).thenReturn("/ajaxjs-web/news/12");// 配置请求路径
-		MvcDispatcherBase.dispatcher.apply(req, resp);
+		MvcDispatcherBase.DISPATCHER.apply(req, resp);
 		chain.doFilter(req, resp);
 
 		assertEquals("home.jsp", MockResponse.getRequestDispatcheResult(req));

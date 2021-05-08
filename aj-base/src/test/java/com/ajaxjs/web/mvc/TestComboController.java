@@ -32,7 +32,7 @@ public class TestComboController extends BaseControllerTest {
 	public void testGet_main() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("GET");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("hihi", writer.toString());
@@ -42,7 +42,7 @@ public class TestComboController extends BaseControllerTest {
 	public void testPost() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("POST");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 	}
 
@@ -60,7 +60,7 @@ public class TestComboController extends BaseControllerTest {
 	public void testDelete() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("DELETE");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!</body></html>", writer.toString());
@@ -71,7 +71,7 @@ public class TestComboController extends BaseControllerTest {
 		HttpServletRequest request = MockRequest.mockRequest("/ajaxjs-web", "/combo/mvc");
 		when(request.getMethod()).thenReturn("GET");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("index.jsp", MockResponse.getRequestDispatcheResult(request));
@@ -94,7 +94,7 @@ public class TestComboController extends BaseControllerTest {
 	public void testGet_Person() throws ServletException, IOException {
 		when(request2.getMethod()).thenReturn("GET");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("just person", writer2.toString());
@@ -105,7 +105,7 @@ public class TestComboController extends BaseControllerTest {
 		when(request2.getMethod()).thenReturn("POST");
 		when(request2.getParameter("name")).thenReturn("Jack");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("{\"name\":\"Jack\"}", writer2.toString());
@@ -123,7 +123,7 @@ public class TestComboController extends BaseControllerTest {
 		when(request.getParameter("name")).thenReturn("Jack");
 		when(request.getParameter("word")).thenReturn("Love");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("Jack Love_88", writer.toString());
@@ -135,7 +135,7 @@ public class TestComboController extends BaseControllerTest {
 		when(request2.getParameter("name")).thenReturn("Jack");
 		when(request2.getParameter("age")).thenReturn("28");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("{\"name\":\"Jack\"}", writer2.toString());
@@ -153,7 +153,7 @@ public class TestComboController extends BaseControllerTest {
 		when(request.getParameter("name")).thenReturn("Jack");
 		when(request.getParameter("age")).thenReturn("28");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("{\"name\":\"Jack\"}", writer.toString());

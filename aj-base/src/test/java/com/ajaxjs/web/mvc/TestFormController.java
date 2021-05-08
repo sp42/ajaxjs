@@ -35,7 +35,7 @@ public class TestFormController extends BaseControllerTest {
 		when(request.getMethod()).thenReturn("POST");
 		when(request.getParameter("username")).thenReturn("Jack");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Jack</body></html>", writer.toString());
@@ -57,7 +57,7 @@ public class TestFormController extends BaseControllerTest {
 		when(request.getParameter("username")).thenReturn("Jack");
 		when(request.getParameter("age")).thenReturn("28");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Jack</body></html>", writer.toString());
@@ -73,7 +73,7 @@ public class TestFormController extends BaseControllerTest {
 		map.put("name", new String[] { "Jack" });
 		when(request.getParameterMap()).thenReturn(map);
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Jack</body></html>", writer.toString());

@@ -39,7 +39,7 @@ public class TestTransaction extends BaseControllerTest {
 
 		when(request.getMethod()).thenReturn("GET");
 		
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 		
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Foo</body></html>", writer.toString());
@@ -51,7 +51,7 @@ public class TestTransaction extends BaseControllerTest {
 
 		when(request.getMethod()).thenReturn("GET");
 		
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 		
 		assertEquals("", writer.toString());

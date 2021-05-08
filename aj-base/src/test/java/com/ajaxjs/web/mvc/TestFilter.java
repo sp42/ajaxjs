@@ -30,7 +30,7 @@ public class TestFilter extends BaseControllerTest {
 	public void testFilter() throws IOException, ServletException {
 		when(request.getMethod()).thenReturn("GET");
 		
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 		
 		assertNotNull(writer.toString());
@@ -42,7 +42,7 @@ public class TestFilter extends BaseControllerTest {
 		when(request.getMethod()).thenReturn("GET");
 //		when(request.getParameter("token")).thenReturn(TokenService.getTimeStampToken(ConfigService.getValueAsString("System.api.AES_Key")));
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 		
 		assertNotNull(writer.toString());

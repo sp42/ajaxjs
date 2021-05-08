@@ -46,7 +46,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 		response = mock(HttpServletResponse.class);
 		writer = MockResponse.writerFactory(response);
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello World!</body></html>", writer.toString());
@@ -61,7 +61,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		StringWriter writer = MockResponse.writerFactory(response);
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>MyTopPath</body></html>", writer.toString());
@@ -76,7 +76,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		StringWriter writer = MockResponse.writerFactory(response);
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>Hello Jack</body></html>", writer.toString());
@@ -86,7 +86,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 	public void testIdGet() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("GET");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>showID: 123,Jack</body></html>", writer.toString());
@@ -96,7 +96,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 	public void testPost() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("POST");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>ID:123</body></html>", writer.toString());
@@ -106,7 +106,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 	public void testPut() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("PUT");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("ID:123", writer.toString());
@@ -116,7 +116,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 	public void testDelete() throws ServletException, IOException {
 		when(request.getMethod()).thenReturn("DELETE");
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("{\"showJSON\":\"Jack\"}", writer.toString());
@@ -131,7 +131,7 @@ public class TestSubPath_Id_Controller extends BaseControllerTest {
 		HttpServletResponse response = mock(HttpServletResponse.class);
 		StringWriter writer = MockResponse.writerFactory(response);
 
-		MvcDispatcherBase.dispatcher.apply(request, response);
+		MvcDispatcherBase.DISPATCHER.apply(request, response);
 		chain.doFilter(request, response);
 
 		assertEquals("<html><meta charset=\"utf-8\" /><body>show_shuPath_ID: 123,Jack</body></html>", writer.toString());

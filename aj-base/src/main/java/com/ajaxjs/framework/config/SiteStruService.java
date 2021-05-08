@@ -22,7 +22,6 @@ import java.util.function.Consumer;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.framework.Application;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.util.CommonUtil;
@@ -91,17 +90,13 @@ public class SiteStruService implements IComponent {
 		return list;
 	}
 
-	private final static Consumer<ServletContext> initialized = ctx -> {
+	public final static Consumer<ServletContext> INITIALIZED = ctx -> {
 		// 加载网站结构
 		loadSiteStru(ctx);
 
 		if (STRU != null && STRU.isLoaded())
 			ctx.setAttribute("SITE_STRU", new SiteStruService()); // 所有网站结构保存在这里
 	};
-
-	static {
-		Application.onServletStartUp.add(initialized);
-	}
 
 	/**
 	 * 加载网站结构
