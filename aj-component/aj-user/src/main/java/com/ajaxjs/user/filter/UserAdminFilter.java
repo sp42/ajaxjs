@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.framework.Application;
-import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.user.role.RightConstant;
 import com.ajaxjs.user.role.RoleService;
 import com.ajaxjs.util.Encode;
@@ -20,7 +18,7 @@ import com.ajaxjs.util.Encode;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class UserAdminFilter implements IComponent {
+public class UserAdminFilter {
 	/**
 	 * 提示的 HTML
 	 */
@@ -43,7 +41,7 @@ public class UserAdminFilter implements IComponent {
 			+ "	</tr></table></div>";
 	// @formatter:on
 
-	private static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> checkAdmin = (req, resp) -> {
+	public static final BiFunction<HttpServletRequest, HttpServletResponse, Boolean> CHECK_ADMIN = (req, resp) -> {
 		String ctxPath = req.getContextPath(), uri = req.getRequestURI();
 
 		if (uri.startsWith(ctxPath + "/admin")) {
@@ -71,8 +69,4 @@ public class UserAdminFilter implements IComponent {
 
 		return true;
 	};
-
-	static {
-		Application.onRequest.add(0, checkAdmin);
-	}
 }

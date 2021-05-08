@@ -124,7 +124,7 @@ public class RoleService extends BaseService<Map<String, Object>> implements Rig
 		for (int i = 0; i < buf.length; i++)
 			System.out.print(buf[i]);
 
-		System.out.println("-->" + num);
+//		LOGGER.info("-->" + num);
 	}
 
 	/**
