@@ -149,7 +149,7 @@ public class ListMap {
 				map.put("supers", supers);
 				// supers.add(superPath + ":" + superMap.get("name"));
 			}
-			// System.out.println(map.get(id) + "@" + _level + ":" + map.get(path));
+			// LOGGER.info(map.get(id) + "@" + _level + ":" + map.get(path));
 			return true;
 		};
 

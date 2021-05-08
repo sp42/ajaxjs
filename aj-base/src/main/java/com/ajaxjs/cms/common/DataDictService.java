@@ -31,8 +31,6 @@ public class DataDictService extends BaseService<Map<String, Object>> {
 			map.put(_map.get("key").toString(), _map.get("value").toString());
 		}
 
-		System.out.println(map);
-
 		return map;
 	}
 	

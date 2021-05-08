@@ -110,7 +110,7 @@ public class JdbcHelper extends JdbcReader {
 		}, conn, sql, params);
 
 		if (sqlE.length == 1 && sqlE[0] != null) {
-//			System.out.println(Arrays.toString(sqlE));
+//			LOGGER.info(Arrays.toString(sqlE));
 			throw new RuntimeException(sqlE[0] + "");
 		}
 

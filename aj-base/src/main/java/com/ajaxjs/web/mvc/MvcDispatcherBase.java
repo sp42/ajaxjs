@@ -40,7 +40,6 @@ public class MvcDispatcherBase {
 	public static void init(ServletContext ctx) {
 		for (Class<?> clz : ComponentMgr.clzs) {
 			if (IController.class.isAssignableFrom(clz)) {
-				System.out.println(clz);
 				add((Class<? extends IController>) clz);// 添加到集合中去
 			}
 		}

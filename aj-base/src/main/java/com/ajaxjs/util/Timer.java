@@ -47,8 +47,7 @@ public class Timer {
 	public static void print() {
 		for (String key : timeMap.keySet()) {
 			Long value = timeMap.get(key), _value = timeHappenCount.get(key);
-			String str = String.format(TPL, key, value, _value, value / _value);
-			System.out.println(str);
+			String.format(TPL, key, value, _value, value / _value);
 		}
 	}
 }

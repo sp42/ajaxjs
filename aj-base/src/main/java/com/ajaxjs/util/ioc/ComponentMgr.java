@@ -65,7 +65,6 @@ public class ComponentMgr {
 		Set<Class<?>> clzs = new LinkedHashSet<>();
 
 		new EveryClass().scan(packageName, resource -> {
-//			System.out.println(resource);
 			ClassPool cp = ClassPool.getDefault();
 			// 类加载并添加 setter
 			try {
