@@ -20,7 +20,6 @@ import java.util.function.Consumer;
 import javax.servlet.ServletContext;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.Application;
 import com.ajaxjs.framework.IComponent;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.JdbcReader;
@@ -46,7 +45,7 @@ public class MysqlAutoBackup extends TimerTask implements IComponent {
 	// 时间间隔 一天时间
 	private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
 
-	private final static Consumer<ServletContext> initialized = ctx -> {
+	public final static Consumer<ServletContext> INITIALIZED = ctx -> {
 		if (Version.isDebug || !ConfigService.getValueAsBool("isEnableMySqlBackup"))
 			return;
 
@@ -77,7 +76,7 @@ public class MysqlAutoBackup extends TimerTask implements IComponent {
 	};
 
 	static {
-		Application.onServletStartUp.add(initialized);
+//		Application.onServletStartUp.add(initialized);
 	}
 
 	/**
