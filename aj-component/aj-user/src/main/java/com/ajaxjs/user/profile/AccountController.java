@@ -1,4 +1,4 @@
-package com.ajaxjs.user.profile;
+	package com.ajaxjs.user.profile;
 
 import java.util.Objects;
 import java.util.Random;
@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.common.TreeLikeService;
+import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
