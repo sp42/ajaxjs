@@ -29,6 +29,12 @@
 			<artifactId>ajaxjs-base</artifactId>
 			<version>1.2.6</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-entity</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 
 		<!-- 跨项目共享单测 -->
 		<dependency>
