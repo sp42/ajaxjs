@@ -47,6 +47,12 @@
 
  		<dependency>
 			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-entity</artifactId>
+			<version>1.0.0</version>
+			
+		</dependency>
+ 		<dependency>
+			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-workflow</artifactId>
 			<version>1.0.0</version>
 		</dependency>
