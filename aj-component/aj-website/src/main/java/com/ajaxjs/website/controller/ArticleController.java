@@ -15,7 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.ajaxjs.cms.common.TreeLikeService;
+import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.BaseService;
@@ -78,7 +78,6 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 		Map<String, Object> map = getService().findById(id);
 
 		BaseService.getNeighbor(mv, "entity_article", id);
-		getService().showInfo(mv, id);
 
 		System.out.println(new AttachmentService().findByOwner((long) map.get("uid")));
 		if (ConfigService.getValueAsBool("domain.article.attachmentDownload"))

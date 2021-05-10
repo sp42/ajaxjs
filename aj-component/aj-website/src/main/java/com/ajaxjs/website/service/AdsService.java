@@ -3,7 +3,7 @@ package com.ajaxjs.website.service;
 import java.util.List;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.common.TreeLikeService;
+import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.annotation.TableName;

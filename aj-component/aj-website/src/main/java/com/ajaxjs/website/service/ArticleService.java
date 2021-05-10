@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.common.TreeLikeService;
+import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.CommonConstant;
-import com.ajaxjs.framework.ViewObjectService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
@@ -17,10 +16,9 @@ import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.CommonUtil;
 import com.ajaxjs.util.ioc.Component;
-import com.ajaxjs.web.mvc.ModelAndView;
 
 @Component
-public class ArticleService extends BaseService<Map<String, Object>> implements ViewObjectService {
+public class ArticleService extends BaseService<Map<String, Object>> {
 	@TableName(value = "cms_article", beanClass = Map.class)
 	public interface ArticleDao extends IBaseDao<Map<String, Object>> {
 		@Select("SELECT e.id, e.name, e.createDate, e.updateDate, e.catalogId, e.intro, e.cover, e.stat FROM ${tableName} e " + WHERE_REMARK_ORDER)
@@ -88,13 +86,5 @@ public class ArticleService extends BaseService<Map<String, Object>> implements 
 		}
 
 		return list;
-	}
-
-	@Override
-	public void showList(ModelAndView mv) {
-	}
-
-	@Override
-	public void showInfo(ModelAndView mv, Long id) {
 	}
 }
