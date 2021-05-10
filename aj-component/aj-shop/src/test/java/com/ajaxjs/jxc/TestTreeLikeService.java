@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ajaxjs.cms.common.Catalog;
-import com.ajaxjs.cms.common.TreeLikeService;
+import com.ajaxjs.entity.model.Catalog;
+import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestTreeLikeService extends BaseTest {

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.ajaxjs.cms.common.TreeLikeService;
+import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.shop.dao.GoodsDao;
