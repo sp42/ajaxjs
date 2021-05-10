@@ -1,4 +1,4 @@
-package com.ajaxjs.entity;
+	package com.ajaxjs.entity;
 
 import static org.junit.Assert.assertNotNull;
 
