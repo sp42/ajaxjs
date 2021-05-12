@@ -6,8 +6,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.entity.filter.DataBaseFilter;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.IController;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
