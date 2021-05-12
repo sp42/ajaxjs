@@ -7,7 +7,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 
 import com.ajaxjs.framework.filter.CaptchaFilter;
-import com.ajaxjs.user.filter.ApiAllowRequestCheck;
+//import com.ajaxjs.user.filter.ApiAllowRequestCheck;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 
@@ -27,12 +27,12 @@ public class FilterController implements IController {
 		return "html::Hello World!";
 	}
 	
-	@GET
-	@Path("api")
-	@MvcFilter(filters = ApiAllowRequestCheck.class)
-	public String aes() {
-		return "html::Hello World!";
-	}
+//	@GET
+//	@Path("api")
+//	@MvcFilter(filters = ApiAllowRequestCheck.class)
+//	public String aes() {
+//		return "html::Hello World!";
+//	}
 
 	@POST
 	public String gotoJSP() {
