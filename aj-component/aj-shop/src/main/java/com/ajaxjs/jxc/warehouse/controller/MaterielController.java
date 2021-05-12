@@ -10,10 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.entity.filter.DataBaseFilter;
 import com.ajaxjs.entity.service.DataDictService;
 import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.jxc.Constant;
 import com.ajaxjs.jxc.base.model.Supplier;
 import com.ajaxjs.jxc.base.service.SupplierService;
