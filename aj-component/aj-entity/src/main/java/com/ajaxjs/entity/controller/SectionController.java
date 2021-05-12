@@ -11,11 +11,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.ajaxjs.entity.filter.DataBaseFilter;
 import com.ajaxjs.entity.model.Section;
 import com.ajaxjs.entity.service.SectionService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.framework.filter.DataBaseFilter;
 import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	import="java.util.*, java.sql.*,com.ajaxjs.developer.controller.DataBaseStruController,com.ajaxjs.framework.filter.DataBaseFilter,com.ajaxjs.sql.JdbcConnection"
+	import="java.util.*, java.sql.*,com.ajaxjs.developer.controller.DataBaseStruController,com.ajaxjs.entity.filter.DataBaseFilter,com.ajaxjs.sql.JdbcConnection"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="/ajaxjs" prefix="c"%>
 <%
