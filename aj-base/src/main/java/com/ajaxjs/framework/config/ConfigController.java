@@ -10,7 +10,7 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.ajaxjs.cms.common;
+package com.ajaxjs.framework.config;
 
 import java.io.File;
 import java.util.Map;
@@ -25,8 +25,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.ajaxjs.framework.BaseController;
-import com.ajaxjs.framework.config.ConfigService;
-import com.ajaxjs.framework.config.SiteStruService;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;

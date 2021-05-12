@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.model;
+package com.ajaxjs.framework;
 
 /**
  * 短信内容
