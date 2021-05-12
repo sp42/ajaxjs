@@ -3,7 +3,6 @@ package com.ajaxjs.entity.filter;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import com.ajaxjs.entity.filter.EnableTransaction;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.web.mvc.IController;
