@@ -1,4 +1,4 @@
-package com.ajaxjs.entity;
+	package com.ajaxjs.entity;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -13,11 +13,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ajaxjs.entity.service.ArticleService;
 import com.ajaxjs.entity.service.MapCRUDService.MapCRUDDao;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.website.service.ArticleService;
 
 public class TestMapCRUD {
 	@Before

@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import com.ajaxjs.TestHelper;
 import com.ajaxjs.entity.model.Catalog;
+import com.ajaxjs.entity.service.ArticleService;
 import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
 import com.ajaxjs.util.ioc.ComponentMgr;
-import com.ajaxjs.website.service.ArticleService;
 
 public class TestCatalogService {
 	static TreeLikeService catalogService;
