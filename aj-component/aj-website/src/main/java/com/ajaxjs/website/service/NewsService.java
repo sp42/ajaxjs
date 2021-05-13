@@ -1,5 +1,6 @@
 package com.ajaxjs.website.service;
 
+import com.ajaxjs.entity.service.ArticleService;
 import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.util.ioc.Component;
 

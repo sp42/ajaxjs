@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import com.ajaxjs.entity.filter.DataBaseFilter;
+import com.ajaxjs.entity.service.AttachmentService;
 import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.BaseService;
@@ -19,7 +20,6 @@ import com.ajaxjs.sql.orm.IBaseService;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
-import com.ajaxjs.website.service.AttachmentService;
 import com.ajaxjs.website.service.NewsService;
 
 @Component
