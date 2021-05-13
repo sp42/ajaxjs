@@ -29,14 +29,14 @@ import com.ajaxjs.framework.config.ConfigService;
 import com.ajaxjs.net.http.PicDownload;
 import com.ajaxjs.sql.SnowflakeIdWorker;
 import com.ajaxjs.sql.orm.PageResult;
-import com.ajaxjs.user.filter.PrivilegeFilter;
-import com.ajaxjs.user.role.RightConstant;
+//import com.ajaxjs.user.filter.PrivilegeFilter;
+//import com.ajaxjs.user.role.RightConstant;
+//import com.ajaxjs.web.mvc.filter.Authority;
 import com.ajaxjs.util.ioc.Component;
 import com.ajaxjs.util.ioc.Resource;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.web.mvc.ModelAndView;
 import com.ajaxjs.web.mvc.MvcRequest;
-import com.ajaxjs.web.mvc.filter.Authority;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Component
@@ -57,7 +57,7 @@ public class ArticleController extends BaseController<Map<String, Object>> {
 
 	@GET
 	@MvcFilter(filters = { DataBaseFilter.class })
-	@Authority(filter = PrivilegeFilter.class, value = RightConstant.ARTICLE_ONLINE)
+//	@Authority(filter = PrivilegeFilter.class, value = RightConstant.ARTICLE_ONLINE)
 	public String list(@QueryParam(START) int start, @QueryParam(LIMIT) int limit) {
 		return page("article-list");
 	}
