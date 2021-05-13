@@ -254,11 +254,11 @@ public class CommonUtil {
 				return null;
 
 			try {
-				if (DATE_PATTERN.matcher(str).matches()) 
+				if (DATE_PATTERN.matcher(str).matches())
 					return simpleDateFormatFactory(DATE_FORMAT).parse(str);
-				 else if (DATE_YEAR_PATTERN.matcher(str).matches()) 
+				else if (DATE_YEAR_PATTERN.matcher(str).matches())
 					return simpleDateFormatFactory(DATE_FORMAT_SHORTER).parse(str);
-				 else
+				else
 					return simpleDateFormatFactory(DATE_FORMAT_SHORT).parse(str);
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -272,24 +272,33 @@ public class CommonUtil {
 	/**
 	 * SimpleDateFormat caches
 	 */
-	private final static Map<String, SimpleDateFormat> formaters = new ConcurrentHashMap<>();
+	private final static Map<String, SimpleDateFormat> FORMATERS = new ConcurrentHashMap<>();
 
 	/**
-	 * 对输入的时间进行格式化 有 SimpleDateFormat 缓存 格式化的另外一种方法 new
-	 * SimpleDateFormat(format).format(System.currentTimeMillis());返回
-	 * SimpleDateFormat 的工厂函数
+	 * 对输入的时间进行格式化 有 SimpleDateFormat 缓存 格式化的另外一种方法
+	 * 
+	 * <pre>
+	 * {@code
+	 *   new SimpleDateFormat(format).format(System.currentTimeMillis());
+	 *  }
+	 * </pre>
+	 * 
+	 * 返回 SimpleDateFormat 的工厂函数
 	 * 
 	 * @param format 日期格式
 	 * @return 格式日期的对象
 	 */
 	public static SimpleDateFormat simpleDateFormatFactory(String format) {
-		if (!formaters.containsKey(format))
-			formaters.put(format, new SimpleDateFormat(format));
+		if (!FORMATERS.containsKey(format))
+			FORMATERS.put(format, new SimpleDateFormat(format));
 
-		return formaters.get(format);
+		return FORMATERS.get(format);
 	}
 
-	private static final String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	/**
+	 * 随机字符串
+	 */
+	private static final String STR = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 	/**
 	 * 生成指定长度的随机字符，可能包含数字
@@ -303,7 +312,7 @@ public class CommonUtil {
 
 		for (int i = 0; i < length; i++) {
 			int number = random.nextInt(62);
-			sb.append(str.charAt(number));
+			sb.append(STR.charAt(number));
 		}
 
 		return sb.toString();

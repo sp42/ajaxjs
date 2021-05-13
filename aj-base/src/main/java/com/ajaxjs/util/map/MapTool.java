@@ -224,7 +224,6 @@ public class MapTool {
 		T bean = ReflectUtil.newInstance(clz);
 
 		eachField(bean, (key, v, property) -> {
-
 			try {
 				if (map.containsKey(key)) {
 					Object value = map.get(key);
@@ -233,9 +232,8 @@ public class MapTool {
 					if (value != null) {
 						Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
-						if (isTransform && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
+						if (isTransform && t != value.getClass())  // 类型相同，直接传入；类型不相同，开始转换
 							value = MappingValue.objectCast(value, t);
-						}
 
 //						LOGGER.info("t:" + t);
 //						LOGGER.info("v:" + value + " type: " + value.getClass());
@@ -264,9 +262,8 @@ public class MapTool {
 					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				if(e instanceof IllegalArgumentException) {
+				if(e instanceof IllegalArgumentException) 
 					LOGGER.warning("[{0}]参数类型不匹配，输入值是[{1}]", key, v);
-				}
 				
 				LOGGER.warning(e);
 			}
@@ -369,6 +366,7 @@ public class MapTool {
 
 			for (int idx = 0; idx < nodeList.getLength(); ++idx) {
 				Node node = nodeList.item(idx);
+				
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					Element element = (Element) node;
 					data.put(element.getNodeName(), element.getTextContent());

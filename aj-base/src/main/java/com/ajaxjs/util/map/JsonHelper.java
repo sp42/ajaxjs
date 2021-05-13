@@ -90,54 +90,53 @@ public class JsonHelper {
 	 * @return JSON 字符串
 	 */
 	public static String toJson(Object obj) {
-		if (obj == null) {
+		if (obj == null)
 			return null;
-		} else if (obj instanceof Boolean || obj instanceof Number) {
+		else if (obj instanceof Boolean || obj instanceof Number)
 			return obj.toString();
-		} else if (obj instanceof String) {
+		else if (obj instanceof String)
 			return '\"' + obj.toString().replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + '\"';
-		} else if (obj instanceof String[]) {
+		else if (obj instanceof String[])
 			return jsonArr((String[]) obj, v -> "\"" + v + "\"");
-		} else if (obj.getClass() == Integer[].class) {
+		else if (obj.getClass() == Integer[].class)
 			return jsonArr((Integer[]) obj, v -> v + "");
-		} else if (obj.getClass() == int[].class) {
+		else if (obj.getClass() == int[].class) {
 			Integer[] arr = Arrays.stream((int[]) obj).boxed().toArray(Integer[]::new);
 			return jsonArr(arr, v -> v + "");
-		} else if (obj instanceof Long[]) {
+		} else if (obj instanceof Long[])
 			return jsonArr((Long[]) obj, v -> v.toString());
-		} else if (obj instanceof long[]) {
+		else if (obj instanceof long[]) {
 			Long[] arr = Arrays.stream((long[]) obj).boxed().toArray(Long[]::new);
 			return jsonArr(arr, v -> v.toString());
-		} else if (obj instanceof Date) {
+		} else if (obj instanceof Date)
 			return '\"' + CommonUtil.simpleDateFormatFactory(CommonUtil.DATE_FORMAT).format((Date) obj) + '\"';
-		} else if (obj instanceof Map) {
+		else if (obj instanceof Map)
 			return stringifyMap((Map<?, ?>) obj);
-		} else if (obj instanceof Map[]) {
+		else if (obj instanceof Map[])
 			return jsonArr((Map<?, ?>[]) obj, JsonHelper::stringifyMap);
-		} else if (obj instanceof BaseModel) {
+		else if (obj instanceof BaseModel)
 			return beanToJson((BaseModel) obj);
-		} else if (obj instanceof BaseModel[]) {
+		else if (obj instanceof BaseModel[])
 			return jsonArr((BaseModel[]) obj, JsonHelper::beanToJson);
-		} else if (obj instanceof List) {
+		else if (obj instanceof List) {
 			List<?> list = (List<?>) obj;
 
 			if (list.size() > 0) {
-				if (list.get(0) instanceof Integer) {
+				if (list.get(0) instanceof Integer)
 					return toJson(list.toArray(new Integer[list.size()]));
-				} else if (list.get(0) instanceof String) {
+				else if (list.get(0) instanceof String)
 					return toJson(list.toArray(new String[list.size()]));
-				} else if (list.get(0) instanceof Map) { // Map 类型的输出
+				else if (list.get(0) instanceof Map) // Map 类型的输出
 					return toJson(list.toArray(new Map[list.size()]));
-				} else if (list.get(0) instanceof BaseModel) { // Bean
+				else if (list.get(0) instanceof BaseModel) // Bean
 					return toJson(list.toArray(new BaseModel[list.size()]));
-				}
-			} else {
+			} else
 				return "[]";
-			}
-		} else if (obj instanceof Object[]) {
+		} else if (obj instanceof Object[])
 			return jsonArr((Object[]) obj, JsonHelper::toJson);
-		} else if (obj instanceof Object) { // 普通 Java Object
+		else if (obj instanceof Object) { // 普通 Java Object
 			List<String> arr = new ArrayList<>();
+
 			for (Field field : obj.getClass().getDeclaredFields()) {
 				field.setAccessible(true);
 
@@ -257,7 +256,7 @@ public class JsonHelper {
 			}
 
 			json.setCharAt(json.length() - 1, '}');
-		} else 
+		} else
 			json.append("}");
 
 		return json.toString();
@@ -372,7 +371,6 @@ public class JsonHelper {
 
 			if (c == ' ') // 忽略空格
 				continue;
-			
 
 			if (hasQuoataion) {
 				if (hasQuoataion(cs[i]))
@@ -404,9 +402,11 @@ public class JsonHelper {
 				isList.push(true);
 				continue;
 			case ',':
-				// 这是一个分割，因为可能是简单地 string 的键值对，也有可能是 string=map 的键值对，因此 valuetmp 使用 object 类型；
-				// 如果valuetmp是null 应该是第一次，如果value不是空有可能是string，那是上一个键值对，需要重新赋值
-				// 还有可能是map对象，如果是map对象就不需要了
+				/*
+				 * 这是一个分割，因为可能是简单地 string 的键值对，也有可能是 string=map 的键值对，因此 valuetmp 使用 object 类型；
+				 * 如果 valuetmp 是 null 应该是第一次，如果 value 不是空有可能是 string，那是上一个键值对，需要重新赋值 还有可能是 map
+				 * 对象，如果是 map 对象就不需要了
+				 */
 				if (sb.length() > 0)
 					valuetmp = sb.toString();
 				sb = new StringBuilder();

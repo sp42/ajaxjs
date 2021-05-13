@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -15,9 +14,6 @@
 	but also integrates the front-end library. It's written in HTML5 + Java, a successor to the JVM platform, efficient, secure, stable, cross-platform and many other advantages, but it abandoned the traditional enterprise architecture brought about by the large and bloated, 
 	emphasizing the lightweight, and fast, very suitable for the Internet fast application.</description>
 
-
-
-
 	<version>1.2.6</version>
 	<build>
 		<!-- 复制静态资源 -->
@@ -32,25 +28,9 @@
 		</resources>
 
 		<!-- By gitee.com service -->
-<!-- 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-						<configuration>
-							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins> -->
+		<!-- <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> <version>3.0.0</version> <executions> <execution> 
+			<id>attach-javadocs</id> <phase>package</phase> <goals> <goal>jar</goal> </goals> <configuration> <additionalparam>-Xdoclint:none</additionalparam> </configuration> 
+			</execution> </executions> </plugin> </plugins> -->
 	</build>
 
 	<dependencies>

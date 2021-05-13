@@ -71,7 +71,7 @@ public class MappingValue {
 	}
 
 	/**
-	 * true/1、 字符串 true／1/yes/on 被视为 true 返回； false／0/null、字符串 false／0/no/off/null
+	 * true/1、 字符串 true/1/yes/on 被视为 true 返回； false/0/null、字符串 false/0/no/off/null
 	 * 被视为 false 返回；
 	 * 
 	 * @param value 输入值
@@ -108,37 +108,37 @@ public class MappingValue {
 	public static Object objectCast(Object value, Class<?> t) {
 		if (value == null)
 			return null;
-		else if (t == boolean.class || t == Boolean.class) {// 布尔型
+		else if (t == boolean.class || t == Boolean.class) // 布尔型
 			value = toBoolean(value);
-		} else if (t == int.class || t == Integer.class) { // 整形
-			value = CommonUtil.isEmptyString(value.toString()) ? 0: Integer.parseInt(value.toString());
-		} else if (t == int[].class || t == Integer[].class) {
+		else if (t == int.class || t == Integer.class) // 整形
+			value = CommonUtil.isEmptyString(value.toString()) ? 0 : Integer.parseInt(value.toString());
+		else if (t == int[].class || t == Integer[].class) {
 			// 复数
 			if (value instanceof String)
-				value = stringArr2intArr((String) value, diver + "");
+				value = stringArr2intArr((String) value, DIVER + "");
 			else if (value instanceof List)
-				value = integerList2arr((List<Integer>) value);
+				value = intList2Arr((List<Integer>) value);
 
-		} else if (t == long.class || t == Long.class) {
+		} else if (t == long.class || t == Long.class)
 			// LONG 型
 			value = Long.valueOf((value == null || CommonUtil.isEmptyString(value.toString())) ? "0" : value.toString());
-		} else if (t == String.class) { // 字符串型
+		else if (t == String.class) // 字符串型
 			value = value.toString();
-		} else if (t == String[].class) {
+		else if (t == String[].class) {
 			// 复数
 			if (value instanceof ArrayList) {
 				ArrayList<String> list = (ArrayList<String>) value;
 				value = list.toArray(new String[list.size()]);
 			} else if (value instanceof String) {
 				String str = (String) value;
-				value = str.split(diver + "");
+				value = str.split(DIVER + "");
 			} else {
 				// LOGGER.info("Bean 要求 String[] 类型，但实际传入类型：" +
 				// value.getClass().getName());
 			}
-		} else if (t == Date.class) {
+		} else if (t == Date.class)
 			value = CommonUtil.Objet2Date(value);
-		} else if (t == BigDecimal.class) {
+		else if (t == BigDecimal.class) {
 			if (value instanceof Integer)
 				value = new BigDecimal((Integer) value);
 			else if (value instanceof String) {
@@ -146,9 +146,8 @@ public class MappingValue {
 				b.setScale(2, BigDecimal.ROUND_DOWN);
 
 				value = b;
-			} else if (value instanceof Double) {
+			} else if (value instanceof Double)
 				value = new BigDecimal(Double.toString((Double) value));
-			}
 		}
 
 		return value;
@@ -157,20 +156,26 @@ public class MappingValue {
 	/**
 	 * 用于数组的分隔符
 	 */
-	static final char diver = ',';
+	private static final char DIVER = ',';
 
 	/**
-	 * Integer[] 不能直接转 int[]
+	 * Integer[] 不能直接转 int[]，故设置一个函数专门处理之
 	 * 
 	 * @param list 整形列表
 	 * @return 整形数组
 	 */
-	private static int[] integerList2arr(List<Integer> list) {
+	private static int[] intList2Arr(List<Integer> list) {
 		return newIntArray(list.size(), index -> list.get(index));
 	}
 
 	/**
-	 * 当它们每一个都是数字的字符串形式，转换为整形的数组 "1,2,3, ..." -- [1, 2, ...]
+	 * 当它们每一个都是数字的字符串形式，转换为整形的数组
+	 * 
+	 * <pre>
+	 * {@code
+	 *   "1,2,3, ..." -- [1, 2, ...]
+	 * }
+	 * </pre>
 	 * 
 	 * @param value 输入字符串
 	 * @param diver 分隔符
@@ -178,17 +183,20 @@ public class MappingValue {
 	 */
 	private static int[] stringArr2intArr(String value, String diver) {
 		String[] strArr = value.split(diver);
+
 		return newIntArray(strArr.length, index -> Integer.parseInt(strArr[index].trim()));
 	}
 
 	/**
+	 * 创建一个 int 数列，对其执行一些逻辑
 	 * 
-	 * @param length
-	 * @param fn
-	 * @return
+	 * @param length 数列最大值
+	 * @param fn     执行的逻辑
+	 * @return 数组
 	 */
 	private static int[] newIntArray(int length, Function<Integer, Integer> fn) {
 		int[] arr = new int[length];
+
 		for (int i = 0; i < length; i++)
 			arr[i] = fn.apply(i);
 

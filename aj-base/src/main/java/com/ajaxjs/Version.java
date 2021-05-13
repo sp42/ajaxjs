@@ -34,38 +34,38 @@ public class Version {
 	 */
 	public static final String srcFolder = new File(Version.class.getClassLoader().getResource("").getPath()).toString();
 
-//	public static final String srcFolder = AbstractScanner.getResourceFilePath(Version.class, "");
-
-	private static final String osName = System.getProperty("os.name").toLowerCase();
+	/**
+	 * 获取操作系统名称
+	 */
+	private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
 
 	/**
 	 * 是否苹果操作系统
 	 */
-	public static final boolean isMac = osName.contains("mac");
+	public static final boolean isMac = OS_NAME.contains("mac");
 
 	/**
 	 * 是否视窗操作系统
 	 */
-	public static final boolean isWindows = osName.contains("window");
+	public static final boolean isWindows = OS_NAME.contains("window");
 
 	/**
 	 * 是否 Linux 操作系统
 	 */
-	public static final boolean isLinux = osName.contains("linux");
+	public static final boolean isLinux = OS_NAME.contains("linux");
 
 	static {
 		System.setProperty("user.timezone", "GMT +08");// 设置中国时区
 
-		if (System.getProperty("java.vm.vendor").indexOf("Oracle") == -1 || System.getProperty("java.vm.vendor").contains("openJDK")) {
-			LOGGER.warning("本框架不支持 OpenJDK!如果你是 Linux 系统，请把自带的 OpenJDK 卸载，改用 Oracle JVM");
+		// 仅仅支持 Oracle JVM
+		String vendor = System.getProperty("java.vm.vendor");
+		if (vendor.indexOf("Oracle") == -1 || vendor.contains("openJDK")) {
+			LOGGER.warning("抱歉，本框架暂不支持 OpenJDK。 如果你是 Linux 系统，请把自带的 OpenJDK 卸载，改用 Oracle JVM");
 			System.exit(1);
 		}
 
 		// 版本检测
-		double version = Double.parseDouble(System.getProperty("java.specification.version")); /* or Major Version, get java.runtime.version */
-		
-		if (version > 1.5) {
-		} else {
+		if (Double.parseDouble(System.getProperty("java.specification.version")) < 1.5) {/* or Major Version, get java.runtime.version */
 			LOGGER.warning("请升级你的 JRE/JDK版本 >= 1.8");
 			System.exit(1);
 		}
@@ -74,7 +74,7 @@ public class Version {
 		 * 有两种模式：本地模式和远程模式（自动判断） 返回 true 表示是非 linux 环境，为开发调试的环境，即 isDebug = true； 返回
 		 * false 表示在部署的 linux 环境下。 Linux 的为远程模式
 		 */
-		isDebug = !(osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0);
+		isDebug = !(OS_NAME.indexOf("nix") >= 0 || OS_NAME.indexOf("nux") >= 0 || OS_NAME.indexOf("aix") > 0);
 
 		LOGGER.infoYellow("\n     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
 				+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
