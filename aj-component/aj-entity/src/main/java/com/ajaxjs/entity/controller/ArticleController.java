@@ -40,7 +40,7 @@ import com.ajaxjs.web.mvc.MvcRequest;
 import com.ajaxjs.web.mvc.filter.MvcFilter;
 
 @Component
-@Path("/cms/article")
+@Path("/cms/article2")
 public class ArticleController extends BaseController<Map<String, Object>> {
 	private static final LogHelper LOGGER = LogHelper.getLog(ArticleController.class);
 
