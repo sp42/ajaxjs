@@ -1,4 +1,4 @@
-package com.ajaxjs.config;
+package com.ajaxjs.config.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +10,9 @@ import javax.script.ScriptException;
 import javax.servlet.ServletContext;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.config.Config;
+import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.config.GetConfig;
 import com.ajaxjs.jsonparser.JsEngineWrapper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
@@ -77,11 +80,11 @@ public class JsonConfigService extends Config implements ConfigService {
 	 * @return 配置 JSON 说明文件
 	 */
 	private static String getSchemeJson() {
-		try (InputStream in = ConfigService.class.getResourceAsStream("ConfigScheme.json");) {
-
+		try (InputStream in = JsonConfigService.class.getResourceAsStream("ConfigScheme.json");) {
 			return StreamHelper.byteStream2string(in);
 		} catch (IOException e) {
 			LOGGER.warning(e);
+
 			return null;
 		}
 	}
@@ -182,12 +185,11 @@ public class JsonConfigService extends Config implements ConfigService {
 	 * 查找节点的 JavaScript 函数
 	 */
 	// @formatter:off
-	private final static String FIND_NODE = "function findNode(obj, queen) {\n" + "			if(!queen.shift) {\n" + "				return null;\n"
-			+ "			}\n" + "			var first = queen.shift();\n" + "			\n" + "			for(var i in obj) {\n"
-			+ "				if(i === first) {\n" + "					var target = obj[i];\n" + "					\n"
-			+ "					if(queen.length == 0) {\n" + "						// 找到了\n" + "						return target;\n"
-			+ "					} else {\n" + "						return arguments.callee(obj[i], queen);\n" + "					}\n" + "				}\n"
-			+ "			}\n" + "		}";
+	private final static String FIND_NODE = "function findNode(obj, queen) {\n" + "			if(!queen.shift) {\n" + "				return null;\n" + "			}\n"
+			+ "			var first = queen.shift();\n" + "			\n" + "			for(var i in obj) {\n" + "				if(i === first) {\n"
+			+ "					var target = obj[i];\n" + "					\n" + "					if(queen.length == 0) {\n" + "						// 找到了\n"
+			+ "						return target;\n" + "					} else {\n" + "						return arguments.callee(obj[i], queen);\n" + "					}\n"
+			+ "				}\n" + "			}\n" + "		}";
 	// @formatter:on
 
 	/**

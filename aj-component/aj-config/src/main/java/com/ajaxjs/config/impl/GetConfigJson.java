@@ -1,5 +1,7 @@
-package com.ajaxjs.config;
+package com.ajaxjs.config.impl;
 
+import com.ajaxjs.config.ConfigService;
+import com.ajaxjs.config.GetConfig;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

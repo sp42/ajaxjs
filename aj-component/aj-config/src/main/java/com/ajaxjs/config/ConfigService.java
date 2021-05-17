@@ -12,6 +12,13 @@ import javax.servlet.ServletContext;
  */
 public interface ConfigService {
 	/**
+	 * 加载配置
+	 * 
+	 * @param ctx
+	 */
+	public void init(ServletContext ctx);
+	
+	/**
 	 * 加载 JSON 配置
 	 * 
 	 * @param cfgPath 配置文件所在路径
@@ -45,12 +52,4 @@ public interface ConfigService {
 	 * 是否加载成功
 	 */
 	public boolean isLoaded();
-
-	/**
-	 * 加载配置
-	 * 
-	 * @param ctx
-	 */
-	public void init(ServletContext ctx);
-
 }
