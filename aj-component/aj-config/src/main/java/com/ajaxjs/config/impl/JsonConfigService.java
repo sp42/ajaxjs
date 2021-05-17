@@ -180,16 +180,30 @@ public class JsonConfigService extends Config implements ConfigService {
 
 		return String.join("", arr2);
 	}
-
+	
 	/**
 	 * 查找节点的 JavaScript 函数
 	 */
 	// @formatter:off
-	private final static String FIND_NODE = "function findNode(obj, queen) {\n" + "			if(!queen.shift) {\n" + "				return null;\n" + "			}\n"
-			+ "			var first = queen.shift();\n" + "			\n" + "			for(var i in obj) {\n" + "				if(i === first) {\n"
-			+ "					var target = obj[i];\n" + "					\n" + "					if(queen.length == 0) {\n" + "						// 找到了\n"
-			+ "						return target;\n" + "					} else {\n" + "						return arguments.callee(obj[i], queen);\n" + "					}\n"
-			+ "				}\n" + "			}\n" + "		}";
+	private final static String FIND_NODE = 
+		"function findNode(obj, queen) {\n" + 
+		"			if(!queen.shift) {\n" + 
+		"				return null;\n" + 
+		"			}\n" + 
+		"			var first = queen.shift();\n" + 
+		" \n" + 
+		"			for(var i in obj) {\n" + 
+		"				if(i === first) {\n" + 
+		"					var target = obj[i];\n" + 
+		"					if(queen.length == 0) {\n" + 
+		"						// 找到了\n" + 
+		"						return target;\n" + 
+		"					} else {\n" + 
+		"						return arguments.callee(obj[i], queen);\n" + 
+		"					}\n" + 
+		"				}\n" + 
+		"			}\n" + 
+		"		}";
 	// @formatter:on
 
 	/**
