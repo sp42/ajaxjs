@@ -25,7 +25,7 @@
 <body>
 	<div>
 		<aj-admin-header> 
-			<template slot="title">实用工具</span></template>
+			<template slot="title"><span>实用工具</span></template>
 		</aj-admin-header>
 	</div>
 		<div class="aj-simple-tab-vertical tab" style="padding: 1% 5%;">
