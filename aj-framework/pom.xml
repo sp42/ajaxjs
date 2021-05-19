@@ -26,28 +26,10 @@
 		</resources>
 	</build>
 
-	<dependencies>
- 		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-entity</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		
+	<dependencies>	
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-user</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-
- 		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-workflow</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-developer</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 
@@ -55,7 +37,20 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.30</version>
-			<scope>test</scope>
+		</dependency>
+		
+		<!-- Spring 最小引用 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>5.3.6</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-web</artifactId>
+		    <version>5.3.6</version>
 		</dependency>
 		
 		<!-- 跨项目共享单测 -->
