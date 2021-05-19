@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -7,7 +8,7 @@
 		<version>1.1</version>
 		<!-- <relativePath>../ajaxjs-maven-global.xml</relativePath> -->
 	</parent>
-	
+
 	<artifactId>ajaxjs-base</artifactId>
 	<name>AJAXJS-Base</name>
 	<description>AJAXJS aims to full-stack, not only the server-side framework, 
@@ -16,7 +17,7 @@
 
 	<version>1.2.6</version>
 	<packaging>jar</packaging>
-	
+
 	<build>
 		<!-- 复制静态资源 -->
 		<resources>
@@ -30,9 +31,25 @@
 		</resources>
 
 		<!-- By gitee.com service -->
-		<!-- <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> <version>3.0.0</version> <executions> <execution> 
-			<id>attach-javadocs</id> <phase>package</phase> <goals> <goal>jar</goal> </goals> <configuration> <additionalparam>-Xdoclint:none</additionalparam> </configuration> 
-			</execution> </executions> </plugin> </plugins> -->
+<!-- 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins> -->
 	</build>
 
 	<dependencies>
@@ -62,7 +79,7 @@
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-catalina</artifactId>
-			<version>7.0.37</version>
+			<version>8.5.66</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
