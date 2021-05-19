@@ -118,7 +118,7 @@ public abstract class TaskFActorService extends TaskBaseService {
 						continue;
 
 					for (Long removeActor : actors) {
-						if (actor.equals(removeActor)) {
+						if (actor.equals(removeActor + "")) {
 							isMatch = true;
 							break;
 						}

@@ -28,7 +28,7 @@ public class WorkflowException extends RuntimeException {
 	}
 
 	public WorkflowException(String tpl, String... args) {
-		super(String.format(tpl, args));
+		super(String.format(tpl, (Object[]) args));
 	}
 
 }
