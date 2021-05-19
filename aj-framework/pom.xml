@@ -6,13 +6,12 @@
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.0</version>
-		<relativePath>../ajaxjs-maven-global.xml</relativePath>
+		<version>1.1</version>
 	</parent>
 
 	<artifactId>ajaxjs-framework</artifactId>
 	<version>1.0.3</version>
-	<description>AJAXJS 中台框架</description>
+	<description>AJAXJS 集成框架</description>
 
 	<build>
 		<!-- 复制静态资源 -->
@@ -25,41 +24,24 @@
 				</includes>
 			</resource>
 		</resources>
-
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-		</plugins>
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-base</artifactId>
-			<version>1.2.6</version>
-		</dependency>
-
  		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-entity</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		
- 		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-workflow</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-user</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+ 		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-workflow</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		
@@ -67,21 +49,6 @@
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-developer</artifactId>
 			<version>1.0.0</version>
-		</dependency>
-
-		<!-- 支付宝支付 SDK -->
-		<dependency>
-			<groupId>com.alipay.sdk</groupId>
-			<artifactId>alipay-sdk-java</artifactId>
-			<version>3.7.110.ALL</version>
-		</dependency>
-
-		<!-- 模拟对象 -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>2.0.2-beta</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<dependency>

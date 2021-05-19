@@ -53,6 +53,7 @@ public class MvcDispatcherBase {
 
 		MvcRequest request = new MvcRequest(isEnableSecurityIO ? new SecurityRequest(req) : req);
 		MvcOutput response = new MvcOutput(isEnableSecurityIO ? new SecurityResponse(resp) : resp);
+//		response.allowCORS();
 
 		String uri = request.getFolder(), httpMethod = request.getMethod();
 		Action action = null;
@@ -225,7 +226,11 @@ public class MvcDispatcherBase {
 		Produces a = method.getAnnotation(Produces.class);
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
-			response.resultHandler(String.format(MvcConstant.JSON_NOT_OK, JsonHelper.jsonString_covernt(errMsg)), req, model, method);
+			// 保证合法的 JSON 字符串，进行转义
+			String msg =  JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covernt(errMsg));
+			 msg = String.format(MvcConstant.JSON_NOT_OK,  msg);
+			 
+			response.resultHandler(msg, req, model, method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
 				// 没有权限时跳转的地方

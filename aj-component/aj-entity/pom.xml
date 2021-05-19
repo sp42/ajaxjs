@@ -4,8 +4,7 @@
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.0</version>
-		<relativePath>../ajaxjs-maven-global.xml</relativePath>
+		<version>1.1</version>
 	</parent>
 
 	<artifactId>ajaxjs-entity</artifactId>
@@ -19,21 +18,6 @@
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-base</artifactId>
 			<version>1.2.6</version>
-		</dependency>
-
-		<!-- JSR-330标准注解 -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<version>1</version>
-		</dependency>
-
-		<!-- 模拟对象 -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>2.0.2-beta</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- 跨项目共享单测 -->

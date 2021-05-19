@@ -342,6 +342,22 @@ public class MvcOutput extends HttpServletResponseWrapper {
 	}
 
 	/**
+	 * 使用 CORS协议允许 Response 跨域
+	 */
+	public void allowCORS() {
+		/* 允许跨域的主机地址 */
+		setHeader("Access-Control-Allow-Origin", "*");
+		/* 允许跨域的请求方法GET, POST, HEAD 等 */
+		setHeader("Access-Control-Allow-Methods", "*");
+		/* 重新预检验跨域的缓存时间 (s) */
+		setHeader("Access-Control-Max-Age", "3600");
+		/* 允许跨域的请求头 */
+		setHeader("Access-Control-Allow-Headers", "*");
+		/* 是否携带cookie */
+		setHeader("Access-Control-Allow-Credentials", "true");
+	}
+
+	/**
 	 * 返回到前一页并刷新
 	 */
 	public final static String returnJs_refresh = "window.location = document.referrer;";

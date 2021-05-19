@@ -21,7 +21,7 @@
 				<table class="in-layer">
 					<thead>
 						
-						<th>#</th><th style="width: 150px;">银行名称</th><th>支行名称</th><th style="width: 250px;">银行账号</th><th>创建日期</th><th>操作</th></tr>
+						<th>#</th><th style="width: 150px;">银行名称</th><th>支行名称</th><th style="width: 250px;">银行账号</th><th>创建日期</th><th>操作</th>
 					</thead>
 					<tr is="aj-grid-inline-edit-row" v-for="value in list" v-bind:key="value.id" :row-data="value"
 						:show-checkbox-col="false" :show-control="false"

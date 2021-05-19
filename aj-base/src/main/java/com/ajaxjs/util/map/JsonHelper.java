@@ -145,6 +145,7 @@ public class JsonHelper {
 					continue;
 
 				Object _obj = null;
+				
 				try {
 					_obj = field.get(obj);
 				} catch (IllegalAccessException e) {
@@ -274,6 +275,7 @@ public class JsonHelper {
 
 		for (int i = 0; i < json.length(); i++) {
 			char c = json.charAt(i);
+			
 			if (level > 0 && '\n' == str.charAt(str.length() - 1))
 				str.append(CommonUtil.repeatStr("\t", "", level));
 
@@ -282,10 +284,12 @@ public class JsonHelper {
 			case '[':
 				str.append(c + "\n");
 				level++;
+				
 				break;
 			case ',':
 				if (json.charAt(i + 1) == '"')
 					str.append(c + "\n"); // 后面必定是跟着 key 的双引号，但 其实 json 可以 key 不带双引号的
+				
 				break;
 			case '}':
 			case ']':
@@ -409,11 +413,13 @@ public class JsonHelper {
 				 */
 				if (sb.length() > 0)
 					valuetmp = sb.toString();
+				
 				sb = new StringBuilder();
-
 				boolean listis = isList.peek();
+				
 				if (!listis) {
 					keytmp = keys.pop();
+					
 					if (valuetmp instanceof String)
 						maps.peek().put(keytmp, MappingValue.toJavaValue(valuetmp.toString())); // 保存 Map 的 Value
 					else
@@ -432,6 +438,7 @@ public class JsonHelper {
 				sb = new StringBuilder();
 				lists.peek().add(valuetmp);
 				valuetmp = lists.pop();
+				
 				continue;
 			case '}':
 
@@ -445,6 +452,7 @@ public class JsonHelper {
 				sb = new StringBuilder();
 				maps.peek().put(keytmp, valuetmp);
 				valuetmp = maps.pop();
+				
 				continue;
 			default:
 				sb.append(cs[i]);

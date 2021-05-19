@@ -4,11 +4,10 @@
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.0</version>
-		<relativePath>../ajaxjs-maven-global.xml</relativePath>
+		<version>1.1</version>
 	</parent>
+	
 	<artifactId>ajaxjs-user</artifactId>
-
 	<version>1.0.0</version>
 
 	<build>
@@ -23,13 +22,8 @@
 			</resource>
 		</resources>
 	</build>
+	
 	<dependencies>
-		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-base</artifactId>
-			<version>1.2.6</version>
-		</dependency>
-		
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-entity</artifactId>
@@ -43,14 +37,6 @@
 			<version>1.2.6</version>
 			<type>test-jar</type>
 			<scope>test</scope>
-		</dependency>
-
-		<!-- 模拟对象 -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>2.0.2-beta</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
