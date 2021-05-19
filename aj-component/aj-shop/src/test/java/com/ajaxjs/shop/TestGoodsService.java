@@ -6,7 +6,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.framework.CommonConstant;
 import com.ajaxjs.shop.model.Goods;
 import com.ajaxjs.shop.service.Address;
@@ -15,6 +14,7 @@ import com.ajaxjs.shop.service.GoodsService;
 import com.ajaxjs.shop.service.UserAddressService;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.SnowflakeIdWorker;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestGoodsService {

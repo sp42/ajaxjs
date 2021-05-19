@@ -5,8 +5,8 @@ import java.util.Objects;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.cache.MemoryCacheManager;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;

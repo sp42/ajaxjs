@@ -3,8 +3,8 @@ package com.ajaxjs.jxc;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.util.TestHelper;
 
 public abstract class BaseTest {
 	@BeforeClass

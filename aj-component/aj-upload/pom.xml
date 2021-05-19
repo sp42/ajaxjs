@@ -9,22 +9,12 @@
 	
 	<artifactId>aj-upload</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	
 
 	<dependencies>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-base</artifactId>
 			<version>1.2.6</version>
-		</dependency>
-		
-		<!-- 跨项目共享单测 -->
-		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-base</artifactId>
-			<version>1.2.6</version>
-			<type>test-jar</type>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -9,11 +9,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.login.LoginService;
 import com.ajaxjs.user.register.RegisterService;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestUser {

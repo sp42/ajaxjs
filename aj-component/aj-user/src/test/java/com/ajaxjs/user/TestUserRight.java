@@ -6,10 +6,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.framework.ServiceException;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.role.RoleService;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestUserRight {

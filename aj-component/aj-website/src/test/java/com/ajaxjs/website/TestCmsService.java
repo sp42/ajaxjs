@@ -10,9 +10,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.website.controller.HrController;
 import com.ajaxjs.website.model.Ads;

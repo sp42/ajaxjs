@@ -8,12 +8,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.entity.model.Catalog;
 import com.ajaxjs.entity.service.ArticleService;
 import com.ajaxjs.entity.service.TreeLikeService;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.orm.PageResult;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.ioc.ComponentMgr;
 
 public class TestCatalogService {

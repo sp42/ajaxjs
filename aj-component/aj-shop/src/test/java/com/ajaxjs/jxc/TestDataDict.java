@@ -4,8 +4,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ajaxjs.TestHelper;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.util.TestHelper;
 
 public class TestDataDict {
 	@BeforeClass
