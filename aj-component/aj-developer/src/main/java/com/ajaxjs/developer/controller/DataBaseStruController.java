@@ -62,8 +62,7 @@ public class DataBaseStruController implements IController {
 	 * @return 表注释
 	 */
 	public static String getTableComment(Connection conn, String tableName) {
-		try (Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName);) {
+		try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName);) {
 			if (rs != null && rs.next()) {
 				String createDDL = rs.getString(2);
 				return parse(createDDL);
@@ -88,6 +87,7 @@ public class DataBaseStruController implements IController {
 			for (String tableName : tableNames) {
 				JdbcHelper.rsHandle(stmt, "SHOW CREATE TABLE " + tableName, rs -> {
 					String createDDL = null;
+					
 					try {
 						if (rs.next())
 							createDDL = rs.getString(2);
@@ -151,8 +151,7 @@ public class DataBaseStruController implements IController {
 	 * @param tableNames 多张表的表名
 	 * @return 包含给个字段注释的 Map，key 是表名，value 是各个列。列中的Map
 	 */
-	public static Map<String, List<Map<String, String>>> getColumnComment(Connection conn,
-			List<String> tableNames) {
+	public static Map<String, List<Map<String, String>>> getColumnComment(Connection conn, List<String> tableNames) {
 		Map<String, List<Map<String, String>>> map = new HashMap<>();
 
 		JdbcHelper.stmt(conn, stmt -> {
