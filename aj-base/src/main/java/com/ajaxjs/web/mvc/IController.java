@@ -38,7 +38,7 @@ public interface IController {
 	 * @param tree          保存在Map的一棵树
 	 * @param path          路径队列
 	 * @param basePath      起始路径，如为空应传空字符串
-	 * @param createIfEmpty 如果找不到该节点，是否自动为其创建节点？若为非null 表示为写入模式，不单纯是查找。
+	 * @param createIfEmpty 如果找不到该节点，是否自动为其创建节点？若为非 null 表示为写入模式，不单纯是查找。
 	 * @return 目标 Action 或新建的 Action
 	 */
 	public static Action findTreeByPath(Map<String, Action> tree, Queue<String> path, String basePath, boolean createIfEmpty) {
@@ -48,13 +48,35 @@ public interface IController {
 			basePath += key + "/";
 
 			Action target = null;
-			if (tree.containsKey(key)) // 找到
+
+//			System.out.println(tree);
+//			System.out.println(key);
+//			System.out.println(path);
+//			System.out.println(tree.containsKey(key));
+
+			if (tree.containsKey(key)) {// 找到
 				target = tree.get(key);
-			else if (createIfEmpty) { // 新建Action
+
+				if (target.isAll()) {
+					System.out.println("------------");
+					return target;
+				}
+			} else if (createIfEmpty) { // 新建 Action
+//				if (key.equals("*")) {
+//					return null; // （分析階段）若有通配符，不作处理
+//				}
+
 				target = new Action();
 				target.path = basePath.replaceAll(".$", "");
 
 				tree.put(key, target);
+				
+				if ("*".equals(path.peek())) {// （分析階段），這下一級是有通配符的
+					target.setAll(true);
+//					System.out.println(path);
+
+					return target;
+				}
 			}
 
 			if (path.isEmpty())
@@ -65,6 +87,7 @@ public interface IController {
 
 				if (target != null) {
 					Action t2 = findTreeByPath(target.children, path, basePath, createIfEmpty);
+
 					if (t2 != null)
 						return t2;
 				} else
@@ -103,7 +126,7 @@ public interface IController {
 	 */
 	public static Action findTreeByPath(String path) {
 		Matcher match = idRegexp.matcher(path); // 处理Path上的参数
-		
+
 		if (match.find())
 			path = match.replaceAll("/{id}");
 

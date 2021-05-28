@@ -45,6 +45,11 @@ public class Action {
 	 * 下级路径集合
 	 */
 	public Map<String, Action> children;
+	
+	/**
+	 * 是否到這個節點爲止。如果有通配符（*），則表示這個節點包括了所有的下級目錄的訪問
+	 */
+	private boolean isAll;
 
 	/**
 	 * 控制器实例，方便反射时候调用（如果 HTTP 对应控制器没有，则读取这个）
@@ -105,12 +110,11 @@ public class Action {
 
 		for (Method method : clz.getMethods()) {
 			Path subPath = null;
-			try {
 
+			try {
 				subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
 			} catch (Throwable e) {
-				LOGGER.info(":::"+method + "");
-				e.printStackTrace();
+				LOGGER.warning(e);
 			}
 
 			if (subPath != null) {
@@ -249,5 +253,13 @@ public class Action {
 
 		String rootPath = path.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
 		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
+	}
+
+	public boolean isAll() {
+		return isAll;
+	}
+
+	public void setAll(boolean isAll) {
+		this.isAll = isAll;
 	}
 }

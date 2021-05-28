@@ -68,15 +68,15 @@ public class MvcDispatcherBase {
 		if (action != null) {
 			Method method = action.getMethod(httpMethod);// 要执行的方法
 			IController controller = action.getController(httpMethod);
-//			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
+			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
 
 			if (method != null && controller != null) {
 				execute(request, response, controller, method);
+
 				return false; // 终止当前 servlet 请求
 			} else {
 //				LOGGER.info("{0} {1} 控制器没有这个方法！", httpMethod, request.getRequestURI());
 			}
-		} else {
 		}
 
 		return true;
@@ -102,8 +102,11 @@ public class MvcDispatcherBase {
 
 //		LOGGER.info("正在解析 [{0}]控制器", topPath);
 		Action action = IController.findTreeByPath(IController.urlMappingTree, topPath, "", true);
-		action.createControllerInstance(clz);
-		action.parseMethod();
+
+		if (action != null) {
+			action.createControllerInstance(clz);
+			action.parseMethod();
+		}
 
 		// 会打印控制器的总路径信息，不会打印各个方法的路径，那太细了，日志也会相应地多
 		// LOGGER.info("控制器已登记成功！The controller [{0}] (\"/{1}\") was parsed and
@@ -152,20 +155,19 @@ public class MvcDispatcherBase {
 
 				for (FilterAction filterAction : filterActions) {
 					isbeforeSkip = !filterAction.before(ctx); // 相当于 AOP 前置
+					
 					if (isbeforeSkip)
 						break;
 				}
 			}
 
-			if (!isbeforeSkip) {
+			if (!isbeforeSkip)
 				result = hasArgs ? ReflectUtil.executeMethod_Throwable(controller, method, args) : ReflectUtil.executeMethod_Throwable(controller, method);
-			}
-
 		} catch (Throwable e) {
 			err = e;
 
 			if (e instanceof IllegalArgumentException && e.getMessage().contains("object is not an instance of declaring class"))
-				LOGGER.warning("异常可能的原因：@Bean注解的名称重复，请检查 IOC 中的是否重名");
+				LOGGER.warning("异常可能的原因：@Bean 注解的名称重复，请检查 IOC 中的是否重名");
 		}
 
 		if (model != null)
@@ -195,9 +197,9 @@ public class MvcDispatcherBase {
 			}
 		}
 
-		if (err != null) { // 有未处理的异常
+		if (err != null) // 有未处理的异常
 			handleErr(err, method, request, response, model);
-		} else if (!isbeforeSkip) {// 前置既然不执行了，后续的当然也不执行
+		else if (!isbeforeSkip) {// 前置既然不执行了，后续的当然也不执行
 			if (isDoOldReturn)
 				response.resultHandler(result, request, model, method);
 		} else
@@ -217,9 +219,9 @@ public class MvcDispatcherBase {
 	private static void handleErr(Throwable err, Method method, MvcRequest req, MvcOutput response, ModelAndView model) {
 		Throwable _err = ReflectUtil.getUnderLayerErr(err);
 
-		if (model != null && model.containsKey(FilterAction.NOT_LOG_EXCEPTION) && ((boolean) model.get(FilterAction.NOT_LOG_EXCEPTION))) {
+		if (model != null && model.containsKey(FilterAction.NOT_LOG_EXCEPTION) && ((boolean) model.get(FilterAction.NOT_LOG_EXCEPTION)))
 			_err.printStackTrace(); // 打印异常
-		} else
+		else
 			LOGGER.warning(_err);
 
 		String errMsg = ReflectUtil.getUnderLayerErrMsg(err);
@@ -227,9 +229,9 @@ public class MvcDispatcherBase {
 
 		if (a != null && MediaType.APPLICATION_JSON.equals(a.value()[0])) {// 返回 json
 			// 保证合法的 JSON 字符串，进行转义
-			String msg =  JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covernt(errMsg));
-			 msg = String.format(MvcConstant.JSON_NOT_OK,  msg);
-			 
+			String msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covernt(errMsg));
+			msg = String.format(MvcConstant.JSON_NOT_OK, msg);
+
 			response.resultHandler(msg, req, model, method);
 		} else {
 			if (err instanceof IllegalAccessError && ConfigService.getValueAsString("page.onNoLogin") != null) {
@@ -263,9 +265,8 @@ public class MvcDispatcherBase {
 		if (method.getAnnotation(MvcFilter.class) != null) {
 			Class<? extends FilterAction>[] clzs = method.getAnnotation(MvcFilter.class).filters();
 
-			for (Class<? extends FilterAction> clz : clzs) {
+			for (Class<? extends FilterAction> clz : clzs)
 				list.add(ReflectUtil.newInstance(clz));
-			}
 		}
 
 		if (method.getAnnotation(Authority.class) != null) {
