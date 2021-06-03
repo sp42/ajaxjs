@@ -134,6 +134,8 @@ public class RepositoryReadOnly extends RepositoryBase {
 			result = queryOne(conn, sql, long.class, args);
 		} else if (returnType == Integer[].class) {
 			result = queryArray(conn, sql, Integer.class, args); // 不支持int[]
+		} else if (returnType == String[].class) {
+			result = queryArray(conn, sql, String.class, args); // 不支持int[]
 		} else if (returnType == String.class) {
 			result = queryOne(conn, sql, String.class, args);
 		} else if (returnType == List.class || returnType == PageResult.class) {
