@@ -46,14 +46,14 @@ public class RSA_Cipher {
 
 	/* 貌似 CIPHER_ALGORITHM 默认是RSA/NONE/PKCS1Padding，未验证 */
 	/* RSA密钥长度 KEY_SIZE 必须是64的倍数，在512~65536之间。默认是1024 */
-	private final static CipherInfo ci = new CipherInfo("RSA/ECB/PKCS1Padding", 2048);
+	private final static CipherInfo CI = new CipherInfo("RSA/ECB/PKCS1Padding", 2048);
 
 	public static final String PUBLIC_KEY = "publicKey";
 
 	public static final String PRIVATE_KEY = "privateKey";
 
 	private static byte[] action(int mode, Key key, byte[] s) {
-		return CipherInfo.doCipher(ci.getCipherAlgorithm(), mode, key, s);
+		return CipherInfo.doCipher(CI.getCipherAlgorithm(), mode, key, s);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class RSA_Cipher {
 			return null;
 		}
 
-		g.initialize(ci.getKeySize());
+		g.initialize(CI.getKeySize());
 
 		KeyPair kp = g.generateKeyPair();
 		RSAPublicKey publicKey = (RSAPublicKey) kp.getPublic();

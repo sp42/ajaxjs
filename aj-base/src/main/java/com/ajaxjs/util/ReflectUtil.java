@@ -543,6 +543,11 @@ public class ReflectUtil {
 		executeMethod(bean, method, value);
 	}
 
+	/**
+	 * 
+	 * @param clz
+	 * @return
+	 */
 	public static Map<String, Integer> getConstantsInt(Class<?> clz) {
 		Map<String, Integer> map = new HashMap<>();
 

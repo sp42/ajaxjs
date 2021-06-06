@@ -56,6 +56,7 @@ public class SymmetriCipher {
 	 */
 	public static String AES_Decrypt(String str, String key) {
 		byte[] b = CipherInfo.doCipher(AES, Cipher.DECRYPT_MODE, key, Encode.base64DecodeAsByte(str));
+
 		if (b == null || b.length == 0)
 			return null;
 

@@ -18,7 +18,7 @@ import org.junit.Test;
 import com.ajaxjs.util.cryptography.SymmetriCipher;
 
 public class TestCryptography {
-	public static final String input = "cy11Xlbrmzyh:604:301:1353064296";
+	public static final String input = "Hello World!";
 	public static final String key = "37d5aed075525d4fa0fe635231cba447";
 
 	@Test

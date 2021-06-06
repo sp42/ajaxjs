@@ -178,7 +178,7 @@ public class Encode {
 	private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
 
 	/**
-	 * byte数组转化为16进制字符串输出
+	 * byte[] 转化为16进制字符串输出
 	 * 
 	 * @param bytes
 	 * @return
