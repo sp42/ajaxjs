@@ -68,7 +68,7 @@ public class MvcDispatcherBase {
 		if (action != null) {
 			Method method = action.getMethod(httpMethod);// 要执行的方法
 			IController controller = action.getController(httpMethod);
-			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
+//			LOGGER.info("uri: {0}, action: {1}, method: {2}", uri, action, method);
 
 			if (method != null && controller != null) {
 				execute(request, response, controller, method);

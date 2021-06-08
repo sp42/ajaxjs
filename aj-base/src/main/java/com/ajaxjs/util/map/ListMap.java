@@ -73,8 +73,13 @@ public class ListMap {
 
 				if (value instanceof Map)
 					traveler((Map<String, Object>) value, fristCtx, map, level + 1, config);
-				if (value instanceof List)
-					traveler((List<Map<String, Object>>) value, fristCtx, map, level + 1, config);
+				
+				if (value instanceof List) {
+					List<?> list = (List<?>) value;
+					
+					if (list.get(0) instanceof Map)
+						traveler((List<Map<String, Object>>) value, fristCtx, map, level + 1, config);
+				}
 
 				if (config != null && config.exitKey != null)
 					config.exitKey.accept(key);
@@ -259,9 +264,10 @@ public class ListMap {
 		config.mapEntryHandler = (key, obj, currentMap, superMap, i) -> {
 			if (obj == null || obj instanceof String || obj instanceof Number || obj instanceof Boolean) {
 				StringBuilder sb = new StringBuilder();
-				for (String s : stack) {
+
+				for (String s : stack)
 					sb.append(s + ".");
-				}
+
 				_map.put(sb + key, obj);
 			}
 
@@ -269,6 +275,7 @@ public class ListMap {
 		};
 
 		traveler(map, config);
+
 		return _map;
 	}
 }
