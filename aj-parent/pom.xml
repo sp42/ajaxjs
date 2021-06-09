@@ -4,12 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-parent</artifactId>
+	<description>ajaxjs-parent</description>
+	<name>ajaxjs-parent</name>
 	<version>1.1</version>
 	<packaging>pom</packaging>
-
+	
 	<!-- 模块都写在此处 -->
 	<modules>
-		<module>../ajaxjs-base</module>
+	<!-- 	<module>../ajaxjs-base</module> -->
 		<!-- <module>../ajaxjs-cms</module> -->
 		<!-- <module>../ajaxjs-web</module> -->
 	</modules>
