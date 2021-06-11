@@ -66,7 +66,7 @@ namespace aj.wf.ui {
         /**
          * 
          */
-        cop: SvgComp;
+        cop: Component;
     }
 
     // export let PropertyForm: PropertyForm = <PropertyForm>new Vue({

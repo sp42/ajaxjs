@@ -201,6 +201,10 @@ namespace aj.list.grid {
             else if (this.$parent.onEditClk) // 打开另外的编辑界面
                 //@ts-ignore    
                 this.$parent.onEditClk(this.id);
+            //@ts-ignore  
+            else if (this.$parent.$parent.onEditClk) // 打开另外的编辑界面
+                //@ts-ignore    
+                this.$parent.$parent.onEditClk(this.id);
         }
 
         /**

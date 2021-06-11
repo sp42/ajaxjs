@@ -45,9 +45,11 @@ declare interface Raphael {
     attr(map: { [key: string]: any }): Raphael;
 
     /**
-     * Vue 组件引用，保留一个，方向引用
+     * 组件引用，保留一个，方向引用
      */
-    vue: SvgVue;
+    comp: aj.wf.BaseState;
+
+    node: any;
 
     /**
      * 显示图型

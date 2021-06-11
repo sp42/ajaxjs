@@ -2,7 +2,7 @@ namespace aj.svg {
     /**
      * 连线路径
      */
-    export class Path implements SimpleSharp {
+    export class Path implements SimpleSharp, Warpper, Component {
         /**
          * 默认 path 就是 Transition 类型
          */
@@ -28,10 +28,7 @@ namespace aj.svg {
          */
         public to: Raphael;
 
-        /**
-         * 来自 Raphael 的对象
-         */
-        public svg: Raphael;
+
 
         /**
          * 原始 JSON 数据
@@ -41,17 +38,27 @@ namespace aj.svg {
         /**
          * 
          */
-        private moveFn: Function;
+        private moveFn: updateVBoxHandler;
 
         /**
          * 箭头图形
          */
         private arrow: Raphael;
 
-        constructor(from: Raphael, to: Raphael, pathCfg: JsonTransition) {
+        id: number;
+
+        ref: string;
+
+        text?: aj.svg.TextSvgComp;
+
+        svg: Raphael;
+
+        constructor(ref: string, from: Raphael, to: Raphael, data: JsonTransition) {
+            this.id = wf.ComMgr.nextId();
+            this.ref = ref;
             this.from = from;
             this.to = to;
-            this.rawData = pathCfg;
+            this.rawData = data;
 
             let fromBB: VBox = from.getBBox(),
                 toBB: VBox = to.getBBox(),
@@ -75,12 +82,17 @@ namespace aj.svg {
             this.svg = PAPER.path().addClass('path');
             this.arrow = PAPER.path().addClass('arrow');
 
-            wf.Mgr.register(this);
+            wf.ComMgr.register(this);
             this.hide();
 
             this.moveFn = rectResizeHandler.bind(this);
-            from.vue.addUpdateHandler(this.moveFn);
-            to.vue.addUpdateHandler(this.moveFn);
+            from.comp.addUpdateHandler(this.moveFn);
+            to.comp.addUpdateHandler(this.moveFn);
+
+            if (data.text && data.text.text) {
+                this.text = svg.createTextNode(data.text.text, 0, 0);
+                // this.text.setXY_vBox(this.vBox);
+            }
 
             this.refreshPath();
         }
@@ -105,11 +117,11 @@ namespace aj.svg {
             this.svg.attr({ path: path.join('') });
             this.rendererArrow(d);
 
-            // if (this.textObj) {
-            // let mid = this.midDot().pos();
-            //     let textPos = this.textObj.getXY();// 定位文字
-            //     this.textObj.setXY(mid.x + 30, mid.y + 10);
-            // }
+            if (this.text) {// 定位文字
+                let mid: Point = (<Dot>this.midDot()).pos();
+                // let textPos = this.text.getXY();
+                this.text.setXY(mid.x - 30, mid.y - 5);
+            }
         }
 
         /**
@@ -258,7 +270,7 @@ namespace aj.svg {
         else
             o = dot.pos();
 
-        let r: Point = Utils.connPoint(this.to.getBBox(), o);
+        r = Utils.connPoint(this.to.getBBox(), o);
         this.toDot.moveTo(r.x, r.y);
 
         this.refreshPath();

@@ -15,17 +15,12 @@ interface Component {
     /**
      * 原始 JSON 数据
      */
-    rawData: JsonState;
+    rawData: any;
 
     /**
      * 组件类型
      */
     type: string;
-
-    /**
-     * 初始化
-     */
-    init(): void;
     
     /**
      * 序列化这个组件到 JSON

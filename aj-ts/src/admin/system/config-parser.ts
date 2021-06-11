@@ -34,7 +34,6 @@ namespace aj.admin.system.configParser {
 		value: any;
 	}
 
-
 	/**
 	 * 总体的控件
 	 */
@@ -76,12 +75,12 @@ namespace aj.admin.system.configParser {
 
 	let formGetOptions = {
 		data(this: Editor) {
-			let options = {}; // key 为 value 值，name 为显示文字
-			let option = this.configObj.option;
+			let options: { [key: string]: string } = {}, // key 为 value 值，name 为显示文字
+				option: string[] = <string[]>this.configObj.option;
 
 			if (option) {
 				for (let i = 0, j = option.length; i < j; i++) {
-					let arr = option[i].split("=");
+					let arr: string[] = option[i].split("=");
 					options[arr[0]] = arr[1];
 				}
 			} else  // 默认值的情况
@@ -89,7 +88,7 @@ namespace aj.admin.system.configParser {
 
 			if (this.configObj.value) {
 				this.configObj.checked = {}; // 选中的
-				this.configObj.checked[this.configObj.value] = true;
+				this.configObj.checked[<string>this.configObj.value] = true;
 			}
 
 			return { options: options };
@@ -164,11 +163,12 @@ namespace aj.admin.system.configParser {
 				let v = this.configObj.value,
 					key: number = Number(_key);
 
+				// @ts-ignore
 				return (key & v) === key;
 			}
 		},
 		watch: {
-			checked(this: Editor, checked): void {
+			checked(this: Editor, checked: string[]): void {
 				let i: number = 0;
 				checked.forEach((v: string) => i += Number(v));
 
@@ -266,6 +266,7 @@ namespace aj.admin.system.configParser {
 						if (typeof (template) === 'function')
 							template = (<Function>template)(control);
 
+						// @ts-ignore
 						this.controls.push({ config: control, mixins: [baseFormControl], template: template });
 					}
 				}

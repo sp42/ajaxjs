@@ -7,6 +7,11 @@ Raphael.el.addClass = function (className: string): object {
 }
 
 namespace aj.svg {
+    /**
+     * Raphael.js 桌布
+     */
+    export let PAPER: any;
+
     export class Utils {
         /**
          * 计算矩形中心到点 p 的连线与矩形的交叉点
@@ -74,7 +79,7 @@ namespace aj.svg {
                 s = (p1.y - p3.y) / (p1.x - p3.x);
 
             p2y = (p2.x - p3.x) * s + p3.y;
-            
+
             if ((p2.y - p2y) < 10 && (p2.y - p2y) > -10) {
                 p2.y = p2y;
 
@@ -105,7 +110,10 @@ namespace aj.svg {
         }
     }
 
-    interface TextSvgComp extends Vue {
+    /**
+     * 文字对象
+     */
+    export interface TextSvgComp extends Vue {
         /**
          * 设置文字坐标
          * 
@@ -114,6 +122,8 @@ namespace aj.svg {
          * @param y 
          */
         setXY(this: TextSvgComp, x: number, y: number): void;
+
+        setXY_vBox( vBox: VBox): void;
     }
 
     /**
@@ -123,14 +133,14 @@ namespace aj.svg {
      * @param x 
      * @param y 
      */
-    export function createTextNode(_text: string | any, x: number, y: number): Vue {
+    export function createTextNode(_text: string | any, x: number, y: number): TextSvgComp {
         let text: SVGTextElement = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.textContent = '{{value}}';
         text.setAttributeNS(null, "x", String(x));
         text.setAttributeNS(null, "y", String(y));
         (<Element>document.body.$('svg')).appendChild(text);
 
-        return new Vue({
+        return <TextSvgComp>new Vue({
             el: text,
             data: typeof _text == 'string' ? { value: _text } : _text,
             methods: {

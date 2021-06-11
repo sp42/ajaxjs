@@ -1,20 +1,18 @@
 namespace aj.wf {
-    export abstract class BaseState implements IDisplayControl {
-        constructor(PAPER: any, type: string, ref: string, rawData: JsonState, vBox: VBox, svg: Raphael) {
+    export abstract class BaseState implements IDisplayControl, DargDrop {
+        constructor(PAPER: any, ref: string, data: JsonState, svg: Raphael) {
             this.id = ComMgr.nextId();
             this.PAPER = PAPER;
-            this.type = type;
+            this.type = data.type;
             this.ref = ref;
-            this.rawData = rawData;
-            this.vBox = vBox;
+            this.rawData = data;
+            this.vBox = data.attr;
             this.svg = svg;
-
-            this.vue = new Vue({
-                mixins: [aj.svg.BaseRect],
-                data: { vBox: vBox }
-            });
+            this.svg.comp = this;
+            this.vue = this.initVue();
 
             this.isDrag && this.svg.drag(onDragMove, onDragStart, onDragEnd);	// 使对象可拖动
+            wf.ComMgr.register(this);
         }
 
         id: number;
@@ -35,6 +33,8 @@ namespace aj.wf {
 
         type!: string;
 
+        text?: svg.TextSvgComp;
+
         init(): void {
             throw new Error("Method not implemented.");
         }
@@ -47,7 +47,7 @@ namespace aj.wf {
 
         resize: boolean = true;
 
-        // resizeController: svg.ResizeControl;
+        resizeController?: svg.ResizeControl;
 
         onDragStart: any;
 
@@ -56,34 +56,107 @@ namespace aj.wf {
         onDragEnd: any;
 
         show(): void {
-            throw new Error("Method not implemented.");
+            this.svg.show();
         }
+
         hide(): void {
-            throw new Error("Method not implemented.");
+            this.svg.hide();
         }
 
         pos(p?: Point): Point {
-            throw new Error("Method not implemented.");
+            if (p)
+                this.moveTo(p.x, p.y);
+
+            return { x: this.vBox.x, y: this.vBox.y };
         }
 
         moveTo(x: number, y: number): void {
-            throw new Error("Method not implemented.");
+            this.svg.attr({ x: x, y: y });
+            this.vBox.x = x;
+            this.vBox.y = y;
         }
 
         remove(): void {
-            throw new Error("Method not implemented.");
+            this.svg.remove();
+            this.updateHandlers = [];
+            wf.ComMgr.unregister(this.id);
+        }
+
+        /**
+         * 初始化 Vue 数据驱动
+         * 
+         * @returns 
+         */
+        private initVue(): Vue {
+            let self: BaseState = this,
+                vue: Vue = new Vue({
+                    data: { vBox: this.vBox, text: '' },	// 显示的文字，居中显示
+                    watch: {
+                        vBox: {
+                            handler(val: VBox): void {
+                                self.updateVBox(val);
+                            },
+                            deep: true
+                        }
+                    }
+                });
+
+            return vue;
+        }
+
+        /**
+         * 更新 vbox 的事件
+         * 
+         * @param val 
+         */
+        public updateVBox(val: VBox): void {
+            this.updateHandlers.forEach((fn: updateVBoxHandler) => fn.call(this, val));
+
+            if (this.resize && this.resizeController) {
+                this.resizeController.setDotsPosition();
+                this.resizeController.updateBorder();
+            }
+
+            if (this.text) // 文字伴随着图形拖放
+                this.text.setXY_vBox(this.vBox);
+        }
+
+        /**
+         * 加入 updateVBoxHandler
+         * 
+         * @param fn 
+         */
+        addUpdateHandler(fn: updateVBoxHandler): void {
+            this.updateHandlers.push(fn);
+        }
+
+        /**
+         * 移除 updateVBoxHandler
+         * 
+         * @param fn 
+         */
+        removeUpdateHandler(fn: updateVBoxHandler): void {
+            let index: number | null = null;
+
+            for (let i = 0, j = this.updateHandlers.length; i < j; i++) {
+                if (this.updateHandlers[i] == fn)
+                    index = i;
+            }
+
+            if (index != null)
+                this.updateHandlers.splice(index, 1);
         }
     }
 
     /**
      * 开始拖动
      */
-     function onDragStart(this: Raphael): void {
+    function onDragStart(this: Raphael): void {
         let x = Number(this.attr('x')), y = Number(this.attr('y'));
         this.movingX = x, this.movingY = y;
 
         this.attr({ opacity: .3 }); // 拖动时半透明效果
-        this.vue.onDragStart && this.vue.onDragStart(this.vue, x, y);
+        this.comp.onDragStart && this.comp.onDragStart(this.comp, x, y);
     }
 
     /**
@@ -93,13 +166,15 @@ namespace aj.wf {
      * @param y 
      */
     function onDragMove(this: Raphael, x: number, y: number): void {
-        let _x: number = this.movingX + x, _y: number = this.movingY + y;
+        let _x: number = this.movingX + x,
+            _y: number = this.movingY + y;
 
         this.attr({ x: _x, y: _y });
-        this.vue.vBox.x = _x;
-        this.vue.vBox.y = _y;
+        let s: BaseState = <BaseState>this.comp;
+        s.vBox.x = _x;
+        s.vBox.y = _y;
 
-        this.vue.onDragMove && this.vue.onDragMove(this.vue, _x, _y);
+        this.comp.onDragMove && this.comp.onDragMove(this.comp, _x, _y);
     }
 
     /**
@@ -108,6 +183,6 @@ namespace aj.wf {
     function onDragEnd(this: Raphael): void {
         this.attr({ opacity: 1 });
         // why more one arg 'this'?
-        this.vue.onDragEnd && this.vue.onDragEnd(this.vue, this, this.attr('x'), this.attr('y'));
+        this.comp.onDragEnd && this.comp.onDragEnd(this.comp, this, this.attr('x'), this.attr('y'));
     }
 }

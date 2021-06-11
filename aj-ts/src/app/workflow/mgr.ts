@@ -1,174 +1,194 @@
+/**
+ * 组件管理器
+ */
+namespace aj.wf.ComMgr {
+    /**
+     * id 记数器
+     */
+    let uid: number = 0;
+
+    /**
+     * 生成下一个 id
+     * 
+     * @returns 下一个 id
+     */
+    export function nextId(): number {
+        return ++uid;
+    }
+
+    /**
+     * 登记组件
+     * 
+     * @param vueObj 
+     */
+    export function register(comp: Component): void {
+        let id: string = "ajComp-" + comp.id;
+        // comp.svg.node.id = id;
+
+        let w: Warpper = <Warpper><unknown>comp;
+        w.svg.node.id = id;
+
+        DATA.ALL_COMPS[id] = comp;
+    }
+
+    /**
+     * 注销组件
+     * 
+     * @param id 
+     */
+    export function unregister(id: number): void {
+        delete DATA.ALL_COMPS[id];
+    }
+}
+
 namespace aj.wf {
-	// 定义常量
-	export enum SELECT_MODE {
-		/**
-		 * 选中的模式，点选类型
-		 */
-		POINT_MODE = 1,
+    // 定义常量
+    export enum SELECT_MODE {
+        /**
+         * 选中的模式，点选类型
+         */
+        POINT_MODE = 1,
 
-		/**
-		 * 选中的模式，添加路径类型
-		 */
-		PATH_MODE = 2
-	}
+        /**
+         * 选中的模式，添加路径类型
+         */
+        PATH_MODE = 2
+    }
 
-	/**
-	 * 只读模式不可编辑
-	 */
-	export let isREAD_ONLY: boolean = false;
+    /**
+     * 只读模式不可编辑
+     */
+    export let isREAD_ONLY: boolean = false;
 
-	/**
-	 * 全局数据
-	 */
-	interface _DATA {
-		/**
-		 * 所有的状态，通常是 key= box 的 name，value 是 box 的 vue 实例
-		 */
-		states: { [key: string]: SvgVue };
+    /**
+     * 全局数据
+     */
+    interface _DATA {
+        /**
+         * 所有的状态，通常是 key= box 的 ref，value 是 box 的 vue 实例
+         */
+        STATES: { [key: string]: BaseState };
 
-		/**
-		 * 所有的路径
-		 */
-		paths: { [key: string]: svg.Path };
+        /**
+         * 所有的路径
+         */
+        PATHS: { [key: string]: svg.Path };
 
-		/**
-		* 流程定义 JSON 数据
-		*/
-		JSON_DATA: {};
-	}
+        /**
+         * 所有的组件，key=id
+         */
+        ALL_COMPS: { [key: string]: Component };
 
-	export let DATA: _DATA = {
-		states: {},
-		paths: {},
-		JSON_DATA: {}
-	};
+        /**
+        * 流程定义 JSON 数据
+        */
+        JSON_DATA: {};
+    }
 
-	let name: StringJsonParam = { start: '开始节点', end: '结束节点', task: '任务节点', decision: '抉择节点', transition: '变迁路径' };
+    export let DATA: _DATA = {
+        STATES: {},
+        PATHS: {},
+        ALL_COMPS: {},
+        JSON_DATA: {}
+    };
 
-	/**
-	 * 
-	 * @param cop 
-	 */
-	function setTypeName(cop: SvgComp): void {
-		// ui.PropertyForm.cop = cop;
-		// ui.PropertyForm.selected = name[cop.type];
-	}
+    interface _MAIN_DATA {
+        selectedComponent: Component | null;
+        currentNode: any;
+        currentMode: SELECT_MODE;
+    }
 
-	interface Mgr extends Vue {
-		/**
-		 * 选中的 SVG 图形对象
-		 */
-		selectedComponent: SvgComp | null;
+    let MAIN_DATA: _MAIN_DATA = {
+        selectedComponent: null,			 	// 选中的 SVG 图形对象
+        currentNode: null,						// 当前选中的节点
+        currentMode: SELECT_MODE.POINT_MODE,	// 当前选中的选择模式
+    };
 
-		/**
-		 * 当前选中的选择模式
-		 */
-		currentMode: SELECT_MODE;
+    /**
+     * Main 程序
+     */
+    class Main {
+        /**
+         * 设置选中的组件
+         * 
+         * @param cop 
+         */
+        setSelectedComponent(cop: Component | null): void {
+            MAIN_DATA.selectedComponent = cop;
+        }
 
-		/**
-		 * 所有的组件
-		 * key=uid, value = 图形实例 component
-		 */
-		allComps: { [key: number]: SvgComp };
+        /**
+         * 获取选中的组件
+         * 
+         * @returns 
+         */
+        getSelectedComponent(): Component | null {
+            return MAIN_DATA.selectedComponent;
+        }
 
-		/**
-		 * 设置选中的组件
-		 * 
-		 * @param cop 
-		 */
-		setSelectedComponent(cop: SvgComp | null): void;
+        /**
+         * 清除桌布
+         */
+        clearStage(): void {
+            this.setSelectedComponent(null);
+            svg.PAPER.clear();
 
-		/**
-		 * 创建下个组件的 id
-		 */
-		nextId(): number;
+            for (var i in DATA)
+                // @ts-ignore
+                DATA[i] = {};
+        }
 
-		/**
-		 * 登记组件
-		 * 
-		 * @param vueObj 
-		 */
-		register(vueObj): void;
+        /**
+         * 无 UI Vue 实例
+         */
+        vue: Vue = new Vue({
+            data: MAIN_DATA,
+            watch: {
+                selectedComponent(newCop: Component, old: Component): void {
+                    main.updateSelectedComponent(newCop, old);
+                }
+            }
+        });
 
-		/**
-		 * 注销组件
-		 * 
-		 * @param id 
-		 */
-		unregister(this: Mgr, id: number): void;
+        updateSelectedComponent(newCop: Component, old: Component): void {
+            if (newCop) {
+                if (newCop.hasOwnProperty('resizeController')) {
+                    let state: State = <State>newCop;
+                    state.resizeController?.showBox();
+                }
 
-		/**
-		 * 清除桌布
-		 */
-		clearStage(): void;
-	}
+                if (newCop instanceof svg.Path)
+                    newCop.show();
 
-	let uid: number = 0;
+                setTypeName(newCop);
 
-	export var Mgr: Mgr = <Mgr>new Vue({
-		data: {
-			selectedComponent: null,			 	// 选中的 SVG 图形对象
-			currentNode: null,						// 当前选中的节点
-			currentMode: SELECT_MODE.POINT_MODE,	// 当前选中的选择模式
-		},
-		watch: {
-			selectedComponent(newCop: SvgComp, old: SvgComp): void {
-				newCop && newCop.resizeController && newCop.resizeController.showBox();
-				old && old.resizeController && old.resizeController.hideBox();
+                if (newCop.rawData)
+                    console.log(newCop.rawData)
+            }
 
-				if (newCop instanceof svg.Path)
-					newCop.show();
+            if (old) {
+                if (old.hasOwnProperty('resizeController')) {
+                    let state: State = <State>old;
+                    state.resizeController?.hideBox();
+                }
 
-				if (old instanceof svg.Path)
-					old.hide();
+                if (old instanceof svg.Path)
+                    old.hide();
+            }
+        }
+    }
 
-				if (newCop && newCop.rawData)
-					console.log(newCop.rawData)
+    /**
+     * 
+     * @param cop 
+     */
+    function setTypeName(cop: Component): void {
+        // ui.PropertyForm.cop = cop;
+        // ui.PropertyForm.selected = name[cop.type];
+    }
 
-				// if (newCop)
-				// 	setTypeName(newCop);
-			}
-		},
-		created() {
-			this.allComps = {}; 	// key=uid, value = 图形实例 component
-		},
-		methods: {
-			// 设置选中的组件
-			setSelectedComponent(this: Mgr, cop: SvgComp | null): void {
-				this.selectedComponent = cop;
-			},
+    // 单例
+    export let main = new Main();
 
-			// 获取选中的组件
-			getSelectedComponent(this: Mgr): SvgComp | null {
-				return this.selectedComponent;
-			},
-
-			// 创建下个组件的 id
-			nextId(): number {
-				return ++uid;
-			},
-
-			// 登记组件
-			register(this: Mgr, vueObj): void {
-				vueObj.id = this.nextId();
-				vueObj.svg.node.id = "ajSVG-" + vueObj.id;
-
-				this.allComps[vueObj.svg.node.id] = vueObj;
-			},
-
-			// 注销组件
-			unregister(this: Mgr, id: number): void {
-				delete this.allComps[id];
-			},
-
-			// 清除桌布
-			clearStage(this: Mgr): void {
-				this.setSelectedComponent(null);
-				svg.PAPER.clear();
-
-				for (var i in DATA)
-					DATA[i] = {};
-			}
-		}
-	});
+    let name: StringJsonParam = { start: '开始节点', end: '结束节点', task: '任务节点', decision: '抉择节点', transition: '变迁路径' };
 }

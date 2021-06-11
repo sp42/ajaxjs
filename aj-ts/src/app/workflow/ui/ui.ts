@@ -1,94 +1,4 @@
 namespace aj.wf {
-	let imgBox = (img: string, size: VBox) => aj.apply({ src: `../asset/images/workflow/${img}` }, size);
-
-	/**
-	 * JSON 渲染为图形
-	 * 
-	 * @param data 
-	 */
-	export function init(data: RawWorkflowData): void {
-		let states: { [key: string]: SvgVue } = DATA.states;
-
-		for (let i in data.states) {
-			let state: JsonState = data.states[i],
-				box: SvgVue;
-
-			switch (state.type) { // 生成 box
-				case 'start':
-					box = createRect(imgBox('start.png', state.attr), 'img');
-					break;
-				case 'decision':
-					box = createRect(imgBox('decision.png', state.attr), 'img');
-					break;
-				case 'end':
-					box = createRect(imgBox('end.png', state.attr), 'img');
-					break;
-				default:
-					box = createRect(state.attr);
-					box.text = <string><unknown>state.props.displayName;
-			}
-
-			box.type = state.type;
-			box.ref = i;
-			box.rawData = state;
-			box.init();
-
-			states[i] = box;
-		}
-
-		// 连线
-		let paths = DATA.paths;
-		for (let i in data.paths) {
-			let pathCfg: JsonTransition = data.paths[i],
-				from: SvgVue = states[pathCfg.from],
-				to: SvgVue = states[pathCfg.to],
-				path: svg.Path = new svg.Path(from.svg, to.svg, pathCfg);
-
-			path.id = i;
-			// path.wfData = pathCfg.props;
-			paths[i] = path;
-
-			pathCfg.dots && pathCfg.dots.length && path.restore(pathCfg.dots);
-		}
-	}
-
-	/**
-	 * 创建图形基类的工厂函数
-	 * 
-	 * @param box 
-	 * @param type 
-	 */
-	function createRect(box: VBox, type?: string): SvgVue {
-		let raphaelObj;
-
-		switch (type) {
-			case 'img':
-				raphaelObj = svg.PAPER.image().attr(box).addClass('baseImg');
-				break;
-			default:
-				raphaelObj = svg.PAPER.rect().attr(box).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
-		}
-
-		let vueObj: SvgVue = <SvgVue>new Vue({
-			mixins: [svg.BaseRect],
-			data: { vBox: box }
-		});
-
-		vueObj.PAPER = svg.PAPER;
-		vueObj.svg = raphaelObj;
-
-		// 登记注册
-		Mgr.register(vueObj);
-
-		if (type == 'img')
-			vueObj.resize = false; // 图片禁止放大缩小
-
-		if (isREAD_ONLY)
-			vueObj.resize = vueObj.isDrag = false;
-
-		return vueObj;
-	}
-
 	setTimeout(() => {
 		let el = <HTMLElement>document.body.$(".canvas");
 		//@ts-ignore
@@ -98,6 +8,48 @@ namespace aj.wf {
 
 		wysiwyg.statusBar.showMsg('欢迎来到 工作流流程设计器');
 	}, 800);
+
+	/**
+	 * JSON 渲染为图形
+	 * 
+	 * @param data 
+	 */
+	function init(data: RawWorkflowData): void {
+		let states: { [key: string]: BaseState } = DATA.STATES;
+
+		for (let i in data.states) {
+			let stateData: JsonState = data.states[i],
+				state: BaseState;
+
+			switch (stateData.type) { // 生成 box
+				case 'start':
+				case 'decision':
+				case 'end':
+					state = new ImageState(svg.PAPER, i, stateData);
+					break;
+				default:
+					state = new State(svg.PAPER, i, stateData); 
+			}
+
+			if (isREAD_ONLY)
+				state.resize = state.isDrag = false;
+
+			states[i] = state;
+		}
+
+		// 连线
+		let paths: { [key: string]: svg.Path } = DATA.PATHS;
+
+		for (let i in data.paths) {
+			let pathData: JsonTransition = data.paths[i],
+				from: BaseState = states[pathData.from],
+				to: BaseState = states[pathData.to],
+				path: svg.Path = new svg.Path(i, from.svg, to.svg, pathData);
+
+			paths[i] = path;
+			pathData.dots && pathData.dots.length && path.restore(pathData.dots);
+		}
+	}
 
 	// 菜单选中的
 	document.body.$('.components ul li.selectable', li => {
@@ -112,10 +64,10 @@ namespace aj.wf {
 
 			// 切换模式
 			if (el.classList.contains('pointer'))
-				Mgr.currentMode = SELECT_MODE.POINT_MODE;
+				main.currentMode = SELECT_MODE.POINT_MODE;
 
 			if (el.classList.contains('path'))
-				Mgr.currentMode = SELECT_MODE.PATH_MODE;
+				main.currentMode = SELECT_MODE.PATH_MODE;
 		}
 	});
 
@@ -124,14 +76,13 @@ namespace aj.wf {
 			// @ts-ignore
 			isSVGAElement = !!el.ownerSVGElement; // 点击页面任何一个元素，若为 SVG 且是组件，使其选中的状态
 
-		if (isSVGAElement && el.id.indexOf('ajSVG') != -1) {
-			//@ts-ignore
-			let component = Mgr.allComps[el.id];
+		if (isSVGAElement && el.id.indexOf('ajComp') != -1) {
+			let component:Component = DATA.ALL_COMPS[el.id];
 
 			if (!component)
 				throw '未登记组件 ' + el.id;
 
-			Mgr.setSelectedComponent(component);
+			main.setSelectedComponent(component);
 		}
 	});
 
@@ -144,10 +95,9 @@ namespace aj.wf {
 			return;
 
 		// 键盘删除节点
-		if (ev.keyCode == 46 && Mgr.selectedComponent) {
-			Mgr.selectedComponent.remove();
-			Mgr.selectedComponent = null;
+		if (ev.keyCode == 46 && main.vue.selectedComponent) {
+			main.selectedComponent.remove();
+			main.selectedComponent = null;
 		}
 	});
 }
-

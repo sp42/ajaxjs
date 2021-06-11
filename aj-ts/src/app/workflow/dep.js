@@ -17,3 +17,20 @@
 			vueObj3.init(); 
 		
 			PATH2 = new aj.svg.Path(vueObj3.svg, vueObj1.svg);*/
+
+
+			            /* this上的数据不一定要在data中定义，如果不想变成响应式数据就没有必要定义，这样反而会性能优化 */
+						aj.apply(this, {
+							type: String,	// 组件类型
+							id: String,		// 每个图形对象赋予一个 id
+							name: String,	// 通过 name 保存到 states 的 map 之中，它是 key
+							svg: Object,	// raphael 图形实例
+							wfData: {},		// 工作流状态信息
+							PAPER: Object,	// 图形所在的桌布
+							isDrag: true, 	// 是否启用鼠标拖放
+							resize: true, 	// 是否启用放大缩小
+							resizeNode: null,// resize 对象
+							textNode: Object// 文字对象，这是 Vue 实例
+						});
+			
+						this.updateHandlers = []; // 当大小、位置有变化时候执行的函数列表

@@ -11,7 +11,7 @@ namespace aj.svg {
         /**
          * 所服务的那个组件
          */
-        private rectComp: SvgComp;
+        private rectComp: wf.BaseState;
 
         /**
          * 虚拟的一个控制框
@@ -39,10 +39,9 @@ namespace aj.svg {
          * 
          * @param rectComp 所服务的那个组件
          */
-        constructor(rectComp: SvgComp) {
+        constructor(rectComp: wf.BaseState) {
             this.rectComp = rectComp;
             this.vBox = rectComp.vBox; // 虚拟的一个控制框
-            rectComp.resizeController = this;
         }
 
         /**
@@ -56,7 +55,8 @@ namespace aj.svg {
             this.dotX = this.dotY = 0;
 
             let bdragStart = function (this: Raphael) {// 一定要用 fn，why？
-                self.dotX = Number(this.attr('x')), self.dotY = Number(this.attr('y'));
+                self.dotX = Number(this.attr('x'));
+                self.dotY = Number(this.attr('y'));
             }
 
             let PAPER = this.rectComp.PAPER;
@@ -108,7 +108,7 @@ namespace aj.svg {
          * 定位各个点的坐标
          */
         private resize(): void {
-            // this.setDotsPosition();
+            this.setDotsPosition();
             this.rectComp.svg.attr(this.vBox);
             this.updateBorder();
         }

@@ -2,14 +2,22 @@ namespace aj.wf {
     /**
      * 一个流程节点（图片）
      */
-    class ImageState extends BaseState {
+    export class ImageState extends BaseState {
         resize: boolean = false;// 图片禁止放大缩小
 
-        constructor(PAPER: any, type: string, ref: string, rawData: JsonState, vBox: VBox) {
-            super(PAPER, type, ref, rawData, vBox, getAttr(PAPER, type, vBox));
+        constructor(PAPER: any, ref: string, rawData: JsonState) {
+            super(PAPER, ref, rawData, getAttr(PAPER, rawData.type, rawData.attr));
         }
     }
 
+    /**
+     * super 限制，故设立一个函数
+     * 
+     * @param PAPER 
+     * @param type 
+     * @param vBox 
+     * @returns 
+     */
     function getAttr(PAPER: any, type: string, vBox: VBox): Raphael {
         let attr: {} = {};
 
@@ -25,7 +33,7 @@ namespace aj.wf {
                 break;
         }
 
-        return PAPER.image().attr({}).addClass('baseImg');
+        return PAPER.image().attr(attr).addClass('baseImg');
     }
 
     /**
