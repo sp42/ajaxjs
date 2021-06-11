@@ -9,12 +9,12 @@
 	</jsp:include>
 	<style>
 		body {
-			background: url('https://static-163yun.ajaxjs.com/images/admin-user-login/dynamic-style.png') repeat fixed;
+			background: url('https://ajaxjs.nos-eastchina1.126.net/images/admin-user-login/dynamic-style.png') repeat fixed;
 		}
 		
 		.form {
 			margin: 0 auto;
-			background: rgba(0, 0, 0, 0) url('https://static-163yun.ajaxjs.com/images/admin-user-login/wrap.png') no-repeat;
+			background: rgba(0, 0, 0, 0) url('https://ajaxjs.nos-eastchina1.126.net/images/admin-user-login/wrap.png') no-repeat;
 			width: 436px;
 			height: 950px;
 			position: relative;
@@ -31,7 +31,7 @@
 			left: 7px;
 			width: 126px;
 			height: 49px;
-			background: rgba(0, 0, 0, 0) url('https://static-163yun.ajaxjs.com/images/admin-user-login/login-top-title.png') no-repeat scroll 0% 0%;
+			background: rgba(0, 0, 0, 0) url('https://ajaxjs.nos-eastchina1.126.net/images/admin-user-login/login-top-title.png') no-repeat scroll 0% 0%;
 		}
 		
 		footer {
