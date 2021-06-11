@@ -80,7 +80,7 @@
 			</table>
 			<script> 
 				new Vue({el : '.aj-pageHelper'});
-				window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://static-163yun.ajaxjs.com/bs/static/api/share.js?cdnversion='+~(-new Date()/36e5)];
+				window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='https://ajaxjs.nos-eastchina1.126.net/bs/static/api/share.js?cdnversion='+~(-new Date()/36e5)];
 			</script>
 </c:if>
 
