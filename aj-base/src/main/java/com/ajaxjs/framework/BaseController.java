@@ -298,7 +298,7 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 	}
 
 	/**
-	 * 、
+	 * 输出 JSON 操作成功
 	 * 
 	 * @return
 	 */
