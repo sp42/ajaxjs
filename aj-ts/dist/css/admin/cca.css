@@ -1,0 +1,84 @@
+.main {
+  margin: 0 auto;
+  width: 95%;
+  font-size: 9pt;
+}
+.main .left {
+  width: 200px;
+  margin-right: 2%;
+}
+.main a {
+  text-decoration: underline;
+}
+.center {
+  margin: auto;
+}
+.left h3 {
+  font-weight: bold;
+  margin-bottom: 5%;
+}
+.left select {
+  width: 100%;
+}
+.left select[multiple] {
+  min-height: 400px;
+  border-color: lightgray;
+}
+.config {
+  border: 1px solid #e3e3e3;
+  border-spacing: 0;
+  border-collapse: separate;
+  box-sizing: border-box;
+}
+.config th,
+.config td {
+  padding: 0.8% 0;
+  box-sizing: border-box;
+}
+.config fieldset {
+  border: 0;
+}
+.config tr {
+  border-bottom: 1px solid #e3e3e3;
+}
+.config tr:nth-child(odd) {
+  border-top: 1px solid white;
+  background: #f5f5f5;
+}
+.config p {
+  margin: 2% 0 0 18px;
+  color: gray;
+  font-size: 0.8rem;
+  max-width: 310px;
+}
+.config label i {
+  cursor: pointer;
+}
+.config td.first {
+  text-align: left;
+  padding-left: 2%;
+}
+.config fieldset[disabled],
+.config fieldset[disabled] a,
+.config a.disable {
+  color: lightgray;
+}
+.config .api-url > span {
+  vertical-align: top;
+}
+.config .api-url > a {
+  word-break: break-all;
+  max-width: 160px;
+  display: inline-block;
+}
+.cfgDlg > div {
+  text-align: left;
+  margin-top: 20px;
+}
+.cfgDlg > div .label {
+  width: 80px;
+}
+.cfgDlg > div input,
+.cfgDlg > div textarea {
+  width: 300px;
+}

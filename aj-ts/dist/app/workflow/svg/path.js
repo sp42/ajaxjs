@@ -7,14 +7,16 @@ var aj;
          * 连线路径
          */
         var Path = /** @class */ (function () {
-            function Path(from, to, pathCfg) {
+            function Path(ref, from, to, data) {
                 /**
                  * 默认 path 就是 Transition 类型
                  */
                 this.type = 'transition';
+                this.id = aj.wf.ComMgr.nextId();
+                this.ref = ref;
                 this.from = from;
                 this.to = to;
-                this.rawData = pathCfg;
+                this.rawData = data;
                 var fromBB = from.getBBox(), toBB = to.getBBox(), 
                 // 起点是 box 中央，这个是起点坐标
                 fromPos = svg.Utils.connPoint(fromBB, { x: toBB.x + toBB.width / 2, y: toBB.y + toBB.height / 2 }), 
@@ -32,11 +34,15 @@ var aj;
                 midDot.right(this.toDot);
                 this.svg = svg.PAPER.path().addClass('path');
                 this.arrow = svg.PAPER.path().addClass('arrow');
-                aj.wf.Mgr.register(this);
+                aj.wf.ComMgr.register(this);
                 this.hide();
                 this.moveFn = rectResizeHandler.bind(this);
-                // from.addUpdateHandler(this.moveFn);
-                // to.addUpdateHandler(this.moveFn);
+                from.comp.addUpdateHandler(this.moveFn);
+                to.comp.addUpdateHandler(this.moveFn);
+                if (data.text && data.text.text) {
+                    this.text = svg.createTextNode(data.text.text, 0, 0);
+                    // this.text.setXY_vBox(this.vBox);
+                }
                 this.refreshPath();
             }
             /**
@@ -54,11 +60,11 @@ var aj;
                 }
                 this.svg.attr({ path: path.join('') });
                 this.rendererArrow(d);
-                // if (this.textObj) {
-                // let mid = this.midDot().pos();
-                //     let textPos = this.textObj.getXY();// 定位文字
-                //     this.textObj.setXY(mid.x + 30, mid.y + 10);
-                // }
+                if (this.text) { // 定位文字
+                    var mid = this.midDot().pos();
+                    // let textPos = this.text.getXY();
+                    this.text.setXY(mid.x - 30, mid.y - 5);
+                }
             };
             /**
              * 渲染箭头

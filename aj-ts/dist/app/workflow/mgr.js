@@ -1,5 +1,51 @@
 "use strict";
+/**
+ * 组件管理器
+ */
 var aj;
+(function (aj) {
+    var wf;
+    (function (wf) {
+        var ComMgr;
+        (function (ComMgr) {
+            /**
+             * id 记数器
+             */
+            var uid = 0;
+            /**
+             * 生成下一个 id
+             *
+             * @returns 下一个 id
+             */
+            function nextId() {
+                return ++uid;
+            }
+            ComMgr.nextId = nextId;
+            /**
+             * 登记组件
+             *
+             * @param vueObj
+             */
+            function register(comp) {
+                var id = "ajComp-" + comp.id;
+                // comp.svg.node.id = id;
+                var w = comp;
+                w.svg.node.id = id;
+                wf.DATA.ALL_COMPS[id] = comp;
+            }
+            ComMgr.register = register;
+            /**
+             * 注销组件
+             *
+             * @param id
+             */
+            function unregister(id) {
+                delete wf.DATA.ALL_COMPS[id];
+            }
+            ComMgr.unregister = unregister;
+        })(ComMgr = wf.ComMgr || (wf.ComMgr = {}));
+    })(wf = aj.wf || (aj.wf = {}));
+})(aj || (aj = {}));
 (function (aj) {
     var wf;
     (function (wf) {
@@ -20,11 +66,83 @@ var aj;
          */
         wf.isREAD_ONLY = false;
         wf.DATA = {
-            states: {},
-            paths: {},
+            STATES: {},
+            PATHS: {},
+            ALL_COMPS: {},
             JSON_DATA: {}
         };
-        var name = { start: '开始节点', end: '结束节点', task: '任务节点', decision: '抉择节点', transition: '变迁路径' };
+        var MAIN_DATA = {
+            selectedComponent: null,
+            currentNode: null,
+            currentMode: SELECT_MODE.POINT_MODE,
+        };
+        /**
+         * Main 程序
+         */
+        var Main = /** @class */ (function () {
+            function Main() {
+                /**
+                 * 无 UI Vue 实例
+                 */
+                this.vue = new Vue({
+                    data: MAIN_DATA,
+                    watch: {
+                        selectedComponent: function (newCop, old) {
+                            wf.main.updateSelectedComponent(newCop, old);
+                        }
+                    }
+                });
+            }
+            /**
+             * 设置选中的组件
+             *
+             * @param cop
+             */
+            Main.prototype.setSelectedComponent = function (cop) {
+                MAIN_DATA.selectedComponent = cop;
+            };
+            /**
+             * 获取选中的组件
+             *
+             * @returns
+             */
+            Main.prototype.getSelectedComponent = function () {
+                return MAIN_DATA.selectedComponent;
+            };
+            /**
+             * 清除桌布
+             */
+            Main.prototype.clearStage = function () {
+                this.setSelectedComponent(null);
+                aj.svg.PAPER.clear();
+                for (var i in wf.DATA)
+                    // @ts-ignore
+                    wf.DATA[i] = {};
+            };
+            Main.prototype.updateSelectedComponent = function (newCop, old) {
+                var _a, _b;
+                if (newCop) {
+                    if (newCop.hasOwnProperty('resizeController')) {
+                        var state = newCop;
+                        (_a = state.resizeController) === null || _a === void 0 ? void 0 : _a.showBox();
+                    }
+                    if (newCop instanceof aj.svg.Path)
+                        newCop.show();
+                    setTypeName(newCop);
+                    if (newCop.rawData)
+                        console.log(newCop.rawData);
+                }
+                if (old) {
+                    if (old.hasOwnProperty('resizeController')) {
+                        var state = old;
+                        (_b = state.resizeController) === null || _b === void 0 ? void 0 : _b.hideBox();
+                    }
+                    if (old instanceof aj.svg.Path)
+                        old.hide();
+                }
+            };
+            return Main;
+        }());
         /**
          *
          * @param cop
@@ -33,61 +151,8 @@ var aj;
             // ui.PropertyForm.cop = cop;
             // ui.PropertyForm.selected = name[cop.type];
         }
-        var uid = 0;
-        wf.Mgr = new Vue({
-            data: {
-                selectedComponent: null,
-                currentNode: null,
-                currentMode: SELECT_MODE.POINT_MODE,
-            },
-            watch: {
-                selectedComponent: function (newCop, old) {
-                    newCop && newCop.resizeController && newCop.resizeController.showBox();
-                    old && old.resizeController && old.resizeController.hideBox();
-                    if (newCop instanceof aj.svg.Path)
-                        newCop.show();
-                    if (old instanceof aj.svg.Path)
-                        old.hide();
-                    if (newCop && newCop.rawData)
-                        console.log(newCop.rawData);
-                    // if (newCop)
-                    // 	setTypeName(newCop);
-                }
-            },
-            created: function () {
-                this.allComps = {}; // key=uid, value = 图形实例 component
-            },
-            methods: {
-                // 设置选中的组件
-                setSelectedComponent: function (cop) {
-                    this.selectedComponent = cop;
-                },
-                // 获取选中的组件
-                getSelectedComponent: function () {
-                    return this.selectedComponent;
-                },
-                // 创建下个组件的 id
-                nextId: function () {
-                    return ++uid;
-                },
-                // 登记组件
-                register: function (vueObj) {
-                    vueObj.id = this.nextId();
-                    vueObj.svg.node.id = "ajSVG-" + vueObj.id;
-                    this.allComps[vueObj.svg.node.id] = vueObj;
-                },
-                // 注销组件
-                unregister: function (id) {
-                    delete this.allComps[id];
-                },
-                // 清除桌布
-                clearStage: function () {
-                    this.setSelectedComponent(null);
-                    aj.svg.PAPER.clear();
-                    for (var i in wf.DATA)
-                        wf.DATA[i] = {};
-                }
-            }
-        });
+        // 单例
+        wf.main = new Main();
+        var name = { start: '开始节点', end: '结束节点', task: '任务节点', decision: '抉择节点', transition: '变迁路径' };
     })(wf = aj.wf || (aj.wf = {}));
 })(aj || (aj = {}));

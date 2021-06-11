@@ -21,13 +21,22 @@ var aj;
          */
         var ImageState = /** @class */ (function (_super) {
             __extends(ImageState, _super);
-            function ImageState(PAPER, type, ref, rawData, vBox) {
-                var _this = _super.call(this, PAPER, type, ref, rawData, vBox, getAttr(PAPER, type, vBox)) || this;
+            function ImageState(PAPER, ref, rawData) {
+                var _this = _super.call(this, PAPER, ref, rawData, getAttr(PAPER, rawData.type, rawData.attr)) || this;
                 _this.resize = false; // 图片禁止放大缩小
                 return _this;
             }
             return ImageState;
         }(wf.BaseState));
+        wf.ImageState = ImageState;
+        /**
+         * super 限制，故设立一个函数
+         *
+         * @param PAPER
+         * @param type
+         * @param vBox
+         * @returns
+         */
         function getAttr(PAPER, type, vBox) {
             var attr = {};
             switch (type) { // 生成 box
@@ -41,7 +50,7 @@ var aj;
                     attr = imgBox('end.png', vBox);
                     break;
             }
-            return PAPER.image().attr({}).addClass('baseImg');
+            return PAPER.image().attr(attr).addClass('baseImg');
         }
         /**
          * 增加图片 src 属性

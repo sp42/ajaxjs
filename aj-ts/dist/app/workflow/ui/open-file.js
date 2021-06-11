@@ -16,7 +16,7 @@ var aj;
                         this.$refs.layer.$children[0].ajaxGet();
                     },
                     open: function (id) {
-                        wf.Mgr.clearStage();
+                        Mgr.clearStage();
                         // 定义实体
                         aj.xhr.get(this.ajResources.ctx + '/admin/workflow/process/' + id + '/', function (j) {
                             ui.DefInfo.info = j.result;
@@ -27,7 +27,7 @@ var aj;
                         // 定义 json
                         aj.xhr.get(this.ajResources.ctx + '/admin/workflow/process/getJson/' + id + '/', function (j) {
                             wf.DATA.JSON_DATA = j;
-                            wf.init(j);
+                            init(j);
                         });
                         this.$refs.layer.close();
                         FB.statusBar.showMsg("打开工作流流程成功，读取流程定义成功");

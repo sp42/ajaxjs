@@ -1839,7 +1839,6 @@ textarea {
   --admin-main-color: #1e6bb8;
 }
 .aj-list .no-data {
-  padding: 10%;
   color: gray;
 }
 .aj-classic-list li {
@@ -2299,10 +2298,10 @@ p.note {
   background: -webkit-gradient(linear, center top, center bottom, from(transparent), to(white));
 }
 .aj-expander .openBtn {
-  background: url("https://static-163yun.ajaxjs.com/images/openBtn.png");
+  background: url("https://ajaxjs.nos-eastchina1.126.net/images/openBtn.png");
 }
 .aj-expander .closeBtn {
-  background: url("https://static-163yun.ajaxjs.com/images/closeBtn.png");
+  background: url("https://ajaxjs.nos-eastchina1.126.net/images/closeBtn.png");
 }
 .aj-expander .closeBtn,
 .aj-expander .openBtn {

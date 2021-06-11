@@ -174,6 +174,10 @@ var aj;
                     else if (this.$parent.onEditClk) // 打开另外的编辑界面
                         //@ts-ignore    
                         this.$parent.onEditClk(this.id);
+                    //@ts-ignore  
+                    else if (this.$parent.$parent.onEditClk) // 打开另外的编辑界面
+                        //@ts-ignore    
+                        this.$parent.$parent.onEditClk(this.id);
                 };
                 /**
                  * 双击单元格进入编辑

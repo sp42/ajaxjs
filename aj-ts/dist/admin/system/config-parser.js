@@ -21,8 +21,8 @@ var aj;
                 };
                 var formGetOptions = {
                     data: function () {
-                        var options = {}; // key 为 value 值，name 为显示文字
-                        var option = this.configObj.option;
+                        var options = {}, // key 为 value 值，name 为显示文字
+                        option = this.configObj.option;
                         if (option) {
                             for (var i = 0, j = option.length; i < j; i++) {
                                 var arr = option[i].split("=");
@@ -86,6 +86,7 @@ var aj;
                     methods: {
                         getChecked: function (_key) {
                             var v = this.configObj.value, key = Number(_key);
+                            // @ts-ignore
                             return (key & v) === key;
                         }
                     },
@@ -157,6 +158,7 @@ var aj;
                                     var ui = control.ui || control.type || 'text', template = shortHandsMap[ui] || "<div>\u627E\u4E0D\u5230\u5BF9\u5E94\u7684 " + ui + " \u7EC4\u4EF6</div>";
                                     if (typeof (template) === 'function')
                                         template = template(control);
+                                    // @ts-ignore
                                     this.controls.push({ config: control, mixins: [baseFormControl], template: template });
                                 }
                             }

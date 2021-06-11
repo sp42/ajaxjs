@@ -21,13 +21,22 @@ var aj;
          */
         var State = /** @class */ (function (_super) {
             __extends(State, _super);
-            function State(PAPER, type, ref, rawData, vBox) {
+            function State(PAPER, ref, data) {
                 var _this = this;
-                var svg = PAPER.rect().attr(vBox).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
-                _this = _super.call(this, PAPER, type, ref, rawData, vBox, svg) || this;
+                var svgR = PAPER.rect().attr(data.attr).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
+                _this = _super.call(this, PAPER, ref, data, svgR) || this;
+                if (data.text && data.text.text) {
+                    _this.text = aj.svg.createTextNode(data.text.text, 0, 0);
+                    _this.text.setXY_vBox(_this.vBox);
+                }
+                if (_this.resize) {
+                    _this.resizeController = new aj.svg.ResizeControl(_this);
+                    _this.resizeController.renderer();
+                }
                 return _this;
             }
             return State;
         }(wf.BaseState));
+        wf.State = State;
     })(wf = aj.wf || (aj.wf = {}));
 })(aj || (aj = {}));

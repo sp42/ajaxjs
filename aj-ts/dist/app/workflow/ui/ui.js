@@ -3,76 +3,6 @@ var aj;
 (function (aj) {
     var wf;
     (function (wf) {
-        var imgBox = function (img, size) { return aj.apply({ src: "../asset/images/workflow/" + img }, size); };
-        /**
-         * JSON 渲染为图形
-         *
-         * @param data
-         */
-        function init(data) {
-            var states = wf.DATA.states;
-            for (var i in data.states) {
-                var state = data.states[i], box = void 0;
-                switch (state.type) { // 生成 box
-                    case 'start':
-                        box = createRect(imgBox('start.png', state.attr), 'img');
-                        break;
-                    case 'decision':
-                        box = createRect(imgBox('decision.png', state.attr), 'img');
-                        break;
-                    case 'end':
-                        box = createRect(imgBox('end.png', state.attr), 'img');
-                        break;
-                    default:
-                        box = createRect(state.attr);
-                        box.text = state.props.displayName;
-                }
-                box.type = state.type;
-                box.ref = i;
-                box.rawData = state;
-                box.init();
-                states[i] = box;
-            }
-            // 连线
-            var paths = wf.DATA.paths;
-            for (var i in data.paths) {
-                var pathCfg = data.paths[i], from = states[pathCfg.from], to = states[pathCfg.to], path = new aj.svg.Path(from.svg, to.svg, pathCfg);
-                path.id = i;
-                // path.wfData = pathCfg.props;
-                paths[i] = path;
-                pathCfg.dots && pathCfg.dots.length && path.restore(pathCfg.dots);
-            }
-        }
-        wf.init = init;
-        /**
-         * 创建图形基类的工厂函数
-         *
-         * @param box
-         * @param type
-         */
-        function createRect(box, type) {
-            var raphaelObj;
-            switch (type) {
-                case 'img':
-                    raphaelObj = aj.svg.PAPER.image().attr(box).addClass('baseImg');
-                    break;
-                default:
-                    raphaelObj = aj.svg.PAPER.rect().attr(box).attr({ fill: "90-#fff-#F6F7FF" }).addClass('rectBaseStyle');
-            }
-            var vueObj = new Vue({
-                mixins: [aj.svg.BaseRect],
-                data: { vBox: box }
-            });
-            vueObj.PAPER = aj.svg.PAPER;
-            vueObj.svg = raphaelObj;
-            // 登记注册
-            wf.Mgr.register(vueObj);
-            if (type == 'img')
-                vueObj.resize = false; // 图片禁止放大缩小
-            if (wf.isREAD_ONLY)
-                vueObj.resize = vueObj.isDrag = false;
-            return vueObj;
-        }
         setTimeout(function () {
             var el = document.body.$(".canvas");
             //@ts-ignore
@@ -81,6 +11,36 @@ var aj;
             init(TEST_DATA);
             aj.wysiwyg.statusBar.showMsg('欢迎来到 工作流流程设计器');
         }, 800);
+        /**
+         * JSON 渲染为图形
+         *
+         * @param data
+         */
+        function init(data) {
+            var states = wf.DATA.STATES;
+            for (var i in data.states) {
+                var stateData = data.states[i], state = void 0;
+                switch (stateData.type) { // 生成 box
+                    case 'start':
+                    case 'decision':
+                    case 'end':
+                        state = new wf.ImageState(aj.svg.PAPER, i, stateData);
+                        break;
+                    default:
+                        state = new wf.State(aj.svg.PAPER, i, stateData);
+                }
+                if (wf.isREAD_ONLY)
+                    state.resize = state.isDrag = false;
+                states[i] = state;
+            }
+            // 连线
+            var paths = wf.DATA.PATHS;
+            for (var i in data.paths) {
+                var pathData = data.paths[i], from = states[pathData.from], to = states[pathData.to], path = new aj.svg.Path(i, from.svg, to.svg, pathData);
+                paths[i] = path;
+                pathData.dots && pathData.dots.length && path.restore(pathData.dots);
+            }
+        }
         // 菜单选中的
         document.body.$('.components ul li.selectable', function (li) {
             li.onclick = function (ev) {
@@ -90,21 +50,20 @@ var aj;
                 el.classList.add(aj.SELECTED);
                 // 切换模式
                 if (el.classList.contains('pointer'))
-                    wf.Mgr.currentMode = wf.SELECT_MODE.POINT_MODE;
+                    wf.main.currentMode = wf.SELECT_MODE.POINT_MODE;
                 if (el.classList.contains('path'))
-                    wf.Mgr.currentMode = wf.SELECT_MODE.PATH_MODE;
+                    wf.main.currentMode = wf.SELECT_MODE.PATH_MODE;
             };
         });
         document.addEventListener('click', function (ev) {
             var el = ev.target, 
             // @ts-ignore
             isSVGAElement = !!el.ownerSVGElement; // 点击页面任何一个元素，若为 SVG 且是组件，使其选中的状态
-            if (isSVGAElement && el.id.indexOf('ajSVG') != -1) {
-                //@ts-ignore
-                var component = wf.Mgr.allComps[el.id];
+            if (isSVGAElement && el.id.indexOf('ajComp') != -1) {
+                var component = wf.DATA.ALL_COMPS[el.id];
                 if (!component)
                     throw '未登记组件 ' + el.id;
-                wf.Mgr.setSelectedComponent(component);
+                wf.main.setSelectedComponent(component);
             }
         });
         /**
@@ -115,9 +74,9 @@ var aj;
             if (wf.isREAD_ONLY)
                 return;
             // 键盘删除节点
-            if (ev.keyCode == 46 && wf.Mgr.selectedComponent) {
-                wf.Mgr.selectedComponent.remove();
-                wf.Mgr.selectedComponent = null;
+            if (ev.keyCode == 46 && wf.main.vue.selectedComponent) {
+                wf.main.selectedComponent.remove();
+                wf.main.selectedComponent = null;
             }
         });
     })(wf = aj.wf || (aj.wf = {}));
