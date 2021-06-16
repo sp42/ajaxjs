@@ -99,7 +99,6 @@ table.listTable {
   text-align: left;
 }
 .assign-right .main-panel {
-  max-height: 500px;
   min-width: 900px;
   overflow-y: scroll;
   border-top: 1px solid white;

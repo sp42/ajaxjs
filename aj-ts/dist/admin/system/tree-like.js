@@ -65,7 +65,7 @@ var aj;
                     render: function () {
                         var select = this.$el.$('select');
                         select.innerHTML = '';
-                        aj.xhr.get('.', function (j) { return aj.tree.rendererOption(j.result, select); });
+                        aj.xhr.get('json', function (j) { return aj.tree.rendererOption(j.result, select); });
                     }
                 }
             });

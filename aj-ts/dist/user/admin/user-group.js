@@ -18,11 +18,12 @@ var aj;
                     }
                 },
                 mounted: function () {
+                    var _this = this;
                     this.load();
-                    //         xhr.form(this.$refs.createOrUpdate.$el.$('form'), j => {
-                    //             j && aj.msg.show(j.msg);
-                    //             this.load();
-                    //         });
+                    aj.xhr.form(this.$refs.createOrUpdate.$el.$('form'), function (j) {
+                        j && aj.msg.show(j.msg);
+                        _this.load();
+                    });
                 },
                 methods: {
                     load: function () {

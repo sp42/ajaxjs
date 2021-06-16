@@ -25,7 +25,9 @@ var aj;
                 mounted: function () {
                     var _this = this;
                     /* 可以通过 props 单向绑定 resRightValue，但每个组件要设置一样属性。这里避免多处重复设置属性  */
-                    this.$watch('$parent.$parent.resRightValue', function (v) { return _this.enabled = _this.check(v, _this.resId); });
+                    this.$watch('$parent.resRightValue', function (v) {
+                        _this.enabled = _this.check(v, _this.resId);
+                    });
                 },
                 methods: {
                     /**
@@ -49,7 +51,7 @@ var aj;
                         // @ts-ignore
                         userGroupId = admin.ASSIGN_RIGHT.userGroupId; // 全局变量
                         if (userGroupId && this.resId) {
-                            aj.xhr.post('../user_group/updateResourceRightValue', function (j) { return aj.msg.show(j.msg); }, {
+                            aj.xhr.post('../updateResourceRightValue', function (j) { return aj.msg.show(j.msg); }, {
                                 userGroupId: userGroupId,
                                 isEnable: isEnable,
                                 resId: this.resId
@@ -92,15 +94,11 @@ var aj;
                         if (data.id) {
                             _this.userGroupId = data.id;
                             _this.currentUserGroup = data.name;
-                            aj.xhr.get('../user_group/' + data.id + '/', function (j) { return _this.resRightValue = j.result.accessKey || 0; });
+                            aj.xhr.get("../" + data.id + "/", function (j) { return _this.resRightValue = j.result.accessKey || 0; });
                         }
                     });
                 }
             });
-            // USER_GROUP.$refs.layer.show();
-            // ASSIGN_RIGHT.$refs.assignRight.show();
-            //BAR.$refs.createUI.show();
-            //BAR.$refs.form.load(1);
         })(admin = user.admin || (user.admin = {}));
     })(user = aj.user || (aj.user = {}));
 })(aj || (aj = {}));

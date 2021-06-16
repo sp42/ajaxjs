@@ -24,7 +24,9 @@ namespace aj.user.admin {
         },
         mounted(): void {
             /* 可以通过 props 单向绑定 resRightValue，但每个组件要设置一样属性。这里避免多处重复设置属性  */
-            this.$watch('$parent.$parent.resRightValue', (v: any) => this.enabled = this.check(v, this.resId));
+            this.$watch('$parent.resRightValue', (v: any) => {
+                this.enabled = this.check(v, this.resId);
+            });
         },
         methods: {
             /**
@@ -50,7 +52,7 @@ namespace aj.user.admin {
                     userGroupId = ASSIGN_RIGHT.userGroupId; // 全局变量
 
                 if (userGroupId && this.resId) {
-                    xhr.post('../user_group/updateResourceRightValue', j => msg.show(j.msg), {
+                    xhr.post('../updateResourceRightValue', j => msg.show(j.msg), {
                         userGroupId: userGroupId,
                         isEnable: isEnable,
                         resId: this.resId
@@ -92,14 +94,9 @@ namespace aj.user.admin {
                 if (data.id) {
                     this.userGroupId = data.id;
                     this.currentUserGroup = data.name;
-                    xhr.get('../user_group/' + data.id + '/', j => this.resRightValue = j.result.accessKey || 0);
+                    xhr.get(`../${data.id}/`, j => this.resRightValue = j.result.accessKey || 0);
                 }
             });
         }
     });
-
-    // USER_GROUP.$refs.layer.show();
-    // ASSIGN_RIGHT.$refs.assignRight.show();
-    //BAR.$refs.createUI.show();
-    //BAR.$refs.form.load(1);
 }

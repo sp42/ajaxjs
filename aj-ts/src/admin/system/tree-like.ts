@@ -95,7 +95,7 @@ namespace aj.admin.treeLike {
             render(this: Vue): void {
                 let select: HTMLSelectElement = <HTMLSelectElement>this.$el.$('select');
                 select.innerHTML = '';
-                xhr.get('.', j => tree.rendererOption(<tree.TreeNode[]>j.result, select));
+                xhr.get('json', j => tree.rendererOption(<tree.TreeNode[]>j.result, select));
             }
         }
     });

@@ -36,7 +36,11 @@ var aj;
                 },
                 methods: {
                     gridCols: function () {
-                        return ['id', avatar, 'name', 'username', sex, telOrMail, date, group, 'stat'];
+                        return ['id', avatar, 'name', 'username', sex, telOrMail, date, group, stat];
+                    },
+                    // 编辑按钮事件
+                    onEditClk: function (id) {
+                        location.assign('../' + id + '/');
                     },
                 }
             });
@@ -69,7 +73,8 @@ var aj;
                     return { avatar: avatar };
                 }
             };
-            var date = function (data) { return new Date(data.createDate).format("yyyy-MM-dd hh:mm"); };
+            var date = function (data) { return new Date(data.created_at).format("yyyy-MM-dd hh:mm"); };
+            var stat = function (data) { return data.is_valid === 0 ? '下线' : '上线'; };
             function group(data) {
                 if (!data['roleId'])
                     return "";

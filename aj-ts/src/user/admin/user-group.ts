@@ -20,10 +20,10 @@ namespace aj.user.admin {
         },
         mounted(this: USER_GROUP): void {
             this.load();
-            //         xhr.form(this.$refs.createOrUpdate.$el.$('form'), j => {
-            //             j && aj.msg.show(j.msg);
-            //             this.load();
-            //         });
+            xhr.form(this.$refs.createOrUpdate.$el.$('form'), j => {
+                j && aj.msg.show(j.msg);
+                this.load();
+            });
         },
         methods: {
             load(this: USER_GROUP): void {

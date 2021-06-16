@@ -34,13 +34,13 @@ namespace aj.user.admin {
         },
         methods: {
             gridCols(): any[] {
-                return ['id', avatar, 'name', 'username', sex, telOrMail, date, group, 'stat'];
+                return ['id', avatar, 'name', 'username', sex, telOrMail, date, group, stat];
             },
 
             // 编辑按钮事件
-            // onEditClk(id) {
-            //     location.assign('../' + id + '/');
-            // },
+            onEditClk(id: number): void {
+                location.assign('../' + id + '/');
+            },
 
             // onCreateClk() { }
         }
@@ -87,7 +87,8 @@ namespace aj.user.admin {
         }
     };
 
-    let date = (data: any) => new Date(data.createDate).format("yyyy-MM-dd hh:mm");
+    let date = (data: any) => new Date(data.created_at).format("yyyy-MM-dd hh:mm");
+    let stat = (data: any) => data.is_valid === 0 ? '下线' : '上线';
 
     function group(data: JsonParam) {
         if (!data['roleId'])

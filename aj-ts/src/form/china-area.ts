@@ -16,17 +16,17 @@ namespace aj.form {
 		template = html`
 			<div class="aj-china-area">
 				<span>省</span>
-				<select v-model="province" class="aj-select" style="width:120px;" :name="provinceName || 'locationProvince'">
+				<select v-model="province" class="aj-select" style="width:150px;" :name="provinceName || 'locationProvince'">
 					<option value="">请选择</option>
 					<option v-for="(v, k) in addressData[86]" :value="k">{{v}}</option>
 				</select>
 				<span>市 </span>
-				<select v-model="city" class="aj-select" style="width:120px;" :name="cityName || 'locationCity'">
+				<select v-model="city" class="aj-select" style="width:150px;" :name="cityName || 'locationCity'">
 					<option value="">请选择</option>
 					<option v-for="(v, k) in citys" :value="k">{{v}}</option>
 				</select>
 				<span>区</span>
-				<select v-model="district" class="aj-select" style="width:120px;" :name="districtName || 'locationDistrict'">
+				<select v-model="district" class="aj-select" style="width:150px;" :name="districtName || 'locationDistrict'">
 					<option value="">请选择</option>
 					<option v-for="(v, k) in districts" :value="k">{{v}}</option>
 				</select>
