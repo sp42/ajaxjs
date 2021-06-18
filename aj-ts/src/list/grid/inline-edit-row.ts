@@ -17,11 +17,10 @@ namespace aj.list.grid {
                 <td v-if="showIdCol">{{id}}</td>
                 <td v-for="cellRenderer in columns" :style="styleModifly" class="cell" @dblclick="dbEdit">
                     <span v-if="!isEditMode" v-html="renderCell(rowData, cellRenderer)"></span>
-                    <input v-if="canEdit(cellRenderer)" v-model="rowData[cellRenderer]" type="text" size="0" />
+                    <input v-if="canEdit(cellRenderer)" v-model="rowData[cellRenderer]" type="text" size="0" style="background-color:white;" />
                     <span v-if="cellRenderer && cellRenderer.cmpName">
                         <component v-if="!isEditMode || !cellRenderer.editMode" v-bind:is="cellRenderer.cmpName" v-bind="cellRenderer.cmpProps(rowData)"></component>
-                        <component v-if="isEditMode && cellRenderer.editMode" v-bind:is="cellRenderer.editCmpName" v-bind="cellRenderer.cmpProps(rowData)">
-                                    </component> 
+                        <component v-if="isEditMode && cellRenderer.editMode" v-bind:is="cellRenderer.editCmpName" v-bind="cellRenderer.cmpProps(rowData)"></component> 
                     </span>
                 </td>
                 <td v-if="showControl" class="control">

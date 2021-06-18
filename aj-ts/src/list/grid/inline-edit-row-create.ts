@@ -10,9 +10,8 @@ namespace aj.list.grid {
                 <td></td>
                 <td></td>
                 <td v-for="key in columns" style="padding:0" class="cell">
-                    <aj-select v-if="key != null && key.type == 'select'" :name="key.name" :options="key.data"
-                        style="width: 200px;"></aj-select>
-                    <input v-if="key != null && !key.type" type="text" size="0" :name="key" />
+                    <aj-select v-if="key != null && key.type == 'select'" :name="key.name" :options="key.data"  style="width: 200px;"></aj-select>
+                    <input v-if="key != null && !key.type" type="text" size="0" :name="key" style="background-color:white" />
                 </td>
                 <td class="control">
                     <span @click="addNew"><i class="fa fa-plus" style="color:#080;"></i> 新增</span>

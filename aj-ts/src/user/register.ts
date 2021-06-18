@@ -35,7 +35,9 @@ namespace aj.user.register {
         mounted() {
             xhr.form(this.$el,
                 //@ts-ignore
-                xhr.defaultCallBack.delegate(null, null, (j: RepsonseResult) => setTimeout("location.assign('${ctx}/user/login/')", 2000)),
+                xhr.defaultCallBack.delegate(null, null, (j: RepsonseResult) => {
+                    setTimeout("location.assign('../login/')", 2000);
+                }),
                 {
                     beforeSubmit: (form: HTMLFormElement, json: StringJsonParam) => {
                         if (!this.$el.$('.privacy').checked) {
@@ -63,7 +65,7 @@ namespace aj.user.register {
                     userId: string = el.value;
 
                 if (!form.Validator.check(el))
-                    xhr.get('${ctx}/user/register/checkIfRepeat/', j => {
+                    xhr.get('checkIfRepeat/', j => {
                         this.isAllowRegister = !j.result.isRepeat;
 
                         if (j.result.isRepeat)
@@ -78,8 +80,8 @@ namespace aj.user.register {
                 let el: form.HTMLFormControl = <form.HTMLFormControl>ev.target,
                     email: string = el.value;
 
-                if (!form.Validator.check(el)) {
-                    xhr.get('${ctx}/user/register/checkIfRepeat/', json => {
+                if (email && !form.Validator.check(el)) {
+                    xhr.get('checkIfRepeat/', json => {
                         this.isAllowRegister = !json.result.isRepeat;
 
                         if (json.result.isRepeat)
@@ -97,14 +99,14 @@ namespace aj.user.register {
 
                 this.phoneNumberValid = phoneNumber(phone);
 
-                if (this.phoneNumberValid) {
-                    xhr.get('${ctx}/user/register/checkIfRepeat/', json => {
+                if (phone && this.phoneNumberValid) {
+                    xhr.get('checkIfRepeat/', json => {
                         this.isAllowRegister = !json.result.isRepeat;
 
                         if (json.result.isRepeat)
-                            this.phoneMsg = phone + "已经注册！";
+                            this.checkUserPhoneMsg = phone + "已经注册！";
                         else
-                            this.phoneMsg = phone + "可以注册！";
+                            this.checkUserPhoneMsg = phone + "可以注册！";
                     }, {
                         phone: phone
                     });
@@ -120,7 +122,7 @@ namespace aj.user.register {
                     let value: string = (<HTMLInputElement>document.body.$('form input[name=phone]')).value;
 
                     if (phoneNumber(value)) {
-                        xhr.post('${ctx}/user/register/sendSMScode', function (json) {
+                        xhr.post('sendSMScode/', function (json) {
                             if (json && json.msg)
                                 alert(json.msg);
                         }, {
@@ -141,6 +143,7 @@ namespace aj.user.register {
                 let passowrd = <HTMLInputElement>this.$el.$('input[name=password]')
                 if (passowrd.value != (<HTMLInputElement>this.$el.$('input[name=password2]')).value) {
                     aj.alert('两次密码输入不一致！');
+
                     return false;
                 }
 

@@ -102,7 +102,8 @@ var aj;
                     _this.template = '<div class="aj-grid"><slot v-bind:grid="this"></slot></div>';
                     _this.mixins = [grid.SectionModel];
                     _this.props = {
-                        apiUrl: { type: String, required: true }
+                        apiUrl: { type: String, required: true },
+                        updateUrl: { type: String, required: false }
                     };
                     /**
                      * 数据层，控制分页
@@ -125,6 +126,7 @@ var aj;
                      */
                     _this.list = [];
                     _this.apiUrl = "";
+                    _this.updateUrl = "";
                     _this.maxRows = 0;
                     _this.selected = {};
                     return _this;
@@ -180,7 +182,7 @@ var aj;
                         return;
                     }
                     dirties.forEach(function (item) {
-                        aj.xhr.put(_this.apiUrl + "/" + item.id + "/", function (j) {
+                        aj.xhr.put((_this.updateUrl || _this.apiUrl) + "/" + item.id + "/", function (j) {
                             if (j.isOk) {
                                 _this.list.forEach(function (item) {
                                     if (item.dirty)

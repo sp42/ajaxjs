@@ -123,7 +123,8 @@ namespace aj.list.grid {
         mixins = [SectionModel];
 
         props = {
-            apiUrl: { type: String, required: true }
+            apiUrl: { type: String, required: true },
+            updateUrl:{ type: String, required: false }
         };
 
         data() {
@@ -160,6 +161,8 @@ namespace aj.list.grid {
         list: GridRecord[] = [];
 
         apiUrl = "";
+
+        updateUrl = "";
 
         maxRows: number = 0;
 
@@ -214,7 +217,7 @@ namespace aj.list.grid {
             }
 
             dirties.forEach((item: GridRecord) => {
-                xhr.put(`${this.apiUrl}/${item.id}/`, (j: RepsonseResult) => {
+                xhr.put(`${this.updateUrl || this.apiUrl}/${item.id}/`, (j: RepsonseResult) => {
                     if (j.isOk) {
                         this.list.forEach((item: GridRecord) => { // clear
                             if (item.dirty)

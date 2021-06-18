@@ -24,7 +24,9 @@ var aj;
                     var _this = this;
                     aj.xhr.form(this.$el, 
                     //@ts-ignore
-                    aj.xhr.defaultCallBack.delegate(null, null, function (j) { return setTimeout("location.assign('${ctx}/user/login/')", 2000); }), {
+                    aj.xhr.defaultCallBack.delegate(null, null, function (j) {
+                        setTimeout("location.assign('../login/')", 2000);
+                    }), {
                         beforeSubmit: function (form, json) {
                             if (!_this.$el.$('.privacy').checked) {
                                 aj.alert('请同意用户注册协议和隐私政策');
@@ -45,7 +47,7 @@ var aj;
                         var _this = this;
                         var el = ev.target, userId = el.value;
                         if (!aj.form.Validator.check(el))
-                            aj.xhr.get('${ctx}/user/register/checkIfRepeat/', function (j) {
+                            aj.xhr.get('checkIfRepeat/', function (j) {
                                 _this.isAllowRegister = !j.result.isRepeat;
                                 if (j.result.isRepeat)
                                     _this.checkUserIdMsg = userId + "已经注册";
@@ -58,8 +60,8 @@ var aj;
                     checkEmailValid: function (ev) {
                         var _this = this;
                         var el = ev.target, email = el.value;
-                        if (!aj.form.Validator.check(el)) {
-                            aj.xhr.get('${ctx}/user/register/checkIfRepeat/', function (json) {
+                        if (email && !aj.form.Validator.check(el)) {
+                            aj.xhr.get('checkIfRepeat/', function (json) {
                                 _this.isAllowRegister = !json.result.isRepeat;
                                 if (json.result.isRepeat)
                                     _this.checkUserEmailMsg = email + "已经注册";
@@ -74,13 +76,13 @@ var aj;
                         var _this = this;
                         var el = ev.target, phone = el.value;
                         this.phoneNumberValid = phoneNumber(phone);
-                        if (this.phoneNumberValid) {
-                            aj.xhr.get('${ctx}/user/register/checkIfRepeat/', function (json) {
+                        if (phone && this.phoneNumberValid) {
+                            aj.xhr.get('checkIfRepeat/', function (json) {
                                 _this.isAllowRegister = !json.result.isRepeat;
                                 if (json.result.isRepeat)
-                                    _this.phoneMsg = phone + "已经注册！";
+                                    _this.checkUserPhoneMsg = phone + "已经注册！";
                                 else
-                                    _this.phoneMsg = phone + "可以注册！";
+                                    _this.checkUserPhoneMsg = phone + "可以注册！";
                             }, {
                                 phone: phone
                             });
@@ -92,7 +94,7 @@ var aj;
                         if (this.phoneNumberValid && this.isAllowRegister) {
                             var value = document.body.$('form input[name=phone]').value;
                             if (phoneNumber(value)) {
-                                aj.xhr.post('${ctx}/user/register/sendSMScode', function (json) {
+                                aj.xhr.post('sendSMScode/', function (json) {
                                     if (json && json.msg)
                                         aj.alert(json.msg);
                                 }, {
