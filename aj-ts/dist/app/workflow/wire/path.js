@@ -35,8 +35,8 @@ var aj;
                 aj.wf.Mgr.register(this);
                 this.hide();
                 this.moveFn = rectResizeHandler.bind(this);
-                // from.addUpdateHandler(this.moveFn);
-                // to.addUpdateHandler(this.moveFn);
+                from.vue.addUpdateHandler(this.moveFn);
+                to.vue.addUpdateHandler(this.moveFn);
                 this.refreshPath();
             }
             /**
@@ -182,7 +182,7 @@ var aj;
                 o = { x: this.from.getBBox().x + this.from.getBBox().width / 2, y: this.from.getBBox().y + this.from.getBBox().height / 2 };
             else
                 o = dot.pos();
-            r = svg.Utils.connPoint(this.to.getBBox(), o);
+            var r = svg.Utils.connPoint(this.to.getBBox(), o);
             this.toDot.moveTo(r.x, r.y);
             this.refreshPath();
             //            }

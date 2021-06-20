@@ -31,9 +31,9 @@ var aj;
              */
             ResizeControl.prototype.renderer = function () {
                 var _this = this;
-                var allDots = {}; // 保存所有控制点的 map
+                var allDots = {}, // 保存所有控制点的 map
+                self = this;
                 this.allDots = allDots;
-                var self = this;
                 this.dotX = this.dotY = 0;
                 var bdragStart = function () {
                     self.dotX = Number(this.attr('x'));

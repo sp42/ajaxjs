@@ -48,10 +48,10 @@ namespace aj.svg {
          * 该方法只执行一次
          */
         renderer(): void {
-            let allDots: { [key: string]: any } = {}; // 保存所有控制点的 map
-            this.allDots = allDots;
+            let allDots: { [key: string]: any } = {}, // 保存所有控制点的 map
+                self = this;
 
-            let self = this;
+            this.allDots = allDots;
             this.dotX = this.dotY = 0;
 
             let bdragStart = function (this: Raphael) {// 一定要用 fn，why？
