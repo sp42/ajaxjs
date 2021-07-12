@@ -232,7 +232,7 @@ public class TestHelper {
 			String url = map.getNamedItem("url").getNodeValue(), user = map.getNamedItem("username").getNodeValue(), password = map.getNamedItem("password").getNodeValue();
 			JdbcConnection.setConnection(JdbcConnection.getMySqlConnection(url, user, password));
 			JdbcUtil.IS_DB_CONNECTION_AUTOCLOSE = false;
-			
+
 			ComponentMgr.scan(CommonUtil.split(ConfigService.get("System.scanPackage")));
 			ComponentMgr.inject();
 		});
