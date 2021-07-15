@@ -264,8 +264,8 @@ public abstract class BaseController<T> implements IController, MvcConstant {
 		if (isAddResult)
 			jsonStr = "{\"result\":" + jsonStr + "}";
 
-		if (isAddPerfix)
-			jsonStr = "json::" + jsonStr;
+//		if (isAddPerfix)
+//			jsonStr = "json::" + jsonStr;
 
 		return jsonStr;
 	}
