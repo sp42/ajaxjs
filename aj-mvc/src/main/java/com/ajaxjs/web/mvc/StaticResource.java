@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.framework.Application;
 import com.ajaxjs.framework.IComponent;
 
 /**
@@ -24,6 +23,6 @@ public class StaticResource implements IComponent {
 	private static final BiFunction<HttpServletRequest, FilterChain, Boolean> filter = (req, chain) -> p.matcher(req.getRequestURI()).find();
 
 	static {
-		Application.onRequest2.add(0, filter);
+//		Application.onRequest2.add(0, filter);
 	}
 }
