@@ -41,13 +41,13 @@
     </licenses>
 
     <scm>
-        <url>https://gitee.com/sp42_admin/ajaxjs/tree/master/ajaxjs-base</url>
-        <connection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</connection>
-        <developerConnection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</developerConnection>
+        <url>https://gitee.com/sp42_admin/aj-utils</url>
+        <connection>scm:git:https://gitee.com/sp42_admin/aj-utils.git</connection>
+        <developerConnection>scm:git:https://gitee.com/sp42_admin/aj-utils.git</developerConnection>
     </scm>
 
     <issueManagement>
-        <url>https://gitee.com/sp42_admin/ajaxjs/issues</url>
+        <url>https://gitee.com/sp42_admin/aj-utils/issues</url>
     </issueManagement>
 
     <properties>
@@ -150,7 +150,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
