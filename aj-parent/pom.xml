@@ -5,7 +5,7 @@
     <artifactId>ajaxjs-parent</artifactId>
     <description>ajaxjs-parent</description>
     <name>ajaxjs-parent</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <packaging>pom</packaging>
 
     <!--Maven 的基本使用终结版 https://segmentfault.com/a/1190000020380580-->
@@ -150,7 +150,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>2.9.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -163,11 +163,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                
-                <configuration> 
-					<encoding>UTF-8</encoding> 
-					<skip>true</skip> 
-				</configuration> 
             </plugin>
 
             <!-- 打包时跳过测试 -->
