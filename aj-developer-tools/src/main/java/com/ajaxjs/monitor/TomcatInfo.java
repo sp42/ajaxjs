@@ -12,7 +12,7 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
 
-import org.apache.catalina.util.ServerInfo;
+//import org.apache.catalina.util.ServerInfo;
 
 /**
  * 获取 Tomcat 监控信息
@@ -21,14 +21,14 @@ import org.apache.catalina.util.ServerInfo;
  *
  */
 public class TomcatInfo {
-	/**
-	 * 获取版本，如 Apache Tomcat/8.5.50
-	 * 
-	 * @return
-	 */
-	public static String getVersion() {
-		return ServerInfo.getServerInfo();
-	}
+//	/**
+//	 * 获取版本，如 Apache Tomcat/8.5.50
+//	 * 
+//	 * @return
+//	 */
+//	public static String getVersion() {
+//		return ServerInfo.getServerInfo();
+//	}
 
 	/**
 	 * 获取 tomcat 运行端口
