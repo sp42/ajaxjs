@@ -1,0 +1,68 @@
+@import './common-functions.less';
+
+.aj-article-info {
+    margin: 0 0 3% 0;
+
+    article {
+        h1 {
+            text-align    : center;
+            font-size     : 1.8rem;
+            padding       : 5% 0;
+            letter-spacing: 3px;
+        }
+
+        h2 {
+            font-weight: bold;
+            text-align : left;
+            font-size  : 1.1rem;
+            padding    : 1% 0;
+        }
+
+        h4 {
+            text-align    : right;
+            color         : gray;
+            padding-bottom: 2%;
+            font-size     : .95rem;
+        }
+
+        &>div,
+        p {
+            .aj-text-function();
+            text-indent: 2em;
+        }
+
+        li {
+            .aj-text-function();
+            list-style-type: inherit;
+            margin-left    : 3%;
+        }
+
+        pre {
+            overflow-x : auto;
+            white-space: pre-wrap;
+        }
+
+        img {
+            max-width: 80%;
+            margin   : 2% auto;
+            display  : block;
+
+            &.right {
+                float    : right;
+                max-width: 38%;
+                margin   : 2px 20px 0 10px;
+            }
+
+            &.left {
+                float    : left;
+                max-width: 38%;
+                margin   : 2px 20px 0 0;
+            }
+        }
+    }
+
+    .neighborRecord {
+        clear  : both;
+        padding: 5% 0;
+    }
+}
