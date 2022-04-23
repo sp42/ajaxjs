@@ -1,1 +1,1 @@
-https://framework.ajaxjs.com 的静态业务
+https://framework.ajaxjs.com 的静态页面
