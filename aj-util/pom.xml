@@ -15,6 +15,14 @@
 		<relativePath />
 	</parent>
 
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<version>3.0.0</version>
+		</plugin>
+	</plugins>
+
 	<dependencies>
 		<!-- 测试用的数据库驱动 -->
 		<dependency>

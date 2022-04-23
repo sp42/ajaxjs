@@ -23,7 +23,7 @@
 |aj-framework|其他业务的封装|[浏览 readme](aj-framework)|jar|
 |aj-web|网站作为独立客户端|[浏览 readme](aj-web)|jar|
 |aj-developer-tools |开发者工具|[浏览 readme](aj-developer-tools)|jar|
-|aj-sso |单点登录|[浏览 readme](aj-sso)|war|
+|aj-sso |单点登录 SSO 中心|[浏览 readme](aj-sso)|war|
 |aj-sso-client |单点登录客户端|[浏览 readme](aj-sso-client)|jar|
 
 
