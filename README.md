@@ -11,7 +11,7 @@
 - 前端：TypeScript + Vue.js 2 + iView UI + Less.js + Webpack
 - 后端：Java 1.8 + Tomcat 8.5 + MySQL 5.7 + Spring 5
 
-前端仓库在 [AJAXJS Framework UI](https://gitee.com/sp42_admin/aj-framework-ui)。
+前端仓库在 [AJAXJS Framework UI](https://gitee.com/sp42_admin/aj-framework-ui)。文档资源在 [Wiki](wikis)。
 
 ### 各项目一览
 
