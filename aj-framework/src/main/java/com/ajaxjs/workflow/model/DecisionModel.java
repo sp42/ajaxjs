@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 import javax.el.ExpressionFactory;
 
-import org.apache.el.ExpressionFactoryImpl;
+//import org.apache.el.ExpressionFactoryImpl;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.ReflectUtil;
@@ -52,7 +52,7 @@ public class DecisionModel extends NodeModel {
 	 */
 	private DecisionHandler decide;
 
-	private ExpressionFactory factory = new ExpressionFactoryImpl();
+//	private ExpressionFactory factory = new ExpressionFactoryImpl();
 
 	/**
 	 * 表达式解析器
@@ -66,11 +66,13 @@ public class DecisionModel extends NodeModel {
 	@SuppressWarnings("unchecked")
 	private <T> T eval(Class<T> T, String expr, Map<String, Object> args) {
 		SimpleContext context = new SimpleContext();
+		
+		return null;
 
-		for (String key : args.keySet())
-			context.setVariable(key, factory.createValueExpression(args.get(key), Object.class));
-
-		return (T) factory.createValueExpression(context, expr, T).getValue(context);
+//		for (String key : args.keySet())
+//			context.setVariable(key, factory.createValueExpression(args.get(key), Object.class));
+//
+//		return (T) factory.createValueExpression(context, expr, T).getValue(context);
 	}
 
 	@Override
