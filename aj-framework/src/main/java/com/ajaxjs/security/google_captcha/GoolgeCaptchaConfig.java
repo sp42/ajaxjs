@@ -15,7 +15,7 @@ import com.ajaxjs.framework.ClientAccessFullInfo;
 /**
  * 谷歌验证码配置
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public class GoolgeCaptchaConfig extends ClientAccessFullInfo {
     private Boolean enable;

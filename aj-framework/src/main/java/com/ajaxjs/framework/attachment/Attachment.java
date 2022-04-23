@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * @description 上传附件
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  * @date 2021-11-07
  */
 public class Attachment {

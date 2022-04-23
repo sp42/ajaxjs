@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 用户相关操作接口
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

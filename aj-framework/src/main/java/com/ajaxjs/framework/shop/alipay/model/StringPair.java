@@ -2,7 +2,7 @@ package com.ajaxjs.framework.shop.alipay.model;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class StringPair implements Comparable<StringPair> {

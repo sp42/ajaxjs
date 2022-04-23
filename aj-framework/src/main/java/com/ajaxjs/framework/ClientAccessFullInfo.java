@@ -13,7 +13,7 @@ package com.ajaxjs.framework;
 /**
  * 客户端访问的基本两个字段: App Id、App 密钥
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public abstract class ClientAccessFullInfo {

@@ -31,7 +31,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 最初结果为 InputStram，怎么处理？这里提供一些常见的处理手段。
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public abstract class ResponseHandler {
 	private static final LogHelper LOGGER = LogHelper.getLog(ResponseHandler.class);

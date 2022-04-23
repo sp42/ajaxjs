@@ -7,7 +7,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 订单记录（是否有用？）
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class OrderPayLog extends BaseModel {

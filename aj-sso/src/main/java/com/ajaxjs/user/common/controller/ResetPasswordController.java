@@ -24,7 +24,7 @@ import com.ajaxjs.util.StrUtil;
 /**
  * 重置密码
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

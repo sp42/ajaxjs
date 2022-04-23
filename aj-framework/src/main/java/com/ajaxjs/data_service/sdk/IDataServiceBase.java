@@ -11,7 +11,7 @@ import com.ajaxjs.framework.PageResult;
  * <p>
  * 子接口继承该接口后，不需要写实现
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public abstract interface IDataServiceBase {
 	/**

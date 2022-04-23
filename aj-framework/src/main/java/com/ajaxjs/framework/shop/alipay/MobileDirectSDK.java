@@ -7,7 +7,7 @@ import com.ajaxjs.framework.shop.alipay.core.AbstractAlipay;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class MobileDirectSDK extends AbstractAlipay {

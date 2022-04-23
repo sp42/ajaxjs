@@ -3,7 +3,7 @@ package com.ajaxjs.wechat.merchant;
 /**
  * 微信支付 商户配置
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class MerchantConfig {

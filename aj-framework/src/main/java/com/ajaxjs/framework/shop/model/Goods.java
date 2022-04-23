@@ -7,7 +7,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 商品
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class Goods extends BaseModel {

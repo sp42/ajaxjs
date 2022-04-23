@@ -11,7 +11,7 @@ import com.ajaxjs.framework.PageResult;
  * <p>
  * 子接口继承该接口后，不需要写实现
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  * @param <T> 记录的实体类型
  */

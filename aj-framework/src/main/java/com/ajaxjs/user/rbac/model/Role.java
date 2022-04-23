@@ -5,7 +5,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 用户角色
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class Role extends BaseModel {

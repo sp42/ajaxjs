@@ -22,7 +22,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * Web 工具类
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public class WebHelper {
 	public static String uriDecode(String str) {

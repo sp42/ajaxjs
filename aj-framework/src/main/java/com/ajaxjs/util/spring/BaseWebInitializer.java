@@ -19,7 +19,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 配置 Spring MVC 实现该接口的类会在 Servlet 容器启动时自动加载并运行
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public abstract class BaseWebInitializer implements WebApplicationInitializer {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseWebInitializer.class);

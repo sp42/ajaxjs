@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 表示一个实体
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface IBaseModel {

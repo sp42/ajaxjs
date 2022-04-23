@@ -5,7 +5,7 @@ package com.ajaxjs.wechat.payment.model;
  * 
  * https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_5_1.shtml
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class PreOrder {

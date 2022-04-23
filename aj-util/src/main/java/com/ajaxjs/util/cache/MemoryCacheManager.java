@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 基于虚拟机内存的 cache 管理器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class MemoryCacheManager extends ConcurrentHashMap<String, Cache<?, ?>> implements CacheManager {

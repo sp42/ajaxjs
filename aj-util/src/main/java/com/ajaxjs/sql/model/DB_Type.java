@@ -5,7 +5,7 @@ import com.ajaxjs.framework.IntegerValueEnum;
 /**
  * 数据库类型
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public enum DB_Type implements IntegerValueEnum {

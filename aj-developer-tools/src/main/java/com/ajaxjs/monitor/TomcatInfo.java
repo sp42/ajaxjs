@@ -17,7 +17,7 @@ import javax.management.ReflectionException;
 /**
  * 获取 Tomcat 监控信息
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class TomcatInfo {

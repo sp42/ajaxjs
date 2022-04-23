@@ -9,7 +9,7 @@ import com.ajaxjs.wechat.applet.model.LoginSession;
 /**
  * 用户管理
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class UserMgr {

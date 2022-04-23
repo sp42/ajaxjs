@@ -3,7 +3,7 @@ package com.ajaxjs.file_upload;
 /**
  * 云空间的文件上传
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface IFileUpload {

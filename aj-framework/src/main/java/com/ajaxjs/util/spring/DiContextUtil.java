@@ -20,7 +20,7 @@ import com.ajaxjs.util.StrUtil;
  * 
  * 高级版本：https://blog.csdn.net/qq_20597727/article/details/80996190
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class DiContextUtil implements ApplicationContextAware {

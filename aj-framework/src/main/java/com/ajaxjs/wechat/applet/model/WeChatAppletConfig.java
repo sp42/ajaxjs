@@ -5,7 +5,7 @@ import com.ajaxjs.framework.ClientAccessFullInfo;
 /**
  * 微信小程序服务端配置
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class WeChatAppletConfig extends ClientAccessFullInfo {

@@ -7,7 +7,7 @@ import com.ajaxjs.sql.annotation.IgnoreDB;
 
 /**
  * @description 操作日志
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  * @date 2021-11-07
  */
 public class ServiceLog implements IBaseModel {

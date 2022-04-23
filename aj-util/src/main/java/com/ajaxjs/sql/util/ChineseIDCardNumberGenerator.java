@@ -28,7 +28,7 @@ import com.ajaxjs.util.StrUtil;
  * 
  * https://github.com/binarywang/java-testdata-generator/blob/master/src/main/java/cn/binarywang/tools/generator/ChineseIDCardNumberGenerator.java
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class ChineseIDCardNumberGenerator extends Gen {

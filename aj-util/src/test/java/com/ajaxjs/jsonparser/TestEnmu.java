@@ -7,7 +7,7 @@ import com.ajaxjs.framework.BaseModel;
 /**
  * 测试枚举的序列化
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class TestEnmu {

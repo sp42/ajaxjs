@@ -13,7 +13,7 @@ import com.ajaxjs.user.sso.model.Scope;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface SsoDAO {

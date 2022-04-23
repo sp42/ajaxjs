@@ -5,7 +5,7 @@ import com.ajaxjs.user.rbac.RbacConstant;
 /**
  * 基础资料列表
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface Resources {

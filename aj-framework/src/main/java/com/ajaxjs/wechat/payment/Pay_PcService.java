@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 /**
  * PC 支付业务
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Component

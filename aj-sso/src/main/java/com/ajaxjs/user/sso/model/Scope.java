@@ -3,7 +3,7 @@ package com.ajaxjs.user.sso.model;
 /**
  * 可被访问的用户权限
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class Scope {

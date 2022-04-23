@@ -28,7 +28,7 @@ import com.ajaxjs.util.map.JsonHelper;
 /**
  * OAuth 使用，有部分暂时未使用
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

@@ -26,7 +26,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * POST 或 PUT 请求
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public class Post extends Base {
     /**

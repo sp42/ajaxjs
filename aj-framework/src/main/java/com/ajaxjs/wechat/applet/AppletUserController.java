@@ -31,7 +31,7 @@ import com.ajaxjs.wechat.user.UserMgr;
 /**
  * 小程序用户接口
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

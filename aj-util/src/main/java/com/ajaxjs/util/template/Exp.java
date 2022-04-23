@@ -5,7 +5,7 @@ import java.util.Objects;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public abstract class Exp {

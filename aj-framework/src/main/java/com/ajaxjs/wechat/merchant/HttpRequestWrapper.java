@@ -4,7 +4,7 @@ package com.ajaxjs.wechat.merchant;
  * 
  * 请求接口的 HTTP 方法、URL 和 请求报文主体
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class HttpRequestWrapper {

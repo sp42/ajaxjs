@@ -32,7 +32,7 @@ import com.ajaxjs.util.map.JsonHelper;
 /**
  * 单点登录接口
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

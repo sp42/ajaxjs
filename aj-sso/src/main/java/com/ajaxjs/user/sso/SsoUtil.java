@@ -12,7 +12,7 @@ import com.ajaxjs.util.date.LocalDateUtils;
 /**
  * SSO 工具类
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class SsoUtil {

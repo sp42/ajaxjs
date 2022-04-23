@@ -25,7 +25,7 @@ import com.ajaxjs.util.WebHelper;
 /**
  * 用户注册
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

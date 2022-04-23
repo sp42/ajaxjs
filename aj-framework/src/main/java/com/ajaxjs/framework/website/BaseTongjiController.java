@@ -30,7 +30,7 @@ import com.ajaxjs.util.map.JsonHelper;
 /**
  * 百度统计
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

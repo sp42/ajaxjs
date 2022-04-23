@@ -3,7 +3,7 @@ package com.ajaxjs.wechat.payment.model;
 /**
  * 小程序调起支付 wx.requestPayment() 所需的参数
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class RequestPayment {

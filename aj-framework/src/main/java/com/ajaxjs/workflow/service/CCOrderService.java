@@ -14,7 +14,7 @@ import com.ajaxjs.workflow.model.entity.CCOrder;
 
 /**
  * 委托
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Component

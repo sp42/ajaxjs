@@ -21,7 +21,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 用户登录业务
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Component

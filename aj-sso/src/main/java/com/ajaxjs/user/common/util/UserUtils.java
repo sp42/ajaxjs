@@ -11,7 +11,7 @@ import com.ajaxjs.user.UserConstant;
 /**
  * 用户工具类
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class UserUtils {

@@ -34,7 +34,7 @@ import com.ajaxjs.wechat.user.UserMgr;
 /**
  * 微信小程序支付接口
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @RestController

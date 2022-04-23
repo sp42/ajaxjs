@@ -3,7 +3,7 @@ package com.ajaxjs.user.sso.model;
 /**
  * 授权方式
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public enum GrantTypeEnum {

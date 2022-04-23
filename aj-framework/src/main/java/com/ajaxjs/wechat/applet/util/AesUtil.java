@@ -16,7 +16,7 @@ import com.ajaxjs.util.StrUtil;
 /**
  * 证书和回调报文解密
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class AesUtil {

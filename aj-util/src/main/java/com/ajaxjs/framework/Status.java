@@ -3,7 +3,7 @@ package com.ajaxjs.framework;
 /**
  * 实体状态 这是最通用的状态，供参考使用
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public enum Status implements IntegerValueEnum, DescEnum {

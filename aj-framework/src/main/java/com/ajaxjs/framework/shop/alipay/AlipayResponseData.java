@@ -24,7 +24,7 @@ import com.ajaxjs.framework.shop.alipay.model.StringPair;
 /**
  * 响应
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class AlipayResponseData {

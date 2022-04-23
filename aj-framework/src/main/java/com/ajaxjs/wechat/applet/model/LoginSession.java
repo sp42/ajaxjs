@@ -3,7 +3,7 @@ package com.ajaxjs.wechat.applet.model;
 /**
  * 登录状态
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class LoginSession {

@@ -3,7 +3,7 @@ package com.ajaxjs.net.http;
 /**
  * 常量
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface HttpEnum {

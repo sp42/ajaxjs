@@ -3,7 +3,7 @@ package com.ajaxjs.user.rbac;
 /**
  * 用户角色权限系统的常量
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface RbacConstant {

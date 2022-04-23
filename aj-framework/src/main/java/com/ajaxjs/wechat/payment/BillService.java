@@ -14,7 +14,7 @@ import com.ajaxjs.wechat.merchant.MerchantConfig;
 /**
  * 账单
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Component

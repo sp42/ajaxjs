@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 防止 Captcha
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Target({ ElementType.METHOD, ElementType.TYPE })

@@ -25,7 +25,7 @@ public interface UserConstant {
 		/**
 		 * 登录类型
 		 * 
-		 * @author Frank Cheung<sp42@qq.com>
+		 * @author Frank Cheung
 		 *
 		 */
 		public static interface LoginType {

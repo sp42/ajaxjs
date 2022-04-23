@@ -6,7 +6,7 @@ import java.util.Set;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class SimpleTempletUtil {

@@ -3,7 +3,7 @@ package com.ajaxjs.framework;
 /**
  * 枚举值是 String 的
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public interface StringValueEnum extends BaseEnmu {
 	/**

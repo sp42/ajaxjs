@@ -9,7 +9,7 @@ import java.util.Locale;
 /**
  * LocalDate 相关公共方法
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class LocalDateUtils {
@@ -228,11 +228,8 @@ public class LocalDateUtils {
 	/**
 	 * 将天数转化为秒数
 	 * 
-	 * @author zifangsky
-	 * @date 2018/8/18 17:45
-	 * @since 1.0.0
 	 * @param days 天数
-	 * @return java.lang.Integer
+	 * @return 秒数
 	 */
 	public static Long dayToSecond(Long days) {
 		return days * 86400;

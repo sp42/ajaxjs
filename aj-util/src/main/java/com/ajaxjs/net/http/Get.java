@@ -25,7 +25,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * GET 请求
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class Get extends Base {

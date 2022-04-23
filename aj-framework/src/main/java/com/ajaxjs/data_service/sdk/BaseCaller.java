@@ -15,7 +15,7 @@ import com.ajaxjs.util.spring.DiContextUtil;
 /**
  * Java 动态代理
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public abstract class BaseCaller extends Commander implements InvocationHandler {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseCaller.class);

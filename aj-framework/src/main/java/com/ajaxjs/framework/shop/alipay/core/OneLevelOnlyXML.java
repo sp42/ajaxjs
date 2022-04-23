@@ -17,7 +17,7 @@ import org.w3c.dom.Element;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class OneLevelOnlyXML {

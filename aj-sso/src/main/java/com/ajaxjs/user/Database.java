@@ -12,7 +12,7 @@ import com.ajaxjs.data_service.model.DataServiceConfig;
 /**
  * 数据库连接配置 & 数据服务
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Configuration

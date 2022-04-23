@@ -3,7 +3,7 @@ package com.ajaxjs.framework;
 /**
  * 带描述的枚举
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface DescEnum {

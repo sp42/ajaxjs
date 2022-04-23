@@ -26,7 +26,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 核心 CRUD
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public abstract class Commander extends BaseCommander {

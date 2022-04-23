@@ -3,7 +3,7 @@ package com.ajaxjs.framework;
 /**
  * 枚举值是 int 的
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public interface IntegerValueEnum extends BaseEnmu {
 	/**

@@ -14,7 +14,7 @@ import com.ajaxjs.framework.shop.alipay.model.StringPair;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class GroupStringPair {

@@ -15,7 +15,7 @@ import com.ajaxjs.util.date.LocalDateUtils;
 /**
  * 授权操作
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Component

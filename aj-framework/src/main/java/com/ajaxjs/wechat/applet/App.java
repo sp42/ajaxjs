@@ -9,7 +9,7 @@ import com.ajaxjs.wechat.applet.model.WeChatAppletConfig;
 /**
  * 小程序的一些方法
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class App {

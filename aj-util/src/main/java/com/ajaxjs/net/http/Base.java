@@ -24,7 +24,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 基础调用，初始化 Connection--配置 Connection--发起请求
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public abstract class Base {
     private static final LogHelper LOGGER = LogHelper.getLog(Base.class);

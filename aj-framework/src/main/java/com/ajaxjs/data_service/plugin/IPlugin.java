@@ -13,7 +13,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * 
  * https://www.jb51.net/article/75932.htm
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface IPlugin {

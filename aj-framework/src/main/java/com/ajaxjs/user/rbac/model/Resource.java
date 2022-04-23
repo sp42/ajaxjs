@@ -14,7 +14,7 @@ import com.ajaxjs.util.spring.DiContextUtil;
 /**
  * 权限资源
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class Resource {

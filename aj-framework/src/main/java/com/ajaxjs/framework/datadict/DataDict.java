@@ -7,7 +7,7 @@ import com.ajaxjs.framework.IBaseModel;
 /**
  * 数据字典 
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  * @date 2021-11-07
  */
 public class DataDict implements IBaseModel {

@@ -13,7 +13,7 @@ import com.ajaxjs.framework.shop.alipay.model.StringPair;
 /**
  * 请求数据
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class AlipayRequestData {

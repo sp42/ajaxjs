@@ -26,7 +26,7 @@ import com.ajaxjs.wechat.payment.model.PreOrder;
 /**
  * 小程序支付业务
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Component

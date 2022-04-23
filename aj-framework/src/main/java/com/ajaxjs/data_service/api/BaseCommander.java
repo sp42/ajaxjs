@@ -25,7 +25,7 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public abstract class BaseCommander implements DataServiceConstant {

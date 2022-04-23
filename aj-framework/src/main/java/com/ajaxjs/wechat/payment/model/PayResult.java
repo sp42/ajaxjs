@@ -3,7 +3,7 @@ package com.ajaxjs.wechat.payment.model;
 /**
  * 由微信支付通知过来的支付结果
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class PayResult {

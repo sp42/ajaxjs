@@ -17,7 +17,7 @@ import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 /**
  * Eclipse 提示异常，生产环境应该不会
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @WebListener

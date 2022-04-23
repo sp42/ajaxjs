@@ -10,7 +10,7 @@ import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 /**
  * 数据服务上下文对象
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public class ServiceContext {
 	/**

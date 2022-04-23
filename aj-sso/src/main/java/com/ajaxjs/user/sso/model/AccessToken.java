@@ -3,7 +3,7 @@ package com.ajaxjs.user.sso.model;
 /**
  * 访问令牌
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class AccessToken implements ExpiresCheck {

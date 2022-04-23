@@ -29,7 +29,7 @@ import com.ajaxjs.workflow.model.entity.TaskHistory;
 
 /**
  * 流程实例
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 @Component

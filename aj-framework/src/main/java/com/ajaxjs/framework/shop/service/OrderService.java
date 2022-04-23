@@ -14,7 +14,7 @@ import com.ajaxjs.wechat.applet.model.LoginSession;
 /**
  * 订单处理
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public abstract class OrderService implements Constant, HttpEnum {

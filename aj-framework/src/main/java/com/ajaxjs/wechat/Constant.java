@@ -3,7 +3,7 @@ package com.ajaxjs.wechat;
 /**
  * 微信常量
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface Constant {

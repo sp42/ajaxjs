@@ -14,7 +14,7 @@ import com.ajaxjs.sql.orm.Repository;
 /**
  * DAO
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface DataServiceDAO {

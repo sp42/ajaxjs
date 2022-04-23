@@ -11,7 +11,7 @@ import com.ajaxjs.wechat.applet.util.RsaCryptoUtil;
 /**
  * 签名生成器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class SignerMaker {

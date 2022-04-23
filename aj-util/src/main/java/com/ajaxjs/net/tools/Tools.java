@@ -17,21 +17,22 @@ public class Tools {
 	/**
 	 * 判断 IP 是否内网
 	 * 
-	 * @param ip
-	 * @return
+	 * @param ip IP 地址
+	 * @return IP 是否内网
 	 */
 	public static boolean isInnerIP(String ip) {
 		if (INNER_IP_REG == null)
-			INNER_IP_REG = Pattern.compile("^(127\\.0\\.0\\.1)|(localhost)|(10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(172\\.((1[6-9])|(2\\d)|(3[01]))\\.\\d{1,3}\\.\\d{1,3})|(192\\.168\\.\\d{1,3}\\.\\d{1,3})$");
+			INNER_IP_REG = Pattern.compile(
+					"^(127\\.0\\.0\\.1)|(localhost)|(10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(172\\.((1[6-9])|(2\\d)|(3[01]))\\.\\d{1,3}\\.\\d{1,3})|(192\\.168\\.\\d{1,3}\\.\\d{1,3})$");
 
 		return INNER_IP_REG.matcher(ip).find();
 	}
-	
+
 	/**
 	 * 顶级域名
 	 * 
-	 * @param args
-	 * @return
+	 * @param url 域名
+	 * @return 顶级域名
 	 */
 	public static String getDomainName(String url) {
 		URL fullUrl = null;

@@ -8,7 +8,7 @@ import com.ajaxjs.data_service.sdk.IDataService;
 /**
  * 用户常见的一些 DAO 方法
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface UserCommonDAO {

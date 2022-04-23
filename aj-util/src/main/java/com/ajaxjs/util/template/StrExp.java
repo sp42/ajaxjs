@@ -4,7 +4,7 @@ import java.util.Map;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class StrExp extends Exp {

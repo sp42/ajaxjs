@@ -20,7 +20,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 为初始化 HTTP Connection 所准备的函数。该类不能创建实例 你可以链式调用这些 lambda，xxx.andThen(xxx)
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public abstract class SetConnection {

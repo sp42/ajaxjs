@@ -19,7 +19,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 获取数据库元数据信息。当前只支持 MySQL
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public class DataBaseMetaHelper {
 	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseMetaHelper.class);

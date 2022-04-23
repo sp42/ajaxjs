@@ -8,7 +8,7 @@ import com.ajaxjs.user.common.model.LogLogin;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface UserDAO extends UserCommonDAO {

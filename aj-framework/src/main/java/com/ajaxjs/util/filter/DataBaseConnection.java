@@ -40,7 +40,7 @@ import com.ajaxjs.util.spring.DiContextUtil;
  * 关于springmvc拦截器不拦截jsp页面的折腾
  * https://blog.csdn.net/qq_21294095/article/details/85019603
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public class DataBaseConnection implements HandlerInterceptor {
     private static final LogHelper LOGGER = LogHelper.getLog(DataBaseConnection.class);

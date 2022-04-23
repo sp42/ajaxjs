@@ -3,7 +3,7 @@ package com.ajaxjs.user.sso.model;
 /**
  * 颁发 Token 时候所需的信息
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class IssueToken {

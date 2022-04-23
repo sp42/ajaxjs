@@ -25,7 +25,7 @@ import javax.net.ssl.X509TrustManager;
 /**
  * 全局忽略 HTTPS 证书
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class SkipSSL {

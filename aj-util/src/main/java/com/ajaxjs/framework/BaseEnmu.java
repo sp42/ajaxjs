@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * POJO 中可以读取的枚举
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public interface BaseEnmu {

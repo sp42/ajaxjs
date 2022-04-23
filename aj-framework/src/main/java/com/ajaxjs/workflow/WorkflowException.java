@@ -17,7 +17,7 @@ package com.ajaxjs.workflow;
 /**
  * 框架抛出的所有异常都是此类（unchecked exception）
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class WorkflowException extends RuntimeException {

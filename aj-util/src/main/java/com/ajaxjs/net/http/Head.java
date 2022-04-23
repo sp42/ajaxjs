@@ -18,7 +18,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * HEAD 请求
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class Head extends Base {

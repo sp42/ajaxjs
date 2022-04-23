@@ -3,7 +3,7 @@ package com.ajaxjs.wechat.applet.model;
 /**
  * 异常信息
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public class ErrorMsg {

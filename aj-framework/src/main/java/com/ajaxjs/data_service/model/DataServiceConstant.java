@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 常量
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public interface DataServiceConstant {
 	/**
@@ -78,7 +78,7 @@ public interface DataServiceConstant {
 	/**
 	 * 表示增删改查的几个状态
 	 *
-	 * @author Frank Cheung<sp42@qq.com>
+	 * @author Frank Cheung
 	 */
 	public static enum CRUD {
 		/**

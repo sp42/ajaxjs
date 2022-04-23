@@ -2,7 +2,7 @@ package com.ajaxjs.framework.attachment;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  *
  */
 public abstract class AttachmentService implements IAttachmentService {

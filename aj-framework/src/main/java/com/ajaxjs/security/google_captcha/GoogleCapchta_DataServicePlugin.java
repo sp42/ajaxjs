@@ -11,7 +11,7 @@ import com.ajaxjs.data_service.model.ServiceContext;
 /**
  * 防机器人提交
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung
  */
 public class GoogleCapchta_DataServicePlugin implements IPlugin {
     @Autowired(required = false)
