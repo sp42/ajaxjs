@@ -4,6 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ajaxjs-framework</artifactId>
 	<version>1.0.3</version>
+	<name>aj-framework</name>
+	<description>业务的封装</description>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
@@ -53,4 +55,5 @@
 			<version>1.0.9-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
 </project>

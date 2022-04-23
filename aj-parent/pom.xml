@@ -4,7 +4,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-parent</artifactId>
-	<description>ajaxjs-parent</description>
 	<name>ajaxjs-parent</name>
 	<version>1.6</version>
 	<packaging>pom</packaging>
@@ -42,9 +41,10 @@
 	</licenses>
 
 	<scm>
-		<url>https://gitee.com/sp42_admin/ajaxjs/tree/master/ajaxjs-base</url>
+		<url>https://gitee.com/sp42_admin/ajaxjs</url>
 		<connection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</connection>
 		<developerConnection>scm:git:git@gitee.com:sp42_admin/ajaxjs.git</developerConnection>
+		<tag>spring, low code, workflow, full-stack</tag>
 	</scm>
 
 	<issueManagement>
@@ -232,4 +232,5 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<description>Top pom.xml, public config</description>
 </project>

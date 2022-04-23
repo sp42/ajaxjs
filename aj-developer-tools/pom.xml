@@ -4,6 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>aj-developer-tools</artifactId>
 	<version>1.0</version>
+	<description>开发者工具</description>
+	<name>aj-developer-tools</name>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
@@ -26,4 +28,5 @@
 			<version>6.1.5</version>
 		</dependency>
 	</dependencies>
+
 </project>
