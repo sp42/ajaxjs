@@ -1,1 +1,0 @@
-{"version":3,"sources":["foo.less"],"names":[],"mappings":"AAAA,IACI;EACI,eAAA","sourcesContent":["body {\r\n    div {\r\n        font-size: 19pt;\r\n    }\r\n}"],"file":"../../src/less/foo.css"}
