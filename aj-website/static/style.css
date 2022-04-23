@@ -334,6 +334,7 @@ footer {
     margin-top : 2rem;
     border-top : solid 1px #eff0f1;
     color      : gray;
+    text-align: center;
 }
 
 .language {

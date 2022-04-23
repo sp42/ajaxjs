@@ -5,8 +5,8 @@
 	<artifactId>aj-sso-client</artifactId>
 	<version>1.0</version>
 
-	<name>aj-sso</name>
-	<description>单点登录 SSO 中心</description>
+	<name>aj-sso-client</name>
+	<description>单点登录 SSO 客户端</description>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
