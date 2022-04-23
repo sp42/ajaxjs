@@ -11,43 +11,11 @@
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.2</version>
+		<version>1.6</version>
 		<relativePath />
 	</parent>
-<build>
-
-	<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-javadoc-plugin</artifactId>
-			<version>3.0.0</version>
-			<executions>
-				<execution>
-					<id>attach-javadocs</id>
-					<goals>
-						<goal>jar</goal>
-					</goals>
-
-					<configuration>
-						<!-- add this to disable checking -->
-						<additionalparam>-Xdoclint:none</additionalparam>
-						 <useStandardDocletOptions>false</useStandardDocletOptions>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
-	</plugins>
-</build>
 
 	<dependencies>
-		<!-- 测试用的数据库驱动 -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.11</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- SQLite -->
 		<dependency>
 			<groupId>org.xerial</groupId>
