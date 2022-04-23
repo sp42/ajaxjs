@@ -195,14 +195,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Tomcat JNDI 数据源 -->
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-jdbc</artifactId>
-			<version>8.5.69</version>
-			<scope>test</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -231,7 +223,13 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
-
-
+		
+		<!-- Tomcat JNDI 数据源 -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>8.5.69</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 </project>
