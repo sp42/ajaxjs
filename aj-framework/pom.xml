@@ -3,14 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ajaxjs-framework</artifactId>
-	<version>1.0.3</version>
-	<name>aj-framework</name>
+	<version>1.0.4</version>
 	<description>业务的封装</description>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.6</version>
+		<version>1.7</version>
 		<relativePath />
 	</parent>
 
@@ -52,7 +51,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-util</artifactId>
-			<version>1.0.9-SNAPSHOT</version>
+			<version>1.0.6</version>
 		</dependency>
 	</dependencies>
 
