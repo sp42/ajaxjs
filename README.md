@@ -25,6 +25,7 @@
 |aj-developer-tools |开发者工具|[README](aj-developer-tools)|jar|
 |aj-sso |单点登录 SSO 中心|[README](aj-sso)|war|
 |aj-sso-client |单点登录客户端|[README](aj-sso-client)|jar|
+|aj-ui |前组件|[README](aj-ui)|npm|
 
 
 # 联系方式
