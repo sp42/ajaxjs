@@ -25,15 +25,15 @@
 |aj-developer-tools |开发者工具|[README](aj-developer-tools)|jar|
 |aj-sso |单点登录 SSO 中心|[README](aj-sso)|war|
 |aj-sso-client |单点登录客户端|[README](aj-sso-client)|jar|
-|aj-ui |前组件|[README](aj-ui)|npm|
+|aj-ui |前端组件|[README](aj-ui)|npm|
 
 
 # 联系方式
-- 官网 [https://framework.ajaxjs.com/](https://framework.ajaxjs.com/) 
-- 源码 [https://gitee.com/sp42_admin/ajaxjs](https://gitee.com/sp42_admin/ajaxjs) 支持 Git 或 SVN
-- 博客 [https://zhangxin.blog.csdn.net/](https://zhangxin.blog.csdn.net/) 
-- 邮箱 sp42@qq.com
-- QQ 群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
+ 官网 [https://framework.ajaxjs.com/](https://framework.ajaxjs.com/) | 
+ 源码 [https://gitee.com/sp42_admin/ajaxjs](https://gitee.com/sp42_admin/ajaxjs) 支持 Git 或 SVN |
+ 博客 [https://zhangxin.blog.csdn.net/](https://zhangxin.blog.csdn.net/) | 
+ 邮箱 sp42@qq.com | 
+ QQ 群 [3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 
 # 版权声明 LICENSE
 作者版权所有，开源许可：Apache License, Version 2.0
