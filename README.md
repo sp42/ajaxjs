@@ -20,7 +20,7 @@
 |项目名称|简介|文档|打包|
 |------|-----|----|------|
 |aj-util|轻便灵巧的工具，有丰富的工具类和常用组件|[README](aj-util)|jar|
-|aj-framework|其他业务的封装|[README](aj-framework)|jar|
+|aj-framework|常见的业务组件封装|[README](aj-framework)|jar|
 |aj-web|网站作为独立客户端|[README](aj-web)|jar|
 |aj-developer-tools |开发者工具|[README](aj-developer-tools)|jar|
 |aj-sso |单点登录 SSO 中心|[README](aj-sso)|war|
