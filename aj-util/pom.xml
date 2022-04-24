@@ -3,15 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ajaxjs-util</artifactId>
-	<name>aj-util</name>
 	<description>Small Java Utils Library with many powerful components</description>
-	<version>1.0.9-SNAPSHOT</version>
+	<version>1.0.6</version>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.6</version>
+		<version>1.7</version>
 		<relativePath />
 	</parent>
 
