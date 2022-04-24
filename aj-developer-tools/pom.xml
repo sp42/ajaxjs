@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>aj-developer-tools</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<description>开发者工具</description>
 	<name>aj-developer-tools</name>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.6</version>
+		<version>1.7</version>
 		<relativePath />
 	</parent>
 
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-util</artifactId>
-			<version>1.0.9-SNAPSHOT</version>
+			<version>1.0.6</version>
 		</dependency>
 
 		<!-- 系统监控 -->
