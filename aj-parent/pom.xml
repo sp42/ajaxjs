@@ -5,7 +5,7 @@
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-parent</artifactId>
 	<name>ajaxjs-parent</name>
-	<version>1.6</version>
+	<version>1.7</version>
 	<packaging>pom</packaging>
 
 	<!--Maven 的基本使用终结版 https://segmentfault.com/a/1190000020380580 -->
