@@ -70,10 +70,7 @@
 	</distributionManagement>
 
 	<build>
-		<!-- 指定源码所在的目录 -->
-		<!-- <sourceDirectory>src/main</sourceDirectory> -->
-		<!-- 指定单元测试代码所在的目录 -->
-		<!-- <testSourceDirectory>src/test</testSourceDirectory> -->
+ 
 
 		<!-- 这两个目录中的文件也会分别被复制到 target/classes 和 target/test-classes 目录中。 -->
 		<!-- <resources> -->
