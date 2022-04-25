@@ -26,7 +26,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/form-designer',
-    component: () => import('../pages/form-designer.vue')
+    component: () => import('../components/form-designer/demo.vue')
   },
   {
     path: '/work-flow',

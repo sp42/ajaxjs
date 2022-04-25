@@ -159,7 +159,7 @@ public class JdbcHelper extends JdbcReader {
 	private static StringBuilder initSB(String tableName, boolean isInsert) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(isInsert ? "INSERT INTO " : "UPDATE ");
-		sb.append("`" + tableName + "`" + " ");
+		sb.append(tableName + " ");
 
 		if (!isInsert)
 			sb.append("SET");

@@ -1,6 +1,6 @@
 {
   "name": "@ajaxjs/aj-ui",
-  "version": "0.1.0-snapshot",
+  "version": "0.1.5-snapshot",
   "description": "Base UI Library",
   "repository": {
     "type": "git",

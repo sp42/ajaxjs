@@ -70,7 +70,7 @@
 	</distributionManagement>
 
 	<build>
- 
+
 
 		<!-- 这两个目录中的文件也会分别被复制到 target/classes 和 target/test-classes 目录中。 -->
 		<!-- <resources> -->
@@ -113,6 +113,17 @@
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+
+			<!-- 复制 META-INF 目录 不让 Maven 打包时生成 maven 自己的描述文件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
 				</configuration>
 			</plugin>
 
@@ -220,7 +231,7 @@
 			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- Tomcat JNDI 数据源 -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>

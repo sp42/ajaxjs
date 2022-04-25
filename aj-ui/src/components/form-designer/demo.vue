@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import FormDesigner from "../components/form-designer/form-designer.vue";
+import FormDesigner from "./form-designer.vue";
 
 export default {
   components: { FormDesigner },

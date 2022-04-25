@@ -13,5 +13,12 @@ module.exports = {
             warnings: true,
             error: true
         }
+    },
+    chainWebpack: config => {
+        config.module.rule('images').set('parser', {
+            dataUrlCondition: {
+                maxSize: 15 * 1024 // 4KiB 内联文件的大小限制
+            }
+        });
     }
 };

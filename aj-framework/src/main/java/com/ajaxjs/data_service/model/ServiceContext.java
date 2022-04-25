@@ -14,6 +14,11 @@ import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
  */
 public class ServiceContext {
 	/**
+	 * 自定义错误信息，返回给前端
+	 */
+	private String errMsg;
+
+	/**
 	 * 创建数据服务上下文对象
 	 * 
 	 * @param uri
@@ -166,5 +171,13 @@ public class ServiceContext {
 
 	public void setNode(DataServiceDml node) {
 		this.node = node;
+	}
+
+	public String getErrMsg() {
+		return errMsg;
+	}
+
+	public void setErrMsg(String errMsg) {
+		this.errMsg = errMsg;
 	}
 }

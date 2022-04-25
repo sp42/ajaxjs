@@ -70,7 +70,7 @@ public abstract class Commander extends BaseCommander {
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.INFO, ctx))
-					throw new Error("插件中止执行");
+					throw new Error(getErrMsg(ctx));
 			}
 
 		Map<String, Object> result = info(ctx.getDatasource(), sql, ctx.getRequestParams());
@@ -97,7 +97,7 @@ public abstract class Commander extends BaseCommander {
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.LIST, ctx))
-					throw new Error("插件中止执行");
+					throw new Error(getErrMsg(ctx));
 			}
 
 		List<Map<String, Object>> list = list(ctx.getDatasource(), sql, ctx.getRequestParams());
@@ -124,7 +124,7 @@ public abstract class Commander extends BaseCommander {
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.PAGE_LIST, ctx))
-					throw new Error("插件中止执行");
+					throw new Error(getErrMsg(ctx));
 			}
 
 		PageResult<Map<String, Object>> page = page(ctx.getDatasource(), sql, ctx.getRequestParams());
@@ -218,7 +218,7 @@ public abstract class Commander extends BaseCommander {
 //			ctx.set(node, _params, ds);
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.CREATE, ctx))
-					throw new Error("插件中止执行");
+					throw new Error(getErrMsg(ctx));
 			}
 		}
 
@@ -302,7 +302,7 @@ public abstract class Commander extends BaseCommander {
 		if (hasPlugins) {
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.UPDATE, ctx))
-					throw new Error("插件中止执行");
+					throw new Error(getErrMsg(ctx));
 			}
 		}
 
@@ -358,7 +358,7 @@ public abstract class Commander extends BaseCommander {
 		if (hasPlugins) {
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.DELETE, ctx))
-					throw new Error("插件中止执行");
+					throw new Error(getErrMsg(ctx));
 			}
 		}
 
@@ -390,5 +390,15 @@ public abstract class Commander extends BaseCommander {
 			}
 
 		return result;
+	}
+
+	/**
+	 * 返回具体的异常信息
+	 * 
+	 * @param ctx
+	 * @return
+	 */
+	private static String getErrMsg(ServiceContext ctx) {
+		return ctx.getErrMsg() != null ? ctx.getErrMsg() : "插件中止执行";
 	}
 }

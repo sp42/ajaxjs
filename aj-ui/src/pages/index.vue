@@ -4,7 +4,7 @@
 
       <Submenu name="1">
         <template slot="title">网站管理</template>
-        <MenuItem name="1-1" @click.native="load='JsonConfig'">站点管理</MenuItem>
+        <MenuItem name="1-1" @click.native="load='WebsiteConfig'">站点管理</MenuItem>
         <MenuItem name="1-2" @click.native="load='OrgIndex'">栏目管理</MenuItem>
       </Submenu>
 
@@ -71,7 +71,7 @@
       <Article v-if="load == 'Article'" />
       <FormWidgets v-if="load == 'HtmlEditor'" />
       <Others v-if="load == 'Others'" />
-      <JsonConfig v-if="load == 'JsonConfig'" />
+      <WebsiteConfig v-if="load == 'WebsiteConfig'" />
       <DataDict v-if="load == 'DataDict'" />
       <SysConfig v-if="load == 'SysConfig'" />
       <RBAC v-if="load == 'RBAC'" />
@@ -92,15 +92,15 @@ import DemoWidget from './widget/Wdigets.vue';
 import Article from './widget/Article.vue';
 import FormWidgets from './widget/Form.vue';
 import Others from './widget/Others.vue';
-import JsonConfig from './json-config.vue';
 import DataDict from '../components/admin-page/system/data-dict.vue';
 import SysConfig from '../components/admin-page/system/config.vue';
 import RBAC from '../components/admin-page/user/rbac/rbac.vue';
 import UserListIndex from '../components/admin-page/user/user-list-index.vue';
 import OrgIndex from '../components/admin-page/user/org/index.vue';
+import WebsiteConfig from '../components/admin-page/website/config.vue';
 
 export default {
-  components: { DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, JsonConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex },
+  components: { DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex },
   data() {
     return {
       load: 'OrgIndex',
