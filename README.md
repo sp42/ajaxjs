@@ -15,7 +15,7 @@
 
 ### 各项目一览
 
-这是用一个源码空间（支持 Git/SVN）存放着多个项目，包含以下各个项目。
+这是用一个源码空间（支持 Git/Svn）存放着多个项目，包含以下各个项目。
 
 |项目名称|简介|文档|打包|
 |------|-----|----|------|
@@ -35,5 +35,5 @@
   [邮箱](mailto://sp42@qq.com) | 
   [QQ 群 3150067](//shang.qq.com/wpa/qunwpa?idkey=99415d164e2c776567c9370cc5b0bde26f4e2e7c5068978a24d1fe7c976ace93)
 
-# 版权声明 LICENSE
+# 版权声明 License
 作者版权所有，开源许可：Apache License, Version 2.0
