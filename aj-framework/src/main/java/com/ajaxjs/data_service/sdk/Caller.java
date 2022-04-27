@@ -61,7 +61,7 @@ public class Caller extends BaseCaller {
 		} else if (isFindOne || methodName.equals("findList") || methodName.equals("findListAsListMap")) {
 			uri += "/list";
 			node = exec(uri, RuntimeData.GET);
-
+			
 			ctx = ServiceContext.factory(uri, null, node, params);
 			List<Map<String, Object>> list = list(ctx, null);
 

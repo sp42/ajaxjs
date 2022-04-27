@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.framework.BaseEnmu;
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.IntegerValueEnum;
 import com.ajaxjs.jsonparser.syntax.FMS;
 import com.ajaxjs.util.MappingValue;
@@ -125,9 +126,9 @@ public class JsonHelper {
 				return (((IntegerValueEnum) obj).getValue() + 1) + "";
 			else
 				return ((BaseEnmu) obj).getValue().toString();
-		} else if (obj instanceof BaseModel)
-			return beanToJson((BaseModel) obj);
-		else if (obj instanceof BaseModel[])
+		} else if (obj instanceof BaseModel || obj instanceof IBaseModel)
+			return beanToJson(obj);
+		else if (obj instanceof BaseModel[] || obj instanceof IBaseModel[])
 			return jsonArr((BaseModel[]) obj, JsonHelper::beanToJson);
 		else if (obj instanceof List) {
 			List<?> list = (List<?>) obj;

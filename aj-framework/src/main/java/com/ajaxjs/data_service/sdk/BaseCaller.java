@@ -4,11 +4,14 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.data_service.api.ApiController;
 import com.ajaxjs.data_service.api.Commander;
+import com.ajaxjs.data_service.mybatis.MybatisInterceptor;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.spring.DiContextUtil;
 
@@ -129,9 +132,12 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 			if (queryParams == null)
 				queryParams = new HashMap<>();
 
-			if (args.length == 1)
-				queryParams.put("where", args[0]);
-			else if (args.length == 2) { // 两个参数
+			if (args.length == 1) {
+				if (args[0] instanceof String)
+					queryParams.put("where", args[0]);
+				else if (args[0] instanceof Map)
+					queryParams.put("where", map2sql((Map<String, Object>) args[0]));
+			} else if (args.length == 2) { // 两个参数
 				String value;
 
 				if (args[1] instanceof String)
@@ -141,6 +147,7 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 
 				queryParams.put("where", args[0] + " = " + value);
 			}
+
 			return proxy;
 		} else if (methodName.startsWith("find") || methodName.startsWith("get")) {
 			LOGGER.info("相当于 HTTP GET");
@@ -159,6 +166,21 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 		}
 
 		return null;
+	}
+
+	/**
+	 * 把 map 转换为 SQL 的 field = value 形式，根据不同的类型转换为符合 SQL 的
+	 * 
+	 * @param map
+	 * @return
+	 */
+	private static String map2sql(Map<String, Object> map) {
+		List<String> list = new ArrayList<>();
+
+		for (String key : map.keySet())
+			list.add(key + " = " + MybatisInterceptor.getParameterValue(map.get(key)));
+
+		return String.join(" AND ", list);
 	}
 
 	/**

@@ -18,8 +18,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-web</artifactId>
-			<version>1.2.2</version>
+			<artifactId>ajaxjs-framework</artifactId>
+			<version>1.0.4</version>
 		</dependency>
 	</dependencies>
 </project>

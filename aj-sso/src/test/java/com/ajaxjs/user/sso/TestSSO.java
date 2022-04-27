@@ -25,6 +25,7 @@ import com.ajaxjs.data_service.api.ApiController;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.sso.controller.SsoController;
+import com.ajaxjs.user.sso.controller.StateController;
 import com.ajaxjs.util.StrUtil;
 
 @ContextConfiguration(locations = { "classpath*:applicationContext.xml" })
@@ -64,7 +65,7 @@ public class TestSSO {
 		return redirectedUrl;
 	}
 
-	@Test
+//	@Test
 	public void testAuthCode() throws Exception {
 		String redirectedUrl = getAuthCode();
 		assertNotNull(redirectedUrl);
@@ -74,7 +75,7 @@ public class TestSSO {
 	@Autowired
 	SsoController oauthController;
 
-//	@Test
+	@Test
 	public void testIssueToken() throws Exception {
 		String redirectedUrl = getAuthCode();
 		String authCode = StrUtil.regMatch("(?:code=)(\\w+)", redirectedUrl, 1);
@@ -89,5 +90,15 @@ public class TestSSO {
 	public void testRefreshToken() throws Exception {
 		String newToken = oauthController.refreshToken("2.7518a00025a7db7a324689466dcb76f17f7aca7d.31536000.1682057306");
 		System.out.println(newToken);
+	}
+
+	@Autowired
+	StateController stateController;
+
+//	@Test
+	public void verify() {
+		String token = "1.9e8832e4a30574ccb4e17d35b82f228099dc4530.2592000.1653536869";
+		String verify = stateController.verify(token);
+		System.out.println(verify);
 	}
 }

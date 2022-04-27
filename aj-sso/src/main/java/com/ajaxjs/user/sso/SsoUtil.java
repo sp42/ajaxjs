@@ -23,9 +23,13 @@ public class SsoUtil {
 	 * @return
 	 */
 	public static String oauthError(ErrorCodeEnum err) {
+		return oauthError(err.getError(), err.getErrorDescription());
+	}
+
+	public static String oauthError(String errCode, String errMsg) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("error", err.getError());
-		map.put("error_description", err.getErrorDescription());
+		map.put("error", errCode);
+		map.put("error_description", errMsg);
 
 		return BaseController.toJson(map, false, false);
 	}

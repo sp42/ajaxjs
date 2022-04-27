@@ -5,7 +5,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +29,7 @@ import com.ajaxjs.util.WebHelper;
  */
 @RestController
 @RequestMapping("/user/register")
-public class RegisterController implements LoginType {
+public class RegisterController extends BaseController implements LoginType {
 	@Autowired
 	LoginService loginService;
 
@@ -40,7 +39,7 @@ public class RegisterController implements LoginType {
 	 * @param params
 	 * @return
 	 */
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(produces = JSON)
 	public String register(@RequestParam(required = true) Map<String, Object> params, HttpServletRequest req) {
 		// 所有字符串 trim 一下
 		for (String key : params.keySet()) {
@@ -60,7 +59,7 @@ public class RegisterController implements LoginType {
 		if (hasNoUsername && hasNoEmail && hasNoPhone)
 			throw new IllegalArgumentException("没有用户标识， username/email/phone 至少填一种");
 
-		int tenantId = (int) params.get("tenantId");
+		int tenantId = Integer.parseInt(params.get("tenantId").toString());
 
 		// 是否重复
 		if (!hasNoUsername && isRepeat("username", params.get("username").toString(), tenantId))
@@ -103,8 +102,8 @@ public class RegisterController implements LoginType {
 	 * @param tenantId 租户 id
 	 * @return
 	 */
-	@GetMapping(value = "/checkRepeat", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String checkRepeat(@RequestParam(required = true) String field, @RequestParam(required = true) String value, @RequestParam(required = true) int tenantId) {
+	@GetMapping(value = "/checkRepeat", produces = JSON)
+	public String checkRepeat(@RequestParam String field, @RequestParam String value, @RequestParam int tenantId) {
 		boolean isRepeat = isRepeat(field, value, tenantId);
 
 		return BaseController.jsonOk_Extension("检查某个值是否已经存在一样的值", "\"isRepeat\":" + isRepeat);

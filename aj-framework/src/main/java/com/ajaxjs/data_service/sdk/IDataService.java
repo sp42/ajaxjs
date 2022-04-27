@@ -71,6 +71,9 @@ public abstract interface IDataService<T> extends IDataServiceBase {
 	IDataService<T> setQuery(Map<String, Object> queryParams);
 
 	@Override
+	IDataService<T> setWhereQuery(Map<String, Object> queryWhereParams);
+
+	@Override
 	IDataService<T> setWhereQuery(String where);
 
 	@Override

@@ -78,6 +78,8 @@
       <DeveloperTools v-if="load == 'DeveloperTools'" />
       <UserListIndex v-if="load == 'UserListIndex'" />
       <OrgIndex v-if="load == 'OrgIndex'" />
+
+      <sku v-if="load == 'sku'" />
     </div>
   </div>
 </template>
@@ -98,12 +100,13 @@ import RBAC from '../components/admin-page/user/rbac/rbac.vue';
 import UserListIndex from '../components/admin-page/user/user-list-index.vue';
 import OrgIndex from '../components/admin-page/user/org/index.vue';
 import WebsiteConfig from '../components/admin-page/website/config.vue';
+import sku from './playground/sku.vue';
 
 export default {
-  components: { DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex },
+  components: { sku, DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex },
   data() {
     return {
-      load: 'OrgIndex',
+      load: 'sku',
       apiRoot: window.config.dsApiRoot,
       theme2: 'light',
       listId: 0

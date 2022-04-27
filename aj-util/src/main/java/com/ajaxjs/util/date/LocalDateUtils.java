@@ -239,4 +239,13 @@ public class LocalDateUtils {
 		return dayToSecond(days.longValue());
 	}
 
+	/**
+	 * 和当前日期比较，是否超时
+	 * 
+	 * @param expiresDateTime true 表示超时
+	 */
+	public static boolean isTimeout(LocalDateTime expiresDateTime) {
+		return LocalDateTime.now().isAfter(expiresDateTime);
+	}
+
 }

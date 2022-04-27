@@ -40,8 +40,8 @@ public class LoginController extends BaseController {
 	 */
 	@PostMapping(produces = JSON)
 	@DataBaseFilter
-	public String login(@RequestParam(required = true) String userID, @RequestParam String password, @RequestParam int tenantId, HttpServletRequest req) {
-		User user = loginService.loginByPassword(userID, password, tenantId,req);
+	public String login(@RequestParam String userID, @RequestParam String password, @RequestParam int tenantId, HttpServletRequest req) {
+		User user = loginService.loginByPassword(userID, password, tenantId, req);
 
 		if (user == null)
 			return jsonNoOk();
@@ -55,7 +55,7 @@ public class LoginController extends BaseController {
 	 * @param session
 	 * @return
 	 */
-	@GetMapping("logout")
+	@GetMapping(value = "logout", produces = JSON)
 	public String logout(HttpSession session) {
 		session.invalidate();
 		// TODO 清除 SSO 登录状态

@@ -17,7 +17,7 @@ import com.ajaxjs.user.sso.model.Scope;
  *
  */
 public interface SsoDAO {
-	static interface AcessTokenDAO extends IDataService<AccessToken> {
+	static interface AccessTokenDAO extends IDataService<AccessToken> {
 	}
 
 	static interface ClientDetailDAO extends IDataService<ClientDetails> {
@@ -33,7 +33,7 @@ public interface SsoDAO {
 		ClientUser findByClientId(long clientId, long userId, long scopeId);
 	}
 
-	public final static AcessTokenDAO AcessTokenDAO = new Caller("cms", "sso_access_token").bind(AcessTokenDAO.class, AccessToken.class);
+	public final static AccessTokenDAO AcessTokenDAO = new Caller("cms", "sso_access_token").bind(AccessTokenDAO.class, AccessToken.class);
 
 	public final static ClientDetailDAO ClientDetailDAO = new Caller("cms", "sso_client_details").bind(ClientDetailDAO.class, ClientDetails.class);
 
@@ -42,6 +42,15 @@ public interface SsoDAO {
 	public final static ScopeDAO ScopeDAO = new Caller("cms", "sso_scope").bind(ScopeDAO.class, Scope.class);
 
 	public final static ClientUserDAO ClientUserDAO = new Caller("cms", "sso_scope").bind(ClientUserDAO.class, ClientUser.class);
+
+	/**
+	 * 
+	 * @param accessToken
+	 * @return
+	 */
+	default AccessToken findByAccessToken(String accessToken) {
+		return AcessTokenDAO.setWhereQuery("accessToken", accessToken).findOne();
+	}
 
 	/**
 	 * 
@@ -57,9 +66,7 @@ public interface SsoDAO {
 		params.put("userId", userId);
 		params.put("clientId", clientId);
 		params.put("scope", scope);
-		
-		AcessTokenDAO.setQuery(params);
-		
-		return AcessTokenDAO.findOne();
+
+		return AcessTokenDAO.setWhereQuery(params).findOne();
 	}
 }

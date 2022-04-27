@@ -1,12 +1,14 @@
 package com.ajaxjs.user.sso.model;
 
+import com.ajaxjs.framework.IBaseModel;
+
 /**
  * 颁发 Token 时候所需的信息
  * 
  * @author Frank Cheung
  *
  */
-public class IssueToken {
+public class IssueToken implements IBaseModel {
 	/**
 	 * Access Token
 	 */

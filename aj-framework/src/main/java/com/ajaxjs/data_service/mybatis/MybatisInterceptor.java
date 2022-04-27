@@ -79,7 +79,7 @@ public class MybatisInterceptor implements Interceptor {
 	 * @param obj
 	 * @return
 	 */
-	private static String getParameterValue(Object obj) {
+	public static String getParameterValue(Object obj) {
 		String value = null;
 
 		if (obj instanceof String)

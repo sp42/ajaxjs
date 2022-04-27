@@ -3,7 +3,6 @@ package com.ajaxjs.user.sso.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +19,9 @@ import com.ajaxjs.user.sso.model.ClientDetails;
 import com.ajaxjs.user.sso.model.ErrorCodeEnum;
 import com.ajaxjs.user.sso.model.ExpireEnum;
 import com.ajaxjs.user.sso.model.GrantTypeEnum;
-import com.ajaxjs.user.sso.model.RefreshToken;
 import com.ajaxjs.user.sso.model.IssueToken;
+import com.ajaxjs.user.sso.model.IssueTokenWithUser;
+import com.ajaxjs.user.sso.model.RefreshToken;
 import com.ajaxjs.user.sso.service.AuthorizationService;
 import com.ajaxjs.user.sso.service.SsoDAO;
 import com.ajaxjs.util.cache.ExpireCache;
@@ -37,7 +37,7 @@ import com.ajaxjs.util.map.JsonHelper;
  */
 @RestController
 @RequestMapping("/sso")
-public class SsoController implements SsoDAO {
+public class SsoController extends BaseController implements SsoDAO {
 	private static final LogHelper LOGGER = LogHelper.getLog(SsoController.class);
 
 	@Autowired
@@ -53,7 +53,7 @@ public class SsoController implements SsoDAO {
 	 * @param req          请求对象
 	 * @return
 	 */
-	@RequestMapping(value = "/authorize_code", produces = BaseController.JSON)
+	@RequestMapping(value = "/authorize_code", produces = JSON)
 	public Object authorize(@RequestParam(required = true) String client_id,
 // @formatter:off
 	@RequestParam(required = true) String redirect_uri,
@@ -68,7 +68,7 @@ public class SsoController implements SsoDAO {
 			loginedUser = UserUtils.getLoginedUser(req);
 		} catch (Throwable e) {
 			LOGGER.warning(e);
-			return SsoUtil.oauthError(ErrorCodeEnum.INVALID_CLIENT);
+			return SsoUtil.oauthError("invalid_request", e.getMessage());
 		}
 
 		// 生成 Authorization Code
@@ -91,12 +91,12 @@ public class SsoController implements SsoDAO {
 	 * @param request       请求对象
 	 * @return
 	 */
-	@RequestMapping("/authorize")
-	public String issue(@RequestParam(required = true) String client_id,
+	@RequestMapping(value = "/authorize", produces = JSON)
+	public String issue(@RequestParam String client_id,
 // @formatter:off
-	@RequestParam(required = true) String client_secret,
-	@RequestParam(required = true) String code,
-	@RequestParam(required = true) String grant_type,
+	@RequestParam String client_secret,
+	@RequestParam String code,
+	@RequestParam String grant_type,
 	HttpServletRequest request) {
 // @formatter:on
 		LOGGER.info("通过 Authorization Code 获取 Access Token");
@@ -106,9 +106,17 @@ public class SsoController implements SsoDAO {
 			return SsoUtil.oauthError(ErrorCodeEnum.UNSUPPORTED_GRANT_TYPE);
 
 		ClientDetails savedClientDetails = findClientDetailsByClientId(client_id);
+
 		// 校验请求的客户端秘钥和已保存的秘钥是否匹配
-		if (!(savedClientDetails != null && savedClientDetails.getClientSecret().equals(client_secret)))
+		if (!(savedClientDetails != null && savedClientDetails.getClientSecret().equals(client_secret))) {
+			if (savedClientDetails == null)
+				LOGGER.info("找不到客户端");
+			
+			if (!savedClientDetails.getClientSecret().equals(client_secret))
+				LOGGER.info("密钥不匹配");
+			
 			return SsoUtil.oauthError(ErrorCodeEnum.INVALID_CLIENT);
+		}
 
 		String scope = ExpireCache.CACHE.get(code + ":scope", String.class);
 		User user = ExpireCache.CACHE.get(code + ":user", User.class);
@@ -125,11 +133,12 @@ public class SsoController implements SsoDAO {
 			// 生成 Refresh Token
 			String refreshTokenStr = authService.createRefreshToken(user, authAccessToken);
 
-			IssueToken token = new IssueToken(); // 返回数据
+			IssueTokenWithUser token = new IssueTokenWithUser(); // 返回数据
 			token.setAccess_token(authAccessToken.getAccessToken());
 			token.setRefresh_token(refreshTokenStr);
 			token.setExpires_in(expiresIn);
 			token.setScope(authAccessToken.getScope());
+			token.setUser(user);
 
 			return JsonHelper.toJson(token);
 		} else
@@ -142,8 +151,8 @@ public class SsoController implements SsoDAO {
 	 * @param refresh_token
 	 * @return
 	 */
-	@RequestMapping(value = "/refreshToken", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String refreshToken(@RequestParam(required = true) String refresh_token) {
+	@RequestMapping(value = "/refreshToken", produces = JSON)
+	public String refreshToken(@RequestParam String refresh_token) {
 		LOGGER.info("通过 Refresh Token 刷新 Access Token");
 		RefreshToken authRefreshToken = RefreshTokenDAO.setWhereQuery("refreshToken", refresh_token).findOne();
 

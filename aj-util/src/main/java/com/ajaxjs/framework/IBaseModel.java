@@ -14,7 +14,9 @@ public interface IBaseModel {
 	 * 
 	 * @return id 标识
 	 */
-	public Serializable getId();
+	default Serializable getId() {
+		return null;
+	}
 
 //	 不能 setter
 //	public void setId(Serializable id);
