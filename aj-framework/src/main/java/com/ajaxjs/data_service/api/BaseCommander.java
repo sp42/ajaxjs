@@ -109,7 +109,7 @@ public abstract class BaseCommander implements DataServiceConstant {
 	 * @return 列表的 JSON
 	 */
 	public static List<Map<String, Object>> list(DataSource ds, String sql, Map<String, Object> params) {
-		LOGGER.info("获取列表（不分页）");
+//		LOGGER.info("获取列表（不分页）");
 
 		boolean isDynamicSQL = Commander.isDynamicSQL(sql);
 		if (isDynamicSQL) {// 是否包含 mybatis 脚本控制标签，有的话特殊处理

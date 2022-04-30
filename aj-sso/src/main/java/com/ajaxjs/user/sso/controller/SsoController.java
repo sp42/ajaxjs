@@ -17,7 +17,6 @@ import com.ajaxjs.user.sso.SsoUtil;
 import com.ajaxjs.user.sso.model.AccessToken;
 import com.ajaxjs.user.sso.model.ClientDetails;
 import com.ajaxjs.user.sso.model.ErrorCodeEnum;
-import com.ajaxjs.user.sso.model.ExpireEnum;
 import com.ajaxjs.user.sso.model.GrantTypeEnum;
 import com.ajaxjs.user.sso.model.IssueToken;
 import com.ajaxjs.user.sso.model.IssueTokenWithUser;
@@ -25,7 +24,6 @@ import com.ajaxjs.user.sso.model.RefreshToken;
 import com.ajaxjs.user.sso.service.AuthorizationService;
 import com.ajaxjs.user.sso.service.SsoDAO;
 import com.ajaxjs.util.cache.ExpireCache;
-import com.ajaxjs.util.date.LocalDateUtils;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 
@@ -123,21 +121,19 @@ public class SsoController extends BaseController implements SsoDAO {
 
 		// 如果能够通过 Authorization Code 获取到对应的用户信息，则说明该 Authorization Code 有效
 		if (StringUtils.hasText(scope) && user != null) {
-			// 过期时间
-			Long expiresIn = LocalDateUtils.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
-
 			// 生成 Access Token
-			String accessTokenStr = authService.createAccessToken(user, savedClientDetails, grant_type, scope, expiresIn);
+			AccessToken accessToken = authService.createAccessToken(user, savedClientDetails, grant_type, scope);
 			// 查询已经插入到数据库的 Access Token
-			AccessToken authAccessToken = AcessTokenDAO.setWhereQuery("accessToken", accessTokenStr).findOne();
+//			AccessToken accessToken = AcessTokenDAO.setWhereQuery("accessToken", accessTokenStr).findOne();
+//			LOGGER.info(accessToken.getExpiresIn());
 			// 生成 Refresh Token
-			String refreshTokenStr = authService.createRefreshToken(user, authAccessToken);
+			String refreshTokenStr = authService.createRefreshToken(user, accessToken);
 
 			IssueTokenWithUser token = new IssueTokenWithUser(); // 返回数据
-			token.setAccess_token(authAccessToken.getAccessToken());
+			token.setAccess_token(accessToken.getAccessToken());
 			token.setRefresh_token(refreshTokenStr);
-			token.setExpires_in(expiresIn);
-			token.setScope(authAccessToken.getScope());
+			token.setExpires_in(accessToken.getExpiresIn());
+			token.setScope(accessToken.getScope());
 			token.setUser(user);
 
 			return JsonHelper.toJson(token);
@@ -169,15 +165,14 @@ public class SsoController extends BaseController implements SsoDAO {
 		ClientDetails savedClientDetails = ClientDetailDAO.findById(authAccessToken.getClientId());
 		// 获取对应的用户信息
 		User user = UserCommonDAO.UserDAO.findById(authAccessToken.getUserId());
-		// 新的过期时间
-		Long expiresIn = LocalDateUtils.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
+
 		// 生成新的 Access Token
-		String newAccessTokenStr = authService.createAccessToken(user, savedClientDetails, authAccessToken.getGrantType(), authAccessToken.getScope(), expiresIn);
+		AccessToken newAccessToken = authService.createAccessToken(user, savedClientDetails, authAccessToken.getGrantType(), authAccessToken.getScope());
 
 		IssueToken token = new IssueToken(); // 返回数据
-		token.setAccess_token(newAccessTokenStr);
+		token.setAccess_token(newAccessToken.getAccessToken());
 		token.setRefresh_token(refresh_token);
-		token.setExpires_in(expiresIn);
+		token.setExpires_in(newAccessToken.getExpiresIn());
 		token.setScope(authAccessToken.getScope());
 
 		return JsonHelper.toJson(token);

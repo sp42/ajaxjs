@@ -55,10 +55,11 @@ public class AuthorizationService implements SsoDAO {
 	 * @param client    接入的客户端信息
 	 * @param grantType 授权方式
 	 * @param scope     允许访问的用户权限范围
-	 * @param expiresIn 过期时间
 	 * @return
 	 */
-	public String createAccessToken(User user, ClientDetails client, String grantType, String scope, Long expiresIn) {
+	public AccessToken createAccessToken(User user, ClientDetails client, String grantType, String scope) {
+		// 过期时间
+		Long expiresIn = LocalDateUtils.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
 		// 过期的时间戳
 		Long expiresAt = LocalDateUtils.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null);
 		// 1. 拼装待加密字符串（username + clientId + 当前精确到毫秒的时间戳）
@@ -92,7 +93,11 @@ public class AuthorizationService implements SsoDAO {
 		}
 
 		// 4. 返回Access Token
-		return accessTokenStr;
+		return at;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(LocalDateUtils.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null));
 	}
 
 	/**

@@ -239,7 +239,13 @@ public class MapTool {
 //						LOGGER.info("t:" + t);
 //						LOGGER.info("v:" + value + " type: " + value.getClass());
 
-						property.getWriteMethod().invoke(bean, value);
+						try {
+							property.getWriteMethod().invoke(bean, value);
+						} catch (IllegalArgumentException e) {
+							e.printStackTrace();
+							LOGGER.info("method:" + property.getWriteMethod());
+							LOGGER.info("value type:" + value.getClass() + " vlaue: " + value);
+						}
 					}
 				}
 

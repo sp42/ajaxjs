@@ -33,7 +33,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 	}
 
 	@Override
-	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+	public ModelAndView resolveException(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) {
 		LOGGER.warning(ex);
 
 		Throwable _ex = ex.getCause() != null ? ex.getCause() : ex;
@@ -42,17 +42,17 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 		if (msg == null)
 			msg = _ex.toString();
 
-		response.setCharacterEncoding("UTF-8"); // 避免乱码
-		response.setHeader("Cache-Control", "no-cache, must-revalidate");
+		resp.setCharacterEncoding("UTF-8"); // 避免乱码
+		resp.setHeader("Cache-Control", "no-cache, must-revalidate");
 
 		if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError)// 设置状态码
-			response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
 		else
-			response.setStatus(HttpStatus.OK.value());
+			resp.setStatus(HttpStatus.OK.value());
 
-		if (request.getAttribute("SHOW_HTML_ERR") != null && true == ((boolean) request.getAttribute("SHOW_HTML_ERR"))) {
+		if (req.getAttribute("SHOW_HTML_ERR") != null && true == ((boolean) req.getAttribute("SHOW_HTML_ERR"))) {
 			try {
-				response.getWriter().write(msg);
+				resp.getWriter().write(msg);
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}
@@ -60,10 +60,10 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 			return new ModelAndView();
 		} else {
 			msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covernt(msg));
-			response.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
+			resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
 
 			try {
-				response.getWriter().write(BaseController.jsonNoOk(msg));
+				resp.getWriter().write(BaseController.jsonNoOk(msg));
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}

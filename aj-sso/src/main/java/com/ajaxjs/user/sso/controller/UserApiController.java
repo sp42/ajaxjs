@@ -1,7 +1,10 @@
 package com.ajaxjs.user.sso.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ajaxjs.framework.BaseController;
 
 /**
  * 用户相关操作接口
@@ -11,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/user_api")
-public class UserApiController {
-
+public class UserApiController extends BaseController {
+	@GetMapping(produces = JSON)
+	String getInfo() {
+		return jsonOk();
+	}
 }
