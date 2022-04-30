@@ -3,6 +3,11 @@
 </template>
 
 <script lang="ts">
+/*
+ 淘宝SKU组合查询算法实现 https://www.cnblogs.com/linybo/p/14061335.html
+ sku组合查询算法探讨 https://blog.csdn.net/xmlife/article/details/77628724
+ SKU组合查询算法代码-实例二  https://blog.csdn.net/xmlife/article/details/77774700
+*/
 /* 后端数据 */
 var data = {
   "10;20;30": {
@@ -48,7 +53,7 @@ function getNum(key: string): number {
   if (items.length === keys.length) // 已选择数据是最小路径，直接从已端数据获取
     return data[key] ? data[key].count : 0;
 
-  //拼接子串
+  // 拼接子串
   for (let i = 0; i < keys.length; i++) {
     let j;
 

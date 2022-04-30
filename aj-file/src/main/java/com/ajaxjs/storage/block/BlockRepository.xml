@@ -1,0 +1,13 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.bingosoft.ufs.storage.block.BlockRepository">
+    <select id="selectByMd5WithOutApp" resultType="net.bingosoft.ufs.storage.block.ContentBlock">
+      select * from ufs_storage_block where app_id is null and `storage` is null and `md5` = #{md5} limit 1
+    </select>
+
+    <select id="selectByMd5WithApp" resultType="net.bingosoft.ufs.storage.block.ContentBlock">
+      select * from ufs_storage_block where app_id = #{appId} and `storage` = #{storage} and `md5` = #{md5} limit 1
+    </select>
+</mapper>
