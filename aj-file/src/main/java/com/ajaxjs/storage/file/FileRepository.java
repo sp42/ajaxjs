@@ -1,5 +1,6 @@
 package com.ajaxjs.storage.file;
 
+import com.ajaxjs.storage.file.model.FileStatus;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.SqlHelper;
 import com.google.common.base.Strings;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
  * @author Helfen
  */
 public interface FileRepository extends BaseMapper<FileStatus> {
-    @Select("select count(1) from ufs_storage_file where id = #{fileId} limit 1")
+//    @Select("select count(1) from ufs_storage_file where id = #{fileId} limit 1")
     boolean exists(long fileId);
 
     default Map<String, String> getMetdata(long fileId) {
@@ -54,7 +55,7 @@ public interface FileRepository extends BaseMapper<FileStatus> {
         }
     }
 
-    @Delete("delete from ufs_storage_file_metadata where file_id = #{fileId}")
+//    @Delete("delete from ufs_storage_file_metadata where file_id = #{fileId}")
     void clearMetadata(long fileId);
 
     boolean updateAccessControlAndContentType(@Param("fileId")long fileId, @Param("accessControl") AccessControl accessControl, @Param("contentType")String contentType);

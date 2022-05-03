@@ -31,11 +31,8 @@ import java.util.Base64;
  */
 public class PdfConverter {
 	public static final String BASE64_PREFIX = "data:";
-	public static final float DEFAULT_FONT_SIZE = 80F;
 
-	public static final String[] OFFICE_CONTENT_TYPES = new String[] { "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-			"application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint",
-			"application/vnd.openxmlformats-officedocument.presentationml.presentation" };
+	public static final float DEFAULT_FONT_SIZE = 80F;
 
 	public static final String KIND = "pdf";
 
@@ -134,6 +131,10 @@ public class PdfConverter {
 
 		doc.close();
 	}
+
+	public static final String[] OFFICE_CONTENT_TYPES = new String[] { "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			"application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint",
+			"application/vnd.openxmlformats-officedocument.presentationml.presentation" };
 
 	static boolean isOfficeFile(String contentType) {
 		if (!Strings.isNullOrEmpty(contentType))

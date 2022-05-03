@@ -2,13 +2,12 @@ package com.ajaxjs.storage.app;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
+import com.ajaxjs.storage.app.model.Organization;
 import com.ajaxjs.storage.app.model.StorageArea;
 
-import net.bingosoft.ufs.common.security.Organization;
-
 public class StorageAreaService {
-
 	public interface StorageAreaRespository {
 //	    @Select("select count(1) from ufs_storage_area where id = #{id} limit 1")
 		boolean exists(Serializable id);
@@ -28,7 +27,7 @@ public class StorageAreaService {
 	public StorageArea getByOrgId(String orgId) {
 		StorageArea storageArea = storageAreaRespository.getByOrgId(orgId);
 
-		if (java.util.Objects.isNull(storageArea)) {
+		if (Objects.isNull(storageArea)) {
 			Map<String, Organization> organizationMap = securityContext.getOrganizationMap(orgId);
 			Organization organization = organizationMap.get(orgId);
 
@@ -37,7 +36,6 @@ public class StorageAreaService {
 				storageArea = storageAreaRespository.getByOrgId(parentOrganization.getId());
 				organization = parentOrganization;
 			}
-
 		}
 
 		return storageArea;

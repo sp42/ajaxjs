@@ -18,15 +18,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-util</artifactId>
-			<version>1.0.6</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.dom4j</groupId>
-			<artifactId>dom4j</artifactId>
-			<version>2.1.1</version>
+			<artifactId>ajaxjs-framework</artifactId>
+			<version>1.0.4</version>
 		</dependency>
 
 		<dependency>
@@ -35,6 +28,14 @@
 			<version>1.12.132</version>
 		</dependency>
 
+		<!-- 添加 Office 水印用 -->
+		<dependency>
+			<groupId>org.dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+
+		<!-- 添加 Office 水印用 -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -47,12 +48,14 @@
 			<version>4.1.0</version>
 		</dependency>
 
+		<!-- 转换 mp4 格式用 -->
 		<dependency>
 			<groupId>net.bramp.ffmpeg</groupId>
 			<artifactId>ffmpeg</artifactId>
 			<version>0.7.0</version>
 		</dependency>
 
+		<!-- 转换 PDF 格式用 -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itext7-core</artifactId>

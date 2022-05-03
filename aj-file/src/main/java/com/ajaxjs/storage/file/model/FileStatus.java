@@ -23,20 +23,21 @@ public class FileStatus {
 	 */
 	private String ownerId;
 
-	@ApiModelProperty(value = "该文件所对应的存储块", hidden = true)
-	@TableField("block_id")
+	/**
+	 * 该文件所对应的存储块
+	 */
 	private long blockId;
 
-	@ApiModelProperty(value = "文件名")
-	@TableField("file_name")
 	private String filename;
 
-	@TableField("index_server_id")
-	@JsonIgnore
+	/**
+	 * @JsonIgnore
+	 */
 	private Long indexServerId;
 
-	@ApiModelProperty("文件的安全键，上传文件后自动产生，以后进行签名操作时需要该值")
-	@TableField
+	/**
+	 * 文件的安全键，上传文件后自动产生，以后进行签名操作时需要该值
+	 */
 	private String secretKey;
 
 	/**
@@ -44,8 +45,9 @@ public class FileStatus {
 	 */
 	private String contentType;
 
-	@ApiModelProperty("文件大小")
-	@TableField
+	/**
+	 * 文件大小
+	 */
 	private Long contentLength;
 
 	/**
@@ -62,4 +64,101 @@ public class FileStatus {
 	 * 文件上传时间
 	 */
 	private Date createdAt;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public long getBlockId() {
+		return blockId;
+	}
+
+	public void setBlockId(long blockId) {
+		this.blockId = blockId;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public Long getIndexServerId() {
+		return indexServerId;
+	}
+
+	public void setIndexServerId(Long indexServerId) {
+		this.indexServerId = indexServerId;
+	}
+
+	public String getSecretKey() {
+		return secretKey;
+	}
+
+	public void setSecretKey(String secretKey) {
+		this.secretKey = secretKey;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public Long getContentLength() {
+		return contentLength;
+	}
+
+	public void setContentLength(Long contentLength) {
+		this.contentLength = contentLength;
+	}
+
+	public String getContentMd5() {
+		return contentMd5;
+	}
+
+	public void setContentMd5(String contentMd5) {
+		this.contentMd5 = contentMd5;
+	}
+
+	public AccessControl getAccessControl() {
+		return accessControl;
+	}
+
+	public void setAccessControl(AccessControl accessControl) {
+		this.accessControl = accessControl;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
 }
