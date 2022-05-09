@@ -17,7 +17,6 @@ import java.util.Map;
  * @author sp42 frank@ajaxjs.com
  */
 public abstract class BaseModel {
-
     private Long id;
 
     /**
