@@ -20,8 +20,8 @@ import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
  * @author Frank Cheung
  *
  */
-@WebListener
-@Component
+//@WebListener
+//@Component
 public class ContainerContextClosedHandler implements ServletContextListener {
 	@SuppressWarnings("deprecation")
 	@Override

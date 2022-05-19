@@ -1,5 +1,7 @@
 package com.ajaxjs.util.spring;
 
+import java.util.List;
+
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -8,12 +10,18 @@ import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.GenericWebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.ajaxjs.util.filter.DataBaseConnection;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -21,37 +29,99 @@ import com.ajaxjs.util.logger.LogHelper;
  *
  * @author Frank Cheung
  */
-public abstract class BaseWebInitializer implements WebApplicationInitializer {
+public abstract class BaseWebInitializer implements WebApplicationInitializer, BaseWebInitializerExtender {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseWebInitializer.class);
 
-	/**
-	 * 子类可以配置的方法
-	 * 
-	 * @param servletContext Servlet 上下文
-	 * @param webCxt         如果不想在 WebApplicationInitializer 当前类中注入，可以另设一个类专门注入组件
-	 */
-	public abstract void initWeb(ServletContext servletContext, GenericWebApplicationContext webCxt);
-
 	@Override
-	public void onStartup(ServletContext servletCxt) {
-		LOGGER.info("WEB 程序启动中……");
-		if (servletCxt == null) // 可能在测试
+	public void onStartup(ServletContext cxt) {
+		if (cxt == null) // 可能在测试
 			return;
+		String mainConfig = getMainConfig();
+		cxt.setAttribute("ctx", cxt.getContextPath());
+//		servletCxt.setInitParameter("contextConfigLocation", "classpath:applicationContext.xml");
+		cxt.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+		cxt.setInitParameter("contextConfigLocation", mainConfig);
+		cxt.addListener(new ContextLoaderListener()); // 监听器
 
-		servletCxt.setAttribute("ctx", servletCxt.getContextPath());
-		servletCxt.setInitParameter("contextConfigLocation", "classpath:applicationContext.xml");
-		servletCxt.addListener(new ContextLoaderListener()); // 监听器
+		if (!"".equals(mainConfig)) {// 防呆设计
+			try {
+				Class.forName(mainConfig);
+			} catch (ClassNotFoundException e) {
 
-		FilterRegistration.Dynamic filterReg = servletCxt.addFilter("InitMvcRequest", new CharacterEncodingFilter("UTF-8"));
+				String reverse = new StringBuffer(mainConfig).reverse().toString();
+				reverse = reverse.replaceFirst("\\.", "\\$"); // 对于内部类，我们需要像下面这样写代码
+				String _mainConfig = new StringBuffer(reverse).reverse().toString();
+
+				try {
+					Class.forName(_mainConfig);
+				} catch (ClassNotFoundException e1) {
+					LOGGER.warning("找不到 Component Scan 的配置类 " + mainConfig);
+				}
+			}
+		}
+
+		FilterRegistration.Dynamic filterReg = cxt.addFilter("InitMvcRequest", new CharacterEncodingFilter("UTF-8"));
 		filterReg.addMappingForUrlPatterns(null, true, "/*");
 
-		GenericWebApplicationContext webCxt = new GenericWebApplicationContext();
-		initWeb(servletCxt, webCxt); // 如果不想在 WebApplicationInitializer 当前类中注入，可以另设一个类专门注入组件
+//		GenericWebApplicationContext webCxt = new GenericWebApplicationContext();
+		AnnotationConfigWebApplicationContext webCxt = new AnnotationConfigWebApplicationContext();
+		initWeb(cxt, webCxt); // 如果不想在 WebApplicationInitializer 当前类中注入，可以另设一个类专门注入组件
 
-		ServletRegistration.Dynamic registration = servletCxt.addServlet("dispatcher", new DispatcherServlet(webCxt));
+		ServletRegistration.Dynamic registration = cxt.addServlet("dispatcher", new DispatcherServlet(webCxt));
 		registration.addMapping("/");
 		registration.setLoadOnStartup(1);
 //		registration.setMultipartConfig(new MultipartConfigElement("c:/temp", 50000000, 50000000, 0));// 文件上传
+		LOGGER.info("WEB 程序启动完毕");
+	}
+
+	/**
+	 * Spring MVC 的配置
+	 * 
+	 * @return
+	 */
+	@Bean
+	public WebMvcConfigurer configSpringMVC() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+				configurer.enable();
+			}
+
+			/**
+			 * 加入拦截器
+			 */
+			@Override
+			public void addInterceptors(InterceptorRegistry registry) {
+				addInterceptor(registry);
+				registry.addInterceptor(db());
+			}
+
+			/**
+			 * 跨域
+			 *
+			 * @return
+			 */
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				addCorsMapping(registry);
+			}
+
+			@Override
+			public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+				configureMessageConverter(converters);
+			}
+		};
+
+	}
+
+	/**
+	 * 连接数据库
+	 * 
+	 * @return
+	 */
+	@Bean
+	DataBaseConnection db() {
+		return new DataBaseConnection();
 	}
 
 	/**
@@ -103,4 +173,5 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer {
 	public DiContextUtil DiContextUtil() {
 		return new DiContextUtil();
 	}
+
 }

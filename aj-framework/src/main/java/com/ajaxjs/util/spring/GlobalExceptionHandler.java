@@ -10,9 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.spring.response.ResponseResult;
+import com.ajaxjs.util.spring.response.ReturnCode;
 
 /**
  * 全局异常拦截器
@@ -61,9 +62,14 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 		} else {
 			msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covernt(msg));
 			resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
+			resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+			ResponseResult resultWarpper = new ResponseResult();
+			resultWarpper.setErrorCode(ReturnCode.RC500.getCode() + "");
+			resultWarpper.setMessage(msg);
 
 			try {
-				resp.getWriter().write(BaseController.jsonNoOk(msg));
+				resp.getWriter().write(resultWarpper.toString());
 			} catch (IOException e) {
 				LOGGER.warning(e);
 			}
