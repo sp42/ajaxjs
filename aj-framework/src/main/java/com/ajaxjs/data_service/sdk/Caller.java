@@ -13,6 +13,7 @@ import com.ajaxjs.data_service.api.RuntimeData;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.MapTool;
 
@@ -27,6 +28,7 @@ public class Caller extends BaseCaller {
 		super(dsNamespace, domain);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	Object get(Method method, String methodName, Object[] args) {
 		DataServiceDml node;
@@ -61,7 +63,7 @@ public class Caller extends BaseCaller {
 		} else if (isFindOne || methodName.equals("findList") || methodName.equals("findListAsListMap")) {
 			uri += "/list";
 			node = exec(uri, RuntimeData.GET);
-			
+
 			ctx = ServiceContext.factory(uri, null, node, params);
 			List<Map<String, Object>> list = list(ctx, null);
 
@@ -121,6 +123,15 @@ public class Caller extends BaseCaller {
 			node = exec(uri, RuntimeData.GET);
 			LOGGER.info(params);
 
+			if (args != null && args.length >= 1) {
+				// 方法参数转换为 SQL 参数
+				if (args[0] instanceof Map)
+					params = (Map<String, Object>) args[0];
+				else {
+					// TODO 反射参数获取 key/value
+				}
+			}
+
 			if ("getOne".equals(node.getType())) {
 				ctx = ServiceContext.factory(uri, null, node, params);
 				Map<String, Object> info = info(ctx, null);
@@ -131,7 +142,19 @@ public class Caller extends BaseCaller {
 					Class<?> clz = getBeanClz();
 					Class<?> returnType = method.getReturnType();
 
-					if (returnType == Map.class)
+					if (returnType == String.class) {
+						// 只返回一个
+						for (String key : info.keySet())
+							return info.get(key).toString();
+					} else if (returnType == Integer.class || returnType == int.class) {
+						// 只返回一个
+						for (String key : info.keySet())
+							return MappingValue.object2int(info.get(key));
+					} else if (returnType == Long.class || returnType == long.class) {
+						// 只返回一个
+						for (String key : info.keySet())
+							return MappingValue.object2long(info.get(key).toString());
+					} else if (returnType == Map.class)
 						return info;
 
 					if (clz != null)

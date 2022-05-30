@@ -20,11 +20,14 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.util.StringUtils;
 
+import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.util.date.DateUtil;
+import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * 处理值的一些相关函数
@@ -58,7 +61,7 @@ public class MappingValue {
 		if (value.charAt(0) == '-' || (value.charAt(0) >= '0' && value.charAt(0) <= '9'))
 			try {
 				int int_value = Integer.parseInt(value);
-				
+
 				if ((int_value + "").equals(value)) // 判断为整形
 					return int_value;
 			} catch (NumberFormatException e) {// 不能转换为数字
@@ -67,7 +70,7 @@ public class MappingValue {
 					if ((long_value + "").equals(value)) // 判断为整形
 						return long_value;
 				} catch (NumberFormatException e1) {
-					if (value.matches("[0-9]{1,13}(\\.[0-9]*)?")) 
+					if (value.matches("[0-9]{1,13}(\\.[0-9]*)?"))
 						return Double.parseDouble(value);
 				}
 			}
@@ -150,31 +153,31 @@ public class MappingValue {
 	/**
 	 * 根据送入的类型作适当转换
 	 * 
-	 * @param value 送入的值
-	 * @param t     期待的类型
+	 * @param value  送入的值
+	 * @param target 期待的类型
 	 * @return 已经转换类型的值
 	 */
 	@SuppressWarnings("unchecked")
-	public static Object objectCast(Object value, Class<?> t) {
+	public static Object objectCast(Object value, Class<?> target) {
 		if (value == null)
 			return null;
-		else if (t == boolean.class || t == Boolean.class) // 布尔型
+		else if (target == boolean.class || target == Boolean.class) // 布尔型
 			value = toBoolean(value);
-		else if (t == int.class || t == Integer.class) // 整形
+		else if (target == int.class || target == Integer.class) // 整形
 			value = StringUtils.hasText(value.toString()) ? Integer.parseInt(value.toString()) : 0;
-		else if (t == int[].class || t == Integer[].class) {
+		else if (target == int[].class || target == Integer[].class) {
 			// 复数
 			if (value instanceof String)
 				value = stringArr2intArr((String) value, DIVER + "");
 			else if (value instanceof List)
 				value = intList2Arr((List<Integer>) value);
 
-		} else if (t == long.class || t == Long.class)
+		} else if (target == long.class || target == Long.class)
 			// LONG 型
 			value = Long.valueOf((value == null || StringUtils.hasText(value.toString())) ? value.toString() : "0");
-		else if (t == String.class) // 字符串型
+		else if (target == String.class) // 字符串型
 			value = value.toString();
-		else if (t == String[].class) {
+		else if (target == String[].class) {
 			// 复数
 			if (value instanceof ArrayList) {
 				ArrayList<String> list = (ArrayList<String>) value;
@@ -186,9 +189,9 @@ public class MappingValue {
 				// LOGGER.info("Bean 要求 String[] 类型，但实际传入类型：" +
 				// value.getClass().getName());
 			}
-		} else if (t == Date.class)
+		} else if (target == Date.class)
 			value = DateUtil.object2Date(value);
-		else if (t == BigDecimal.class) {
+		else if (target == BigDecimal.class) {
 			if (value instanceof Integer)
 				value = new BigDecimal((Integer) value);
 			else if (value instanceof String) {
@@ -198,6 +201,26 @@ public class MappingValue {
 				value = b;
 			} else if (value instanceof Double)
 				value = new BigDecimal(Double.toString((Double) value));
+		} else if (target == Map.class) {
+			if (value instanceof String) {
+				value = JsonHelper.parseMap((String) value);
+			}
+		} else if (target == float.class || target == Float.class) {
+			if (value instanceof Double) {
+				value = ((Double) value).floatValue();
+			}
+		} else if (value instanceof String && IBaseModel.class.isAssignableFrom(target)) {
+			// json2bean
+			value = JsonHelper.parseMapAsBean((String) value, target);
+		} else if (target.isEnum()) { // 枚举
+			Object[] enumConstants = target.getEnumConstants();
+
+			for (Object obj : enumConstants) {
+				if (obj.toString().equals(value)) {
+					value = obj;
+					break;
+				}
+			}
 		}
 
 		return value;

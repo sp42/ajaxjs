@@ -43,89 +43,89 @@ import com.ajaxjs.util.spring.DiContextUtil;
  * @author Frank Cheung
  */
 public class DataBaseConnection implements HandlerInterceptor {
-    private static final LogHelper LOGGER = LogHelper.getLog(DataBaseConnection.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(DataBaseConnection.class);
 
 //	private DataSource ds;
 
-    // TODO  没权限时候还会连接，应该禁止 有时会连接两次
-    @Override
-    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
+	// TODO 没权限时候还会连接，应该禁止 有时会连接两次
+	@Override
+	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
+		if (handler instanceof HandlerMethod) {
+			HandlerMethod handlerMethod = (HandlerMethod) handler;
+			Method method = handlerMethod.getMethod();
 
-            if (method != null && method.getAnnotation(DataBaseFilter.class) != null) {// 有注解，要连接数据库
-                initDb();
-            }
-        }
+			if (method != null && method.getAnnotation(DataBaseFilter.class) != null) {// 有注解，要连接数据库
+				initDb();
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    public static Connection initDb() {
-        DataSource ds = (DataSource) DiContextUtil.getBean("dataSource");
-        Objects.requireNonNull(ds, "未配置数据源");
-        Connection conn = null;
+	public static Connection initDb() {
+		DataSource ds = (DataSource) DiContextUtil.getBean("dataSource");
+		Objects.requireNonNull(ds, "未配置数据源");
+		Connection conn = null;
 
-        try {
-            conn = ds.getConnection();
-            setConnection(conn); // 设置连接到库，使其可用
-            getDaoContext().setConnection(conn);
+		try {
+			conn = ds.getConnection();
+			setConnection(conn); // 设置连接到库，使其可用
+			getDaoContext().setConnection(conn);
 
-            if (Version.isDebug)
-                LOGGER.info("数据库连接成功。详情：[{0}]", conn.getMetaData().getURL());
-        } catch (SQLException e) {
-            LOGGER.warning(e);
-        }
+			if (Version.isDebug)
+				LOGGER.info("数据库连接成功。详情：[{0}]", conn.getMetaData().getURL());
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+		}
 
-        return conn;
-    }
+		return conn;
+	}
 
-    @Override
-    public void afterCompletion(HttpServletRequest req, HttpServletResponse resp, Object handler, @Nullable Exception ex) {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
+	@Override
+	public void afterCompletion(HttpServletRequest req, HttpServletResponse resp, Object handler, @Nullable Exception ex) {
+		if (handler instanceof HandlerMethod) {
+			HandlerMethod handlerMethod = (HandlerMethod) handler;
+			Method method = handlerMethod.getMethod();
 
-            if (method != null && method.getAnnotation(DataBaseFilter.class) != null) {// 有注解
-                try {
-                    if (method.getAnnotation(EnableTransaction.class) != null)
-                        doTransaction(ex);
+			if (method != null && method.getAnnotation(DataBaseFilter.class) != null) {// 有注解
+				try {
+					if (method.getAnnotation(EnableTransaction.class) != null)
+						doTransaction(ex);
 
-                    if (method.getAnnotation(SqlAuditing.class) != null)
-                        saveSql();
-                } catch (Throwable e) {
-                    LOGGER.warning(e);
-                } finally {
-                    if (JdbcUtil.IS_DB_CONNECTION_AUTOCLOSE) // 保证一定关闭，哪怕有异常
-                        closeDb();
-                }
-            }
+					if (method.getAnnotation(SqlAuditing.class) != null)
+						saveSql();
+				} catch (Throwable e) {
+					LOGGER.warning(e);
+				} finally {
+					if (JdbcUtil.IS_DB_CONNECTION_AUTOCLOSE) // 保证一定关闭，哪怕有异常
+						closeDb();
+				}
+			}
 
-        }
-    }
+		}
+	}
 
-    private static void doTransaction(Exception ex) throws SQLException {
-        LOGGER.info("正在处理数据库事务……");
-        Connection conn = getConnection();
+	private static void doTransaction(Exception ex) throws SQLException {
+		LOGGER.info("正在处理数据库事务……");
+		Connection conn = getConnection();
 
-        if (conn.isClosed())
-            throw new SQLException("数据库连接已经关闭");
+		if (conn.isClosed())
+			throw new SQLException("数据库连接已经关闭");
 
-        if (conn.getAutoCommit())
-            throw new SQLException("数据库连接没有关闭自动提交事务");
+		if (conn.getAutoCommit())
+			throw new SQLException("数据库连接没有关闭自动提交事务");
 
-        if (ex != null)
-            conn.rollback();
-        else
-            conn.commit();
+		if (ex != null)
+			conn.rollback();
+		else
+			conn.commit();
 
-        conn.setAutoCommit(true);
-    }
+		conn.setAutoCommit(true);
+	}
 
-    private static void saveSql() {
-        for (String sql : getSqls()) {
-            System.out.println(sql); // TODO
-        }
-    }
+	private static void saveSql() {
+		for (String sql : getSqls()) {
+			System.out.println(sql); // TODO
+		}
+	}
 }

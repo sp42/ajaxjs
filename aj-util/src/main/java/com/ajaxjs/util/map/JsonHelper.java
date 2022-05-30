@@ -18,6 +18,7 @@ package com.ajaxjs.util.map;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,10 +31,9 @@ import java.util.function.Function;
 
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.framework.BaseEnmu;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.framework.IntegerValueEnum;
+import com.ajaxjs.framework.ValueEnmu;
 import com.ajaxjs.jsonparser.syntax.FMS;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.date.DateUtil;
@@ -62,6 +62,18 @@ public class JsonHelper {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> parseMap(String str) {
+		return (Map<String, Object>) parse(str);
+	}
+
+	/**
+	 * 解析 JSON 字符串为 Map。清除 \r\n 字符
+	 * 
+	 * @param str JSON 字符串
+	 * @return Map
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> parseMapClean(String str) {
+		str = str.replaceAll("\\r|\\n", "");
 		return (Map<String, Object>) parse(str);
 	}
 
@@ -121,12 +133,13 @@ public class JsonHelper {
 			return stringifyMap((Map<?, ?>) obj);
 		else if (obj instanceof Map[])
 			return jsonArr((Map<?, ?>[]) obj, JsonHelper::stringifyMap);
-		else if (obj instanceof BaseEnmu) {
-			if (obj instanceof IntegerValueEnum && ((IntegerValueEnum) obj).isUsingOrdinal())
-				return (((IntegerValueEnum) obj).getValue() + 1) + "";
-			else
-				return ((BaseEnmu) obj).getValue().toString();
-		} else if (obj instanceof BaseModel || obj instanceof IBaseModel)
+//		else if (obj instanceof ValueEnmu) {
+//			if (obj instanceof IntegerValueEnum && ((IntegerValueEnum) obj).isUsingOrdinal())
+//				return (((IntegerValueEnum) obj).getValue() + 1) + "";
+//			else
+//				return ((ValueEnmu) obj).getValue().toString();
+//		} 
+		else if (obj instanceof BaseModel || obj instanceof IBaseModel)
 			return beanToJson(obj);
 		else if (obj instanceof BaseModel[] || obj instanceof IBaseModel[])
 			return jsonArr((BaseModel[]) obj, JsonHelper::beanToJson);
@@ -142,11 +155,25 @@ public class JsonHelper {
 					return toJson(list.toArray(new Map[list.size()]));
 				else if (list.get(0) instanceof BaseModel) // Bean
 					return toJson(list.toArray(new BaseModel[list.size()]));
+				else { // Bean
+					Object[] array = list.toArray(new Object[list.size()]);
+					return jsonArr(array, JsonHelper::beanToJson);
+				}
 			} else
 				return "[]";
 		} else if (obj instanceof Object[])
 			return jsonArr((Object[]) obj, JsonHelper::toJson);
-		else if (obj instanceof Object) { // 普通 Java Object
+		else if (obj instanceof Enum) {
+			if (obj instanceof ValueEnmu) {
+				Serializable v = ((ValueEnmu) obj).getValue();
+
+				if (v instanceof String)
+					return "\"" + v + "\"";
+				else
+					return (String) v;
+			} else
+				return "\"" + obj.toString() + "\"";
+		} else if (obj instanceof Object) { // 普通 Java Object
 			List<String> arr = new ArrayList<>();
 
 			for (Field field : obj.getClass().getDeclaredFields()) {
@@ -257,13 +284,15 @@ public class JsonHelper {
 			for (int i = 0; i < props.length; i++) {
 				try {
 					String name = "\"" + props[i].getName() + "\"";
-					String value = toJson(props[i].getReadMethod().invoke(bean));
+					Object invoke = props[i].getReadMethod().invoke(bean);
+					String value = toJson(invoke);
 
 					json.append(name);
 					json.append(":");
 					json.append(value);
 					json.append(",");
 				} catch (Exception e) {
+					System.out.println(props[i].getName());
 					e.printStackTrace();
 				}
 			}

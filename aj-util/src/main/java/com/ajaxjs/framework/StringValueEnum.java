@@ -5,7 +5,7 @@ package com.ajaxjs.framework;
  * 
  * @author Frank Cheung
  */
-public interface StringValueEnum extends BaseEnmu {
+public interface StringValueEnum extends ValueEnmu {
 	/**
 	 * 获取 POJO 字段的值
 	 * 

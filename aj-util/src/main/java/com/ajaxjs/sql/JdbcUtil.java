@@ -175,4 +175,16 @@ public class JdbcUtil {
 		return columnName.toString();
 	}
 
+	/**
+	 * pageSize 转换为 MySQL 的 start 分页
+	 * 
+	 * @param pageNo
+	 * @param limit
+	 * @return
+	 */
+	public static int pageNo2start(int pageNo, int limit) {
+		int start = (pageNo - 1) * limit;
+
+		return (start < 0) ? 0 : start;
+	}
 }

@@ -24,26 +24,26 @@ import java.io.IOException;
  * https://www.cnblogs.com/jpfss/p/9447838.html
  */
 public class FileIoHelper {
-    private static final LogHelper LOGGER = LogHelper.getLog(FileIoHelper.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(FileIoHelper.class);
 
-    /**
-     *
-     * @param res
-     * @return
-     */
-    public static String openContent(Resource res) {
-        EncodedResource encRes = new EncodedResource(res, "UTF-8");
+	/**
+	 *
+	 * @param res
+	 * @return
+	 */
+	public static String openContent(Resource res) {
+		EncodedResource encRes = new EncodedResource(res, "UTF-8");
 
-        try {
-            String content = FileCopyUtils.copyToString(encRes.getReader());
-            return content;
-        } catch (IOException e) {
-            LOGGER.warning(e);
-            return null;
-        }
-    }
+		try {
+			String content = FileCopyUtils.copyToString(encRes.getReader());
+			return content;
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
 
-    public static String openContent(String path) {
-        return openContent(new  FileSystemResource(path));
-    }
+	public static String openContent(String path) {
+		return openContent(new FileSystemResource(path));
+	}
 }

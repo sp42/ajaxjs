@@ -21,6 +21,9 @@ public class Gen {
 	public static long getItem(long[] items) {
 		return items[RANDOM.nextInt(items.length)];
 	}
+	public static boolean getItem(boolean[] items) {
+		return items[RANDOM.nextInt(items.length)];
+	}
 
 	public static float getItem(float[] items) {
 		return items[RANDOM.nextInt(items.length)];

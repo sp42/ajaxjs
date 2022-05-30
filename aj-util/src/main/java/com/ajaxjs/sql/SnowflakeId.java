@@ -3,8 +3,7 @@ package com.ajaxjs.sql;
 /**
  * Twitter 的分布式自增ID算法 Snowflake:雪花生成器。
  * 
- * 默认其生成的 Long 主键是 28 位；但 JS Long 最大值是 26 位（Java Long 没此问题）
- * 这个版本则是生成 26 位的
+ * 默认其生成的 Long 主键是 28 位；但 JS Long 最大值是 26 位（Java Long 没此问题） 这个版本则是生成 26 位的
  * 
  * @author https://www.cnblogs.com/yangzhilong/p/10290862.html
  *
@@ -100,4 +99,7 @@ public class SnowflakeId {
 		return new SnowflakeId(1L).nextId();
 	}
 
+	public static void main(String[] args) {
+		System.out.println(get());
+	}
 }

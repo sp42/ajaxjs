@@ -158,6 +158,14 @@ public class LocalDateUtils {
 	public static String currentDateStr() {
 		return toDateStr(LocalDate.now());
 	}
+	/**
+	 * 返回当前日期字符串（格式化表达式：YYYYMMdd）
+	 * 
+	 * @return
+	 */
+	public static String currentDateStr2() {
+		return toDateStr(LocalDate.now(), "YYYYMMdd");
+	}
 
 	// ------------------------------------------------------------------------------------------
 

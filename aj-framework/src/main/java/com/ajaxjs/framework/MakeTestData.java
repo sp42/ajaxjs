@@ -12,6 +12,7 @@ import com.ajaxjs.framework.shop.model.Goods;
 import com.ajaxjs.net.http.Post;
 import com.ajaxjs.sql.util.Gen;
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.date.DateUtil;
 import com.ajaxjs.util.map.MapTool;
 
 public class MakeTestData {
@@ -25,11 +26,6 @@ public class MakeTestData {
 	static String[] project_name = { "与湖南德山资本洽谈在龙泉园区建设100万吨磷酸铁锂正极材料项目", "智能装备（军民融合）产业园项目", "京东（玉溪）新经济产业园总部经济项目" };
 	static String[] project_industry = { "信息传输、制造业/专用设备制造", "制造业/化学原料及化学制品/合成材料", "制造业/专用设备制造" };
 	static String[] project_location = { "北京", "上海", "广州" };
-
-	public static void main(String[] args) {
-		for (int i = 0; i < 200; i++)
-			createGoodsFormat();
-	}
 
 	static String[] phones = { "老人手机", "智能手机", "三防手机", "智能电视", "投影仪", "收音机" };
 	static String[] brands = { "华为", "荣耀", "苹果", "小米", "中兴", "Oppo" };
@@ -196,4 +192,49 @@ public class MakeTestData {
 		System.out.println(result);
 	}
 
+	static void simpleImg() {
+		String[] sample_ids = { "9057286485381120", "9057286485381121", "9057286485381122", "9057286485381123" };
+		String[] imgs = { "https://upload-images.jianshu.io/upload_images/5809200-a99419bb94924e6d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+				"https://upload-images.jianshu.io/upload_images/5809200-736bc3917fe92142.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+				"https://upload-images.jianshu.io/upload_images/5809200-7fe8c323e533f656.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+				"https://upload-images.jianshu.io/upload_images/5809200-c12521fbde6c705b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+				"https://upload-images.jianshu.io/upload_images/5809200-caf66b935fd00e18.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+				"https://upload-images.jianshu.io/upload_images/5809200-48dd99da471ffa3f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+				"https://upload-images.jianshu.io/upload_images/5809200-4de5440a56bff58f.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+				"https://upload-images.jianshu.io/upload_images/5809200-03bbbd715c24750e.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" };
+
+		for (int i = 0; i < 100; i++) {
+			Map<String, Object> params = new HashMap<>();
+//			params.put("image_id", Gen.getItem(owner_id));
+			params.put("sample_id", Gen.getItem(sample_ids));
+			params.put("image_path", Gen.getItem(imgs));
+
+			Map<String, Object> result = Post.api("http://localhost:8080/cms/api/drone/aip_sample_image", params, setHeader);
+			System.out.println(result);
+		}
+
+	}
+
+	static boolean[] bool = { true, false };
+	static int[] boolInt = { 1, 0 };
+
+	static void createEvent() {
+		for (int i = 0; i < 50; i++) {
+			Map<String, Object> params = new HashMap<>();
+//			params.put("image_id", Gen.getItem(owner_id));
+			params.put("rule_id", "82323");
+			params.put("event_name", "ZY-001低电压告警");
+			params.put("event_content", "ZY-001于 2022-12-2 电压值为 3.4v，低于最低电压 5V");
+			params.put("event_time", DateUtil.now());
+			params.put("event_value", 3.3F);
+			params.put("is_read", Gen.getItem(boolInt));
+
+			Map<String, Object> result = Post.api("http://localhost:8080/cms/api/drone/res_alarm_event", params, setHeader);
+			System.out.println(result);
+		}
+	}
+
+	public static void main(String[] args) {
+		createEvent();
+	}
 }

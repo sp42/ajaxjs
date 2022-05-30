@@ -21,6 +21,7 @@ import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.mybatis.MybatisInterceptor;
 import com.ajaxjs.data_service.mybatis.SqlMapper;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -149,8 +150,7 @@ public abstract class BaseCommander implements DataServiceConstant {
 
 		if (params.containsKey("pageNo")) {
 			int pageNo = (int) params.get("pageNo");
-			start = (pageNo - 1) * limit;
-			start = (start < 0) ? 0 : start;
+			start = JdbcUtil.pageNo2start(pageNo, limit);
 		} else if (params.containsKey("start"))
 			start = (int) params.get("start");
 		else

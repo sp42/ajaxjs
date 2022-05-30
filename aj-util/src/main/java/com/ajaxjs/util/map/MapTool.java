@@ -242,9 +242,11 @@ public class MapTool {
 						try {
 							property.getWriteMethod().invoke(bean, value);
 						} catch (IllegalArgumentException e) {
-							e.printStackTrace();
 							LOGGER.info("method:" + property.getWriteMethod());
 							LOGGER.info("value type:" + value.getClass() + " vlaue: " + value);
+
+							e.printStackTrace();
+
 						}
 					}
 				}

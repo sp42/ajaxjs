@@ -1,7 +1,5 @@
 package com.ajaxjs.util.spring;
 
-import java.util.List;
-
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
@@ -10,18 +8,12 @@ import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.ajaxjs.util.filter.DataBaseConnection;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -72,56 +64,6 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 		registration.setLoadOnStartup(1);
 //		registration.setMultipartConfig(new MultipartConfigElement("c:/temp", 50000000, 50000000, 0));// 文件上传
 		LOGGER.info("WEB 程序启动完毕");
-	}
-
-	/**
-	 * Spring MVC 的配置
-	 * 
-	 * @return
-	 */
-	@Bean
-	public WebMvcConfigurer configSpringMVC() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-				configurer.enable();
-			}
-
-			/**
-			 * 加入拦截器
-			 */
-			@Override
-			public void addInterceptors(InterceptorRegistry registry) {
-				addInterceptor(registry);
-				registry.addInterceptor(db());
-			}
-
-			/**
-			 * 跨域
-			 *
-			 * @return
-			 */
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				addCorsMapping(registry);
-			}
-
-			@Override
-			public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-				configureMessageConverter(converters);
-			}
-		};
-
-	}
-
-	/**
-	 * 连接数据库
-	 * 
-	 * @return
-	 */
-	@Bean
-	DataBaseConnection db() {
-		return new DataBaseConnection();
 	}
 
 	/**

@@ -20,6 +20,7 @@ import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.mybatis.SqlMapper;
 import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.sql.SnowflakeId;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -75,12 +76,52 @@ public abstract class Commander extends BaseCommander {
 
 		Map<String, Object> result = info(ctx.getDatasource(), sql, ctx.getRequestParams());
 
+		try {// 避免 null point
+			DataServiceFieldsMapping fieldsMapping = ctx.getNode().getTableInfo().getFieldsMapping();
+
+			if (fieldsMapping != null) {
+				if (fieldsMapping.getDbStyle2CamelCase() != null && fieldsMapping.getDbStyle2CamelCase()) {
+					// 数据库风格 转换 驼峰
+					Map<String, Object> camel = new HashMap<>(result.size());
+
+					for (String key : result.keySet())
+						camel.put(JdbcUtil.changeColumnToFieldName(key), result.get(key));
+
+					result.clear(); // 提早清除
+					result = camel;
+				}
+			}
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+		}
+
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
 				plugin.after(CRUD.INFO, ctx, result);
 			}
 
 		return result;
+	}
+
+	private static void toCaemlCase(ServiceContext ctx, List<Map<String, Object>> list) {
+		DataServiceFieldsMapping fieldsMapping = ctx.getNode().getTableInfo().getFieldsMapping();
+
+		if (fieldsMapping != null) {
+			if (fieldsMapping.getDbStyle2CamelCase() != null && fieldsMapping.getDbStyle2CamelCase()) {
+				for (int i = 0; i < list.size(); i++) {
+					Map<String, Object> map = list.get(i);
+
+					// 数据库风格 转换 驼峰
+					Map<String, Object> camel = new HashMap<>(map.size());
+
+					for (String key : map.keySet())
+						camel.put(JdbcUtil.changeColumnToFieldName(key), map.get(key));
+
+					map.clear(); // 提早清除
+					list.set(i, camel);
+				}
+			}
+		}
 	}
 
 	/**
@@ -101,6 +142,8 @@ public abstract class Commander extends BaseCommander {
 			}
 
 		List<Map<String, Object>> list = list(ctx.getDatasource(), sql, ctx.getRequestParams());
+
+		toCaemlCase(ctx, list);
 
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
@@ -128,6 +171,7 @@ public abstract class Commander extends BaseCommander {
 			}
 
 		PageResult<Map<String, Object>> page = page(ctx.getDatasource(), sql, ctx.getRequestParams());
+		toCaemlCase(ctx, page);
 
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {

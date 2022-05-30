@@ -8,6 +8,6 @@ import java.io.Serializable;
  * @author Frank Cheung
  *
  */
-public interface BaseEnmu {
+public interface ValueEnmu {
 	Serializable getValue();
 }

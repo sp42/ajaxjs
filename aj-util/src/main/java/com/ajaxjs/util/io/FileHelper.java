@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +37,8 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 文件操作工具类
+ * 
+ * https://www.cnblogs.com/digdeep/p/4478734.html
  * 
  * @author sp42 frank@ajaxjs.com
  *
@@ -121,6 +124,17 @@ public class FileHelper extends StreamHelper {
 		}
 
 		StringBuilder sb = new StringBuilder();
+
+		// Files.newBufferedReader 读取文件
+//		try (BufferedReader reader = Files.newBufferedReader(path, encode);) {
+////			String str = null;
+////			while ((str = reader.readLine()) != null)
+////				sb.append(str);
+//			
+//			reader.lines().forEach(_str -> sb.append(_str));
+//		} catch (IOException e) {
+//			LOGGER.warning(e);
+//		}
 
 		try (Stream<String> lines = Files.lines(path, encode);) { // 要关闭文件，否则文件被锁定
 			lines.forEach(str -> sb.append(str));
@@ -214,6 +228,13 @@ public class FileHelper extends StreamHelper {
 		} else
 			LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString());
 
+//		try (BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);) {
+//			writer.write(text);
+//			writer.flush();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
 		save(file, text.getBytes(StandardCharsets.UTF_8), true);
 	}
 
@@ -306,6 +327,23 @@ public class FileHelper extends StreamHelper {
 			throw new IOException("文件已经存在，禁止覆盖！");
 
 		return file;
+	}
+
+	/**
+	 * 遍历一个文件夹
+	 * 
+	 * @param folder
+	 */
+	public static void loop(String folder) {
+		Path dir = Paths.get(folder);
+
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+			for (Path e : stream)
+				System.out.println(e.getFileName());
+
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
 	}
 
 	/**

@@ -13,9 +13,11 @@ package com.ajaxjs.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -268,7 +270,7 @@ public class StrUtil {
 
 		return count;
 	}
-	
+
 	/**
 	 * 字符串补齐
 	 * 
@@ -281,5 +283,33 @@ public class StrUtil {
 	 */
 	public static String leftPad(String str, int leng, String _char) {
 		return String.format("%" + leng + "s", str).replaceAll("\\s", _char);
+	}
+
+	public static String messageFormat() {
+		return MessageFormat.format("您好{0}，晚上好！您目前余额：{1,number,#.##}元，积分：{2}", "张三", 10.155, 10);
+	}
+
+	private static final Pattern TPL_PATTERN = Pattern.compile("\\$\\{\\w+\\}");
+
+	/**
+	 * 
+	 * @param template
+	 * @param params
+	 * @return
+	 */
+	public static String simpleTpl(String template, Map<String, Object> params) {
+		StringBuffer sb = new StringBuffer();
+		Matcher m = TPL_PATTERN.matcher(template);
+
+		while (m.find()) {
+			String param = m.group();
+			Object value = params.get(param.substring(2, param.length() - 1));
+			m.appendReplacement(sb, value == null ? "" : value.toString());
+		}
+
+		m.appendTail(sb);
+
+		return sb.toString();
+
 	}
 }

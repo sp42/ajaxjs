@@ -256,6 +256,7 @@ public class LogHelper {
 	 * @param e 任意异常信息
 	 */
 	public void warning(Throwable e) {
+//		e.printStackTrace();
 		warning(e, e.getMessage());
 	}
 

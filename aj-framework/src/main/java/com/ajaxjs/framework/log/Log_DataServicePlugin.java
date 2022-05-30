@@ -30,15 +30,15 @@ public class Log_DataServicePlugin implements IPlugin {
 			return;
 
 		/* TODO 是否改为 DS 的 DAO 写法 */
-		try (Connection conn = ctx.getDatasource().getConnection()) {
-			ServiceLog log = new ServiceLog();
-			log.setName("读操作");
-			log.setSql(ctx.getSql());
-			log.setIp(WebHelper.getIp(ctx.getRequest()));
-			JdbcHelper.createBean(conn, log, "`ajaxjs`.`sys_log`");
-		} catch (SQLException e) {
-			LOGGER.warning(e);
-		}
+//		try (Connection conn = ctx.getDatasource().getConnection()) {
+//			ServiceLog log = new ServiceLog();
+//			log.setName("读操作");
+//			log.setSql(ctx.getSql());
+//			log.setIp(WebHelper.getIp(ctx.getRequest()));
+//			JdbcHelper.createBean(conn, log, "`ajaxjs`.`sys_log`");
+//		} catch (SQLException e) {
+//			LOGGER.warning(e);
+//		}
 	}
 
 	public Boolean isLogRead() {
