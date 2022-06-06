@@ -10,7 +10,10 @@ public class DataServiceFieldsMapping {
 	private String updateDate;
 	private String updateUser;
 	private String delStatus;
+	
 	private Boolean dbStyle2CamelCase;
+	
+	private Boolean camelCase2DbStyle;
 
 	public String getId() {
 		return id;
@@ -66,5 +69,13 @@ public class DataServiceFieldsMapping {
 
 	public void setDbStyle2CamelCase(Boolean dbStyle2CamelCase) {
 		this.dbStyle2CamelCase = dbStyle2CamelCase;
+	}
+
+	public Boolean getCamelCase2DbStyle() {
+		return camelCase2DbStyle;
+	}
+
+	public void setCamelCase2DbStyle(Boolean camelCase2DbStyle) {
+		this.camelCase2DbStyle = camelCase2DbStyle;
 	}
 }

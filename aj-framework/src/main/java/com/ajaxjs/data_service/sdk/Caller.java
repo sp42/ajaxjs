@@ -12,9 +12,11 @@ import org.springframework.util.CollectionUtils;
 import com.ajaxjs.data_service.api.RuntimeData;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.ServiceContext;
+import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 
 public class Caller extends BaseCaller {
@@ -218,6 +220,14 @@ public class Caller extends BaseCaller {
 			params = (Map<String, Object>) args[0];
 		else
 			params = MapTool.bean2Map(args[0]);// bean
+
+		// java 方式过来的 bean，可能有字段类型是 map 的，存到数据库要转换为 string
+		for (String key : params.keySet()) {
+			Object value = params.get(key);
+
+			if (value instanceof Map || value instanceof IBaseModel)
+				params.put(key, JsonHelper.toJson(value));
+		}
 
 		ServiceContext ctx = ServiceContext.factory(uri, null, node, params);
 

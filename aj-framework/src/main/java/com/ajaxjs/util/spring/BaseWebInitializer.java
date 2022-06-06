@@ -1,6 +1,7 @@
 package com.ajaxjs.util.spring;
 
 import javax.servlet.FilterRegistration;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 
@@ -12,6 +13,8 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -62,7 +65,8 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 		ServletRegistration.Dynamic registration = cxt.addServlet("dispatcher", new DispatcherServlet(webCxt));
 		registration.addMapping("/");
 		registration.setLoadOnStartup(1);
-//		registration.setMultipartConfig(new MultipartConfigElement("c:/temp", 50000000, 50000000, 0));// 文件上传
+		registration.setMultipartConfig(new MultipartConfigElement("c:/temp", 50000000, 50000000, 0));// 文件上传
+		
 		LOGGER.info("WEB 程序启动完毕");
 	}
 
@@ -71,13 +75,13 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 	 * 
 	 * @return
 	 */
-//	@Bean(name = "multipartResolver") // 此处 id 为固定写法，不能随便取名
-//	public MultipartResolver multipartResolver() {
-//		StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-//		resolver.setResolveLazily(true);// resolveLazily 属性启用是为了推迟文件解析，以在在 UploadAction 中捕获文件大小异常
-//
-//		return resolver;
-//	}
+	@Bean(name = "multipartResolver") // 此处 id 为固定写法，不能随便取名
+	public MultipartResolver multipartResolver() {
+		StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
+		resolver.setResolveLazily(true);// resolveLazily 属性启用是为了推迟文件解析，以在在 UploadAction 中捕获文件大小异常
+
+		return resolver;
+	}
 
 	/**
 	 * YAML 配置文件

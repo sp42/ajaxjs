@@ -63,7 +63,7 @@ public abstract interface IDataServiceBase {
 	Boolean delete(Object beanOrMapOrId);
 
 	/**
-	 * 设置 SQL 的查询条件参数。这是针对 MyBatis 插值的用的
+	 * 设置 SQL 的查询条件参数。这是直接针对 MyBatis 插值的用的
 	 * 
 	 * @param queryParams
 	 * @return
@@ -71,7 +71,7 @@ public abstract interface IDataServiceBase {
 	IDataServiceBase setQuery(Map<String, Object> queryParams);
 
 	/**
-	 * 设置 SQL WHERE 的查询条件参数。 不用设置 Map，固定 where 参数
+	 * 设置 SQL WHERE 的查询条件参数。生成对应固定的 where 字符串参数，而不是参与 MyBatis 插值
 	 * 
 	 * @param queryWhereParams 完整的 WHERE 语句部分，不包括 WHERE 关键字
 	 * @return

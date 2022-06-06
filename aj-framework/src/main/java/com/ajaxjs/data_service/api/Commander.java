@@ -266,6 +266,18 @@ public abstract class Commander extends BaseCommander {
 			}
 		}
 
+		// 是否转换数据库风格
+		if (fieldsMapping.getCamelCase2DbStyle() != null && fieldsMapping.getCamelCase2DbStyle()) {
+			// 驼峰 转换 数据库风格
+			Map<String, Object> dbStyle = new HashMap<>(_params.size());
+
+			for (String key : _params.keySet())
+				dbStyle.put(JdbcUtil.changeFieldToColumnName(key), _params.get(key));
+
+			_params.clear(); // 提早清除
+			_params = dbStyle;
+		}
+
 		Map<String, Object> params;
 		String sql = node.getSql();
 
@@ -350,6 +362,19 @@ public abstract class Commander extends BaseCommander {
 			}
 		}
 
+		// 是否转换数据库风格
+		if (fieldsMapping.getCamelCase2DbStyle() != null && fieldsMapping.getCamelCase2DbStyle()) {
+			// 驼峰 转换 数据库风格
+			Map<String, Object> dbStyle = new HashMap<>(_params.size());
+
+			for (String key : _params.keySet())
+				dbStyle.put(JdbcUtil.changeFieldToColumnName(key), _params.get(key));
+
+			_params.clear(); // 提早清除
+			_params = dbStyle;
+		}
+
+		System.out.println(_params);
 		Map<String, Object> params;
 		String sql = node.getSql();
 

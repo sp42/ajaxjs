@@ -133,10 +133,13 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 				queryParams = new HashMap<>();
 
 			if (args.length == 1) {
-				if (args[0] instanceof String)
+				if (args[0] instanceof String) // IDataServiceBase setWhereQuery(String where)
 					queryParams.put("where", args[0]);
-				else if (args[0] instanceof Map)
-					queryParams.put("where", map2sql((Map<String, Object>) args[0]));
+				else if (args[0] instanceof Map) {// 对应方法 IDataServiceBase setWhereQuery(Map<String, Object> queryWhereParams)
+					Map<String, Object> map = (Map<String, Object>) args[0];
+					if (map.size() > 0)
+						queryParams.put("where", map2sql(map));
+				}
 			} else if (args.length == 2) { // 两个参数
 				String value;
 
