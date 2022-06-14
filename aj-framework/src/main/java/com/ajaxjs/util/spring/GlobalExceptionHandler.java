@@ -62,10 +62,18 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 		} else {
 			msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covernt(msg));
 			resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
-			resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 
 			ResponseResult resultWarpper = new ResponseResult();
-			resultWarpper.setErrorCode(ReturnCode.RC500.getCode() + "");
+
+			if (_ex instanceof ICustomException) {
+				int errCode = ((ICustomException) _ex).getErrCode();
+				resultWarpper.setErrorCode(errCode + "");
+				resp.setStatus(errCode);
+			} else {
+				resultWarpper.setErrorCode(ReturnCode.RC500.getCode() + "");
+				resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			}
+
 			resultWarpper.setMessage(msg);
 
 			try {

@@ -132,7 +132,7 @@ public class UploadController {
 	 * @param originalFilename
 	 * @return
 	 */
-	private static String getAutoName(String originalFilename) {
+	public static String getAutoName(String originalFilename) {
 		String[] arr = originalFilename.split("\\.");
 
 		String ext = "";

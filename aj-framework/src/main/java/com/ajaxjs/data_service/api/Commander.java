@@ -142,7 +142,6 @@ public abstract class Commander extends BaseCommander {
 			}
 
 		List<Map<String, Object>> list = list(ctx.getDatasource(), sql, ctx.getRequestParams());
-
 		toCaemlCase(ctx, list);
 
 		if (hasPlugins)

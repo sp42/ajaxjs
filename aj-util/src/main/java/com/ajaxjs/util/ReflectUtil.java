@@ -15,6 +15,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.util.ArrayList;
@@ -559,4 +560,33 @@ public class ReflectUtil {
 
 		return map;
 	}
+
+	/**
+	 * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+	 * 
+	 * @param method
+	 * @return
+	 */
+	public static Type[] getGenericReturnType(Method method) {
+		Type genericReturnType = method.getGenericReturnType();
+
+		if (genericReturnType instanceof ParameterizedType) {
+			Type[] actualTypeArguments = ((ParameterizedType) genericReturnType).getActualTypeArguments();
+
+			return actualTypeArguments;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Type 接口转换为 Class
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static Class<?> type2class(Type type) {
+		return type instanceof Class ? (Class<?>) type : null;
+	}
+
 }

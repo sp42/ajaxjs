@@ -141,7 +141,7 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 						List<Map<String, Object>> customActions = (List<Map<String, Object>>) json.get(type);
 
 						for (Map<String, Object> map : customActions) {
-//                            LOGGER.info(map.toString());
+//							LOGGER.info(map.toString());
 							saveNode(item, map.get("type").toString(), urlDir, map, _ds);
 						}
 					} else
@@ -238,6 +238,7 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 		case "list":
 		case "getOne":
 		case "getRows":
+		case "getRowsPage":
 			GET.put(urlDir, dml);
 			break;
 		case "insert":

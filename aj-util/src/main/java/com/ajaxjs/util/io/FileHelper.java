@@ -27,6 +27,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.util.StreamUtils;
@@ -387,5 +389,25 @@ public class FileHelper extends StreamHelper {
 	 */
 	public static String getFileSuffix(String filename) {
 		return filename.substring(filename.lastIndexOf(".") + 1);
+	}
+
+	/**
+	 * 列出某个目录下的所有文件，不包括文件夹，不递归子目录
+	 * 
+	 * @param directory
+	 * @return
+	 */
+	public static List<File> listFile(String directory) {
+		Path path = Paths.get(directory);
+
+		if (!Files.isDirectory(path))
+			throw new UnsupportedOperationException("参数非文件夹");
+
+		try (Stream<Path> stream = Files.list(path);) {
+			return stream.map(Path::toFile).filter(File::isFile).collect(Collectors.toList());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

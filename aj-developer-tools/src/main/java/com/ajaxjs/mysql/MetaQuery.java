@@ -5,27 +5,24 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import com.ajaxjs.mysql.model.TableColumns;
 import com.ajaxjs.mysql.model.TableDesc;
 import com.ajaxjs.mysql.model.TableIndex;
 import com.ajaxjs.util.logger.LogHelper;
 
-public class JdbcUtils {
-	private static final LogHelper LOGGER = LogHelper.getLog(JdbcUtils.class);
+public class MetaQuery extends BaseMetaQuery {
+	private static final LogHelper LOGGER = LogHelper.getLog(MetaQuery.class);
 
 	/**
 	 * 查询某个变量
 	 *
-	 * @param connect
+	 * @param connect 数据库连接对象
 	 * @param name
-	 * @param sql
+	 * @param sql     要执行的 SQL 语句
 	 */
 	public static String getVariable(Connection connect, String name, String sql) {
 		try (Statement st = connect.createStatement(); ResultSet result = st.executeQuery(sql);) {
@@ -40,18 +37,19 @@ public class JdbcUtils {
 	}
 
 	/**
+	 * 获取所有变量
 	 * 
-	 * @param connect
+	 * @param connect 数据库连接对象
 	 * @return
 	 */
-	public static Map<String, String> getALlVariable(Connection connect) {
+	public static Map<String, String> getAllVariable(Connection connect) {
 		return getVariables(connect, "SHOW VARIABLES");
 	}
 
 	/**
 	 * 
-	 * @param connect
-	 * @param sql
+	 * @param connect 数据库连接对象
+	 * @param sql     要执行的 SQL 语句
 	 * @return
 	 */
 	public static Map<String, String> getVariables(Connection connect, String sql) {
@@ -69,8 +67,8 @@ public class JdbcUtils {
 	/**
 	 * 获取数据库的大小
 	 *
-	 * @param connect
-	 * @param database
+	 * @param connect  数据库连接对象
+	 * @param database 数据库名
 	 * @return
 	 */
 	public static Map<String, String> getDbSize(Connection connect, String database) {
@@ -80,6 +78,8 @@ public class JdbcUtils {
 				+ "count( * ) AS TABLES,curdate( ) AS today FROM information_schema.TABLES where table_schema = '" + database + "' GROUP BY table_schema ORDER BY 2 DESC ;";
 
 		return getMapResult(connect, sql, (rs, map) -> {
+			String name = null, value;
+
 			try {
 				ResultSetMetaData meta = rs.getMetaData();
 				int count = meta.getColumnCount();
@@ -88,21 +88,21 @@ public class JdbcUtils {
 					if (i == 1)
 						rs.next();
 
-					String name = meta.getColumnName(i);
-					String value = rs.getString(name);
+					name = meta.getColumnName(i);
+					value = rs.getString(name);
 					map.put(name, value);
 				}
 			} catch (SQLException e) {
 				LOGGER.warning(e);
 			}
-		});
+		}, false);
 	}
 
 	/**
 	 * 获取某个库下的所有表信息
 	 *
-	 * @param connect
-	 * @param sql
+	 * @param connect 数据库连接对象
+	 * @param sql     要执行的 SQL 语句 例如 SHOW TABLES IN xxx
 	 * @return
 	 */
 	public static List<String> getTables(Connection connect, String sql) {
@@ -117,58 +117,11 @@ public class JdbcUtils {
 	}
 
 	/**
-	 * 
-	 * @param <T>
-	 * @param connect
-	 * @param sql
-	 * @param cb
-	 * @param clz
-	 * @return
-	 */
-	public static <T> List<T> getResult(Connection connect, String sql, Function<ResultSet, T> cb, Class<T> clz) {
-		List<T> list = new ArrayList<>();
-
-		try (Statement st = connect.createStatement(); ResultSet rs = st.executeQuery(sql);) {
-			while (rs.next()) {
-				T v = cb.apply(rs);
-				list.add(v);
-			}
-		} catch (SQLException e) {
-			LOGGER.warning(e);
-		}
-
-		return list;
-	}
-
-	/**
-	 * 
-	 * @param <T>
-	 * @param connect
-	 * @param sql
-	 * @param cb
-	 * @param clz
-	 * @return
-	 */
-	public static Map<String, String> getMapResult(Connection connect, String sql, BiConsumer<ResultSet, Map<String, String>> cb) {
-		Map<String, String> map = new HashMap<>();
-
-		try (Statement st = connect.createStatement(); ResultSet rs = st.executeQuery(sql);) {
-			while (rs.next())
-				cb.accept(rs, map);
-
-		} catch (SQLException e) {
-			LOGGER.warning(e);
-		}
-
-		return map;
-	}
-
-	/**
 	 * 获取表的详情信息
 	 *
-	 * @param connect
-	 * @param database
-	 * @param tables
+	 * @param connect  数据库连接对象
+	 * @param database 数据库名
+	 * @param tables 表名集合
 	 * @return
 	 */
 	public static Map<String, TableDesc> getTableDesc(Connection connect, String database, List<String> tables) {
@@ -178,13 +131,11 @@ public class JdbcUtils {
 			sqlIn = sqlIn + "'" + table + "',";
 
 		sqlIn = sqlIn.substring(0, sqlIn.lastIndexOf(","));
-		String sql = "SHOW TABLE STATUS FROM " + database + "   WHERE name IN (" + sqlIn + ")";
+		String sql = "SHOW TABLE STATUS FROM " + database + " WHERE name IN (" + sqlIn + ")";
 
 		Map<String, TableDesc> map = new HashMap<>();
-		try {
-			Statement st = connect.createStatement();
-			ResultSet result = st.executeQuery(sql);
 
+		try (Statement st = connect.createStatement(); ResultSet result = st.executeQuery(sql);) {
 			while (result.next()) {
 				String name = result.getString("Name");
 				String engine = result.getString("Engine");
@@ -197,9 +148,9 @@ public class JdbcUtils {
 				String index_length = result.getString("Index_length");
 				String data_free = result.getString("Data_free");
 				String auto_increment = result.getString("Auto_increment");
-				String create_time = result.getString("Create_time");
-				String update_time = result.getString("Update_time");
-				String check_time = result.getString("Check_time");
+//				String create_time = result.getString("Create_time");
+//				String update_time = result.getString("Update_time");
+//				String check_time = result.getString("Check_time");
 				String collation = result.getString("Collation");
 				String checksum = result.getString("Checksum");
 				String create_options = result.getString("Create_options");
@@ -224,27 +175,27 @@ public class JdbcUtils {
 				map.put(name, tableDesc);
 			}
 
-			String sql2 = "select table_name, (data_length/1024/1024) as data_mb, (index_length/1024/1024) as index_mb, ((data_length+index_length)/1024/1024) as all_mb, table_rows from information_schema.tables "
-					+ "where table_schema = '" + database + "'";
+			String sql2 = "select table_name, (data_length/1024/1024) AS data_mb, (index_length/1024/1024) AS index_mb,"
+					+ " ((data_length+index_length)/1024/1024) AS all_mb, table_rows from information_schema.tables " + "WHERE table_schema = '" + database + "'";
 
-			ResultSet result2 = st.executeQuery(sql2);
-			while (result2.next()) {
-				String table_name = result2.getString("TABLE_NAME");
-				String data_mb = result2.getString("data_mb");
-				String index_mb = result2.getString("index_mb");
-				String all_mb = result2.getString("all_mb");
-				String table_rows = result2.getString("TABLE_ROWS");
+			try (ResultSet rs2 = st.executeQuery(sql2);) {
+				while (rs2.next()) {
+					String table_name = rs2.getString("TABLE_NAME");
+					String data_mb = rs2.getString("data_mb");
+					String index_mb = rs2.getString("index_mb");
+					String all_mb = rs2.getString("all_mb");
+					String table_rows = rs2.getString("TABLE_ROWS");
 
-				TableDesc tableDesc = map.get(table_name);
-				tableDesc.setDataMb(data_mb);
-				tableDesc.setIndexMb(index_mb);
-				tableDesc.setAllMb(all_mb);
-				tableDesc.setCount(table_rows);
+					TableDesc tableDesc = map.get(table_name);
+					tableDesc.setDataMb(data_mb);
+					tableDesc.setIndexMb(index_mb);
+					tableDesc.setAllMb(all_mb);
+					tableDesc.setCount(table_rows);
+				}
 			}
 
-			st.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		return map;
@@ -253,9 +204,9 @@ public class JdbcUtils {
 	/**
 	 * 获取表的详情信息
 	 * 
-	 * @param connect
-	 * @param database
-	 * @param tableName
+	 * @param connect   数据库连接对象
+	 * @param database  数据库名
+	 * @param tableName 表名
 	 * @return
 	 */
 	public static List<TableColumns> getTableColumns(Connection connect, String database, String tableName) {
@@ -292,15 +243,14 @@ public class JdbcUtils {
 			}
 
 			return null;
-
 		}, TableColumns.class);
 	}
 
 	/**
 	 * 获取表索引信息
 	 *
-	 * @param connect
-	 * @param sql
+	 * @param connect 数据库连接对象
+	 * @param sql     要执行的 SQL 语句
 	 * @return
 	 */
 	public static List<TableIndex> getTableIndex(Connection connect, String sql) {

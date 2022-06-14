@@ -25,7 +25,7 @@ export default {
                 isShowDlg: false, // 是否弹出选择表
                 api: '',
                 column: [
-                    { title: '表名', key: 'tableName', width: 150 },
+                    { title: '表名', key: 'tableName', width: 220 },
                     { title: '表说明', key: 'comment' }
                 ]
             },

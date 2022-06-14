@@ -2,6 +2,7 @@ package com.ajaxjs.data_service.sdk;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
@@ -101,21 +103,7 @@ public class Caller extends BaseCaller {
 			if (methodName.equals("findPagedList")) {
 				Class<?> clz = getBeanClz();
 
-				PageResult<Object> _list = new PageResult<>();
-
-				list.forEach(item -> {
-					Object bean = MapTool.map2Bean(item, clz, true, true);
-					_list.add(bean);
-				});
-
-				// copy
-				_list.setTotalPage(list.getTotalPage());
-				_list.setTotalCount(list.getTotalCount());
-				_list.setCurrentPage(list.getCurrentPage());
-				_list.setPageSize(list.getPageSize());
-				_list.setStart(list.getStart());
-
-				return _list;
+				return pageMap2pageBean(clz, list);
 			}
 
 			return list;
@@ -164,10 +152,72 @@ public class Caller extends BaseCaller {
 					else
 						return info;
 				}
+			} else if ("getRows".equals(node.getType())) {
+				ctx = ServiceContext.factory(uri, null, node, params);
+				List<Map<String, Object>> list = list(ctx, null);
+
+				Type[] types = ReflectUtil.getGenericReturnType(method);
+
+				if (types == null)
+					throw new IllegalArgumentException("分页容器类没指定泛型参数？");
+
+				Class<?> clz = ReflectUtil.type2class(types[0]);
+
+				if (clz == Map.class)
+					return list;
+				else {// bean
+					List<Object> _list = new ArrayList<>();
+
+					list.forEach(item -> {
+						Object bean = MapTool.map2Bean(item, clz, true, true);
+						_list.add(bean);
+					});
+
+					return _list;
+				}
+			} else if ("getRowsPage".equals(node.getType())) {
+				ctx = ServiceContext.factory(uri, null, node, params);
+				PageResult<Map<String, Object>> list = page(ctx, null);
+
+				Type[] types = ReflectUtil.getGenericReturnType(method);
+
+				if (types == null)
+					throw new IllegalArgumentException("分页容器类没指定泛型参数？");
+
+				Class<?> clz = ReflectUtil.type2class(types[0]);
+
+				if (clz == Map.class)
+					return list;
+				else // bean
+					return pageMap2pageBean(clz, list);
 			}
 		}
-
 		return null;
+	}
+
+	/**
+	 * 分页结果从 Map 的转换为 bean
+	 * 
+	 * @param clz
+	 * @param list
+	 * @return
+	 */
+	private static PageResult<Object> pageMap2pageBean(Class<?> clz, PageResult<Map<String, Object>> list) {
+		PageResult<Object> _list = new PageResult<>();
+
+		list.forEach(item -> {
+			Object bean = MapTool.map2Bean(item, clz, true, true);
+			_list.add(bean);
+		});
+
+		// copy
+		_list.setTotalPage(list.getTotalPage());
+		_list.setTotalCount(list.getTotalCount());
+		_list.setCurrentPage(list.getCurrentPage());
+		_list.setPageSize(list.getPageSize());
+		_list.setStart(list.getStart());
+
+		return _list;
 	}
 
 	@Override

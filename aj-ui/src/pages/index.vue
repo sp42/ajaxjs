@@ -44,6 +44,7 @@
         <MenuItem name="6-4" @click.native="load='FactoryList'">列表生成器</MenuItem>
         <MenuItem name="6-6" @click.native="routeTo('form-designer')">可视化设计器</MenuItem>
         <MenuItem name="6-7" @click.native="routeTo('work-flow')">工作流设计器</MenuItem>
+        <MenuItem name="6-8" @click.native="routeTo('api-helper')">Api Helper</MenuItem>
       </Submenu>
 
       <Submenu name="8">
@@ -56,7 +57,7 @@
       </Submenu>
 
     </Menu>
-    <div style="float:left;width:85%;">
+    <div style="float:left;width:83%;">
       <div v-if="!load" class="center" style="text-align:center;margin-top:25%;">Welcome!</div>
       <DataSource v-if="load == 'DataSource'" :api-root="apiRoot" />
       <DataService v-if="load == 'DataService'" :api-root="apiRoot" />
@@ -78,6 +79,7 @@
       <DeveloperTools v-if="load == 'DeveloperTools'" />
       <UserListIndex v-if="load == 'UserListIndex'" />
       <OrgIndex v-if="load == 'OrgIndex'" />
+      <ApiHelper v-if="load == 'api-helper'" />
 
       <sku v-if="load == 'sku'" />
     </div>
@@ -100,13 +102,14 @@ import RBAC from '../components/admin-page/user/rbac/rbac.vue';
 import UserListIndex from '../components/admin-page/user/user-list-index.vue';
 import OrgIndex from '../components/admin-page/user/org/index.vue';
 import WebsiteConfig from '../components/admin-page/website/config.vue';
+import ApiHelper from '../components/api-helper/api-helper.vue';
 import sku from './playground/sku.vue';
 
 export default {
-  components: { sku, DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex },
+  components: { sku, DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
-      load: 'sku',
+      load: 'api-helper',
       apiRoot: window.config.dsApiRoot,
       theme2: 'light',
       listId: 0

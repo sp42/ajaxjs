@@ -1,6 +1,7 @@
 package com.ajaxjs.mysql.model;
 
 /**
+ * 表的详情信息
  * 
  * @author Frank Cheung<sp42@qq.com>
  *
