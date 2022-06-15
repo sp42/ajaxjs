@@ -246,7 +246,6 @@ public class MapTool {
 							LOGGER.info("value type:" + value.getClass() + " vlaue: " + value);
 
 							e.printStackTrace();
-
 						}
 					}
 				}

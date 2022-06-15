@@ -7,7 +7,7 @@
       <select style="margin: 10px 0 0 15px; width: 120px" v-model="dml.type">
         <option value="getOne">查询单行操作</option>
         <option value="getRows">查询多行操作</option>
-        <option value="getRows">查询多行操作（分页）</option>
+        <option value="getRowsPage">查询多行操作（分页）</option>
         <option value="insert">新增操作</option>
         <option value="update">修改操作</option>
         <option value="delete">删除操作</option>

@@ -181,7 +181,10 @@ public class LogHelper {
 	}
 
 	public void info(Object obj) {
-		info(obj.toString());
+		if (obj == null)
+			info(null);
+		else
+			info(obj.toString());
 	}
 
 	/**

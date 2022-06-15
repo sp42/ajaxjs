@@ -373,7 +373,6 @@ public abstract class Commander extends BaseCommander {
 			_params = dbStyle;
 		}
 
-		System.out.println(_params);
 		Map<String, Object> params;
 		String sql = node.getSql();
 
@@ -389,6 +388,8 @@ public abstract class Commander extends BaseCommander {
 
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
+		
+		LOGGER.info(params);
 
 		try (SqlSession session = getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).update(sql, params);

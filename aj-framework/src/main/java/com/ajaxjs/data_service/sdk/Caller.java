@@ -176,6 +176,9 @@ public class Caller extends BaseCaller {
 					return _list;
 				}
 			} else if ("getRowsPage".equals(node.getType())) {
+				params.put("start", args[0]);
+				params.put("limit", args[1]);
+
 				ctx = ServiceContext.factory(uri, null, node, params);
 				PageResult<Map<String, Object>> list = page(ctx, null);
 
@@ -223,13 +226,18 @@ public class Caller extends BaseCaller {
 	@Override
 	Serializable create(String methodName, Object[] args) {
 		LOGGER.info("Caller 创建实体");
+		if ("create".equals(methodName))
+			methodName = null;
 
-		return create(getServiceContext(RuntimeData.POST, args), null);
+		return create(getServiceContext(RuntimeData.POST, methodName, args), null);
 	}
 
 	@Override
 	boolean update(String methodName, Object[] args) {
-		return update(getServiceContext(RuntimeData.PUT, args), null);
+		if ("update".equals(methodName))
+			methodName = null;
+
+		return update(getServiceContext(RuntimeData.PUT, methodName, args), null);
 	}
 
 	/**
@@ -249,7 +257,10 @@ public class Caller extends BaseCaller {
 
 	@Override
 	boolean delete(String methodName, Object[] args) {
-		return delete(getServiceContext(RuntimeData.DELETE, args), null);
+		if ("delete".equals(methodName))
+			methodName = null;
+
+		return delete(getServiceContext(RuntimeData.DELETE, methodName, args), null);
 	}
 
 	/**
@@ -260,8 +271,8 @@ public class Caller extends BaseCaller {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	private ServiceContext getServiceContext(Map<String, DataServiceDml> map, Object[] args) {
-		String uri = getUri();
+	private ServiceContext getServiceContext(Map<String, DataServiceDml> map, String methodName, Object[] args) {
+		String uri = methodName == null ? getUri() : getUri() + "/" + methodName;
 		DataServiceDml node = exec(uri, map);
 
 		Map<String, Object> params;

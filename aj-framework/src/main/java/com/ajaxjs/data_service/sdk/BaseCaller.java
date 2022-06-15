@@ -154,21 +154,45 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 			return proxy;
 		} else if (methodName.startsWith("find") || methodName.startsWith("get")) {
 			LOGGER.info("相当于 HTTP GET");
+			args = makeMapArgs(method, args);
 			return get(method, methodName, args);
 		} else if (methodName.equals("create")) {
 			LOGGER.info("相当于 HTTP POST");
 			return create(methodName, args);
-		} else if (methodName.equals("update")) {
+		} else if (methodName.startsWith("set") || methodName.equals("update")) {
 			LOGGER.info("相当于 HTTP PUT");
+
+			args = makeMapArgs(method, args);
 			return update(methodName, args);
 		} else if (methodName.equals("delete")) {
 			LOGGER.info("相当于 HTTP DELETE");
 			return delete(methodName, args);
 		} else {
 			LOGGER.info("其他自定义命令");
+			throw new Error("暂时不支持其他自定义命令，请按照命名风格自定义命令");
 		}
+	}
 
-		return null;
+	private Object[] makeMapArgs(Method method, Object[] args) {
+		KeyOfMapParams annotation = method.getAnnotation(KeyOfMapParams.class);
+
+		if (annotation != null) {
+			String[] value = annotation.value();
+
+			if (value.length != args.length)
+				LOGGER.warning("注解声明数量与方法传递的参数数量不一致，请检查方法定义");
+
+			// to map
+			Map<String, Object> map = new HashMap<>();
+			for (int i = 0; i < args.length; i++)
+				map.put(value[i], args[i]);
+
+			Object[] _args = new Object[1];
+			_args[0] = map;
+
+			return _args;
+		} else
+			return args;
 	}
 
 	/**

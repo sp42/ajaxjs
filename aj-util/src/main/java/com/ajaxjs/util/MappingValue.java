@@ -98,7 +98,8 @@ public class MappingValue {
 			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1") || _value.equalsIgnoreCase("on"))
 				return true;
 
-			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0") || _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
+			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0") || _value.equalsIgnoreCase("off")
+					|| _value.equalsIgnoreCase("null"))
 				return false;
 		}
 

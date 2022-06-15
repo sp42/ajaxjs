@@ -33,6 +33,10 @@ const routes: Array<RouteConfig> = [
     component: () => import('../components/work-flow/index.vue')
   },
   {
+    path: '/api-helper',
+    component: () => import('../components/api-helper/api-helper.vue')
+  },
+  {
     path: '/list',
     component: () => import('../pages/list-loader.vue')
   },
