@@ -4,6 +4,7 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
+import javax.servlet.ServletRegistration.Dynamic;
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -65,9 +68,16 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 		ServletRegistration.Dynamic registration = cxt.addServlet("dispatcher", new DispatcherServlet(webCxt));
 		registration.addMapping("/");
 		registration.setLoadOnStartup(1);
-		registration.setMultipartConfig(new MultipartConfigElement("c:/temp", 50000000, 50000000, 0));// 文件上传
-		
+
+		initUpload(cxt, registration);
 		LOGGER.info("WEB 程序启动完毕");
+	}
+
+	private static void initUpload(ServletContext cxt, Dynamic registration) {
+		String tempDir = WebHelper.mappath(cxt, "upload_temp");
+		// 如果不存在则创建
+		FileHelper.mkDir(tempDir);
+		registration.setMultipartConfig(new MultipartConfigElement(tempDir, 50000000, 50000000, 0));// 文件上传
 	}
 
 	/**
