@@ -1,6 +1,7 @@
 package com.ajaxjs.util.map;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * Java Bean 工具类
@@ -33,5 +34,11 @@ public class BeanHelper {
 		}
 
 		System.out.println(sb);
+	}
+
+	public static <T> T jsonStr2Bean(String jsonStr, Class<T> beanClz) {
+		Map<String, Object> map = JsonHelper.parseMapClean(jsonStr);
+
+		return MapTool.map2Bean(map, beanClz, true);
 	}
 }

@@ -312,4 +312,35 @@ public class StrUtil {
 		return sb.toString();
 
 	}
+
+	public static String join(List<String> list, String str) {
+		return join(list, null, str);
+	}
+
+	public static String join(List<String> list, String tpl, String str) {
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0, len = list.size(); i < len; i++) {
+			String s = list.get(i);
+
+			if (tpl != null)
+				s = String.format(tpl, s);
+
+			if (i != (len - 1))
+				sb.append(s + str);
+			else
+				sb.append(s);
+		}
+
+		return sb.toString();
+	}
+
+	public static void main(String[] args) {
+		List<String> list = new ArrayList<>();
+		list.add("a");
+		list.add("b");
+		list.add("c");
+
+		System.out.println(join(list, "&"));
+	}
 }

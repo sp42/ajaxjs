@@ -165,7 +165,16 @@ public class Caller extends BaseCaller {
 
 				if (clz == Map.class)
 					return list;
-				else {// bean
+				else if (clz == String.class) {
+					List<String> _list = new ArrayList<>();
+
+					list.forEach(map -> {
+						for (String key : map.keySet()) // 只有一个记录
+							_list.add(map.get(key).toString());
+					});
+
+					return _list;
+				} else {// bean
 					List<Object> _list = new ArrayList<>();
 
 					list.forEach(item -> {
