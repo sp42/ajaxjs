@@ -130,8 +130,10 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 
 						// LOGGER.info(item.getDatasourceId() + "");
 						MyDataSource myds = mulitDataSource.get(item.getDatasourceId());
-						if (myds == null)
+						if (myds == null) {
 							LOGGER.warning("不存在 id 为 {0} 的数据源", item.getDatasourceId());
+							continue;
+						}
 
 						_ds = myds.getInstance();
 						urlDir = StrUtil.concatUrl(myds.getUrlDir(), item.getUrlDir());

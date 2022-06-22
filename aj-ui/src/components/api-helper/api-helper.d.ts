@@ -20,6 +20,9 @@ declare type API_HELPER_ENV = {
  */
 declare type API_HELPER_HTTP_METHOD = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
+/**
+ * 历史记录
+ */
 declare type API_HELPER_HISTORY = {
     id: number;
 
@@ -57,7 +60,7 @@ declare type API_HELPER_ARGUMENT_ENU = {
     /**
      * 是否默认
      */
-    isDefault: boolean;
+    isDefault?: boolean;
 
     /**
      * 值
@@ -74,14 +77,40 @@ declare type API_HELPER_ARGUMENT_ENU = {
  * 参数
  */
 declare type API_HELPER_ARGUMENT = {
+    /**
+     * 是否使用
+     */
+    isEnable: boolean;
+
+    /**
+     * 变量
+     */
     name: string;
 
-    type: string;
+    /**
+     * 参数说明
+     */
+    desc: string;
+
+    /**
+     * 参数位置
+     */
+    type: 'HEADER' | 'PATH' | 'QUERY' | 'BODY' | 'FORM';
+
+    /**
+     * 数据类型
+     */
+    dataType: any;
+
+    /**
+     * 对应后端语言的类型或者枚举
+     */
+    mappingType?: any;
 
     /**
      * 值，枚举值
      */
-    values: API_HELPER_ARGUMENT_ENU[];
+    values?: API_HELPER_ARGUMENT_ENU[];
 
     /**
      * 是否必填
@@ -89,7 +118,66 @@ declare type API_HELPER_ARGUMENT = {
     isRequired: boolean;
 
     /**
-     * 说明
+     * 说明，描述
      */
     comment: string;
+};
+
+/**
+ * JSON 类型参数
+ */
+declare type API_HELPER_JSON_ARGUMENT = API_HELPER_ARGUMENT & {
+    /**
+     * 类型
+     */
+    dataType: number | string | boolean | null | array | object;
+};
+
+/**
+ * 文档
+ */
+declare type API_HELPER_DOCUMENT = {
+    /**
+     * ID
+     */
+    id: any;
+
+    /**
+     * 名称
+     */
+    name: string;
+
+    /**
+     * 分组
+     */
+    catalogId: any;
+
+    /**
+     * 说明
+     */
+    description: string;
+
+    httpMethod: API_HELPER_HTTP_METHOD;
+
+    url: string;
+
+    /**
+     * 对应 UI，图片地址
+     */
+    ui: string;
+
+    /**
+     * 请求示例
+     */
+    demoUrl: string;
+
+    /**
+     * 接口状态
+     */
+    state: 'INITED' | 'DEFINED' | 'DONE';
+
+    /**
+     * 是否在文档汇总中展示
+     */
+    isShow: boolean;
 };

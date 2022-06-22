@@ -19,6 +19,8 @@
       <Button style="width: 8%">保存</Button>
     </section>
 
+    <Document />
+
     <Tabs name="request" class="request" value="name2" :animated="false">
       <TabPane label="头部参数" name="name1" tab="request">标签一的内容</TabPane>
       <TabPane label="请求体" name="name2" tab="request">
@@ -39,9 +41,10 @@
 
 <script>
 import RequestBody from "./request-body.vue";
+import Document from "./document/document.vue";
 
 export default {
-  components: { RequestBody },
+  components: { RequestBody, Document },
   data() {
     return {
       url: {
