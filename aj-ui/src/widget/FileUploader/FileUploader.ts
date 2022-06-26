@@ -1,9 +1,18 @@
+import Empty from '../EmptyContent';
+
 export default {
     props: {
-        action: { type: String, required: true }, // 上传路径
+        action: { type: String, required: false }, // 上传路径
         limitSize: { type: Number, default: 20000 }, // 文件大小限制
         limitFileType: String,
-        accpectFileType: String, // 可以上传类型
+        isImgUpload: Boolean,
+        isShowBtn: { type: Boolean, default: true },
+        accpectFileType: {
+            type: String, default() {
+                if (this.isImgUpload)
+                    return 'image/*';
+            }
+        }, // 可以上传类型 如 image/*
         buttonBottom: Boolean, // 上传按钮是否位于下方
         radomId: {
             type: Number, default() { // 不重复的 id，用关于关联 label 与 input[type=file]
@@ -15,6 +24,7 @@ export default {
     data() {
         return {
             model: { children: [] },
+            imgSrc: Empty.empty,
             open: false,
             allowAddNode: false,
             // isFolder : false
@@ -22,7 +32,8 @@ export default {
             fileSize: 0,         // 文件大小
             progress: 0,         // 上传进度百分比
             errMsg: '',          // 错误信息。约定：只有为空字符串，才表示允许上传。
-            newlyId: ''          // 成功上传之后的文件 id
+            newlyId: '',         // 成功上传之后的文件 id
+            fileObj: null
         }
     },
 
@@ -38,6 +49,28 @@ export default {
 
             // this.errStatus = [false, false, false];
             this.onFileGet(fileInput.files);
+
+            let file: File = fileInput.files[0];
+            this.fileObj = file;
+
+            if (this.isImgUpload) {
+                let reader: FileReader = new FileReader();
+                reader.onload = (e) => {
+                    let imgBase64: string = <string>e.target.result; // 得到了图片的 base64 编码
+                    // alert(imgBase64Str);
+                    this.imgSrc = imgBase64;
+                }
+
+                reader.readAsDataURL(file);
+            }
+        },
+
+        /**
+         * 返回 File 对象，在表单混合上传时候有用
+         * @returns 
+         */
+        getFileObj(): File {
+            return this.fileObj;
         },
 
         onDrop(ev: DragEvent): void {
@@ -88,6 +121,8 @@ export default {
 
             xhr.send(fd);
         },
+
+        changeByte: changeByte
     }
 }
 

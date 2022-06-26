@@ -7,9 +7,6 @@ import java.util.Enumeration;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-
-import org.springframework.stereotype.Component;
 
 import com.ajaxjs.Version;
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;

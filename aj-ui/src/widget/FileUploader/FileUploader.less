@@ -1,5 +1,5 @@
 .aj-file-uploader {
-    width: 300px;
+    width: 360px;
 
     &>* {
         display: inline-block;
@@ -51,5 +51,18 @@
         &>div {
             font-size: 0.75rem;
         }
+    }
+
+    .perviewImg {
+        max-width: 260px;
+    }
+
+    .fileName {
+        // display: inline-block;
+        text-overflow: ellipsis; //溢出用省略号显示
+        white-space: nowrap; //溢出不换行
+        max-width: 120px;
+        max-height: 20px;
+        overflow: hidden;
     }
 }

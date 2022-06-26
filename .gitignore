@@ -39,13 +39,13 @@ buildNumber.properties
 .project
 .classpath
 .settings
-# ºöÂÔÅäÖÃÎÄ¼ş
+# ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 application.yml
 applicationContext.xml
 config.json
 
 
-# Ç°¶ËµÄ
+# Ç°ï¿½Ëµï¿½
 .DS_Store
 node_modules
 dist
@@ -67,3 +67,6 @@ yarn-error.log*
 package-lock.json
 
 /.history
+
+# Config file
+/aj-upload/src/main/resources/application.yml

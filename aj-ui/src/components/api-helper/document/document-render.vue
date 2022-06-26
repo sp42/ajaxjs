@@ -86,6 +86,7 @@ export default {
         httpMethod: "GET",
         url: "/uav/{uav_id}/check_status",
         demoUrl: "http://test.ajaxjs.com:8081/drone/uav/10001/check_status",
+        isShow: true
       } as API_HELPER_DOCUMENT,
       args: [
         {

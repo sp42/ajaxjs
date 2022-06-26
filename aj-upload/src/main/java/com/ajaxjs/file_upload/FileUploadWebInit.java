@@ -1,0 +1,27 @@
+package com.ajaxjs.file_upload;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.ajaxjs.easy_controller.ServiceBeanDefinitionRegistry;
+import com.ajaxjs.util.spring.BaseWebInitializer;
+
+@Configuration
+@EnableWebMvc
+public class FileUploadWebInit extends BaseWebInitializer {
+	@ComponentScan({ "com.ajaxjs.file_upload", "com.ajaxjs.data_service" })
+	public static class ScanComponent {
+	}
+
+	@Override
+	public String getMainConfig() {
+		return "com.ajaxjs.file_upload.ScanComponent";
+	}
+
+	@Bean
+	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
+		return new ServiceBeanDefinitionRegistry("com.ajaxjs.file_upload");
+	}
+}
