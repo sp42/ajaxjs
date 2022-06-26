@@ -1,9 +1,10 @@
-package com.ajaxjs.file_upload;
+package com.ajaxjs.file_upload.controller;
 
 import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ajaxjs.file_upload.IFileUpload;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.sql.SnowflakeId;
 import com.ajaxjs.util.WebHelper;
@@ -67,8 +69,8 @@ public class UploadController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping(method = RequestMethod.POST)
-	public String uploadFileHandler(@RequestParam("file") MultipartFile file, HttpServletRequest req) throws IOException {
+	@RequestMapping(method = RequestMethod.POST, produces = "application/json; charset=utf-8")
+	public String uploadFileHandler(@RequestParam("file") MultipartFile file, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		fileCheck(file);
 
 		String originalFilename = file.getOriginalFilename();
@@ -78,14 +80,20 @@ public class UploadController {
 			String newly = localFileUpload(filename, file, req);
 
 			if (newly != null)
-				return BaseController.jsonOk_Extension("上传成功", "\"filename\":\"" + newly + "\"");
+				return makeJson(filename, newly);
 		} else if (fileUpload.upload(filename, file.getBytes())) {// TODO add folder
 			String newly = FILE_URL_ROOT + "/" + filename;// 返回文件 url
 
-			return BaseController.jsonOk_Extension("上传成功", "\"filename\":\"" + newly + "\"");
+			return makeJson(filename, newly);
 		}
 
 		return BaseController.jsonNoOk("上传失败");
+	}
+
+	private static String makeJson(String filename, String url) {
+		String ext = String.format("\"filename\":\"%s\", \"url\": \"%s\"", filename, url);
+
+		return BaseController.jsonOk_Extension("上传成功", ext);
 	}
 
 	/**

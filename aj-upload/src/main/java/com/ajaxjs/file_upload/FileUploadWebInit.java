@@ -11,13 +11,13 @@ import com.ajaxjs.util.spring.BaseWebInitializer;
 @Configuration
 @EnableWebMvc
 public class FileUploadWebInit extends BaseWebInitializer {
-	@ComponentScan({ "com.ajaxjs.file_upload", "com.ajaxjs.data_service" })
+	@ComponentScan({ "com.ajaxjs.file_upload" })
 	public static class ScanComponent {
 	}
 
 	@Override
 	public String getMainConfig() {
-		return "com.ajaxjs.file_upload.ScanComponent";
+		return "com.ajaxjs.file_upload.FileUploadWebInit.ScanComponent";
 	}
 
 	@Bean

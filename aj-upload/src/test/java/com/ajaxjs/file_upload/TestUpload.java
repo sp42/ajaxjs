@@ -42,7 +42,7 @@ public class TestUpload {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 	}
 
-	File file = new File(Resources.getResourcesFromClasspath("img.jpg"));
+	File file = new File(Resources.getResourcesFromClasspath("img.png"));
 
 //	@Test
 	public void testCommonUpload() throws Exception {
