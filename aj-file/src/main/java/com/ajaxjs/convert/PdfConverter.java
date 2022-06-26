@@ -1,5 +1,21 @@
 package com.ajaxjs.convert;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.Base64;
+
+import org.apache.xmlbeans.impl.tool.CommandLine;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import com.google.common.net.MediaType;
 import com.itextpdf.io.image.ImageData;
@@ -12,16 +28,8 @@ import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.Canvas;
-
-import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.Base64;
+import com.itextpdf.layout.property.TextAlignment;
 
 /**
  * 
@@ -49,10 +57,11 @@ public class PdfConverter {
 		Path inputFile = input.file();
 
 		if (isOfficeFile(input.status().getContentType())) {
-			Path convertedFile = outputFile.getParent().resolve(com.google.common.io.Files.getNameWithoutExtension(input.file().getFileName().toString()) + ".pdf");
+			Path convertedFile = outputFile.getParent()
+					.resolve(com.google.common.io.Files.getNameWithoutExtension(input.file().getFileName().toString()) + ".pdf");
 
-			CommandLine cmdLine = CommandLine
-					.parse(String.format("soffice --headless --convert-to pdf %s --outdir  %s", input.file().toAbsolutePath().toString(), outputFile.getParent().toAbsolutePath()));
+			CommandLine cmdLine = CommandLine.parse(String.format("soffice --headless --convert-to pdf %s --outdir  %s",
+					input.file().toAbsolutePath().toString(), outputFile.getParent().toAbsolutePath()));
 			DefaultExecutor executor = new DefaultExecutor();
 			executor.setStreamHandler(new PumpStreamHandler(new OutputStream() {
 				@Override
@@ -80,10 +89,12 @@ public class PdfConverter {
 
 		// 加水印
 		if (convertParams.getWatermark() != null) {
-			Path convertedFile = outputFile.getParent().resolve(com.google.common.io.Files.getNameWithoutExtension(input.file().getFileName().toString()) + ".pdf");
+			Path convertedFile = outputFile.getParent()
+					.resolve(com.google.common.io.Files.getNameWithoutExtension(input.file().getFileName().toString()) + ".pdf");
 			Files.deleteIfExists(convertedFile);
 
-			try (FileOutputStream outStream = new FileOutputStream(convertedFile.toFile()); FileInputStream inStream = new FileInputStream(inputFile.toFile())) {
+			try (FileOutputStream outStream = new FileOutputStream(convertedFile.toFile());
+					FileInputStream inStream = new FileInputStream(inputFile.toFile())) {
 				setWatemark(convertParams.getWatermark(), inStream, outStream);
 			}
 
@@ -132,8 +143,9 @@ public class PdfConverter {
 		doc.close();
 	}
 
-	public static final String[] OFFICE_CONTENT_TYPES = new String[] { "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-			"application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint",
+	public static final String[] OFFICE_CONTENT_TYPES = new String[] { "application/msword",
+			"application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel",
+			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-powerpoint",
 			"application/vnd.openxmlformats-officedocument.presentationml.presentation" };
 
 	static boolean isOfficeFile(String contentType) {

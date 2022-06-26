@@ -11,14 +11,22 @@ declare type API_HELPER_TABLE = {
 declare type API_HELPER_ENV = {
     id: number;
     name: string;
+
+    /**
+     * URL 前缀
+     */
     urlPrefix: string;
+
+    /**
+     * 
+     */
     actived: boolean;
 };
 
 /**
  * HTTP 方法
  */
-declare type API_HELPER_HTTP_METHOD = 'GET' | 'POST' | 'PUT' | 'DELETE';
+declare type API_HELPER_HTTP_METHOD = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTION';
 
 /**
  * 历史记录
@@ -157,6 +165,9 @@ declare type API_HELPER_DOCUMENT = {
      */
     description: string;
 
+    /**
+     * HTTP 请求方法
+     */
     httpMethod: API_HELPER_HTTP_METHOD;
 
     url: string;
@@ -172,9 +183,9 @@ declare type API_HELPER_DOCUMENT = {
     demoUrl: string;
 
     /**
-     * 接口状态
+     * 接口编码状态
      */
-    state: 'INITED' | 'DEFINED' | 'DONE';
+    codeState: 'INITED' | 'DEFINED' | 'DONE';
 
     /**
      * 是否在文档汇总中展示
