@@ -2,29 +2,20 @@
   <div style="overflow: hidden">
     <div class="left">
       <ul>
-        <li
-          v-for="env in envs"
-          :key="env.id"
-          @click="active(env.id)"
-          :class="{ actived: env.actived }"
-        >
-          <Icon
-            type="md-trash"
-            style="float: right; margin-top: 3px"
-            @click="del(env.id, $event)"
-          />
-          {{ env.name }}
+        <li v-for="env in envs" :key="env.id" @click="active(env.id)" :class="{ actived: env.actived }">
+          <Icon type="md-trash" style="float: right; margin-top: 3px" @click="del(env.id, $event)" />
+          {{env.name}}
         </li>
       </ul>
       <a class="add" @click="add">+ 新建……</a>
     </div>
     <div class="right">
       <Input v-model="editing.name" ref="inputName">
-        <span slot="prepend">环境名称</span>
+      <span slot="prepend">环境名称</span>
       </Input>
       <br />
       <Input v-model="editing.urlPrefix">
-        <span slot="prepend">URL前缀</span>
+      <span slot="prepend">URL前缀</span>
       </Input>
 
       <br />
@@ -37,6 +28,8 @@
 </template>
 
 <script lang="ts">
+import { xhr_get, xhr_del } from "../../util/xhr";
+
 export default {
   props: {},
   data() {
@@ -58,6 +51,17 @@ export default {
       editing: {} as API_HELPER_ENV,
       isCreate: false,
     };
+  },
+  mounted() {
+    xhr_get(
+      "http://127.0.0.1:8080/cms/api/ApiHelper/env/list",
+      (j: RepsonseResult) => {
+        let r: any = j.result;
+        if (r) {
+          this.envs = r;
+        } else this.$Message.warning(j.msg);
+      }
+    );
   },
   methods: {
     add(): void {

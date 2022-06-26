@@ -319,8 +319,9 @@ public abstract class Commander extends BaseCommander {
 //					long newlyId = MappingValue.object2long(params.get(idField));
 				} else if (params.containsKey("params")) {
 					if (params.get("params") instanceof Map) {
+						Object object = ((Map<?, ?>) params.get("params")).get(idField);
 
-						return ((Map<?, ?>) params.get("params")).get(idField).toString();
+						return object != null ? object.toString() : NOT_AUTOCREMENT_ID;
 					} else
 						return NOT_AUTOCREMENT_ID;
 				} else
@@ -388,7 +389,7 @@ public abstract class Commander extends BaseCommander {
 
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
-		
+
 		LOGGER.info(params);
 
 		try (SqlSession session = getMyBatisSession(node.getDataSource())) {

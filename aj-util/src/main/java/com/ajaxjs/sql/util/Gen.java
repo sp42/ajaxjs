@@ -21,6 +21,7 @@ public class Gen {
 	public static long getItem(long[] items) {
 		return items[RANDOM.nextInt(items.length)];
 	}
+
 	public static boolean getItem(boolean[] items) {
 		return items[RANDOM.nextInt(items.length)];
 	}
@@ -38,6 +39,14 @@ public class Gen {
 	}
 
 	public static String getItem(String[] items) {
+		return items[RANDOM.nextInt(items.length)];
+	}
+
+//	public static Object getItem(Object[] items) {
+//		return items[RANDOM.nextInt(items.length)];
+//	}
+
+	public static <T> T getItem(T[] items) {
 		return items[RANDOM.nextInt(items.length)];
 	}
 
@@ -60,7 +69,8 @@ public class Gen {
 	/*--------------------------- START -------------------------------------*/
 
 	/*--------------------------- 名字 -------------------------------------*/
-	private static String[] ENGLISHNAMES = { "Johannet", "Jellyan", "Julian", "Joan", "Katheryn", "Mike", "Jack", "Katheron", "Catherine", "Kusteris", "Luce", "Mabell" };
+	private static String[] ENGLISHNAMES = { "Johannet", "Jellyan", "Julian", "Joan", "Katheryn", "Mike", "Jack", "Katheron", "Catherine", "Kusteris", "Luce",
+			"Mabell" };
 
 	/**
 	 * 生成英文名字

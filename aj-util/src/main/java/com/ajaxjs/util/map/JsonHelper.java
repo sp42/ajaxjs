@@ -71,10 +71,9 @@ public class JsonHelper {
 	 * @param str JSON 字符串
 	 * @return Map
 	 */
-	@SuppressWarnings("unchecked")
 	public static Map<String, Object> parseMapClean(String str) {
 		str = str.replaceAll("\\r|\\n", "");
-		return (Map<String, Object>) parse(str);
+		return parseMap(str);
 	}
 
 	/**
@@ -85,7 +84,7 @@ public class JsonHelper {
 	 * @return Bean 对象
 	 */
 	public static <T> T parseMapAsBean(String json, Class<T> clz) {
-		Map<String, Object> map = parseMap(json);
+		Map<String, Object> map = parseMapClean(json);
 		return MapTool.map2Bean(map, clz, true); // 应该为 false
 	}
 
