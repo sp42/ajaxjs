@@ -20,10 +20,10 @@ TODO：
 该服务只有一个接口： `/upload` （你可以修改 Controller 的路径），客户端调用如下数据：
 
 ```html
-	 <form method="POST" action="/upload/upload" enctype="multipart/form-data">
-	    File to upload: <input type="file" name="file">
-	    <input type="submit" value="Upload"> Press here to upload the file!
-	 </form>
+ <form method="POST" action="/upload/upload" enctype="multipart/form-data">
+    File to upload: <input type="file" name="file">
+    <input type="submit" value="Upload"> Press here to upload the file!
+ </form>
 ```
 	 
 	 
