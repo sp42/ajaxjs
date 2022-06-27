@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>aj-upload</artifactId>
+	<artifactId>aj-message</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>统一文件上传服务</description>
+	<description>统一外部消息服务</description>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>

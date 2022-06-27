@@ -12,7 +12,6 @@ import java.util.Stack;
  *
  */
 public class SimpleCalc {
-
 	/**
 	 * 计算并打印简单表达式
 	 * 
@@ -21,9 +20,9 @@ public class SimpleCalc {
 	public static void print(List<String> array) {
 		for (String string : array) {
 			// 数字栈
-			Stack<Double> numStack = new Stack<Double>();
+			Stack<Double> numStack = new Stack<>();
 			// 符号栈
-			Stack<Character> opeStack = new Stack<Character>();
+			Stack<Character> opeStack = new Stack<>();
 			// 读取的每个临时数字
 			int n = 0;
 			// 标识当前读取的是否是数字
@@ -45,9 +44,9 @@ public class SimpleCalc {
 					}
 
 					// 碰到左括号，符号栈入栈
-					if (temp == '(') {
+					if (temp == '(')
 						opeStack.push(temp);
-					} else if (temp == ')') {
+					else if (temp == ')') {
 						// 碰到右括号，符号栈不断出栈，并计算括号里面的表达式
 						while (opeStack.peek() != '(') {
 							double result = cal(numStack.pop(), numStack.pop(), opeStack.pop());
@@ -67,6 +66,7 @@ public class SimpleCalc {
 								double result = cal(numStack.pop(), numStack.pop(), opeStack.pop());
 								numStack.push(result);
 							}
+
 							opeStack.push(temp);
 						}
 					}
