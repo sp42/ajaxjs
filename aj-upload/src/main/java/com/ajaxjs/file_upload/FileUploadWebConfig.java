@@ -1,11 +1,14 @@
 package com.ajaxjs.file_upload;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.ajaxjs.file_upload.s3.NsoHttpUpload;
+import com.ajaxjs.util.config.EasyConfig;
 import com.ajaxjs.util.spring.BaseWebMvcConfigurer;
 
 @Configuration
@@ -20,15 +23,17 @@ public class FileUploadWebConfig extends BaseWebMvcConfigurer {
 		registry.addMapping("/**").allowedHeaders("*").allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").allowedOrigins("*");
 	}
 
-	@Value("${db.url}")
-	private String url;
+	@Autowired
+	private ServletContext servletCxt;
 
-	@Value("${db.user}")
-	private String user;
+	@Bean
+	EasyConfig EasyConfig() {
+		EasyConfig e = new EasyConfig();
+		servletCxt.setAttribute("EASY_CONFIG", e);
 
-	@Value("${db.psw}")
-	private String psw;
-	
+		return e;
+	}
+
 	@Bean
 	public IFileUpload fileUpload() {
 		return new NsoHttpUpload();

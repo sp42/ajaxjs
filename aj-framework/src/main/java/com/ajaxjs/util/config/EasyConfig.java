@@ -2,6 +2,7 @@ package com.ajaxjs.util.config;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.util.cryptography.encryption.SymmetriCipher;
@@ -48,6 +49,11 @@ public class EasyConfig extends HashMap<String, Object> {
 	}
 
 	/**
+	 * 
+	 */
+	private Map<String, Object> rawConfig;
+
+	/**
 	 * 加载 JSON 配置
 	 */
 	public void load() {
@@ -61,6 +67,7 @@ public class EasyConfig extends HashMap<String, Object> {
 		try {
 			String jsonStr = FileHelper.openAsText(filePath);
 			Map<String, Object> map = JsonHelper.parseMap(jsonStr);
+			rawConfig = map;
 
 			clear();
 			putAll(ListMap.flatMap2(map));
@@ -108,6 +115,8 @@ public class EasyConfig extends HashMap<String, Object> {
 
 		if (v == null) {
 			LOGGER.warning("没发现[{0}]配置", key);
+			LOGGER.info(this);
+
 			return isNullValue;
 		}
 
@@ -164,6 +173,14 @@ public class EasyConfig extends HashMap<String, Object> {
 	 */
 	public long getLong(String key) {
 		return getAny(key, 0L, long.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> getListMap(String key) {
+		if (rawConfig.containsKey(key))
+			return (List<Map<String, Object>>) rawConfig.get(key);
+		else
+			return null;
 	}
 
 	public String getFilePath() {

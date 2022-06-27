@@ -2,14 +2,17 @@ package com.ajaxjs.file_upload.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +23,7 @@ import com.ajaxjs.file_upload.IFileUpload;
 import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.sql.SnowflakeId;
 import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.util.config.EasyConfig;
 
 @RestController
 @RequestMapping("/upload")
@@ -62,6 +66,9 @@ public class UploadController {
 	@Autowired(required = false)
 	IFileUpload fileUpload; // 默认是网易云 若 null 则使用本地上传
 
+	@Autowired
+	EasyConfig config;
+
 	/**
 	 * 测试文件上传的方法，测试使用的，可以废弃
 	 * 
@@ -70,7 +77,19 @@ public class UploadController {
 	 * @throws IOException
 	 */
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	public String uploadFileHandler(@RequestParam("file") MultipartFile file, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public String uploadFileHandler(@RequestHeader String clientId, @RequestHeader String token, @RequestParam("file") MultipartFile file,
+			HttpServletRequest req) throws IOException {
+		List<Map<String, Object>> list = config.getListMap("auth");
+		Optional<Map<String, Object>> authO = list.stream().filter(map -> clientId.equals(map.get("clientId").toString())).findFirst();
+
+		if (!authO.isPresent())
+			throw new IllegalAccessError("非法客户端 id：" + clientId);
+
+		Map<String, Object> auth = authO.get();
+
+		if (!token.equals(auth.get("token")))
+			throw new IllegalAccessError("非法客户端 token：" + token);
+
 		fileCheck(file);
 
 		String originalFilename = file.getOriginalFilename();

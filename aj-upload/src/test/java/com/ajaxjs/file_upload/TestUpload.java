@@ -63,6 +63,11 @@ public class TestUpload {
 	IFileUpload fileUpload; // 默认是网易云
 
 	@Test
+	public void testYaml() {
+		// @value 不支持复杂类型，改用自己的 json 配置 TODO
+//		nsoHttpUpload.test();
+	}
+
 	public void testNso() {
 		byte[] bytes = FileHelper.openAsByte(file);
 		String filenmae = "abldj75zav.png";
