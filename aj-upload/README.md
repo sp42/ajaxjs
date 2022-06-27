@@ -37,3 +37,30 @@ TODO：
     "url": "https://xxxxx/9274656743690240.webp"
 }
 ```
+
+在 Classpath 目录下新建一个 `application.yml` 配置文件，内容如下：
+
+```yaml
+# 文件上传
+FileUpload:
+  maxSingleFileSize: 1 # 单位 mb
+  allowExtFilenames: jpeg, jpg, png, gif, bmp, webp
+  isRename: true
+  FILE_URL_ROOT: https://leidong.nos-eastchina1.126.net
+  saveFolder: attachment
+
+# 云存储，对象存储
+S3Storage:
+ Nso: # 网易云
+  accessKey: 4c2396f706744a74ba6b8319e1099b60
+  accessSecret: 67f070468939410491c54d6979614980
+  api: https://leidong.nos-eastchina1.126.net/
+  bucket: leidong
+ Oss: # 阿里 OSS
+  accessKeyId: LTAI4FtWXD5P4cCAxPcb7apP
+  secretAccessKey: i6HPqz4AlTZUPkVQSj7Pr74yQsK69Q
+  endpoint: oss-cn-beijing.aliyuncs.com
+  bucket: leyou-cxk
+ LocalStorage: # 本地保存
+  absoluteSavePath: c:\temp\ # 若有此值，保存这个绝对路径上
+```
