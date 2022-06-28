@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.rpc;
+package com.rpc;
 
 public class HelloServiceImpl implements HelloService {
 	@Override

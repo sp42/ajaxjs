@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.rpc;
+package com.rpc;
 
 public class RpcConsumer {
 	public static void main(String[] args) throws Exception {

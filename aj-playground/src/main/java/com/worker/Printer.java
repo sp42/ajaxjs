@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.worker;
+package com.worker;
 
 /**
  * 打印机

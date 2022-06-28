@@ -63,29 +63,4 @@ public class UserAddressService extends BaseService<Address> {
 		checkIfExist(bean);
 		return super.update(bean);
 	}
-
-//	public static JsEngineWrapper AREA_DATA;
-//
-//	/**
-//	 * 初始化一个 js 引擎并缓存之
-//	 * 
-//	 * @param r 请求对象，用来获取
-//	 */
-//	public static void initData(HttpServletRequest r) {
-//		if (UserAddressService.AREA_DATA == null) {
-//			InputStream in = r.getServletContext().getResourceAsStream("/asset/js/China_AREA_full.js");
-//			Objects.requireNonNull(in, "未准备好地址 JSON 文件");
-//			
-//			JsEngineWrapper js = new JsEngineWrapper();
-//			js.eval(IoHelper.byteStream2string(in));
-//
-//			try {
-//				in.close();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//
-//			UserAddressService.AREA_DATA = js;
-//		}
-//	}
 }

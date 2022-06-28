@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.rpc;
+package com.rpc;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

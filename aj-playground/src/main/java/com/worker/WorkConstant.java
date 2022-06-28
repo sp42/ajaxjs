@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.worker;
+package com.worker;
 
 public interface WorkConstant {
 	public static enum Status {
