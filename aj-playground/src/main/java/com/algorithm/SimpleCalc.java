@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.algorithm;
+package com.algorithm;
 
 import java.util.List;
 import java.util.Stack;
