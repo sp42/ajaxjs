@@ -9,8 +9,6 @@ package com.ajaxjs.workflow.model;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.el.ExpressionFactory;
-
 //import org.apache.el.ExpressionFactoryImpl;
 import org.springframework.util.StringUtils;
 
@@ -63,10 +61,10 @@ public class DecisionModel extends NodeModel {
 	 * @param args 参数列表
 	 * @return 返回对象
 	 */
-	@SuppressWarnings("unchecked")
 	private <T> T eval(Class<T> T, String expr, Map<String, Object> args) {
 		SimpleContext context = new SimpleContext();
-		
+		System.out.println(context);
+
 		return null;
 
 //		for (String key : args.keySet())

@@ -67,6 +67,7 @@ public class BasicFormatterImpl {
 		boolean beginLine = true;
 		boolean afterBeginBeforeEnd = false;
 		boolean afterByOrSetOrFromOrSelect = false;
+		@SuppressWarnings("unused")
 		boolean afterValues = false;
 		boolean afterOn = false;
 		boolean afterBetween = false;

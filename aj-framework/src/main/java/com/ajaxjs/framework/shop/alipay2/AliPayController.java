@@ -63,6 +63,8 @@ public class AliPayController {
 		String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
 		String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
 
+		System.out.println(out_trade_no);
+
 		if (AlipayNotify.verify(params)) {
 			if (trade_status.equals("TRADE_FINISHED") || trade_status.equals("TRADE_SUCCESS")) {
 
@@ -98,9 +100,9 @@ public class AliPayController {
 	public String refundBack(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// 获取支付宝POST过来反馈信息
 		Map<String, String> params = new HashMap<>();
-		Map requestParams = request.getParameterMap();
+		Map<String, String[]> requestParams = request.getParameterMap();
 
-		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+		for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
 			String name = (String) iter.next();
 			String[] values = (String[]) requestParams.get(name);
 			String valueStr = "";
@@ -116,6 +118,10 @@ public class AliPayController {
 		String batch_no = new String(request.getParameter("batch_no").getBytes("ISO-8859-1"), "UTF-8");
 		String success_num = new String(request.getParameter("success_num").getBytes("ISO-8859-1"), "UTF-8");
 		String result_details = new String(request.getParameter("result_details").getBytes("ISO-8859-1"), "UTF-8");
+
+		System.out.println(batch_no);
+		System.out.println(success_num);
+		System.out.println(result_details);
 
 		if (AlipayNotify.verify(params)) // 验证成功
 			return "success";

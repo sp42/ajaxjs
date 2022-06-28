@@ -75,8 +75,8 @@ public class AlipaySubmit {
 
 		StringBuffer sbHtml = new StringBuffer();
 
-		sbHtml.append("<form id=\"alipaysubmit\" target=\"_blank\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW + "_input_charset=" + AlipayConfig.input_charset
-				+ "\" method=\"" + strMethod + "\">");
+		sbHtml.append("<form id=\"alipaysubmit\" target=\"_blank\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW + "_input_charset="
+				+ AlipayConfig.input_charset + "\" method=\"" + strMethod + "\">");
 
 		for (int i = 0; i < keys.size(); i++) {
 			String name = (String) keys.get(i);
@@ -101,11 +101,11 @@ public class AlipaySubmit {
 	 * @throws MalformedURLException
 	 */
 	public static String query_timestamp() throws MalformedURLException, IOException {
-
 		// 构造访问query_timestamp接口的URL串
 		String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" + AlipayConfig.partner + "&_input_charset" + AlipayConfig.input_charset;
 		StringBuffer result = new StringBuffer();
 
+		System.out.println(strUrl);
 //		SAXReader reader = new SAXReader();
 //		Document doc = reader.read(new URL(strUrl).openStream());
 //

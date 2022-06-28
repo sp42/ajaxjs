@@ -39,7 +39,7 @@ public class TestExpire extends BaseTest {
 		WorkflowEngine engine = (WorkflowEngine) init("test/timeExpire.xml");
 
 		Order order = engine.startInstanceByName(PROCESSNAME, null, 2L, args);
-
+		System.out.println(order);
 //		List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
 //		for(Task task : tasks) {
 //			engine.executeTask(task.getId(), "1", args);
