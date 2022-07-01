@@ -25,7 +25,10 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -207,7 +210,8 @@ public class MapTool {
 
 				fn.item(key, value, property);
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			LOGGER.warning(e);
 		}
 	}
@@ -233,10 +237,28 @@ public class MapTool {
 					if (value != null) {
 						Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
-						if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
-							value = MappingValue.objectCast(value, t);
+						if (t == List.class) { // List 容器类，要处理里面的泛型
+							Type[] genericReturnType = ReflectUtil.getGenericReturnType(property.getReadMethod());
+							Type beanT = genericReturnType[0];
+							Class<?> realT = ReflectUtil.type2class(beanT);
 
-//						LOGGER.info("t:" + t);
+							@SuppressWarnings("unchecked")
+							List<Map<String, Object>> oldValue = (List<Map<String, Object>>) value;
+							List<Object> newList = new ArrayList<>(oldValue.size());
+
+							// 转换一个新 list
+							for (Map<String, Object> _map : oldValue) {
+								Object _bean = map2Bean(_map, realT, true);
+								newList.add(_bean);
+							}
+
+							value = newList;
+						} else {
+							if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
+								value = MappingValue.objectCast(value, t);
+						}
+
+//						LOGGER.info("t:" + t.toString());
 //						LOGGER.info("v:" + value + " type: " + value.getClass());
 
 						try {
@@ -245,7 +267,7 @@ public class MapTool {
 							LOGGER.info("method:" + property.getWriteMethod());
 							LOGGER.info("value type:" + value.getClass() + " vlaue: " + value);
 
-							e.printStackTrace();
+//							e.printStackTrace();
 						}
 					}
 				}
@@ -254,7 +276,8 @@ public class MapTool {
 				if (isChild) {
 					for (String mKey : map.keySet()) {
 						if (mKey.contains(key + '_')) {
-							Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter 方法
+							Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter
+																											// 方法
 
 							Object subBean = getter.invoke(bean);
 							String subBeanKey = mKey.replaceAll(key + '_', "");
@@ -274,8 +297,8 @@ public class MapTool {
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				if (e instanceof IllegalArgumentException)
 					LOGGER.warning("[{0}] 参数类型不匹配，输入值是 [{1}]", key, v);
-
-				LOGGER.warning(e);
+				else
+					LOGGER.warning(e);
 			}
 		});
 

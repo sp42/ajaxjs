@@ -174,6 +174,10 @@ public class Post extends Base {
         return api(url, params, null);
     }
 
+    public static Map<String, Object> api(String url){
+    	return api(url, null);
+    }
+    
     /**
      * POST API，返回 XML
      *
