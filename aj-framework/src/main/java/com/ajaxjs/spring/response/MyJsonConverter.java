@@ -15,9 +15,9 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.easy_controller.ServiceProxy;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.spring.easy_controller.ServiceProxy;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 

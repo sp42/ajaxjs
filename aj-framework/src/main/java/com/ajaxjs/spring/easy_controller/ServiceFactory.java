@@ -1,4 +1,4 @@
-package com.ajaxjs.easy_controller;
+package com.ajaxjs.spring.easy_controller;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;

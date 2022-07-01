@@ -29,6 +29,7 @@ import com.ajaxjs.workflow.model.entity.TaskHistory;
 
 /**
  * 流程实例
+ * 
  * @author Frank Cheung
  *
  */
@@ -37,7 +38,6 @@ public class OrderService extends BaseService<Order> {
 	public static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
 
 	{
-
 		setDao(dao);
 	}
 

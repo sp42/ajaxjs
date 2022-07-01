@@ -45,7 +45,6 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 			try {
 				Class.forName(mainConfig);
 			} catch (ClassNotFoundException e) {
-
 				String reverse = new StringBuffer(mainConfig).reverse().toString();
 				reverse = reverse.replaceFirst("\\.", "\\$"); // 对于内部类，我们需要像下面这样写代码
 				String _mainConfig = new StringBuffer(reverse).reverse().toString();
@@ -73,6 +72,12 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 		LOGGER.info("WEB 程序启动完毕");
 	}
 
+	/**
+	 * 初始化文件上传
+	 * 
+	 * @param cxt
+	 * @param registration
+	 */
 	private static void initUpload(ServletContext cxt, Dynamic registration) {
 		String tempDir = WebHelper.mappath(cxt, "upload_temp");
 		// 如果不存在则创建
