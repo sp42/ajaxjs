@@ -20,9 +20,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.spring.DiContextUtil;
 
 //import com.ajaxjs.entity.filter.EnableTransaction;
 //import com.ajaxjs.entity.filter.SqlAuditing;

@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring;
+package com.ajaxjs.spring;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;

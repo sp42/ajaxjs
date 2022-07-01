@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.ajaxjs.file_upload.s3.NsoHttpUpload;
+import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.util.config.EasyConfig;
-import com.ajaxjs.util.spring.BaseWebMvcConfigurer;
 
 @Configuration
 public class FileUploadWebConfig extends BaseWebMvcConfigurer {

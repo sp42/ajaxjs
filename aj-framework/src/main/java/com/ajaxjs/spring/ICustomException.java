@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring;
+package com.ajaxjs.spring;
 
 /**
  * 自定义的业务异常

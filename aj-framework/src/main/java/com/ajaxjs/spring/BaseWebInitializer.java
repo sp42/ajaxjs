@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring;
+package com.ajaxjs.spring;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.MultipartConfigElement;

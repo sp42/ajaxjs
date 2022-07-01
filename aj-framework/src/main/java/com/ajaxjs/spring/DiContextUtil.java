@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring;
+package com.ajaxjs.spring;
 
 import java.util.Locale;
 import java.util.Map;
@@ -82,7 +82,7 @@ public class DiContextUtil implements ApplicationContextAware {
 	}
 
 	/**
-	 * 获取注册者 context->beanfactory->registry
+	 * 获取注册者 context->bean factory->registry
 	 * 
 	 * @return
 	 */

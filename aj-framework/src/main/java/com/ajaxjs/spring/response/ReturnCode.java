@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring.response;
+package com.ajaxjs.spring.response;
 
 public enum ReturnCode {
 	/** 操作成功 **/

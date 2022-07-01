@@ -17,8 +17,8 @@ package com.ajaxjs.workflow.model;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.spring.DiContextUtil;
 import com.ajaxjs.workflow.interceptor.WorkflowInterceptor;
 import com.ajaxjs.workflow.model.entity.Task;
 

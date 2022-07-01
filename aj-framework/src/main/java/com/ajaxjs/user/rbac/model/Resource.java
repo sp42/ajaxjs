@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.user.rbac.RbacConstant.RESOURCES_GROUP;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.spring.DiContextUtil;
 
 /**
  * 权限资源

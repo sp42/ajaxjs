@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.ajaxjs.message.sms.AliyunSmsEntity;
+import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.util.config.EasyConfig;
-import com.ajaxjs.util.spring.BaseWebMvcConfigurer;
 
 @Configuration
 public class WebConfig extends BaseWebMvcConfigurer {

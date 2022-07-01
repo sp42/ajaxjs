@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring;
+package com.ajaxjs.spring;
 
 import java.io.IOException;
 
@@ -10,10 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ajaxjs.spring.response.ResponseResult;
+import com.ajaxjs.spring.response.ReturnCode;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.spring.response.ResponseResult;
-import com.ajaxjs.util.spring.response.ReturnCode;
 
 /**
  * 全局异常拦截器

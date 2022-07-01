@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring.response;
+package com.ajaxjs.spring.response;
 
 import java.io.IOException;
 import java.io.OutputStream;

@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring.response;
+package com.ajaxjs.spring.response;
 
 public class ResultData<T> {
 	/** 结果状态 ,具体状态码参见ResultData.java */

@@ -1,4 +1,4 @@
-package com.ajaxjs.util.spring.response;
+package com.ajaxjs.spring.response;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

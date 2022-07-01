@@ -12,8 +12,8 @@ import java.util.Map;
 import com.ajaxjs.data_service.api.ApiController;
 import com.ajaxjs.data_service.api.Commander;
 import com.ajaxjs.data_service.mybatis.MybatisInterceptor;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.spring.DiContextUtil;
 
 /**
  * Java 动态代理

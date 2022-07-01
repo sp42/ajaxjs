@@ -5,10 +5,10 @@ import java.util.Objects;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.date.DateUtil;
-import com.ajaxjs.util.spring.DiContextUtil;
 import com.ajaxjs.workflow.model.NodeModel;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.TransitionModel;
