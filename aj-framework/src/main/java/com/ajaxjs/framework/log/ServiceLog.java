@@ -27,7 +27,7 @@ public class ServiceLog implements IBaseModel {
 	private Long userid;
 
 	/**
-	 * 租户 id。0 = 不设租户
+	 * 租户 id。 0 = 不设租户
 	 */
 	private Long tenantid;
 

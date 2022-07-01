@@ -1,4 +1,4 @@
-package com.ajaxjs.data_service.plugin;
+package com.ajaxjs.tag;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -8,9 +8,8 @@ import java.util.Map;
 
 import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 import com.ajaxjs.data_service.model.ServiceContext;
+import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.tag.TagInfo;
-import com.ajaxjs.framework.tag.TagService;
 import com.ajaxjs.sql.JdbcConnection;
 
 public class TagsPlugin implements IPlugin {

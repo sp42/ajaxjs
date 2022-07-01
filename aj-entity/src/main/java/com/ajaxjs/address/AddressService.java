@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.address;
+package com.ajaxjs.address;
 
 import java.util.List;
 import java.util.function.Function;
@@ -13,7 +13,7 @@ import com.ajaxjs.sql.orm.IBaseDao;
 import com.ajaxjs.sql.orm.Repository;
 
 @Component
-public class UserAddressService extends BaseService<Address> {
+public class AddressService extends BaseService<Address> {
 
 	@TableName(value = "entity_address", beanClass = Address.class)
 	public static interface UserAddressDao extends IBaseDao<Address> {

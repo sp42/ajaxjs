@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.tag;
+package com.ajaxjs.tag;
 
 import java.sql.Connection;
 import java.util.ArrayList;

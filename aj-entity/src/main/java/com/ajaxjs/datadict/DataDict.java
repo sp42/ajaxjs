@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.datadict;
+package com.ajaxjs.datadict;
 
 import java.util.Date;
 
