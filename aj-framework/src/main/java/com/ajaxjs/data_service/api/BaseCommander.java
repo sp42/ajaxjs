@@ -113,6 +113,7 @@ public abstract class BaseCommander implements DataServiceConstant {
 //		LOGGER.info("获取列表（不分页）");
 
 		boolean isDynamicSQL = Commander.isDynamicSQL(sql);
+		
 		if (isDynamicSQL) {// 是否包含 mybatis 脚本控制标签，有的话特殊处理
 			sql = "<script>" + sql + "</script>";
 		}

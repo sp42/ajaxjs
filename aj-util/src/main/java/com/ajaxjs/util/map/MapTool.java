@@ -210,8 +210,7 @@ public class MapTool {
 
 				fn.item(key, value, property);
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning(e);
 		}
 	}
@@ -230,7 +229,7 @@ public class MapTool {
 
 		eachField(bean, (key, v, property) -> {
 			try {
-				if (map.containsKey(key)) {
+				if (map != null && map.containsKey(key)) {
 					Object value = map.get(key);
 
 					// null 是不会传入 bean 的
@@ -273,7 +272,7 @@ public class MapTool {
 				}
 
 				// 子对象
-				if (isChild) {
+				if (isChild && map != null) {
 					for (String mKey : map.keySet()) {
 						if (mKey.contains(key + '_')) {
 							Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter

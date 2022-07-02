@@ -135,6 +135,7 @@ public abstract class Commander extends BaseCommander {
 		String sql = where(ctx);
 
 		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
+		
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.LIST, ctx))
