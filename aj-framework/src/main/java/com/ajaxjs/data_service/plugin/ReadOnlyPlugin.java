@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.log;
+package com.ajaxjs.data_service.plugin;
 
 import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 import com.ajaxjs.Version;

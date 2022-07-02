@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.log;
+package com.ajaxjs.system_log;
 
 import com.ajaxjs.framework.teant.ITenantService;
 
