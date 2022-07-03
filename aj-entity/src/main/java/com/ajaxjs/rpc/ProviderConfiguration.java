@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableDubbo(scanBasePackages = "com.ajaxjs")
+//@EnableDubbo(scanBasePackages = "com.ajaxjs")
 public class ProviderConfiguration {
 	@Bean // #2
 	public ApplicationConfig applicationConfig() {
@@ -24,6 +24,7 @@ public class ProviderConfiguration {
 		ProviderConfig provider = new ProviderConfig();
 		provider.setTimeout(1000);
 
+
 		return provider;
 	}
 
@@ -31,6 +32,7 @@ public class ProviderConfiguration {
 	public RegistryConfig registryConfig() {
 		RegistryConfig registry = new RegistryConfig();
 		registry.setAddress("N/A"); // 直连
+//		registry.setCheck(false);
 
 		return registry;
 	}

@@ -57,7 +57,7 @@ public class EasyConfig extends HashMap<String, Object> {
 	 * 加载 JSON 配置
 	 */
 	public void load() {
-		if (!new File(filePath).exists()) {
+		if (filePath == null || !new File(filePath).exists()) {
 			LOGGER.info("没有[{0}]项目配置文件", filePath);
 			return;
 		}

@@ -1,4 +1,4 @@
-package com.ajaxjs.datadict;
+package com.ajaxjs.entity.datadict;
 
 import com.ajaxjs.data_service.sdk.Caller;
 import com.ajaxjs.data_service.sdk.IDataService;

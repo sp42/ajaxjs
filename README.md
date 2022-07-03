@@ -28,6 +28,7 @@
 |aj-sso-client |单点登录客户端|[README](aj-sso-client)|jar|
 |aj-entity  |通用业务实体服务|[README](aj-entity)|war|
 |aj-upload  |统一文件上传服务|[README](aj-upload)|war|
+|aj-message  |统一邮件、短信发送服务|[README](aj-message)|war|
 |aj-workflow  |工作流|[README](aj-upload)|war|
 |aj-wechat  |微信公众号、支付服务|[README](aj-wechat)|war|
 |aj-playground  |实验室|[README](aj-playground)|war|
