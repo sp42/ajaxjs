@@ -20,5 +20,11 @@
 			<artifactId>ajaxjs-framework</artifactId>
 			<version>1.0.4</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.dubbo</groupId>
+			<artifactId>dubbo</artifactId>
+			<version>3.0.9</version>
+		</dependency>
 	</dependencies>
 </project>

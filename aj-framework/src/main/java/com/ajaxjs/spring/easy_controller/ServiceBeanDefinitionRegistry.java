@@ -85,7 +85,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 	 * 根据包路径获取包及子包下的所有类
 	 *
 	 * @param basePackage basePackage
-	 * @return Set<Class < ?>> Set<Class<?>>
+	 * @return Set<Class<?>> Set<Class<?>>
 	 */
 	private Set<Class<?>> scannerPackages(String basePackage) {
 		Set<Class<?>> set = new LinkedHashSet<>();
