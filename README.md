@@ -6,10 +6,10 @@
 [![QQ群](https://framework.ajaxjs.com/static/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22) 
 
 
-提供完整的、全栈的、简单的基础支撑平台，开源、免费。
+提供全栈的、分布式的、简单的基础支撑平台，开源、免费。
 
 - 前端：TypeScript + Vue.js 2 + iView UI + Less.js + Webpack
-- 后端：Java 1.8 + Tomcat 8.5 + MySQL 5.7 + Spring 5
+- 后端：Java 1.8 + Tomcat 8.5 + MySQL 5.8 + Spring 5 + Dubbo 3
 
 [文档 Wiki](../../wikis) | [在线演示](https://cp-service.ajaxjs.com/demo/)
 
@@ -19,12 +19,18 @@
 
 |项目名称|简介|文档|打包|
 |------|-----|----|------|
+|aj-parent  |Maven 根 POM|[README](aj-parent)|maven|
 |aj-util|轻便灵巧的工具，有丰富的工具类和常用组件|[README](aj-util)|jar|
 |aj-framework|常见的业务组件封装|[README](aj-framework)|jar|
 |aj-web|网站作为独立客户端|[README](aj-web)|jar|
 |aj-developer-tools |开发者工具|[README](aj-developer-tools)|jar|
 |aj-sso|单点登录 SSO 中心|[README](aj-sso)|war|
 |aj-sso-client |单点登录客户端|[README](aj-sso-client)|jar|
+|aj-entity  |通用业务实体服务|[README](aj-entity)|war|
+|aj-upload  |统一文件上传服务|[README](aj-upload)|war|
+|aj-workflow  |工作流|[README](aj-upload)|war|
+|aj-wechat  |微信公众号、支付服务|[README](aj-wechat)|war|
+|aj-playground  |实验室|[README](aj-playground)|war|
 |aj-ui|前端组件|[README](aj-ui)|npm|
 
 
