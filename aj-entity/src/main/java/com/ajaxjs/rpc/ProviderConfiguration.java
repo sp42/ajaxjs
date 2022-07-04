@@ -32,7 +32,7 @@ public class ProviderConfiguration {
 	public RegistryConfig registryConfig() {
 		RegistryConfig registry = new RegistryConfig();
 		registry.setAddress("N/A"); // 直连
-//		registry.setCheck(false);
+		registry.setCheck(false);
 
 		return registry;
 	}

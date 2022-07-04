@@ -1,12 +1,14 @@
-package com.ajaxjs.rpc;
+package com.ajaxjs.entity;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
+import org.apache.bval.jsr.ApacheValidationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.ajaxjs.data_service.api.Commander;
@@ -63,5 +65,18 @@ public class EntityWebConfig extends BaseWebMvcConfigurer {
 		servletCxt.setAttribute("EASY_CONFIG", e);
 
 		return e;
+	}
+
+	/**
+	 * 数据验证框架
+	 * 
+	 * @return
+	 */
+	@Bean
+	LocalValidatorFactoryBean localValidatorFactoryBean() {
+		LocalValidatorFactoryBean v = new LocalValidatorFactoryBean();
+		v.setProviderClass(ApacheValidationProvider.class);
+		
+		return v;
 	}
 }

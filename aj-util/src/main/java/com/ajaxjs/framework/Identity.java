@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public interface Identity {
 	default void setId(Serializable id) {
-
+		throw new NullPointerException();
 	}
 
 	default Serializable getId() {

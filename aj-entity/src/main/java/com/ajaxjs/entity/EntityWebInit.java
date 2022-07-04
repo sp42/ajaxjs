@@ -1,4 +1,4 @@
-package com.ajaxjs.rpc;
+package com.ajaxjs.entity;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

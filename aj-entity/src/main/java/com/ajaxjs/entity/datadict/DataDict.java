@@ -2,9 +2,9 @@ package com.ajaxjs.entity.datadict;
 
 import java.util.Date;
 
-import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.framework.Identity;
-import com.ajaxjs.gateway.TenantPortal;
+import javax.validation.constraints.NotNull;
+
+import com.ajaxjs.entity.CommonEntity;
 
 /**
  * 数据字典
@@ -12,7 +12,7 @@ import com.ajaxjs.gateway.TenantPortal;
  * @author Frank Cheung
  * @date 2021-11-07
  */
-public class DataDict implements IBaseModel, TenantPortal, Identity {
+public class DataDict implements CommonEntity {
 	/**
 	 * 主键 id，自增
 	 */
@@ -36,11 +36,13 @@ public class DataDict implements IBaseModel, TenantPortal, Identity {
 	/**
 	 * 父 id
 	 */
+	@NotNull
 	private Long parentId;
 
 	/**
 	 * 类型 id
 	 */
+	@NotNull
 	private Long type;
 
 	/**

@@ -6,6 +6,7 @@
 	<artifactId>aj-upload</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>统一文件上传服务</description>
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>

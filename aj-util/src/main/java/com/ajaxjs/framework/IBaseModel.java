@@ -1,7 +1,5 @@
 package com.ajaxjs.framework;
 
-import java.io.Serializable;
-
 /**
  * 表示一个实体
  * 
@@ -9,15 +7,5 @@ import java.io.Serializable;
  *
  */
 public interface IBaseModel {
-	/**
-	 * 获取实体 id
-	 * 
-	 * @return id 标识
-	 */
-	default Serializable getId() {
-		return null;
-	}
 
-//	 不能 setter
-//	public void setId(Serializable id);
 }

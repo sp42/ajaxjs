@@ -6,6 +6,7 @@
 	<artifactId>aj-entity</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>基础实体服务</description>
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
@@ -25,6 +26,18 @@
 			<groupId>org.apache.dubbo</groupId>
 			<artifactId>dubbo</artifactId>
 			<version>3.0.9</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.bval</groupId>
+			<artifactId>bval-jsr</artifactId>
+			<version>2.0.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
 		</dependency>
 	</dependencies>
 </project>
