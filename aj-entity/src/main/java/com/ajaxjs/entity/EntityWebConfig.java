@@ -1,5 +1,7 @@
 package com.ajaxjs.entity;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
@@ -8,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import com.ajaxjs.data_service.api.Commander;
 import com.ajaxjs.data_service.model.DataServiceConfig;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
+import com.ajaxjs.spring.response.MyJsonConverter;
+import com.ajaxjs.spring.response.RestResponseEntityExceptionHandler;
 import com.ajaxjs.util.config.EasyConfig;
 
 @Configuration
@@ -67,6 +72,15 @@ public class EntityWebConfig extends BaseWebMvcConfigurer {
 		return e;
 	}
 
+	@Bean
+	RestResponseEntityExceptionHandler RestResponseEntityExceptionHandler() {
+		return new RestResponseEntityExceptionHandler();
+	}
+
+//	@Bean
+//	RestResponseStatusExceptionResolver RestResponseStatusExceptionResolver() {
+//		return new RestResponseStatusExceptionResolver();
+//	}
 	/**
 	 * 数据验证框架
 	 * 
@@ -76,7 +90,13 @@ public class EntityWebConfig extends BaseWebMvcConfigurer {
 	LocalValidatorFactoryBean localValidatorFactoryBean() {
 		LocalValidatorFactoryBean v = new LocalValidatorFactoryBean();
 		v.setProviderClass(ApacheValidationProvider.class);
-		
+
 		return v;
+	}
+
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		// 统一返回 JSON
+		converters.add(new MyJsonConverter());
 	}
 }

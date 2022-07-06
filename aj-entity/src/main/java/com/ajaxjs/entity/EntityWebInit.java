@@ -11,17 +11,18 @@ import com.ajaxjs.spring.easy_controller.ServiceBeanDefinitionRegistry;
 @Configuration
 @EnableWebMvc
 public class EntityWebInit extends BaseWebInitializer {
-	@ComponentScan({ "com.ajaxjs.rpc", "com.ajaxjs.data_service"  })
+	@ComponentScan({ "com.ajaxjs.entity", "com.ajaxjs.rpc", "com.ajaxjs.data_service" })
 	public static class ScanComponent {
 	}
 
 	@Override
 	public String getMainConfig() {
-		return "com.ajaxjs.EntityWebInit.ScanComponent";
+		return "com.ajaxjs.entity.EntityWebInit.ScanComponent";
 	}
 
 	@Bean
 	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-		return new ServiceBeanDefinitionRegistry("com.ajaxjs.rpc");
+		return new ServiceBeanDefinitionRegistry("com.ajaxjs.entity");
 	}
+
 }

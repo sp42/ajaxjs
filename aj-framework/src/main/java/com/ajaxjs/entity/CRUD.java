@@ -1,7 +1,5 @@
 package com.ajaxjs.entity;
 
-import java.io.Serializable;
-
 import com.ajaxjs.data_service.sdk.IDataService;
 import com.ajaxjs.framework.Identity;
 
@@ -21,18 +19,21 @@ public class CRUD {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T create(Identity bean, IDataService<T> dao) {
-		Serializable newly = dao.create((T) bean);
-		if (newly == null)
+	public static <T, K> T create(Identity<K> bean, IDataService<T> dao) {
+		Object obj = dao.create((T) bean);
+
+		if (obj == null)
 			throw new NullPointerException("创建失败");
+		else {
+			K newly = (K) obj;
+			bean.setId(newly);
 
-		bean.setId(newly);
-
-		return (T) bean;
+			return (T) bean;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> boolean update(Identity bean, IDataService<T> dao) {
+	public static <T, K> boolean update(Identity<K> bean, IDataService<T> dao) {
 		if (bean.getId() == null)
 			throw new IllegalArgumentException("缺少 id 参数，不知道修改哪条记录");
 

@@ -45,6 +45,7 @@ public class DataDictService {
 	}
 
 	public DataDict createDataDict(DataDict dataDict) {
+		System.out.println(dataDict.getId());
 		return CRUD.create(dataDict, DataDictDao.DataDictDAO);
 	}
 

@@ -278,8 +278,8 @@ public class JsonHelper {
 		} catch (IntrospectionException e) {
 			e.printStackTrace();
 		}
-
-		if (props != null) {
+		
+		if (props != null && props.length > 0) {
 			for (int i = 0; i < props.length; i++) {
 				try {
 					String name = "\"" + props[i].getName() + "\"";
@@ -297,8 +297,31 @@ public class JsonHelper {
 			}
 
 			json.setCharAt(json.length() - 1, '}');
-		} else
-			json.append("}");
+		} else {
+			// 无 getter/stter
+			Field[] fields = bean.getClass().getFields();
+
+			if (fields != null && fields.length > 0) {
+				for (Field field : fields) {
+					String name = "\"" + field.getName() + "\"";
+
+					try {
+						Object _value = field.get(bean);
+						String value = toJson(_value);
+
+						json.append(name);
+						json.append(":");
+						json.append(value);
+						json.append(",");
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
+				}
+
+				json.setCharAt(json.length() - 1, '}');
+			} else
+				json.append("}");
+		}
 
 		return json.toString();
 	}

@@ -2,6 +2,7 @@ package com.ajaxjs.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,9 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.MediaType;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;
@@ -232,6 +235,30 @@ public class WebHelper {
 		}
 
 		return map;
+	}
+
+	/**
+	 * 输出 JSON 字符串
+	 * 
+	 * @param resp
+	 * @param toJson
+	 */
+	public static void outputJson(HttpServletResponse resp, Object toJson) {
+		String json;
+
+		if (toJson instanceof String)
+			json = (String) toJson;
+		else
+			json = JsonHelper.toJson(toJson);
+
+		resp.setCharacterEncoding("UTF-8"); // 避免乱码
+		resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
+
+		try (PrintWriter writer = resp.getWriter();) {
+			writer.write(json);
+		} catch (IOException ex) {
+
+		}
 	}
 
 	/**

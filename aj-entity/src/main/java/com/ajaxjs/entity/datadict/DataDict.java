@@ -21,6 +21,7 @@ public class DataDict implements CommonEntity {
 	/**
 	 * 名称、自定义编码、相当于 key。可选的
 	 */
+	@NotNull
 	private String name;
 
 	/**
@@ -42,7 +43,7 @@ public class DataDict implements CommonEntity {
 	/**
 	 * 类型 id
 	 */
-	@NotNull
+//	@NotNull
 	private Long type;
 
 	/**
@@ -90,6 +91,7 @@ public class DataDict implements CommonEntity {
 		return id;
 	}
 
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}

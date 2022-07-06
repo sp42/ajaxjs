@@ -1,4 +1,4 @@
-package com.ajaxjs.spring;
+package com.ajaxjs.spring.bean;
 
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Condition;
