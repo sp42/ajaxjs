@@ -2,10 +2,6 @@ package com.ajaxjs.entity.datadict;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,11 +29,6 @@ public class DataDictService {
 	public List<DataDict> getDataDict(Long parentId) {
 		List<DataDict> list = DataDictDao.DataDictDAO.setWhereQuery("parentId", parentId).findList();
 
-		Validator validator = v.getValidator();
-		Set<ConstraintViolation<DataDict>> violations = validator.validate(list.get(0));
-		System.out.println(violations.size()); // 校验结果
-
-		System.out.println(list.get(0).getParentId());
 		if (CollectionUtils.isEmpty(list))
 			list = new ArrayList<>();
 
