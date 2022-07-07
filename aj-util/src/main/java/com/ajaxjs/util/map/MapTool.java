@@ -210,7 +210,8 @@ public class MapTool {
 
 				fn.item(key, value, property);
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			LOGGER.warning(e);
 		}
 	}
@@ -228,13 +229,16 @@ public class MapTool {
 		T bean = ReflectUtil.newInstance(clz);
 
 		eachField(bean, (key, v, property) -> {
+			Object value = null;
+			Class<?> t = null;
+
 			try {
 				if (map != null && map.containsKey(key)) {
-					Object value = map.get(key);
+					value = map.get(key);
 
 					// null 是不会传入 bean 的
 					if (value != null) {
-						Class<?> t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
+						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
 						if (t == List.class) { // List 容器类，要处理里面的泛型
 							Type[] genericReturnType = ReflectUtil.getGenericReturnType(property.getReadMethod());
@@ -295,7 +299,8 @@ public class MapTool {
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				if (e instanceof IllegalArgumentException)
-					LOGGER.warning("[{0}] 参数类型不匹配，输入值是 [{1}]", key, v);
+					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value,
+							value != null ? value.getClass().toString() : "null");
 				else
 					LOGGER.warning(e);
 			}
