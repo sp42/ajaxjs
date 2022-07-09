@@ -29,17 +29,7 @@ public class RestResponseEntityExceptionHandler {
 
 		for (FieldError err : fieldErrors) {
 			msg += String.format(TPL, err.getField(), err.getDefaultMessage(), err.getRejectedValue());
-//			msg += "\\\\n";
 		}
-
-//		List<ObjectError> allErrors = e.getAllErrors();
-//		for (ObjectError err : allErrors) {
-//
-//			msg += err.getDefaultMessage();
-////			msg += StringUtils.arrayToDelimitedString(err.getCodes(), ",");
-////			System.out.println("::::::" + err.getCode());
-//			msg += "\\\\n";
-//		}
 
 		ResponseResult result = new ResponseResult();
 		result.setErrorCode("400");
@@ -47,5 +37,4 @@ public class RestResponseEntityExceptionHandler {
 
 		WebHelper.outputJson(resp, result.toString());
 	}
-
 }

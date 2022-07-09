@@ -15,6 +15,11 @@ public class DataServiceTable extends BaseModel {
     private String urlDir;
 
     private String urlRoot;
+    
+    /**
+     * 其他额外的配置信息
+     */
+    private String config;
 
     private Long datasourceId;
 
@@ -98,4 +103,12 @@ public class DataServiceTable extends BaseModel {
     public void setKeyGen(Integer keyGen) {
         this.keyGen = keyGen;
     }
+
+	public String getConfig() {
+		return config;
+	}
+
+	public void setConfig(String config) {
+		this.config = config;
+	}
 }

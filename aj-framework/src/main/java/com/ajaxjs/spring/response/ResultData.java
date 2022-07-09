@@ -4,6 +4,7 @@ public class ResultData<T> {
 	/** 结果状态 ,具体状态码参见ResultData.java */
 	private Integer status;
 	private String message;
+	
 	private T data;
 
 	private long timestamp;

@@ -36,7 +36,8 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
 	@Override
 	protected boolean supports(Class<?> clazz) {
-		boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz) || IBaseModel.class.isAssignableFrom(clazz);
+		boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz)
+				|| IBaseModel.class.isAssignableFrom(clazz);
 
 		if (isContainerType) // 优化：出现频率较高，放在前面
 			return true;
@@ -52,28 +53,40 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 	 * 从请求中读取该类型的方法参数
 	 */
 	@Override
-	protected Object readInternal(Class<? extends Object> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+	protected Object readInternal(Class<? extends Object> clazz, HttpInputMessage inputMessage)
+			throws IOException, HttpMessageNotReadableException {
+
 		boolean isMapParams = clazz == Map.class;
+		boolean isListParams = clazz == List.class;
 		boolean isJavaBean = IBaseModel.class.isAssignableFrom(clazz);
 //		System.out.println("readInternal:::" + inputMessage);
 //		System.out.println("readInternal:::" + isJavaBean);
 
 		// 对于 @RequestBody 有效
-		if (isMapParams || isJavaBean) {
+		if (isMapParams || isJavaBean || isListParams) {
 			String jsonStr = StreamUtils.copyToString(inputMessage.getBody(), Charset.forName("UTF-8"));
-			Map<String, Object> parseMap = JsonHelper.parseMap(jsonStr);
 
-			if (!isJavaBean)
-				return parseMap;
-			else
-				// raw body json to bean
-				return MapTool.map2Bean(parseMap, clazz, true);
-		} else
-			return null;
+			if (isListParams) {
+				List<Map<String, Object>> parseList = JsonHelper.parseList(jsonStr);
+				return parseList;
+			} else {
+				Map<String, Object> parseMap = JsonHelper.parseMap(jsonStr);
+
+				if (!isJavaBean)
+					return parseMap;
+				else
+					// raw body json to bean
+					return MapTool.map2Bean(parseMap, clazz, true);
+			}
+		}
+
+		return null;
+
 	}
 
 	@Override
-	protected void writeInternal(Object result, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+	protected void writeInternal(Object result, HttpOutputMessage outputMessage)
+			throws IOException, HttpMessageNotWritableException {
 		/*
 		 * Spring Boot 如果 RestController 中返回 null，则不会走进自定义 HttpMessageConverter
 		 * https://www.v2ex.com/t/452195 暂时无解，请不要返回 null

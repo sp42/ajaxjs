@@ -13,6 +13,27 @@ import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
  * @author Frank Cheung
  */
 public class ServiceContext {
+	private Map<String, Object> requestParams;
+
+	private CRUD crudType;
+
+	private String uri;
+
+	/**
+	 * 操作者 id
+	 */
+	private Long userId;
+
+	private DataSource datasource;
+
+	private String sql;
+
+	private Map<String, Object> sqlParam;
+
+	private String[] sqls;
+
+	private Map<String, Object>[] sqlParams;
+
 	/**
 	 * 自定义错误信息，返回给前端
 	 */
@@ -38,7 +59,8 @@ public class ServiceContext {
 	 * @param params
 	 * @return
 	 */
-	public static ServiceContext factory(String uri, HttpServletRequest req, DataServiceDml node, Map<String, Object> params) {
+	public static ServiceContext factory(String uri, HttpServletRequest req, DataServiceDml node,
+			Map<String, Object> params) {
 		ServiceContext ctx = new ServiceContext(uri, req);
 		ctx.setNode(node);
 		ctx.setDatasource(node.getDataSource());
@@ -143,27 +165,6 @@ public class ServiceContext {
 	public void setSqlParams(Map<String, Object>[] sqlParams) {
 		this.sqlParams = sqlParams;
 	}
-
-	private Map<String, Object> requestParams;
-
-	private CRUD crudType;
-
-	private String uri;
-
-	/**
-	 * 操作者 id
-	 */
-	private Long userId;
-
-	private DataSource datasource;
-
-	private String sql;
-
-	private Map<String, Object> sqlParam;
-
-	private String[] sqls;
-
-	private Map<String, Object>[] sqlParams;
 
 	public DataServiceDml getNode() {
 		return node;

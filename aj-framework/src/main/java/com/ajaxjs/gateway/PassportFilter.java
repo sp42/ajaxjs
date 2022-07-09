@@ -49,7 +49,7 @@ public class PassportFilter implements HandlerInterceptor {
 
 			for (Map<String, Object> map : list) {
 				Passport passport = MapTool.map2Bean(map, Passport.class);
-				CLIENTS.put(token, passport);
+				CLIENTS.put(clientId, passport);
 			}
 		}
 
@@ -61,10 +61,7 @@ public class PassportFilter implements HandlerInterceptor {
 //		Map<String, Object> auth = authO.get();
 //		Passport passport = MapTool.map2Bean(auth, Passport.class);
 
-		if (CLIENTS.containsKey(token))
-			throw new IllegalAccessError("非法客户端 id：" + clientId);
-
-		Passport passport = CLIENTS.get(token);
+		Passport passport = getPassportByClientId(clientId);
 
 		if (!token.equals(passport.getToken()))
 			throw new IllegalAccessError("非法客户端 token：" + token);
@@ -73,19 +70,34 @@ public class PassportFilter implements HandlerInterceptor {
 	}
 
 	private Long getTenantIdByClientId(String clientId) {
-		if (!CLIENTS.containsKey(clientId))
-			throw new NullPointerException("找不到认证： " + clientId);
-
-		return CLIENTS.get(clientId).getTenantId();
+		return getPassportByClientId(clientId).getTenantId();
 	}
 
 	private Long getPortalIdByClientId(String clientId) {
-		if (!CLIENTS.containsKey(clientId))
-			throw new NullPointerException("找不到认证： " + clientId);
-
-		return CLIENTS.get(clientId).getPortalId();
+		return getPassportByClientId(clientId).getPortalId();
 	}
-
+	
+	/**
+	 * 
+	 * @param req
+	 * @return
+	 */
+	public Passport getPassportByClientId(HttpServletRequest req) {
+		String clientId = req.getHeader(CLIENT_ID);
+		return getPassportByClientId(clientId);
+	}
+	
+	/**
+	 * 
+	 * @param clientId
+	 * @return
+	 */
+	public Passport getPassportByClientId(String clientId) {
+		if (!CLIENTS.containsKey(clientId))
+			throw new IllegalAccessError("非法客户端 id：" + clientId);
+		
+		return CLIENTS.get(clientId);
+	}
 	/**
 	 * 检测是否有效
 	 * 

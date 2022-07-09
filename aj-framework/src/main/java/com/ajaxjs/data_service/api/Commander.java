@@ -49,7 +49,8 @@ public abstract class Commander extends BaseCommander {
 //		}
 
 		if ("list".equals(node.getType()) || "getRows".equals(node.getType()) || "getRowsPage".equals(node.getType())) {
-			if ((node.containsKey("pageMode") && (1 == (int) node.get("pageMode"))) || "getRowsPage".equals(node.getType()))
+			if ((node.containsKey("pageMode") && (1 == (int) node.get("pageMode")))
+					|| "getRowsPage".equals(node.getType()))
 				return page(ctx, plugins);
 			else
 				return list(ctx, plugins); // 不分页
@@ -79,7 +80,7 @@ public abstract class Commander extends BaseCommander {
 		try {// 避免 null point
 			DataServiceFieldsMapping fieldsMapping = ctx.getNode().getTableInfo().getFieldsMapping();
 
-			if (fieldsMapping != null) {
+			if (fieldsMapping != null && result != null) {
 				if (fieldsMapping.getDbStyle2CamelCase() != null && fieldsMapping.getDbStyle2CamelCase()) {
 					// 数据库风格 转换 驼峰
 					Map<String, Object> camel = new HashMap<>(result.size());
@@ -135,7 +136,7 @@ public abstract class Commander extends BaseCommander {
 		String sql = where(ctx);
 
 		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
-		
+
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
 				if (!plugin.before(CRUD.LIST, ctx))
