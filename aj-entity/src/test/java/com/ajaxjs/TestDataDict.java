@@ -12,14 +12,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.ajaxjs.entity.datadict.DataDict;
-import com.ajaxjs.entity.datadict.DataDictService;
+import com.ajaxjs.entity.datadict.DataDictServiceImpl;
 
 @ContextConfiguration(classes = TestConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public class TestDataDict {
 	@Autowired
-	DataDictService dataDictService;
+	DataDictServiceImpl dataDictService;
 
 	@Test
 	public void test() {

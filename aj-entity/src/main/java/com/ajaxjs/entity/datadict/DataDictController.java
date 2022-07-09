@@ -18,26 +18,31 @@ import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
 
 @RestController
-@InterfaceBasedController(serviceClass = DataDictService.class)
+@InterfaceBasedController(serviceClass = DataDictServiceImpl.class)
 @RequestMapping("/data_dict")
-public interface DataDictController {
+public interface DataDictController extends IDataDictService {
 	@GetMapping("/{parentId}/children")
 	@ControllerMethod("获取数据字典，包含所有子节点")
+	@Override
 	List<DataDict> getDataDictChildren(@PathVariable Long parentId);
 
 	@GetMapping("/{parentId}")
 	@ControllerMethod("获取数据字典，只是当期一级的节点")
+	@Override
 	List<DataDict> getDataDict(@PathVariable Long parentId);
 
 	@PostMapping
 	@ControllerMethod("创建数据字典")
+	@Override
 	DataDict createDataDict(@Valid @RequestBody DataDict dataDict);
 
 	@PutMapping
 	@ControllerMethod("创建数据字典")
+	@Override
 	Boolean updateDataDict(DataDict dataDict);
 
 	@DeleteMapping("/{id}")
 	@ControllerMethod("删除数据字典")
+	@Override
 	Boolean deleteDataDict(@PathVariable Long id, @RequestParam(required = false) Boolean isDeleteChildren);
 }

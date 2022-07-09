@@ -17,7 +17,7 @@ import com.ajaxjs.entity.CRUD;
  *
  */
 @Service
-public class DataDictService {
+public class DataDictServiceImpl implements IDataDictService {
 	public List<DataDict> getDataDictChildren(Long parentId) {
 
 		return null;
@@ -26,6 +26,7 @@ public class DataDictService {
 	@Autowired
 	LocalValidatorFactoryBean v;
 
+	@Override
 	public List<DataDict> getDataDict(Long parentId) {
 		List<DataDict> list = DataDictDao.DataDictDAO.setWhereQuery("parentId", parentId).findList();
 
@@ -35,15 +36,18 @@ public class DataDictService {
 		return list;
 	}
 
+	@Override
 	public DataDict createDataDict(DataDict dataDict) {
 		System.out.println(dataDict.getId());
 		return CRUD.create(dataDict, DataDictDao.DataDictDAO);
 	}
 
+	@Override
 	public Boolean updateDataDict(DataDict dataDict) {
 		return CRUD.update(dataDict, DataDictDao.DataDictDAO);
 	}
 
+	@Override
 	public Boolean deleteDataDict(Long id, Boolean isDeleteChildren) {
 		if (isDeleteChildren) {
 
