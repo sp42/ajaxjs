@@ -95,11 +95,12 @@ public class MappingValue {
 		if (value instanceof String) {
 			String _value = (String) value;
 
-			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1") || _value.equalsIgnoreCase("on"))
+			if (_value.equalsIgnoreCase("yes") || _value.equalsIgnoreCase("true") || _value.equals("1")
+					|| _value.equalsIgnoreCase("on"))
 				return true;
 
-			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0") || _value.equalsIgnoreCase("off")
-					|| _value.equalsIgnoreCase("null"))
+			if (_value.equalsIgnoreCase("no") || _value.equalsIgnoreCase("false") || _value.equals("0")
+					|| _value.equalsIgnoreCase("off") || _value.equalsIgnoreCase("null"))
 				return false;
 		}
 
@@ -209,6 +210,8 @@ public class MappingValue {
 		} else if (target == float.class || target == Float.class) {
 			if (value instanceof Double) {
 				value = ((Double) value).floatValue();
+			} else if (value instanceof Integer) {
+				value = ((Integer) value).floatValue();
 			}
 		} else if (value instanceof String && IBaseModel.class.isAssignableFrom(target)) {
 			// json2bean

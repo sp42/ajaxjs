@@ -1,5 +1,5 @@
 /**
- * Copyright Sp42 frank@ajaxjs.com Licensed under the Apache License, Version
+≠ * Copyright Sp42 frank@ajaxjs.com Licensed under the Apache License, Version
  * 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -74,7 +74,8 @@ public class ReflectUtil {
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
 			return constructor.newInstance(args); // 实例化
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
 			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
 			return null;
 		}
@@ -388,7 +389,8 @@ public class ReflectUtil {
 	 * @return 实际异常对象
 	 */
 	public static Throwable getUnderLayerErr(Throwable e) {
-		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
+		while (e.getClass().equals(InvocationTargetException.class)
+				|| e.getClass().equals(UndeclaredThrowableException.class)) {
 			e = e.getCause();
 		}
 
@@ -530,7 +532,8 @@ public class ReflectUtil {
 			method = getSuperClassDeclaredMethod(clazz, setMethodName);
 
 		// 最终还是找不到
-		Objects.requireNonNull(method, "找不到目标方法[" + clazz.getSimpleName() + "." + setMethodName + "(" + value.getClass().getSimpleName() + ")]");
+		Objects.requireNonNull(method, "找不到目标方法[" + clazz.getSimpleName() + "." + setMethodName + "("
+				+ value.getClass().getSimpleName() + ")]");
 
 		executeMethod(bean, method, value);
 	}
@@ -570,13 +573,33 @@ public class ReflectUtil {
 	public static Type[] getGenericReturnType(Method method) {
 		Type genericReturnType = method.getGenericReturnType();
 
-		if (genericReturnType instanceof ParameterizedType) {
-			Type[] actualTypeArguments = ((ParameterizedType) genericReturnType).getActualTypeArguments();
+		return getActualType(genericReturnType);
+	}
 
-			return actualTypeArguments;
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static Type[] getActualType(Type type) {
+		if (type instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType) type;
+
+			return pt.getActualTypeArguments();
 		}
 
 		return null;
+	}
+
+	/**
+	 * 获取如 List<String> 里面的泛型类型
+	 * 
+	 * @param clz 类必须先指向一个实例，参见
+	 *            https://stackoverflow.com/questions/8436055/how-to-get-class-of-generic-type-when-there-is-no-parameter-of-it
+	 * @return
+	 */
+	public static Type[] getActualType(Class<?> clz) {
+		return getActualType(clz.getGenericSuperclass());
 	}
 
 	/**
