@@ -36,8 +36,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
 	@Override
 	protected boolean supports(Class<?> clazz) {
-		boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz)
-				|| IBaseModel.class.isAssignableFrom(clazz);
+		boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz) || IBaseModel.class.isAssignableFrom(clazz);
 
 		if (isContainerType) // 优化：出现频率较高，放在前面
 			return true;
@@ -53,9 +52,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 	 * 从请求中读取该类型的方法参数
 	 */
 	@Override
-	protected Object readInternal(Class<? extends Object> clazz, HttpInputMessage inputMessage)
-			throws IOException, HttpMessageNotReadableException {
-
+	protected Object readInternal(Class<? extends Object> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
 		boolean isMapParams = clazz == Map.class;
 		boolean isListParams = clazz == List.class;
 		boolean isJavaBean = IBaseModel.class.isAssignableFrom(clazz);
@@ -81,12 +78,10 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 		}
 
 		return null;
-
 	}
 
 	@Override
-	protected void writeInternal(Object result, HttpOutputMessage outputMessage)
-			throws IOException, HttpMessageNotWritableException {
+	protected void writeInternal(Object result, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
 		/*
 		 * Spring Boot 如果 RestController 中返回 null，则不会走进自定义 HttpMessageConverter
 		 * https://www.v2ex.com/t/452195 暂时无解，请不要返回 null

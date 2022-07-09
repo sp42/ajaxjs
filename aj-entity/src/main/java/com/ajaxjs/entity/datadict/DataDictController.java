@@ -22,14 +22,19 @@ import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
 @RequestMapping("/data_dict")
 public interface DataDictController extends IDataDictService {
 	@GetMapping("/{parentId}/children")
-	@ControllerMethod("获取数据字典，包含所有子节点")
+	@ControllerMethod("获取数据字典，包含父节点下面所有的子节点")
 	@Override
 	List<DataDict> getDataDictChildren(@PathVariable Long parentId);
 
 	@GetMapping("/{parentId}")
-	@ControllerMethod("获取数据字典，只是当期一级的节点")
+	@ControllerMethod("获取数据字典，只是父节点下一级的子节点")
 	@Override
 	List<DataDict> getDataDict(@PathVariable Long parentId);
+
+	@GetMapping("/{id}/getDepthById")
+	@ControllerMethod("计算树节点的嵌套树深度")
+	@Override
+	public Integer getDepthById(@PathVariable Long id);
 
 	@PostMapping
 	@ControllerMethod("创建数据字典")

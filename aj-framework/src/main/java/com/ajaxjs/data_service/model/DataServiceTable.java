@@ -1,6 +1,7 @@
 package com.ajaxjs.data_service.model;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IBaseModel;
 
 import java.util.Map;
 
@@ -9,100 +10,100 @@ import java.util.Map;
  *
  * @author Frank Cheung
  */
-public class DataServiceTable extends BaseModel {
-    private String tableName;
+public class DataServiceTable extends BaseModel implements IBaseModel {
+	private String tableName;
 
-    private String urlDir;
+	private String urlDir;
 
-    private String urlRoot;
-    
-    /**
-     * 其他额外的配置信息
-     */
-    private String config;
+	private String urlRoot;
 
-    private Long datasourceId;
+	/**
+	 * 其他额外的配置信息
+	 */
+	private String config;
 
-    /**
-     * 主键生成策略 1=自增 2=雪花 3=uuid
-     */
-    private Integer keyGen;
+	private Long datasourceId;
 
-    /**
-     * key 字段名，value 字段注释
-     */
-    private Map<String, String> fields;
+	/**
+	 * 主键生成策略 1=自增 2=雪花 3=uuid
+	 */
+	private Integer keyGen;
 
-    /**
-     * 字段映射
-     */
-    private DataServiceFieldsMapping fieldsMapping;
+	/**
+	 * key 字段名，value 字段注释
+	 */
+	private Map<String, String> fields;
 
-    public DataServiceFieldsMapping getFieldsMapping() {
-        return fieldsMapping;
-    }
+	/**
+	 * 字段映射
+	 */
+	private DataServiceFieldsMapping fieldsMapping;
 
-    public void setFieldsMapping(DataServiceFieldsMapping fieldsMapping) {
-        this.fieldsMapping = fieldsMapping;
-    }
+	public DataServiceFieldsMapping getFieldsMapping() {
+		return fieldsMapping;
+	}
 
-    public String getJson() {
-        return json;
-    }
+	public void setFieldsMapping(DataServiceFieldsMapping fieldsMapping) {
+		this.fieldsMapping = fieldsMapping;
+	}
 
-    public void setJson(String json) {
-        this.json = json;
-    }
+	public String getJson() {
+		return json;
+	}
 
-    public String getTableName() {
-        return tableName;
-    }
+	public void setJson(String json) {
+		this.json = json;
+	}
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
+	public String getTableName() {
+		return tableName;
+	}
 
-    public String getUrlDir() {
-        return urlDir;
-    }
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 
-    public void setUrlDir(String urlDir) {
-        this.urlDir = urlDir;
-    }
+	public String getUrlDir() {
+		return urlDir;
+	}
 
-    public Long getDatasourceId() {
-        return datasourceId;
-    }
+	public void setUrlDir(String urlDir) {
+		this.urlDir = urlDir;
+	}
 
-    public void setDatasourceId(Long datasourceId) {
-        this.datasourceId = datasourceId;
-    }
+	public Long getDatasourceId() {
+		return datasourceId;
+	}
 
-    public Map<String, String> getFields() {
-        return fields;
-    }
+	public void setDatasourceId(Long datasourceId) {
+		this.datasourceId = datasourceId;
+	}
 
-    public void setFields(Map<String, String> fields) {
-        this.fields = fields;
-    }
+	public Map<String, String> getFields() {
+		return fields;
+	}
 
-    private String json;
+	public void setFields(Map<String, String> fields) {
+		this.fields = fields;
+	}
 
-    public String getUrlRoot() {
-        return urlRoot;
-    }
+	private String json;
 
-    public void setUrlRoot(String urlRoot) {
-        this.urlRoot = urlRoot;
-    }
+	public String getUrlRoot() {
+		return urlRoot;
+	}
 
-    public Integer getKeyGen() {
-        return keyGen;
-    }
+	public void setUrlRoot(String urlRoot) {
+		this.urlRoot = urlRoot;
+	}
 
-    public void setKeyGen(Integer keyGen) {
-        this.keyGen = keyGen;
-    }
+	public Integer getKeyGen() {
+		return keyGen;
+	}
+
+	public void setKeyGen(Integer keyGen) {
+		this.keyGen = keyGen;
+	}
 
 	public String getConfig() {
 		return config;

@@ -49,8 +49,7 @@ public abstract class Commander extends BaseCommander {
 //		}
 
 		if ("list".equals(node.getType()) || "getRows".equals(node.getType()) || "getRowsPage".equals(node.getType())) {
-			if ((node.containsKey("pageMode") && (1 == (int) node.get("pageMode")))
-					|| "getRowsPage".equals(node.getType()))
+			if ((node.containsKey("pageMode") && (1 == (int) node.get("pageMode"))) || "getRowsPage".equals(node.getType()))
 				return page(ctx, plugins);
 			else
 				return list(ctx, plugins); // 不分页
@@ -396,6 +395,7 @@ public abstract class Commander extends BaseCommander {
 
 		try (SqlSession session = getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).update(sql, params);
+			// 有时没 update 到数据，却返回 1
 			session.commit();
 			boolean isOK = effectedRow > 0;
 

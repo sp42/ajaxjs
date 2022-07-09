@@ -52,7 +52,8 @@ public class AdminController extends BaseController implements DataServiceDAO {
 
 	@GetMapping(produces = JSON)
 	@DataBaseFilter
-	public String list(HttpServletRequest req, @RequestParam(defaultValue = "0") int start, @RequestParam(defaultValue = "9") int limit, Long datasourceId) {
+	public PageResult<DataServiceTable> list(HttpServletRequest req, @RequestParam(defaultValue = "0") int start, @RequestParam(defaultValue = "9") int limit,
+			Long datasourceId) {
 		LOGGER.info("获取表配置列表");
 
 		Function<String, String> handler = BaseService::searchQuery_NameOnly;
@@ -61,7 +62,7 @@ public class AdminController extends BaseController implements DataServiceDAO {
 			handler = handler.andThen(QueryTools.by("datasourceId", datasourceId));
 
 		PageResult<DataServiceTable> pagedList = DataServiceAdminDAO.findPagedList(start, limit, handler);
-		return toJson(pagedList);
+		return pagedList;
 	}
 
 	@DataBaseFilter
@@ -100,22 +101,22 @@ public class AdminController extends BaseController implements DataServiceDAO {
 	}
 
 	@DataBaseFilter
-	@PutMapping(value = ID_INFO, produces = JSON)
-	public String update(@PathVariable long id, HttpServletRequest req) {
+	@PutMapping(value = ID_INFO)
+	public Boolean update(@PathVariable long id, HttpServletRequest req) {
 		DataServiceTable entity = WebHelper.getParameterBean(req, DataServiceTable.class);
 		entity.setId(id);
 
 		if (DataServiceAdminDAO.update(entity) >= 1) {
 			apiController.init();// 重新加载配置
 
-			return jsonOk("修改成功");
+			return true;
 		} else
-			return jsonOk("修改失败");
+			return false;
 	}
 
 	@DataBaseFilter
-	@DeleteMapping(value = ID_INFO, produces = JSON)
-	public String delete(@PathVariable long id) {
+	@DeleteMapping(value = ID_INFO)
+	public Boolean delete(@PathVariable long id) {
 		LOGGER.info("删除配置 {0}", id);
 		DataServiceTable dataServiceTable = new DataServiceTable();
 		dataServiceTable.setId(id);
@@ -123,19 +124,19 @@ public class AdminController extends BaseController implements DataServiceDAO {
 		if (DataServiceAdminDAO.delete(dataServiceTable)) {
 			apiController.init();// 重新加载配置
 
-			return jsonOk("删除成功");
+			return true;
 		} else
-			return jsonOk("删除失败");
+			return false;
 	}
 
 	@GetMapping(value = "getDatabases", produces = JSON)
 	@DataBaseFilter
-	public String getDatabases(Long datasourceId) throws SQLException, ClassNotFoundException {
+	public List<String> getDatabases(Long datasourceId) throws SQLException, ClassNotFoundException {
 		LOGGER.info("查询数据库 {0}", datasourceId);
 		MyDataSource dataSource = DataSourceDAO.findById(datasourceId);
 
 		if (dataSource.getCrossDB() == null || !dataSource.getCrossDB())
-			return jsonNoOk("不是跨库的数据库连接");
+			throw new NullPointerException("不是跨库的数据库连接");
 
 		List<String> databases;
 
@@ -144,12 +145,13 @@ public class AdminController extends BaseController implements DataServiceDAO {
 		}
 
 		LOGGER.info("查询数据库 {0}", databases.size());
-		return toJson(databases);
+
+		return databases;
 	}
 
 	@DataBaseFilter
 	@RequestMapping(value = ID_INFO, produces = JSON)
-	public String getInfo(@PathVariable(ID) long id, String dbName) throws ClassNotFoundException, SQLException {
+	public DataServiceTable getInfo(@PathVariable(ID) long id, String dbName) throws ClassNotFoundException, SQLException {
 		LOGGER.info("加载表详情");
 		DataServiceTable info = DataServiceAdminDAO.findById(id);
 
@@ -182,7 +184,7 @@ public class AdminController extends BaseController implements DataServiceDAO {
 			info.setFields(map);
 		}
 
-		return toJson(info);
+		return info;
 	}
 
 	@GetMapping(value = "reload", produces = JSON)

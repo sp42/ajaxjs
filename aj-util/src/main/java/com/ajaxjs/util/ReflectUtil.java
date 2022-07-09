@@ -61,6 +61,7 @@ public class ReflectUtil {
 
 		// 获取构造器
 		Constructor<T> constructor = getConstructor(clz, args2class(args));
+		
 		return newInstance(constructor, args);
 	}
 

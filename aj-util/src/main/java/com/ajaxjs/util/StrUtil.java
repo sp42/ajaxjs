@@ -313,6 +313,20 @@ public class StrUtil {
 
 	}
 
+	public static <T> String join(T[] arr, String str) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, len = arr.length; i < len; i++) {
+			String s = arr[i].toString();
+
+			if (i != (len - 1))
+				sb.append(s + str);
+			else
+				sb.append(s);
+		}
+
+		return sb.toString();
+	}
+
 	public static String join(List<String> list, String str) {
 		return join(list, null, str);
 	}

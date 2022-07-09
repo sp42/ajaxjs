@@ -164,8 +164,9 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 
 			args = makeMapArgs(method, args);
 			return update(methodName, args);
-		} else if (methodName.equals("delete")) {
+		} else if (methodName.equals("delete") || methodName.startsWith("delete")) {
 			LOGGER.info("相当于 HTTP DELETE");
+			args = makeMapArgs(method, args);
 			return delete(methodName, args);
 		} else {
 			LOGGER.info("其他自定义命令");

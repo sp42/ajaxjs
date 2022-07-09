@@ -47,8 +47,8 @@ public class MyDataSourceController extends BaseController implements DataServic
 	private static final LogHelper LOGGER = LogHelper.getLog(MyDataSourceController.class);
 
 	@DataBaseFilter
-	@GetMapping(produces = JSON)
-	public String list(HttpServletRequest req, String appId) {
+	@GetMapping
+	public List<MyDataSource> list(HttpServletRequest req, String appId) {
 		LOGGER.info("数据源列表" + appId);
 
 		Function<String, String> handler = BaseService::searchQuery_NameOnly;
@@ -57,7 +57,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 		if (appId != null)
 			handler = handler.andThen(QueryTools.by("appId", appId));
 
-		return toJson(DataSourceDAO.findList(handler));
+		return DataSourceDAO.findList(handler);
 	}
 
 	@DataBaseFilter
@@ -202,7 +202,8 @@ public class MyDataSourceController extends BaseController implements DataServic
 	@ResponseBody
 	@DataBaseFilter
 	@GetMapping(value = "/{id}/getFields/{tableName}", produces = JSON)
-	public String getFields(@PathVariable(ID) Long datasourceId, @PathVariable("tableName") String tableName, String dbName) throws SQLException, ClassNotFoundException {
+	public String getFields(@PathVariable(ID) Long datasourceId, @PathVariable("tableName") String tableName, String dbName)
+			throws SQLException, ClassNotFoundException {
 		LOGGER.info("获取所有字段:" + tableName + " 数据库：" + dbName);
 
 		return getField(datasourceId, tableName, dbName);

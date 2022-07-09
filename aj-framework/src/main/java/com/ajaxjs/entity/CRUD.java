@@ -1,7 +1,12 @@
 package com.ajaxjs.entity;
 
+import java.util.List;
+
+import org.springframework.util.CollectionUtils;
+
 import com.ajaxjs.data_service.sdk.IDataService;
 import com.ajaxjs.framework.Identity;
+import com.ajaxjs.util.ReflectUtil;
 
 /**
  * 通用的 CRUD 业务方法
@@ -38,5 +43,32 @@ public class CRUD {
 			throw new IllegalArgumentException("缺少 id 参数，不知道修改哪条记录");
 
 		return dao.update((T) bean);
+	}
+
+	public static <T extends Identity<Long>> boolean delete(Long id, IDataService<T> dao, Class<T> beanClz) {
+		T bean = ReflectUtil.newInstance(beanClz);
+		bean.setId(id);
+
+		return dao.delete(bean);
+	}
+
+	/**
+	 * 取出实体中 id
+	 * 
+	 * @param dicts
+	 * @return
+	 */
+	public static Long[] getIds(List<? extends Identity<Long>> dicts) {
+		if (CollectionUtils.isEmpty(dicts))
+			return new Long[0];
+		else {
+			Long[] ids = new Long[dicts.size()];
+
+			int i = 0;
+			for (Identity<Long> bean : dicts)
+				ids[i++] = bean.getId();
+
+			return ids;
+		}
 	}
 }

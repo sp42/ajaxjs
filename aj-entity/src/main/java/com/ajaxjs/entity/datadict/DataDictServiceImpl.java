@@ -1,6 +1,6 @@
 package com.ajaxjs.entity.datadict;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import com.ajaxjs.entity.CRUD;
+import com.ajaxjs.util.StrUtil;
 
 /**
  * 数据字典，也是树状结构
@@ -17,10 +18,14 @@ import com.ajaxjs.entity.CRUD;
  *
  */
 @Service
-public class DataDictServiceImpl implements IDataDictService {
+public class DataDictServiceImpl implements IDataDictService, DataDictDao {
 	public List<DataDict> getDataDictChildren(Long parentId) {
+		List<DataDict> list = DataDictDAO.getListByParentId(parentId);
 
-		return null;
+		if (CollectionUtils.isEmpty(list))
+			list = Collections.emptyList();
+
+		return list;
 	}
 
 	@Autowired
@@ -28,32 +33,44 @@ public class DataDictServiceImpl implements IDataDictService {
 
 	@Override
 	public List<DataDict> getDataDict(Long parentId) {
-		List<DataDict> list = DataDictDao.DataDictDAO.setWhereQuery("parentId", parentId).findList();
+		List<DataDict> list = DataDictDAO.setWhereQuery("parentId", parentId).findList();
 
 		if (CollectionUtils.isEmpty(list))
-			list = new ArrayList<>();
+			list = Collections.emptyList();
 
 		return list;
 	}
 
 	@Override
+	public Integer getDepthById(Long id) {
+		return DataDictDAO.getDepthById(id);
+	}
+
+	@Override
 	public DataDict createDataDict(DataDict dataDict) {
-		System.out.println(dataDict.getId());
-		return CRUD.create(dataDict, DataDictDao.DataDictDAO);
+		if (dataDict.getParentId() == null)
+			throw new IllegalArgumentException("缺少 parentId 参数");
+
+		return CRUD.create(dataDict, DataDictDAO);
 	}
 
 	@Override
 	public Boolean updateDataDict(DataDict dataDict) {
-		return CRUD.update(dataDict, DataDictDao.DataDictDAO);
+		return CRUD.update(dataDict, DataDictDAO);
 	}
 
 	@Override
 	public Boolean deleteDataDict(Long id, Boolean isDeleteChildren) {
 		if (isDeleteChildren) {
+			Long[] ids = CRUD.getIds(getDataDictChildren(id));
 
-		}
+			if (ids.length > 0)
+				DataDictDAO.deleteChildren(StrUtil.join(ids, ","));
 
-		return DataDictDao.DataDictDAO.delete(id);
+			return false;
+		} else
+
+			return CRUD.delete(id, DataDictDAO, DataDict.class);
 	}
 
 }
