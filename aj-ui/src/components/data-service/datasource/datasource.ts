@@ -1,4 +1,4 @@
-import { xhr_get, xhr_post, xhr_put } from '../../../util/xhr';
+import { xhr_get, xhr_post, xhr_put, getPageList } from '../../../util/xhr';
 import List from '../../widget/list';
 
 const DBType: {} = { 1: 'MySQL', 2: 'Oracle', 3: 'SqlServer', 4: 'Spark', 5: 'SQLite' };
@@ -65,15 +65,7 @@ export default {
             if (dp_appId)
                 params.appId = dp_appId;
 
-            xhr_get(this.API, (j: RepsonseResult) => {
-                if (j.result) {
-                    // @ts-ignore
-                    this.list.total = j.total;
-                    console.log(j.result)
-                    this.list.data = j.result;
-                } else
-                    this.$Message.warning('获取数据失败');
-            }, params);
+            xhr_get(this.API, getPageList(this, this.list), params);
         },
 
         /**

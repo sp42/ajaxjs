@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-//@EnableDubbo(scanBasePackages = "com.ajaxjs")
+@EnableDubbo(scanBasePackages = "com.ajaxjs")
 public class ProviderConfiguration {
 	@Bean // #2
 	public ApplicationConfig applicationConfig() {

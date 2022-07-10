@@ -1,4 +1,4 @@
-import { xhr_get, xhr_post } from '../../util/xhr';
+import { xhr_get, xhr_post, getPageList } from '../../util/xhr';
 import SearchPanel from '../widget/search-panel.vue';
 import TagListPanel from '../widget/tag-list-panel.vue';
 import List from '../widget/list';
@@ -74,7 +74,9 @@ export default {
             this.getData();
         },
         getData(): void {
-            xhr_get(this.isEmbed ? this.API : `${this.API}?datasourceId=${this.datasource.id}`, List.getListResult.bind(this), {
+            const url: string = this.isEmbed ? this.API : `${this.API}?datasourceId=${this.datasource.id}`;
+            
+            xhr_get(url, getPageList(this, this.list), {
                 start: this.list.start,
                 limit: this.list.limit
             });

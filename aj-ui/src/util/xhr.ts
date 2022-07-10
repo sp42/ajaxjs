@@ -81,14 +81,12 @@ function postOrPut(method: 'post' | 'put', url: string, cb: XhrCallback, params:
             xhr.setRequestHeader(key, BASE_HEAD_PARAMS[key]);
 
     // 此方法必须在 open() 方法和 send() 之间调用
-    if (cfg.contentType === null) {
-        // 如果为 null 表示什么 Content-Type 都不设置
-    } else {
-        if (!cfg.contentType) // 如未设置，默认为表单请求
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        else
-            xhr.setRequestHeader("Content-Type", cfg.contentType);
-    }
+
+    if (!cfg.contentType) // 如未设置，默认为表单请求
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    else
+        xhr.setRequestHeader("Content-Type", cfg.contentType);
+
 
     let _params: string = typeof params != 'string' ? toParams(params) : <string>params;
 
@@ -96,6 +94,29 @@ function postOrPut(method: 'post' | 'put', url: string, cb: XhrCallback, params:
         xhr.send(_params);
     else
         xhr.send();
+}
+
+/**
+ * 
+ * @param url 
+ * @param cb 
+ * @param params 
+ * @param cfg 
+ */
+export function xhr_post_upload(url: string, cb: XhrCallback, params: Document | XMLHttpRequestBodyInit, cfg: XhrConfig = DEFAULT_XHR_CFG): void {
+    let xhr: XMLHttpRequest = initXhr(cfg);
+    xhr.open('post', url, true);
+    xhr.onreadystatechange = function () {
+        responseHandle(this, cb, cfg);
+    }
+
+    if (BASE_HEAD_PARAMS) // 设置自定义请求头
+        for (let key in BASE_HEAD_PARAMS)
+            xhr.setRequestHeader(key, BASE_HEAD_PARAMS[key]);
+
+    // 什么 Content-Type 都不设置
+
+    xhr.send(params);
 }
 
 /**
@@ -262,6 +283,12 @@ export function getQuery(val: string): string {
     return '';
 }
 
-export function xhr_post_upload(): void {
-
+export function getPageList(self: any, listArray: any): XhrCallback {
+    return (j: JsonResponse) => {
+        if (j.status) {
+            listArray.total = j.total;
+            listArray.data = j.data;
+        } else
+            self.$Message.warning(j.message || '获取数据失败');
+    }
 }

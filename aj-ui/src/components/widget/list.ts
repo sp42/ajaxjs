@@ -29,15 +29,6 @@ export default {
      */
     id: { title: '#', width: 60, key: 'id', align: 'center' },
 
-    getListResult(j: RepsonseResult): void {
-        if (j.result) {
-            this.list.data = j.result;
-            // @ts-ignore
-            this.list.total = j.total;
-        }
-        else this.$Message.warning(j.msg || '获取数据失败');
-    },
-
     /**
      * 创建日期
      */

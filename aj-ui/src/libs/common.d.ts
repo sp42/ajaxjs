@@ -33,6 +33,31 @@ declare interface RepsonseResult {
     total?: number;
 }
 
+/**
+ * JSON 接口返回的通用
+ */
+type JsonResponse = {
+    /**
+     * 1 = 成功，0 = 失败
+     */
+    status: number;
+
+    /**
+     * 信息
+     */
+    message: string;
+
+    /**
+     * 分页的总数
+     */
+    total?: number;
+
+    /**
+     * 返回数据
+     */
+    data: any;
+};
+
 // 官方 API 还没提供，自己写一个
 interface FileReaderEventTarget extends EventTarget {
     result: string
