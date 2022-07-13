@@ -22,8 +22,7 @@ public class ProviderConfiguration {
 	@Bean // #1
 	public ProviderConfig providerConfig() {
 		ProviderConfig provider = new ProviderConfig();
-		provider.setTimeout(1000);
-
+		provider.setTimeout(3000);
 
 		return provider;
 	}
@@ -31,8 +30,10 @@ public class ProviderConfiguration {
 	@Bean // #3
 	public RegistryConfig registryConfig() {
 		RegistryConfig registry = new RegistryConfig();
-		registry.setAddress("N/A"); // 直连
-		registry.setCheck(false);
+//		registry.setAddress("N/A"); // 直连
+//		registry.setCheck(false);
+		registry.setAddress("etcd3://58.248.254.12:2379");
+		registry.setCheck(true);
 
 		return registry;
 	}

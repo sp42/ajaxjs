@@ -39,6 +39,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 	private String controllerPackage;
 
 	/**
+	 * 创建一个 ServiceBeanDefinitionRegistry
 	 * 
 	 * @param controllerPackage 控制器所在的包
 	 */
@@ -54,91 +55,90 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 		// 通过反射获取需要代理的接口的 clazz 列表
 		for (Class<?> beanClazz : scannerPackages) {
 			BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
-			GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
-			// 这里可以给该对象的属性注入对应的实例。mybatis就在这里注入了dataSource和sqlSessionFactory，
-			// definition.getPropertyValues().add("interfaceType",
-			// beanClazz)，BeanClass需要提供setter
-			// definition.getConstructorArgumentValues()，BeanClass需要提供包含该属性的构造方法，否则会注入失败
-			definition.getConstructorArgumentValues().addGenericArgumentValue(beanClazz);
-			definition.getConstructorArgumentValues().addGenericArgumentValue(applicationContext);
+			GenericBeanDefinition def = (GenericBeanDefinition) builder.getRawBeanDefinition();
 
-			// 注意，这里的BeanClass是生成Bean实例的工厂，不是Bean本身。
-			// FactoryBean是一种特殊的Bean，其返回的对象不是指定类的一个实例，
-			// 其返回的是该工厂Bean的getObject方法所返回的对象。
-			definition.setBeanClass(ServiceFactory.class);
+			/*
+			 * 这里可以给该对象的属性注入对应的实例。mybatis 就在这里注入了 dataSource 和 sqlSessionFactory，
+			 * definition.getPropertyValues().add("interfaceType", beanClazz)，BeanClass 需要提供
+			 * setter definition.getConstructorArgumentValues()，BeanClass
+			 * 需要提供包含该属性的构造方法，否则会注入失败
+			 */
+			def.getConstructorArgumentValues().addGenericArgumentValue(beanClazz);
+//			def.getConstructorArgumentValues().addGenericArgumentValue(applicationContext);
 
-			// 这里采用的是 byType 方式注入，类似的还有 byName 等
-			definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
+			/*
+			 * 注意，这里的 BeanClass 是生成 Bean 实例的工厂，不是 Bean 本身。 FactoryBean 是一种特殊的
+			 * Bean，其返回的对象不是指定类的一个实例，其返回的是该工厂 Bean 的 getObject 方法所返回的对象。
+			 */
+			def.setBeanClass(ControllerFactory.class);
+			def.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);// 这里采用的是 byType 方式注入，类似的还有 byName 等
 
 //			String simpleName = beanClazz.getSimpleName();
 //			LOGGER.info("beanClazz.getSimpleName(): {0}", simpleName);
 //			LOGGER.info("GenericBeanDefinition: {0}", definition);
 
-			registry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
+			registry.registerBeanDefinition(beanClazz.getSimpleName(), def);
 		}
+	}
+	
+	@Override
+	public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
 	}
 
 	private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
+
 	private MetadataReaderFactory metadataReaderFactory;
 
 	/**
 	 * 根据包路径获取包及子包下的所有类
 	 *
 	 * @param basePackage basePackage
-	 * @return Set<Class<?>> Set<Class<?>>
+	 * @return Set<Class<?>>
 	 */
 	private Set<Class<?>> scannerPackages(String basePackage) {
 		Set<Class<?>> set = new LinkedHashSet<>();
 		String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
 
 		try {
-			Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+			Resource[] resources = resolver.getResources(packageSearchPath);
 
 			for (Resource resource : resources) {
 				if (resource.isReadable()) {
 					String clzName = metadataReaderFactory.getMetadataReader(resource).getClassMetadata().getClassName();
 
-					try {
-						Class<?> clazz = Class.forName(clzName);
-						if (clazz.isInterface() && clazz.getAnnotation(InterfaceBasedController.class) != null)
-							set.add(clazz);
-					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
-					}
+					Class<?> clazz = Class.forName(clzName);
+					if (clazz.isInterface() && clazz.getAnnotation(InterfaceBasedController.class) != null)
+						set.add(clazz);
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (ClassNotFoundException | IOException e) {
+			LOGGER.warning(e);
 		}
 
 		return set;
 	}
 
+	
 	protected String resolveBasePackage(String basePackage) {
-		return ClassUtils.convertClassNameToResourcePath(getEnvironment().resolveRequiredPlaceholders(basePackage));
+		Environment env = ctx.getEnvironment();
+		String holders = env.resolveRequiredPlaceholders(basePackage);
+
+		return ClassUtils.convertClassNameToResourcePath(holders);
 	}
 
-	@Override
-	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-	}
-
-	private ResourcePatternResolver resourcePatternResolver;
-
-	private ApplicationContext applicationContext;
+	private ResourcePatternResolver resolver;
 
 	@Override
 	public void setResourceLoader(ResourceLoader loader) {
-		resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(loader);
+		resolver = ResourcePatternUtils.getResourcePatternResolver(loader);
 		metadataReaderFactory = new CachingMetadataReaderFactory(loader);
 	}
 
+	private ApplicationContext ctx;
+
 	@Override
 	public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-		this.applicationContext = cxt;
-	}
-
-	private Environment getEnvironment() {
-		return applicationContext.getEnvironment();
+		this.ctx = cxt;
 	}
 
 }

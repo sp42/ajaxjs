@@ -57,39 +57,6 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 	private Map<String, Object> queryParams;
 
 	/**
-	 * 
-	 * @param method
-	 * @param methodName 方法名称
-	 * @param args       参数列表
-	 * @return SQL 执行结果
-	 */
-	abstract Object get(Method method, String methodName, Object[] args);
-
-	/**
-	 * 
-	 * @param methodName 方法名称
-	 * @param args       参数列表
-	 * @return SQL 执行结果
-	 */
-	abstract Serializable create(String methodName, Object[] args);
-
-	/**
-	 * 
-	 * @param methodName 方法名称
-	 * @param args       参数列表
-	 * @return SQL 执行结果
-	 */
-	abstract boolean update(String methodName, Object[] args);
-
-	/**
-	 * 
-	 * @param methodName 方法名称
-	 * @param args       参数列表
-	 * @return SQL 执行结果
-	 */
-	abstract boolean delete(String methodName, Object[] args);
-
-	/**
 	 * 绑定接口（使用 Java Bean）
 	 * 
 	 * @param <T>     DAO 类型
@@ -275,4 +242,36 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 		this.beanClz = beanClz;
 	}
 
+	/**
+	 * 
+	 * @param method
+	 * @param methodName 方法名称
+	 * @param args       参数列表
+	 * @return SQL 执行结果
+	 */
+	abstract Object get(Method method, String methodName, Object[] args);
+
+	/**
+	 * 
+	 * @param methodName 方法名称
+	 * @param args       参数列表
+	 * @return SQL 执行结果
+	 */
+	abstract Serializable create(String methodName, Object[] args);
+
+	/**
+	 * 
+	 * @param methodName 方法名称
+	 * @param args       参数列表
+	 * @return SQL 执行结果
+	 */
+	abstract boolean update(String methodName, Object[] args);
+
+	/**
+	 * 
+	 * @param methodName 方法名称
+	 * @param args       参数列表
+	 * @return SQL 执行结果
+	 */
+	abstract boolean delete(String methodName, Object[] args);
 }

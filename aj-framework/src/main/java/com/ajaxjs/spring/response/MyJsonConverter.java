@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.spring.easy_controller.ServiceProxy;
+import com.ajaxjs.spring.easy_controller.ControllerProxy;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 
@@ -95,7 +95,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 			resultWarpper.setTotal(p.getTotalCount());
 		}
 
-		String comment = ServiceProxy.ACTION_COMMNET.get();
+		String comment = ControllerProxy.ACTION_COMMNET.get();
 		if (StringUtils.hasText(comment))
 			resultWarpper.setMessage(comment);
 

@@ -3,6 +3,9 @@ package com.ajaxjs.spring;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -11,6 +14,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.ajaxjs.util.StrUtil;
 
@@ -48,7 +54,7 @@ public class DiContextUtil implements ApplicationContextAware {
 	 * @return 组件对象
 	 */
 	public static <T> T getBean(Class<T> clz) {
-		context.getBean(clz, "");
+//		context.getBean(clz, "");
 		return context.getBean(clz);
 	}
 
@@ -131,5 +137,17 @@ public class DiContextUtil implements ApplicationContextAware {
 
 	public static void closeTest() {
 		((ConfigurableApplicationContext) context).close();
+	}
+
+	public static HttpServletRequest getRequest() {
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		if (requestAttributes == null)
+			return null;
+		
+		return ((ServletRequestAttributes) requestAttributes).getRequest();
+	}
+
+	public static HttpSession getSession() {
+		return getRequest().getSession();
 	}
 }

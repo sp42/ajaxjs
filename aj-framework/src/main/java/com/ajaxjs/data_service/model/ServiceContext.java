@@ -28,10 +28,16 @@ public class ServiceContext {
 
 	private String sql;
 
+	/**
+	 * 
+	 */
 	private Map<String, Object> sqlParam;
 
 	private String[] sqls;
 
+	/**
+	 * 
+	 */
 	private Map<String, Object>[] sqlParams;
 
 	/**

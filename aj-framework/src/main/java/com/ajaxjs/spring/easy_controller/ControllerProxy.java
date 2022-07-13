@@ -3,24 +3,29 @@ package com.ajaxjs.spring.easy_controller;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.util.ReflectionUtils;
 
+import com.ajaxjs.spring.DiContextUtil;
+
 /**
- * 动态代理
+ * 通过动态代理执行控制器
  * 
  * @author Frank Cheung<sp42@qq.com>
  *
- * @param <T>
  */
-public class ServiceProxy<T> implements InvocationHandler {
-	private Class<T> interfaceType;
+public class ControllerProxy implements InvocationHandler {
+	/**
+	 * 控制器接口类
+	 */
+	private Class<?> interfaceType;
 
-	private ApplicationContext applicationContext;
-
-	public ServiceProxy(Class<T> interfaceType, ApplicationContext applicationContext) {
+	/**
+	 * 创建一个 ServiceProxy
+	 * 
+	 * @param interfaceType 控制器接口类
+	 */
+	public ControllerProxy(Class<?> interfaceType) {
 		this.interfaceType = interfaceType;
-		this.applicationContext = applicationContext;
 	}
 
 	/**
@@ -42,23 +47,25 @@ public class ServiceProxy<T> implements InvocationHandler {
 				serviceClass = clzAnn.serviceClass();
 			}
 
-			Object serviceBean = applicationContext.getBean(serviceClass);
+//			Object serviceBean = ctx.getBean(serviceClass);
+			Object serviceBean = DiContextUtil.getBean(serviceClass);
 			String serviceMethod = annotation.methodName();
 
 			if ("".equals(serviceMethod))
 				serviceMethod = method.getName(); // 如果没设置方法，则与控制器的一致
 
 			String comment = annotation.value(); // 处理说明
+
 			if (!"".equals(serviceMethod)) {
 				ACTION_COMMNET.remove();
 				ACTION_COMMNET.set(comment);
 			}
 
 			Method beanMethod = ReflectionUtils.findMethod(serviceBean.getClass(), serviceMethod, method.getParameterTypes());
-			
+
 			if (beanMethod == null)
 				throw new NullPointerException("是否绑定 Service 类错误？找不到" + serviceBean.getClass() + "目标方法");
-			
+
 			beanMethod.setAccessible(true);
 			Object result = ReflectionUtils.invokeMethod(beanMethod, serviceBean, args);
 //			System.out.println("调用后，result = " + result);
@@ -67,5 +74,4 @@ public class ServiceProxy<T> implements InvocationHandler {
 		} else
 			return ReflectionUtils.invokeMethod(method, this, args);
 	}
-
 }

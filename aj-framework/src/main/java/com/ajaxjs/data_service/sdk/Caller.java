@@ -13,8 +13,10 @@ import org.springframework.util.CollectionUtils;
 import com.ajaxjs.data_service.api.RuntimeData;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.ServiceContext;
+import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -52,7 +54,7 @@ public class Caller extends BaseCaller {
 			params.put("id", args[0]);
 			node = exec(uri, RuntimeData.GET);
 
-			ctx = ServiceContext.factory(uri, null, node, params);
+			ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 			Map<String, Object> info = info(ctx, null);
 
 			if (info == null)
@@ -68,7 +70,7 @@ public class Caller extends BaseCaller {
 			uri += "/list";
 			node = exec(uri, RuntimeData.GET);
 
-			ctx = ServiceContext.factory(uri, null, node, params);
+			ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 			List<Map<String, Object>> list = list(ctx, null);
 
 			if (list == null || list.size() == 0)
@@ -97,7 +99,7 @@ public class Caller extends BaseCaller {
 			params.put("start", args[0]);
 			params.put("limit", args[1]);
 
-			ctx = ServiceContext.factory(uri, null, node, params);
+			ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 			PageResult<Map<String, Object>> list = page(ctx, null);
 
 			if (methodName.equals("findPagedList")) {
@@ -123,7 +125,7 @@ public class Caller extends BaseCaller {
 			}
 
 			if ("getOne".equals(node.getType())) {
-				ctx = ServiceContext.factory(uri, null, node, params);
+				ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 				Map<String, Object> info = info(ctx, null);
 
 				if (info == null)
@@ -153,7 +155,7 @@ public class Caller extends BaseCaller {
 						return info;
 				}
 			} else if ("getRows".equals(node.getType())) {
-				ctx = ServiceContext.factory(uri, null, node, params);
+				ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 				List<Map<String, Object>> list = list(ctx, null);
 
 				Type[] types = ReflectUtil.getGenericReturnType(method);
@@ -188,7 +190,7 @@ public class Caller extends BaseCaller {
 				params.put("start", args[0]);
 				params.put("limit", args[1]);
 
-				ctx = ServiceContext.factory(uri, null, node, params);
+				ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 				PageResult<Map<String, Object>> list = page(ctx, null);
 
 				Type[] types = ReflectUtil.getGenericReturnType(method);
@@ -204,6 +206,7 @@ public class Caller extends BaseCaller {
 					return pageMap2pageBean(clz, list);
 			}
 		}
+
 		return null;
 	}
 
@@ -232,13 +235,20 @@ public class Caller extends BaseCaller {
 		return _list;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<IPlugin> getPlugins() {
+		Object bean = DiContextUtil.getBean("DataServicePlugins");
+
+		return bean == null ? null : (List<IPlugin>) bean;
+	}
+
 	@Override
 	Serializable create(String methodName, Object[] args) {
 		LOGGER.info("Caller 创建实体");
 		if ("create".equals(methodName))
 			methodName = null;
 
-		return create(getServiceContext(RuntimeData.POST, methodName, args), null);
+		return create(getServiceContext(RuntimeData.POST, methodName, args), getPlugins());
 	}
 
 	@Override
@@ -246,7 +256,7 @@ public class Caller extends BaseCaller {
 		if ("update".equals(methodName))
 			methodName = null;
 
-		return update(getServiceContext(RuntimeData.PUT, methodName, args), null);
+		return update(getServiceContext(RuntimeData.PUT, methodName, args), getPlugins());
 	}
 
 	/**
@@ -269,7 +279,7 @@ public class Caller extends BaseCaller {
 		if ("delete".equals(methodName))
 			methodName = null;
 
-		return delete(getServiceContext(RuntimeData.DELETE, methodName, args), null);
+		return delete(getServiceContext(RuntimeData.DELETE, methodName, args), getPlugins());
 	}
 
 	/**
@@ -299,7 +309,7 @@ public class Caller extends BaseCaller {
 				params.put(key, JsonHelper.toJson(value));
 		}
 
-		ServiceContext ctx = ServiceContext.factory(uri, null, node, params);
+		ServiceContext ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 
 		return ctx;
 	}

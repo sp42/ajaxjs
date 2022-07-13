@@ -25,6 +25,11 @@ public class PassportFilter implements HandlerInterceptor {
 	 * 认证 HTTP HEAD 中 字段
 	 */
 	public final static String TOKEN = "token";
+//
+//	/**
+//	 * 是否激活
+//	 */
+//	public static boolean isEnable;
 
 	@Autowired
 	EasyConfig config;
@@ -48,8 +53,8 @@ public class PassportFilter implements HandlerInterceptor {
 			CLIENTS = new HashMap<>();
 
 			for (Map<String, Object> map : list) {
-				Passport passport = MapTool.map2Bean(map, Passport.class);
-				CLIENTS.put(clientId, passport);
+				Passport passport = MapTool.map2Bean(map, Passport.class, true);
+				CLIENTS.put(passport.getClientId(), passport);
 			}
 		}
 
@@ -65,8 +70,8 @@ public class PassportFilter implements HandlerInterceptor {
 
 		if (!token.equals(passport.getToken()))
 			throw new IllegalAccessError("非法客户端 token：" + token);
-
-		return false;
+		else
+			return true;
 	}
 
 	private Long getTenantIdByClientId(String clientId) {
@@ -76,7 +81,7 @@ public class PassportFilter implements HandlerInterceptor {
 	private Long getPortalIdByClientId(String clientId) {
 		return getPassportByClientId(clientId).getPortalId();
 	}
-	
+
 	/**
 	 * 
 	 * @param req
@@ -86,18 +91,21 @@ public class PassportFilter implements HandlerInterceptor {
 		String clientId = req.getHeader(CLIENT_ID);
 		return getPassportByClientId(clientId);
 	}
-	
+
 	/**
 	 * 
 	 * @param clientId
 	 * @return
 	 */
 	public Passport getPassportByClientId(String clientId) {
-		if (!CLIENTS.containsKey(clientId))
+		if (!CLIENTS.containsKey(clientId)) {
+			System.out.println(CLIENTS);
 			throw new IllegalAccessError("非法客户端 id：" + clientId);
-		
+		}
+
 		return CLIENTS.get(clientId);
 	}
+
 	/**
 	 * 检测是否有效
 	 * 

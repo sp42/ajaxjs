@@ -1,5 +1,6 @@
 package com.ajaxjs.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -13,9 +14,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import com.ajaxjs.data_service.api.Commander;
 import com.ajaxjs.data_service.model.DataServiceConfig;
+import com.ajaxjs.data_service.plugin.IPlugin;
+import com.ajaxjs.framework.teant.Writer;
+import com.ajaxjs.gateway.PassportFilter;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.spring.response.MyJsonConverter;
 import com.ajaxjs.spring.response.RestResponseEntityExceptionHandler;
@@ -33,6 +38,15 @@ public class EntityWebConfig extends BaseWebMvcConfigurer {
 		registry.addMapping("/**").allowedHeaders("*").allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").allowedOrigins("*");
 	}
 
+	@Value("${db.url}")
+	private String url;
+
+	@Value("${db.user}")
+	private String user;
+
+	@Value("${db.psw}")
+	private String psw;
+
 	/**
 	 * 数据服务配置
 	 * 
@@ -47,14 +61,13 @@ public class EntityWebConfig extends BaseWebMvcConfigurer {
 		return cfg;
 	}
 
-	@Value("${db.url}")
-	private String url;
-
-	@Value("${db.user}")
-	private String user;
-
-	@Value("${db.psw}")
-	private String psw;
+//	@Bean("DataServicePlugins")
+//	List<IPlugin> DataServicePlugins() {
+//		List<IPlugin> list = new ArrayList<>();
+//		list.add(new Writer());
+//
+//		return list;
+//	}
 
 	@Bean(value = "dataSource", destroyMethod = "close")
 	DataSource getDs() {
@@ -70,6 +83,22 @@ public class EntityWebConfig extends BaseWebMvcConfigurer {
 		servletCxt.setAttribute("EASY_CONFIG", e);
 
 		return e;
+	}
+
+	/**
+	 * 鉴权
+	 * 
+	 * @return
+	 */
+	@Bean
+	PassportFilter passportFilter() {
+		return new PassportFilter();
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(passportFilter());
+		super.addInterceptors(registry);
 	}
 
 	@Bean
