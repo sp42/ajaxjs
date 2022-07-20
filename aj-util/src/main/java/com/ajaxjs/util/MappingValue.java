@@ -89,7 +89,7 @@ public class MappingValue {
 		if (value == null)
 			return false;
 
-		if (value.equals(true) || value.equals(1))
+		if (value.equals(true) || value.equals(1)|| value.equals(1L))
 			return true;
 
 		if (value instanceof String) {
