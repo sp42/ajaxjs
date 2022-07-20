@@ -123,8 +123,9 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 			LOGGER.info("相当于 HTTP GET");
 			args = makeMapArgs(method, args);
 			return get(method, methodName, args);
-		} else if (methodName.equals("create")) {
+		} else if (methodName.equals("create") || methodName.startsWith("create")) {
 			LOGGER.info("相当于 HTTP POST");
+			args = makeMapArgs(method, args);
 			return create(methodName, args);
 		} else if (methodName.startsWith("set") || methodName.equals("update")) {
 			LOGGER.info("相当于 HTTP PUT");
