@@ -57,20 +57,20 @@ public class MybatisInterceptor implements Interceptor {
 
 	/**
 	 * 
-	 * @param configuration
-	 * @param boundSql
+	 * @param cfg
+	 * @param sql
 	 * @param sqlId
 	 * @param time
 	 * @return
 	 */
-	public static String getSql(Configuration configuration, BoundSql boundSql, String sqlId, long time) {
-		String sql = showSql(configuration, boundSql);
-		StringBuilder str = new StringBuilder(100);
-		str.append(sqlId);
-		str.append(" : ");
-		str.append(sql);
+	public static String getSql(Configuration cfg, BoundSql sql, String sqlId, long time) {
+		String _sql = showSql(cfg, sql);
+		StringBuilder sb = new StringBuilder(100);
+		sb.append(sqlId);
+		sb.append(" : ");
+		sb.append(_sql);
 
-		return str.toString();
+		return sb.toString();
 	}
 
 	/**
@@ -92,24 +92,26 @@ public class MybatisInterceptor implements Interceptor {
 
 		return value;
 	}
-
+	
 	/**
-	 * @param:
-	 * @author:Shuoshi.Yan
-	 * @date: 2020/12/2 11:32
+	 *  @author:Shuoshi.Yan
+	 * @param cfg
+	 * @param boundSql
+	 * @return
 	 */
-	public static String showSql(Configuration configuration, BoundSql boundSql) {
+	public static String showSql(Configuration cfg, BoundSql boundSql) {
 		Object parameterObject = boundSql.getParameterObject();
 		List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
 		String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
 
 		if (parameterMappings != null && parameterMappings.size() > 0 && parameterObject != null) {
-			TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+			TypeHandlerRegistry typeHandlerRegistry = cfg.getTypeHandlerRegistry();
 
 			if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass()))
 				sql = sql.replaceFirst("\\?", Matcher.quoteReplacement(getParameterValue(parameterObject)));
 			else {
-				MetaObject metaObject = configuration.newMetaObject(parameterObject);
+				MetaObject metaObject = cfg.newMetaObject(parameterObject);
+				
 				for (ParameterMapping parameterMapping : parameterMappings) {
 					String propertyName = parameterMapping.getProperty();
 

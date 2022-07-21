@@ -7,7 +7,7 @@ import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.apache.ibatis.session.SqlSession;
 
 /**
- * MyBatis 执行 sql 工具，在写SQL的时候建议使用参数形式的可以是${}或#{}
+ * MyBatis 执行 sql 工具，在写 SQL 的时候建议使用参数形式的可以是${}或#{}
  *
  * 不建议将参数直接拼到字符串中，当大量这么使用的时候由于缓存 MappedStatement 而占用更多的内存
  *
@@ -147,7 +147,7 @@ public class SqlMapper {
 	/**
 	 * 查询返回指定的结果类型
 	 *
-	 * @param sql        执行的sql
+	 * @param sql        执行的 sql
 	 * @param value      参数
 	 * @param resultType 返回的结果类型
 	 * @param <T>        泛型类型
@@ -242,6 +242,4 @@ public class SqlMapper {
 
 		return sqlSession.delete(msId, value);
 	}
-
-
 }

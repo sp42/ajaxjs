@@ -40,6 +40,9 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 数据源管理控制器的基类
+ * 
+ * @author Frank Cheung<sp42@qq.com>
+ *
  */
 @RestController
 @RequestMapping("/admin/datasource")
@@ -68,12 +71,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 		if (is != null)
 			throw new NullPointerException(is);
 
-		Long newlyId = DataSourceDAO.create(entity);
-		if (newlyId != null) {
-			entity.setId(newlyId);
-			return entity;
-		} else
-			throw new NullPointerException("创建失败");
+		return afterCreate(DataSourceDAO.create(entity), entity);
 	}
 
 	@DataBaseFilter
@@ -107,34 +105,31 @@ public class MyDataSourceController extends BaseController implements DataServic
 
 	@DataBaseFilter
 	@DeleteMapping(value = ID_INFO, produces = JSON)
-	public String delete(@PathVariable long id) {
+	public Boolean delete(@PathVariable long id) {
 		MyDataSource myDataSource = new MyDataSource();
 		myDataSource.setId(id);
 
-		if (DataSourceDAO.delete(myDataSource))
-			return jsonOk("删除成功");
-		else
-			return jsonOk("删除失败");
+		return DataSourceDAO.delete(myDataSource);
 	}
 
 	/**
 	 * 获取某个数据源下面的所有表
-	 *
+	 * 
 	 * @param dataSourceId 数据源 id
-	 * @return 所有表
-	 * @throws SQLException
+	 * @param dbName
+	 * @return
 	 * @throws ClassNotFoundException
-	 * @deprecated
+	 * @throws SQLException
 	 */
 	@DataBaseFilter
-	@GetMapping(value = "/{id}/getSelectTables", produces = JSON)
-	public String getSelectTables(@PathVariable(ID) Long dataSourceId, String dbName) throws ClassNotFoundException, SQLException {
+	@GetMapping("/{id}/getSelectTables")
+	public List<Map<String, Object>> getSelectTables(@PathVariable(ID) Long dataSourceId, String dbName) throws ClassNotFoundException, SQLException {
 		List<Map<String, Object>> list = new ArrayList<>();
 
 		String[] selectedTables = DataSourceDAO.findSelectedTables(dataSourceId);
 
 		if (ObjectUtils.isEmpty(selectedTables))
-			return jsonNoOk("没有数据");
+			throw new NullPointerException("没有数据");
 
 		Map<String, Boolean> sMap = new HashMap<>();
 
@@ -145,7 +140,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 			Map<String, String> tableComment = DataBaseMetaHelper.getTableComment(conn, DataBaseMetaHelper.getAllTableName(conn, dbName), dbName);
 
 			for (String tableName : tableComment.keySet()) {
-				Map<String, Object> map = new HashMap<>();
+				Map<String, Object> map = new HashMap<>(3);
 				map.put("tableName", tableName);
 				map.put("comment", tableComment.get(tableName));
 				map.put("_checked", sMap.containsKey(tableName));
@@ -154,7 +149,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 			}
 		}
 
-		return toJson(list);
+		return list;
 	}
 
 	/**
@@ -190,8 +185,8 @@ public class MyDataSourceController extends BaseController implements DataServic
 	@ResponseBody
 	@DataBaseFilter
 	@GetMapping(value = "/{id}/getAllTables", produces = JSON)
-	public PageResult<Map<String, Object>> getTableAndComment(@PathVariable(ID) Long dataSourceId, Integer start, Integer limit, String tablename, String dbName)
-			throws ClassNotFoundException, SQLException {
+	public PageResult<Map<String, Object>> getTableAndComment(@PathVariable(ID) Long dataSourceId, Integer start, Integer limit, String tablename,
+			String dbName) throws ClassNotFoundException, SQLException {
 		LOGGER.info("查询表名和表注释");
 		if (start == null)
 			start = 0;
@@ -204,7 +199,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 	@ResponseBody
 	@DataBaseFilter
 	@GetMapping(value = "/{id}/getFields/{tableName}", produces = JSON)
-	public String getFields(@PathVariable(ID) Long datasourceId, @PathVariable("tableName") String tableName, String dbName)
+	public List<Map<String, String>> getFields(@PathVariable(ID) Long datasourceId, @PathVariable("tableName") String tableName, String dbName)
 			throws SQLException, ClassNotFoundException {
 		LOGGER.info("获取所有字段:" + tableName + " 数据库：" + dbName);
 
@@ -221,7 +216,8 @@ public class MyDataSourceController extends BaseController implements DataServic
 	 * @return
 	 * @throws SQLException
 	 */
-	private static PageResult<Map<String, Object>> getTableAndComment(Connection _conn, Integer start, Integer limit, String tablename, String dbName) throws SQLException {
+	private static PageResult<Map<String, Object>> getTableAndComment(Connection _conn, Integer start, Integer limit, String tablename, String dbName)
+			throws SQLException {
 		int total = 0;
 		List<Map<String, Object>> list = null;
 
@@ -272,15 +268,14 @@ public class MyDataSourceController extends BaseController implements DataServic
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public static String getField(Long datasourceId, String tableName, String dbName) throws SQLException, ClassNotFoundException {
+	public static List<Map<String, String>> getField(Long datasourceId, String tableName, String dbName) throws SQLException, ClassNotFoundException {
 		MyDataSource dataSource = DataSourceDAO.findById(datasourceId);
-		List<Map<String, String>> columnComment;
 
 		try (Connection conn = getConnection(dataSource)) {
-			columnComment = DataBaseMetaHelper.getColumnComment(conn, tableName, dbName);
-		}
+			List<Map<String, String>> columnComment = DataBaseMetaHelper.getColumnComment(conn, tableName, dbName);
 
-		return toJson(columnComment);
+			return columnComment;
+		}
 	}
 
 	/**

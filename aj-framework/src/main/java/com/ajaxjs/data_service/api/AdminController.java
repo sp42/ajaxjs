@@ -61,8 +61,7 @@ public class AdminController extends BaseController implements DataServiceDAO {
 		if (datasourceId != null && datasourceId != 0L)
 			handler = handler.andThen(QueryTools.by("datasourceId", datasourceId));
 
-		PageResult<DataServiceTable> pagedList = DataServiceAdminDAO.findPagedList(start, limit, handler);
-		return pagedList;
+		return DataServiceAdminDAO.findPagedList(start, limit, handler);
 	}
 
 	@DataBaseFilter
@@ -189,10 +188,10 @@ public class AdminController extends BaseController implements DataServiceDAO {
 
 	@GetMapping(value = "reload", produces = JSON)
 	@DataBaseFilter
-	public String reload() {
+	public Boolean reload() {
 		apiController.init();// 重新加载配置
-
-		return jsonOk("重新加载成功");
+		// jsonOk("重新加载成功")
+		return true;
 	}
 
 	/**
@@ -200,9 +199,8 @@ public class AdminController extends BaseController implements DataServiceDAO {
 	 */
 	@DataBaseFilter
 	@RequestMapping(value = "getAllFieldsByDataSourceAndTablename", produces = JSON)
-	public String getAllFieldsByDataSourceAndTablename(Long datasourceId, String tableName, String dbName) throws ClassNotFoundException, SQLException {
-		LOGGER.info("getAllFieldsByDataSourceAndTablename");
-
+	public List<Map<String, String>> getAllFieldsByDataSourceAndTablename(Long datasourceId, String tableName, String dbName)
+			throws ClassNotFoundException, SQLException {
 		return MyDataSourceController.getField(datasourceId, tableName, dbName);
 	}
 }

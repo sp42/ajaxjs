@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.builder.StaticSqlSource;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.mapping.ResultMap.Builder;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.mapping.SqlSource;
@@ -13,14 +14,19 @@ import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
 
 /**
- * Mybatis
+ * 
+ *
  */
 public class MSUtils {
+	/**
+	 * MyBatis 配置
+	 */
 	private Configuration configuration;
+
 	private LanguageDriver languageDriver;
 
 	/**
-	 * @param configuration
+	 * @param configuration MyBatis 配置
 	 */
 	public MSUtils(Configuration configuration) {
 		this.configuration = configuration;
@@ -28,10 +34,10 @@ public class MSUtils {
 	}
 
 	/**
-	 * 创建MSID
+	 * 创建 MSID
 	 *
-	 * @param sql 执行的sql
-	 * @param sql 执行的sqlCommandType
+	 * @param sql 执行的 sql
+	 * @param sql 执行的 sqlCommandType
 	 * @return
 	 */
 	private String newMsId(String sql, SqlCommandType sqlCommandType) {
@@ -42,7 +48,7 @@ public class MSUtils {
 	}
 
 	/**
-	 * 是否已经存在该ID
+	 * 是否已经存在该 ID
 	 *
 	 * @param msId
 	 * @return
@@ -52,14 +58,14 @@ public class MSUtils {
 	}
 
 	/**
-	 * 创建一个查询的MS
+	 * 创建一个查询的 MS
 	 *
 	 * @param msId
-	 * @param sqlSource  执行的sqlSource
+	 * @param source  执行的 sqlSource
 	 * @param resultType 返回的结果类型
 	 */
-	private void newSelectMappedStatement(String msId, SqlSource sqlSource, final Class<?> resultType) {
-		MappedStatement ms = new MappedStatement.Builder(configuration, msId, sqlSource, SqlCommandType.SELECT).resultMaps(new ArrayList<ResultMap>() {
+	private void newSelectMappedStatement(String msId, SqlSource source, final Class<?> resultType) {
+		MappedStatement ms = new MappedStatement.Builder(configuration, msId, source, SqlCommandType.SELECT).resultMaps(new ArrayList<ResultMap>() {
 			private static final long serialVersionUID = 4647394718738200770L;
 
 			{
@@ -67,28 +73,28 @@ public class MSUtils {
 			}
 		}).build();
 
-		// 缓存
-		configuration.addMappedStatement(ms);
+		configuration.addMappedStatement(ms);// 缓存
 	}
 
 	/**
 	 * 创建一个简单的 MS
 	 *
 	 * @param msId
-	 * @param sqlSource      执行的 sqlSource
-	 * @param sqlCommandType 执行的 sqlCommandType
+	 * @param source      执行的 sqlSource
+	 * @param type 执行的 sqlCommandType
 	 */
-	private void newUpdateMappedStatement(String msId, SqlSource sqlSource, SqlCommandType sqlCommandType) {
-		MappedStatement ms = new MappedStatement.Builder(configuration, msId, sqlSource, sqlCommandType).resultMaps(new ArrayList<ResultMap>() {
+	private void newUpdateMappedStatement(String msId, SqlSource source, SqlCommandType type) {
+		MappedStatement ms = new MappedStatement.Builder(configuration, msId, source, type).resultMaps(new ArrayList<ResultMap>() {
 			private static final long serialVersionUID = 9060317759673729016L;
 
 			{
-				add(new ResultMap.Builder(configuration, "defaultResultMap", int.class, new ArrayList<ResultMapping>(0)).build());
+				ArrayList<ResultMapping> arr = new ArrayList<>(0);
+				Builder builder = new ResultMap.Builder(configuration, "defaultResultMap", int.class, arr);
+				add(builder.build());
 			}
 		}).keyColumn("id").keyProperty("id").build();
 
-		// 缓存
-		configuration.addMappedStatement(ms);
+		configuration.addMappedStatement(ms);// 缓存
 	}
 
 	String select(String sql) {

@@ -1,6 +1,5 @@
 package com.ajaxjs.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -18,8 +17,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 
 import com.ajaxjs.data_service.api.Commander;
 import com.ajaxjs.data_service.model.DataServiceConfig;
-import com.ajaxjs.data_service.plugin.IPlugin;
-import com.ajaxjs.framework.teant.Writer;
 import com.ajaxjs.gateway.PassportFilter;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.spring.response.MyJsonConverter;
