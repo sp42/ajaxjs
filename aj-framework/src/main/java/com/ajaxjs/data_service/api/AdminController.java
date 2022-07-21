@@ -67,7 +67,7 @@ public class AdminController extends BaseController implements DataServiceDAO {
 
 	@DataBaseFilter
 	@PostMapping(produces = JSON)
-	public String create(DataServiceTable entity) {
+	public DataServiceTable create(DataServiceTable entity) {
 		LOGGER.info("创建 DataService");
 
 		entity.setUrlDir(entity.getTableName());
@@ -97,7 +97,7 @@ public class AdminController extends BaseController implements DataServiceDAO {
 		Long newlyId = DataServiceAdminDAO.create(entity);
 		apiController.init(); // 重新加载配置
 
-		return afterCreate(newlyId);
+		return afterCreate(newlyId, entity);
 	}
 
 	@DataBaseFilter

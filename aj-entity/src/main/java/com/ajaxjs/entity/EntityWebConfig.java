@@ -97,7 +97,7 @@ public class EntityWebConfig extends BaseWebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(passportFilter());
+//		registry.addInterceptor(passportFilter());
 		super.addInterceptors(registry);
 	}
 

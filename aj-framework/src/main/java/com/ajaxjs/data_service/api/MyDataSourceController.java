@@ -62,32 +62,34 @@ public class MyDataSourceController extends BaseController implements DataServic
 
 	@DataBaseFilter
 	@PostMapping(produces = JSON)
-	public String create(MyDataSource entity) {
+	public MyDataSource create(MyDataSource entity) {
 		String is = isRepeatUrlDir(entity);
 
 		if (is != null)
-			return is;
+			throw new NullPointerException(is);
 
-		return afterCreate(DataSourceDAO.create(entity));
+		Long newlyId = DataSourceDAO.create(entity);
+		if (newlyId != null) {
+			entity.setId(newlyId);
+			return entity;
+		} else
+			throw new NullPointerException("创建失败");
 	}
 
 	@DataBaseFilter
 	@PutMapping(value = ID_INFO, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = JSON)
-	public String update(@PathVariable long id, HttpServletRequest req) {
+	public Boolean update(@PathVariable long id, HttpServletRequest req) {
 		MyDataSource entity = WebHelper.getParameterBean(req, MyDataSource.class);
 
 		LOGGER.info("更新数据源" + entity.getName());
 		String is = isRepeatUrlDir(entity);
 
 		if (is != null)
-			return is;
+			throw new NullPointerException(is);
 
 		entity.setId(id);
 
-		if (DataSourceDAO.update(entity) >= 1)
-			return jsonOk("修改成功");
-		else
-			return jsonOk("修改成功");
+		return DataSourceDAO.update(entity) >= 1;
 	}
 
 	/**
@@ -167,7 +169,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 	@ResponseBody
 	@DataBaseFilter
 	@GetMapping(value = "/getAllTables", produces = JSON)
-	public String getAllTables(Integer start, Integer limit, String tablename, String dbName) throws SQLException {
+	public PageResult<Map<String, Object>> getAllTables(Integer start, Integer limit, String tablename, String dbName) throws SQLException {
 		LOGGER.info("查询表名和表注释");
 
 		Connection conn = JdbcConnection.getConnection();
@@ -188,7 +190,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 	@ResponseBody
 	@DataBaseFilter
 	@GetMapping(value = "/{id}/getAllTables", produces = JSON)
-	public String getTableAndComment(@PathVariable(ID) Long dataSourceId, Integer start, Integer limit, String tablename, String dbName)
+	public PageResult<Map<String, Object>> getTableAndComment(@PathVariable(ID) Long dataSourceId, Integer start, Integer limit, String tablename, String dbName)
 			throws ClassNotFoundException, SQLException {
 		LOGGER.info("查询表名和表注释");
 		if (start == null)
@@ -219,7 +221,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 	 * @return
 	 * @throws SQLException
 	 */
-	private static String getTableAndComment(Connection _conn, Integer start, Integer limit, String tablename, String dbName) throws SQLException {
+	private static PageResult<Map<String, Object>> getTableAndComment(Connection _conn, Integer start, Integer limit, String tablename, String dbName) throws SQLException {
 		int total = 0;
 		List<Map<String, Object>> list = null;
 
@@ -258,7 +260,7 @@ public class MyDataSourceController extends BaseController implements DataServic
 		result.sort(byName);
 		result.setTotalCount(total);
 
-		return toJson(result);
+		return result;
 	}
 
 	/**

@@ -96,6 +96,15 @@ public abstract class BaseController {
 		return jsonOk_Extension("创建实体成功", "\"newlyId\":" + newlyId);
 	}
 
+	public static <T extends BaseModel> T afterCreate(Long newlyId, T bean) {
+		if (newlyId == null)
+			throw new Error("创建失败！");
+
+		bean.setId(newlyId);
+
+		return bean;
+	}
+
 	/**
 	 * 修改一个实体
 	 *
