@@ -49,6 +49,9 @@ public class ControllerProxy implements InvocationHandler {
 
 //			Object serviceBean = ctx.getBean(serviceClass);
 			Object serviceBean = DiContextUtil.getBean(serviceClass);
+			if (serviceBean == null)
+				throw new NullPointerException("Spring IoC 中找不到对应的 Bean：" + serviceClass + "，是否已经加入 Bean 扫描，或者添加 @Service 的注解？");
+
 			String serviceMethod = annotation.methodName();
 
 			if ("".equals(serviceMethod))

@@ -1,5 +1,6 @@
 package com.ajaxjs.entity;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.util.CollectionUtils;
@@ -18,7 +19,7 @@ public class CRUD {
 	/**
 	 * 创建实体
 	 * 
-	 * @param <T>
+	 * @param      <T>
 	 * @param bean
 	 * @param dao
 	 * @return
@@ -70,5 +71,17 @@ public class CRUD {
 
 			return ids;
 		}
+	}
+
+	/**
+	 * 查询列表
+	 * 
+	 * @param dao
+	 * @return
+	 */
+	public static <T> List<T> findList(IDataService<T> dao) {
+		List<T> list = dao.findList();
+
+		return CollectionUtils.isEmpty(list) ? Collections.emptyList() : list;
 	}
 }
