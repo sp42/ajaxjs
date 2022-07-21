@@ -26,6 +26,8 @@ import java.util.function.Function;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.sql.util.geo.LocationPoint;
+import com.ajaxjs.sql.util.geo.MySqlGeoUtils;
 import com.ajaxjs.util.date.DateUtil;
 import com.ajaxjs.util.map.JsonHelper;
 
@@ -89,7 +91,7 @@ public class MappingValue {
 		if (value == null)
 			return false;
 
-		if (value.equals(true) || value.equals(1)|| value.equals(1L))
+		if (value.equals(true) || value.equals(1) || value.equals(1L))
 			return true;
 
 		if (value instanceof String) {
@@ -222,6 +224,13 @@ public class MappingValue {
 					break;
 				}
 			}
+		} else if (target == LocationPoint.class) { // mysql Geo 信息
+			double[] point = MySqlGeoUtils.bytesToOnePoint((byte[]) value);
+			LocationPoint p = new LocationPoint();
+			p.setLatitude(point[0]);
+			p.setLongitude(point[1]);
+
+			value = p;
 		}
 
 		return value;
