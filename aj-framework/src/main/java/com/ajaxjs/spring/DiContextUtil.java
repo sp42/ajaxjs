@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -49,13 +50,16 @@ public class DiContextUtil implements ApplicationContextAware {
 	/**
 	 * 获取已注入的对象
 	 * 
-	 * @param <T> 对象类型
+	 * @param     <T> 对象类型
 	 * @param clz 对象类型引用
 	 * @return 组件对象
 	 */
 	public static <T> T getBean(Class<T> clz) {
-//		context.getBean(clz, "");
-		return context.getBean(clz);
+		try {
+			return context.getBean(clz);
+		} catch (NoSuchBeanDefinitionException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -65,7 +69,11 @@ public class DiContextUtil implements ApplicationContextAware {
 	 * @return 组件对象
 	 */
 	public static Object getBean(String beanName) {
-		return context.getBean(beanName);
+		try {
+			return context.getBean(beanName);
+		} catch (NoSuchBeanDefinitionException e) {
+			return null;
+		}
 	}
 
 	/**
@@ -79,7 +87,7 @@ public class DiContextUtil implements ApplicationContextAware {
 
 	/**
 	 * 
-	 * @param <T>
+	 * @param     <T>
 	 * @param clz
 	 * @return key 为 bean 的 id，value 为 bean 实例
 	 */
@@ -100,7 +108,7 @@ public class DiContextUtil implements ApplicationContextAware {
 	/**
 	 * 手动注入 Bean
 	 * 
-	 * @param <T>
+	 * @param        <T>
 	 * @param clz
 	 * @param beanId
 	 */
@@ -116,7 +124,7 @@ public class DiContextUtil implements ApplicationContextAware {
 	/**
 	 * 手动注入 Bean 并立即返回
 	 * 
-	 * @param <T>
+	 * @param        <T>
 	 * @param clz
 	 * @param beanId
 	 * @return
@@ -143,7 +151,7 @@ public class DiContextUtil implements ApplicationContextAware {
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 		if (requestAttributes == null)
 			return null;
-		
+
 		return ((ServletRequestAttributes) requestAttributes).getRequest();
 	}
 
