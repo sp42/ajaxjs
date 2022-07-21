@@ -28,7 +28,7 @@
 
 <script lang="ts">
 // 提供模糊搜索，列表展示，选择的功能
-import { xhr_get } from "../../util/xhr";
+import { xhr_get, getPageList } from "../../util/xhr";
 
 export default {
   data() {
@@ -52,14 +52,14 @@ export default {
       searchKeyword: "",
 
       databaseList: [],
-      databaseName:''
+      databaseName: "",
     };
   },
 
   props: {
     listColumn: { type: Array, required: true },
     apiUrl: { type: String, required: true },
-    dsid:{}
+    dsid: {},
   },
 
   mounted() {
@@ -81,21 +81,23 @@ export default {
       if (this.searchKeyword) p.tablename = this.searchKeyword;
       if (this.databaseName) p.dbName = this.databaseName;
 
-      xhr_get(this.apiUrl,
-        (j: RepsonseResult) => {
-          if (j.result) {
-            this.data = j.result;
-            this.total = j.total;
+      // xhr_get(this.apiUrl,
+      //   (j: RepsonseResult) => {
+      //     if (j.result) {
+      //       this.data = j.result;
+      //       this.total = j.total;
 
-            // this.resetData();
-          } else {
-            this.data = [];
-            this.total = 0;
-            if (!j.isOk && j.msg) this.$Message.error(j.msg);
-          }
-        },
-        p
-      );
+      //       // this.resetData();
+      //     } else {
+      //       this.data = [];
+      //       this.total = 0;
+      //       if (!j.isOk && j.msg) this.$Message.error(j.msg);
+      //     }
+      //   },
+      //   p
+      // );
+      // alert(999)
+      xhr_get(this.apiUrl, getPageList(this, this), p);
     },
     handleChangePageSize(): void {
       let start = (this.current - 1) * this.pageSize,
@@ -117,7 +119,8 @@ export default {
       this.$refs.inputEl.$el.querySelector("input").value = "";
     },
     search(ev: Event): void {
-      let input: EventTarget = ev.target, v: string = (<HTMLInputElement>input).value;
+      let input: EventTarget = ev.target,
+        v: string = (<HTMLInputElement>input).value;
 
       if (v) {
         this.searchKeyword = v;
@@ -154,17 +157,20 @@ export default {
     },
     "$parent.$parent.isCrossDb"(v): void {
       if (v) {
-         xhr_get(this.$parent.$parent.API + '/getDatabases', (j: RepsonseResult) => {
-                if (j.result) {
-                    this.databaseList = j.result;
-                } else
-                    this.$Message.warning('获取数据库名失败');
-            }, {datasourceId: this.dsid});
+        xhr_get(
+          this.$parent.$parent.API + "/getDatabases",
+          (j: RepsonseResult) => {
+            if (j.result) {
+              this.databaseList = j.result;
+            } else this.$Message.warning("获取数据库名失败");
+          },
+          { datasourceId: this.dsid }
+        );
       }
     },
     databaseName(v) {
       this.getData();
-    }
+    },
   },
 };
 </script>

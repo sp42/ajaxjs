@@ -109,7 +109,7 @@ export default {
     },
 
     save(): void {
-      xhr_post_upload("", (j) => {}, {}, { contentType: null });
+      // xhr_post_upload("", (j) => {}, {}, { contentType: null });
     },
   },
 };

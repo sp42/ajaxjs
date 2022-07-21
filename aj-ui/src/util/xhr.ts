@@ -283,11 +283,13 @@ export function getQuery(val: string): string {
     return '';
 }
 
-export function getPageList(self: any, listArray: any): XhrCallback {
+export function getPageList(self: any, listArray: any, callback?: Function): XhrCallback {
     return (j: JsonResponse) => {
         if (j.status) {
             listArray.total = j.total;
             listArray.data = j.data;
+
+            callback && callback();
         } else
             self.$Message.warning(j.message || '获取数据失败');
     }

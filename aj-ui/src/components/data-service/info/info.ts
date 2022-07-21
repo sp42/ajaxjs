@@ -39,6 +39,7 @@ export default {
         // 获取详情
         xhr_get(`${this.API}/${this.tableId}`, (j: JsonResponse) => {
             let _table: DataService_TableConfig = (<any>j.data) as DataService_TableConfig;
+      
             this.table.name = _table.name;
             this.table.urlRoot = _table.urlRoot;
             this.table.urlDir = _table.urlDir;
@@ -81,11 +82,11 @@ export default {
          * 更新
          */
         saveOrUpdate(): void {
-            xhr_put(`${this.API}/${this.tableId}`, (j: RepsonseResult) => {
-                if (j.isOk) {
+            xhr_put(`${this.API}/${this.tableId}`, (j: JsonResponse) => {
+                if (j.status) {
                     this.$Message.success('修改成功');
                 } else
-                    this.$Message.info('修改失败。原因：' + j.msg);
+                    this.$Message.info('修改失败。原因：' + j.message);
             }, {
                 tableName: this.table.tableName,
                 name: this.table.name,
