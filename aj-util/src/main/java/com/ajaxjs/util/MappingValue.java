@@ -166,9 +166,16 @@ public class MappingValue {
 			return null;
 		else if (target == boolean.class || target == Boolean.class) // 布尔型
 			value = toBoolean(value);
-		else if (target == int.class || target == Integer.class) // 整形
-			value = StringUtils.hasText(value.toString()) ? Integer.parseInt(value.toString()) : 0;
-		else if (target == int[].class || target == Integer[].class) {
+		else if (target == int.class || target == Integer.class) { // 整形
+			if (value instanceof Integer) {
+
+//				System.out.println("::::::" + value.getClass());
+//				System.out.println("::::::" + value.getClass().getName());
+
+			} else {
+				value = StringUtils.hasText(value.toString()) ? Integer.parseInt(value.toString()) : 0;
+			}
+		} else if (target == int[].class || target == Integer[].class) {
 			// 复数
 			if (value instanceof String)
 				value = stringArr2intArr((String) value, DIVER + "");
@@ -225,12 +232,21 @@ public class MappingValue {
 				}
 			}
 		} else if (target == LocationPoint.class) { // mysql Geo 信息
-			double[] point = MySqlGeoUtils.bytesToOnePoint((byte[]) value);
-			LocationPoint p = new LocationPoint();
-			p.setLatitude(point[0]);
-			p.setLongitude(point[1]);
+			if (value instanceof byte[]) {
+				double[] point = MySqlGeoUtils.bytesToOnePoint((byte[]) value);
+				LocationPoint p = new LocationPoint();
+				p.setLatitude(point[0]);
+				p.setLongitude(point[1]);
 
-			value = p;
+				value = p;
+			} else if (value instanceof Map) {
+				LocationPoint p = new LocationPoint();
+				Map<String, Object> map = (Map<String, Object>) value;
+				p.setLatitude(Double.parseDouble(map.get("latitude").toString()));
+				p.setLongitude(Double.parseDouble(map.get("longitude").toString()));
+
+				value = p;
+			}
 		}
 
 		return value;

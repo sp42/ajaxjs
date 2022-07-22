@@ -210,8 +210,7 @@ public class MapTool {
 
 				fn.item(key, value, property);
 			}
-		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning(e);
 		}
 	}
@@ -234,8 +233,7 @@ public class MapTool {
 
 			try {
 				if (map != null && map.containsKey(key)) {
-					value = map.get(key);
-
+					value = map.get(key); 
 					// null 是不会传入 bean 的
 					if (value != null) {
 						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
@@ -259,10 +257,7 @@ public class MapTool {
 						} else {
 							if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
 								value = MappingValue.objectCast(value, t);
-						}
-
-//						LOGGER.info("t:" + t.toString());
-//						LOGGER.info("v:" + value + " type: " + value.getClass());
+						} 
 
 						try {
 							property.getWriteMethod().invoke(bean, value);
