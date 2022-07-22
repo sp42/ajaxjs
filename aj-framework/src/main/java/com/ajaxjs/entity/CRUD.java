@@ -31,6 +31,9 @@ public class CRUD {
 		if (obj == null)
 			throw new NullPointerException("创建失败");
 		else {
+			if (obj instanceof String)
+				obj = Long.parseLong((String) obj);
+
 			K newly = (K) obj;
 			bean.setId(newly);
 

@@ -38,6 +38,10 @@ import com.ajaxjs.util.logger.LogHelper;
  * 数据服务 后台控制器
  * 
  * 数据服务本身的控制器
+ * 
+ * 
+        "camelCase2DbStyle": true,
+        "dbStyle2CamelCase": true
  */
 @RestController
 @RequestMapping("/admin/data_service")

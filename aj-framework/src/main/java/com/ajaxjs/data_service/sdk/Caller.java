@@ -17,6 +17,7 @@ import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.sql.util.geo.LocationPoint;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -305,7 +306,11 @@ public class Caller extends BaseCaller {
 		for (String key : params.keySet()) {
 			Object value = params.get(key);
 
-			if (value instanceof Map || value instanceof IBaseModel)
+			if (value instanceof LocationPoint) {
+				LocationPoint p = (LocationPoint) value;
+				// 对应 mysql point 类型. MyBatis 的 SQL 语句还要加上 ST_GeomFromText(）函数
+				params.put(key, "POINT(" + p.getLatitude() + " " + p.getLongitude() + ")");
+			} else if (value instanceof Map || value instanceof IBaseModel)
 				params.put(key, JsonHelper.toJson(value));
 		}
 
