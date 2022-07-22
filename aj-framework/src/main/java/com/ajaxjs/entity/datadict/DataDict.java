@@ -13,6 +13,8 @@ import com.ajaxjs.entity.CommonEntity;
  * @date 2021-11-07
  */
 public class DataDict implements CommonEntity {
+	private static final long serialVersionUID = 8694943130249360094L;
+
 	/**
 	 * 主键 id，自增
 	 */
