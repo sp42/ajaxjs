@@ -114,7 +114,7 @@ public class Caller extends BaseCaller {
 			// 其他类型
 			uri += "/" + methodName;
 			node = exec(uri, RuntimeData.GET);
-			LOGGER.info(params);
+//			LOGGER.info(params);
 
 			if (args != null && args.length >= 1) {
 				// 方法参数转换为 SQL 参数

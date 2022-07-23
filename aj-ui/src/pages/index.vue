@@ -40,6 +40,7 @@
         <template slot="title">业务建模</template>
         <MenuItem name="6-1" @click.native="load='DataSource'">数据源</MenuItem>
         <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem>
+        <MenuItem name="6-2" @click.native="load='DataServiceIndex'">数据服务 New</MenuItem>
         <MenuItem name="6-3" @click.native="load='ModelMgr'">模型管理</MenuItem>
         <MenuItem name="6-4" @click.native="load='FactoryList'">列表生成器</MenuItem>
         <MenuItem name="6-6" @click.native="routeTo('form-designer')">可视化设计器</MenuItem>
@@ -57,7 +58,7 @@
       </Submenu>
 
     </Menu>
-    <div style="float:left;width:83%;">
+    <div style="float:left;width:83%;height: 100%;">
       <div v-if="!load" class="center" style="text-align:center;margin-top:25%;">Welcome!</div>
       <DataSource v-if="load == 'DataSource'" :api-root="apiRoot" />
       <DataService v-if="load == 'DataService'" :api-root="apiRoot" />
@@ -80,6 +81,7 @@
       <UserListIndex v-if="load == 'UserListIndex'" />
       <OrgIndex v-if="load == 'OrgIndex'" />
       <ApiHelper v-if="load == 'api-helper'" />
+      <DataServiceIndex v-if="load == 'DataServiceIndex'" />
 
       <sku v-if="load == 'sku'" />
     </div>
@@ -88,6 +90,7 @@
 <script>
 import DataSource from '../components/data-service/datasource/datasource.vue';
 import DataService from '../components/data-service/data-service.vue';
+import DataServiceIndex from '../components/data-service/index/index.vue';
 import FactoryList from '../components/factory-list/list.vue';
 import FactoryListLoader from '../components/factory-list/list-loader.vue';
 import ModelMgr from '../components/factory-form/list.vue';
@@ -106,10 +109,10 @@ import ApiHelper from '../components/api-helper/api-helper.vue';
 import sku from './playground/sku.vue';
 
 export default {
-  components: { sku, DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
+  components: { DataServiceIndex,sku, DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
-      load: 'api-helper',
+      load: 'DataServiceIndex',
       apiRoot: window.config.dsApiRoot,
       theme2: 'light',
       listId: 0

@@ -109,12 +109,6 @@ oReq.send();
 </script>
 
 <style>
-html,
-body {
-  height: 100%;
-  overflow: hidden;
-}
-
 .mainTab
   > .ivu-tabs-bar
   > .ivu-tabs-nav-container
@@ -125,6 +119,8 @@ body {
 }
 </style>
 
+<style lang="less" src="../common-css/left-right-layout.less"></style>
+
 <style lang="less" scoped>
 nav {
   height: 36px;
@@ -132,19 +128,5 @@ nav {
   padding: 0 10px;
   background-color: #f5f5f5;
   border-bottom: 1px solid lightgray;
-}
-
-.container {
-  display: flex;
-  height: 100%;
-  .left {
-    height: 100%;
-    flex: 0 0 300px;
-    border-right: 1px solid lightgray;
-  }
-  .right {
-    height: 100%;
-    flex: 1; /*div占据所有剩余宽度 */
-  }
 }
 </style>
