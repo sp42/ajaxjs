@@ -231,9 +231,12 @@ public class MapTool {
 			Object value = null;
 			Class<?> t = null;
 
+//			LOGGER.info("typeName".equals(key));
+
 			try {
 				if (map != null && map.containsKey(key)) {
-					value = map.get(key); 
+					value = map.get(key);
+
 					// null 是不会传入 bean 的
 					if (value != null) {
 						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
@@ -257,7 +260,7 @@ public class MapTool {
 						} else {
 							if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
 								value = MappingValue.objectCast(value, t);
-						} 
+						}
 
 						try {
 							property.getWriteMethod().invoke(bean, value);
@@ -272,30 +275,29 @@ public class MapTool {
 
 				// 子对象
 				if (isChild && map != null) {
-					for (String mKey : map.keySet()) {
-						if (mKey.contains(key + '_')) {
-							Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter
-																											// 方法
-
-							Object subBean = getter.invoke(bean);
-							String subBeanKey = mKey.replaceAll(key + '_', "");
-
-							if (subBean != null) {// 已有子 bean
-								if (map.get(mKey) != null) // null 值不用处理
-									ReflectUtil.setProperty(subBean, subBeanKey, map.get(mKey));
-							} else { // map2bean
-								Map<String, Object> subMap = new HashMap<>();
-								subMap.put(subBeanKey, map.get(mKey));
-								subBean = map2Bean(subMap, setter.getParameterTypes()[0], isTransform);
-								setter.invoke(bean, subBean); // 保存新建的 bean
-							}
-						}
-					}
+//					for (String mKey : map.keySet()) {
+//						if (mKey.contains(key + '_')) {
+//							Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter
+//																											// 方法
+//
+//							Object subBean = getter.invoke(bean);
+//							String subBeanKey = mKey.replaceAll(key + '_', "");
+//
+//							if (subBean != null) {// 已有子 bean
+//								if (map.get(mKey) != null) // null 值不用处理
+//									ReflectUtil.setProperty(subBean, subBeanKey, map.get(mKey));
+//							} else { // map2bean
+//								Map<String, Object> subMap = new HashMap<>();
+//								subMap.put(subBeanKey, map.get(mKey));
+//								subBean = map2Bean(subMap, setter.getParameterTypes()[0], isTransform);
+//								setter.invoke(bean, subBean); // 保存新建的 bean
+//							}
+//						}
+//					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				if (e instanceof IllegalArgumentException)
-					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value,
-							value != null ? value.getClass().toString() : "null");
+					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value, value != null ? value.getClass().toString() : "null");
 				else
 					LOGGER.warning(e);
 			}

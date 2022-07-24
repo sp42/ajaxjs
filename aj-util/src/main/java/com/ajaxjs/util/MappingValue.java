@@ -225,8 +225,17 @@ public class MappingValue {
 		} else if (target.isEnum()) { // 枚举
 			Object[] enumConstants = target.getEnumConstants();
 
-			for (Object obj : enumConstants) {
-				if (obj.toString().equals(value)) {
+			boolean isNumber = value instanceof Integer;
+			for (Object obj : enumConstants) { // value 跟枚举类型比较
+				if (isNumber) {
+					Enum<?> e = ((Enum<?>) obj);
+
+					if (e.ordinal() == ((Integer) value)) {
+						value = e.ordinal();
+						break;
+					}
+
+				} else if (obj.toString().equals(value)) {
 					value = obj;
 					break;
 				}

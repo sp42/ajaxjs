@@ -19,7 +19,7 @@ public class CRUD {
 	/**
 	 * 创建实体
 	 * 
-	 * @param      <T>
+	 * @param <T>
 	 * @param bean
 	 * @param dao
 	 * @return
@@ -49,6 +49,14 @@ public class CRUD {
 		return dao.update((T) bean);
 	}
 
+	/**
+	 * 
+	 * @param <T>
+	 * @param id
+	 * @param dao
+	 * @param beanClz
+	 * @return
+	 */
 	public static <T extends Identity<Long>> boolean delete(Long id, IDataService<T> dao, Class<T> beanClz) {
 		T bean = ReflectUtil.newInstance(beanClz);
 		bean.setId(id);
@@ -77,10 +85,10 @@ public class CRUD {
 	}
 
 	/**
-	 * 查询列表
+	 * 查询列表。如果无记录，返回空列表
 	 * 
-	 * @param dao
-	 * @return
+	 * @param dao DAO
+	 * @return 列表
 	 */
 	public static <T> List<T> findList(IDataService<T> dao) {
 		List<T> list = dao.findList();
