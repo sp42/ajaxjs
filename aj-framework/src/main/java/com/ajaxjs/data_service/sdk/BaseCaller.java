@@ -109,11 +109,12 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 				}
 			} else if (args.length == 2) { // 两个参数
 				String value;
-
-				if (args[1] instanceof String)
-					value = "'" + args[1] + "'";
+				Object arg = args[1];
+				
+				if (arg instanceof String)
+					value = "'" + arg + "'";
 				else
-					value = args[1].toString();
+					value = arg.toString();
 
 				queryParams.put("where", args[0] + " = " + value);
 			}
