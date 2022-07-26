@@ -15,6 +15,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -325,6 +326,10 @@ public class StrUtil {
 		}
 
 		return sb.toString();
+	}
+
+	public static String join(String[] arr, String tpl, String str) {
+		return join(Arrays.asList(arr), tpl, str);
 	}
 
 	public static String join(List<String> list, String str) {
