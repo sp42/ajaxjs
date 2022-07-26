@@ -111,14 +111,17 @@ public abstract class Commander extends BaseCommander {
 				for (int i = 0; i < list.size(); i++) {
 					Map<String, Object> map = list.get(i);
 
-					// 数据库风格 转换 驼峰
-					Map<String, Object> camel = new HashMap<>(map.size());
+					if (map != null) {
+//System.out.println(">>>>>>" + map);
+						// 数据库风格 转换 驼峰
+						Map<String, Object> camel = new HashMap<>(map.size());
 
-					for (String key : map.keySet())
-						camel.put(JdbcUtil.changeColumnToFieldName(key), map.get(key));
+						for (String key : map.keySet())
+							camel.put(JdbcUtil.changeColumnToFieldName(key), map.get(key));
 
-					map.clear(); // 提早清除
-					list.set(i, camel);
+						map.clear(); // 提早清除
+						list.set(i, camel);
+					}
 				}
 			}
 		}
