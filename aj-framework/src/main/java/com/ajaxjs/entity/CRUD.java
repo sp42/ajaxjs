@@ -8,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 import com.ajaxjs.data_service.sdk.IDataService;
 import com.ajaxjs.framework.Identity;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.StrUtil;
 
 /**
  * 通用的 CRUD 业务方法
@@ -19,7 +20,7 @@ public class CRUD {
 	/**
 	 * 创建实体
 	 * 
-	 * @param <T>
+	 * @param      <T>
 	 * @param bean
 	 * @param dao
 	 * @return
@@ -51,7 +52,7 @@ public class CRUD {
 
 	/**
 	 * 
-	 * @param <T>
+	 * @param         <T>
 	 * @param id
 	 * @param dao
 	 * @param beanClz
@@ -94,5 +95,25 @@ public class CRUD {
 		List<T> list = dao.findList();
 
 		return CollectionUtils.isEmpty(list) ? Collections.emptyList() : list;
+	}
+
+	/**
+	 * 返回下一个序号
+	 * 
+	 * @param maxId 当前最大的序号
+	 * @param width 序号宽度
+	 * @return
+	 */
+	public static String getNextCode(String maxId, int width) {
+		String dig = "";
+
+		if (maxId != null) {
+			dig = StrUtil.regMatch("\\d+$", maxId);
+			int i = Integer.parseInt(dig);
+			dig = (++i) + "";
+		} else
+			dig = "1";
+
+		return StrUtil.leftPad(dig, width, "0");
 	}
 }

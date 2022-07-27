@@ -177,7 +177,9 @@ public class Caller extends BaseCaller {
 					});
 
 					return _list;
-				} else {// bean
+				} else if (clz == null) // map
+					return list;
+				else {// bean
 					List<Object> _list = new ArrayList<>();
 
 					list.forEach(item -> {
