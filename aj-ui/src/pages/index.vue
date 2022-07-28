@@ -112,7 +112,7 @@ export default {
   components: { DataServiceIndex,sku, DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
-      load: 'DataServiceIndex',
+      load: 'DataService',
       apiRoot: window.config.dsApiRoot,
       theme2: 'light',
       listId: 0
@@ -135,14 +135,6 @@ export default {
 </script>
 
 <style>
-html,
-body,
-body > div.main {
-  height: 100%;
-}
-body > div.main > ul {
-  height: 100%;
-}
 
 .home h2,
 .home p {
