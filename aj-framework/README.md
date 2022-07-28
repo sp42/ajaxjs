@@ -10,6 +10,6 @@
 <dependency>
   <groupId>com.ajaxjs</groupId>
   <artifactId>ajaxjs-framework</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 </dependency>
 ```
