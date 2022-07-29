@@ -74,7 +74,9 @@ public class ControllerProxy implements InvocationHandler {
 //			System.out.println("调用后，result = " + result);
 
 			return result;
-		} else
+		} else {
+			System.err.println("接口方法 " + method + " 没配置 ControllerMethod 注解");
 			return ReflectionUtils.invokeMethod(method, this, args);
+		}
 	}
 }
