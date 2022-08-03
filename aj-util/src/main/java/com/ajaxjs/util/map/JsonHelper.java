@@ -110,9 +110,19 @@ public class JsonHelper {
 	public static String toJson(Object obj) {
 		if (obj == null)
 			return null;
-		else if (obj instanceof Boolean || obj instanceof Number)
+		else if (obj instanceof Boolean || obj instanceof Number) {
+			if (obj instanceof Long) {
+				Long l = (Long) obj;// js number 最大长度为 16，转换为字符串
+
+				if (l > 100000L) {
+					String s = l.toString();
+					if (s.length() > 16)
+						return '\"' + s + '\"';
+				}
+			}
+
 			return obj.toString();
-		else if (obj instanceof String)
+		} else if (obj instanceof String)
 			return '\"' + jsonString_covernt((String) obj) + '\"';
 		else if (obj instanceof String[])
 			return jsonArr((String[]) obj, v -> "\"" + v + "\"");
@@ -278,7 +288,7 @@ public class JsonHelper {
 		} catch (IntrospectionException e) {
 			e.printStackTrace();
 		}
-		
+
 		if (props != null && props.length > 0) {
 			for (int i = 0; i < props.length; i++) {
 				try {

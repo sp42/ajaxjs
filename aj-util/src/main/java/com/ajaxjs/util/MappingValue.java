@@ -219,6 +219,11 @@ public class MappingValue {
 			if (value instanceof Double) {
 				value = ((Double) value).floatValue();
 			}
+		} else if (target == double.class || target == Double.class) {
+//			if (value instanceof Float) {
+//				value = ((Float) value).doubleValue();
+//			}
+			value = Double.parseDouble(value.toString());
 		} else if (value instanceof String && IBaseModel.class.isAssignableFrom(target)) {
 			// json2bean
 			value = JsonHelper.parseMapAsBean((String) value, target);
