@@ -1,3 +1,4 @@
+
 package com.ajaxjs.data_service.sdk;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.framework.Identity;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.util.geo.LocationPoint;
@@ -281,6 +283,18 @@ public class Caller extends BaseCaller {
 	boolean delete(String methodName, Object[] args) {
 		if ("delete".equals(methodName))
 			methodName = null;
+
+		if (args[0] instanceof Identity<?>) {
+			@SuppressWarnings("unchecked")
+			Long id = ((Identity<Long>) args[0]).getId();
+			Map<String, Object> params = new HashMap<>();
+			params.put("id", id); // 写死 id
+			args[0] = params;
+		} else if (args[0] instanceof Number || args[0] instanceof String) {
+			Map<String, Object> params = new HashMap<>();
+			params.put("id", args[0]); // 写死 id
+			args[0] = params;
+		}
 
 		return delete(getServiceContext(RuntimeData.DELETE, methodName, args), getPlugins());
 	}
