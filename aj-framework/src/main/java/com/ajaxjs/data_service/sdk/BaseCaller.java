@@ -121,24 +121,24 @@ public abstract class BaseCaller extends Commander implements InvocationHandler 
 
 			return proxy;
 		} else if (methodName.startsWith("find") || methodName.startsWith("get")) {
-			LOGGER.info("相当于 HTTP GET");
+//			LOGGER.info("相当于 HTTP GET");
 			args = makeMapArgs(method, args);
 			return get(method, methodName, args);
 		} else if (methodName.equals("create") || methodName.startsWith("create")) {
-			LOGGER.info("相当于 HTTP POST");
+//			LOGGER.info("相当于 HTTP POST");
 			args = makeMapArgs(method, args);
 			return create(methodName, args);
 		} else if (methodName.startsWith("set") || methodName.equals("update")) {
-			LOGGER.info("相当于 HTTP PUT");
+//			LOGGER.info("相当于 HTTP PUT");
 
 			args = makeMapArgs(method, args);
 			return update(methodName, args);
 		} else if (methodName.equals("delete") || methodName.startsWith("delete")) {
-			LOGGER.info("相当于 HTTP DELETE");
+//			LOGGER.info("相当于 HTTP DELETE");
 			args = makeMapArgs(method, args);
 			return delete(methodName, args);
 		} else {
-			LOGGER.info("其他自定义命令");
+//			LOGGER.info("其他自定义命令");
 			throw new Error("暂时不支持其他自定义命令，请按照命名风格自定义命令");
 		}
 	}

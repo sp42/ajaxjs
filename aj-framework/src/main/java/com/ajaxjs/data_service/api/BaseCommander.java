@@ -94,7 +94,7 @@ public abstract class BaseCommander implements DataServiceConstant {
 	 * @return 单个记录的 Map 如果返回 null 找不到数据
 	 */
 	public static Map<String, Object> info(DataSource ds, String sql, Map<String, Object> params) {
-		LOGGER.info("查询单个记录");
+//		LOGGER.info("查询单个记录");
 
 		try (SqlSession session = getMyBatisSession(ds)) {
 			return new SqlMapper(session).selectOne(sql, params);
