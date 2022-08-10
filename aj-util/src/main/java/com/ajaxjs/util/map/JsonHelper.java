@@ -96,6 +96,7 @@ public class JsonHelper {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Map<String, Object>> parseList(String str) {
+		str = str.replaceAll("\\r|\\n", "");
 		return (List<Map<String, Object>>) parse(str);
 	}
 
@@ -116,7 +117,7 @@ public class JsonHelper {
 
 				if (l > 100000L) {
 					String s = l.toString();
-					if (s.length() > 16)
+					if (s.length() > 15) // gson 最大 15
 						return '\"' + s + '\"';
 				}
 			}
