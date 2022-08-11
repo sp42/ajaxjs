@@ -12,6 +12,7 @@ package com.ajaxjs.net.http;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.function.Consumer;
 
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -80,4 +81,11 @@ public class Head extends Base {
 	public static long getFileSize(String url) {
 		return head(url).getContentLength();
 	}
+
+	/**
+	 * 加入 HTTP 头为 JSON
+	 */
+	public final static Consumer<HttpURLConnection> GET_JSON = (head) -> {
+		head.setRequestProperty("Content-Type", "application/json");
+	};
 }
