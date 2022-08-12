@@ -99,7 +99,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 		if (StringUtils.hasText(comment))
 			resultWarpper.setMessage(comment);
 
-		outputMessage.getHeaders().setContentType(CONTENT_TYPE);
+		outputMessage.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
 
 		try (OutputStream out = outputMessage.getBody();) {
 			out.write(resultWarpper.getBytes());

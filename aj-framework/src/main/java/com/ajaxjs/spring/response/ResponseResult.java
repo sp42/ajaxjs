@@ -1,5 +1,7 @@
 package com.ajaxjs.spring.response;
 
+import java.nio.charset.StandardCharsets;
+
 public class ResponseResult {
 	private Integer status;
 
@@ -93,6 +95,6 @@ public class ResponseResult {
 	 * @return
 	 */
 	public byte[] getBytes() {
-		return toString().getBytes();
+		return toString().getBytes(StandardCharsets.UTF_8);
 	}
 }
