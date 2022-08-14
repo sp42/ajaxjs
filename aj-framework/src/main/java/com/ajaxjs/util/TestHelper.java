@@ -17,4 +17,7 @@ public class TestHelper {
 	public static void printJson(Object obj) {
 		System.out.println(JsonHelper.format(JsonHelper.toJson(obj)));
 	}
+	public static void printJson2(Object obj) {
+		System.out.println((JsonHelper.toJson(obj)));
+	}
 }

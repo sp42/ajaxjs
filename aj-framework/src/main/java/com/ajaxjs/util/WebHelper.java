@@ -125,6 +125,21 @@ public class WebHelper {
 	}
 
 	/**
+	 * 返回 // 主机名+端口+项目前缀（如果为 80 端口的话就默认不写 80） 有时通过代理返回的，可能不正确 自动识别 http or https
+	 *
+	 * @return 网站名称
+	 */
+	public static String getBasePathAuto(HttpServletRequest req) {
+		String prefix = "//" + req.getServerName();
+
+		int port = req.getServerPort();
+		if (port != 80)
+			prefix += ":" + port;
+
+		return prefix + req.getContextPath();
+	}
+
+	/**
 	 * 获取资源 URI，忽略项目前缀和最后的文件名（如 index.jsp） 分析 URL 目标资源（最原始的版本）
 	 *
 	 * @return 请求路径
