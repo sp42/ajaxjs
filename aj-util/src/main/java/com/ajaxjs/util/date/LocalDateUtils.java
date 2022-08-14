@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -17,6 +18,12 @@ public class LocalDateUtils {
 	 * 中国时区
 	 */
 	private static final ZoneOffset CHINA_ZONE = ZoneOffset.ofHours(8);
+
+	public static boolean nowIsAfter(Date date) {
+		LocalDate _date = LocalDate.parse(DateUtil.formatDate(date));
+
+		return LocalDate.now().isAfter(_date);
+	}
 
 	// ------------------------------------------------------------------------------------------
 
@@ -158,6 +165,7 @@ public class LocalDateUtils {
 	public static String currentDateStr() {
 		return toDateStr(LocalDate.now());
 	}
+
 	/**
 	 * 返回当前日期字符串（格式化表达式：YYYYMMdd）
 	 * 
