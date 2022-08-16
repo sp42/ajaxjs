@@ -34,9 +34,11 @@ import org.springframework.util.StringUtils;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.ValueEnmu;
+import com.ajaxjs.jsonparser.JsonParseException;
 import com.ajaxjs.jsonparser.syntax.FMS;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.date.DateUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 序列化/反序列化 JSON
@@ -44,6 +46,8 @@ import com.ajaxjs.util.date.DateUtil;
  * @author sp42 frank@ajaxjs.com
  */
 public class JsonHelper {
+	public static final LogHelper LOGGER = LogHelper.getLog(JsonHelper.class);
+
 	/**
 	 * 解析 JSON 为 Map 或 List
 	 * 
@@ -51,7 +55,15 @@ public class JsonHelper {
 	 * @return Map 或 List
 	 */
 	public static Object parse(String str) {
-		return new FMS(str).parse();
+		str = removeCr(str);
+
+		try {
+			return new FMS(str).parse();
+		} catch (JsonParseException e) {
+			LOGGER.warning("JSON 解析错误：" + str);
+
+			throw e;
+		}
 	}
 
 	/**
@@ -66,13 +78,24 @@ public class JsonHelper {
 	}
 
 	/**
+	 * 解析 JSON 字符串为 List
+	 * 
+	 * @param str 字符串
+	 * @return List
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Map<String, Object>> parseList(String str) {
+		return (List<Map<String, Object>>) parse(str);
+	}
+
+	/**
 	 * 解析 JSON 字符串为 Map。清除 \r\n 字符
 	 * 
 	 * @param str JSON 字符串
 	 * @return Map
 	 */
 	public static Map<String, Object> parseMapClean(String str) {
-		str = str.replaceAll("\\r|\\n", "");
+		str = removeCr(str);
 		return parseMap(str);
 	}
 
@@ -84,20 +107,8 @@ public class JsonHelper {
 	 * @return Bean 对象
 	 */
 	public static <T> T parseMapAsBean(String json, Class<T> clz) {
-		Map<String, Object> map = parseMapClean(json);
+		Map<String, Object> map = parseMap(json);
 		return MapTool.map2Bean(map, clz, true); // 应该为 false
-	}
-
-	/**
-	 * 解析 JSON 字符串为 List
-	 * 
-	 * @param str 字符串
-	 * @return List
-	 */
-	@SuppressWarnings("unchecked")
-	public static List<Map<String, Object>> parseList(String str) {
-		str = str.replaceAll("\\r|\\n", "");
-		return (List<Map<String, Object>>) parse(str);
 	}
 
 	/**
@@ -198,7 +209,7 @@ public class JsonHelper {
 				try {
 					_obj = field.get(obj);
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+					LOGGER.warning(e);
 				}
 
 				arr.add('\"' + key + "\":" + toJson(_obj));
@@ -287,7 +298,7 @@ public class JsonHelper {
 		try {
 			props = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
 		} catch (IntrospectionException e) {
-			e.printStackTrace();
+			LOGGER.warning(e);
 		}
 
 		if (props != null && props.length > 0) {
@@ -303,7 +314,7 @@ public class JsonHelper {
 					json.append(",");
 				} catch (Exception e) {
 					System.out.println(props[i].getName());
-					e.printStackTrace();
+					LOGGER.warning(e);
 				}
 			}
 
@@ -325,7 +336,7 @@ public class JsonHelper {
 						json.append(value);
 						json.append(",");
 					} catch (IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
+						LOGGER.warning(e);
 					}
 				}
 
@@ -430,6 +441,16 @@ public class JsonHelper {
 	 */
 	public static String javaValue2jsonValue(String str) {
 		return str.replaceAll("\"", "\\\\\"").replaceAll("\t", "\\\\\t");
+	}
+
+	/**
+	 * 清除 \r\n 字符
+	 * 
+	 * @param str JSON 字符串
+	 * @return 转换后的字符串
+	 */
+	public static String removeCr(String str) {
+		return str.replaceAll("\\r|\\n", "");
 	}
 
 	/**
