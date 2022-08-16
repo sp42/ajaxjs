@@ -47,7 +47,7 @@ public class MybatisInterceptor implements Interceptor {
 			Configuration configuration = mappedStatement.getConfiguration();
 
 			String sql = getSql(configuration, boundSql, sqlId, 0);
-			LOGGER.info("实际执行 SQL：" + sql);
+			LOGGER.infoYellow("执行 SQL：" + sql);
 		} catch (Exception e) {
 			LOGGER.warning(e);
 		}

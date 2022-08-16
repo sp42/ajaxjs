@@ -221,7 +221,7 @@ public abstract class Commander extends BaseCommander {
 	 * @return
 	 */
 	public static Serializable create(ServiceContext ctx, List<IPlugin> plugins) {
-		LOGGER.info("数据服务 创建实体");
+//		LOGGER.info("数据服务 创建实体");
 
 		DataServiceDml node = ctx.getNode();
 		DataServiceTable tableInfo = node.getTableInfo();
@@ -349,7 +349,7 @@ public abstract class Commander extends BaseCommander {
 	 * @return
 	 */
 	public static boolean update(ServiceContext ctx, List<IPlugin> plugins) {
-		LOGGER.info("数据服务 修改实体");
+//		LOGGER.info("数据服务 修改实体");
 		DataServiceDml node = ctx.getNode();
 		Map<String, Object> _params = ctx.getRequestParams();
 		DataServiceFieldsMapping fieldsMapping = node.getTableInfo().getFieldsMapping();
@@ -394,7 +394,7 @@ public abstract class Commander extends BaseCommander {
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
 
-		LOGGER.info(params);
+		LOGGER.info("修改实体:" + params);
 
 		try (SqlSession session = getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).update(sql, params);

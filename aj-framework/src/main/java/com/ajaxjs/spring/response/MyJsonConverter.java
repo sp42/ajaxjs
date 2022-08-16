@@ -56,8 +56,6 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 		boolean isMapParams = clazz == Map.class;
 		boolean isListParams = clazz == List.class;
 		boolean isJavaBean = IBaseModel.class.isAssignableFrom(clazz);
-//		System.out.println("readInternal:::" + inputMessage);
-//		System.out.println("readInternal:::" + isJavaBean);
 
 		// 对于 @RequestBody 有效
 		if (isMapParams || isJavaBean || isListParams) {
@@ -72,8 +70,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 				if (!isJavaBean)
 					return parseMap;
 				else
-					// raw body json to bean
-					return MapTool.map2Bean(parseMap, clazz, true);
+					return MapTool.map2Bean(parseMap, clazz, true);// raw body json to bean
 			}
 		}
 
@@ -98,8 +95,8 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 		String comment = ControllerProxy.ACTION_COMMNET.get();
 		if (StringUtils.hasText(comment))
 			resultWarpper.setMessage(comment);
-
-		outputMessage.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
+//		MediaType.APPLICATION_JSON_UTF8
+		outputMessage.getHeaders().setContentType(CONTENT_TYPE);
 
 		try (OutputStream out = outputMessage.getBody();) {
 			out.write(resultWarpper.getBytes());

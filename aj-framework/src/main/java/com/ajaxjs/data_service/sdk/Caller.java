@@ -249,7 +249,7 @@ public class Caller extends BaseCaller {
 
 	@Override
 	Serializable create(String methodName, Object[] args) {
-		LOGGER.info("Caller 创建实体");
+//		LOGGER.info("Caller 创建实体");
 		if ("create".equals(methodName))
 			methodName = null;
 

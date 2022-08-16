@@ -74,7 +74,7 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	 */
 	@SuppressWarnings("unchecked")
 	public synchronized void init() {
-		LOGGER.info("初始化 API 接口。");
+//		LOGGER.info("初始化 API 接口。");
 		DataSource ds = cfg.getDataSource(); // 总配置的数据源
 
 		try {
@@ -173,7 +173,7 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	 * 初始化多个数据源
 	 */
 	private void initMulitDataSource() {
-		LOGGER.info("初始化所有数据源");
+//		LOGGER.info("初始化所有数据源");
 
 		mulitDataSource.clear();
 		List<MyDataSource> findList = DataSourceDAO.findList(QueryTools.setStatus(Status.ONLINE.getValue()));
