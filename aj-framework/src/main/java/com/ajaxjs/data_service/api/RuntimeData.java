@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.sql.DataSource;
 
@@ -60,7 +61,9 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	/**
 	 * 是否已初始化的标识
 	 */
-	private static boolean isInit = false;
+	private static boolean isInit;
+
+	private static AtomicBoolean initialized = new AtomicBoolean(false);
 
 	@Autowired
 	private DataServiceConfig cfg;
@@ -158,9 +161,13 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	 * 初始化（带缓存控制）
 	 */
 	public void initCache() {
-		if (!isInit) {
+//		if (!isInit) {
+//			init();
+//			isInit = true;
+//		}
+
+		if (initialized.compareAndSet(false, true)) {// 如果为false，更新为true
 			init();
-			isInit = true;
 		}
 	}
 

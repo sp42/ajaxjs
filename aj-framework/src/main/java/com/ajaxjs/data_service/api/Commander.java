@@ -293,6 +293,7 @@ public abstract class Commander extends BaseCommander {
 
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
+		LOGGER.info("创建实体:" + params);
 
 		try (SqlSession session = getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).insert(sql, params);

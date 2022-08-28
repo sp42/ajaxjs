@@ -296,6 +296,7 @@ public class Caller extends BaseCaller {
 			args[0] = params;
 		}
 
+		LOGGER.info("删除实体" + args[0]);
 		return delete(getServiceContext(RuntimeData.DELETE, methodName, args), getPlugins());
 	}
 
