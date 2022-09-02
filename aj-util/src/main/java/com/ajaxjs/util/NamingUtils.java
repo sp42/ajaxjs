@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
  * @since 2021-10-27
  */
 public class NamingUtils {
-
 	private static final Pattern HUMP_PATTERN = Pattern.compile("[A-Z]");
+	
 	private static final Pattern UNDERLINE_PATTERN = Pattern.compile("_(\\w)");
 
 	/**
@@ -39,7 +39,6 @@ public class NamingUtils {
 	 * @return 转换后的名称
 	 */
 	public static String humpToUnderline(String name) {
-
 		Matcher matcher = HUMP_PATTERN.matcher(name);
 		StringBuffer buffer = new StringBuffer();
 
@@ -58,9 +57,7 @@ public class NamingUtils {
 	 * @return 转换后的名称
 	 */
 	public static String underlineToHump(String name) {
-
-		name = name.toLowerCase();
-		Matcher matcher = UNDERLINE_PATTERN.matcher(name);
+		Matcher matcher = UNDERLINE_PATTERN.matcher(name.toLowerCase());
 		StringBuffer buffer = new StringBuffer();
 
 		while (matcher.find())
