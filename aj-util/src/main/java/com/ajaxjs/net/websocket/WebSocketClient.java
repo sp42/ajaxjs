@@ -47,6 +47,7 @@ public class WebSocketClient {
 		try {
 			userSession = container.connectToServer(this, new URI(server));
 		} catch (DeploymentException | URISyntaxException | IOException e) {
+			LOGGER.warning("WS 地址： " + server);
 			LOGGER.warning(e);
 		}
 	}
