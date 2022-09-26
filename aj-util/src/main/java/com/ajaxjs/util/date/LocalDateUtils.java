@@ -19,12 +19,20 @@ public class LocalDateUtils {
 	 */
 	private static final ZoneOffset CHINA_ZONE = ZoneOffset.ofHours(8);
 
+	private static final DateTimeFormatter PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 	public static boolean nowIsAfter(Date date) {
-		LocalDate _date = LocalDate.parse(DateUtil.formatDate(date));
+		LocalDate _date = LocalDate.parse(DateUtil.formatDate(date), PATTERN);
 
 		return LocalDate.now().isAfter(_date);
 	}
 
+//	public static void main(String[] args) {
+//		String s = DateUtil.formatDate(new Date());
+////		System.out.println(s);
+////		LocalDate.parse(s); 
+//		LocalDate _date = LocalDate.parse(s, PATTERN);
+//	}
 	// ------------------------------------------------------------------------------------------
 
 	/**
