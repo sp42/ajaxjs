@@ -113,6 +113,7 @@ public class Caller extends BaseCaller {
 
 			return list;
 		} else {
+
 			// 其他类型
 			uri += "/" + methodName;
 			node = exec(uri, RuntimeData.GET);

@@ -15,12 +15,12 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
-import com.ajaxjs.Version;
 import com.ajaxjs.data_service.model.DataServiceConstant;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.mybatis.MybatisInterceptor;
 import com.ajaxjs.data_service.mybatis.SqlMapper;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -77,8 +77,8 @@ public abstract class BaseCommander implements DataServiceConstant {
 		configuration.setUseGeneratedKeys(true);
 		configuration.setCallSettersOnNulls(true);// 设置为 true 为 null 字段也会查询出来
 
-		if (Version.isDebug)
-			configuration.addInterceptor(new MybatisInterceptor()); // 打印 SQL
+//		if (Version.isDebug)
+		configuration.addInterceptor(new MybatisInterceptor()); // 打印 SQL
 
 		SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(configuration);
 
@@ -113,7 +113,7 @@ public abstract class BaseCommander implements DataServiceConstant {
 //		LOGGER.info("获取列表（不分页）");
 
 		boolean isDynamicSQL = Commander.isDynamicSQL(sql);
-		
+
 		if (isDynamicSQL) {// 是否包含 mybatis 脚本控制标签，有的话特殊处理
 			sql = "<script>" + sql + "</script>";
 		}
@@ -132,7 +132,7 @@ public abstract class BaseCommander implements DataServiceConstant {
 	 * @return 分页列表的 JSON
 	 */
 	public static PageResult<Map<String, Object>> page(DataSource ds, String sql, Map<String, Object> params) {
-		LOGGER.info("获取列表");
+//		LOGGER.info("获取列表");
 
 		if (params == null)
 			params = new HashMap<>();
@@ -237,9 +237,18 @@ public abstract class BaseCommander implements DataServiceConstant {
 			else
 				throw new RuntimeException("该命令 [" + uri + "] 未启用");
 		} else {
-			for (String key : states.keySet())
-				System.out.println(key);
-			throw new RuntimeException("不存在该路径 [" + uri + "] 之配置；或者未初始化数据服务");
+			if (states == null || states.size() == 0) {
+				// 自定义类型好像不会触发 ds 初始化，这里强制执行 TODO
+				ApiController api = DiContextUtil.getBean(ApiController.class);
+				api.init();
+//				api.initCache();
+
+				throw new RuntimeException("未初始化数据服务");
+			} else {
+				for (String key : states.keySet())
+					System.out.println(key);
+				throw new RuntimeException("不存在该路径 [" + uri + "] 之配置");
+			}
 		}
 	}
 

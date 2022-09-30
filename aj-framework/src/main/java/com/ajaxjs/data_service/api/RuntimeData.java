@@ -61,8 +61,6 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	/**
 	 * 是否已初始化的标识
 	 */
-	private static boolean isInit;
-
 	private static AtomicBoolean initialized = new AtomicBoolean(false);
 
 	@Autowired
@@ -81,7 +79,12 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 		DataSource ds = cfg.getDataSource(); // 总配置的数据源
 
 		try {
-			JdbcConnection.setConnection(ds.getConnection());
+			Connection connection = ds.getConnection();
+
+			if (connection == null)
+				LOGGER.warning("不能建立数据库连接");
+
+			JdbcConnection.setConnection(connection);
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}
@@ -161,11 +164,6 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	 * 初始化（带缓存控制）
 	 */
 	public void initCache() {
-//		if (!isInit) {
-//			init();
-//			isInit = true;
-//		}
-
 		if (initialized.compareAndSet(false, true)) {// 如果为false，更新为true
 			init();
 		}

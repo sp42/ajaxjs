@@ -33,6 +33,8 @@ public class MybatisInterceptor implements Interceptor {
 	@SuppressWarnings("unused")
 	private Properties properties;
 
+	private static String TEMP_SQL = null;
+
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		try {
@@ -47,6 +49,13 @@ public class MybatisInterceptor implements Interceptor {
 			Configuration configuration = mappedStatement.getConfiguration();
 
 			String sql = getSql(configuration, boundSql, sqlId, 0);
+
+			if (sql != null && !sql.toUpperCase().startsWith("SELECT")) {
+				if (sql.equals(TEMP_SQL)) // 相同 sql 不打印
+					return invocation.proceed();
+				TEMP_SQL = sql;
+			}
+
 			LOGGER.infoYellow("执行 SQL：" + sql);
 		} catch (Exception e) {
 			LOGGER.warning(e);
@@ -92,9 +101,9 @@ public class MybatisInterceptor implements Interceptor {
 
 		return value;
 	}
-	
+
 	/**
-	 *  @author:Shuoshi.Yan
+	 * @author:Shuoshi.Yan
 	 * @param cfg
 	 * @param boundSql
 	 * @return
@@ -111,7 +120,7 @@ public class MybatisInterceptor implements Interceptor {
 				sql = sql.replaceFirst("\\?", Matcher.quoteReplacement(getParameterValue(parameterObject)));
 			else {
 				MetaObject metaObject = cfg.newMetaObject(parameterObject);
-				
+
 				for (ParameterMapping parameterMapping : parameterMappings) {
 					String propertyName = parameterMapping.getProperty();
 
