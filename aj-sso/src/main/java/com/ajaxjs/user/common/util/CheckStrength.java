@@ -36,8 +36,8 @@ public class CheckStrength {
 	/**
 	 * 简单的密码字典
 	 */
-	private final static String[] DICTIONARY = { "password", "abc123", "iloveyou", "adobe123", "123123", "1234567890", "1314520", "a1b2c3", "123qwe", "aaa111", "qweasd", "admin",
-			"passwd" };
+	private final static String[] DICTIONARY = { "password", "abc123", "iloveyou", "adobe123", "123123", "1234567890", "1314520", "a1b2c3", "123qwe",
+			"aaa111", "qweasd", "admin", "passwd" };
 
 	/**
 	 * 检查字符类型，包括num、大写字母、小写字母和其他字符。
@@ -72,7 +72,6 @@ public class CheckStrength {
 			for (char c : passwd.toCharArray()) {
 				if (checkCharacterType(c) == type)
 					count++;
-
 			}
 		}
 
@@ -110,9 +109,12 @@ public class CheckStrength {
 			level++;
 
 		// 密码长度大于4并且2种类型组合......（不一一概述）
-		if (len > 4 && countLetter(passwd, NUM) > 0 && countLetter(passwd, SMALL_LETTER) > 0 || countLetter(passwd, NUM) > 0 && countLetter(passwd, CAPITAL_LETTER) > 0
-				|| countLetter(passwd, NUM) > 0 && countLetter(passwd, OTHER_CHAR) > 0 || countLetter(passwd, SMALL_LETTER) > 0 && countLetter(passwd, CAPITAL_LETTER) > 0
-				|| countLetter(passwd, SMALL_LETTER) > 0 && countLetter(passwd, OTHER_CHAR) > 0 || countLetter(passwd, CAPITAL_LETTER) > 0 && countLetter(passwd, OTHER_CHAR) > 0) {
+		if (len > 4 && countLetter(passwd, NUM) > 0 && countLetter(passwd, SMALL_LETTER) > 0
+				|| countLetter(passwd, NUM) > 0 && countLetter(passwd, CAPITAL_LETTER) > 0
+				|| countLetter(passwd, NUM) > 0 && countLetter(passwd, OTHER_CHAR) > 0
+				|| countLetter(passwd, SMALL_LETTER) > 0 && countLetter(passwd, CAPITAL_LETTER) > 0
+				|| countLetter(passwd, SMALL_LETTER) > 0 && countLetter(passwd, OTHER_CHAR) > 0
+				|| countLetter(passwd, CAPITAL_LETTER) > 0 && countLetter(passwd, OTHER_CHAR) > 0) {
 			level++;
 		}
 
@@ -125,13 +127,16 @@ public class CheckStrength {
 		}
 
 		// 密码长度大于8并且4种类型组合......（不一一概述）
-		if (len > 8 && countLetter(passwd, NUM) > 0 && countLetter(passwd, SMALL_LETTER) > 0 && countLetter(passwd, CAPITAL_LETTER) > 0 && countLetter(passwd, OTHER_CHAR) > 0) {
+		if (len > 8 && countLetter(passwd, NUM) > 0 && countLetter(passwd, SMALL_LETTER) > 0 && countLetter(passwd, CAPITAL_LETTER) > 0
+				&& countLetter(passwd, OTHER_CHAR) > 0) {
 			level++;
 		}
 
 		// 密码长度大于6并且2种类型组合每种类型长度大于等于3或者2......（不一一概述）
-		if (len > 6 && countLetter(passwd, NUM) >= 3 && countLetter(passwd, SMALL_LETTER) >= 3 || countLetter(passwd, NUM) >= 3 && countLetter(passwd, CAPITAL_LETTER) >= 3
-				|| countLetter(passwd, NUM) >= 3 && countLetter(passwd, OTHER_CHAR) >= 2 || countLetter(passwd, SMALL_LETTER) >= 3 && countLetter(passwd, CAPITAL_LETTER) >= 3
+		if (len > 6 && countLetter(passwd, NUM) >= 3 && countLetter(passwd, SMALL_LETTER) >= 3
+				|| countLetter(passwd, NUM) >= 3 && countLetter(passwd, CAPITAL_LETTER) >= 3
+				|| countLetter(passwd, NUM) >= 3 && countLetter(passwd, OTHER_CHAR) >= 2
+				|| countLetter(passwd, SMALL_LETTER) >= 3 && countLetter(passwd, CAPITAL_LETTER) >= 3
 				|| countLetter(passwd, SMALL_LETTER) >= 3 && countLetter(passwd, OTHER_CHAR) >= 2
 				|| countLetter(passwd, CAPITAL_LETTER) >= 3 && countLetter(passwd, OTHER_CHAR) >= 2) {
 			level++;

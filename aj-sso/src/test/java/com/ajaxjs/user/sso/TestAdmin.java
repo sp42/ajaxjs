@@ -41,6 +41,5 @@ public class TestAdmin {
 		client.setName("测试客户端");
 
 		assertEquals("{\"isOk\": true, \"msg\" : \"操作成功！\"}", new OauthController().clientRegister(client));
-
 	}
 }

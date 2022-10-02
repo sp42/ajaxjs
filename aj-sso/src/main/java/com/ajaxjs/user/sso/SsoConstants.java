@@ -6,7 +6,7 @@ package com.ajaxjs.user.sso;
  * @author Frank Cheung
  *
  */
-public class SsoConstants {
+public interface SsoConstants {
 	/**
 	 * 用户信息在session中存储的变量名
 	 */
@@ -24,6 +24,7 @@ public class SsoConstants {
 
 	// 主库
 	public final static String OAUTH_DB_MASTER = "oauth_master";
+
 	// 从库
 	public final static String OAUTH_DB_SLAVE = "oauth_slave";
 

@@ -59,7 +59,8 @@ public class TestSSO {
 				session(sessionPub);
 		// @formatter:on
 
-		String redirectedUrl = mockMvc.perform(req).andExpect(status().is3xxRedirection()).andDo(print()).andReturn().getResponse().getRedirectedUrl();
+		String redirectedUrl = mockMvc.perform(req).andExpect(status().is3xxRedirection()).andDo(print()).andReturn().getResponse()
+				.getRedirectedUrl();
 //		String redirectedUrl = mockMvc.perform(req).andDo(print()).andReturn().getResponse().getRedirectedUrl();
 
 		return redirectedUrl;
@@ -69,7 +70,6 @@ public class TestSSO {
 	public void testAuthCode() throws Exception {
 		String redirectedUrl = getAuthCode();
 		assertNotNull(redirectedUrl);
-
 	}
 
 	@Autowired

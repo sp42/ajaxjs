@@ -34,10 +34,8 @@ public class AuthorizationService implements SsoDAO {
 
 		// 1. 拼装待加密字符串（clientId + scope + 当前精确到毫秒的时间戳）
 		String str = clientId + scope + String.valueOf(System.currentTimeMillis());
-
 		// 2. SHA1 加密
 		String encryptedStr = Digest.getSHA1(str);
-
 		int timeout = ExpireEnum.AUTHORIZATION_CODE.getTime() * 60;
 		// 3.1 保存本次请求的授权范围
 		ExpireCache.CACHE.put(encryptedStr + ":scope", scope, timeout);
@@ -95,7 +93,7 @@ public class AuthorizationService implements SsoDAO {
 		// 4. 返回Access Token
 		return at;
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println(LocalDateUtils.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null));
 	}

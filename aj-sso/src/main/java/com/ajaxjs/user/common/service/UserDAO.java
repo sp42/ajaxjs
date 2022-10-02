@@ -16,8 +16,8 @@ public interface UserDAO extends UserCommonDAO {
 		return UserAuthDAO.setWhereQuery("loginType = 1 AND userId = " + id).findOne();
 	}
 
-	static interface LogLoginDAO extends IDataService<LogLogin> {
+	static interface LogLoginDao extends IDataService<LogLogin> {
 	}
 
-	public static final LogLoginDAO LogLoginDAO = new Caller("cms", "user_login_log").bind(LogLoginDAO.class, LogLogin.class);
+	public static final LogLoginDao LogLoginDAO = new Caller("cms", "user_login_log").bind(LogLoginDao.class, LogLogin.class);
 }

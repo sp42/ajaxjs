@@ -6,12 +6,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserAuth;
-import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.common.model.LogLogin;
 import com.ajaxjs.user.common.util.UserUtils;
 import com.ajaxjs.util.WebHelper;
@@ -24,23 +23,15 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Frank Cheung
  *
  */
-@Component
-public class LoginService implements UserConstant, UserDAO {
+@Service
+public class LoginService implements ILoginService {
 	private static final LogHelper LOGGER = LogHelper.getLog(LoginService.class);
 
 	@Value("${user.login.passWordLoginType}")
 	private int passWordLoginType;
 
-	/**
-	 * 根据密码登录
-	 * 
-	 * @param userID
-	 * @param password
-	 * @param tenantId
-	 * @param req
-	 * @return
-	 */
-	public User loginByPassword(String userID, String password, int tenantId, HttpServletRequest req) {
+	@Override
+	public Boolean login(String userID, String password, int tenantId, HttpServletRequest req) {
 		User user;
 		userID = userID.trim();
 
@@ -72,7 +63,7 @@ public class LoginService implements UserConstant, UserDAO {
 		saveLoginLog(user, req);
 		afterLogin(user, req);
 
-		return user;
+		return user != null;
 	}
 
 	/**
@@ -102,8 +93,7 @@ public class LoginService implements UserConstant, UserDAO {
 	 * @return 加密后的密码
 	 */
 	public String encodePassword(String plainPsw) {
-		plainPsw = plainPsw.trim();
-		plainPsw = plainPsw.toLowerCase();
+		plainPsw = plainPsw.trim().toLowerCase();
 
 		return Digest.getSHA1(plainPsw + passwordSalt);
 	}
@@ -199,5 +189,18 @@ public class LoginService implements UserConstant, UserDAO {
 
 		bean.setIp(ip);
 		bean.setUserAgent(req.getHeader("user-agent"));
+	}
+
+	@Override
+	public Boolean logout(HttpSession session) {
+		session.invalidate();
+		// TODO 清除 SSO 登录状态
+		return true;
+	}
+
+	@Override
+	public String listLog(int start, int limit) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

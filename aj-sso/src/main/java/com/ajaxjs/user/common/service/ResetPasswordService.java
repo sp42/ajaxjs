@@ -1,22 +1,107 @@
 package com.ajaxjs.user.common.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserAuth;
 import com.ajaxjs.user.common.util.CheckStrength;
 import com.ajaxjs.user.common.util.CheckStrength.LEVEL;
+import com.ajaxjs.user.common.util.UserUtils;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cryptography.Digest;
 import com.ajaxjs.util.cryptography.encryption.SymmetriCipher;
 
-@Component
-public class ResetPasswordService {
+@Service
+public class ResetPasswordService implements IResetPassword {
 	@Value("${ResetPassword.encryptKey}")
 	private String encryptKey;
+
+	@Autowired
+	SendEmail sendEmail;
+
+	@Value("${Website.basePath}")
+	String websiteBasePath;
+
+	/**
+	 * 
+	 */
+	private final static String FIND_BY_EMAIL = "/user/reset_password/findByEmail/";
+
+	@Override
+	public Boolean sendRestEmail(String email, int tenantId) {
+		if (!StringUtils.hasText(email) || !UserUtils.EAMIL_REG.matcher(email).find())
+			throw new IllegalArgumentException("请提交有效的邮件地址");
+
+		User user = findByEmail(email, tenantId);
+		if (user == null)
+			throw new IllegalAccessError("该 email：" + email + " 的用户不存在！");
+
+		String token = makeEmailToken(email, tenantId);
+		String url = websiteBasePath + FIND_BY_EMAIL;
+		url += String.format("?email=%s&token=%s", StrUtil.urlEncode(email), StrUtil.urlEncode(token));
+
+		String title = "重置密码";
+		Map<String, String> map = new HashMap<>(4);
+		map.put("username", user.getUsername());
+		map.put("link", url);
+		map.put("desc", title);
+		map.put("timeout", tokenTimeout + "");
+
+		String content = sendEmail.getEmailContent(map);
+
+		return sendEmail.send(email, title, content);
+	}
+
+	@Autowired
+	SendSMS sendSMS;
+
+	@Override
+	public Boolean sendRestPhone(String phone, int tenantId) {
+		if (!StringUtils.hasText(phone) || !UserUtils.PHONE_REG.matcher(phone).find())
+			throw new IllegalArgumentException("请提交有效的手机");
+
+		User user = findByPhone(phone, tenantId);
+		if (user == null)
+			throw new IllegalAccessError("该手机： " + phone + " 的用户不存在！");
+
+		String code = SendSMS.getRandomCodeAndSave(phone, user.getId() + "", user.getUsername());
+
+		return sendSMS.send(phone, code);
+	}
+
+	@Override
+	public Boolean verifySmsUpdatePsw(String code, String newPsw, String phone, int tenantId) {
+		UserDAO.setWhereQuery(" u.phone = '" + phone + "' AND u.tenantId = 1 ");
+		Map<String, Object> user = UserDAO.findOneWithAuth();
+
+		if (user == null)
+			throw new IllegalAccessError(String.format("不存在手机号码[%s]的用户", phone));
+
+		SendSMS.checkSmsCode(phone, code); // 没有异常就表示通过
+
+		return updatePwd(user, newPsw);
+	}
+
+	@Override
+	public Boolean verifyTokenUpdatePsw(String token, String newPsw, String email, int tenantId) {
+		UserDAO.setWhereQuery(" u.email = '" + email + "' AND u.tenantId = 1 ");
+		Map<String, Object> user = UserDAO.findOneWithAuth();
+
+		if (user == null)
+			throw new IllegalAccessError("该 email：" + email + " 的用户不存在！");
+
+		if (!checkEmailToken(token, email))
+			throw new IllegalAccessError("校验 Token　失败");
+
+		return updatePwd(user, newPsw);
+	}
 
 	/**
 	 * 生成重置密码的 Token（ for 邮件） 这 Token 在有效期内一直有效 TODO，令其无效。 该签名方法不能公开
@@ -79,7 +164,7 @@ public class ResetPasswordService {
 		if (passwordLevel == LEVEL.EASY)
 			throw new UnsupportedOperationException("密码强度太低");
 
-		newPassword = loginService.encodePassword(newPassword); 
+		newPassword = loginService.encodePassword(newPassword);
 
 		if (newPassword.equalsIgnoreCase(user.get("password").toString()))
 			throw new UnsupportedOperationException("新密码与旧密码一致，没有修改");

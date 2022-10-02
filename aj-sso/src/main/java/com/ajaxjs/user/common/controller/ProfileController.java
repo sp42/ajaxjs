@@ -1,11 +1,11 @@
 package com.ajaxjs.user.common.controller;
 
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
+import com.ajaxjs.user.common.service.IProfileUser;
+import com.ajaxjs.user.common.service.ProfileService;
 
 /**
  * 用户信息控制器
@@ -14,10 +14,7 @@ import com.ajaxjs.framework.BaseController;
  *
  */
 @RestController
-@RequestMapping("/user/profile")
-public class ProfileController {
-	@PostMapping(value = "/clientRegister", produces = MediaType.APPLICATION_JSON_VALUE)
-	public String post() {
-		return BaseController.jsonNoOk();
-	}
+@RequestMapping("/user")
+@InterfaceBasedController(serviceClass = ProfileService.class)
+public interface ProfileController extends IProfileUser {
 }

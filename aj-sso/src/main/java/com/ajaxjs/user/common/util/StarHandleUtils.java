@@ -16,6 +16,11 @@ public class StarHandleUtils {
 	/** 空的字符串（""） */
 	public static final String BLANK = "";
 
+	/**
+	 * 
+	 * @param ip
+	 * @return
+	 */
 	public static String ip(String ip) {
 		if (!StringUtils.hasText(ip))
 			return BLANK;
