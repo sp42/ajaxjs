@@ -2,6 +2,8 @@ package com.ajaxjs.user.sso.service;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.servlet.ModelAndView;
+
 import com.ajaxjs.user.sso.model.IssueToken;
 import com.ajaxjs.user.sso.model.IssueTokenWithUser;
 
@@ -17,12 +19,12 @@ public interface ISsoService extends IBaseService {
 	 * 
 	 * @param client_id    客户端 ID
 	 * @param redirect_uri 回调 URL
-	 * @param scope        权限范围
+	 * @param scope        权限范围（非必填）
 	 * @param status       用于防止CSRF攻击（非必填）
 	 * @param req          请求对象
-	 * @return
+	 * @return 返回给客户端一个 302 重定向
 	 */
-	Object authorize(String client_id, String redirect_uri, String scope, String status, HttpServletRequest req);
+	ModelAndView getAuthorizeCode(String client_id, String redirect_uri, String scope, String status, HttpServletRequest req);
 
 	/**
 	 * 通过 Authorization Code 获取 Access Token
@@ -31,10 +33,9 @@ public interface ISsoService extends IBaseService {
 	 * @param client_secret 接入的客户端的密钥
 	 * @param code          前面获取的 Authorization Code
 	 * @param grant_type    授权方式
-	 * @param request       请求对象
 	 * @return
 	 */
-	IssueTokenWithUser issue(String client_id, String client_secret, String code, String grant_type, HttpServletRequest request);
+	IssueTokenWithUser issue(String client_id, String client_secret, String code, String grant_type);
 
 	/**
 	 * 通过 Refresh Token 刷新 Access Token

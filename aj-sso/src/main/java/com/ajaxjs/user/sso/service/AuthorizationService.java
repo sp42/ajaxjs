@@ -20,31 +20,7 @@ import com.ajaxjs.util.date.LocalDateUtils;
  */
 @Component
 public class AuthorizationService implements SsoDAO {
-	/**
-	 * 根据 clientId、scope 以及当前时间戳生成 AuthorizationCode（有效期为10分钟）
-	 *
-	 * @param clientId 客户端ID
-	 * @param scope
-	 * @param user     用户信息
-	 * @return
-	 */
-	public String createAuthorizationCode(String clientId, String scope, User user) {
-		if (!StringUtils.hasText(scope))
-			scope = "DEFAULT_SCOPE";
 
-		// 1. 拼装待加密字符串（clientId + scope + 当前精确到毫秒的时间戳）
-		String str = clientId + scope + String.valueOf(System.currentTimeMillis());
-		// 2. SHA1 加密
-		String encryptedStr = Digest.getSHA1(str);
-		int timeout = ExpireEnum.AUTHORIZATION_CODE.getTime() * 60;
-		// 3.1 保存本次请求的授权范围
-		ExpireCache.CACHE.put(encryptedStr + ":scope", scope, timeout);
-		// 3.2 保存本次请求所属的用户信息
-		ExpireCache.CACHE.put(encryptedStr + ":user", user, timeout);
-
-		// 4. 返回Authorization Code
-		return encryptedStr;
-	}
 
 	/**
 	 * 生成 Access Token

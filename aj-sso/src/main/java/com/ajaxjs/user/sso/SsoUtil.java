@@ -17,24 +17,6 @@ import com.ajaxjs.util.date.LocalDateUtils;
  */
 public class SsoUtil {
 	/**
-	 * 输出符合 Oauth 规范的异常
-	 * 
-	 * @param err
-	 * @return
-	 */
-	public static String oauthError(ErrorCodeEnum err) {
-		return oauthError(err.getError(), err.getErrorDescription());
-	}
-
-	public static String oauthError(String errCode, String errMsg) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("error", errCode);
-		map.put("error_description", errMsg);
-
-		return BaseController.toJson(map, false, false);
-	}
-
-	/**
 	 * 获取 expiresIn 与当前时间对比，看是否超时
 	 * 
 	 * @param token 令牌
