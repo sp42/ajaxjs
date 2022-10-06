@@ -1,4 +1,4 @@
-package com.ajaxjs.user.sso;
+package com.ajaxjs.user.sso.common;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

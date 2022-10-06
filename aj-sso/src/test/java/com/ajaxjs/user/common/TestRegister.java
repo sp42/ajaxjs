@@ -63,10 +63,10 @@ public class TestRegister {
 		HttpSession s = mock(HttpSession.class);
 		when(req.getSession()).thenReturn(s);
 		when(req.getRemoteAddr()).thenReturn("35.220.250.107");
-		assertTrue(RegisterController.isRepeat("email", "sp42@qq.com", 1));
+//		assertTrue(RegisterController.isRepeat("email", "sp42@qq.com", 1));
 		
-		result = registerController.checkRepeat("email", "sp42@qq.com", 1);
-		System.out.println(result);
+//		result = registerController.checkRepeat("email", "sp42@qq.com", 1);
+//		System.out.println(result);
 
 //		try (Connection connection = ds.getConnection()) {
 //			JdbcConnection.setConnection(connection);

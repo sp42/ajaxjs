@@ -3,6 +3,8 @@ package com.ajaxjs.user.sso;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import com.ajaxjs.user.sso.controller.StateController;
+import com.ajaxjs.user.sso.model.IssueToken;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,58 +24,74 @@ import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.user.sso.model.IssueTokenWithUser;
 import com.ajaxjs.user.sso.service.SsoService;
 import com.ajaxjs.util.TestHelper;
+import org.springframework.web.servlet.ModelAndView;
 
 @ContextConfiguration(classes = TestConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public class TestSSO {
-	MockMvc mockMvc;
+    MockMvc mockMvc;
 
-	@Autowired
-	WebApplicationContext wac;
+    @Autowired
+    WebApplicationContext wac;
 
-	@Autowired
-	private SsoService ssoService;
-	
-	@Autowired
-	ApiController apiController;
+    @Autowired
+    private SsoService ssoService;
 
-	@Before
-	public void init() {
-		apiController.initCache();
-	}
+    @Autowired
+    ApiController apiController;
 
-	@Test
-	public void testGetAuthCode() {
-		assertNotNull(ssoService);
+    @Before
+    public void init() {
+        apiController.initCache();
+    }
 
-		User user = new User();
-		user.setId(1L);
-		user.setUsername("admin");
-		MockHttpSession sessionPub = new MockHttpSession();
-		sessionPub.setAttribute(UserConstant.USER_SESSION_KEY, user);
+    @Test
+    public void testGetAuthCode() {
+        assertNotNull(ssoService);
 
-		// @formatter:off
-		MockHttpServletRequestBuilder req = get("/sso/authorize_code").
-				param("redirect_uri", "https://www.qq.com").param("client_id", "dss23s").
-				session(sessionPub);
-		// @formatter:on
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("admin");
+        MockHttpSession sessionPub = new MockHttpSession();
+        sessionPub.setAttribute(UserConstant.USER_SESSION_KEY, user);
 
-		Object authorize = ssoService.getAuthorizeCode("dss23s", "https://www.qq.com", "", "", req.buildRequest(wac.getServletContext()));
-		TestHelper.printJson(authorize);
-	}
+        // @formatter:off
+        MockHttpServletRequestBuilder req = get("/sso/authorize_code").
+                param("redirect_uri", "https://www.qq.com").param("client_id", "dss23s").
+                session(sessionPub);
+        // @formatter:on
 
-	@Test
-	public void testIssueToken() throws Exception {
-		User user = new User();
-		user.setId(1L);
-		user.setUsername("admin");
+        ModelAndView m = ssoService.getAuthorizeCode("dss23s", "https://www.qq.com", "", "", req.buildRequest(wac.getServletContext()));
+        TestHelper.printJson(m);
+    }
 
-		String authCode = ssoService.createAuthorizationCode("dss23s", "https://www.qq.com", user);
-		System.out.println(authCode);
+    @Test
+    public void testIssueToken() throws Exception {
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("admin");
 
-		IssueTokenWithUser issue = ssoService.issue("C2Oj5hKcwMmgxiKygwquLCSN", "1PtTvjmAvy2zSUZISdjeKBFJTgZM43BZ", authCode, "authorization_code");
-		System.out.println(issue);
-	}
+        String authCode = ssoService.createAuthorizationCode("dss23s", "https://www.qq.com", user);
+        System.out.println(authCode);
 
+        IssueTokenWithUser issue = ssoService.issue("C2Oj5hKcwMmgxiKygwquLCSN", "1PtTvjmAvy2zSUZISdjeKBFJTgZM43BZ", authCode, "authorization_code");
+        TestHelper.printJson(issue);
+    }
+
+    @Test
+    public void testRefreshToken() throws Exception {
+        IssueToken newToken = ssoService.refreshToken("2.7518a00025a7db7a324689466dcb76f17f7aca7d.31536000.1682057306");
+        TestHelper.printJson(newToken);
+    }
+
+//    @Autowired
+//    StateController stateController;
+//
+//    @Test
+//    public void verify() {
+//        String token = "1.9e8832e4a30574ccb4e17d35b82f228099dc4530.2592000.1653536869";
+//        Boolean verify = stateController.verify(token);
+//        System.out.println(verify);
+//    }
 }

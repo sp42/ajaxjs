@@ -53,8 +53,6 @@ public class RegisterService implements IRegisterService {
 		if (!hasNoPhone && isRepeat("phone", params.get("phone").toString(), tenantId))
 			throw new IllegalArgumentException("手机: " + params.get("phone").toString() + " 重复");
 
-		// TODO 检测密码强度
-
 		// 有些字段不要
 		String psw = params.get("password").toString();
 		params.remove("password");
@@ -73,7 +71,7 @@ public class RegisterService implements IRegisterService {
 		auth.setRegisterIp(WebHelper.getIp(req));
 
 		// TODO SSO 返回的
-		return false;
+		return true;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.ajaxjs.user.sso;
+package com.ajaxjs.user.sso.common;
 
 /**
  * 常量

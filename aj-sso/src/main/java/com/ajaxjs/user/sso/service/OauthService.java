@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.common.util.UserUtils;
-import com.ajaxjs.user.sso.SsoConstants;
+import com.ajaxjs.user.sso.common.SsoConstants;
 import com.ajaxjs.user.sso.model.ClientDetails;
 import com.ajaxjs.user.sso.model.ClientUser;
 import com.ajaxjs.user.sso.model.Scope;
