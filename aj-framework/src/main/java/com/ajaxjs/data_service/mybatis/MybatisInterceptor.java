@@ -75,8 +75,8 @@ public class MybatisInterceptor implements Interceptor {
 	public static String getSql(Configuration cfg, BoundSql sql, String sqlId, long time) {
 		String _sql = showSql(cfg, sql);
 		StringBuilder sb = new StringBuilder(100);
-		sb.append(sqlId);
-		sb.append(" : ");
+//		sb.append(sqlId);
+//		sb.append(" : ");
 		sb.append(_sql);
 
 		return sb.toString();
