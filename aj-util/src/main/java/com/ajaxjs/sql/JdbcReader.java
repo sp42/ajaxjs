@@ -56,7 +56,7 @@ public class JdbcReader {
 	 * @param handle 控制器
 	 */
 	public static void stmt(Connection conn, Consumer<Statement> handle) {
-		try (Statement stmt = conn.createStatement();) {
+		try (Statement stmt = conn.createStatement()) {
 			handle.accept(stmt);
 		} catch (SQLException e) {
 			LOGGER.warning(e);
@@ -71,7 +71,7 @@ public class JdbcReader {
 	 * @param handle 控制器
 	 */
 	public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
-		try (ResultSet rs = stmt.executeQuery(sql);) {
+		try (ResultSet rs = stmt.executeQuery(sql)) {
 			handle.accept(rs);
 		} catch (SQLException e) {
 			LOGGER.warning(e);
