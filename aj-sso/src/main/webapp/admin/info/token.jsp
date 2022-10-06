@@ -2,8 +2,9 @@
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="/ajaxjs" %>
 <%
-	String sql = "SELECT t.*, u.username AS userName, c.name AS clientName FROM auth_access_token t "+
+	String sql = "SELECT t.*, u.username AS userName, c.name AS clientName, z.name AS tenantName FROM auth_access_token t "+
 	"LEFT JOIN user u ON t.userId = u.id " +
+	"LEFT JOIN sys_tenant z ON u.tenantId = z.id " +  
 	"LEFT JOIN auth_client_details c ON t.Id = c.id ";
 	JspHelper.parepreInfoSql(request, sql, "t.id");
 	
@@ -16,7 +17,7 @@
 	</tr>
 	<tr>
 		<td>租户</td>
-		<td></td>
+		<td>${info.tenantName}</td>
 	</tr>
 	<tr>
 		<td>用户</td>

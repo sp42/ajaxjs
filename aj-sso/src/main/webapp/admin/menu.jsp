@@ -1,4 +1,5 @@
-<%@ page pageEncoding="UTF-8"%>
+<%@page import="java.util.Map, com.ajaxjs.sql.JdbcHelper"%>
+<%@ page pageEncoding="UTF-8" import="java.sql.Connection, com.ajaxjs.util.JspHelper"%>
 
 <!DOCTYPE html>
 <html>
@@ -64,9 +65,18 @@ li.inline a {
 <body>
 	<h1>SSO 管理中心</h1>
 	<ul>
-		<li class="inline">切换租户： <select>
-				<option>不分租户</option>
-		</select> <br /> <br /> <a target="center" href="main.jsp">首页</a> | <a href="javascript:logout();">登出</a>
+	<%
+		Connection conn = JspHelper.init(request);
+	
+	%>
+		<li class="inline">切换租户： 
+			<select class="tenantSelect" onchange="changeTenant(this)">
+				<option value="">不分租户</option>
+			<%for (Map<String, Object> map : JdbcHelper.queryAsMapList(conn, "SELECT * FROM sys_tenant")) {%>
+				<option value="<%=map.get("id")%>"><%=map.get("name")%></option>
+			<%}%>
+			</select> 
+			<br /> <br /> <a target="center" href="main.jsp">首页</a> | <a href="javascript:logout();">登出</a>
 		</li>
 		<li><a target="center" href="list/tenant.jsp">租户管理</a></li>
 		<li><a target="center" href="list/client.jsp">客户端管理</a></li>
@@ -74,6 +84,31 @@ li.inline a {
 		<li><a target="center" href="list/user.jsp">用户管理</a></li>
 		<li><a target="center" href="list/token.jsp">Token 管理</a></li>
 	</ul>
+	<% conn.close(); %>
+	<script>
+		setTimeout(()=>{			
+			// 显示选中项
+			var tenantId = localStorage.getItem("tenantId");
+			
+			if (tenantId != null) {
+				var option = document.querySelector('.tenantSelect option[value="' + tenantId + '"]');
+			
+				if (option)
+					option.setAttribute('selected', true);
+			}
+		}, 500);
+		
+		function changeTenant(selectEl) {
+			var tenantId = selectEl.options[selectEl.selectedIndex].value;
+			
+			if (tenantId) 
+				localStorage.setItem("tenantId", tenantId);// 存储
+			else 
+				window.localStorage.removeItem('tenantId');				
+			
+			window.parent.frames.center.location.reload();
+		}
+	</script>
 
 	<div class="copyright">
 		©2022 隶属于 <a href="https://gitee.com/sp42_admin/ajaxjs" target="_blank">AJAXJS</a>

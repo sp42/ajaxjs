@@ -2,10 +2,19 @@
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="/ajaxjs"%>
 <%
-	String sql = "SELECT * FROM user limit 20";
+	String sql = "SELECT * FROM user";
+	
+	if (request.getParameter("tenantId") != null) 
+		sql += " WHERE tenantId = " + request.getParameter("tenantId");
+	
 	JspHelper.parepreListSql(request, sql, "user", "用户");
 %>
-<myTag:list namespace="${namespace}" namespace_chs="${namespace_chs}">
+
+<myTag:list namespace="${namespace}" namespace_chs="${namespace_chs}" page="true">
+	<script>
+		tenantFilter();
+	</script>
+	
 	<table class="aj-table even">
 		<thead>
 			<tr>
@@ -20,7 +29,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:foreach items="${list}" var="item">
+			<c:foreach items="${PAGE_RESULT}" var="item">
 				<tr>
 					<td>${item.id}</td>
 					<td>${item.name}</td>

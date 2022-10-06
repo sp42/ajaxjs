@@ -44,15 +44,30 @@ table {
 	border-spacing: 0;
 }
 
+input:focus, textarea:focus, select:focus {
+	outline: none;
+	border: 1px solid gray !important;
+}
+
 .form input[type=text], .form input[type=password] {
 	height: 20px;
 }
 
 .form input[type=text], .form input[type=password], .form textarea {
-	border: 1px solid gray;
+	border: 1px solid lightgray;
 	margin: 10px;
 	display: inline-block;
 	padding: 2px;
+}
+
+select {
+	color: gray;
+	height: 25px;
+	border: 1px solid gray;
+}
+
+select:hover {
+	border-color: black;
 }
 
 button {
@@ -100,7 +115,7 @@ a:hover {
 }
 
 .aj-table    td, .aj-table   th {
-	border: 1px lightgray solid;
+	/* border: 1px lightgray solid; */
 	line-height: 160%;
 	height: 120%;
 	padding: 6px;

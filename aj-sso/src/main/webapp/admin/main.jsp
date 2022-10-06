@@ -1,6 +1,17 @@
-<%@ page pageEncoding="UTF-8"%>
+<%@ page pageEncoding="UTF-8" import="com.ajaxjs.util.JspHelper"%>
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
+<%
+	String sql = "SELECT "+
+			"(SELECT COUNT(id) FROM user_login_log) AS loginTimes,"+
+	     	"(SELECT COUNT(id) FROM user) AS userNum,"+
+	     	"(SELECT COUNT(id) FROM auth_client_details) AS clientNum,"+
+	     	"(SELECT COUNT(id) FROM auth_access_token) AS onlineNum,"+
+	     	"(SELECT COUNT(id) FROM sys_tenant) AS tenantNum";
 
+	JspHelper.init(request);
+	JspHelper.getOne(request, sql);
+	JspHelper.closeConn(request);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,11 +58,11 @@ table.tj {
 						</tr>
 
 						<tr>
-							<td>5</td>
-							<td>6</td>
-							<td>999</td>
-							<td>55</td>
-							<td>55</td>
+							<td>${info.tenantNum}</td>
+							<td>${info.clientNum}</td>
+							<td>${info.userNum}</td>
+							<td>${info.onlineNum}</td>
+							<td>${info.loginTimes}</td>
 						</tr>
 					</table>
 				</div>

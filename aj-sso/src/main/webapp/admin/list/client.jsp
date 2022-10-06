@@ -2,10 +2,23 @@
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="/ajaxjs"%>
 <%
-	String sql = "SELECT c.*, t.name AS tenantName FROM auth_client_details c LEFT JOIN sys_tenant t ON c.tenantId = t.id";
+	String sql = "SELECT c.*, t.name AS tenantName FROM auth_client_details c LEFT JOIN sys_tenant t ON c.tenantId = t.id WHERE 1=1";
+	
+	if (request.getParameter("tenantId") != null) 
+		sql = sql.replace("1=1", "1=1 AND c.tenantId = " + JspHelper.safeGet(request, "tenantId"));
+	
+	if (request.getParameter("keyword") != null) {
+		String k = JspHelper.safeGet(request, "keyword");
+		sql = sql.replace("1=1", "1=1 AND (c.name LIKE '%" + k + "%' OR c.clientId LIKE '%" + k + "%')");
+	}
+
 	JspHelper.parepreListSql(request, sql, "client", "客户端");
 %>
 <myTag:list namespace="${namespace}" namespace_chs="${namespace_chs}">
+	<script>
+		tenantFilter();
+	</script>
+	
 	<table class="aj-table">
 		<thead>
 			<tr>

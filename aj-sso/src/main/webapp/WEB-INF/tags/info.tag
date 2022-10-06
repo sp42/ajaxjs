@@ -1,11 +1,12 @@
 
-<%@ tag description="HTML" pageEncoding="UTF-8" import=" com.ajaxjs.util.JspHelper"%>
+<%@ tag description="HTML" pageEncoding="UTF-8" import="com.ajaxjs.util.JspHelper"%>
 <%@ taglib uri="/ajaxjs" prefix="c"%>
 <%@ attribute fragment="false" required="true" name="namespace" description="命名"%>
 <%@ attribute fragment="false" required="true" name="namespace_chs" description="命名（中文）"%>
 <%@ attribute fragment="false" required="false" name="show_create" type="Boolean" description=""%>
 <%@ attribute fragment="false" required="false" name="date_style" type="Integer" description="1=创建；2=修改; 3=创建 && 修改"%>
 <%@ attribute fragment="false" required="false" name="field_style" type="Integer" description="1=id；2=name; 4=content; 8 =state; 15 = all"%>
+<%@ attribute fragment="false" required="false" name="two_cols" type="Boolean" description="表格是否双列"%>
 <%
 	JspHelper.getInfo(request);
 %>
@@ -22,7 +23,7 @@ html, body, body>table {
 }
 
 .form {
-	width: 600px;
+	width: 660px;
 	min-height: 600px;
 	margin: 0 auto;
 	text-align:center;
@@ -62,26 +63,25 @@ h1 {
 							<c:if test="${JSP_HELPER.bit(2, field_style)}">
 								<tr>
 									<td>${namespace_chs}名称</td>
-									<td><input type="text" value="${info.name}" /></td>
+									<td ${two_cols? 'colspan="3"': ''}><input type="text" value="${info.name}" /></td>
 								</tr>
 							</c:if>
 							<c:if test="${JSP_HELPER.bit(4, field_style)}">
 								<tr>
 									<td style="vertical-align: middle;">${namespace_chs}简介</td>
-									<td><textarea rows="5">${info.content}</textarea></td>
+									<td ${two_cols? 'colspan="3"': ''}><textarea rows="5">${info.content}</textarea></td>
 								</tr>
 							</c:if>
 							<jsp:doBody />
 							<c:if test="${JSP_HELPER.bit(8, field_style)}">
 								<tr>
 									<td>${namespace_chs}状态</td>
-									<td>${info.stat}<label><input type="radio"
-											name="stat" /> 启用</label> <label><input type="radio"
-											name="stat" /> 禁用</label> 
-											<label><input type="radio"
-											name="stat" /> 已删除</label> 
+									<td ${two_cols? 'colspan="3"': ''}>
+										<label><input type="radio" name="stat" /> 启用</label> 
+										<label><input type="radio" name="stat" /> 禁用</label> 
+										<label><input type="radio" name="stat" /> 已删除</label> 
 											
-											<span class="note">不选择默认表示启用状态</span>
+										<span class="note">不选择默认表示启用状态</span>
 									</td>
 								</tr>
 							</c:if>
@@ -100,7 +100,7 @@ h1 {
 						<button>
 							<i class="fa-solid fa-floppy-disk" style="color: green"></i> 保存
 						</button>
-						<button onclick="setTimeout('parent.window.history.go(-1);', 10)">返回</button>
+						<button onclick="setTimeout('parent.window.history.go(-1);', 20)">返回</button>
 					</form>
 				</div>
 			</td>

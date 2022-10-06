@@ -2,7 +2,11 @@
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="/ajaxjs"%>
 <%
-	String sql = "SELECT * FROM sys_tenant";
+	String sql = "SELECT * FROM sys_tenant WHERE 1=1";
+
+if (request.getParameter("keyword") != null) 
+	sql = sql.replace("1=1", "1=1 AND name LIKE '%" + JspHelper.safeGet(request, "keyword") + "%'");
+
 	JspHelper.parepreListSql(request, sql, "tenant", "租户");
 %>
 <myTag:list namespace="${namespace}" namespace_chs="${namespace_chs}">

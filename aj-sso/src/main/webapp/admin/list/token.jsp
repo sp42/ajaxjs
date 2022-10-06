@@ -2,12 +2,24 @@
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="/ajaxjs"%>
 <%
-	String sql = "SELECT t.*, u.username AS userName, c.name AS clientName FROM auth_access_token t "+
+	String sql = "SELECT t.*, u.username AS userName, c.name AS clientName, z.name AS tenantName FROM auth_access_token t "+
 	"LEFT JOIN user u ON t.userId = u.id " +
-	"LEFT JOIN auth_client_details c ON t.Id = c.id ";
+	"LEFT JOIN sys_tenant z ON u.tenantId = z.id " +  
+	"LEFT JOIN auth_client_details c ON t.Id = c.id WHERE 1=1";
+
+if (request.getParameter("tenantId") != null) 
+	sql = sql.replace("1=1", "1=1 AND c.tenantId = " + JspHelper.safeGet(request, "tenantId"));
+
+if (request.getParameter("keyword") != null) 
+	sql = sql.replace("1=1", "1=1 AND t.accessToken LIKE '%" + JspHelper.safeGet(request, "keyword") + "%'");
+
 	JspHelper.parepreListSql(request, sql, "token", "Token");
 %>
 <myTag:list namespace="token" namespace_chs="Token" show_create="false">
+	<script>
+		tenantFilter();
+	</script>
+	
 	<table class="aj-table">
 		<thead>
 			<tr>
@@ -27,7 +39,7 @@
 				<tr>
 					<td>${item.id}</td>
 					<td>${item.accessToken}</td>
-					<td title="userId：${item.userId}">${item.userName}</td>
+					<td title="tenantId：${item.userId}">${item.tenantName}</td>
 					<td title="clientId：${item.clientId}">${item.clientName}</td>
 					<td title="userId：${item.userId}">${item.userName}</td>
 					<td>${item.scope}</td>
