@@ -22,7 +22,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import org.springframework.util.Base64Utils;
 
 /**
@@ -192,7 +196,8 @@ public class StrUtil {
 
 	/**
 	 * 生成指定长度的随机字符，可能包含数字
-	 *
+	 * 另外一个方法https://blog.csdn.net/qq_41995919/article/details/115299461
+	 * 
 	 * @param length 户要求产生字符串的长度
 	 * @return 随机字符
 	 */
@@ -352,6 +357,33 @@ public class StrUtil {
 		}
 
 		return sb.toString();
+	}
+
+	/**
+	 * 对象深度克隆
+	 * https://blog.csdn.net/qq_41995919/article/details/114486615
+	 * 1). 实现Cloneable接口并重写Object类中的clone()方法； 2). 实现Serializable接口，通过对象的序列化和反序列化实现克隆
+	 * @param <T>
+	 * @param obj
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Serializable> T clone(T obj) {
+		try {
+			ByteArrayOutputStream bout = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(bout);
+			oos.writeObject(obj);
+
+			ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bout.toByteArray()));
+
+			return (T) ois.readObject();
+
+			// 说明：调用ByteArrayInputStream或ByteArrayOutputStream对象的close方法没有任何意义
+			// 这两个基于内存的流只要垃圾回收器清理对象就能够释放资源，这一点不同于对外部资源（如文件流）的释放
+		} catch (Throwable e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static void main(String[] args) {

@@ -91,6 +91,8 @@ public class WebSocketClient {
 
 	@OnClose
 	public void onClose(Session session, CloseReason closeReason) {
+		LOGGER.info("WebSocket 连接断开！");
+		
 		if (end.get())
 			return;
 
@@ -159,7 +161,7 @@ public class WebSocketClient {
 	 * 重新连接
 	 */
 	private void needReconnect() {
-		ThreadUtil.sleep(3, TimeUnit.SECONDS);
+		ThreadUtil.sleep(3);
 		int cul = reConnectTimes.incrementAndGet();
 
 		if (cul > 3) {
@@ -170,7 +172,7 @@ public class WebSocketClient {
 		LOGGER.warning("[{0}]第[{1}]次断开重连", cul);
 
 		if (tryReconnect.get()) {
-			LOGGER.warning("[{}]第[{}]次断开重连结果 -> 连接正在重连，本次重连请求放弃", cul);
+			LOGGER.warning("第[{0}]次断开重连结果 -> 连接正在重连，本次重连请求放弃", cul);
 			needReconnect();
 
 			return;
@@ -180,14 +182,14 @@ public class WebSocketClient {
 			tryReconnect.set(true);
 
 			if (userSession != null && userSession.isOpen()) {
-				LOGGER.warning("[{}]第[{}]次断开重连，关闭旧连接", cul);
+				LOGGER.warning("[第[{0}]次断开重连，关闭旧连接", cul);
 				disconnect();
 			}
 
 			container = ContainerProvider.getWebSocketContainer();
 			connect();
 		} catch (Exception exception) {
-			LOGGER.warning("[{}]第[{}]次断开重连结果 -> 连接正在重连，重连异常:[{}]", cul, exception.getMessage());
+			LOGGER.warning("[第[{0}]次断开重连结果 -> 连接正在重连，重连异常:[{1}]", cul, exception.getMessage());
 			needReconnect();
 		} finally {
 			tryReconnect.set(false);
