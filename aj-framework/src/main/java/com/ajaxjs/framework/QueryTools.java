@@ -336,7 +336,7 @@ public class QueryTools {
 	 * 简单检查字符串有否 SQL 关键字
 	 *
 	 * @param str
-	 * @return true 表示为字符串中有 SQL 关键字
+	 * @return false 表示为字符串中有 SQL 关键字
 	 */
 	public static boolean preventSQLInject(String str) {
 		str = str.toUpperCase();
