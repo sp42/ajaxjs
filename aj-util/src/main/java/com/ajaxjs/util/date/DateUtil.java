@@ -73,6 +73,15 @@ public class DateUtil {
 	 * @return 当前时间
 	 */
 	public static String now() {
+		return now(DATE_FORMAT_SHORT);
+	}
+
+	/**
+	 * 返回当前时间的 YYYY-MM-dd HH:MM:ss 字符串类型
+	 * 
+	 * @return 当前时间
+	 */
+	public static String now2() {
 		return now(DATE_FORMAT);
 	}
 

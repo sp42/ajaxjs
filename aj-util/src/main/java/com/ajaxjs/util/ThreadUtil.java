@@ -19,4 +19,9 @@ public class ThreadUtil {
 
 		return true;
 	}
+
+	public static boolean sleep(Number timeout) {
+		return sleep(timeout, TimeUnit.SECONDS);
+	}
+
 }

@@ -1,29 +1,84 @@
 package com.ajaxjs.framework;
 
-import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.sql.annotation.Delete;
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.Serializable;
-import java.util.Map;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.JdbcHelper;
+import com.ajaxjs.sql.annotation.Delete;
 
 /**
  * 通用的写操作
  */
 public abstract class CommonWriter {
-    @PostMapping
-    public Boolean create(String tableName, Map<String, Object> entity) {
-        return JdbcHelper.createMap(null, entity, tableName) != null;
-    }
+	@Autowired
+	private DataSource ds;
 
-    @PutMapping
-    public Boolean update(String tableName, Map<String, Object> entity) {
-        return JdbcHelper.updateMap(null, entity, tableName) > 0;
-    }
+	public static class NewlyInfo implements IBaseModel {
+		public Serializable newlyId;
+	}
 
-    @Delete
-    public Boolean delete(String tableName, Serializable id) {
-        return JdbcHelper.deleteById(null, tableName, id);
-    }
+	@PostMapping
+	public NewlyInfo create(@RequestParam String tableName, @RequestBody Map<String, Object> entity) {
+		Serializable id = null;
+		Connection conn = null;
+		NewlyInfo n = new NewlyInfo();
+
+		try {
+			conn = ds.getConnection();
+			id = JdbcHelper.createMap(conn, entity, tableName);
+			n.newlyId = id;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JdbcConnection.closeDb(conn);
+		}
+
+		return n;
+	}
+
+	@PutMapping
+	public Boolean update(@RequestParam String tableName, @RequestBody Map<String, Object> entity) {
+		Connection conn = null;
+		int rows = 0;
+
+		try {
+			conn = ds.getConnection();
+			rows = JdbcHelper.updateMap(conn, entity, tableName);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JdbcConnection.closeDb(conn);
+		}
+
+		return rows > 0;
+	}
+
+	@Delete("/{id}")
+	public Boolean delete(String tableName, @PathVariable Serializable id) {
+		Connection conn = null;
+		boolean isOk = false;
+
+		try {
+			conn = ds.getConnection();
+			isOk = JdbcHelper.deleteById(conn, tableName, id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JdbcConnection.closeDb(conn);
+		}
+
+		return isOk;
+	}
 }
