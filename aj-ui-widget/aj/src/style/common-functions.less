@@ -1,0 +1,171 @@
+:root {
+    --admin-main-color: #1e6bb8;
+}
+
+.aj-center-title () {
+    text-align    : center;
+    font-size     : 1.3rem;
+    font-weight   : bold;
+    letter-spacing: 5px;
+    padding       : 20px 0;
+}
+
+.aj-text-function() {
+    color         : #333;
+    line-height   : 160%;
+    margin        : 15px 0;
+    font-size     : .95rem;
+    letter-spacing: 1px;
+    text-align    : justify;
+}
+
+.centerBody (@defaultWidth: 1300px) {
+    max-width: @defaultWidth;
+    margin   : 0 auto;
+    width    : 100%;
+    height   : 100%;
+}
+
+.transition (@t) {
+    -webkit-transition: @t;
+    -moz-transition   : @t;
+    -ms-transition    : @t;
+    -o-transition     : @t;
+    transition        : @t;
+}
+
+.transition_withTransform (@t) {
+    -webkit-transition: -webkit-transform @t;
+    -moz-transition   : -moz-transform @t;
+    -ms-transition    : -moz-transform @t;
+    -o-transition     : -o-transform @t;
+    transition        : transform @t;
+}
+
+.transform (@t) {
+    -webkit-transform: @t;
+    -moz-transform   : @t;
+    -ms-transform    : @t;
+    -o-transform     : @t;
+    -transform       : @t;
+}
+
+.heightFx () {
+    .transition (300ms height ease-out);
+}
+
+.widthFx () {
+    .transition (200ms width ease-out);
+}
+
+.leftFx () {
+    .transition (200ms left linear);
+}
+
+// 解决使用CSS动画时闪烁的问题
+// http://ued.taobao.com/blog/2012/01/chrome%E6%B8%B2%E6%9F%93transition%E6%97%B6%E9%A1%B5%E9%9D%A2%E9%97%AA%E5%8A%A8bug/
+.fixTransitionFlash () {
+    backface-visibility        : hidden;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility   : hidden;
+}
+
+// 解决高度塌陷的问题 – 清除浮动 或叫 闭合浮动
+// http://www.iyunlu.com/view/css-xhtml/55.html
+// http://www.zhangxinxu.com/wordpress/2010/01/css-float%E6%B5%AE%E5%8A%A8%E7%9A%84%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6%E3%80%81%E8%AF%A6%E8%A7%A3%E5%8F%8A%E6%8B%93%E5%B1%95%E4%BA%8C/
+// 强制换行
+.forceBreak () {
+    word-wrap : break-word;
+    word-break: break-all;
+}
+
+.giveHeight () {
+    overflow: hidden;
+    zoom    : 1;
+}
+
+// 透明度
+.imgOpacityShow (@time: 300ms) {
+    .transition (opacity @time ease-in);
+}
+
+// 旋转角度
+.rotate (@ro: 30deg) {
+    .transform (rotate(@ro));
+}
+
+// 渐变
+.gradient (@direction , @startColor , @endColor) {
+    background-image: -webkit-linear-gradient(@direction, @startColor, @endColor);
+    background-image: -moz-linear-gradient(@direction, @startColor, @endColor);
+    background-image: -ms-linear-gradient(@direction, @startColor, @endColor);
+    background-image: -o-linear-gradient(@direction, @startColor, @endColor);
+    background-image: linear-gradient(@direction, @startColor, @endColor);
+}
+
+// 渐变
+.gradient (@direction , @startColor , @midColor , @endColor) {
+    background-image: -webkit-linear-gradient(@direction, @startColor, @midColor, @endColor);
+    background-image: -moz-linear-gradient(@direction, @startColor, @midColor, @endColor);
+    background-image: -ms-linear-gradient(@direction, @startColor, @midColor, @endColor);
+    background-image: -o-linear-gradient(@direction, @startColor, @midColor, @endColor);
+    background-image: linear-gradient(@direction, @startColor, @midColor, @endColor);
+}
+
+.fadeIn (@duration) {
+    animation         : fade-in;
+    animation-duration: @duration;
+    -webkit-animation : fade-in @duration;
+}
+
+.fadeOut (@duration) {
+    animation         : fade-out-hide;
+    animation-duration: @duration;
+    -webkit-animation : fade-out-hide @duration;
+}
+.aj-text-title {
+    letter-spacing: 2px;
+    margin: 10px;
+}
+.aj-text-function() {
+    color         : #333;
+    line-height   : 160%;
+    margin        : 15px 0;
+    font-size     : .95rem;
+    letter-spacing: 1px;
+    text-align    : justify;
+}
+
+// 快速制作1px 表格边框，为需要设置的 table 元素加上 border 的class即可
+.aj-table {
+    border         : 1px lightgray solid;
+    border-collapse: collapse;
+    border-spacing : 0;
+
+    th {
+        background-color: #efefef;
+        letter-spacing  : 3px;
+    }
+
+    td,
+    th {
+        border     : 1px lightgray solid;
+        line-height: 160%;
+        height     : 120%;
+        padding    : 6px;
+    }
+
+    tr {
+        .transition (background-color 400ms ease-out);
+
+        &:nth-child(odd) {
+            background: #f5f5f5;
+            box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+        }
+
+        &:hover {
+            background-color: #fbf8e9;
+        }
+    }
+
+}
