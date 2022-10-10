@@ -7,7 +7,7 @@ export default {
   created() {
     // window.config = { dsApiRoot: 'http://127.0.0.1:8080/entity' };
     window.config = { dsApiRoot: '/entity' };
-    document.title = "My UI library";
+    document.title = "Demo Page";
   }
 }
 </script>

@@ -37,7 +37,7 @@ export default {
       ) {
         _btn = _btn.parentNode as Element;
 
-        for (let btn, i = 0, j = children.length; i < j; i++) {
+        for (let btn: Element, i: number = 0, j = children.length; i < j; i++) {
           btn = children[i];
           let ul = btn.querySelector("ul");
 
@@ -61,7 +61,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '../style/common-functions.less';
+@import "../style/common-functions.less";
 
 // 折叠菜单 Accordion Menu
 .aj-accordion {
@@ -76,7 +76,7 @@ export default {
   }
 
   & > li > ul {
-    .transition (height .5s cubic-bezier(0, 1, 0.5, 1));
+    .transition (height .5s cubic-bezier(0, 1, 0.5, 1));;
     overflow: hidden;
   }
 
