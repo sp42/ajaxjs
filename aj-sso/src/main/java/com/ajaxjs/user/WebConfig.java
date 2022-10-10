@@ -1,16 +1,20 @@
 package com.ajaxjs.user;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.ajaxjs.message.sms.AliyunSmsEntity;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
+import com.ajaxjs.spring.response.MyJsonConverter;
 import com.ajaxjs.util.config.EasyConfig;
 
 @Configuration
@@ -26,11 +30,17 @@ public class WebConfig extends BaseWebMvcConfigurer {
 	}
 
 	@Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 将/static/**访问映射到classpath:/mystatic/
-        registry.addResourceHandler("/common/**").addResourceLocations("/common/");
-    }
-	
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		// 将/static/**访问映射到classpath:/mystatic/
+		registry.addResourceHandler("/common/**").addResourceLocations("/common/");
+	}
+
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		// 统一返回 JSON
+		converters.add(new MyJsonConverter());
+	}
+
 	@Autowired
 	private ServletContext servletCxt;
 
@@ -69,6 +79,5 @@ public class WebConfig extends BaseWebMvcConfigurer {
 
 		return sms;
 	}
-	
-	
+
 }

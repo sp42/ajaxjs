@@ -11,15 +11,15 @@
 <%@attribute fragment="false" required="false" name="page"
 	type="Boolean" description="是否分页"%>
 <%
-JspHelper.init(request);
-Object obj = jspContext.getAttribute("page");
-
-if (obj != null && (boolean) obj)
-	JspHelper.page(request);
-else
-	JspHelper.getList(request);
-
-JspHelper.closeConn(request);
+	JspHelper.init(request);
+	Object obj = jspContext.getAttribute("page");
+	
+	if (obj != null && (boolean) obj)
+		JspHelper.page(request);
+	else
+		JspHelper.getList(request);
+	
+	JspHelper.closeConn(request);
 %>
 <!DOCTYPE html>
 <html>
@@ -126,12 +126,9 @@ h1 {
 						<jsp:doBody />
 						<c:choose>
 							<c:when test="${page}">
-								<jsp:useBean id="JspPageHelper"
-									class="com.ajaxjs.util.JspPageHelper" />
-								<jsp:setProperty name="JspPageHelper" property="request"
-									value="${pageContext.request}" />
-								<jsp:setProperty name="JspPageHelper" property="pageResult"
-									value="${PAGE_RESULT}" />
+								<jsp:useBean id="JspPageHelper" class="com.ajaxjs.util.JspPageHelper" />
+								<jsp:setProperty name="JspPageHelper" property="request" value="${pageContext.request}" />
+								<jsp:setProperty name="JspPageHelper" property="pageResult" value="${PAGE_RESULT}" />
 
 								<div class="list-page">
 									<div class="bar">
@@ -139,24 +136,21 @@ h1 {
 										<%--分页数过多影响 HTML 加载，这里判断下 --%>
 										<c:if test="${PAGE_RESULT.getTotalPage() < 1000}">
 											<c:foreach items="${JspPageHelper.getLink()}" var="item">
-												<a href="${item.url}"
-													class="${item.selected ? 'selected' : ''}">
-													${item.pageNo} </a>
+												<a href="${item.url}" class="${item.selected ? 'selected' : ''}">${item.pageNo} </a>
 											</c:foreach>
 										</c:if>
 										${JspPageHelper.nextLink}
 									</div>
+									
 									<div class="info">${JspPageHelper.info}
-										每页记录数 <input onkeydown="refreshLimit2(event)"
-											onblur="refreshLimit(this)" size="3" title="输入一个数字确定每页记录数"
-											name="limit"
-											value="${empty param.limit ? PAGE_RESULT.getPageSize() : param.limit}" />
+										每页记录数 
+										<input onkeydown="refreshLimit2(event)" onblur="refreshLimit(this)" size="3" title="输入一个数字确定每页记录数"
+											name="limit" value="${empty param.limit ? PAGE_RESULT.getPageSize() : param.limit}" />
 									</div>
 								</div>
 							</c:when>
 							<c:otherwise>
-								<div
-									style="color: gray; font-size: 9pt; margin: 20px; text-align: center;">共
+								<div style="color: gray; font-size: 9pt; margin: 20px; text-align: center;">共
 									${JSP_HELPER.getListSize(list)} 笔记录</div>
 							</c:otherwise>
 						</c:choose>

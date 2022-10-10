@@ -65,15 +65,16 @@ function tenantFilter() {
 	function request(method, url, params, cb, cfg) {
 		var xhr = new XMLHttpRequest();
 		xhr.open(method, url);
-		xhr.onreadystatechange = function(event) {
-			if (this.readyState === 4 && this.status === 200) {
+		xhr.onreadystatechange = function() {
+			if (this.readyState === 4) {
 				var responseText = this.responseText.trim();
+				if (!responseText) {
+					alert('服务端返回空的字符串!');
+					return;
+				}
+
 				var data = null;
-
 				try {
-					if (!responseText)
-						throw '服务端返回空的字符串!';
-
 					var parseContentType = cfg && cfg.parseContentType;
 					switch (parseContentType) {
 						case 'text':
@@ -89,8 +90,11 @@ function tenantFilter() {
 				} catch (e) {
 					alert('AJAX 错误:\n' + e + '\nThe url is:' + cb.url); // 提示用户 异常
 				}
-
+				
 				cb && cb(data, this);
+/*				if (this.status === 200) {
+				} else if (this.status === 500) {
+				}*/
 			}
 		}
 
@@ -114,8 +118,8 @@ function tenantFilter() {
 		return result.substring(1);
 	}
 
-	function form(method, url, cb, params, cfg) {
-		if (typeof params != 'string')
+	function form(method, url, params, cb, cfg) {
+		if (typeof params != 'string' && !(params instanceof FormData))
 			params = json2fromParams(params);
 
 		if (!cfg)
@@ -125,8 +129,8 @@ function tenantFilter() {
 		request(method, url, params, cb, cfg);
 	}
 
-	function json(method, url, cb, params, cfg) {
-		if (typeof params != 'string')
+	function json(method, url, params, cb, cfg) {
+		if (typeof params != 'string' && !(params instanceof FormData))
 			params = JSON.stringify(params);
 
 		if (!cfg)
@@ -140,21 +144,36 @@ function tenantFilter() {
 		get(url, cb, cfg) {
 			request('GET', url, null, cb, cfg);
 		},
-		postForm(url, cb, params, cfg) {
-			form("POST", url, cb, params, cfg);
+		postForm(url, params, cb, cfg) {
+			form("POST", url, params, cb, cfg);
 		},
-		postJson(url, cb, params, cfg) {
-			json("POST", url, cb, params, cfg);
+		postJson(url, params, cb, cfg) {
+			json("POST", url, params, cb, cfg);
 		},
-		putForm(url, cb, params, cfg) {
-			form("PUT", url, cb, params, cfg);
+		putForm(url, params, cb, cfg) {
+			form("PUT", url, params, cb, cfg);
 		},
-		putJson(url, cb, params, cfg) {
-			json("PUT", url, cb, params, cfg);
+		putJson(url, params, cb, cfg) {
+			json("PUT", url, params, cb, cfg);
 		},
 		del(url, cb, cfg) {
 			request('DELETE', url, null, cb, cfg);
 		},
+		formData(form) {
+			if (!window.FormData)
+				throw 'The version of your browser is too old, please upgrade it.';
+
+			if (typeof form == 'string')
+				form = document.querySelector(form);
+			var json = {};
+
+			var formData = new FormData(form);
+			formData.forEach(function(value, key) {
+				json[key] = value;
+			});
+
+			return json;
+		}
 	};
 
 })();

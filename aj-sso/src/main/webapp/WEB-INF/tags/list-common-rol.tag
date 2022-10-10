@@ -7,7 +7,7 @@
 <%@attribute fragment="false" required="false" name="show_create" type="Boolean" description=""%>
 
 <c:if test="${JSP_HELPER.bit(1, style)}">
-	<td>正常</td>
+	<td>${JSP_HELPER.getState(item.stat)}</td>
 </c:if>
 <c:if test="${JSP_HELPER.bit(2, style)}">
 	<td>${JSP_HELPER.formatDate(item.createDate)}</td>
