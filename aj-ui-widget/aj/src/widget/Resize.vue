@@ -96,7 +96,7 @@
   border: 1px solid gray;
   width: 100px;
   height: 60px;
-  top: 50px;
+  top: 150px;
   left: 550px;
   background: #fff;
   position: absolute;
