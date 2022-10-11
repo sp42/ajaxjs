@@ -11,6 +11,7 @@
       <Submenu name="2">
         <template slot="title">内容管理</template>
         <MenuItem name="2-1" @click.native="showList(103, '图文')">图文列表</MenuItem>
+        <MenuItem name="8-5" @click.native="routeTo('list?id=103&title=图文')">CMS 图文</MenuItem>
         <MenuItem name="2-2" @click.native="showList(123)">附件列表</MenuItem>
         <MenuItem name="2-3" @click.native="load='TagMgr'">标签/点赞/收藏管理</MenuItem>
       </Submenu>
@@ -47,16 +48,6 @@
         <MenuItem name="6-7" @click.native="routeTo('work-flow')">工作流设计器</MenuItem>
         <MenuItem name="6-8" @click.native="routeTo('api-helper')">Api Helper</MenuItem>
       </Submenu>
-
-      <Submenu name="8">
-        <template slot="title">补充组件</template>
-        <MenuItem name="8-1" @click.native="load='DemoWidget'">页面 Widget</MenuItem>
-        <MenuItem name="8-2" @click.native="load='Article'">文章 Article</MenuItem>
-        <MenuItem name="8-3" @click.native="load='HtmlEditor'">HTML 编辑器</MenuItem>
-        <MenuItem name="8-4" @click.native="load='Others'">其他组件</MenuItem>
-        <MenuItem name="8-5" @click.native="routeTo('list?id=103&title=图文')">CMS 图文</MenuItem>
-      </Submenu>
-
     </Menu>
     <div style="float:left;width:83%;height: 100%;">
       <div v-if="!load" class="center" style="text-align:center;margin-top:25%;">Welcome!</div>
@@ -64,15 +55,11 @@
       <DataService v-if="load == 'DataService'" :api-root="apiRoot" />
       <FactoryList v-if="load == 'FactoryList'" :api-root="apiRoot" />
       <ModelMgr v-if="load == 'ModelMgr'" :api-root="apiRoot" />
-      <DemoWidget v-if="load == 'DemoWidget'" />
 
       <FactoryListLoader v-if="load === 'UserList'" id="5" />
       <FactoryListLoader v-if="load === 'UserLog'" id="6" />
       <FactoryListLoader v-if="load === 'showList'" :id="listId" style="margin:1%;" />
 
-      <Article v-if="load == 'Article'" />
-      <FormWidgets v-if="load == 'HtmlEditor'" />
-      <Others v-if="load == 'Others'" />
       <WebsiteConfig v-if="load == 'WebsiteConfig'" />
       <DataDict v-if="load == 'DataDict'" />
       <SysConfig v-if="load == 'SysConfig'" />
@@ -83,7 +70,6 @@
       <ApiHelper v-if="load == 'api-helper'" />
       <DataServiceIndex v-if="load == 'DataServiceIndex'" />
 
-      <sku v-if="load == 'sku'" />
     </div>
   </div>
 </template>
@@ -95,10 +81,6 @@ import FactoryList from '../components/factory-list/list.vue';
 import FactoryListLoader from '../components/factory-list/list-loader.vue';
 import ModelMgr from '../components/factory-form/list.vue';
 import DeveloperTools from '../components/admin-page/developer-tools/index.vue';
-import DemoWidget from './widget/Wdigets.vue';
-import Article from './widget/Article.vue';
-import FormWidgets from './widget/Form.vue';
-import Others from './widget/Others.vue';
 import DataDict from '../components/admin-page/system/data-dict.vue';
 import SysConfig from '../components/admin-page/system/config.vue';
 import RBAC from '../components/admin-page/user/rbac/rbac.vue';
@@ -106,10 +88,9 @@ import UserListIndex from '../components/admin-page/user/user-list-index.vue';
 import OrgIndex from '../components/admin-page/user/org/index.vue';
 import WebsiteConfig from '../components/admin-page/website/config.vue';
 import ApiHelper from '../components/api-helper/api-helper.vue';
-import sku from './playground/sku.vue';
 
 export default {
-  components: { DataServiceIndex,sku, DataSource, DataService, DemoWidget, Article, FormWidgets, FactoryList, FactoryListLoader, Others, ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
+  components: { DataServiceIndex, DataSource, DataService,  FactoryList, FactoryListLoader,  ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
       load: 'DataService',
