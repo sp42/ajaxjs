@@ -3,6 +3,16 @@ import * as util from './util/utils';
 import { setBaseHeadParams } from './util/xhr';
 import { xhr_get, xhr_post, xhr_put, xhr_del } from './util/xhr';
 
+import OpacityBanner from "@/widget/OpacityBanner.vue";
+import ProcessLine from "@/widget/ProcessLine.vue";
+import AccordionMenu from "@/widget/AccordionMenu.vue";
+import Expander from "@/widget/Expander.vue";
+import BaiduSearch from "@/widget/BaiduSearch.vue";
+import HtmlEditor from "@/widget/HtmlEditor/HtmlEditor.vue";
+import FileUploader from "@/widget/FileUploader/FileUploader.vue";
+import Calendar from "@/widget/calendar/Calendar.vue";
+import Article from '@/widget/Article.vue';
+
 /**
  * API 统一前缀
  */
@@ -38,5 +48,7 @@ export default {
 
     xhr: {
         xhr_get, xhr_post, xhr_put, xhr_del
-    }
+    },
+
+    OpacityBanner, ProcessLine, AccordionMenu, Expander, BaiduSearch, Article, HtmlEditor, FileUploader, Calendar
 };

@@ -284,7 +284,7 @@ export function getQuery(val: string): string {
 }
 
 export function getPageList(self: any, listArray: any, callback?: Function): XhrCallback {
-    return (j: JsonResponse) => {
+    return (j: any) => {
         if (j.status) {
             listArray.total = j.total;
             listArray.data = j.data;

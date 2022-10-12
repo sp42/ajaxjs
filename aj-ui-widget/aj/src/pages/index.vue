@@ -24,10 +24,29 @@
             </li>
             <li>
               简单易懂的代码，不折腾。当然了，是 typescript。不过我没有用 class
-              风格，只是加入类型提示，这就足够了
+              风格，只是加入参数类型、返回值类型，这就足够了
             </li>
             <li>CSS 基于 less.js</li>
           </ul>
+          <p class="p">安装 npm i @ajaxjs/ui</p>
+
+          <p>
+            <a
+              href="https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/aj"
+              >源码</a
+            >
+            |
+            <a
+              target="_blank"
+              href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22"
+              >QQ 群：3150067</a
+            >
+            | <a href="mailto:frank@ajaxjs.com">Email</a> |
+            <a target="_blank" href="http://blog.csdn.net/zhangxin09"
+              >作者博客</a
+            >
+            <center>©1999-2022 Frank Cheung</center>
+          </p>
         </td>
       </tr>
     </table>
@@ -51,7 +70,7 @@ export default {
   components: { DemoWidget, Form, HtmlEditor, Calendar, PlayGround },
   data() {
     return {
-      show: "html-editor",
+      show: "intro",
     };
   },
 };
@@ -106,13 +125,30 @@ h1 {
 </style>
 
 <style lang="less" scoped>
+h1 {
+  margin: 30px;
+}
+
 ul {
-  width: 500px;
-  margin: 0 auto;
+  max-width: 500px;
+  margin: 20px auto;
   color: gray;
   li {
     text-align: left;
     list-style-type: initial;
+    padding-bottom: 10px;
   }
+}
+
+p.p {
+  .aj-text-function();
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+center {
+  margin: 20px;
+  font-size: 9pt;
+  color: lightgray;
 }
 </style>

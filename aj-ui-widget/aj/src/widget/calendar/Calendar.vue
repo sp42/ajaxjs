@@ -1,7 +1,7 @@
 <template>
   <div class="aj-form-calendar">
     <div class="selectYearMonth">
-      <a href="###" @click="getDate('preYear')" class="preYear" title="上一年">&lt;</a>
+      <a href="###" @click="getDate('preYear')" class="preYear" title="上一年">	&#171; <!-- &lt; --></a>
       <select @change="setMonth" v-model="month">
         <option value="1">一月</option>
         <option value="2">二月</option>
@@ -16,7 +16,7 @@
         <option value="11">十一月</option>
         <option value="12">十二月</option>
       </select>
-      <a href="###" @click="getDate('nextYear')" class="nextYear" title="下一年">&gt;</a>
+      <a href="###" @click="getDate('nextYear')" class="nextYear" title="下一年"> &#187;<!-- &gt; --> </a>
     </div>
     <div class="showCurrentYearMonth">
       <span class="showYear">{{year}}</span>/<span class="showMonth">{{month}}</span>

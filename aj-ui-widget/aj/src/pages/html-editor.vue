@@ -6,7 +6,7 @@
     <p>
       <a href="https://zhangxin.blog.csdn.net/article/details/113867893" target="_blank">查看教程</a>
     </p>
-    <p>需要引入图标库；HTML 外层要有 textarea 元素包裹着。</p>
+    <p>需要引入图标库；HTML 外层要有隐藏的 textarea 元素包裹着。</p>
 
     <textarea style="display:none;">
         <h2>什么是Lorem Ipsum?</h2>
@@ -20,9 +20,10 @@
 
     <br />
     <br />
-    <div style="margin:0 auto;width:800px;">
+    <h2>生成的 HTML 标签</h2>
+    <p>
       {{v}}
-    </div>
+    </p>
   </div>
 </template>
 

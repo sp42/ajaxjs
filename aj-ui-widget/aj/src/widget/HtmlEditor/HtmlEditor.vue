@@ -51,8 +51,8 @@
         <div class="colorPicker" v-html="createColorPickerHTML()" @click="format('backColor', $event.target.title)"></div>
       </li>
       <li @click="createLink"><i title="增加链接" :class="isIonicons ? 'ivu-icon ivu-icon-ios-link'  : 'fontAwesome fa-link'"></i></li>
-      <li @click="insertImage"><i title="增加图片" :class="isIonicons ? 'ivu-icon ivu-icon-md-images' : 'fontAwesome fa-file-image-o'"></i></li>
-      <li @click="saveRemoteImage2Local"><i title="一键存图" :class="isIonicons ? 'ivu-icon ivu-icon-md-photos' : 'fontAwesome fa-hdd-o'"></i></li>
+      <li @click="insertImage"><i title="增加图片" :class="isIonicons ? 'ivu-icon ivu-icon-md-images' : 'fontAwesome fa-regular fa-image'"></i></li>
+      <li @click="saveRemoteImage2Local"><i title="一键存图" :class="isIonicons ? 'ivu-icon ivu-icon-md-photos' : 'fontAwesome fa-camera'"></i></li>
       <li @click="cleanHTML"><i title="清理 HTML" :class="isIonicons ? 'ivu-icon ivu-icon-md-done-all' : 'fontAwesome fa-eraser'"></i></li>
       <li @click="isShowCode = !isShowCode"><i title="切换到代码" :class="(isIonicons ? 'ivu-icon ivu-icon-md-code' : 'fontAwesome fa-code')+ ' switchMode'"></i></li>
     </ul>

@@ -66,7 +66,7 @@ export default {
             }
 
             // 先清空内容再插入
-            let tbody = <HTMLElement>this.$el.$("table tbody");
+            let tbody = <HTMLElement>this.$el.querySelector("table tbody");
             tbody.innerHTML = '';
             tbody.appendChild(frag);
         },
@@ -103,7 +103,7 @@ export default {
         /**
          * 
          * 
-         * @param $even
+         * @param querySelectoreven
          */
         setMonth(ev: Event): void {
             let el: HTMLSelectElement = <HTMLSelectElement>ev.target;
@@ -132,23 +132,23 @@ export default {
         /**
          * 获取日期
          * 
-         * @param $event 
+         * @param event 
          */
         pickDay(ev: Event): string {
             let el: HTMLElement = <HTMLElement>ev.target,
                 date: string = el.title;
-            this.$emit('pick-date', date);
+            this.$emit('pickdate', date);
 
             return date;
         },
 
         /**
          * 
-         * @param $event 
+         * @param event 
          */
-        pickupTime($event: Event): void {
-            let hour: HTMLSelectElement = <HTMLSelectElement>this.$el.$('.hour'),
-                minute: HTMLSelectElement = <HTMLSelectElement>this.$el.$('.minute'),
+        pickupTime(event: Event): void {
+            let hour: HTMLSelectElement = <HTMLSelectElement>this.$el.querySelector('.hour'),
+                minute: HTMLSelectElement = <HTMLSelectElement>this.$el.querySelector('.minute'),
                 time = hour.selectedOptions[0].value + ':' + minute.selectedOptions[0].value;
 
             this.$emit('pick-time', time);
