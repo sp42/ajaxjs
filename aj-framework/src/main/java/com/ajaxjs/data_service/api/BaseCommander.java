@@ -22,16 +22,11 @@ import com.ajaxjs.data_service.mybatis.SqlMapper;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcUtil;
-import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 
- * @author Frank Cheung
- *
  */
 public abstract class BaseCommander implements DataServiceConstant {
-	private static final LogHelper LOGGER = LogHelper.getLog(BaseCommander.class);
-
 	/**
 	 * 手动创建连接池。这里使用了 Tomcat JDBC Pool
 	 *

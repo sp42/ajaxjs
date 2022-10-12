@@ -18,6 +18,7 @@ import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.framework.shop.service.OrderService;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.util.binrary.BytesUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
@@ -101,9 +102,9 @@ public class WxPayController {
 					String ciphertext = resource.get("ciphertext").toString();
 					LOGGER.info(ciphertext);
 
-					byte[] apiV3KeyByte = StrUtil.getUTF8_Bytes(merchantConfig.getApiV3Key());
-					byte[] associatedData = StrUtil.getUTF8_Bytes(resource.get("associated_data").toString());
-					byte[] nonce = StrUtil.getUTF8_Bytes(resource.get("nonce").toString());
+					byte[] apiV3KeyByte = BytesUtil.getUTF8_Bytes(merchantConfig.getApiV3Key());
+					byte[] associatedData = BytesUtil.getUTF8_Bytes(resource.get("associated_data").toString());
+					byte[] nonce = BytesUtil.getUTF8_Bytes(resource.get("nonce").toString());
 
 					// 解密
 					AesUtil aesUtil = new AesUtil(apiV3KeyByte);

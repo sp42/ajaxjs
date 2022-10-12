@@ -11,7 +11,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.binrary.BytesUtil;
 
 /**
  * 证书和回调报文解密
@@ -57,7 +57,7 @@ public class AesUtil {
 			cipher.init(Cipher.DECRYPT_MODE, key, spec);
 			cipher.updateAAD(associatedData);
 
-			return StrUtil.byte2String(cipher.doFinal(Base64.getDecoder().decode(ciphertext)));
+			return BytesUtil.byte2String(cipher.doFinal(Base64.getDecoder().decode(ciphertext)));
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
 			throw new IllegalStateException(e);
 		} catch (InvalidKeyException | InvalidAlgorithmParameterException e) {

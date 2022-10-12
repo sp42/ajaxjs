@@ -29,10 +29,10 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.util.DataBaseMetaHelper;
-import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.WebHelper;
 import com.ajaxjs.util.filter.DataBaseFilter;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.regexp.RegExpUtils;
 
 /**
  * 数据服务 后台控制器
@@ -88,7 +88,7 @@ public class AdminController extends BaseController implements DataServiceDAO {
 			String dig = "";
 
 			if (maxId != null) {
-				dig = StrUtil.regMatch("\\d+$", maxId);
+				dig = RegExpUtils.regMatch("\\d+$", maxId);
 				int i = Integer.parseInt(dig);
 				dig = (++i) + "";
 			} else
