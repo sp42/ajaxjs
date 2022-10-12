@@ -5,7 +5,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.regexp.RegexpUtils;
+import com.ajaxjs.util.regexp.RegExpUtils;
 
 public class TestRegexpUtils {
 	static String json = "{\"magic\":254,\"len\":28,\"sysid\":3,\"compid\":1,\"payload\":{\"pitchspeed\":-2.2399216E-4,"
@@ -14,7 +14,7 @@ public class TestRegexpUtils {
 
 	@Test
 	public void testCallback() {
-		String j = RegexpUtils.kexuejishu(json);
+		String j = RegExpUtils.kexuejishu(json);
 		System.out.println(j);
 		Map<String, Object> map = JsonHelper.parseMap(j);
 		@SuppressWarnings("unchecked")

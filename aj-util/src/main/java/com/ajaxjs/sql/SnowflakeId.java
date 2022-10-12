@@ -98,8 +98,4 @@ public class SnowflakeId {
 	public static long get() {
 		return new SnowflakeId(1L).nextId();
 	}
-
-	public static void main(String[] args) {
-		System.out.println(get());
-	}
 }

@@ -30,7 +30,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.util.Base64Utils;
 
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.binrary.BytesUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -77,7 +77,7 @@ public class SymmetriCipher {
 		if (b == null || b.length == 0)
 			return null;
 
-		return StrUtil.byte2String(b);
+		return BytesUtil.byte2String(b);
 	}
 
 	///////////////////////// --------------DES----------------------------
@@ -102,7 +102,7 @@ public class SymmetriCipher {
 	 * @return 解密后的内容
 	 */
 	public static String DES_Decrypt(String str, String key) {
-		return StrUtil.byte2String(SymmetriCipherInfo.doCipher(DES, Cipher.DECRYPT_MODE, key, Base64Utils.decodeFromString(str)));
+		return BytesUtil.byte2String(SymmetriCipherInfo.doCipher(DES, Cipher.DECRYPT_MODE, key, Base64Utils.decodeFromString(str)));
 	}
 
 	///////////////////////// --------------3DES----------------------------

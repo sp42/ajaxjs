@@ -54,7 +54,7 @@ public class SimpleTempletUtil {
 	 * @return 模板中的变量名
 	 */
 	public static Set<String> getParamNames(String templet, String split) {
-		Set<String> paramNames = new HashSet<String>();
+		Set<String> paramNames = new HashSet<>();
 		int start = 0, end = 0;
 
 		while (end < templet.length()) {

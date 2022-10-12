@@ -76,7 +76,6 @@ public class WebSocketClient {
 	public void sendMessage(String msg) {
 		try {
 			userSession.getBasicRemote().sendText(msg);
-
 		} catch (IOException e) {
 			LOGGER.warning(e);
 		}
@@ -90,9 +89,9 @@ public class WebSocketClient {
 	}
 
 	@OnClose
-	public void onClose(Session session, CloseReason closeReason) {
-		LOGGER.info("WebSocket 连接断开！");
-		
+	public void onClose(Session session, CloseReason reason) {
+		LOGGER.info("WebSocket 连接断开！code: {0}, reson: {1}", reason.getCloseCode(), reason.getReasonPhrase());
+
 		if (end.get())
 			return;
 

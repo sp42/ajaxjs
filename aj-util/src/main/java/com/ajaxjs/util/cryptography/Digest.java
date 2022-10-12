@@ -33,7 +33,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.binrary.BytesUtil;
 import com.ajaxjs.util.cryptography.encryption.SymmetriCipherInfo;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -64,7 +64,7 @@ public class Digest {
 
 		md.update(str.getBytes(StandardCharsets.UTF_8));
 
-		return StrUtil.bytesToHexStr(md.digest()).toLowerCase();
+		return BytesUtil.bytesToHexStr(md.digest()).toLowerCase();
 	}
 
 	;
@@ -145,7 +145,7 @@ public class Digest {
 			LOGGER.warning(e);
 		}
 
-		return StrUtil.bytesToHexStr(bytes);
+		return BytesUtil.bytesToHexStr(bytes);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class Digest {
 			while ((len = stream.read(buf)) > 0)
 				digest.update(buf, 0, len);
 
-			return StrUtil.bytesToHexStr(digest.digest());
+			return BytesUtil.bytesToHexStr(digest.digest());
 		} catch (IOException | NoSuchAlgorithmException e) {
 			LOGGER.warning(e);
 			return "";

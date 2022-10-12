@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.regexp.RegExpUtils;
 
 /**
  * GET 请求
@@ -156,7 +156,7 @@ public class Get extends Base {
 
 		String fileName = FileHelper.getFileNameFromUrl(url);
 		if (newFileName != null)
-			fileName = newFileName + StrUtil.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
+			fileName = newFileName + RegExpUtils.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
 
 		ResponseEntity resp = connect(conn);
 

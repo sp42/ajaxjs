@@ -24,6 +24,7 @@ import java.net.UnknownHostException;
 
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.regexp.RegExpUtils;
 
 /**
  * 简易邮件发送器
@@ -64,7 +65,8 @@ public class Sender extends Socket {
 	public boolean sendMail() throws MailException {
 		LOGGER.info("发送邮件:" + bean.getSubject());
 
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream())); DataOutputStream os = new DataOutputStream(getOutputStream());) {
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(getInputStream()));
+				DataOutputStream os = new DataOutputStream(getOutputStream());) {
 			this.in = in;
 			this.os = os;
 
@@ -197,7 +199,7 @@ public class Sender extends Socket {
 	 * @return 是否与之匹配
 	 */
 	private static boolean isOkCode(String str, int code) {
-		int _code = Integer.parseInt(StrUtil.regMatch("^\\d+", str));
+		int _code = Integer.parseInt(RegExpUtils.regMatch("^\\d+", str));
 
 		return _code == code;
 	}
