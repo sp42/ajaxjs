@@ -44,15 +44,13 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 		boolean isBolType = clazz == Boolean.class || clazz == boolean.class;
 		boolean isIntType = clazz == Integer.class || clazz == int.class;
 		boolean isLongType = clazz == Long.class || clazz == long.class;
+		boolean isString = clazz == String.class;
 
-		return isBolType || isIntType || isLongType;
+		return isBolType || isIntType || isLongType || isString;
 	}
 
-	/**
-	 * 从请求中读取该类型的方法参数
-	 */
 	@Override
-	protected Object readInternal(Class<? extends Object> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+	protected Object readInternal(Class<?> clazz, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
 		boolean isMapParams = clazz == Map.class;
 		boolean isListParams = clazz == List.class;
 		boolean isJavaBean = IBaseModel.class.isAssignableFrom(clazz);

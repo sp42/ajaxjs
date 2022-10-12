@@ -23,12 +23,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author： 谢辉 @date： 2021/4/14
+ * 获取每个月有几周，并且每周的开始日期和结束日期 国内都是以周一开始，注：即使第一天是周末，也算一周 @author： 谢辉
  * https://blog.csdn.net/qq_41995919/article/details/115756233
- * 
- * @email: xieh_mail@163.com @description： 获取每个月有几周，并且每周的开始日期和结束日期
- *         国内都是以周一开始，注：即使第一天是周末，也算一周 @modifiedBy：
- * @version: 1.0
  */
 public class AdDateUtils {
 
@@ -49,7 +45,6 @@ public class AdDateUtils {
 				.collect(Collectors.groupingBy(localDate -> localDate.get(WeekFields.of(DayOfWeek.MONDAY, 1).weekOfMonth()),
 						Collectors.collectingAndThen(Collectors.toList(), WeekData::new)));
 		return map;
-
 	}
 
 	/**

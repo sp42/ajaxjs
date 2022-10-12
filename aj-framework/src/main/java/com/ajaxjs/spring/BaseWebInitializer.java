@@ -34,6 +34,7 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 	public void onStartup(ServletContext cxt) {
 		if (cxt == null) // 可能在测试
 			return;
+
 		String mainConfig = getMainConfig();
 		cxt.setAttribute("ctx", cxt.getContextPath());
 //		servletCxt.setInitParameter("contextConfigLocation", "classpath:applicationContext.xml");

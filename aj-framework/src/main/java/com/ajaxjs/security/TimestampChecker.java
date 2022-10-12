@@ -1,4 +1,4 @@
-package com.ajaxjs.security.checker;
+package com.ajaxjs.security;
 
 /**
  * 时间戳检查

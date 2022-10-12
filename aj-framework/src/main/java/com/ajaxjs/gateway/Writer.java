@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.teant;
+package com.ajaxjs.gateway;
 
 import com.ajaxjs.data_service.model.ServiceContext;
 
@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 import com.ajaxjs.data_service.plugin.IPlugin;
-import com.ajaxjs.gateway.Passport;
-import com.ajaxjs.gateway.PassportFilter;
 import com.ajaxjs.spring.DiContextUtil;
 
 /**
