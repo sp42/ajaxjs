@@ -2,7 +2,7 @@ package com.ajaxjs.framework.shop;
 
 import java.util.Calendar;
 
-import com.ajaxjs.sql.SnowflakeId;
+import com.ajaxjs.sql.util.SnowflakeId;
 
 public class Utils {
 

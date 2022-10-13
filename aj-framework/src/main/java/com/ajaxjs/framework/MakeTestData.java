@@ -10,7 +10,6 @@ import java.util.function.Consumer;
 
 import com.ajaxjs.framework.shop.model.Goods;
 import com.ajaxjs.net.http.Post;
-import com.ajaxjs.sql.util.Gen;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.date.DateUtil;
 import com.ajaxjs.util.map.MapTool;

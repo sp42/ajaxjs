@@ -21,7 +21,7 @@ import com.ajaxjs.data_service.mybatis.SqlMapper;
 import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.sql.JdbcUtil;
-import com.ajaxjs.sql.SnowflakeId;
+import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
