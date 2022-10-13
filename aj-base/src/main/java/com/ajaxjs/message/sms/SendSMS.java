@@ -1,12 +1,12 @@
 package com.ajaxjs.message.sms;
 
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.user.common.util.UserUtils;
 import com.ajaxjs.util.cache.ExpireCache;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -87,7 +87,7 @@ public class SendSMS {
 		if (!StringUtils.hasText(v_code))
 			throw new IllegalArgumentException("请输入验证码");
 
-		if (!UserUtils.PHONE_REG.matcher(phone).find())
+		if (!PHONE_REG.matcher(phone).find())
 			throw new IllegalArgumentException(phone + " 不是有效的手机号码");
 
 		String key = CACHE_PREFIX + phone;
@@ -106,4 +106,11 @@ public class SendSMS {
 
 		return new String[] { userId, userName };
 	}
+
+	/**
+	 * 验证手机号码是否合法正确
+	 */
+	private static final String PHONE_REGEXP = "^[1][3-8]\\d{9}$";
+
+	public final static Pattern PHONE_REG = Pattern.compile(PHONE_REGEXP);
 }
