@@ -92,12 +92,4 @@ public class MakePassword {
 		// 3. 返回结果
 		return new String(chars);
 	}
-
-	/**
-	 * 测试代码
-	 */
-	public static void main(String[] args) {
-		for (int i = 4; i <= 15; i++)
-			System.out.println(randomPassword(i));
-	}
 }

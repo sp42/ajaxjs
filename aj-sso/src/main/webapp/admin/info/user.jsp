@@ -9,8 +9,7 @@
 	request.setAttribute("TENANT_LIST", JdbcHelper.queryAsMapList(conn, "SELECT * FROM sys_tenant"));
 	request.setAttribute("TABLE_NAME", "user");
 %>
-<myTag:info namespace="user" namespace_chs="用户" date_style="3"
-	field_style="15" two_cols="true">
+<myTag:info namespace="user" namespace_chs="用户" date_style="3" field_style="15" two_cols="true">
 	<tr>
 		<td>昵称</td>
 		<td><input type="text" name="name" value="${info.name}" /></td>

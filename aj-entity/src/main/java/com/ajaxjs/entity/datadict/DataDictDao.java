@@ -16,7 +16,6 @@ public interface DataDictDao {
 
 		@KeyOfMapParams("ids")
 		public Boolean deleteChildren(String ids);
-
 	}
 
 	public static final DataDictDAO DataDictDAO = new Caller("cms", "sys_datadict").bind(DataDictDAO.class, DataDict.class);

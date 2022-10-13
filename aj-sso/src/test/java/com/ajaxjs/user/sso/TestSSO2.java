@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import javax.servlet.http.HttpServletRequest;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.data_service.api.ApiController;
 import com.ajaxjs.user.TestConfig;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
@@ -29,7 +26,7 @@ import com.ajaxjs.user.sso.controller.SsoController;
 import com.ajaxjs.user.sso.controller.StateController;
 import com.ajaxjs.user.sso.model.IssueToken;
 import com.ajaxjs.user.sso.model.IssueTokenWithUser;
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.regexp.RegExpUtils;
 
 @ContextConfiguration(classes = TestConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -81,7 +78,7 @@ public class TestSSO2 {
     //	@Test
     public void testIssueToken() throws Exception {
         String redirectedUrl = getAuthCode();
-        String authCode = StrUtil.regMatch("(?:code=)(\\w+)", redirectedUrl, 1);
+        String authCode = RegExpUtils.regMatch("(?:code=)(\\w+)", redirectedUrl, 1);
         System.out.println(authCode);
         HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
 

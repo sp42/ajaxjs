@@ -1,18 +1,16 @@
 package com.ajaxjs.user.sso.service;
 
+import java.io.Serializable;
+
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.sso.model.AccessToken;
 import com.ajaxjs.user.sso.model.ClientDetails;
 import com.ajaxjs.user.sso.model.ExpireEnum;
 import com.ajaxjs.user.sso.model.RefreshToken;
-import com.ajaxjs.util.cache.ExpireCache;
 import com.ajaxjs.util.cryptography.Digest;
 import com.ajaxjs.util.date.LocalDateUtils;
-
-import java.io.Serializable;
 
 /**
  * 授权操作
@@ -65,6 +63,7 @@ public class AuthorizationService implements SsoDAO {
 //			at.setCreateUser(user.getId());
 
             Serializable id = AcessTokenDAO.create(at);
+            
             if (id == null)
                 System.err.println("创建 AccessToken 失败");
             else

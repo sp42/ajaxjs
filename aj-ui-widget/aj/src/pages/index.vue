@@ -32,6 +32,11 @@
 
           <p>
             <a
+              href="https://www.npmjs.com/package/@ajaxjs/ui"
+              >npm</a
+            >
+            |
+            <a
               href="https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/aj"
               >源码</a
             >
