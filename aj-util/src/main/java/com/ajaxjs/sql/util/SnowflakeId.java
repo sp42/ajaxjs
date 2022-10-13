@@ -1,4 +1,4 @@
-package com.ajaxjs.sql;
+package com.ajaxjs.sql.util;
 
 /**
  * Twitter 的分布式自增ID算法 Snowflake:雪花生成器。
