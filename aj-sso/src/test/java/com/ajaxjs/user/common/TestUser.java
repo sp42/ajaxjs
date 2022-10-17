@@ -1,8 +1,14 @@
 package com.ajaxjs.user.common;
 
-import com.ajaxjs.data_service.api.ApiController;
-import com.ajaxjs.user.TestConfig;
-import com.ajaxjs.user.common.service.RegisterService;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +19,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.ajaxjs.data_service.api.ApiController;
+import com.ajaxjs.user.TestConfig;
+import com.ajaxjs.user.common.service.RegisterService;
 
 @ContextConfiguration(classes = TestConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -62,6 +64,6 @@ public class TestUser {
         Boolean repeat = registerService.checkRepeat("username", "Mike747", 1);
         assertTrue(repeat);
 
-        assertTrue(registerService.isRepeat("email", "sp42@qq.com", 1));
+        assertTrue(RegisterService.isRepeat("email", "sp42@qq.com", 1));
     }
 }

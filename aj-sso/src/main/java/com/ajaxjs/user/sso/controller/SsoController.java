@@ -2,18 +2,17 @@ package com.ajaxjs.user.sso.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
-import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
-import com.ajaxjs.user.common.service.LoginService;
-import com.ajaxjs.user.sso.service.SsoService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ajaxjs.spring.easy_controller.ControllerMethod;
+import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
 import com.ajaxjs.user.sso.model.IssueToken;
 import com.ajaxjs.user.sso.model.IssueTokenWithUser;
 import com.ajaxjs.user.sso.service.ISsoService;
+import com.ajaxjs.user.sso.service.SsoService;
 
 @RestController
 @RequestMapping("/sso")

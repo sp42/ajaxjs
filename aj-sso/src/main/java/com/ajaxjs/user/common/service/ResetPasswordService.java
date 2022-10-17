@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.ajaxjs.base.ISendSMS;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserAuth;
 import com.ajaxjs.user.common.util.CheckStrength;
@@ -59,8 +60,8 @@ public class ResetPasswordService implements IResetPassword {
 		return sendEmail.send(email, title, content);
 	}
 
-	@Autowired
-	SendSMS sendSMS;
+	@Autowired(required = false)
+	ISendSMS sendSMS;
 
 	@Override
 	public Boolean sendRestPhone(String phone, int tenantId) {
@@ -71,7 +72,7 @@ public class ResetPasswordService implements IResetPassword {
 		if (user == null)
 			throw new IllegalAccessError("该手机： " + phone + " 的用户不存在！");
 
-		String code = SendSMS.getRandomCodeAndSave(phone, user.getId() + "", user.getUsername());
+		String code = sendSMS.getRandomCodeAndSave(phone, user.getId() + "", user.getUsername());
 
 		return sendSMS.send(phone, code);
 	}
@@ -84,7 +85,7 @@ public class ResetPasswordService implements IResetPassword {
 		if (user == null)
 			throw new IllegalAccessError(String.format("不存在手机号码[%s]的用户", phone));
 
-		SendSMS.checkSmsCode(phone, code); // 没有异常就表示通过
+		sendSMS.checkSmsCode(phone, code); // 没有异常就表示通过
 
 		return updatePwd(user, newPsw);
 	}

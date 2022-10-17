@@ -32,15 +32,4 @@
 	<session-config>
 		<session-timeout>90</session-timeout>
 	</session-config>
-
-	<!-- 不安全的 TRACE、OPTIONS 等方法禁用 -->
- 	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>restricted methods</web-resource-name>
-			<url-pattern>/*</url-pattern>
-			<http-method>HEAD</http-method>
-			<http-method>OPTIONS</http-method>
-			<http-method>TRACE</http-method>
-		</web-resource-collection>
-	</security-constraint> 
 </web-fragment>

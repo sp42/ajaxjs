@@ -7,23 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.ajaxjs.base.ISendSMS;
 import com.ajaxjs.util.cache.ExpireCache;
 import com.ajaxjs.util.logger.LogHelper;
 
 @Component
-public class SendSMS {
+public class SendSMS implements ISendSMS {
 	private static final LogHelper LOGGER = LogHelper.getLog(SendSMS.class);
 
 	@Autowired
 	private AliyunSmsEntity sendSMS;
 
-	/**
-	 * 发送短信
-	 * 
-	 * @param phone
-	 * @param code
-	 * @return
-	 */
+	@Override
 	public boolean send(String phone, String code) {
 		sendSMS.setTemplateParam(String.format("{\"code\":%s}", code));
 		sendSMS.setPhoneNumbers(phone);
@@ -46,15 +41,8 @@ public class SendSMS {
 	 */
 	private final static int SMS_EXPIRE_SECONDS = 5 * 60;
 
-	/**
-	 * 生成随机码，保存到缓存
-	 *
-	 * @param phone
-	 * @param userId
-	 * @param username
-	 * @return 随机码
-	 */
-	public static String getRandomCodeAndSave(String phone, String userId, String username) {
+	@Override
+	public String getRandomCodeAndSave(String phone, String userId, String username) {
 		String key = CACHE_PREFIX + phone;
 		String rad;
 
@@ -76,14 +64,8 @@ public class SendSMS {
 		return rad;
 	}
 
-	/**
-	 * 检查是否合法请求
-	 *
-	 * @param phone
-	 * @param v_code
-	 * @return 用户 id 和用户名
-	 */
-	public static String[] checkSmsCode(String phone, String v_code) {
+	@Override
+	public String[] checkSmsCode(String phone, String v_code) {
 		if (!StringUtils.hasText(v_code))
 			throw new IllegalArgumentException("请输入验证码");
 

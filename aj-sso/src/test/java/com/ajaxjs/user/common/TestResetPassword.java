@@ -18,11 +18,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.ajaxjs.base.ISendSMS;
 import com.ajaxjs.data_service.api.ApiController;
 import com.ajaxjs.user.common.controller.ResetPasswordController;
 import com.ajaxjs.user.common.service.ResetPasswordService;
 import com.ajaxjs.user.common.service.SendEmail;
-import com.ajaxjs.user.common.service.SendSMS;
 
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,7 +51,7 @@ public class TestResetPassword {
 	}
 
 	@Autowired
-	SendSMS sendSMS;
+	ISendSMS sendSMS;
 
 //	@Test
 	public void testSendSms() {
