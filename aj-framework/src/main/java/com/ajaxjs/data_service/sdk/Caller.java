@@ -55,7 +55,7 @@ public class Caller extends BaseCaller {
 				throw new IllegalArgumentException("缺少 id 参数");
 
 			params.put("id", args[0]);
-			node = exec(uri, RuntimeData.GET);
+			node = RuntimeData.exec(uri, RuntimeData.GET);
 
 			ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 			Map<String, Object> info = info(ctx, null);
@@ -71,7 +71,7 @@ public class Caller extends BaseCaller {
 			}
 		} else if (isFindOne || methodName.equals("findList") || methodName.equals("findListAsListMap")) {
 			uri += "/list";
-			node = exec(uri, RuntimeData.GET);
+			node = RuntimeData.exec(uri, RuntimeData.GET);
 
 			ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 			List<Map<String, Object>> list = list(ctx, null);
@@ -97,7 +97,7 @@ public class Caller extends BaseCaller {
 			return list;
 		} else if (methodName.equals("findPagedList") || methodName.equals("findPagedListAsMap")) {
 			uri += "/list";
-			node = exec(uri, RuntimeData.GET);
+			node = RuntimeData.exec(uri, RuntimeData.GET);
 
 			params.put("start", args[0]);
 			params.put("limit", args[1]);
@@ -116,7 +116,7 @@ public class Caller extends BaseCaller {
 
 			// 其他类型
 			uri += "/" + methodName;
-			node = exec(uri, RuntimeData.GET);
+			node = RuntimeData.exec(uri, RuntimeData.GET);
 //			LOGGER.info(params);
 
 			if (args != null && args.length >= 1) {
@@ -311,7 +311,7 @@ public class Caller extends BaseCaller {
 	@SuppressWarnings("unchecked")
 	private ServiceContext getServiceContext(Map<String, DataServiceDml> map, String methodName, Object[] args) {
 		String uri = methodName == null ? getUri() : getUri() + "/" + methodName;
-		DataServiceDml node = exec(uri, map);
+		DataServiceDml node = RuntimeData.exec(uri, map);
 
 		Map<String, Object> params;
 

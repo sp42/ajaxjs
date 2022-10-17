@@ -21,9 +21,12 @@ import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.DataServiceFieldsMapping;
 import com.ajaxjs.data_service.model.DataServiceTable;
 import com.ajaxjs.data_service.model.MyDataSource;
+import com.ajaxjs.data_service.mybatis.MSUtils;
 import com.ajaxjs.data_service.plugin.IPlugin;
+import com.ajaxjs.data_service.service.ApiCommander;
 import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.framework.Status;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -33,7 +36,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 运行时配置 初始化数据源
  */
-public abstract class RuntimeData extends Commander implements DataServiceDAO {
+public abstract class RuntimeData extends ApiCommander implements DataServiceDAO {
 	private static final LogHelper LOGGER = LogHelper.getLog(RuntimeData.class);
 
 	/**
@@ -159,9 +162,8 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	 * 初始化（带缓存控制）
 	 */
 	public void initCache() {
-		if (initialized.compareAndSet(false, true)) {// 如果为false，更新为true
+		if (initialized.compareAndSet(false, true)) // 如果为false，更新为true
 			init();
-		}
 	}
 
 	/**
@@ -179,7 +181,7 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 		List<MyDataSource> findList = DataSourceDAO.findList(QueryTools.setStatus(Status.ONLINE.getValue()));
 
 		findList.forEach(myds -> {
-			DataSource ds = setupJdbcPool(MyDataSourceController.getDbDriver(myds), myds.getUrl(), myds.getUsername(), myds.getPassword());
+			DataSource ds = MSUtils.setupJdbcPool(MyDataSourceController.getDbDriver(myds), myds.getUrl(), myds.getUsername(), myds.getPassword());
 			myds.setInstance(ds);
 			mulitDataSource.put(myds.getId(), myds);
 		});
@@ -203,7 +205,7 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 			LOGGER.info("Created MyDs " + myds);
 
 			if (myds != null)
-				ds = setupJdbcPool(MyDataSourceController.getDbDriver(myds), myds.getUrl(), myds.getUsername(), myds.getPassword());
+				ds = MSUtils.setupJdbcPool(MyDataSourceController.getDbDriver(myds), myds.getUrl(), myds.getUsername(), myds.getPassword());
 			else
 				return null;
 		}
@@ -253,6 +255,38 @@ public abstract class RuntimeData extends Commander implements DataServiceDAO {
 		case "delete":
 			DELETE.put(urlDir, dml);
 			break;
+		}
+	}
+	
+	/**
+	 * URL 匹配命令。根据两个输入条件找到匹配的 DML 命令
+	 * 
+	 * @param uri    命令 URL
+	 * @param states 状态 Map
+	 * @return
+	 */
+	public static DataServiceDml exec(String uri, Map<String, DataServiceDml> states) {
+		if (states.containsKey(uri)) {
+			DataServiceDml node = states.get(uri);
+
+			if (node.isEnable())
+				return node;
+			else
+				throw new RuntimeException("该命令 [" + uri + "] 未启用");
+		} else {
+			if (states == null || states.size() == 0) {
+				// 自定义类型好像不会触发 ds 初始化，这里强制执行 TODO
+				ApiController api = DiContextUtil.getBean(ApiController.class);
+				api.init();
+//				api.initCache();
+
+				throw new RuntimeException("未初始化数据服务");
+			} else {
+				for (String key : states.keySet())
+					System.out.println(key);
+
+				throw new RuntimeException("不存在该路径 [" + uri + "] 之配置");
+			}
 		}
 	}
 }

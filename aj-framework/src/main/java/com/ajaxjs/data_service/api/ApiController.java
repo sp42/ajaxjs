@@ -74,20 +74,6 @@ public class ApiController extends RuntimeData {
 		return uri;
 	}
 
-	private static Map<String, Object> getParamMap(HttpServletRequest req, Map<String, Object> formPostMap) {
-		Map<String, Object> map;
-
-		if (formPostMap.size() == 0 && req.getContentType().contains("application/json")) {
-			map = WebHelper.getRawBodyAsJson(req);// 不是标准的 表单格式，而是 RawBody Payload
-		} else
-			map = formPostMap;
-
-		if (map.size() == 0)
-			throw new IllegalArgumentException("没有提交任何数据");
-
-		return map;
-	}
-
 	/**
 	 * 创建实体
 	 * 
@@ -101,7 +87,7 @@ public class ApiController extends RuntimeData {
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
 	public String post(@RequestParam Map<String, Object> formPostMap, HttpServletRequest req) {
 		initCache();
-		Map<String, Object> map = getParamMap(req, formPostMap);
+		Map<String, Object> map = WebHelper.getParamMap(req, formPostMap);
 		String uri = getUri(req);
 		LOGGER.info("API POST: " + uri + " map:" + map);
 

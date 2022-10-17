@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.ajaxjs.data_service.DataServiceDAO;
 import com.ajaxjs.data_service.model.DataServiceDTO;
 import com.ajaxjs.data_service.model.MyDataSource;

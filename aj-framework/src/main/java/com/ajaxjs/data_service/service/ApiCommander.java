@@ -1,4 +1,4 @@
-package com.ajaxjs.data_service.api;
+package com.ajaxjs.data_service.service;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -10,13 +10,17 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.sql.DataSource;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.util.CollectionUtils;
 
+import com.ajaxjs.data_service.model.DataServiceConstant;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.DataServiceFieldsMapping;
 import com.ajaxjs.data_service.model.DataServiceTable;
 import com.ajaxjs.data_service.model.ServiceContext;
+import com.ajaxjs.data_service.mybatis.MSUtils;
 import com.ajaxjs.data_service.mybatis.SqlMapper;
 import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.PageResult;
@@ -30,8 +34,8 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Frank Cheung
  *
  */
-public abstract class Commander extends BaseCommander {
-	private static final LogHelper LOGGER = LogHelper.getLog(Commander.class);
+public abstract class ApiCommander implements DataServiceConstant {
+	private static final LogHelper LOGGER = LogHelper.getLog(ApiCommander.class);
 
 	/**
 	 * 
@@ -42,12 +46,6 @@ public abstract class Commander extends BaseCommander {
 	public static Object get(ServiceContext ctx, List<IPlugin> plugins) {
 		DataServiceDml node = ctx.getNode();
 
-//		try {
-//			LOGGER.info(node.getDataSource().getConnection().getMetaData().getURL());
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-
 		if ("list".equals(node.getType()) || "getRows".equals(node.getType()) || "getRowsPage".equals(node.getType())) {
 			if ((node.containsKey("pageMode") && (1 == (int) node.get("pageMode"))) || "getRowsPage".equals(node.getType()))
 				return page(ctx, plugins);
@@ -57,24 +55,32 @@ public abstract class Commander extends BaseCommander {
 			return info(ctx, plugins);
 	}
 
-	/**
-	 * 单笔查询
-	 * 
-	 * @param ctx
-	 * @param plugins
-	 * @return
-	 */
-	public static Map<String, Object> info(ServiceContext ctx, List<IPlugin> plugins) {
-		String sql = where(ctx);
-
+	private static boolean before(CRUD type, ServiceContext ctx, List<IPlugin> plugins) {
 		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
-				if (!plugin.before(CRUD.INFO, ctx))
+				if (!plugin.before(type, ctx))
 					throw new Error(getErrMsg(ctx));
 			}
 
-		Map<String, Object> result = info(ctx.getDatasource(), sql, ctx.getRequestParams());
+		return hasPlugins;
+	}
+
+	/**
+	 * 单笔查询，查询单个记录
+	 * 
+	 * @param ctx
+	 * @param plugins
+	 * @return 单个记录的 Map 如果返回 null 找不到数据
+	 */
+	public static Map<String, Object> info(ServiceContext ctx, List<IPlugin> plugins) {
+		String sql = where(ctx);
+		boolean hasPlugins = before(CRUD.INFO, ctx, plugins);
+		Map<String, Object> result = null;
+
+		try (SqlSession session = MSUtils.getMyBatisSession(ctx.getDatasource())) {
+			result = new SqlMapper(session).selectOne(sql, ctx.getRequestParams());
+		}
 
 		try {// 避免 null point
 			DataServiceFieldsMapping fieldsMapping = ctx.getNode().getTableInfo().getFieldsMapping();
@@ -104,30 +110,28 @@ public abstract class Commander extends BaseCommander {
 	}
 
 	private static void toCaemlCase(ServiceContext ctx, List<Map<String, Object>> list) {
-		DataServiceFieldsMapping fieldsMapping = ctx.getNode().getTableInfo().getFieldsMapping();
+		DataServiceFieldsMapping m = ctx.getNode().getTableInfo().getFieldsMapping();
 
-		if (fieldsMapping != null) {
-			if (fieldsMapping.getDbStyle2CamelCase() != null && fieldsMapping.getDbStyle2CamelCase()) {
-				for (int i = 0; i < list.size(); i++) {
-					Map<String, Object> map = list.get(i);
+		if (m != null && m.getDbStyle2CamelCase() != null && m.getDbStyle2CamelCase()) {
+			for (int i = 0; i < list.size(); i++) {
+				Map<String, Object> map = list.get(i);
 
-					if (map != null) {
-						// 数据库风格 转换 驼峰
-						Map<String, Object> camel = new HashMap<>();
+				if (map != null) {
+					// 数据库风格 转换 驼峰
+					Map<String, Object> camel = new HashMap<>();
 
-						for (String key : map.keySet())
-							camel.put(JdbcUtil.changeColumnToFieldName(key), map.get(key));
+					for (String key : map.keySet())
+						camel.put(JdbcUtil.changeColumnToFieldName(key), map.get(key));
 
-						map.clear(); // 提早清除
-						list.set(i, camel);
-					}
+					map.clear(); // 提早清除
+					list.set(i, camel);
 				}
 			}
 		}
 	}
 
 	/**
-	 * 列表查询
+	 * 列表查询（不分页）
 	 * 
 	 * @param ctx
 	 * @param plugins
@@ -135,16 +139,16 @@ public abstract class Commander extends BaseCommander {
 	 */
 	public static List<Map<String, Object>> list(ServiceContext ctx, List<IPlugin> plugins) {
 		String sql = where(ctx);
+		boolean hasPlugins = before(CRUD.LIST, ctx, plugins);
+		List<Map<String, Object>> list = null;
 
-		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
+		if (isDynamicSQL(sql)) // 是否包含 mybatis 脚本控制标签，有的话特殊处理
+			sql = "<script>" + sql + "</script>";
 
-		if (hasPlugins)
-			for (IPlugin plugin : plugins) {
-				if (!plugin.before(CRUD.LIST, ctx))
-					throw new Error(getErrMsg(ctx));
-			}
+		try (SqlSession session = MSUtils.getMyBatisSession(ctx.getDatasource())) {
+			list = new SqlMapper(session).selectList(sql, ctx.getRequestParams());
+		}
 
-		List<Map<String, Object>> list = list(ctx.getDatasource(), sql, ctx.getRequestParams());
 		toCaemlCase(ctx, list);
 
 		if (hasPlugins)
@@ -164,14 +168,7 @@ public abstract class Commander extends BaseCommander {
 	 */
 	public static PageResult<Map<String, Object>> page(ServiceContext ctx, List<IPlugin> plugins) {
 		String sql = where(ctx);
-
-		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
-		if (hasPlugins)
-			for (IPlugin plugin : plugins) {
-				if (!plugin.before(CRUD.PAGE_LIST, ctx))
-					throw new Error(getErrMsg(ctx));
-			}
-
+		boolean hasPlugins = before(CRUD.PAGE_LIST, ctx, plugins);
 		PageResult<Map<String, Object>> page = page(ctx.getDatasource(), sql, ctx.getRequestParams());
 		toCaemlCase(ctx, page);
 
@@ -181,6 +178,87 @@ public abstract class Commander extends BaseCommander {
 			}
 
 		return page;
+	}
+
+	/**
+	 * 分页列表
+	 *
+	 * @param ds     数据源
+	 * @param sql    SQL 语句
+	 * @param params SQL 参数
+	 * @return 分页列表的 JSON
+	 */
+	private static PageResult<Map<String, Object>> page(DataSource ds, String sql, Map<String, Object> params) {
+//		LOGGER.info("获取列表");
+
+		if (params == null)
+			params = new HashMap<>();
+
+		/* 判断分页参数，兼容 MySQL or 页面两者。最后统一使用 start/limit */
+		int limit;
+
+		if (params.containsKey("pageSize"))
+			limit = (int) params.get("pageSize");
+		else if (params.containsKey("limit"))
+			limit = (int) params.get("limit");
+		else
+			limit = PageResult.DEFAULT_PAGE_SIZE;
+
+		int start;
+
+		if (params.containsKey("pageNo")) {
+			int pageNo = (int) params.get("pageNo");
+			start = JdbcUtil.pageNo2start(pageNo, limit);
+		} else if (params.containsKey("start"))
+			start = (int) params.get("start");
+		else
+			start = 0;
+
+		params.put("start", start);
+		params.put("limit", limit);
+
+		try (SqlSession session = MSUtils.getMyBatisSession(ds)) {
+			SqlMapper sqlMapper = new SqlMapper(session); // 先获取记录总数，若大于零继续查询，获取分页数据
+
+//            int index = sql.lastIndexOf(";"); // 有分号影响子查询，去掉
+//            if (index > 0)
+//                sql = sql.substring(0, index);
+
+			String getTotalSql = "SELECT COUNT(*) AS count FROM (" + sql + ") AS t;";
+			Map<String, Object> _params;
+			boolean isDynamicSQL = isDynamicSQL(sql);
+
+			if (isDynamicSQL) {// 是否包含 mybatis 脚本控制标签，有的话特殊处理
+				getTotalSql = "<script>" + getTotalSql + "</script>";
+				_params = new HashMap<>();
+				_params.put("params", params);
+			} else
+				_params = params;
+
+			Map<String, Object> t = sqlMapper.selectOne(getTotalSql, params);
+			Long total = (Long) t.get("count");
+
+			PageResult<Map<String, Object>> pageList = new PageResult<>();
+			pageList.setTotalCount(total.intValue());
+
+			if (total == 0) {
+				pageList.setZero(true);
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("result", null);
+//                map.put("msg", "没有数据，查询结果为零");
+//                map.put("total", 0);
+			} else {
+				sql += " LIMIT #{start}, #{limit}";
+
+				if (isDynamicSQL)
+					sql = "<script>" + sql + "</script>";
+
+				List<Map<String, Object>> _list = sqlMapper.selectList(sql, params);
+				pageList.addAll(_list);
+			}
+
+			return pageList;
+		}
 	}
 
 	/**
@@ -258,15 +336,7 @@ public abstract class Commander extends BaseCommander {
 			_params.put(hasMapping ? fieldsMapping.getUpdateDate() : "createDate", now);
 		}
 
-		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
-
-		if (hasPlugins) {
-//			ctx.set(node, _params, ds);
-			for (IPlugin plugin : plugins) {
-				if (!plugin.before(CRUD.CREATE, ctx))
-					throw new Error(getErrMsg(ctx));
-			}
-		}
+		boolean hasPlugins = before(CRUD.CREATE, ctx, plugins);
 
 		// 是否转换数据库风格
 		if (fieldsMapping.getCamelCase2DbStyle() != null && fieldsMapping.getCamelCase2DbStyle()) {
@@ -294,7 +364,7 @@ public abstract class Commander extends BaseCommander {
 		ctx.setSqlParam(params);
 		LOGGER.info("创建实体:" + params);
 
-		try (SqlSession session = getMyBatisSession(node.getDataSource())) {
+		try (SqlSession session = MSUtils.getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).insert(sql, params);
 			session.commit();
 
@@ -312,13 +382,13 @@ public abstract class Commander extends BaseCommander {
 						// might be UUID, that is the string
 						long idLong = Long.parseLong(idStr); // TODO will it be a format exception if UUID?
 
-						if (idStr.equals(idLong + "")) { // if it covernted, the same, that means it should be the Long
+						if (idStr.equals(idLong + "")) // if it covernted, the same, that means it should be the Long
 							return idLong;
-						} else
+						else
 							return idStr;
-					} else if (id instanceof BigInteger) {
+					} else if (id instanceof BigInteger)
 						return ((BigInteger) id).longValue();
-					} else
+					else
 						return (Serializable) params.get(idField);
 //					long newlyId = MappingValue.object2long(params.get(idField));
 				} else if (params.containsKey("params")) {
@@ -357,19 +427,12 @@ public abstract class Commander extends BaseCommander {
 		if (node.isUpdateDate())
 			_params.put(fieldsMapping != null ? fieldsMapping.getUpdateDate() : "updateDate", new Date());
 
-		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
-
-		if (hasPlugins) {
-			for (IPlugin plugin : plugins) {
-				if (!plugin.before(CRUD.UPDATE, ctx))
-					throw new Error(getErrMsg(ctx));
-			}
-		}
+		boolean hasPlugins = before(CRUD.UPDATE, ctx, plugins);
 
 		// 是否转换数据库风格
 		if (fieldsMapping.getCamelCase2DbStyle() != null && fieldsMapping.getCamelCase2DbStyle()) {
 			// 驼峰 转换 数据库风格
-			Map<String, Object> dbStyle = new HashMap<>(_params.size());
+			Map<String, Object> dbStyle = new HashMap<>();
 
 			for (String key : _params.keySet())
 				dbStyle.put(JdbcUtil.changeFieldToColumnName(key), _params.get(key));
@@ -396,7 +459,7 @@ public abstract class Commander extends BaseCommander {
 
 		LOGGER.info("修改实体:" + params);
 
-		try (SqlSession session = getMyBatisSession(node.getDataSource())) {
+		try (SqlSession session = MSUtils.getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).update(sql, params);
 			// 有时没 update 到数据，却返回 1
 			session.commit();
@@ -405,9 +468,8 @@ public abstract class Commander extends BaseCommander {
 			if (hasPlugins) {
 				params.put("isOk", isOK); // 添加一个是否修改成功的状态
 
-				for (IPlugin plugin : plugins) {
+				for (IPlugin plugin : plugins)
 					plugin.after(CRUD.UPDATE, ctx, params);
-				}
 			}
 
 			return isOK;
@@ -422,37 +484,28 @@ public abstract class Commander extends BaseCommander {
 	 * @return
 	 */
 	public static boolean delete(ServiceContext ctx, List<IPlugin> plugins) {
-		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
 		DataServiceDml node = ctx.getNode();
 		Map<String, Object> params = ctx.getRequestParams();
 		String sql = node.getSql();
-
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
 
-		if (hasPlugins) {
-			for (IPlugin plugin : plugins) {
-				if (!plugin.before(CRUD.DELETE, ctx))
-					throw new Error(getErrMsg(ctx));
-			}
-		}
-
+		boolean hasPlugins = before(CRUD.DELETE, ctx, plugins);
 		boolean result = false;
 
 		if (node.isPhysicallyDelete()) {
 			if (params.containsKey("ids")) {// 物理删除
 				String[] arr = params.get("ids").toString().split(",");
 
-				for (int i = 0; i < arr.length; i++) {
+				for (int i = 0; i < arr.length; i++)
 					arr[i] = "'" + arr[i] + "'";
-				}
 
-				String _sql = sql.replaceAll("=.*$", " in (" + String.join(",", arr) + ")");
+				String _sql = sql.replaceAll("=.*$", " IN (" + String.join(",", arr) + ")");
 				result = delete(node.getDataSource(), _sql, null);
 			} else
 				result = delete(node.getDataSource(), sql, params);
 		} else { // 逻辑删除
-			try (SqlSession session = getMyBatisSession(node.getDataSource())) {
+			try (SqlSession session = MSUtils.getMyBatisSession(node.getDataSource())) {
 				int effectedRow = new SqlMapper(session).update(sql, params);
 				session.commit();
 				result = effectedRow > 0;
@@ -468,6 +521,23 @@ public abstract class Commander extends BaseCommander {
 	}
 
 	/**
+	 * 物理删除一笔记录
+	 *
+	 * @param ds
+	 * @param sql
+	 * @param params
+	 * @return true 表示删除成功
+	 */
+	private static boolean delete(DataSource ds, String sql, Map<String, Object> params) {
+		try (SqlSession session = MSUtils.getMyBatisSession(ds)) {
+			int rows = new SqlMapper(session).delete(sql, params);
+			session.commit();
+
+			return rows >= 1;
+		}
+	}
+
+	/**
 	 * 返回具体的异常信息
 	 * 
 	 * @param ctx
@@ -475,5 +545,17 @@ public abstract class Commander extends BaseCommander {
 	 */
 	private static String getErrMsg(ServiceContext ctx) {
 		return ctx.getErrMsg() != null ? ctx.getErrMsg() : "插件中止执行";
+	}
+
+	/**
+	 * 是否包含 mybatis 脚本控制标签，有的话特殊处理
+	 * <p>
+	 * https://mybatis.org/mybatis-3/dynamic-sql.html
+	 *
+	 * @param sql
+	 * @return
+	 */
+	static boolean isDynamicSQL(String sql) {
+		return sql.contains("</foreach>") || sql.contains("<if test") || sql.contains("<choose>") || sql.contains("<set>");
 	}
 }
