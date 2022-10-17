@@ -147,9 +147,8 @@ public class ApiController extends RuntimeData {
 		if (map == null) {
 			if (req.getContentType() != null && req.getContentType().contains("application/json"))
 				map = WebHelper.getRawBodyAsJson(req);// 不是标准的 表单格式，而是 RawBody Payload
-			else {
+			else
 				map = WebHelper.getParameterMap(req);
-			}
 		}
 
 		if (map.size() == 0)

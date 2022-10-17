@@ -20,6 +20,7 @@ public class GoogleCapchta_DataServicePlugin implements IPlugin {
 	@Override
 	public boolean before(CRUD type, ServiceContext ctx) {
 		Map<String, Object> requestParams = ctx.getRequestParams();
+		
 		if (g != null && requestParams.containsKey(GoogleFilter.PARAM_NAME)) {
 			String token = requestParams.get(GoogleFilter.PARAM_NAME).toString();
 			requestParams.remove(GoogleFilter.PARAM_NAME);

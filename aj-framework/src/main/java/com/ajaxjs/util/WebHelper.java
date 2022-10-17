@@ -125,7 +125,7 @@ public class WebHelper {
 	}
 
 	/**
-	 * 返回 // 主机名+端口+项目前缀（如果为 80 端口的话就默认不写 80） 有时通过代理返回的，可能不正确 自动识别 http or https
+	 * 返回:主机名+端口+项目前缀（如果为 80 端口的话就默认不写 80） 有时通过代理返回的，可能不正确 自动识别 http or https
 	 *
 	 * @return 网站名称
 	 */
@@ -203,6 +203,7 @@ public class WebHelper {
 	public static Map<String, Object> getPutRequestData(HttpServletRequest req) {
 		try (InputStream in = req.getInputStream()) {
 			String params = StreamHelper.byteStream2string(in);
+			
 			return MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -269,10 +270,10 @@ public class WebHelper {
 		resp.setCharacterEncoding("UTF-8"); // 避免乱码
 		resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
 
-		try (PrintWriter writer = resp.getWriter();) {
+		try (PrintWriter writer = resp.getWriter()) {
 			writer.write(json);
-		} catch (IOException ex) {
-
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

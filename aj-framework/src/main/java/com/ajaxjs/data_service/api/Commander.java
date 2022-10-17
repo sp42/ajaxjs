@@ -112,9 +112,8 @@ public abstract class Commander extends BaseCommander {
 					Map<String, Object> map = list.get(i);
 
 					if (map != null) {
-//System.out.println(">>>>>>" + map);
 						// 数据库风格 转换 驼峰
-						Map<String, Object> camel = new HashMap<>(map.size());
+						Map<String, Object> camel = new HashMap<>();
 
 						for (String key : map.keySet())
 							camel.put(JdbcUtil.changeColumnToFieldName(key), map.get(key));

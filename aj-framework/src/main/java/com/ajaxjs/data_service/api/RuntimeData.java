@@ -32,11 +32,6 @@ import com.ajaxjs.util.map.MapTool;
 
 /**
  * 运行时配置 初始化数据源
- * 
- * <pre>
- * {@code 
- * }
- * </pre>
  */
 public abstract class RuntimeData extends Commander implements DataServiceDAO {
 	private static final LogHelper LOGGER = LogHelper.getLog(RuntimeData.class);

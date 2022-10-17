@@ -242,6 +242,7 @@ public abstract class BaseCommander implements DataServiceConstant {
 			} else {
 				for (String key : states.keySet())
 					System.out.println(key);
+				
 				throw new RuntimeException("不存在该路径 [" + uri + "] 之配置");
 			}
 		}

@@ -29,7 +29,7 @@ public interface DataServiceDAO {
 		@Select("SELECT d.urlDir AS dataSourceUrlDir, d.* FROM datasource d " + "INNER JOIN project p ON d.projectId = p.id WHERE d.id = ?")
 		MyDataSource getUrlDir(long dataSourceId);
 
-		@Select("SELECT tableName FROM datasource_table  WHERE dataSourceId = ?")
+		@Select("SELECT tableName FROM datasource_table WHERE dataSourceId = ?")
 		String[] findSelectedTables(long dataSourceId);
 
 		@Select("SELECT id FROM ${tableName} WHERE urlDir = ? AND id != ? LIMIT 1")

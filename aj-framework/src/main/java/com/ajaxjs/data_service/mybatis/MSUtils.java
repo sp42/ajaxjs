@@ -28,9 +28,9 @@ public class MSUtils {
 	/**
 	 * @param configuration MyBatis 配置
 	 */
-	public MSUtils(Configuration configuration) {
-		this.configuration = configuration;
-		languageDriver = configuration.getDefaultScriptingLanguageInstance();
+	public MSUtils(Configuration cfg) {
+		this.configuration = cfg;
+		languageDriver = cfg.getDefaultScriptingLanguageInstance();
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class MSUtils {
 	 * 创建一个查询的 MS
 	 *
 	 * @param msId
-	 * @param source  执行的 sqlSource
+	 * @param source     执行的 sqlSource
 	 * @param resultType 返回的结果类型
 	 */
 	private void newSelectMappedStatement(String msId, SqlSource source, final Class<?> resultType) {
@@ -80,8 +80,8 @@ public class MSUtils {
 	 * 创建一个简单的 MS
 	 *
 	 * @param msId
-	 * @param source      执行的 sqlSource
-	 * @param type 执行的 sqlCommandType
+	 * @param source 执行的 sqlSource
+	 * @param type   执行的 sqlCommandType
 	 */
 	private void newUpdateMappedStatement(String msId, SqlSource source, SqlCommandType type) {
 		MappedStatement ms = new MappedStatement.Builder(configuration, msId, source, type).resultMaps(new ArrayList<ResultMap>() {
@@ -165,7 +165,6 @@ public class MSUtils {
 
 	String update(String sql) {
 		String msId = newMsId(sql, SqlCommandType.UPDATE);
-
 		if (hasMappedStatement(msId))
 			return msId;
 

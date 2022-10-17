@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 
 import com.ajaxjs.security.web.checker.Xss;
 import com.ajaxjs.util.config.EasyConfig;
@@ -64,13 +65,13 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 	@Override
 	public Map<String, String[]> getParameterMap() {
 		Map<String, String[]> _map = super.getParameterMap();
-		
+
 		if (_map == null)
 			return null;
 
 		if (config.getBol(IS_ENABLE_XSS)) {
 			Map<String, String[]> map = new HashMap<>();
-			_map.forEach((k, v) -> map.put(xxsChecker.clean(k), xxsChecker.clean(v)));
+			_map.forEach((k, v) -> map.put(xxsChecker.clean(k), clean(v)));
 
 			return map;
 		} else
@@ -98,12 +99,28 @@ public class SecurityRequest extends HttpServletRequestWrapper {
 
 	@Override
 	public String[] getParameterValues(String key) {
-		String[] arr = super.getParameterValues(key);
+		String[] values = super.getParameterValues(key);
 
 		if (config.getBol(IS_ENABLE_XSS))
-			arr = xxsChecker.clean(arr);
+			clean(values);
 
-		return arr;
+		return values;
+	}
+
+	/**
+	 * 过滤 for 数组
+	 * 
+	 * @param values 输入内容的数组
+	 * @return 转义文字
+	 */
+	public String[] clean(String[] values) {
+		if (ObjectUtils.isEmpty(values))
+			return null;
+
+		for (int i = 0; i < values.length; i++)
+			values[i] = xxsChecker.clean(values[i]);
+
+		return values;
 	}
 
 }
