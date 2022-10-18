@@ -59,6 +59,7 @@ public class JdbcConnection {
 
 			LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
 		} catch (SQLException e) {
+			e.printStackTrace();
 			LOGGER.warning("数据库连接失败！", e);
 		}
 
@@ -235,8 +236,11 @@ public class JdbcConnection {
 	 * 关闭数据库连接
 	 */
 	public static void closeDb() {
-		Connection conn = getConnection();
+		closeDb(getConnection());
+		clean();
+	}
 
+	public static void closeDb(Connection conn) {
 		try {
 			if (conn != null && !conn.isClosed()) {
 				conn.close();
@@ -246,8 +250,6 @@ public class JdbcConnection {
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}
-
-		clean();
 	}
 
 	/**

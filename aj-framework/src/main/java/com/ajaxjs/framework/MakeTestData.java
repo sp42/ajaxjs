@@ -1,6 +1,5 @@
 package com.ajaxjs.framework;
 
-import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,12 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ajaxjs.framework.shop.model.Goods;
 import com.ajaxjs.net.http.Post;
-import com.ajaxjs.sql.util.Gen;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.date.DateUtil;
-import com.ajaxjs.util.map.MapTool;
 
 public class MakeTestData {
 	static String token = "f953c611-fc87-4863-a314-03da0a66587b";
@@ -62,17 +58,7 @@ public class MakeTestData {
 	static double[] prices = { 2331.3d, 33f, 2333d };
 	static String[] goodsFormatNames = { "8G/16G RAM", "16G/32G RAM", "16G/64G RAM", "32G/256G RAM" };
 
-	static void createGoodsFormat() {
-		Goods f = new Goods();
-		f.setName(Gen.getItem(goodsFormatNames));
-//		f.setGoodsId((long) Gen.getNum(1, 200));
-		f.setPrice(BigDecimal.valueOf(Gen.getItem(prices)));
 
-		Map<String, Object> map = MapTool.bean2Map(f);
-		cleanNull(map);
-
-		Post.api("http://127.0.0.1:8080/cp/api/cms/shop_goods_format", map);
-	}
 
 	static void cleanNull(Map<String, Object> map) {
 		List<String> list = new ArrayList<>();

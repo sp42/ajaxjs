@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.ajaxjs.util.regexp.RegExpUtils;
+
 public class TestReflectUtil {
 	public static class Foo {
 		public Foo() {
@@ -139,6 +141,13 @@ public class TestReflectUtil {
 		assertEquals(executeMethod(new Bar2(), "m1"), null);
 		assertEquals(executeMethod(new Bar3(), "m1", "bar"), "bar");
 		assertEquals(executeMethod(new Bar3(), "m1", String.class, "foo"), "foo");
-	
 	}
+	
+	@Test
+	public void testRegMatch() {
+		assertEquals(RegExpUtils.regMatch("^a", "abc"), "a");// 匹配结果，只有匹配第一个
+		assertEquals(RegExpUtils.regMatch("^a", "abc", 0), "a");// 可指定分组
+		assertEquals(RegExpUtils.regMatch("^a(b)", "abc", 1), "b");
+	}
+
 }

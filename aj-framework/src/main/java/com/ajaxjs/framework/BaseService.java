@@ -7,8 +7,8 @@
  */
 package com.ajaxjs.framework;
 
-import com.ajaxjs.sql.SnowflakeId;
 import com.ajaxjs.sql.orm.IBaseDao;
+import com.ajaxjs.sql.util.SnowflakeId;
 
 import org.springframework.util.StringUtils;
 

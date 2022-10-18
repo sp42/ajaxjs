@@ -49,17 +49,6 @@ public abstract class BaseController {
 		return getRequest().getSession();
 	}
 
-	public static final String HTML_TPL = "<title>操作错误</title>\r\n" + "<meta charset=\"utf-8\" />\r\n"
-			+ "<div style=\"height: 100%%; display: flex; justify-content: center; align-items: center;\">\r\n" + "  <table>\r\n" + "    <tr>\r\n"
-			+ "      <td align=\"center\"> <svg width=\"150px\" viewBox=\"0 0 1000 1000\">\r\n" + "          <g>\r\n"
-			+ "            <path fill=\"#ea8010\" d=\"M500,10c-46.7,0-84.5,38-84.5,84.9v573.7c0,46.9,37.8,84.9,84.5,84.9c46.7,0,84.5-38,84.5-84.9V94.9C584.5,48,546.7,10,500,10z M500,821c-46.7,0-84.5,37.8-84.5,84.5c0,46.7,37.8,84.5,84.5,84.5c46.7,0,84.5-37.8,84.5-84.5C584.4,858.9,546.6,821,500,821z\" />\r\n"
-			+ "          </g>\r\n" + "        </svg></td>\r\n" + "    </tr>\r\n" + "    <tr>\r\n"
-			+ "      <td align=\"center\"><br />%s<br /><a href=\"javascript:history.go(-1);\">返回</a></td>\r\n" + "    </tr>\r\n" + "  </table>\r\n" + "</div>";
-
-	public static void main(String[] args) {
-		System.out.println(HTML_TPL);
-	}
-
 	/**
 	 * 创建一个实体
 	 *

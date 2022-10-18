@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.net.http.Post;
+import com.ajaxjs.spring.DiContextUtil;
 
 /**
  * 校验核心
@@ -46,7 +46,7 @@ public class GoogleFilter {
 	 * @return 是否通过验证，若为 true 表示通过，否则抛出异常
 	 */
 	public boolean check() {
-		return check(BaseController.getRequest());
+		return check(DiContextUtil.getRequest());
 	}
 
 	/**

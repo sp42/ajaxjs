@@ -7,11 +7,10 @@ import java.util.regex.Pattern;
  * 命名工具类
  * 
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
- * @since 2021-10-27
  */
 public class NamingUtils {
 	private static final Pattern HUMP_PATTERN = Pattern.compile("[A-Z]");
-	
+
 	private static final Pattern UNDERLINE_PATTERN = Pattern.compile("_(\\w)");
 
 	/**

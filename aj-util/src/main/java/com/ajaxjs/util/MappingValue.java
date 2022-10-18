@@ -124,6 +124,7 @@ public class MappingValue {
 			return ((Number) value).intValue();
 		else {
 			String toString = value.toString();
+
 			if (toString.matches("-?\\d+"))
 				return Integer.parseInt(toString);
 
@@ -172,9 +173,8 @@ public class MappingValue {
 //				System.out.println("::::::" + value.getClass());
 //				System.out.println("::::::" + value.getClass().getName());
 
-			} else {
+			} else
 				value = StringUtils.hasText(value.toString()) ? Integer.parseInt(value.toString()) : 0;
-			}
 		} else if (target == int[].class || target == Integer[].class) {
 			// 复数
 			if (value instanceof String)

@@ -18,7 +18,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;
 
 import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 
@@ -125,7 +124,7 @@ public class WebHelper {
 	}
 
 	/**
-	 * 返回 // 主机名+端口+项目前缀（如果为 80 端口的话就默认不写 80） 有时通过代理返回的，可能不正确 自动识别 http or https
+	 * 返回:主机名+端口+项目前缀（如果为 80 端口的话就默认不写 80） 有时通过代理返回的，可能不正确 自动识别 http or https
 	 *
 	 * @return 网站名称
 	 */
@@ -147,8 +146,8 @@ public class WebHelper {
 	public static String getRoute(HttpServletRequest req) {
 		String route = req.getRequestURI().replaceAll("^" + req.getContextPath(), "");
 
-		LogHelper.p(route);
-		LogHelper.p(route.replaceFirst("/\\w+\\.\\w+$", ""));
+//		LogHelper.p(route);
+//		LogHelper.p(route.replaceFirst("/\\w+\\.\\w+$", ""));
 
 		return route.replaceFirst("/\\w+\\.\\w+$", ""); // 删除最后的 index.jsp
 	}
@@ -195,6 +194,27 @@ public class WebHelper {
 	}
 
 	/**
+	 * 如果不是表单 POST，那么就是 JsonRawBdoy
+	 * 
+	 * @param req
+	 * @param formPostMap
+	 * @return
+	 */
+	public static Map<String, Object> getParamMap(HttpServletRequest req, Map<String, Object> formPostMap) {
+		Map<String, Object> map;
+
+		if (formPostMap.size() == 0 && req.getContentType().contains("application/json")) {
+			map = getRawBodyAsJson(req);// 不是标准的 表单格式，而是 RawBody Payload
+		} else
+			map = formPostMap;
+
+		if (map.size() == 0)
+			throw new IllegalArgumentException("没有提交任何数据");
+
+		return map;
+	}
+
+	/**
 	 * 获取 PUT 请求所提交的内容。 Servlet 没有 PUT 获取表单，要自己处理 Servlet 不能获取 PUT 请求内容，spring mvc
 	 * 也不支持 put form data
 	 *
@@ -203,6 +223,7 @@ public class WebHelper {
 	public static Map<String, Object> getPutRequestData(HttpServletRequest req) {
 		try (InputStream in = req.getInputStream()) {
 			String params = StreamHelper.byteStream2string(in);
+
 			return MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -269,10 +290,10 @@ public class WebHelper {
 		resp.setCharacterEncoding("UTF-8"); // 避免乱码
 		resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
 
-		try (PrintWriter writer = resp.getWriter();) {
+		try (PrintWriter writer = resp.getWriter()) {
 			writer.write(json);
-		} catch (IOException ex) {
-
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -2,7 +2,6 @@ package com.ajaxjs.data_service.plugin;
 
 import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 import com.ajaxjs.data_service.model.ServiceContext;
-import com.ajaxjs.data_service.plugin.IPlugin;
 
 /**
  * 系统日志，记录所有写的操作

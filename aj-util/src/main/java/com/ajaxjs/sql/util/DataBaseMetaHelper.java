@@ -89,7 +89,7 @@ public class DataBaseMetaHelper {
 	public static List<Map<String, Object>> getTableCommentWithAnnotateAsList(Connection conn, List<String> tableNames, String dbName) {
 		List<Map<String, Object>> list = new ArrayList<>();
 		Map<String, String> tableComment = getTableComment(conn, tableNames, dbName);
-		
+
 		for (String tableName : tableComment.keySet()) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("tableName", tableName);
@@ -177,6 +177,7 @@ public class DataBaseMetaHelper {
 	 */
 	public static List<Map<String, String>> getColumnComment(Connection conn, String tableName, String dbName) {
 		String target = "";
+
 		if (StringUtils.hasText(dbName))
 			target += dbName + ".";
 

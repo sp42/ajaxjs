@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.security.web.Handle;
@@ -39,21 +38,5 @@ public class Xss {
 			return matcher.replaceAll("");
 		else
 			return matcher.group().replace("<", "&lt;").replace(">", "&gt;");
-	}
-
-	/**
-	 * 过滤 for 数组
-	 * 
-	 * @param values 输入内容的数组
-	 * @return 转义文字
-	 */
-	public String[] clean(String[] values) {
-		if (ObjectUtils.isEmpty(values))
-			return null;
-
-		for (int i = 0; i < values.length; i++)
-			values[i] = clean(values[i]);
-
-		return values;
 	}
 }

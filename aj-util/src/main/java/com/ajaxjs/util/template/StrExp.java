@@ -18,12 +18,12 @@ public class StrExp extends Exp {
 	 * @param exp
 	 */
 	StrExp(String exp) {
-		this.value = exp;
+		value = exp;
 	}
 
 	@Override
 	public String resolve(Map<String, String> context) {
-		return this.value;
+		return value;
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import javax.crypto.spec.DESKeySpec;
 
 import org.springframework.util.Base64Utils;
 
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.binrary.BytesUtil;
 
 /**
  * DES 加解密工具类
@@ -105,7 +105,7 @@ public class DES {
 		Key k = byteToKey(Base64Utils.decodeFromString(key));
 		byte[] bytes = SymmetriCipherInfo.doCipher(KEY_DES, Cipher.ENCRYPT_MODE, k, null, data.getBytes());
 
-		return StrUtil.bytesToHexStr(bytes);// 将得到的字节数组变成字符串返回
+		return BytesUtil.bytesToHexStr(bytes);// 将得到的字节数组变成字符串返回
 	}
 
 	/**

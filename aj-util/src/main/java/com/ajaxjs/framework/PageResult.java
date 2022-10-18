@@ -22,7 +22,6 @@ public class PageResult<T> extends ArrayList<T> {
 	private int pageSize; // 每页大小
 	private int totalPage; // 总页数
 	private int currentPage; // 当前第几页
-
 	private boolean isZero; // 是否没有数据，就是查询了之后，一条记录符合都没有
 
 	public int getCurrentPage() {

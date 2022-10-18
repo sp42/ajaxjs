@@ -29,19 +29,13 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.util.DataBaseMetaHelper;
-import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.WebHelper;
 import com.ajaxjs.util.filter.DataBaseFilter;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.regexp.RegExpUtils;
 
 /**
  * 数据服务 后台控制器
- * 
- * 数据服务本身的控制器
- * 
- * 
-        "camelCase2DbStyle": true,
-        "dbStyle2CamelCase": true
  */
 @RestController
 @RequestMapping("/admin/data_service")
@@ -56,12 +50,13 @@ public class AdminController extends BaseController implements DataServiceDAO {
 
 	@GetMapping(produces = JSON)
 	@DataBaseFilter
-	public PageResult<DataServiceTable> list(HttpServletRequest req, @RequestParam(defaultValue = "0") int start, @RequestParam(defaultValue = "9") int limit,
-			Long datasourceId) {
+	public PageResult<DataServiceTable> list(HttpServletRequest req, @RequestParam(defaultValue = "0") int start,
+			@RequestParam(defaultValue = "9") int limit, Long datasourceId) {
 		LOGGER.info("获取表配置列表");
 
 		Function<String, String> handler = BaseService::searchQuery_NameOnly;
 		handler = handler.andThen(QueryTools.byAny(req)).andThen(BaseService::betweenCreateDate);
+
 		if (datasourceId != null && datasourceId != 0L)
 			handler = handler.andThen(QueryTools.by("datasourceId", datasourceId));
 
@@ -80,15 +75,17 @@ public class AdminController extends BaseController implements DataServiceDAO {
 //        LOGGER.info(DataServiceAdminService.DAO.toString());
 
 		Long dsId = entity.getDatasourceId();
-		DataServiceTable repeatUrlDir = dsId == null ? DataServiceAdminDAO.findRepeatUrlDir(url) : DataServiceAdminDAO.findRepeatUrlDirAndDsId(url, dsId);
+		DataServiceTable repeatUrlDir = dsId == null ? DataServiceAdminDAO.findRepeatUrlDir(url)
+				: DataServiceAdminDAO.findRepeatUrlDirAndDsId(url, dsId);
 
 		if (repeatUrlDir != null) {
 			// 已经有重复的
-			String maxId = dsId == null ? DataServiceAdminDAO.findRepeatUrlDirMaxId(url) : DataServiceAdminDAO.findRepeatUrlDirAndDsIdMaxId(url, dsId);
+			String maxId = dsId == null ? DataServiceAdminDAO.findRepeatUrlDirMaxId(url)
+					: DataServiceAdminDAO.findRepeatUrlDirAndDsIdMaxId(url, dsId);
 			String dig = "";
 
 			if (maxId != null) {
-				dig = StrUtil.regMatch("\\d+$", maxId);
+				dig = RegExpUtils.regMatch("\\d+$", maxId);
 				int i = Integer.parseInt(dig);
 				dig = (++i) + "";
 			} else

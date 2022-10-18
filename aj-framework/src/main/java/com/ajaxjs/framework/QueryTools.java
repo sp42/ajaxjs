@@ -7,6 +7,7 @@
  */
 package com.ajaxjs.framework;
 
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.orm.IBaseDao;
@@ -232,6 +233,10 @@ public class QueryTools {
 		return setWhere(field + "LIKE ");
 	}
 
+	public static Function<String, String> byAny() {
+		return byAny(DiContextUtil.getRequest());
+	}
+
 	/**
 	 * 谨慎使用！这查询权力很大，可指定任意的字段
 	 * 
@@ -307,7 +312,8 @@ public class QueryTools {
 	 */
 	public static void getNeighbor(Map<String, Object> map, String tableName, Serializable id) {
 		Map<String, Object> perv, next;
-		perv = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE id < ? ORDER BY id DESC LIMIT 1", id);
+		perv = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE id < ? ORDER BY id DESC LIMIT 1",
+				id);
 		next = JdbcHelper.queryAsMap(JdbcConnection.getConnection(), "SELECT id, name FROM " + tableName + " WHERE id > ? LIMIT 1", id);
 
 		map.put("neighbor_pervInfo", perv);
@@ -341,10 +347,10 @@ public class QueryTools {
 	public static boolean preventSQLInject(String str) {
 		str = str.toUpperCase();
 
-		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0 || str.indexOf("SELECT") >= 0 || str.indexOf("'") >= 0
-				|| str.indexOf("SUBSTR(") >= 0 || str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0 || str.indexOf(" AND ") >= 0 || str.indexOf("DROP") >= 0
-				|| str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0 || str.indexOf("TRUNCATE") >= 0 || str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0
-				|| str.indexOf("MASTER") >= 0) {
+		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0 || str.indexOf("SELECT") >= 0
+				|| str.indexOf("'") >= 0 || str.indexOf("SUBSTR(") >= 0 || str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0
+				|| str.indexOf(" AND ") >= 0 || str.indexOf("DROP") >= 0 || str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0
+				|| str.indexOf("TRUNCATE") >= 0 || str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0 || str.indexOf("MASTER") >= 0) {
 			return false;
 		}
 

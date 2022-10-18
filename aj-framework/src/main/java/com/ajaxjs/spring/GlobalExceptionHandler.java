@@ -11,7 +11,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.spring.response.ResponseResult;
-import com.ajaxjs.spring.response.ReturnCode;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 
@@ -70,7 +69,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 				resultWarpper.setErrorCode(errCode + "");
 				resp.setStatus(errCode);
 			} else {
-				resultWarpper.setErrorCode(ReturnCode.RC500.getCode() + "");
+				resultWarpper.setErrorCode(500 + "");
 				resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			}
 

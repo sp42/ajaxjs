@@ -9,6 +9,7 @@ import com.ajaxjs.data_service.sdk.IDataService;
 import com.ajaxjs.framework.Identity;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.regexp.RegExpUtils;
 
 /**
  * 通用的 CRUD 业务方法
@@ -108,7 +109,7 @@ public class CRUD {
 		String dig = "";
 
 		if (maxId != null) {
-			dig = StrUtil.regMatch("\\d+$", maxId);
+			dig = RegExpUtils.regMatch("\\d+$", maxId);
 			int i = Integer.parseInt(dig);
 			dig = (++i) + "";
 		} else

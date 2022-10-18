@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.ajaxjs.data_service.api.ApiController;
-import com.ajaxjs.data_service.api.Commander;
 import com.ajaxjs.data_service.mybatis.MybatisInterceptor;
+import com.ajaxjs.data_service.service.ApiCommander;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -20,7 +20,7 @@ import com.ajaxjs.util.logger.LogHelper;
  *
  * @author Frank Cheung
  */
-public abstract class BaseCaller extends Commander implements InvocationHandler {
+public abstract class BaseCaller extends ApiCommander implements InvocationHandler {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseCaller.class);
 
 	/**

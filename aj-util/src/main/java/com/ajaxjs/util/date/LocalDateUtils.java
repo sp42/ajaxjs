@@ -27,12 +27,6 @@ public class LocalDateUtils {
 		return LocalDate.now().isAfter(_date);
 	}
 
-//	public static void main(String[] args) {
-//		String s = DateUtil.formatDate(new Date());
-////		System.out.println(s);
-////		LocalDate.parse(s); 
-//		LocalDate _date = LocalDate.parse(s, PATTERN);
-//	}
 	// ------------------------------------------------------------------------------------------
 
 	/**

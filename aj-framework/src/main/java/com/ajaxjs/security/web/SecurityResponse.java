@@ -61,6 +61,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 			if (cookie.getDomain() != null)
 				newCookie.setDomain(cookie.getDomain());
+
 			newCookie.setComment(cookie.getComment());
 			newCookie.setHttpOnly(cookie.isHttpOnly());
 			newCookie.setMaxAge(cookie.getMaxAge());
@@ -90,17 +91,17 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 	@Override
 	public void setDateHeader(String name, long date) {
 		if (config.getBol(IS_ENABLE_CRLF))
-			super.setDateHeader(crlfChecker.clean(name), date);
-		else
-			super.setDateHeader(name, date);
+			name = crlfChecker.clean(name);
+
+		super.setDateHeader(name, date);
 	}
 
 	@Override
 	public void setIntHeader(String name, int value) {
 		if (config.getBol(IS_ENABLE_CRLF))
-			super.setIntHeader(crlfChecker.clean(name), value);
-		else
-			super.setIntHeader(name, value);
+			name = crlfChecker.clean(name);
+
+		super.setIntHeader(name, value);
 	}
 
 	@Override
@@ -108,10 +109,12 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
 			value = xxsChecker.clean(value);
 
-		if (config.getBol(IS_ENABLE_CRLF))
-			super.addHeader(crlfChecker.clean(name), crlfChecker.clean(value));
-		else
-			super.addHeader(name, value);
+		if (config.getBol(IS_ENABLE_CRLF)) {
+			name = crlfChecker.clean(name);
+			value = crlfChecker.clean(value);
+		}
+
+		super.addHeader(name, value);
 	}
 
 	@Override
@@ -119,26 +122,28 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
 			value = xxsChecker.clean(value);
 
-		if (config.getBol(IS_ENABLE_CRLF))
-			super.setHeader(crlfChecker.clean(name), crlfChecker.clean(value));
-		else
-			super.setHeader(name, value);
+		if (config.getBol(IS_ENABLE_CRLF)) {
+			name = crlfChecker.clean(name);
+			value = crlfChecker.clean(value);
+		}
+
+		super.setHeader(name, value);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void setStatus(int sc, String value) {
 		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
-			super.setStatus(sc, crlfChecker.clean(value));
-		else
-			super.setStatus(sc, value);
+			value = crlfChecker.clean(value);
+
+		super.setStatus(sc, value);
 	}
 
 	@Override
 	public void sendError(int sc, String value) throws IOException {
 		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
-			super.sendError(sc, crlfChecker.clean(value));
-		else
-			super.sendError(sc, value);
+			value = crlfChecker.clean(value);
+
+		super.sendError(sc, value);
 	}
 }
