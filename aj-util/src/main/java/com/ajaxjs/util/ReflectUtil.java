@@ -61,7 +61,7 @@ public class ReflectUtil {
 
 		// 获取构造器
 		Constructor<T> constructor = getConstructor(clz, args2class(args));
-		
+
 		return newInstance(constructor, args);
 	}
 
@@ -75,8 +75,7 @@ public class ReflectUtil {
 	public static <T> T newInstance(Constructor<T> constructor, Object... args) {
 		try {
 			return constructor.newInstance(args); // 实例化
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
 			return null;
 		}
@@ -354,6 +353,40 @@ public class ReflectUtil {
 	}
 
 	/**
+	 * 获取本类及其父类的字段属性（包括 private 的）
+	 * 
+	 * @param clz 当前类对象
+	 * @return 字段数组
+	 */
+	public static Field[] getSuperClassDeclaredFields(Class<?> clz) {
+		List<Field> fieldList = new ArrayList<>();
+
+		while (clz != null) {
+			fieldList.addAll(new ArrayList<>(Arrays.asList(clz.getDeclaredFields())));
+			clz = clz.getSuperclass();
+		}
+
+		return fieldList.toArray(new Field[fieldList.size()]);
+	}
+
+	public static Class<?>[] getAllSuperClazz(Class<?> clz) {
+		List<Class<?>> clzList = new ArrayList<>();
+
+//		while (clz != null) {
+//			clz = clazz.getSuperclass();
+//
+//			if (clz != null && clz != Object.class)
+//				clzList.add(clz);
+//		}
+		for (; clz != Object.class; clz = clz.getSuperclass())
+			clzList.add(clz);
+
+		clzList.remove(0); // 排除自己
+
+		return clzList.toArray(new Class[clzList.size()]);
+	}
+
+	/**
 	 * 调用方法
 	 * 
 	 * @param instance 对象实例，bean
@@ -390,8 +423,7 @@ public class ReflectUtil {
 	 * @return 实际异常对象
 	 */
 	public static Throwable getUnderLayerErr(Throwable e) {
-		while (e.getClass().equals(InvocationTargetException.class)
-				|| e.getClass().equals(UndeclaredThrowableException.class)) {
+		while (e.getClass().equals(InvocationTargetException.class) || e.getClass().equals(UndeclaredThrowableException.class)) {
 			e = e.getCause();
 		}
 
@@ -533,8 +565,7 @@ public class ReflectUtil {
 			method = getSuperClassDeclaredMethod(clazz, setMethodName);
 
 		// 最终还是找不到
-		Objects.requireNonNull(method, "找不到目标方法[" + clazz.getSimpleName() + "." + setMethodName + "("
-				+ value.getClass().getSimpleName() + ")]");
+		Objects.requireNonNull(method, "找不到目标方法[" + clazz.getSimpleName() + "." + setMethodName + "(" + value.getClass().getSimpleName() + ")]");
 
 		executeMethod(bean, method, value);
 	}
