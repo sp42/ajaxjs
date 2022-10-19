@@ -52,6 +52,19 @@ public interface Aip2DController extends IAip2DService {
     function Item() {
         this.method = '';
         this.url = "";
+        this.return = '';
+
+        this.methodName = '';
+        this.agrs = []; // Arg
+    }
+
+    // 方法参数
+    function Arg() {
+        this.name = '';
+        this.javaType = '';
+        this.requestType = '';
+        this.isRequired = false;
+        this.defaultValue = null;
     }
 
     javaSource = javaSource.trim();
@@ -75,11 +88,13 @@ public interface Aip2DController extends IAip2DService {
         let item = new Item();
         getMethod(result, item);
         getUrl(result, item);
+        getReturn(result, item);
+        getArgs(result, item);
 
         allItem.push(item);
-        console.log(item)   
-    });
+        console.log(item);
 
+    });
 
     function getMethod(str, item) {
         if (/@GetMapping/.test(str))
@@ -94,7 +109,6 @@ public interface Aip2DController extends IAip2DService {
             alert('No method spec.\n' + str);
     }
 
-
     function getUrl(str, item) {
         var GET_URL = /@(?:GetMapping|PostMapping|PutMapping|DeleteMapping)\("(.*)"\)/;
         var m = str.match(GET_URL);
@@ -106,4 +120,27 @@ public interface Aip2DController extends IAip2DService {
         }
     }
 
+    function getReturn(str, item) {
+        var m = str.match(/\n\s?[\w\[\]<>]+\s+/);
+
+        if (m && m.length >= 1) {
+            item.return = m[0].trim();
+            console.log(item.return);
+        } else
+            throw 'parese Return value error';
+    }
+
+    function getArgs(str, item) {
+        var m = str.match(/\s+(\w+)\s?\((.*)$/);
+        console.log(m);
+    
+
+
+        if (m && m.length >= 3) {
+            item.methodName = m[1].trim();
+            let argStr = m[2].trim();
+            console.log(item);
+        } else
+            throw 'parese Args value error';
+    }
 </script>
