@@ -1,0 +1,109 @@
+<script>
+
+    let javaSource = `
+@RestController
+@InterfaceBasedController(serviceClass = Aip2DService.class)
+@RequestMapping("/aip")
+public interface Aip2DController extends IAip2DService {
+	@PostMapping("/recognition_task")
+	@ControllerMethod("创建图像拼接识别任务")
+	@Override
+	RecognitionTask createTask(@RequestBody RecognitionTask task);
+
+	@GetMapping("/list_zip/{taskId}")
+	@ControllerMethod("列出地图资源目录")
+	@Override
+	FileResult listZip(@PathVariable String taskId, @RequestParam String task_type, @RequestParam(required = false) String filename);
+
+	@GetMapping("/task/{taskId}/result")
+	@ControllerMethod("获取识别进度")
+	@Override
+	Result2D getRecognitionResult(@PathVariable String taskId, @RequestParam String task_type);
+
+	@GetMapping("/task/total_num")
+	@ControllerMethod("获取不同类别的任务统计数字")
+	@Override
+	TaskTotal getTaskTotal();
+
+	@GetMapping("/recognition_task/list")
+	@ControllerMethod("获取图像拼接识别任务列表")
+	@Override
+	PageResult<RecognitionTask> getTaskList(@RequestParam(required = false) String task_status, @RequestParam(required = false) String task_no,
+			 @RequestParam(required = false) boolean isShowTargetNum, @RequestParam(defaultValue = "1") Integer pageNo, @RequestParam(defaultValue = PAGE_SIZE) Integer pageSize);
+
+	@PutMapping("/recognition_task")
+	@ControllerMethod("任务编辑")
+	@Override
+	Boolean update2DTask(@RequestBody RecognitionTask task);
+
+	@PostMapping("/select_reco/{taskId}")
+	@ControllerMethod("选择图像拼接识别压缩包")
+	@Override
+	Boolean selectReco(@PathVariable String taskId, @RequestBody Map<String, Object> params);
+
+	@GetMapping("/get2DMapResources/{taskId}")
+	@ControllerMethod("获取 2D 地图资源")
+	@Override
+	List<MapResource> get2DMapResources(@PathVariable String taskId);
+
+}
+`;
+
+    function Item() {
+        this.method = '';
+        this.url = "";
+    }
+
+    javaSource = javaSource.trim();
+
+    let arr = javaSource.match(/interface.*{/);
+    if (!arr || !arr.length)
+        throw '正则没有匹配成功，数组为空';
+
+    javaSource = javaSource.substring(arr.index + arr[0].length, javaSource.length - 1);
+
+    arr = javaSource.split(/\);/);
+
+    let allItem = [];
+
+    arr.forEach(result => {
+        if (!result.trim())
+            return;
+
+        console.log(result);
+
+        let item = new Item();
+        getMethod(result, item);
+        getUrl(result, item);
+
+        allItem.push(item);
+        console.log(item)   
+    });
+
+
+    function getMethod(str, item) {
+        if (/@GetMapping/.test(str))
+            item.method = 'GET';
+        else if (/@PostMapping/.test(str))
+            item.method = 'POST';
+        else if (/@PutMapping/.test(str))
+            item.method = 'PUT';
+        else if (/@DeleteMapping/.test(str))
+            item.method = 'DELETE';
+        else
+            alert('No method spec.\n' + str);
+    }
+
+
+    function getUrl(str, item) {
+        var GET_URL = /@(?:GetMapping|PostMapping|PutMapping|DeleteMapping)\("(.*)"\)/;
+        var m = str.match(GET_URL);
+
+        if (m && m.length >= 2) {
+            item.url = m[1];
+        } else {
+            // 没指定 url，用 root
+        }
+    }
+
+</script>
