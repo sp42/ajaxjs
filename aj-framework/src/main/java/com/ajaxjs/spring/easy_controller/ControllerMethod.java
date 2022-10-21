@@ -22,6 +22,20 @@ public @interface ControllerMethod {
 	String value() default "";
 
 	/**
+	 * 详细简介（可选的）
+	 * 
+	 * @return
+	 */
+	String descrition() default "";
+
+	/**
+	 * 图片（可选的）
+	 * 
+	 * @return
+	 */
+	String image() default "";
+
+	/**
 	 * 对应的业务类
 	 * 
 	 * @return

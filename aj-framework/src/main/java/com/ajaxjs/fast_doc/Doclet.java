@@ -32,6 +32,7 @@ public class Doclet implements Model {
 		bean.values = DocParser.makeListByArray(classDoc.fields(false), fieldDoc -> {
 			Value v = new Value();
 			v.name = fieldDoc.name();
+			v.type = fieldDoc.type().simpleTypeName();
 			v.desc = fieldDoc.commentText();
 
 			return v;
@@ -50,18 +51,18 @@ public class Doclet implements Model {
 	 */
 	public static void parseFieldsOfOneBean(String root, Class<?> real, BeanInfo bean, List<String> sources) {
 		BeanInfo parseComment = parseFieldsOfOneBean(sources); // 带注释的
-
 		getSuperFields(real, root, parseComment);
-//		TestHelper.printJson(parseComment);
-
-		for (Value v : parseComment.values) {
-			for (Value v2 : bean.values) {
-				if (v.name.equals(v2.name)) {
-					v2.desc = v.desc;
-					break;
-				}
-			}
-		}
+		bean.values = parseComment.values;
+//		for (Value v : parseComment.values) {
+//			for (Value v2 : bean.values) {
+//				if (v.name.equals(v2.name)) {
+//
+//					v2.desc = v.desc;
+//					break;
+//				}
+//			}
+//		}
+//		TestHelper.printJson(bean);
 	}
 
 	/**

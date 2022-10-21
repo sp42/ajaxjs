@@ -1,0 +1,108 @@
+body {
+	font-size: .9rem;
+}
+
+table.b {
+	border-collapse: collapse;
+	border: 1px solid lightgray;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: .85rem;
+	color: gray;
+	min-width: 600px;
+}
+
+table.b td,
+table.b th {
+	padding: 10px;
+}
+
+table.b td,
+table.b th {
+	border-collapse: collapse;
+	border: 1px solid lightgray;
+	text-align: center;
+}
+
+.code li {
+	list-style-type: none;
+}
+
+.code {
+	border-left: 4px solid lightgray;
+	padding-left: 15px;
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.code .block {
+	width: 200px;
+	display: inline-block;
+}
+
+.code .key {
+	color: #9f0000;
+}
+
+.code .comment {
+	color: green;
+}
+
+.code .type {
+	color: blue;
+}
+
+.tag {
+	font-family: 'Courier New', Courier, monospace;
+	border: 1px solid lightgray;
+	display: inline-block;
+	border-radius: 5px;
+}
+
+.tag div:first-child {
+	background-color: lightgray;
+	color: white;
+
+}
+
+.tag div:last-child {
+	padding-left: 0;
+}
+
+.tag div {
+	padding: 3px 5px;
+	display: inline-block;
+}
+
+.GET {
+	color: green !important;
+}
+
+.POST {
+	color: blue !important;
+}
+
+.PUT {
+	color: yellow !important;
+}
+
+.DELETE {
+	color: red !important;
+}
+
+h1 {
+	text-align: center;
+	padding: 38px;
+	padding-bottom: 0;
+}
+
+h3 {
+	margin-top: 38px;
+}
+
+#doc>ul>li {
+	padding: 50px 0;
+	border-top: 1px gray dashed;
+}
+
+#doc .content {
+	padding: 40px;
+}
