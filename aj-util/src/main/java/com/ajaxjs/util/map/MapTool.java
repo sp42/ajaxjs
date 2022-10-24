@@ -206,13 +206,14 @@ public class MapTool {
 
 				// 得到 property 对应的 getter 方法
 				Method getter = property.getReadMethod();
-				Object value = getter.invoke(bean);
+				Object value = getter.invoke(bean); // 原始默认值，不过通常是没有指定的
 
 				fn.item(key, value, property);
 			}
 		} catch (IntrospectionException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			LOGGER.warning(e);
 		}
+
 	}
 
 	/**
@@ -227,7 +228,7 @@ public class MapTool {
 	public static <T> T map2Bean(Map<String, ?> map, Class<T> clz, boolean isTransform, boolean isChild) {
 		T bean = ReflectUtil.newInstance(clz);
 
-		eachField(bean, (key, v, property) -> {
+		eachField(bean, (String key, Object v, PropertyDescriptor property) -> {
 			Object value = null;
 			Class<?> t = null;
 

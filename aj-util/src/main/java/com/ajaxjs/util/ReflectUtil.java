@@ -385,7 +385,8 @@ public class ReflectUtil {
 				clzList.add(clz);
 		}
 
-		clzList.remove(0); // 排除自己
+		if (clzList.size() > 0)
+			clzList.remove(0); // 排除自己
 
 		return clzList.toArray(new Class[clzList.size()]);
 	}

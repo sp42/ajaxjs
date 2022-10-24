@@ -1,4 +1,5 @@
 /**
+
  * Copyright Sp42 frank@ajaxjs.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -236,6 +237,7 @@ public class JsonHelper {
 
 		for (int i = 0; i < o.length; i++) {
 			sb.append(fn.apply((T) o[i]));
+
 			if (i != (o.length - 1))
 				sb.append(", ");
 		}
@@ -276,8 +278,10 @@ public class JsonHelper {
 			return "{}";
 
 		List<String> arr = new ArrayList<>();
-		for (Object key : map.keySet())
+
+		for (Object key : map.keySet()) {
 			arr.add('\"' + key.toString() + "\":" + toJson(map.get(key)));
+		}
 
 		return '{' + String.join(",", arr) + '}';
 	}
@@ -331,6 +335,8 @@ public class JsonHelper {
 						Object _value = field.get(bean);
 						String value = toJson(_value);
 
+//						if ("photoInterval".equals(field.getName()))
+//							LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>" + name+">>>>>"+_value);
 						json.append(name);
 						json.append(":");
 						json.append(value);

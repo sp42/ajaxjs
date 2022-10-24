@@ -95,7 +95,7 @@ public class SnowflakeId {
 	 * 
 	 * @return 雪花 id
 	 */
-	public static long get() {
+	public static synchronized long get() {
 		return new SnowflakeId(1L).nextId();
 	}
 }
