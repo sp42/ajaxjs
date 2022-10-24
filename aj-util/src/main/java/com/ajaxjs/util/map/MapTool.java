@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -303,6 +304,29 @@ public class MapTool {
 					LOGGER.warning(e);
 			}
 		});
+
+		// 处理无 getter/setter 的
+		Field[] fields = clz.getFields();
+
+		if (!ObjectUtils.isEmpty(fields)) {
+			for (Field field : fields) {
+				String key = field.getName();
+				Class<?> t = field.getType();
+
+				if (map != null && map.containsKey(key)) {
+					Object value = map.get(key);
+
+					if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
+						value = MappingValue.objectCast(value, t);
+
+					try {
+						field.set(bean, value);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						LOGGER.warning(e);
+					}
+				}
+			}
+		}
 
 		return bean;
 	}
