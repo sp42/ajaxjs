@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>Fast Doc</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.13/vue.js"></script>
+    <script src="json.js"></script>
     <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -42,7 +43,7 @@
                     </div>
                 </div>
 
-                <p>{{item.description}}</p>
+                <p v-html="item.description"></p>
 
                 <h3>URL</h3>
                 <div class="code">
@@ -109,7 +110,23 @@
                             </div>
                         </td>
                         <td width="50"></td>
-                        <td v-if="isSimpleValue(item)">
+                        <td v-if="item.returnValue.example" style="vertical-align: top;">
+                            <h3>成功的返回例子</h3>
+
+                            <div class="code">
+                                <div>{</div>
+                                <div style="margin-left: 20px;"> "status": 1,
+                                </div>
+                                <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
+                                <div style="margin-left: 20px;"> "data": <pre>{{getExample(item.returnValue.example)}}</pre>
+                                   
+                                </div>
+
+                                <div style="margin-left: 20px;"></div>
+                                <div>}</div>
+                            </div>
+                        </td>
+                        <td v-if="!item.returnValue.example && isSimpleValue(item)" style="vertical-align: top;">
                             <h3>成功的返回例子</h3>
 
                             <div class="code">
@@ -128,27 +145,10 @@
                                 <div>}</div>
                             </div>
                         </td>
-                        <td v-if="!isSimpleValue(item)">
+                        <td v-if="!item.returnValue.example && !isSimpleValue(item)" style="vertical-align: top;">
                             <h3>成功的返回例子</h3>
 
-                            <div class="code">
-                                <div>{</div>
-                                <div style="margin-left: 20px;"> "status": 1,
-                                </div>
-                                <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
-                                <div style="margin-left: 20px;"> "data": {</div>
-                                <ul style="margin-left: 25px;">
-                                    <li v-for="reVal in item.returnValue.values">
-                                        <div class="block">
-                                            <span class="key">{{reVal.name}}</span>: <span
-                                                class="type">{{reVal.type}}</span>,
-                                        </div>
-                                        <span class="comment">// {{reVal.description}}</span>
-                                    </li>
-                                </ul>
-                                <div style="margin-left: 20px;">}</div>
-                                <div>}</div>
-                            </div>
+      					                      无
                         </td>
                     </tr>
                 </table>
@@ -164,12 +164,11 @@
             el: document.getElementById('doc'),
             data: {
                 root: 'https://foo.com/api',
-                list:
-                    [{ "id": "9947558265032704", "name": "获取图像拼接识别任务（导入侦察点）", "description": "", "methodName": "getAipTask", "args": [{ "position": "query", "isRequired": true, "defaultValue": "1", "example": null, "name": "pageNo", "description": null, "type": "Integer" }, { "position": "query", "isRequired": true, "defaultValue": "8", "example": null, "name": "pageSize", "description": null, "type": "Integer" }], "returnValue": { "comment": null, "isMany": false, "isObject": true, "values": null, "name": "PageResult", "description": null, "type": "com.ajaxjs.framework.PageResult" }, "httpMethod": "GET", "url": "/aip_task_list", "image": "" }, { "id": "9947558265556992", "name": "航路规划", "description": "", "methodName": "routePlan", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }], "returnValue": { "comment": null, "isMany": true, "isObject": true, "values": null, "name": "UAVRouteOutputOfApproach", "description": null, "type": "java.util.List" }, "httpMethod": "GET", "url": "/route_plan/{taskId}", "image": "" }, { "id": "9947558265884672", "name": "获取资源规划", "description": "获取资源规划，注意着不是生成资源规划", "methodName": "getResourcePlan", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }], "returnValue": { "comment": "", "isMany": true, "isObject": true, "values": [{ "isRequired": false, "name": "detectPointNo", "description": "", "type": "String" }, { "isRequired": false, "name": "uav", "description": "", "type": "Uav" }], "name": "CloseResPlan", "description": null, "type": "java.util.List" }, "httpMethod": "GET", "url": "/resource_plan/{taskId}", "image": "" }, { "id": "9947558299897856", "name": "保存资源规划", "description": "", "methodName": "saveResourcePlan", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }, { "position": null, "isRequired": false, "defaultValue": null, "example": null, "name": "list", "description": null, "type": "List" }], "returnValue": { "comment": null, "isMany": false, "isObject": false, "values": null, "name": "Boolean", "description": null, "type": "java.lang.Boolean" }, "httpMethod": "POST", "url": "/resource_plan/{taskId}", "image": "" }, { "id": "9947558300094464", "name": "获取抵近任务摘要", "description": "", "methodName": "summaryTask", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }], "returnValue": { "comment": "抵近任务摘要", "isMany": false, "isObject": true, "values": [{ "isRequired": false, "name": "task", "description": "", "type": "DetectTask" }, { "isRequired": false, "name": "list", "description": "", "type": "List" }, { "isRequired": false, "name": "relayUav", "description": "", "type": "List" }], "name": "CloseTaskSummary", "description": null, "type": "com.toway.droneswarm.detect.model.DetectDto$CloseTaskSummary" }, "httpMethod": "GET", "url": "/summary/{taskId}", "image": "" }, { "id": "9947558306779136", "name": "生成资源规划", "description": "", "methodName": "resourcePlan", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }], "returnValue": { "comment": "低空资源规划", "isMany": false, "isObject": true, "values": [{ "isRequired": false, "name": "resourcePlan", "description": "资源规划结果", "type": "List" }, { "isRequired": false, "name": "relayUav", "description": "中继机", "type": "List" }], "name": "CloseResourcePlan", "description": null, "type": "com.toway.droneswarm.detect.model.DetectDto$CloseResourcePlan" }, "httpMethod": "GET", "url": "/make_resource_plan/{taskId}", "image": "" }, { "id": "9947558311497728", "name": "保存所有侦查点", "description": "", "methodName": "saveAllDetectPoint", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }, { "position": null, "isRequired": false, "defaultValue": null, "example": null, "name": "detectPoints", "description": null, "type": "List" }], "returnValue": { "comment": null, "isMany": false, "isObject": false, "values": null, "name": "Boolean", "description": null, "type": "java.lang.Boolean" }, "httpMethod": "POST", "url": "/detect_point/{taskId}", "image": "" }, { "id": "9947558311497728", "name": "创建抵近侦察任务", "description": "", "methodName": "createCloseDetectTask", "args": [], "returnValue": { "comment": "图像拼接识别任务(UI)/侦察任务 dtc_detect_task(DB)", "isMany": false, "isObject": true, "values": [{ "isRequired": false, "name": "taskName", "description": "", "type": "String" }, { "isRequired": false, "name": "detectTaskId", "description": "id", "type": "String" }, { "isRequired": false, "name": "recognitionTaskId", "description": "侦察图像识别任务 id", "type": "String" }, { "isRequired": false, "name": "renderTaskId", "description": "id", "type": "String" }, { "isRequired": false, "name": "taskType", "description": "任务类型", "type": "TaskType" }, { "isRequired": false, "name": "screenSave", "description": "录屏", "type": "String" }, { "isRequired": false, "name": "homePoint", "description": "Home 点", "type": "DoublePoint" }, { "isRequired": false, "name": "detectTarget", "description": "侦察目标：侦察区域/侦察点集合，对应 DetectTarget 枚举", "type": "Geo" }, { "isRequired": false, "name": "resourceAlgorithm", "description": "资源规划算法", "type": "ResourceAlgorithm" }, { "isRequired": false, "name": "taskConfig", "description": "任务参数", "type": "Map" }, { "isRequired": false, "name": "taskNo", "description": "任务编号", "type": "String" }, { "isRequired": false, "name": "taskDescription", "description": "任务描述", "type": "String" }, { "isRequired": false, "name": "taskStatus", "description": "任务状态", "type": "TaskStatus" }, { "isRequired": false, "name": "startTime", "description": "开始时间", "type": "Date" }, { "isRequired": false, "name": "endTime", "description": "结束时间", "type": "Date" }, { "isRequired": false, "name": "creatorId", "description": "创建人Id", "type": "String" }, { "isRequired": false, "name": "creatorName", "description": "创建人名称", "type": "String" }, { "isRequired": false, "name": "updatorId", "description": "更新人Id", "type": "String" }, { "isRequired": false, "name": "updatorName", "description": "更新人名称", "type": "String" }, { "isRequired": false, "name": "createdOn", "description": "创建时间", "type": "Date" }, { "isRequired": false, "name": "updatedOn", "description": "创建时间", "type": "String" }, { "isRequired": false, "name": "isDeleted", "description": "是否删除", "type": "Boolean" }], "name": "DetectTask", "description": null, "type": "com.toway.droneswarm.detect.model.DetectTask" }, "httpMethod": "POST", "url": "/task", "image": "" }, { "id": "9947558319034368", "name": "选择任务后返回侦查点", "description": "", "methodName": "getDetectPonintByAipTaskId", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "aipTaskId", "description": null, "type": "String" }, { "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }], "returnValue": { "comment": "", "isMany": true, "isObject": true, "values": [{ "isRequired": false, "name": "name", "description": "名称", "type": "String" }, { "isRequired": false, "name": "pointNo", "description": "序号", "type": "String" }, { "isRequired": false, "name": "speed", "description": "速度", "type": "Float" }, { "isRequired": false, "name": "radius", "description": "圆形半径", "type": "Float" }, { "isRequired": false, "name": "distance", "description": "和上一个点距离", "type": "Float" }, { "isRequired": false, "name": "turnMode", "description": "转弯模式，内切", "type": "String" }, { "isRequired": false, "name": "visited", "description": "是否已访问", "type": "Boolean" }, { "isRequired": false, "name": "isImport", "description": "是否导入", "type": "Boolean" }, { "isRequired": false, "name": "payload", "description": "", "type": "Map" }, { "isRequired": false, "name": "longitude", "description": "经度", "type": "Float" }, { "isRequired": false, "name": "latitude", "description": "维度", "type": "Float" }, { "isRequired": false, "name": "altitude", "description": "海拔", "type": "Float" }], "name": "GeoPoint", "description": null, "type": "java.util.List" }, "httpMethod": "GET", "url": "/{taskId}/getDetectPonintByAipTaskId/{aipTaskId}", "image": "" }, { "id": "9947558322966528", "name": "获取任务进度", "description": "", "methodName": "getTaskCurrent", "args": [{ "position": "path", "isRequired": true, "defaultValue": null, "example": null, "name": "taskId", "description": null, "type": "String" }], "returnValue": { "comment": "抵近任务进度", "isMany": false, "isObject": true, "values": [{ "isRequired": false, "name": "current_detected", "description": "", "type": "int" }, { "isRequired": false, "name": "all_detect", "description": "", "type": "Object" }, { "isRequired": false, "name": "current_detected", "description": "", "type": "int" }, { "isRequired": false, "name": "all_detect", "description": "", "type": "Object" }], "name": "CloseTaskProgress", "description": null, "type": "com.toway.droneswarm.detect.model.DetectDto$CloseTaskProgress" }, "httpMethod": "GET", "url": "/progress/{taskId}", "image": "" }, { "id": "9947558327554048", "name": "获取侦察任务列表", "description": "", "methodName": "getAllDoneTask", "args": [{ "position": "query", "isRequired": true, "defaultValue": "1", "example": null, "name": "pageNo", "description": null, "type": "Integer" }, { "position": "query", "isRequired": true, "defaultValue": "8", "example": null, "name": "pageSize", "description": null, "type": "Integer" }, { "position": "query", "isRequired": false, "defaultValue": "\n\t\t\n\t\t\n\n\t\t\t\t\n", "example": null, "name": "start_time", "description": null, "type": "String" }, { "position": "query", "isRequired": false, "defaultValue": "\n\t\t\n\t\t\n\n\t\t\t\t\n", "example": null, "name": "end_time", "description": null, "type": "String" }], "returnValue": { "comment": null, "isMany": false, "isObject": true, "values": null, "name": "PageResult", "description": null, "type": "com.ajaxjs.framework.PageResult" }, "httpMethod": "GET", "url": "/task_list", "image": "" }]
-
+                list: DOC_JSON
             },
             methods: {
                 isNumber(v) {
+                	v = v.returnValue.type;
                     return v == 'java.lang.Integer' || v == 'java.lang.Long' || v == 'java.lang.Double';
                 },
                 // 是否可预测的简单值，如 boolean/int/long，给出的例子就是 true/1
@@ -181,6 +180,13 @@
                     let returnValue = v.returnValue;
 
                     return !returnValue.isObject && this.isPreSimpleValue(v);
+                },
+                getExample(eg) {
+                	if(eg[0] === '{' || eg[0] === '[') {
+                		// json
+                		return JSON.stringify(JSON.parse(eg),  null , 4);
+                	} else
+                		return eg;
                 }
             }
         });

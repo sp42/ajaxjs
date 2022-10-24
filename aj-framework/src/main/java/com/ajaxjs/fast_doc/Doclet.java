@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import com.ajaxjs.framework.PageResult;
@@ -13,10 +14,11 @@ import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.RootDoc;
+import com.sun.javadoc.Type;
 import com.sun.tools.javadoc.Main;
 
 public class Doclet implements Model {
-	private static final LogHelper LOGGER = LogHelper.getLog(DocParser.class);
+	private static final LogHelper LOGGER = LogHelper.getLog(Doclet.class);
 
 	public static class Params {
 		public String root;
@@ -28,7 +30,10 @@ public class Doclet implements Model {
 		public List<String> sources;
 	}
 
+	static Params tempParams;
+
 	public static void parseFieldsOfOneBean(Params params, Class<?> clz, BeanInfo bean) {
+		tempParams = params;
 		Objects.requireNonNull(clz);
 		params.sources = new ArrayList<>();
 		boolean isInnerClz = bean.type.contains("$");
@@ -52,8 +57,14 @@ public class Doclet implements Model {
 		BeanInfo parseComment = parseFieldsOfOneBean(bean); // 带注释的
 		getSuperFields(clz, params, parseComment);
 
-		bean.description = parseComment.description;
-		bean.values = parseComment.values;
+		if (parseComment != null) {
+
+			bean.description = parseComment.description;
+			bean.values = parseComment.values;
+
+			if (!CollectionUtils.isEmpty(parseComment.beans))
+				bean.beans = parseComment.beans;
+		}
 	}
 
 	private static String handleInnerClass(String type) {
@@ -71,7 +82,8 @@ public class Doclet implements Model {
 	 */
 	private static BeanInfo parseFieldsOfOneBean(BeanInfo targetBean) {
 		ClassDoc[] classes = root.classes();
-		BeanInfo bean = null;
+		BeanInfo bean = new BeanInfo();
+		;
 
 		if (classes.length > 1) { // maybe inner clz
 			for (ClassDoc clzDoc : classes) {
@@ -80,7 +92,7 @@ public class Doclet implements Model {
 				String fullType = clzDoc.qualifiedTypeName();
 				String clzName = clzDoc.simpleTypeName();
 				fullType = fullType.replace("." + clzName, "$" + clzName);
-				LOGGER.info(fullType);
+//				LOGGER.info(fullType);
 
 				if (targetBean != null && fullType.equals(targetBean.type))
 
@@ -91,14 +103,44 @@ public class Doclet implements Model {
 						b.name = clzName;
 						b.description = clzDoc.commentText();
 						b.type = fullType;
-						b.values = Util.makeListByArray(clzDoc.fields(false), fieldDoc -> {
+
+						List<Value> simpleValues = new ArrayList<>();
+						List<BeanInfo> beans = new ArrayList<>();
+
+						Util.makeListByArray(clzDoc.fields(false), fieldDoc -> {
+							Type type = fieldDoc.type();
+
 							Value v = new Value();
 							v.name = fieldDoc.name();
-							v.type = fieldDoc.type().simpleTypeName();
+							v.type = type.simpleTypeName();
 							v.description = fieldDoc.commentText();
+
+							simpleValues.add(v);
+							// TODO 递归 内嵌对象。没有 List<?> 真实 Class 引用
+//							if (ifSimpleValue(type))
+//								simpleValues.add(v);
+//							else {
+//								BeanInfo bi = new BeanInfo();
+//								bi.name = v.type;
+//								bi.type = type.toString();
+//								bi.description = v.description;
+//								LOGGER.info(b.name + ">>>>>>>>>" + v.type);
+//								
+//								Class<?> clz = ReflectUtil.getClassByName(bi.type);
+//
+//								if (!"Object".equals(v.type)) // Object 字段无法解析
+//									parseFieldsOfOneBean(tempParams, clz, bi);
+//
+//								beans.add(bi);
+//							}
 
 							return v;
 						});
+
+						b.values = simpleValues;
+
+						if (!CollectionUtils.isEmpty(beans))
+							b.beans = beans;
 
 						DocParser.CACHE.put(fullType, b);
 					}
@@ -108,7 +150,6 @@ public class Doclet implements Model {
 				bean = DocParser.CACHE.get(targetBean.type);
 		} else {
 			ClassDoc classDoc = classes[0];
-			bean = new BeanInfo();
 			bean.name = classDoc.name();
 			bean.description = classDoc.commentText();
 			bean.values = Util.makeListByArray(classDoc.fields(false), fieldDoc -> {
@@ -124,6 +165,24 @@ public class Doclet implements Model {
 		return bean;
 	}
 
+	private final static String[] types = { "int", "java.lang.String", "java.lang.Integer", "java.lang.Boolean", "java.lang.Long" };
+
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
+	private static boolean ifSimpleValue(Type type) {
+		String t = type.toString();
+//		LOGGER.info(t);
+		for (String _t : types) {
+			if (_t.equals(t))
+				return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Doclet 不能获取父类成员
 	 * 
@@ -136,8 +195,7 @@ public class Doclet implements Model {
 
 		if (!ObjectUtils.isEmpty(allSuperClazz)) {
 			for (Class<?> clz : allSuperClazz) {
-				if (clz == PageResult.class || clz == List.class || clz == ArrayList.class || clz == AbstractList.class
-						|| clz == AbstractCollection.class)
+				if (clz == PageResult.class || clz == List.class || clz == ArrayList.class || clz == AbstractList.class || clz == AbstractCollection.class)
 					continue;
 
 				Params p = new Params();

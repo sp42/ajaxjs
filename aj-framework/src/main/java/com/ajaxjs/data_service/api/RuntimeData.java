@@ -180,11 +180,14 @@ public abstract class RuntimeData extends ApiCommander implements DataServiceDAO
 		mulitDataSource.clear();
 		List<MyDataSource> findList = DataSourceDAO.findList(QueryTools.setStatus(Status.ONLINE.getValue()));
 
-		findList.forEach(myds -> {
-			DataSource ds = MSUtils.setupJdbcPool(MyDataSourceController.getDbDriver(myds), myds.getUrl(), myds.getUsername(), myds.getPassword());
-			myds.setInstance(ds);
-			mulitDataSource.put(myds.getId(), myds);
-		});
+		if (CollectionUtils.isEmpty(findList))
+			LOGGER.warning("DataSource 表中没有任何数据");
+		else
+			findList.forEach(myds -> {
+				DataSource ds = MSUtils.setupJdbcPool(MyDataSourceController.getDbDriver(myds), myds.getUrl(), myds.getUsername(), myds.getPassword());
+				myds.setInstance(ds);
+				mulitDataSource.put(myds.getId(), myds);
+			});
 	}
 
 	/**
@@ -257,7 +260,7 @@ public abstract class RuntimeData extends ApiCommander implements DataServiceDAO
 			break;
 		}
 	}
-	
+
 	/**
 	 * URL 匹配命令。根据两个输入条件找到匹配的 DML 命令
 	 * 

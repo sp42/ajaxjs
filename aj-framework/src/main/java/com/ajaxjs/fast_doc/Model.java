@@ -16,6 +16,11 @@ public interface Model {
 
 	public class BeanInfo extends CommonValue {
 		public List<Value> values;
+
+		/**
+		 * 不是 simple value，是对象
+		 */
+		public List<BeanInfo> beans;
 	}
 
 	/**
@@ -26,11 +31,11 @@ public interface Model {
 	}
 
 	public static class Item {
-		public long id;
+		public String id;
 
 		public String name;
 
-		public String description;
+		public String description="fooooooooooooo";
 
 		public String methodName;
 
@@ -64,5 +69,15 @@ public interface Model {
 		public boolean isObject;
 
 		public List<Value> values;
+
+		/**
+		 * 不是 simple value，是对象
+		 */
+		public List<BeanInfo> beans;
+
+		/**
+		 * 例子
+		 */
+		public String example;
 	}
 }

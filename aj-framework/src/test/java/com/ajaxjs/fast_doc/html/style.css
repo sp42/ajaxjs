@@ -24,7 +24,6 @@ h3 {
 table.b {
 	border-collapse: collapse;
 	border: 1px solid lightgray;
-
 	font-size: .85rem;
 	color: gray;
 	min-width: 600px;
@@ -35,12 +34,12 @@ table.b th {
 	letter-spacing: 4px;
 }
 
-table.b td,
-table.b th {
+table.b td, table.b th {
 	padding: 10px;
 	border-collapse: collapse;
 	border: 1px solid lightgray;
 	text-align: center;
+	
 }
 
 .code li {
@@ -71,6 +70,10 @@ table.b th {
 	color: blue;
 }
 
+.code pre {
+	display: inline;
+}
+
 .tag {
 	font-family: 'Courier New', Courier, monospace;
 	border: 1px solid lightgray;
@@ -81,7 +84,6 @@ table.b th {
 .tag div:first-child {
 	background-color: lightgray;
 	color: white;
-
 }
 
 .tag div:last-child {
@@ -108,8 +110,6 @@ table.b th {
 .DELETE {
 	color: red !important;
 }
-
-
 
 #doc>ul>li {
 	padding: 50px 0;
