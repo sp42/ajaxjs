@@ -79,7 +79,7 @@
 
                 <table>
                     <tr>
-                        <td>
+                        <td style="vertical-align: top;">
                             <h3>返回值</h3>
 
                             <div class="code">
@@ -118,7 +118,7 @@
                                 <div style="margin-left: 20px;"> "status": 1,
                                 </div>
                                 <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
-                                <div style="margin-left: 20px;"> "data": <pre>{{getExample(item.returnValue.example)}}</pre>
+                                <div style="margin-left: 20px;"> "data": <pre>{{getExample(item)}}</pre>
                                    
                                 </div>
 
@@ -154,7 +154,7 @@
                 </table>
 
                 <h3>备忘</h3>
-                <textarea>dsfdf</textarea>
+                <textarea>TODO</textarea>
             </li>
         </ul>
     </div>
@@ -181,12 +181,14 @@
 
                     return !returnValue.isObject && this.isPreSimpleValue(v);
                 },
-                getExample(eg) {
-                	if(eg[0] === '{' || eg[0] === '[') {
-                		// json
+                getExample(item) {
+                	let eg = item.returnValue.example;
+                
+                	if(eg[0] === '{' || eg[0] === '[') {// json
                 		return JSON.stringify(JSON.parse(eg),  null , 4);
-                	} else
-                		return eg;
+                	} else {
+                		return item.returnValue.type == 'java.lang.String' ? '"' + eg + '"' : eg;
+                	}
                 }
             }
         });

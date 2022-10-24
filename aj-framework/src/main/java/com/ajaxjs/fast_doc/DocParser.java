@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -121,12 +122,12 @@ public class DocParser implements Model {
 
 				return arg;
 			});
-			
-			LOGGER.info(">>item.description>>>>>>" + item.description);
 
 			return item;
 		});
 
+		// 按 url 排序
+		list = list.stream().sorted().collect(Collectors.toList());
 		return list;
 	}
 

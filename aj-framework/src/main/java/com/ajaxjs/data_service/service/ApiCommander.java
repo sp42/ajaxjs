@@ -298,7 +298,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 	 * @return
 	 */
 	public static Serializable create(ServiceContext ctx, List<IPlugin> plugins) {
-//		LOGGER.info("数据服务 创建实体");
+		LOGGER.info("数据服务 创建实体");
 
 		DataServiceDml node = ctx.getNode();
 		DataServiceTable tableInfo = node.getTableInfo();
@@ -376,7 +376,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 
 				if (params != null && params.containsKey(idField)) {
 					Object id = params.get(idField);
-
+					LOGGER.info(">>>>>>>>>" + id);
 					if (id instanceof String) {
 						String idStr = id.toString();
 						// might be UUID, that is the string

@@ -30,12 +30,12 @@ public interface Model {
 		public boolean isRequired;
 	}
 
-	public static class Item {
+	public static class Item implements Comparable<Item> {
 		public String id;
 
 		public String name;
 
-		public String description="fooooooooooooo";
+		public String description = "fooooooooooooo";
 
 		public String methodName;
 
@@ -48,6 +48,11 @@ public interface Model {
 		public String url;
 
 		public String image;
+
+		@Override
+		public int compareTo(Item o) {
+			return url.compareTo(o.url);
+		}
 	}
 
 	public static class Arg extends CommonValue {
