@@ -4,17 +4,32 @@ import java.util.List;
 
 public interface Model {
 	/**
+	 * 基础类
+	 */
+	static abstract class CommonValue {
+		public String name;
+
+		public String description;
+
+		public String type;
+	}
+
+	public class BeanInfo extends CommonValue {
+		public List<Value> values;
+	}
+
+	/**
 	 * 
 	 */
-	public static class Value {
-		public String name;
-		public String desc;
-		public String type;
+	public static class Value extends CommonValue {
 		public boolean isRequired;
 	}
 
 	public static class Item {
+		public long id;
+
 		public String name;
+
 		public String description;
 
 		public String methodName;
@@ -30,19 +45,19 @@ public interface Model {
 		public String image;
 	}
 
-	public static class Arg {
-		public String name;
+	public static class Arg extends CommonValue {
 		public String position;
-		public String type;
+
 		public boolean isRequired;
+
+		public String defaultValue;
+
+		public String example;
 	}
 
-	public static class Return {
-		public String name;
-
+	public static class Return extends CommonValue {
 		public String comment;
 
-		public String fullName;
 //		public Class<?> clz;
 		public boolean isMany;
 

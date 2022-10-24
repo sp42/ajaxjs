@@ -1,32 +1,41 @@
 package com.ajaxjs.fast_doc;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ajaxjs.fast_doc.Doclet.Params;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
+import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 public class DocParser implements Model {
+	private static final LogHelper LOGGER = LogHelper.getLog(DocParser.class);
+
 	public static List<Item> parse(Class<?> clz) {
 		RequestMapping rm = clz.getAnnotation(RequestMapping.class);
 		String rootUrl = rm.value()[0];
 
-		List<Item> list = makeListByArray(clz.getDeclaredMethods(), method -> {
+		List<Item> list = Util.makeListByArray(clz.getDeclaredMethods(), method -> {
 			Item item = new Item();
 			item.methodName = method.getName();
+			item.id = SnowflakeId.get();
 
 			ControllerMethod cm = method.getAnnotation(ControllerMethod.class);
 
@@ -88,19 +97,36 @@ public class DocParser implements Model {
 			getReturnType(item, method);
 
 			// 参数 入参
-			item.args = makeListByArray(method.getParameters(), param -> {
+			item.args = Util.makeListByArray(method.getParameters(), param -> {
 				Arg arg = new Arg();
 				arg.name = param.getName();
 				arg.type = param.getType().getSimpleName();
-				
+
 				RequestParam queryP = param.getAnnotation(RequestParam.class);
+
 				if (queryP != null) {
 					arg.position = "query";
 					arg.isRequired = queryP.required();
 
-					if (queryP.value() != null) {
+					if (StringUtils.hasText(queryP.value()))
 						arg.name = queryP.value();
-					}
+
+					if (StringUtils.hasText(queryP.defaultValue()))
+						arg.defaultValue = queryP.defaultValue();
+
+					return arg;
+				}
+
+				PathVariable pv = param.getAnnotation(PathVariable.class);
+
+				if (pv != null) {
+					arg.position = "path";
+					arg.isRequired = true;
+
+					if (StringUtils.hasText(pv.value()))
+						arg.name = pv.value();
+
+					return arg;
 				}
 
 				return arg;
@@ -112,98 +138,100 @@ public class DocParser implements Model {
 		return list;
 	}
 
+	public static Map<String, BeanInfo> CACHE = new HashMap<>();
+
 	/**
-	 * 对一个数组进行迭代，返回一个 list
+	 * 生成返回值信息
 	 * 
-	 * @param <T>
-	 * @param arr
-	 * @param fn
-	 * @return
+	 * @param item
+	 * @param method
 	 */
-	public static <T, K> List<T> makeListByArray(K[] arr, Function<K, T> fn) {
-		List<T> values = new ArrayList<>();
-
-		for (K obj : arr) {
-			T v = fn.apply(obj);
-			values.add(v);
-		}
-
-		return values;
-
-	}
-
-	static Map<String, BeanInfo> CACHE = new HashMap<>();
-
 	private static void getReturnType(Item item, Method method) {
-		Return r = new Return();
 		Class<?> returnType = method.getReturnType();
+		Return r = new Return();
+		r.name = returnType.getSimpleName();
+		r.type = returnType.getName();
 
-		if (isSimpleValueType(returnType)) {
+		if (Util.isSimpleValueType(returnType)) {
 			r.isObject = false;
-			r.name = returnType.getSimpleName();
-			r.fullName = returnType.getName();
 		} else if (returnType == Map.class) {
 			// TODO
-		} else if (returnType == List.class) {
+		} else if (returnType == List.class || returnType == ArrayList.class || returnType == AbstractList.class) {
 			r.isMany = true;
 
 			Type[] _real = ReflectUtil.getGenericReturnType(method);
 			Class<?> real = ReflectUtil.type2class(_real[0]);
 
-			if (isSimpleValueType(real)) {
-				r.isObject = false;
-				r.name = returnType.getSimpleName();
-				r.fullName = returnType.getName();
-			} else {
+			if (!Util.isSimpleValueType(real)) {
 				r.isObject = true;
-				r.fullName = real.getName();
-
-				BeanInfo bean;
-
-				if (CACHE.containsKey(r.fullName))
-					bean = CACHE.get(r.fullName);
-				else {
-					bean = getBeanInfo(real);
-					CACHE.put(r.fullName, bean);
-				}
-
-				r.name = bean.name;
-				r.comment = bean.comment;
-				r.values = bean.values;
-			}
+				getBeanInfo(real, r);
+			} else
+				r.isObject = false;
 		} else if (returnType.isArray()) {
 			r.isMany = true;
+		} else { // it's single bean
+			r.isMany = false;
+			r.isObject = true;
+
+			getBeanInfo(returnType, r);
 		}
 
 		item.returnValue = r;
 	}
 
+	private static void getBeanInfo(Class<?> clz, Return r) {
+		String fullName = clz.getName();
+		BeanInfo bean;
+
+//		LOGGER.info("want clz: " + fullName);
+		if (CACHE.containsKey(fullName))
+			bean = CACHE.get(fullName);
+		else {
+			bean = getBeanInfo(clz);
+			CACHE.put(fullName, bean);
+		}
+
+		r.name = bean.name;
+		r.comment = bean.description;
+		r.values = bean.values;
+	}
+
 	private static BeanInfo getBeanInfo(Class<?> real) {
 		BeanInfo bean = new BeanInfo();
 		bean.name = real.getSimpleName();
-		bean.fullName = real.getName();
-//		bean.values = makeListByArray(real.getDeclaredFields(), field -> {
-//			Value v = new Value();
-//			v.name = field.getName();
-//			v.type = field.getType().getSimpleName();
-//
-//			return v;
-//		});
+		bean.type = real.getName();
 
-		if (bean.fullName.contains("$") || bean.fullName.contains("UAVRouteOutputOfApproach"))
+		if (bean.type.contains("CloseResourcePlan"))
+			LOGGER.info(">>>>>>>>>>>" + bean.type);
+
+		if (bean.type.contains("UAVRouteOutputOfApproach") || bean.type.contains("PageResult"))
 			return bean;
 
-		String root = "C:\\project\\drone\\src\\main\\java\\";
-		List<String> sources = Doclet.initDoclet(root);
-		sources.add(root + Doclet.className2JavaFileName(bean.fullName));
+		Params params = new Params();
+		params.root = "C:\\code\\drone\\src\\main\\java\\";
+		// C:\\code\\drone\\jar\\lbsalgo-0.0.1-SNAPSHOT.jar
+		params.classPath = getClzPath(
+				"C:\\sp42\\profile\\eclipse\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\aj-sso\\WEB-INF\\lib");
+		params.sourcePath = params.root + ";C:\\code\\aj\\aj-framework\\src\\main\\java;C:\\code\\aj\\aj-util\\src\\main\\java";
 
-		Doclet.parseFieldsOfOneBean(root, real, bean, sources);
+		Doclet.parseFieldsOfOneBean(params, real, bean);
 
 		return bean;
 	}
 
-	static boolean isSimpleValueType(Class<?> type) {
-		return type.isPrimitive() || type == Boolean.class || type == Integer.class || type == Long.class || type == String.class || type == Double.class
-				|| type == Float.class;
+	public static String getClzPath(String dir) {
+		File file = new File(dir); // 获取其file对象
+		File[] fs = file.listFiles(); // 遍历path下的文件和目录，放在File数组中
+
+		List<String> list = new ArrayList<>();
+
+		for (File f : fs) { // 遍历File[]数组
+			if (!f.isDirectory() && f.getName().contains("jar")) {
+				list.add(dir + "//" + f.getName());
+			}
+		}
+
+		return StrUtil.join(list, ";");
 	}
+
 }
