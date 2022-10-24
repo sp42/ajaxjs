@@ -378,8 +378,12 @@ public class ReflectUtil {
 //			if (clz != null && clz != Object.class)
 //				clzList.add(clz);
 //		}
-		for (; clz != Object.class; clz = clz.getSuperclass())
-			clzList.add(clz);
+		for (; clz != Object.class; clz = clz.getSuperclass()) {
+			if (clz == null)
+				break;
+			else
+				clzList.add(clz);
+		}
 
 		clzList.remove(0); // 排除自己
 

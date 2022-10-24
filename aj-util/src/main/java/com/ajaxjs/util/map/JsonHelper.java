@@ -197,7 +197,7 @@ public class JsonHelper {
 		} else if (obj instanceof Object) { // 普通 Java Object
 			List<String> arr = new ArrayList<>();
 
-			for (Field field : obj.getClass().getDeclaredFields()) {
+			for (Field field : obj.getClass().getFields()) {
 				field.setAccessible(true);
 
 				String key = field.getName();
