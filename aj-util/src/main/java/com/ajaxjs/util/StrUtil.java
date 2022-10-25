@@ -138,13 +138,15 @@ public class StrUtil {
 	 */
 	public static String concatUrl(String a, String b) {
 		char last = a.charAt(a.length() - 1), first = b.charAt(0);
-
 		String result = null;
+
 		if (last == '/' && first == '/') // both has
 			result = a + b.substring(1);
 		else if (last != '/' && first != '/') // haven't at all
 			result = a + "/" + b;
 		else if (last == '/' && first != '/')
+			result = a + b;
+		else if (last != '/' && first == '/')
 			result = a + b;
 
 		return result;
