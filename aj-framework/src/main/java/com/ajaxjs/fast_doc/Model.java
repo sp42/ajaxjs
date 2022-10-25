@@ -3,6 +3,7 @@ package com.ajaxjs.fast_doc;
 import java.util.List;
 
 public interface Model {
+
 	/**
 	 * 基础类
 	 */
@@ -12,6 +13,10 @@ public interface Model {
 		public String description;
 
 		public String type;
+	}
+
+	public static class ControllerInfo extends CommonValue {
+		public List<Item> items;
 	}
 
 	public class BeanInfo extends CommonValue {
@@ -63,6 +68,11 @@ public interface Model {
 		public String defaultValue;
 
 		public String example;
+
+		/**
+		 * 如果参数是一个 bean，这里说明 bean 的各个字段
+		 */
+		public List<BeanInfo> beans;
 	}
 
 	public static class Return extends CommonValue {

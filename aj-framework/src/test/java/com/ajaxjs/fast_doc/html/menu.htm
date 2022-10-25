@@ -160,6 +160,7 @@
 			font-weight: bold;
 			margin: 10px 0;
 			margin-top: 30px;
+			line-height: 130%;
 		}
 
 		footer {
@@ -172,9 +173,12 @@
 			margin-bottom: 10px;
 			word-break: break-all;
 			overflow: hidden;
+			line-height: 140%;
 		}
 
-		li .url {}
+		li .url {
+			color: gray;
+		}
 
 		/*定义整个滚动条高宽及背景：高宽分别对应横竖滚动条的尺寸*/
 		::-webkit-scrollbar {
@@ -192,6 +196,11 @@
 			border-radius: 10px;
 			background-color: lightgray;
 		}
+
+		h2 {
+			display: inline;
+
+		}
 	</style>
 	<script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.13/vue.js"></script>
 	<script src="json.js"></script>
@@ -206,50 +215,19 @@
 		<a href="javascript:alert('TODO')">生成</a>
 	</section>
 	<div id="menu">
-		<h1>抵近侦察 Close Detect</h1>
-		<ul v-for="item in list">
-			<li>
-				<a :href="'doc.htm#' + item.id" target="center">
-					<h2>{{item.name}}</h2>
-					<span class="url">
-						{{item.url}}
-					</span>
-				</a>
-			</li>
-		</ul>
-		<h1>抵近侦察 Close Detect</h1>
-		<ul v-for="item in list">
-			<li>
-				<a :href="'doc.htm#' + item.id" target="center">
-					<h2>{{item.name}}</h2>
-					<span class="url">
-						{{item.url}}
-					</span>
-				</a>
-			</li>
-		</ul>
-		<h1>抵近侦察 Close Detect</h1>
-		<ul v-for="item in list">
-			<li>
-				<a :href="'doc.htm#' + item.id" target="center">
-					<h2>{{item.name}}</h2>
-					<span class="url">
-						{{item.url}}
-					</span>
-				</a>
-			</li>
-		</ul>
-		<h1>抵近侦察 Close Detect</h1>
-		<ul v-for="item in list">
-			<li>
-				<a :href="'doc.htm#' + item.id" target="center">
-					<h2>{{item.name}}</h2>
-					<span class="url">
-						{{item.url}}
-					</span>
-				</a>
-			</li>
-		</ul>
+		<div v-for="(value, key) in list">
+			<h1>{{value.description}} {{key}}</h1>
+			<ul v-for="item in value.items">
+				<li>
+					<a :href="'doc.htm?key=' + key + '#' + item.id" target="center">
+						<h2>{{item.name}}</h2>
+						<span class="url">
+							{{item.url}}
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 
 	<script>

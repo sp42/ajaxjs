@@ -3,7 +3,17 @@ body {
 }
 
 a {
+	color: black;
 	text-decoration: none;
+}
+
+a:visited {
+	color: gray;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: brown;
 }
 
 h1 {
@@ -34,16 +44,18 @@ table.b th {
 	letter-spacing: 4px;
 }
 
-table.b td, table.b th {
+table.b td,
+table.b th {
 	padding: 10px;
 	border-collapse: collapse;
 	border: 1px solid lightgray;
 	text-align: center;
-	
+
 }
 
 .code li {
 	list-style-type: none;
+	margin-bottom: 3px;
 }
 
 .code {
@@ -72,6 +84,8 @@ table.b td, table.b th {
 
 .code pre {
 	display: inline;
+	font-family: 'Courier New', Courier, monospace;
+	line-height: 140%;
 }
 
 .tag {
@@ -123,4 +137,18 @@ table.b td, table.b th {
 
 .content p {
 	text-indent: 2em;
+}
+
+img.ui {
+	cursor: pointer;
+	transition: all 600ms;
+	max-width: 300px;
+}
+
+td.td-json {
+	text-align: left !important;
+}
+
+td.td-json pre {
+	font-family: 'Courier New', Courier, monospace !important;
 }

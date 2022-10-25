@@ -328,7 +328,7 @@ public class Caller extends BaseCaller {
 				LocationPoint p = (LocationPoint) value;
 				// 对应 mysql point 类型. MyBatis 的 SQL 语句还要加上 ST_GeomFromText(）函数
 				params.put(key, "POINT(" + p.getLatitude() + " " + p.getLongitude() + ")");
-			} else if (value instanceof Map || value instanceof IBaseModel)
+			} else if (value instanceof Map || value instanceof IBaseModel || value instanceof List)
 				params.put(key, JsonHelper.toJson(value));
 		}
 

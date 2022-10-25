@@ -10,10 +10,10 @@
 
 <body>
     <div id="doc">
-        <h1>接口文档</h1>
+        <h1>{{controllerInfo.name}} {{controllerInfo.description}}接口文档</h1>
         <div class="content">
             <h2>业务概述</h2>
-            <p></p>
+            <p>{{controllerInfo.description}}</p>
             <h2>目录</h2>
             <ul v-for="item in list">
                 <li>
@@ -50,9 +50,18 @@
                     <span :class="item.httpMethod" style="font-weight: bold;">
                         {{item.httpMethod}}
                     </span>
-                    {{root}}{{item.url}} <a :href="root + item.url" target="_blank" title="打开连接">&#x1f517;</a> <a
-                        href="javascript:alert('TODO')" style="text-decoration:underline;">测试</a>
+                    {{root}}{{item.url}}
+                    <a :href="root + item.url" target="_blank" title="打开连接">&#x1f517;</a>
+                    <a href="javascript:void(0)" @click="copy(root + item.url)" title="复制">📄</a>
+
+                    <a href="javascript:alert('TODO')" style="text-decoration:underline;">测试</a>
                 </div>
+                <span v-if="item.image">
+                    <h3>对应 UI</h3>
+                    <img class="ui" :src="'http://workwe.gz88.cc:18085/doc/images/'+ item.image + '.jpg'"
+                        title="点击扩大/缩小图片" @click="enlargeImg($event)" />
+                </span>
+
 
                 <h3>请求参数</h3>
                 <table class="b" v-if="item.args.length">
@@ -72,7 +81,8 @@
                         <td></td>
                         <td>{{arg.isRequired ? '必填' : '选填'}}</td>
                         <td>{{arg.defaultValue}}</td>
-                        <td></td>
+                        <td class="td-json"><pre v-if="arg.example">{{beautiJson(arg.example)}}</pre>
+                        </td>
                     </tr>
                 </table>
                 <div v-if="!item.args.length">无</div>
@@ -84,12 +94,12 @@
 
                             <div class="code">
                                 <div>{</div>
-                                <div style="margin-left: 20px;"> "status": 1/0, <span class="comment">// 1=操作成功，0 =
-                                        操作失败</span>
+                                <div style="margin-left: 20px;"> "status": 1/0, <span class="comment">// 1=操作成功， 0=操作失败</span>
                                 </div>
                                 <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
-                                <div style="margin-left: 20px;"> "data": <span v-if="item.returnValue.isMany">[</span><span v-if="item.returnValue.isObject">{ <span
-                                            class="comment">// {{item.returnValue.name}}</span> </span>
+                                <div style="margin-left: 20px;"> "data": <span
+                                        v-if="item.returnValue.isMany">[</span><span v-if="item.returnValue.isObject">{
+                                        <span class="comment">// {{item.returnValue.name}}</span> </span>
                                     <!--- 简单值 --->
                                     <span class="type" v-if="!item.returnValue.isObject">
                                         {{item.returnValue.type}}</span>
@@ -105,7 +115,8 @@
                                     </li>
                                 </ul>
 
-                                <div style="margin-left: 20px;"><span v-if="item.returnValue.isObject">}</span><span v-if="item.returnValue.isMany">, <br />...]</span></div>
+                                <div style="margin-left: 20px;"><span v-if="item.returnValue.isObject">}</span><span
+                                        v-if="item.returnValue.isMany">, <br />...]</span></div>
                                 <div>}</div>
                             </div>
                         </td>
@@ -118,8 +129,9 @@
                                 <div style="margin-left: 20px;"> "status": 1,
                                 </div>
                                 <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
-                                <div style="margin-left: 20px;"> "data": <pre>{{getExample(item)}}</pre>
-                                   
+                                <div style="margin-left: 20px;"> "data":
+                                    <pre>{{getExample(item)}}</pre>
+
                                 </div>
 
                                 <div style="margin-left: 20px;"></div>
@@ -134,7 +146,7 @@
                                 <div style="margin-left: 20px;"> "status": 1,
                                 </div>
                                 <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
-                                <div style="margin-left: 20px;"> "data": 
+                                <div style="margin-left: 20px;"> "data":
                                     <span v-if="isPreSimpleValue(item)">
                                         <span v-if="item.returnValue.type == 'java.lang.Boolean'">true</span>
                                         <span v-if="isNumber(item)">1</span>
@@ -148,7 +160,7 @@
                         <td v-if="!item.returnValue.example && !isSimpleValue(item)" style="vertical-align: top;">
                             <h3>成功的返回例子</h3>
 
-      					                      无
+                            无
                         </td>
                     </tr>
                 </table>
@@ -159,16 +171,22 @@
         </ul>
     </div>
     <script>
+        var arr = location.search.match(/key\=(\w+)/);
+        if (!arr || !arr[1])
+            alert('未指定 key 参数');
+
+        var key = arr[1];
 
         new Vue({
             el: document.getElementById('doc'),
             data: {
-                root: 'https://foo.com/api',
-                list: DOC_JSON
+                root: 'http://workwe.gz88.cc:18085/oba',
+                controllerInfo: DOC_JSON[key],
+                list: DOC_JSON[key].items
             },
             methods: {
                 isNumber(v) {
-                	v = v.returnValue.type;
+                    v = v.returnValue.type;
                     return v == 'java.lang.Integer' || v == 'java.lang.Long' || v == 'java.lang.Double';
                 },
                 // 是否可预测的简单值，如 boolean/int/long，给出的例子就是 true/1
@@ -182,13 +200,28 @@
                     return !returnValue.isObject && this.isPreSimpleValue(v);
                 },
                 getExample(item) {
-                	let eg = item.returnValue.example;
-                
-                	if(eg[0] === '{' || eg[0] === '[') {// json
-                		return JSON.stringify(JSON.parse(eg),  null , 4);
-                	} else {
-                		return item.returnValue.type == 'java.lang.String' ? '"' + eg + '"' : eg;
-                	}
+                    let eg = item.returnValue.example;
+
+                    if (eg[0] === '{' || eg[0] === '[') {// json
+                        return JSON.stringify(JSON.parse(eg), null, 4);
+                    } else {
+                        return item.returnValue.type == 'java.lang.String' ? '"' + eg + '"' : eg;
+                    }
+                },
+                copy(url) {
+                    navigator.clipboard.writeText(url);
+                    alert('已复制')
+                },
+                enlargeImg(e) {
+                    let img = e.target;
+                    if (getComputedStyle(img).maxWidth == '300px')
+                        img.style.maxWidth = 'initial';
+                    else
+                        img.style.maxWidth = '300px';
+
+                },
+                beautiJson(json) {
+                    return JSON.stringify(JSON.parse(json), null, 2);
                 }
             }
         });

@@ -83,7 +83,6 @@ public class Doclet implements Model {
 	private static BeanInfo parseFieldsOfOneBean(BeanInfo targetBean) {
 		ClassDoc[] classes = root.classes();
 		BeanInfo bean = new BeanInfo();
-		;
 
 		if (classes.length > 1) { // maybe inner clz
 			for (ClassDoc clzDoc : classes) {
@@ -230,12 +229,13 @@ public class Doclet implements Model {
 	}
 
 	/**
-	 * 初始化 Doclet 参数，包括 classpath 和 sourcepath -classpath 参数指定
-	 * 源码文件及依赖库的class位置，不提供也可以执行，但无法获取到完整的注释信息(比如annotation)
+	 * 初始化 Doclet 参数，包括 classpath 和 sourcepath -classpath 参数指定 源码文件及依赖库的 class
+	 * 位置，不提供也可以执行，但无法获取到完整的注释信息(比如 annotation)
 	 * 
 	 * @param params Doclet 参数
 	 */
 	private static void init(Params params) {
+		LOGGER.info("初始化 Doclet");
 		init(params.sources, params.sourcePath, params.classPath);
 	}
 
@@ -245,7 +245,6 @@ public class Doclet implements Model {
 		params.add(Doclet.class.getName());
 		params.add("-docletpath");
 
-		System.out.println(Doclet.class.getResource("/").getPath());
 		params.add(Doclet.class.getResource("/").getPath());
 		params.add("-encoding");
 		params.add("utf-8");

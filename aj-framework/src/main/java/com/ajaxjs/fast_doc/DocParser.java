@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ValueConstants;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ValueConstants;
 import com.ajaxjs.fast_doc.Doclet.Params;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.spring.easy_controller.Example;
+import com.ajaxjs.spring.easy_controller.Info;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -36,6 +38,26 @@ public class DocParser implements Model {
 
 	public DocParser(Params params) {
 		this.params = params;
+	}
+
+	public static Map<String, ControllerInfo> run(Params params, Class<?>... clzs) {
+		Map<String, ControllerInfo> map = new HashMap<>();
+		DocParser docParser = new DocParser(params);
+
+		for (Class<?> clz : clzs) {
+			ControllerInfo ci = new ControllerInfo();
+			ci.name = clz.getSimpleName();
+			ci.type = clz.getName();
+			ci.items = docParser.parse(clz);
+
+			Info info = clz.getAnnotation(Info.class);
+			if (info != null)
+				ci.description = info.value();
+
+			map.put(ci.name, ci);
+		}
+
+		return map;
 	}
 
 	public List<Item> parse(Class<?> clz) {
@@ -120,6 +142,18 @@ public class DocParser implements Model {
 					return arg;
 				}
 
+				RequestBody rb = param.getAnnotation(RequestBody.class);
+
+				if (rb != null) {
+					arg.position = "body";
+					arg.isRequired = rb.required();
+				}
+
+				Example eg = param.getAnnotation(Example.class);
+
+				if (eg != null)
+					arg.example = eg.value();
+
 				return arg;
 			});
 
@@ -139,8 +173,13 @@ public class DocParser implements Model {
 	 * @return
 	 */
 	private String setUrl(String[] arr, String rootUrl) {
-		if (!ObjectUtils.isEmpty(arr) && StringUtils.hasText(arr[0]))
-			return arr[0];
+		if (!ObjectUtils.isEmpty(arr) && StringUtils.hasText(arr[0])) {
+
+			String s = StrUtil.concatUrl(rootUrl, arr[0]);
+			System.out.println(s);
+			return s;
+		}
+//		return arr[0];
 
 		return rootUrl;
 	}
