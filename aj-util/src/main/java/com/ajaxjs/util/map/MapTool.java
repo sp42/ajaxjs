@@ -226,6 +226,7 @@ public class MapTool {
 	 * @param isChild     是否处理子对象
 	 * @return 实体 bean 对象
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T map2Bean(Map<String, ?> map, Class<T> clz, boolean isTransform, boolean isChild) {
 		T bean = ReflectUtil.newInstance(clz);
 
@@ -239,6 +240,8 @@ public class MapTool {
 				if (map != null && map.containsKey(key)) {
 					value = map.get(key);
 
+	
+
 					// null 是不会传入 bean 的
 					if (value != null) {
 						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
@@ -248,8 +251,13 @@ public class MapTool {
 							Type beanT = genericReturnType[0];
 							Class<?> realT = ReflectUtil.type2class(beanT);
 
-							@SuppressWarnings("unchecked")
-							List<Map<String, Object>> oldValue = (List<Map<String, Object>>) value;
+							List<Map<String, Object>> oldValue = null;
+
+							if (value instanceof String) {
+								oldValue = JsonHelper.parseList((String) value);
+							} else
+								oldValue = (List<Map<String, Object>>) value;
+
 							List<Object> newList = new ArrayList<>(oldValue.size());
 
 							// 转换一个新 list
@@ -263,7 +271,7 @@ public class MapTool {
 							if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
 								value = MappingValue.objectCast(value, t);
 						}
-
+						
 						try {
 							property.getWriteMethod().invoke(bean, value);
 						} catch (IllegalArgumentException e) {
