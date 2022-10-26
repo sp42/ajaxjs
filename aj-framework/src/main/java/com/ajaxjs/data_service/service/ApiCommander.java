@@ -376,7 +376,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 
 				if (params != null && params.containsKey(idField)) {
 					Object id = params.get(idField);
-					LOGGER.info(">>>>>>>>>" + id);
+					
 					if (id instanceof String) {
 						String idStr = id.toString();
 						// might be UUID, that is the string
