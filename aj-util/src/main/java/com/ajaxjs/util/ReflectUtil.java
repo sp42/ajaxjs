@@ -639,6 +639,11 @@ public class ReflectUtil {
 		return getActualType(clz.getGenericSuperclass());
 	}
 
+	public static Class<?> getActualClass(Class<?> clz) {
+		Type[] actualType = getActualType(clz);
+		return type2class(actualType[0]);
+	}
+
 	/**
 	 * Type 接口转换为 Class
 	 * 
