@@ -192,6 +192,7 @@ public class Doclet implements Model {
 	private static void getSuperFields(Class<?> real, Params params, BeanInfo parse) {
 		Class<?>[] allSuperClazz = ReflectUtil.getAllSuperClazz(real);
 
+		LOGGER.info(allSuperClazz[0]);
 		if (!ObjectUtils.isEmpty(allSuperClazz)) {
 			for (Class<?> clz : allSuperClazz) {
 				if (clz == PageResult.class || clz == List.class || clz == ArrayList.class || clz == AbstractList.class || clz == AbstractCollection.class)
