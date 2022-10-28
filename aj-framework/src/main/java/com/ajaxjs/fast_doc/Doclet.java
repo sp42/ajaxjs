@@ -58,7 +58,6 @@ public class Doclet implements Model {
 		getSuperFields(clz, params, parseComment);
 
 		if (parseComment != null) {
-
 			bean.description = parseComment.description;
 			bean.values = parseComment.values;
 
@@ -93,8 +92,7 @@ public class Doclet implements Model {
 				fullType = fullType.replace("." + clzName, "$" + clzName);
 //				LOGGER.info(fullType);
 
-				if (targetBean != null && fullType.equals(targetBean.type))
-
+				if (targetBean != null && fullType.equals(targetBean.type)) {
 					if (DocParser.CACHE.containsKey(fullType)) {
 						continue; // 已经有
 					} else {
@@ -143,6 +141,7 @@ public class Doclet implements Model {
 
 						DocParser.CACHE.put(fullType, b);
 					}
+				}
 			}
 
 			if (targetBean != null)
@@ -192,7 +191,7 @@ public class Doclet implements Model {
 	private static void getSuperFields(Class<?> real, Params params, BeanInfo parse) {
 		Class<?>[] allSuperClazz = ReflectUtil.getAllSuperClazz(real);
 
-		LOGGER.info(allSuperClazz[0]);
+//		LOGGER.info(allSuperClazz[0]);
 		if (!ObjectUtils.isEmpty(allSuperClazz)) {
 			for (Class<?> clz : allSuperClazz) {
 				if (clz == PageResult.class || clz == List.class || clz == ArrayList.class || clz == AbstractList.class || clz == AbstractCollection.class)
@@ -216,12 +215,17 @@ public class Doclet implements Model {
 //					params.sources.add(type);
 					type = handleInnerClass(type);
 
-					params.sources.add(params.root + Util.className2JavaFileName(type));
+					p.sources.add(params.root + Util.className2JavaFileName(type));
 				} else
 					p.sources.add(params.root + Util.className2JavaFileName(clz));
 
 				init(p);
-				BeanInfo parse2 = parseFieldsOfOneBean(parse);
+
+				BeanInfo superBeanInfo = new BeanInfo();
+				superBeanInfo.name = clz.getSimpleName();
+				superBeanInfo.type = clz.getName();
+
+				BeanInfo parse2 = parseFieldsOfOneBean(superBeanInfo); // 父类的信息
 
 				if (parse2 != null && parse.values != null)
 					parse.values.addAll(parse2.values);
