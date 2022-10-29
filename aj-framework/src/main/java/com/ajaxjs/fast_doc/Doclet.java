@@ -20,21 +20,16 @@ import com.sun.tools.javadoc.Main;
 public class Doclet implements Model {
 	private static final LogHelper LOGGER = LogHelper.getLog(Doclet.class);
 
-	public static class Params {
-		public String root;
-
-		public String sourcePath;
-
-		public String classPath;
-
-		public List<String> sources;
-	}
-
 	static Params tempParams;
 
-	public static void parseFieldsOfOneBean(Params params, Class<?> clz, BeanInfo bean) {
+	public static BeanInfo parseFieldsOfOneBean(Params params, Class<?> clz) {
 		tempParams = params;
 		Objects.requireNonNull(clz);
+		
+		BeanInfo bean = new BeanInfo();
+		bean.name = clz.getSimpleName();
+		bean.type = clz.getName();
+		
 		params.sources = new ArrayList<>();
 		boolean isInnerClz = bean.type.contains("$");
 
@@ -64,6 +59,8 @@ public class Doclet implements Model {
 			if (!CollectionUtils.isEmpty(parseComment.beans))
 				bean.beans = parseComment.beans;
 		}
+		
+		return bean;
 	}
 
 	private static String handleInnerClass(String type) {
@@ -93,7 +90,7 @@ public class Doclet implements Model {
 //				LOGGER.info(fullType);
 
 				if (targetBean != null && fullType.equals(targetBean.type)) {
-					if (DocParser.CACHE.containsKey(fullType)) {
+					if (BeanParser.CACHE.containsKey(fullType)) {
 						continue; // 已经有
 					} else {
 						BeanInfo b = new BeanInfo();
@@ -139,13 +136,13 @@ public class Doclet implements Model {
 						if (!CollectionUtils.isEmpty(beans))
 							b.beans = beans;
 
-						DocParser.CACHE.put(fullType, b);
+						BeanParser.CACHE.put(fullType, b);
 					}
 				}
 			}
 
 			if (targetBean != null)
-				bean = DocParser.CACHE.get(targetBean.type);
+				bean = BeanParser.CACHE.get(targetBean.type);
 		} else {
 			ClassDoc classDoc = classes[0];
 			bean.name = classDoc.name();

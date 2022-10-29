@@ -1,8 +1,11 @@
 package com.ajaxjs.fast_doc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import com.ajaxjs.util.StrUtil;
 
 public class Util {
 	/**
@@ -41,5 +44,21 @@ public class Util {
 
 	public static String className2JavaFileName(Class<?> clz) {
 		return className2JavaFileName(clz.getName());
+	}
+
+	public static String getClzPath(String dir) {
+		File file = new File(dir); // 获取其file对象
+		File[] fs = file.listFiles(); // 遍历path下的文件和目录，放在File数组中
+
+		List<String> list = new ArrayList<>();
+
+		if (fs != null)
+			for (File f : fs) { // 遍历File[]数组
+				if (!f.isDirectory() && f.getName().contains("jar")) {
+					list.add(dir + "//" + f.getName());
+				}
+			}
+
+		return StrUtil.join(list, ";");
 	}
 }
