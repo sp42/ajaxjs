@@ -16,7 +16,6 @@ public class BeanParser {
 		if (CACHE.containsKey(fullName))
 			bean = CACHE.get(fullName);
 		else {
-
 			if (clz.getName().contains("UAVRouteOutputOfApproach") || clz.getName().contains("PageResult")) {
 			} else {
 				bean = Doclet.parseFieldsOfOneBean(params, clz);

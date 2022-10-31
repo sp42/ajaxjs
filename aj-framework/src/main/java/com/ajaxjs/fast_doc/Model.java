@@ -72,7 +72,7 @@ public interface Model {
 		/**
 		 * 如果参数是一个 bean，这里说明 bean 的各个字段
 		 */
-		public List<BeanInfo> beans;
+		public BeanInfo bean;
 	}
 
 	public static class Return extends CommonValue {

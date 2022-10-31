@@ -78,7 +78,12 @@
                         <td style="font-family: 'Courier New';">{{arg.name}}</td>
                         <td>{{arg.position}}</td>
                         <td>{{arg.type}}</td>
-                        <td></td>
+                        <td>
+
+                            {{arg.bean}}
+
+                            
+                        </td>
                         <td>{{arg.isRequired ? '必填' : '选填'}}</td>
                         <td>{{arg.defaultValue}}</td>
                         <td class="td-json"><pre v-if="arg.example">{{beautiJson(arg.example)}}</pre>

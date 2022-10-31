@@ -154,9 +154,11 @@ public class DocParser implements Model {
 	 */
 	private void getArgs(Item item, Method method) {
 		item.args = Util.makeListByArray(method.getParameters(), param -> {
+			Class<?> clz = param.getType();
+
 			Arg arg = new Arg();
 			arg.name = param.getName();
-			arg.type = param.getType().getSimpleName();
+			arg.type = clz.getSimpleName();
 
 			RequestParam queryP = param.getAnnotation(RequestParam.class);
 
@@ -196,10 +198,9 @@ public class DocParser implements Model {
 
 			if (eg != null)
 				arg.example = eg.value();
-
-			if (!Util.isSimpleValueType(param.getType())) {
-
-			}
+			LOGGER.info(">>>>>>>>>" + clz + !Util.isSimpleValueType(clz));
+			if (!Util.isSimpleValueType(clz))
+				arg.bean = BeanParser.getBeanInfo(clz, params);
 
 			return arg;
 		});
@@ -268,10 +269,12 @@ public class DocParser implements Model {
 
 	private void getBeanInfo(Class<?> clz, Return r) {
 		BeanInfo bean = BeanParser.getBeanInfo(clz, params);
+		if (bean != null) {
 
-		r.name = bean.name;
-		r.comment = bean.description;
-		r.values = bean.values;
-		r.beans = bean.beans;
+			r.name = bean.name;
+			r.comment = bean.description;
+			r.values = bean.values;
+			r.beans = bean.beans;
+		}
 	}
 }
