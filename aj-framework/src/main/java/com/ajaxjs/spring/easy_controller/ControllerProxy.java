@@ -70,6 +70,8 @@ public class ControllerProxy implements InvocationHandler {
 				throw new NullPointerException("是否绑定 Service 类错误？找不到" + serviceBean.getClass() + "目标方法");
 
 			beanMethod.setAccessible(true);
+			
+			// TODO List<Map> 类型转换 Bean
 			Object result = ReflectionUtils.invokeMethod(beanMethod, serviceBean, args);
 //			System.out.println("调用后，result = " + result);
 

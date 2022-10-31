@@ -80,8 +80,15 @@
                         <td>{{arg.type}}</td>
                         <td>
 
-                            {{arg.bean}}
+                         
+                            <span  v-if="arg.bean && arg.bean.values.length">
+                                {{arg.bean.description}}，各字段如下：
+                                <ul v-if="arg.bean.values" style="text-align: left;">
+                                    <li v-for="i in arg.bean.values">{{i.name}}: {{i.type}}，{{i.description}}，必填：{{i.isRequired}}</li>
+                                </ul>
+                            </span>
 
+                          
                             
                         </td>
                         <td>{{arg.isRequired ? '必填' : '选填'}}</td>
