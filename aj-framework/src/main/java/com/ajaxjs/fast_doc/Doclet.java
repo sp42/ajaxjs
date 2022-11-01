@@ -12,6 +12,7 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.sun.javadoc.ClassDoc;
+import com.sun.javadoc.MethodDoc;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Type;
 import com.sun.tools.javadoc.Main;
@@ -19,6 +20,13 @@ import com.sun.tools.javadoc.Main;
 public class Doclet implements Model {
 	private static final LogHelper LOGGER = LogHelper.getLog(Doclet.class);
 
+	/**
+	 * Docket 程序入口
+	 * 
+	 * @param params
+	 * @param clz
+	 * @return
+	 */
 	public static BeanInfo parseFieldsOfOneBean(Params params, Class<?> clz) {
 		init(params, clz);
 		BeanInfo bean = parseFieldsOfOneBean(clz); // 带注释的
@@ -30,7 +38,7 @@ public class Doclet implements Model {
 	/**
 	 * 解析某个 bean 的所有 fields(不包括父类的)
 	 * 
-	 * @param beanInfo
+	 * @param clz
 	 * 
 	 * @return
 	 */
@@ -53,11 +61,23 @@ public class Doclet implements Model {
 
 				return v;
 			});
+
+			Class<?>[] interfaces = clz.getInterfaces();
+			for (Class<?> _interface : interfaces) {
+
+				LOGGER.info(_interface);
+			}
+
+			MethodDoc[] methods = classDoc.methods();
+			for (MethodDoc methodDoc : methods) {
+				LOGGER.info(methodDoc.commentText());
+
+			}
 		} else if (classes.length > 1) { // maybe inner clz
 			for (ClassDoc clzDoc : classes) {
 				/*
-				 * qualifiedTypeName() 返回如 xxx.DetectDto.ResourcePlanResult
-				 * 按照 clz$innerClz 风格转换 xxx.DetectDto$ResourcePlanResult
+				 * qualifiedTypeName() 返回如 xxx.DetectDto.ResourcePlanResult 按照 clz$innerClz 风格转换
+				 * xxx.DetectDto$ResourcePlanResult
 				 */
 				String fullType = clzDoc.qualifiedTypeName();
 				String clzName = clzDoc.simpleTypeName();
@@ -160,8 +180,7 @@ public class Doclet implements Model {
 
 		if (!ObjectUtils.isEmpty(allSuperClazz)) {
 			for (Class<?> clz : allSuperClazz) {
-				if (clz == PageResult.class || clz == List.class || clz == ArrayList.class || clz == AbstractList.class
-						|| clz == AbstractCollection.class)
+				if (clz == PageResult.class || clz == List.class || clz == ArrayList.class || clz == AbstractList.class || clz == AbstractCollection.class)
 					continue;
 
 				Params p = new Params();
@@ -174,7 +193,7 @@ public class Doclet implements Model {
 				if (!CollectionUtils.isEmpty(superBeanInfo.values))
 					list.addAll(superBeanInfo.values);
 			}
-		} 
+		}
 
 		return list;
 	}
