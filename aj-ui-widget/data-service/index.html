@@ -22,8 +22,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-codemirror@4.0.0/dist/vue-codemirror.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/sql/sql.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/selection/active-line.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet" />
+
+    <link rel="icon" type="image/x-icon" href="assert/favicon.ico" />
 
 </head>
 
@@ -33,7 +36,7 @@
             <div style="float:right;">
                 <a>首页</a> | <a href="https://framework.ajaxjs.com" target="_blank">帮助</a> | <a @click="showAbout">关于</a>
             </div>
-            数据服务 Data Service
+            <img src="assert/icon.png" width="16" style="vertical-align: middle;" /> 数据服务 Data Service
         </nav>
         <Split v-model="split1" style="border-top: 1px solid lightgray;">
             <div slot="left" class="split-pane-left">
@@ -270,6 +273,12 @@
                                         </Radio-Group>
 
                                         <div style="margin:20px 0">
+                                            <span style="float: right;"><label><input type="checkbox" />
+                                                    启用</label></span>
+                                            命令名称 <i-input type="text" placeholder="自定义命令必填" style="width:200px"
+                                                size="small"></i-input>
+                                            <br />
+                                            <br />
                                             <label>
                                                 <input type="checkbox" :value="true" /> 生成唯一 uid
                                                 <tips text="唯一 id，通过 uuid 生成不重复 id"></tips>
