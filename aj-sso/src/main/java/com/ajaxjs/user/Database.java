@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.ajaxjs.data_service.api.Commander;
 import com.ajaxjs.data_service.model.DataServiceConfig;
+import com.ajaxjs.data_service.mybatis.MSUtils;
 
 /**
  * 数据库连接配置 & 数据服务
@@ -42,6 +42,6 @@ public class Database {
 
 	@Bean(value = "dataSource", destroyMethod = "close")
 	DataSource getDs() {
-		return Commander.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
+		return MSUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
 	}
 }

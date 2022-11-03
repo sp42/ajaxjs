@@ -1,0 +1,154 @@
+body {
+	font-size: .9rem;
+}
+
+a {
+	color: black;
+	text-decoration: none;
+}
+
+a:visited {
+	color: gray;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: brown;
+}
+
+h1 {
+	text-align: center;
+	padding: 30px;
+	padding-bottom: 0;
+	letter-spacing: 6px;
+}
+
+h2 {
+	letter-spacing: 4px;
+}
+
+h3 {
+	margin-top: 38px;
+}
+
+table.b {
+	border-collapse: collapse;
+	border: 1px solid lightgray;
+	font-size: .85rem;
+	color: gray;
+	min-width: 600px;
+}
+
+table.b th {
+	font-size: .8rem;
+	letter-spacing: 4px;
+}
+
+table.b td,
+table.b th {
+	padding: 10px;
+	border-collapse: collapse;
+	border: 1px solid lightgray;
+	text-align: center;
+
+}
+
+.code li {
+	list-style-type: none;
+	margin-bottom: 3px;
+}
+
+.code {
+	border-left: 4px solid lightgray;
+	padding-left: 15px;
+	font-family: 'Courier New', Courier, monospace;
+	font-size: .8rem;
+}
+
+.code .block {
+	width: 200px;
+	display: inline-block;
+}
+
+.code .key {
+	color: #9f0000;
+}
+
+.code .comment {
+	color: green;
+}
+
+.code .type {
+	color: blue;
+}
+
+.code pre {
+	display: inline;
+	font-family: 'Courier New', Courier, monospace;
+	line-height: 140%;
+}
+
+.tag {
+	font-family: 'Courier New', Courier, monospace;
+	border: 1px solid lightgray;
+	display: inline-block;
+	border-radius: 5px;
+}
+
+.tag div:first-child {
+	background-color: lightgray;
+	color: white;
+}
+
+.tag div:last-child {
+	padding-left: 0;
+}
+
+.tag div {
+	padding: 3px 5px;
+	display: inline-block;
+}
+
+.GET {
+	color: green !important;
+}
+
+.POST {
+	color: blue !important;
+}
+
+.PUT {
+	color: yellow !important;
+}
+
+.DELETE {
+	color: red !important;
+}
+
+#doc>ul>li {
+	padding: 50px 0;
+	border-top: 1px gray dashed;
+}
+
+.content {
+	padding: 40px;
+	padding-top: 20px;
+}
+
+.content p {
+	text-indent: 2em;
+}
+
+img.ui {
+	cursor: pointer;
+	transition: all 600ms;
+	max-width: 300px;
+}
+
+td.td-json {
+	text-align: left !important;
+}
+
+td.td-json pre {
+	font-family: 'Courier New', Courier, monospace !important;
+}

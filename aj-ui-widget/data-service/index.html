@@ -21,10 +21,11 @@
     <!-- Include the Codemirror library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-codemirror@4.0.0/dist/vue-codemirror.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/javascript/javascript.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/javascript/javascript.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/sql/sql.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/selection/active-line.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/theme/monokai.min.css" rel="stylesheet" />
 
     <link rel="icon" type="image/x-icon" href="assert/favicon.ico" />
 
@@ -292,8 +293,14 @@
                                                 <input type="checkbox" :value="true" /> 当有 id 参数时采用“修改”的规则
                                                 <tips text="CreateOrSave，同一个接口处理"></tips>
                                             </label>
-
+                                            <br />
+                                            <br />
                                             <Divider style="color:gray" size="small">API 接口</Divider>
+
+                                            <api></api>
+
+                                            <!--选择表格-->
+                                            <select-table></select-table>
 
                                         </div>
 
@@ -315,9 +322,11 @@
                 <div class="status-bar">Sss</div>
             </div>
         </Split>
-        <Modal title="数据源配置" v-model="isShowDataSource" ok-text="保存" cancel-text="" width="900">
+
+        <Modal title="数据源配置2" v-model="isShowDataSource" ok-text="保存" cancel-text="" width="900">
             <DataSource />
         </Modal>
+
     </div>
 
     <template id="DataSourceTpl">
@@ -371,8 +380,11 @@
         </div>
     </template>
 
-    <script src="datasource.js"> </script>
-    <script src="main.js"> </script>
+    <script src="js/utils.js"> </script>
+    <script src="js/select-table.js"> </script>
+    <script src="js/datasource.js"> </script>
+    <script src="js/api.js"> </script>
+    <script src="js/main.js"> </script>
 </body>
 
 </html>
