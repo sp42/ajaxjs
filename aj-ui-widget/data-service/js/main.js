@@ -12,6 +12,7 @@ new Vue({
     el: document.querySelector('.data-service'),
     data() {
         return {
+            isShowSelectTable: false,
             split1: 0.2,
             isShowDataSource: false,
             datasource: {

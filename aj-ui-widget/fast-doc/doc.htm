@@ -80,20 +80,22 @@
                         <td>{{arg.type}}</td>
                         <td>
 
-                         
-                            <span  v-if="arg.bean && arg.bean.values.length">
+
+                            <span v-if="arg.bean && arg.bean.values.length">
                                 {{arg.bean.description}}，各字段如下：
                                 <ul v-if="arg.bean.values" style="text-align: left;">
-                                    <li v-for="i in arg.bean.values">{{i.name}}: {{i.type}}，{{i.description}}，必填：{{i.isRequired}}</li>
+                                    <li v-for="i in arg.bean.values">{{i.name}}:
+                                        {{i.type}}，{{i.description}}，必填：{{i.isRequired}}</li>
                                 </ul>
                             </span>
 
-                          
-                            
+
+
                         </td>
                         <td>{{arg.isRequired ? '必填' : '选填'}}</td>
                         <td>{{arg.defaultValue}}</td>
-                        <td class="td-json"><pre v-if="arg.example">{{beautiJson(arg.example)}}</pre>
+                        <td class="td-json">
+                            <pre v-if="arg.example">{{beautiJson(arg.example)}}</pre>
                         </td>
                     </tr>
                 </table>
@@ -106,7 +108,8 @@
 
                             <div class="code">
                                 <div>{</div>
-                                <div style="margin-left: 20px;"> "status": 1/0, <span class="comment">// 1=操作成功， 0=操作失败</span>
+                                <div style="margin-left: 20px;"> "status": 1/0, <span class="comment">// 1=操作成功，
+                                        0=操作失败</span>
                                 </div>
                                 <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
                                 <div style="margin-left: 20px;"> "data": <span
@@ -215,7 +218,13 @@
                     let eg = item.returnValue.example;
 
                     if (eg[0] === '{' || eg[0] === '[') {// json
-                        return JSON.stringify(JSON.parse(eg), null, 4);
+
+                        try {
+                            return JSON.stringify(JSON.parse(eg), null, 4);
+                        } catch (e) {
+                            console.warn('JSON 解析有错！ ', eg);
+                            return 'JSON ERR';
+                        }
                     } else {
                         return item.returnValue.type == 'java.lang.String' ? '"' + eg + '"' : eg;
                     }

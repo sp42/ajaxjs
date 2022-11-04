@@ -74,7 +74,7 @@
                             </span>
                         </div>
                     </li>
-                    <li>
+                    <li @click="isShowSelectTable=true">
                         <div>
                             <div class="icon">
                                 <Icon type="md-add" size="25" style="color:green" />
@@ -299,8 +299,7 @@
 
                                             <api></api>
 
-                                            <!--选择表格-->
-                                            <select-table></select-table>
+                                            
 
                                         </div>
 
@@ -323,8 +322,13 @@
             </div>
         </Split>
 
-        <Modal title="数据源配置2" v-model="isShowDataSource" ok-text="保存" cancel-text="" width="900">
+        <Modal title="数据源配置" v-model="isShowDataSource" ok-text="保存" cancel-text="" width="900">
             <DataSource />
+        </Modal>
+        
+        <Modal title="选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
+            <!--选择表格-->
+            <select-table></select-table>
         </Modal>
 
     </div>
