@@ -1,0 +1,64 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+nav {
+    height: 4%;
+    border-bottom: 1px solid lightgray;
+    vertical-align: middle;
+    line-height: 40px;
+    padding: 0 20px;
+    background-color: #eaeaea;
+}
+
+menu {
+    height: 96%;
+    width: 18%;
+    float: left;
+    margin: 0;
+    padding: 0;
+    border-right: 1px solid lightgray;
+    padding-left: 2%;
+}
+
+iframe {
+    height: 96%;
+    width: 80%;
+    float: left;
+}
+
+.links {
+    float: right;
+}
+
+h1 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 10px 0;
+    margin-top: 30px;
+    line-height: 130%;
+}
+
+.table {
+    margin-left: 16px;
+    margin-bottom: 10px;
+    word-break: break-all;
+    overflow: hidden;
+    line-height: 140%;
+}
+
+h1:hover .cache {
+    display: block;
+}
+
+.cache {
+    display: none;
+    width: 32px;
+    height: 32px;
+    float: right;
+    cursor: pointer;
+}

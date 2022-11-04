@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>数据库文档</title>
+    <script src="../libs/vue.js"></script>
+
+    <!-- import stylesheet -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="../libs/iview.js"></script>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <nav>
+        数据库文档浏览器
+
+        <span class="links">
+
+            <a href="">数据源</a> |
+            <a href="#" @click="showAbout">关于</a>
+        </span>
+    </nav>
+    <menu>
+        <ul>
+
+            <li>
+                <h1>
+                    <div class="cache">
+                        <Icon type="ios-flash" v-if="cached" size="25" @click="makeCache" title="生成缓存" />
+                        <Icon type="ios-flash-outline" v-if="!cached" size="25" @click="makeCache" title="生成缓存" />
+                    </div>
+                    user
+                </h1>
+
+                <ul>
+                    <li class="table">
+                        <a href="#" target="targetFrame">user</a>
+                    </li>
+                    <li class="table">
+                        address
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </menu>
+    <iframe src="doc.htm" name="targetFrame" frameborder="no" height="96%"></iframe>
+
+    <script>
+        new Vue({
+            el: 'body>nav',
+            data: {
+
+            },
+            methods: {
+                showAbout() {
+                    this.$Modal.confirm({
+                        title: '关于 DataService',
+                        content: '<p>DataService：用数据库管理 SQL 语句，快捷生成 API 接口</p><p>Powered by MyBatis + AJAXJS Framework.</p><p>ver 2022.10.31</p>'
+                    });
+                },
+            }
+        });
+
+        new Vue({
+            el: 'body>menu',
+            data: {
+                cached: true
+            },
+            methods: {
+                makeCache() {
+
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
