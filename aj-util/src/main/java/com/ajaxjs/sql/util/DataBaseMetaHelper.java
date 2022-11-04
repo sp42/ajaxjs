@@ -189,6 +189,12 @@ public class DataBaseMetaHelper {
 		return list;
 	}
 
+	/**
+	 * 获取所有库名
+	 * 
+	 * @param conn
+	 * @return
+	 */
 	public static List<String> getDatabase(Connection conn) {
 		List<String> list = new ArrayList<>();
 
