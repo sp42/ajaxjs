@@ -18,7 +18,7 @@ Vue.component('api', {
             return 'http://ssssssssss.com';
         },
         copy() {
-            copyToClipboard(this.getUrl())
+            aj.copyToClipboard(this.getUrl())
             this.$Message.success('复制成功');
         }
     }

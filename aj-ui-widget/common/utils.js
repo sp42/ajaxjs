@@ -1,9 +1,12 @@
+if (!window.aj)
+    aj = {};
+
 /**
- * 复制文字到剪切板
- * 
- * @param {*} text 
- */
-function copyToClipboard(text) {
+* 复制文字到剪切板
+* 
+* @param {*} text 
+*/
+aj.copyToClipboard = function (text) {
     if (navigator.clipboard) {
         // clipboard api 复制
         navigator.clipboard.writeText(text);

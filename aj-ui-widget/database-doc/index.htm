@@ -9,11 +9,18 @@
     <!-- import stylesheet -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" />
     <link rel="stylesheet" href="styles.css" />
+
     <script src="../libs/iview.js"></script>
+    <script src="../common/utils.js"></script>
 
-    <style>
-
-    </style>
+    <!-- Include the Codemirror library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-codemirror@4.0.0/dist/vue-codemirror.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/selection/active-line.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/theme/monokai.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -28,30 +35,51 @@
     </nav>
     <menu>
         <ul>
-
-            <li>
+            <li v-for="item in list">
                 <h1>
                     <div class="cache">
                         <Icon type="ios-flash" v-if="cached" size="25" @click="makeCache" title="生成缓存" />
                         <Icon type="ios-flash-outline" v-if="!cached" size="25" @click="makeCache" title="生成缓存" />
                     </div>
-                    user
+                    {{item.name}}
                 </h1>
 
                 <ul>
-                    <li class="table">
-                        <a href="#" target="targetFrame">user</a>
+                    <li class="table" v-for="table in item.tableInfo">
+                        <a :href="'doc.htm#'+ table.uuid" target="targetFrame"> {{table.comment}}
+                            <span class="eng">{{table.name}}</span></a>
                     </li>
-                    <li class="table">
-                        address
-                    </li>
+
                 </ul>
             </li>
         </ul>
+
+        <Modal v-model="showJavaEditor" title="Java Editor" width="900" height="600" cancel-text="">
+            <codemirror class="code-editor" ref="cm-java" v-model="java" :options="cmOptionJava">
+            </codemirror>
+            <br />
+            <a @click="copyJava">复制</a>
+        </Modal>
+
+        <Modal v-model="showSqlEditor" title="SQL Editor" width="900" height="600" cancel-text="">
+            <codemirror class="code-editor" ref="cm" v-model="sql" :options="cmOption">
+            </codemirror>
+            <br />
+            <a @click="copySQL">复制</a>
+        </Modal>
     </menu>
     <iframe src="doc.htm" name="targetFrame" frameborder="no" height="96%"></iframe>
 
+
+    <script src="json.js"></script>
     <script>
+        Vue.use(VueCodemirror);
+
+        for (var i = 0, j = DOC_DATA.length; i < j; i++) {
+            let item = DOC_DATA[i];
+            console.log(item.tableInfo)
+        }
+
         new Vue({
             el: 'body>nav',
             data: {
@@ -59,22 +87,65 @@
             },
             methods: {
                 showAbout() {
-                    this.$Modal.confirm({
-                        title: '关于 DataService',
-                        content: '<p>DataService：用数据库管理 SQL 语句，快捷生成 API 接口</p><p>Powered by MyBatis + AJAXJS Framework.</p><p>ver 2022.10.31</p>'
+                    this.$Modal.success({
+                        title: '数据库文档浏览器',
+                        content: '<p>一个简单的数据库文档浏览器</p><p>Powered by AJAXJS Framework.</p><p>ver 2022.10.31</p>'
                     });
                 },
             }
         });
 
-        new Vue({
+        MAIN = new Vue({
             el: 'body>menu',
             data: {
-                cached: true
+                cached: true,
+                showSqlEditor: false,
+                sql: `SELECT * FROM user\n`,
+                cmOption: {
+                    tabSize: 4,
+                    styleActiveLine: true,
+                    lineNumbers: true,
+                    mode: 'text/x-mysql',
+                    // theme: "monokai"
+                },
+
+                showJavaEditor: false,
+                java: ``,
+                cmOptionJava: {
+                    tabSize: 4,
+                    styleActiveLine: true,
+                    lineNumbers: true,
+                    indentWithTabs: true,
+                    smartIndent: true,
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    matchBrackets: true,
+                    autofocus: true,
+                    mode: 'text/x-java',
+                    // theme: "monokai"
+                },
+
+                list: DOC_DATA
             },
             methods: {
                 makeCache() {
 
+                },
+                showSQL(sql) {
+                    this.sql = sql;
+                    this.showSqlEditor = true;
+                },
+                showJava(java) {
+                    this.java = java;
+                    this.showJavaEditor = true;
+                },
+                copySQL() {
+                    aj.copyToClipboard(this.sql);
+                    this.$Message.success('复制成功');
+                },
+                copyJava() {
+                    aj.copyToClipboard(this.java);
+                    this.$Message.success('复制成功');
                 }
             }
         });
