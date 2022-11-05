@@ -163,8 +163,10 @@ public class JsonHelper {
 //		} 
 		else if (obj instanceof BaseModel || obj instanceof IBaseModel)
 			return beanToJson(obj);
-		else if (obj instanceof BaseModel[] || obj instanceof IBaseModel[])
+		else if (obj instanceof BaseModel[])
 			return jsonArr((BaseModel[]) obj, JsonHelper::beanToJson);
+		else if (obj instanceof IBaseModel[])
+			return jsonArr((IBaseModel[]) obj, JsonHelper::beanToJson);
 		else if (obj instanceof List) {
 			List<?> list = (List<?>) obj;
 
