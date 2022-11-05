@@ -71,6 +71,7 @@ public class JdbcReader {
 	 * @param handle 控制器
 	 */
 	public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
+		LOGGER.info(sql);
 		try (ResultSet rs = stmt.executeQuery(sql)) {
 			handle.accept(rs);
 		} catch (SQLException e) {
