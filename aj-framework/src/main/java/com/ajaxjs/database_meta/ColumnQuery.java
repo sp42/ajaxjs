@@ -91,7 +91,6 @@ public class ColumnQuery extends BaseMetaQuery {
 				Matcher m = getLength.matcher(type);
 				col.setLength(m.find() ? Integer.parseInt(m.group(1)) : 0);
 				col.setType(m.replaceAll(""));
-				col.setNullValue(rs.getString("Null"));
 				col.setComment(rs.getString("Comment"));
 				col.setDefaultValue(rs.getString("Default"));
 

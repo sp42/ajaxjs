@@ -25,7 +25,7 @@ public class Column {
 	/**
 	 * 空值
 	 */
-	private String nullValue;
+	private Boolean isRequired;
 
 	/**
 	 * 注释
@@ -58,14 +58,6 @@ public class Column {
 		this.length = length;
 	}
 
-	public String getNullValue() {
-		return nullValue;
-	}
-
-	public void setNullValue(String nullValue) {
-		this.nullValue = nullValue;
-	}
-
 	public String getComment() {
 		return comment;
 	}
@@ -96,5 +88,13 @@ public class Column {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public Boolean getIsRequired() {
+		return isRequired;
+	}
+
+	public void setIsRequired(Boolean isRequired) {
+		this.isRequired = isRequired;
 	}
 }
