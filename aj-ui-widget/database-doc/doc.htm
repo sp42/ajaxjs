@@ -118,43 +118,7 @@
                     parent.window.MAIN.showSQL(ddl);
                 },
                 showBean(table) {
-                    console.log(table);
-
-                    let fields = [], getter = [];
-
-                    table.columns.forEach(col => {
-                        let type = sqlType2javaType(col.type);
-                        let fieldName = toHump(col.name);
-
-                        let tpl =
-                            `   /**
-    * ${col.comment}
-    */
-    private ${type} ${fieldName};`;
-                        fields.push(tpl);
-
-                        let getterTpl = `
-    public void set${firstLetterUpper(fieldName)}(${type} ${fieldName}) {
-        this.${fieldName} = ${fieldName};
-    }
-    
-    public ${type} get${firstLetterUpper(fieldName)}() {
-        return ${fieldName};
-    }`;
-                        getter.push(getterTpl);
-                    });
-
-                    let tpl =
-                        `/**
-  * ${table.comment}
-  * 
-  * @author Frank Cheung<sp42@qq.com>
-  */
-public class ${firstLetterUpper(toHump(table.name))} implements IBaseModel {
-${fields.join('\n\n')}
-${getter.join('\n')}
-}`;
-                    parent.window.MAIN.showJava(tpl);
+                    parent.window.MAIN.showJava(table);
                 }
 
             }

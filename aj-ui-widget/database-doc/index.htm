@@ -21,64 +21,66 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/selection/active-line.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/theme/monokai.min.css" rel="stylesheet" />
+
+    <script src="json.js"></script>
+    <script src="utils.js"></script>
+    <script src="generator.js"></script>
+    <script src="js/jszip.min.js"></script>
 </head>
 
 <body>
     <nav>
         数据库文档浏览器
-
         <span class="links">
 
             <a href="">数据源</a> |
             <a href="#" @click="showAbout">关于</a>
         </span>
     </nav>
-    <menu>
-        <ul>
-            <li v-for="item in list">
-                <h1>
-                    <div class="cache">
-                        <Icon type="ios-flash" v-if="cached" size="25" @click="makeCache" title="生成缓存" />
-                        <Icon type="ios-flash-outline" v-if="!cached" size="25" @click="makeCache" title="生成缓存" />
-                    </div>
-                    {{item.name}}
-                </h1>
+    <div class="main">
+        <menu>
+            <ul>
+                <li v-for="item in list">
+                    <h1>
+                        <div class="cache">
+                            <Icon type="ios-flash" v-if="cached" size="25" @click="makeCache" title="生成缓存" />
+                            <Icon type="ios-flash-outline" v-if="!cached" size="25" @click="makeCache" title="生成缓存" />
+                        </div>
+                        {{item.name}}
+                    </h1>
 
-                <ul>
-                    <li class="table" v-for="table in item.tableInfo">
-                        <a :href="'doc.htm#'+ table.uuid" target="targetFrame"> {{table.comment}}
-                            <span class="eng">{{table.name}}</span></a>
-                    </li>
+                    <ul>
+                        <li class="table" v-for="table in item.tableInfo">
+                            <a :href="'doc.htm#'+ table.uuid" target="targetFrame"> {{table.comment}}
+                                <span class="eng">{{table.name}}</span></a>
+                        </li>
 
-                </ul>
-            </li>
-        </ul>
+                    </ul>
+                </li>
+            </ul>
 
-        <Modal v-model="showJavaEditor" title="Java Editor" width="900" height="600" cancel-text="">
-            <codemirror class="code-editor" ref="cm-java" v-model="java" :options="cmOptionJava">
-            </codemirror>
-            <br />
-            <a @click="copyJava">复制</a>
-        </Modal>
+            <Modal v-model="java.showJavaEditor" title="Java Editor" width="900" height="600" cancel-text=""
+                :transfer="false">
+                <codemirror class="code-editor" ref="cm-java" v-model="java.code" :options="cmOptionJava">
+                </codemirror>
+                <br />
+                <div style="text-align: center;">
+                    <a @click="copyJava">复制</a> |
+                    <a @click="downloadJava">下载</a>
+                </div>
+            </Modal>
 
-        <Modal v-model="showSqlEditor" title="SQL Editor" width="900" height="600" cancel-text="">
-            <codemirror class="code-editor" ref="cm" v-model="sql" :options="cmOption">
-            </codemirror>
-            <br />
-            <a @click="copySQL">复制</a>
-        </Modal>
-    </menu>
-    <iframe src="doc.htm" name="targetFrame" frameborder="no" height="96%"></iframe>
-
-
-    <script src="json.js"></script>
+            <Modal v-model="showSqlEditor" title="SQL Editor" width="900" height="600" cancel-text="" :transfer="false">
+                <codemirror class="code-editor" ref="cm" v-model="sql" :options="cmOption">
+                </codemirror>
+                <br />
+                <a @click="copySQL">复制</a>
+            </Modal>
+        </menu>
+        <iframe src="doc.htm" name="targetFrame" frameborder="no"></iframe>
+    </div>
     <script>
         Vue.use(VueCodemirror);
-
-        for (var i = 0, j = DOC_DATA.length; i < j; i++) {
-            let item = DOC_DATA[i];
-            console.log(item.tableInfo)
-        }
 
         new Vue({
             el: 'body>nav',
@@ -96,7 +98,7 @@
         });
 
         MAIN = new Vue({
-            el: 'body>menu',
+            el: 'body>div>menu',
             data: {
                 cached: true,
                 showSqlEditor: false,
@@ -109,8 +111,11 @@
                     // theme: "monokai"
                 },
 
-                showJavaEditor: false,
-                java: ``,
+                java: {
+                    showJavaEditor: false,
+                    code: '',
+                    name: ''
+                },
                 cmOptionJava: {
                     tabSize: 4,
                     styleActiveLine: true,
@@ -135,9 +140,24 @@
                     this.sql = sql;
                     this.showSqlEditor = true;
                 },
-                showJava(java) {
-                    this.java = java;
-                    this.showJavaEditor = true;
+                showJava(tableInfo) {
+                    this.java.name = tableInfo.name;
+                    this.java.code = beanGen(tableInfo);
+                    this.java.showJavaEditor = true;
+                },
+
+                downloadJava() {
+                    var blob = new Blob([this.java.code], { type: 'text/txt,charset=UTF-8' });
+                    var filename = firstLetterUpper(toHump(this.java.name)) + '.java';
+
+                    // openDownloadDialog(blob, filename);
+
+                    var zip = new JSZip();
+                    zip.file(filename, this.java.code);// 创建一个被用来打包的名为Hello.txt的文件
+                    zip.generateAsync({ type: "blob" }).then(function (blob) {// 把打包内容异步转成blob二进制格式
+                        // content就是blob数据
+                        openDownloadDialog(blob, filename);
+                    });
                 },
                 copySQL() {
                     aj.copyToClipboard(this.sql);
@@ -150,6 +170,13 @@
             }
         });
 
+        onscroll = (event) => {
+            event.stopPropagation();
+            event.preventDefault();
+
+            window.scrollTo(0, 0); // scroll parent window to anchor in iframe
+            return false;
+        };
     </script>
 </body>
 
