@@ -188,6 +188,7 @@ public class StreamHelper {
 	public static byte[] subBytes(byte[] data, int off, int length) {
 		byte[] bs = new byte[length];
 		System.arraycopy(data, off, bs, 0, length);
+		
 		return bs;
 	}
 
