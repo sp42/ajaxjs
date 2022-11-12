@@ -67,6 +67,7 @@ public class Caller extends BaseCaller {
 				return info;
 			else if (methodName.equals("findById")) {
 				Class<?> clz = getBeanClz();
+
 				return MapTool.map2Bean(info, clz, true, true);
 			}
 		} else if (isFindOne || methodName.equals("findList") || methodName.equals("findListAsListMap")) {
@@ -152,6 +153,8 @@ public class Caller extends BaseCaller {
 							return MappingValue.object2long(info.get(key).toString());
 					} else if (returnType == Map.class)
 						return info;
+					else if (IBaseModel.class.isAssignableFrom(returnType))
+						clz = returnType;
 
 					if (clz != null)
 						return MapTool.map2Bean(info, clz, true, true);
