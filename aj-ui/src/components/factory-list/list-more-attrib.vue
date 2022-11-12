@@ -46,9 +46,9 @@
 </template>
 
 <script lang="ts">
-import input from "../form-designer/meta/panel/input.vue";
+// import input from "../form-designer/meta/panel/input.vue";
 export default {
-  components: { input },
+  // components: { input },
   props: {
     row: {
       type: Object,

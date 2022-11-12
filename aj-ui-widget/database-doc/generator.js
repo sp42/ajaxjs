@@ -9,7 +9,7 @@ function beanGen(tableInfo) {
             `   /**
     * ${col.comment}
     */
-    private ${type} ${fieldName};`;
+    ${MAIN.codeGenerator.data.isGetter ? 'private' : 'public'} ${type} ${fieldName};`;
         fields.push(tpl);
 
         let getterTpl = `    public void set${firstLetterUpper(fieldName)}(${type} ${fieldName}) {
@@ -23,14 +23,16 @@ function beanGen(tableInfo) {
     });
 
     let tpl =
-        `/**
+        `package ${MAIN.codeGenerator.data.packageName};
+
+/**
 * ${tableInfo.comment}
 * 
-* @author Frank Cheung<sp42@qq.com>
+* ${MAIN.codeGenerator.data.author ? '@author' : ''} ${MAIN.codeGenerator.data.author}
 */
 public class ${firstLetterUpper(toHump(tableInfo.name))} implements IBaseModel {
 ${fields.join('\n\n')}
-${getter.join('\n')}
+${MAIN.codeGenerator.data.isGetter ? getter.join('\n'): ''}
 }`;
 
     return tpl;

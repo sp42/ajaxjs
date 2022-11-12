@@ -24,18 +24,8 @@ const routes: Array<RouteConfig> = [
     path: '/factory-form-info',
     component: () => import('../pages/factory-form-info.vue')
   },
-  {
-    path: '/form-designer',
-    component: () => import('../components/form-designer/demo.vue')
-  },
-  {
-    path: '/work-flow',
-    component: () => import('../components/work-flow/index.vue')
-  },
-  {
-    path: '/api-helper',
-    component: () => import('../components/api-helper/api-helper.vue')
-  },
+
+
   {
     path: '/list',
     component: () => import('../pages/list-loader.vue')

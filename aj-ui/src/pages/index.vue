@@ -44,8 +44,6 @@
         <MenuItem name="6-2" @click.native="load='DataServiceIndex'">数据服务 New</MenuItem>
         <MenuItem name="6-3" @click.native="load='ModelMgr'">模型管理</MenuItem>
         <MenuItem name="6-4" @click.native="load='FactoryList'">列表生成器</MenuItem>
-        <MenuItem name="6-6" @click.native="routeTo('form-designer')">可视化设计器</MenuItem>
-        <MenuItem name="6-7" @click.native="routeTo('work-flow')">工作流设计器</MenuItem>
         <MenuItem name="6-8" @click.native="routeTo('api-helper')">Api Helper</MenuItem>
       </Submenu>
     </Menu>

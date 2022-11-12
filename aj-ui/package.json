@@ -24,7 +24,6 @@
     "dist/"
   ],
   "dependencies": {
-    "raphael": "^2.3.0",
     "vue-codemirror": "^4.0.6",
     "vuedraggable": "^2.24.3"
   },

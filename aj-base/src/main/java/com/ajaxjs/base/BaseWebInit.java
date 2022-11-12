@@ -11,7 +11,7 @@ import com.ajaxjs.spring.easy_controller.ServiceBeanDefinitionRegistry;
 @Configuration
 @EnableWebMvc
 public class BaseWebInit extends BaseWebInitializer {
-	@ComponentScan({ "com.ajaxjs" })
+	@ComponentScan({ "com.ajaxjs.adp" })
 	public static class ScanComponent {
 	}
 
@@ -22,6 +22,6 @@ public class BaseWebInit extends BaseWebInitializer {
 
 	@Bean
 	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-		return new ServiceBeanDefinitionRegistry("com.ajaxjs.base");
+		return new ServiceBeanDefinitionRegistry("com.ajaxjs.adp");
 	}
 }
