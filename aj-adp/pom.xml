@@ -27,6 +27,7 @@
 	</build>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-framework</artifactId>

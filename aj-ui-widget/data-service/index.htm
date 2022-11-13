@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" />
     <!-- import iView -->
     <script src="../libs/iview.js"></script>
+    <script src="../common/utils.js"></script>
 
-    <link rel="stylesheet/less" type="text/css" href="styles.less" />
+    <link rel="stylesheet/less" type="text/css" href="asset/styles.less" />
     <!-- <script src="https://cdn.jsdelivr.net/npm/less"></script> -->
     <script src="../libs/less.js"></script>
 
@@ -30,6 +31,15 @@
 </head>
 
 <body>
+    <!-- 数据源 -->
+    <div w3-include-html="../common/data-source/data-source.html"></div>
+    <link href="../common/data-source/data-source.css" rel="stylesheet" />
+    <script src="../common/data-source/data-source.js"></script>
+
+    <div w3-include-html="../common/table-selector/table-selector.htm"></div>
+    <!-- <link href="../common/table-selector/table-selector.css" rel="stylesheet" /> -->
+    <script src="../common/table-selector/table-selector.js"></script>
+
     <div class="data-service">
         <nav>
             <div style="float:right;">
@@ -43,9 +53,9 @@
                     <i-Input suffix="ios-search" placeholder="搜索数据服务……" style="width: 90%" />
                 </div>
 
-                <i-Select v-model="datasource.id" style="margin: 15px 8px;width: 91%;" placeholder="请选择数据源">
+                <!--                <i-Select v-model="datasource.id" style="margin: 15px 8px;width: 91%;" placeholder="请选择数据源">
                     <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{ item.name }}</Option>
-                </i-Select>
+                </i-Select> -->
 
                 <Tree :data="treeData" style="margin-left: 10px;"></Tree>
             </div>
@@ -62,7 +72,7 @@
                             </span>
                         </div>
                     </li>
-                    <li style="float:right" @click="isShowDataSource=true">
+                    <li style="float:right" @click="dataSource.isShowDataSource=true">
                         <div>
                             <div class="icon">
                                 <Icon type="md-swap" size="25" style="color:blueviolet" />
@@ -127,10 +137,10 @@
                             <!--服务配置-->
                             <ul class="line-layout">
                                 <li>
-                                    <i-Select v-model="datasource.id" placeholder="请选择数据源">
+                                    <!--         <i-Select v-model="datasource.id" placeholder="请选择数据源">
                                         <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{
                                             item.name }}</Option>
-                                    </i-Select>
+                                    </i-Select> -->
                                 </li>
                                 <li>
                                     <i-input ref="inputName">
@@ -296,22 +306,11 @@
                                             <Divider style="color:gray" size="small">API 接口</Divider>
 
                                             <api></api>
-
-                                            
-
                                         </div>
-
                                     </div>
-
-
-
-
                                     </label>
                                 </div>
                             </div>
-
-
-
                         </tab-pane>
                     </Tabs>
                 </div>
@@ -320,71 +319,18 @@
             </div>
         </Split>
 
-        <Modal title="数据源配置" v-model="isShowDataSource" ok-text="保存" cancel-text="" width="900">
-            <DataSource />
+        <Modal title="数据源配置" v-model="dataSource.isShowDataSource" ok-text="关闭" cancel-text="" width="900">
+            <Datasource></Datasource>
         </Modal>
-        
+
         <Modal title="选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
             <!--选择表格-->
-            <select-table></select-table>
+            <table-selector></table-selector>
         </Modal>
-
     </div>
 
-    <template id="DataSourceTpl">
-        <div class="datasource" style="overflow: hidden">
-            <div class="left">
-                <ul>
-                    <li v-for="datasource in datasources" :key="datasource.id" @click="active(datasource.id)"
-                        :class="{ actived: datasource.actived }">
-                        <span>
-                            <Icon type="md-trash" style="float: right; margin-top: 3px"
-                                @click="del(datasource.id, $event)" />
-                        </span>
-                        {{datasource.name}}
-                    </li>
-                </ul>
-                <a class="add" @click="add">+ 新建……</a>
-            </div>
-            <div class="right">
-                <i-Form ref="editForm" :model="form.data" :rules="form.createRules" :label-width="120"
-                    style="margin-right:100px">
-                    <form-item label="数据源名称：" prop="urlDir">
-                        <i-Input v-model="form.data.urlDir" placeholder="数据源编码全局唯一不重复" />
-                    </form-item>
-                    <form-item label="数据库类型：" prop="type">
-                        <i-Select v-model="form.data.type">
-                            <Option v-for="(value, key) in DBType" :value="value" :key="value">{{ key }}</Option>
-                        </i-Select>
-                    </form-item>
-                    <form-item label="连接地址：" prop="url">
-                        <i-Input v-model="form.data.url" maxlength="200" show-word-limit type="textarea" :rows="4"
-                            placeholder="数据库连接 URL，注意无须携带用户名和密码，且不需要 URL 转义" />
-                    </form-item>
-                    <form-item label="登录用户：" prop="username">
-                        <i-Input v-model="form.data.username" placeholder="请输入数据库用户账号" />
-                    </form-item>
-                    <form-item label="登录密码：" prop="password">
-                        <i-Input v-model="form.data.password" type="password" password placeholder="请输入账号密码" />
-                    </form-item>
-                    <form-item label="是否跨库：" prop="crossDB">
-                        <i-switch v-model="form.data.crossDB" />
-                    </form-item>
-                </i-Form>
-                <!--                 <i-Input v-model="editing.name" ref="inputName">
-                    <span slot="prepend">环境名称</span>
-                </i-Input>
-                <br />
-                <i-Input v-model="editing.urlPrefix">
-                    <span slot="prepend">URL前缀</span>
-                </i-Input> -->
-            </div>
-        </div>
-    </template>
 
-    <script src="js/utils.js"> </script>
-    <script src="js/select-table.js"> </script>
-    <script src="js/datasource.js"> </script>
+
     <script src="js/api.js"> </script>
     <script src="js/main.js"> </script>
 </body>

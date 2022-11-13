@@ -1,5 +1,7 @@
 package com.ajaxjs.adp;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
@@ -7,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-import com.ajaxjs.data_service.model.DataServiceConfig;
 import com.ajaxjs.data_service.mybatis.MSUtils;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
+import com.ajaxjs.spring.response.MyJsonConverter;
 import com.ajaxjs.util.config.EasyConfig;
 
 @Configuration
@@ -63,6 +66,12 @@ public class ADPWebConfig extends BaseWebMvcConfigurer {
 	@Bean(value = "dataSource", destroyMethod = "close")
 	DataSource getDs() {
 		return MSUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
+	}
+
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		// 统一返回 JSON
+		converters.add(new MyJsonConverter());
 	}
 
 	@Value("${sms.accessKeyId}")

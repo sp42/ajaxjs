@@ -15,13 +15,9 @@ public class ADPWebInit extends BaseWebInitializer {
 	public static class ScanComponent {
 	}
 
-	@Override
-	public String getMainConfig() {
-		return "com.ajaxjs.adp.ADPWebInit.ScanComponent";
-	}
-
 	@Bean
 	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-		return new ServiceBeanDefinitionRegistry("com.ajaxjs.adp");
+//		return new ServiceBeanDefinitionRegistry("com.ajaxjs.adp");
+		return new ServiceBeanDefinitionRegistry(getClass().getPackage().getName());
 	}
 }

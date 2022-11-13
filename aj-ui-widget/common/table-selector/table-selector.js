@@ -1,29 +1,5 @@
-Vue.component('select-table', {
-    template: `<div>ddddddddddddddddddd
-    <Row style="margin:20px 0;" type="flex" justify="center" align="middle">
-      <Col v-if="isCrossDb" span="6" style="padding-right:10px;">
-      <Select placeholder="请选择数据库名" v-model="databaseName">
-        <Option v-for="d in databaseList" :key="d" :value="d">{{d}}</Option>
-      </Select>
-      </Col>
-      <Col :span="isCrossDb ? 6 : 12">
-      <Input search enter-button placeholder="按表名模糊搜索" @on-keyup="search" ref="inputEl" />
-      </Col>
-      <Col span="12">
-      &nbsp;&nbsp;&nbsp;<a @click="resetData">重置</a>
-      </Col>
-    </Row>
-
-    <Table :columns="list_column" :data="data" width="100%" @on-selection-change="onSelect" max-height="500">
-      <template slot-scope="{row}" slot="select">
-        <a @click="$emit('on-select', row, databaseName)">选择</a>
-      </template>
-    </Table>
-
-    <div class="ivu-mt ivu-text-right" v-if="!isFilter">
-      <Page :total="total" :current.sync="current" show-total :page-size="pageSize" />
-    </div>
-  </div>`,
+Vue.component('table-selector', {
+    template: '#table-selector-tpl',
     data() {
         return {
             isCrossDb: false,

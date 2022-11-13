@@ -11,21 +11,34 @@
     padding-left: 10px;
 }
 
-.datasource ul {
+.datasource .left ul {
     margin: 0 2%;
 }
 
-.datasource li {
-    border-bottom: 1px solid #f5f5f5;
+.datasource .left li {
+    border-bottom: 1px solid #eaeaea;
     padding: 5px 8px;
     cursor: pointer;
 }
 
-.datasource li.actived {
+.datasource .left li:hover {
+    border-bottom-color: lightgray;
+}
+
+.datasource .left li.actived {
     font-weight: bold;
 }
 
 .datasource .add {
     display: block;
     padding: 5px 10px;
+}
+
+.datasource .del-icon {
+    float: right;
+    margin-top: 3px
+}
+
+.datasource .del-icon:hover {
+    color: brown;
 }

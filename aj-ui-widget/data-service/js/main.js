@@ -1,3 +1,5 @@
+myHTMLInclude();
+
 Vue.use(VueCodemirror);
 const addTabBtn = { label: "+", name: "addTab", closable: false };
 
@@ -12,12 +14,10 @@ new Vue({
     el: document.querySelector('.data-service'),
     data() {
         return {
-            isShowSelectTable: false,
+            isShowSelectTable: true,
             split1: 0.2,
-            isShowDataSource: false,
-            datasource: {
-                id: 'dd',
-                list: []
+            dataSource: {
+                isShowDataSource: false
             },
             treeData: [
                 {

@@ -1,0 +1,187 @@
+body {
+    overflow: hidden;
+}
+
+nav {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+    border-bottom: 1px solid white;
+    background-color: #e3e3e3;
+    background-image: linear-gradient(#fefefe, #d8d8d8);
+    text-shadow: 1px 1px 1px white;
+}
+
+.split-pane-left {
+    // padding: 3px;
+}
+
+.split-pane-right {
+    padding-left: 5px;
+
+}
+
+.toolbar {
+    border-bottom: 1px solid white;
+    padding: 2px 15px;
+    padding-top: 12px;
+    background-color: #eaeaea;
+    background-image: linear-gradient(#fefefe, #e6e6e6);
+    text-shadow: 1px 1px 1px white;
+
+    li {
+        width: 50px;
+        text-align: center;
+        list-style: none;
+        color: gray;
+
+        display: inline-block;
+        margin-right: 20px;
+
+        &:hover {
+            .text {
+                color: black;
+            }
+
+            .icon {
+                border-color: gray;
+            }
+
+            cursor: pointer;
+        }
+
+        .icon {
+            width: 32px;
+            border-radius: 3px;
+            box-shadow: 1px 1px 1px white;
+            border: 1px solid lightgray;
+            margin: 0 auto;
+            margin-bottom: 5px;
+        }
+
+        .text {
+            font-size: .65rem;
+        }
+    }
+}
+
+.content {
+    border-top: 1px solid lightgray;
+    padding: 1%;
+}
+
+.search-panel {
+    border-bottom: 1px solid lightgray;
+    background-image: linear-gradient(#fefefe, #e6e6e6);
+    height: 66px;
+    padding-top: 14px;
+    text-align: center;
+
+}
+
+.status-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+fieldset {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid lightgray;
+    padding: 10px 20px;
+
+    legend {
+        margin-left: 8px;
+        font-weight: bold;
+        letter-spacing: 5px;
+    }
+}
+
+table.layout {
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    td {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+}
+
+ul.line-layout {
+    li {
+        display: inline-block;
+        min-width: 200px;
+        vertical-align: top;
+        margin-right: 20px;
+    }
+}
+
+
+.config {
+    transition: height 200ms ease;
+    overflow: hidden;
+}
+
+.main-edit-panel {
+    overflow: hidden;
+    min-height: 400px;
+
+    .command-list {
+        float: left;
+        height: 100%;
+        width: 16%;
+        border-top: 1px solid lightgray;
+        border-right: 1px solid lightgray;
+        border-radius: 5px;
+
+        li {
+            overflow: hidden;
+            height: 35px;
+            line-height: 35px;
+            // margin-bottom: 10px;
+            border-bottom: 1px solid #e3e3e3;
+            margin-left: 10px;
+            cursor: pointer;
+            padding-left: 5px;
+
+            &:hover {
+                background-color: #e3e3e3;
+            }
+        }
+    }
+
+    .code-panel {
+        float: left;
+        width: 83%;
+        padding-left: 15px;
+    }
+
+    .code-editor {
+        border: 1px solid #e3e3e3;
+        margin-bottom: 20px;
+    }
+}
+
+.api {
+    border-left: 4px solid lightgray;
+    padding-left: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: .95rem;
+
+    .GET {
+        color: green;
+    }
+
+    .PUT {
+        color: blue;
+    }
+
+    .POST {
+        color: rgb(224, 60, 254);
+    }
+
+    .DELETE {
+        color: rgb(20, 215, 20);
+    }
+}

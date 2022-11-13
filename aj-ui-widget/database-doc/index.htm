@@ -8,7 +8,7 @@
 
     <!-- import stylesheet -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="asset/styles.css" />
 
     <script src="../libs/iview.js"></script>
     <script src="../common/utils.js"></script>
@@ -23,8 +23,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/theme/monokai.min.css" rel="stylesheet" />
 
     <script src="json.js"></script>
-    <script src="utils.js"></script>
-    <script src="generator.js"></script>
+    <script src="js/generator.js"></script>
     <script src="js/jszip.min.js"></script>
 
     <link rel="icon" type="image/x-icon" href="asset/favicon.ico" />
@@ -104,18 +103,19 @@
                 <a @click="copySQL">复制</a>
             </Modal>
 
-            <Modal title="数据源配置" v-model="dataSource.isShowDataSource" ok-text="保存" cancel-text="" width="900">
+            <Modal title="数据源配置" v-model="dataSource.isShowDataSource" ok-text="关闭" cancel-text="" width="900">
                 <Datasource></Datasource>
             </Modal>
         </menu>
         <iframe src="doc.htm" name="targetFrame" frameborder="no"></iframe>
     </div>
 
+    <!-- 数据源 -->
     <div w3-include-html="../common/data-source/data-source.html"></div>
     <link href="../common/data-source/data-source.css" rel="stylesheet" />
     <script src="../common/data-source/data-source.js"></script>
 
-    <script src="js.js"></script>
+    <script src="js/js.js"></script>
 </body>
 
 </html>
