@@ -305,7 +305,8 @@ public class MapTool {
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				if (e instanceof IllegalArgumentException)
-					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value, value != null ? value.getClass().toString() : "null");
+					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value,
+							value != null ? value.getClass().toString() : "null");
 				else
 					LOGGER.warning(e);
 			}
@@ -316,11 +317,16 @@ public class MapTool {
 
 		if (!ObjectUtils.isEmpty(fields)) {
 			for (Field field : fields) {
+				LOGGER.info(field);
+
 				String key = field.getName();
 				Class<?> t = field.getType();
 
 				if (map != null && map.containsKey(key)) {
 					Object value = map.get(key);
+
+					if (value == null)
+						continue;
 
 					// TODO list
 					if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
