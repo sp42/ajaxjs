@@ -49,69 +49,6 @@ import com.ajaxjs.util.logger.LogHelper;
 public class MyDataSourceController extends BaseController implements DataServiceDAO {
 	private static final LogHelper LOGGER = LogHelper.getLog(MyDataSourceController.class);
 
-	@DataBaseFilter
-	@GetMapping
-	public List<MyDataSource> list(HttpServletRequest req, String appId) {
-		LOGGER.info("数据源列表" + appId);
-
-		Function<String, String> handler = BaseService::searchQuery_NameOnly;
-		handler = handler.andThen(QueryTools.byAny(req)).andThen(BaseService::betweenCreateDate);
-
-		if (appId != null)
-			handler = handler.andThen(QueryTools.by("appId", appId));
-
-		return DataSourceDAO.findList(handler);
-	}
-
-	@DataBaseFilter
-	@PostMapping(produces = JSON)
-	public MyDataSource create(MyDataSource entity) {
-		String is = isRepeatUrlDir(entity);
-
-		if (is != null)
-			throw new NullPointerException(is);
-
-		return afterCreate(DataSourceDAO.create(entity), entity);
-	}
-
-	@DataBaseFilter
-	@PutMapping(value = ID_INFO, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = JSON)
-	public Boolean update(@PathVariable long id, HttpServletRequest req) {
-		MyDataSource entity = WebHelper.getParameterBean(req, MyDataSource.class);
-
-		LOGGER.info("更新数据源" + entity.getName());
-		String is = isRepeatUrlDir(entity);
-
-		if (is != null)
-			throw new NullPointerException(is);
-
-		entity.setId(id);
-
-		return DataSourceDAO.update(entity) >= 1;
-	}
-
-	/**
-	 * 是否重复数据源编码
-	 *
-	 * @param entity 数据源
-	 * @return 是否重复
-	 */
-	private static String isRepeatUrlDir(MyDataSource entity) {
-		Long id = entity.getId() == null ? 0L : entity.getId();
-		boolean isRepeatUrlDir = !DataSourceDAO.isRepeatUrlDir(entity.getUrlDir(), id);
-
-		return isRepeatUrlDir ? jsonNoOk("已存在 URL 目录[" + entity.getUrlDir() + "]") : null;
-	}
-
-	@DataBaseFilter
-	@DeleteMapping(value = ID_INFO, produces = JSON)
-	public Boolean delete(@PathVariable long id) {
-		MyDataSource myDataSource = new MyDataSource();
-		myDataSource.setId(id);
-
-		return DataSourceDAO.delete(myDataSource);
-	}
-
 	/**
 	 * 获取某个数据源下面的所有表
 	 * 
