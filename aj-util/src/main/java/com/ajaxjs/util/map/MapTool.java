@@ -320,8 +320,6 @@ public class MapTool {
 
 		if (!ObjectUtils.isEmpty(fields)) {
 			for (Field field : fields) {
-				LOGGER.info(field);
-
 				String key = field.getName();
 				Class<?> t = field.getType();
 
