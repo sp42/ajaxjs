@@ -49,6 +49,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.XmlHelper;
@@ -244,6 +245,7 @@ public class MapTool {
 					if (value != null) {
 						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
+	
 						if (t == List.class) { // List 容器类，要处理里面的泛型
 							Type[] genericReturnType = ReflectUtil.getGenericReturnType(property.getReadMethod());
 							Type beanT = genericReturnType[0];
@@ -304,10 +306,11 @@ public class MapTool {
 //					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				if (e instanceof IllegalArgumentException)
+				if (e instanceof IllegalArgumentException) {
+					LOGGER.warning(value + " JSON in DB " + IBaseModel.class.isAssignableFrom(t));
 					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value,
 							value != null ? value.getClass().toString() : "null");
-				else
+				} else
 					LOGGER.warning(e);
 			}
 		});
