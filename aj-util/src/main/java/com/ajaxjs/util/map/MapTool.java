@@ -49,6 +49,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.XmlHelper;
@@ -304,9 +305,11 @@ public class MapTool {
 //					}
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				if (e instanceof IllegalArgumentException)
-					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value, value != null ? value.getClass().toString() : "null");
-				else
+				if (e instanceof IllegalArgumentException) {
+					LOGGER.warning(value + " JSON in DB " + IBaseModel.class.isAssignableFrom(t));
+					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value,
+							value != null ? value.getClass().toString() : "null");
+				} else
 					LOGGER.warning(e);
 			}
 		});
@@ -321,6 +324,9 @@ public class MapTool {
 
 				if (map != null && map.containsKey(key)) {
 					Object value = map.get(key);
+
+					if (value == null)
+						continue;
 
 					// TODO list
 					if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
@@ -366,6 +372,21 @@ public class MapTool {
 			if (v != null && !k.equals("class")) // 过滤 class 属性
 				map.put(k, v);
 		});
+
+		// 处理无 getter/setter 的
+		Field[] fields = bean.getClass().getFields();
+
+		if (!ObjectUtils.isEmpty(fields)) {
+			for (Field field : fields) {
+				String key = field.getName();
+
+				try {
+					map.put(key, field.get(bean));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					LOGGER.warning(e);
+				}
+			}
+		}
 
 		return map;
 	}

@@ -30,6 +30,16 @@ import com.ajaxjs.util.logger.LogHelper;
 public abstract class BaseWebInitializer implements WebApplicationInitializer, BaseWebInitializerExtender {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseWebInitializer.class);
 
+	/**
+	 * 可以不用子类实现
+	 */
+	@Override
+	public String getMainConfig() {
+//		System.out.println(getClass().getName());
+//		return "com.ajaxjs.adp.ADPWebInit.ScanComponent";
+		return getClass().getName() + ".ScanComponent";
+	}
+
 	@Override
 	public void onStartup(ServletContext cxt) {
 		if (cxt == null) // 可能在测试

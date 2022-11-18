@@ -444,8 +444,8 @@ public abstract class ApiCommander implements DataServiceConstant {
 		Map<String, Object> params;
 		String sql = node.getSql();
 
-		if (!_params.containsKey(fieldsMapping != null ? fieldsMapping.getId() : "id"))
-			LOGGER.info("没有 id 字段，请检查");
+//		if (!_params.containsKey(fieldsMapping != null ? fieldsMapping.getId() : "id"))
+//			LOGGER.info("没有 id 字段，请检查");
 
 		if (isDynamicSQL(sql)) {// 是否包含 mybatis 脚本控制标签，有的话特殊处理
 			sql = "<script>" + sql + "</script>";

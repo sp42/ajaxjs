@@ -188,6 +188,9 @@ public class JdbcReader {
 				String key = rsmd.getColumnLabel(i);
 				Object _value = rs.getObject(i); // Real value in DB
 
+				if (key.indexOf("_") != -1) // 将以下划线分隔的数据库字段转换为驼峰风格的字符串
+					key = JdbcUtil.changeColumnToFieldName(key);
+
 				try {
 					PropertyDescriptor property = new PropertyDescriptor(key, beanClz);
 					Method method = property.getWriteMethod();

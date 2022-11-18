@@ -185,6 +185,11 @@ public class FileHelper extends StreamHelper {
 	public static void save(File file, byte[] data, boolean isOverwrite) {
 		LOGGER.info("正在保存文件" + file);
 
+		if (data == null || data.length < 0) {
+			LOGGER.warning("要保存的文件内容为空");
+			return;
+		}
+
 		try {
 			if (!isOverwrite && file.exists())
 				throw new IOException(file + "文件已经存在，禁止覆盖！");
@@ -354,7 +359,8 @@ public class FileHelper extends StreamHelper {
 	 * @return 如 /2008/10/15/ 格式的字符串
 	 */
 	public static String getDirNameByDate() {
-		String datatime = DateUtil.now("yyyy-MM-dd"), year = datatime.substring(0, 4), mouth = datatime.substring(5, 7), day = datatime.substring(8, 10);
+		String datatime = DateUtil.now("yyyy-MM-dd"), year = datatime.substring(0, 4), mouth = datatime.substring(5, 7),
+				day = datatime.substring(8, 10);
 
 		return SEPARATOR + year + SEPARATOR + mouth + SEPARATOR + day + SEPARATOR;
 	}
@@ -401,7 +407,7 @@ public class FileHelper extends StreamHelper {
 		Path path = Paths.get(directory);
 
 		if (!Files.isDirectory(path))
-			throw new UnsupportedOperationException("参数非文件夹");
+			throw new UnsupportedOperationException("参数非文件夹 " + directory);
 
 		try (Stream<Path> stream = Files.list(path);) {
 			return stream.map(Path::toFile).filter(File::isFile).collect(Collectors.toList());

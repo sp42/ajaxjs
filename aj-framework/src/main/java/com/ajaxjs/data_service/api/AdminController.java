@@ -129,26 +129,6 @@ public class AdminController extends BaseController implements DataServiceDAO {
 			return false;
 	}
 
-	@GetMapping(value = "getDatabases", produces = JSON)
-	@DataBaseFilter
-	public List<String> getDatabases(Long datasourceId) throws SQLException, ClassNotFoundException {
-		LOGGER.info("查询数据库 {0}", datasourceId);
-		MyDataSource dataSource = DataSourceDAO.findById(datasourceId);
-
-		if (dataSource.getCrossDB() == null || !dataSource.getCrossDB())
-			throw new NullPointerException("不是跨库的数据库连接");
-
-		List<String> databases;
-
-		try (Connection conn = MyDataSourceController.getConnection(dataSource)) {
-			databases = DataBaseMetaHelper.getDatabase(conn);
-		}
-
-		LOGGER.info("查询数据库 {0}", databases.size());
-
-		return databases;
-	}
-
 	@DataBaseFilter
 	@RequestMapping(value = ID_INFO, produces = JSON)
 	public DataServiceTable getInfo(@PathVariable(ID) long id, String dbName) throws ClassNotFoundException, SQLException {
@@ -185,14 +165,6 @@ public class AdminController extends BaseController implements DataServiceDAO {
 		}
 
 		return info;
-	}
-
-	@GetMapping(value = "reload", produces = JSON)
-	@DataBaseFilter
-	public Boolean reload() {
-		apiController.init();// 重新加载配置
-		// jsonOk("重新加载成功")
-		return true;
 	}
 
 	/**

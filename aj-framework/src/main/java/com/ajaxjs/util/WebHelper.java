@@ -17,6 +17,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
@@ -90,6 +91,9 @@ public class WebHelper {
 	 * @return 绝对地址
 	 */
 	public static String mappath(ServletContext cxt, String relativePath) {
+		if (Version.isDebug && TestHelper.isRunningTest())
+			return "c:\\temp\\" + relativePath;
+
 		String absolute = cxt.getRealPath(relativePath);
 
 		if (absolute != null)
@@ -100,12 +104,13 @@ public class WebHelper {
 
 	/**
 	 * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
-	 *
-	 * @param relativePath 相对地址，例如 /images
-	 * @return 绝对地址
+	 * 
+	 * @param req          相对地址，例如 /images
+	 * @param relativePath
+	 * @return 绝对地址，真实的磁盘路径
 	 */
 	public static String mappath(HttpServletRequest req, String relativePath) {
-		return mappath(req.getServletContext(), relativePath);
+		return mappath(req == null ? null : req.getServletContext(), relativePath);
 	}
 
 	/**

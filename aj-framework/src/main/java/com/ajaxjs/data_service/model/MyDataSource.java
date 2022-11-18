@@ -9,6 +9,7 @@ import com.ajaxjs.framework.BaseModel;
  *
  * @author Frank Cheung
  */
+@Deprecated
 public class MyDataSource extends BaseModel {
 	/**
 	 * 数据源类型

@@ -35,7 +35,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 	}
 
 	@Override
-	protected boolean supports(Class<?> clazz) {
+	protected boolean supports(Class<?> clazz /* 控制器方法的参数 */) {
 		boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz) || IBaseModel.class.isAssignableFrom(clazz);
 
 		if (isContainerType) // 优化：出现频率较高，放在前面
