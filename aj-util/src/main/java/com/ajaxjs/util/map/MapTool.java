@@ -245,7 +245,6 @@ public class MapTool {
 					if (value != null) {
 						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
-	
 						if (t == List.class) { // List 容器类，要处理里面的泛型
 							Type[] genericReturnType = ReflectUtil.getGenericReturnType(property.getReadMethod());
 							Type beanT = genericReturnType[0];
@@ -373,6 +372,21 @@ public class MapTool {
 			if (v != null && !k.equals("class")) // 过滤 class 属性
 				map.put(k, v);
 		});
+
+		// 处理无 getter/setter 的
+		Field[] fields = bean.getClass().getFields();
+
+		if (!ObjectUtils.isEmpty(fields)) {
+			for (Field field : fields) {
+				String key = field.getName();
+
+				try {
+					map.put(key, field.get(bean));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					LOGGER.warning(e);
+				}
+			}
+		}
 
 		return map;
 	}

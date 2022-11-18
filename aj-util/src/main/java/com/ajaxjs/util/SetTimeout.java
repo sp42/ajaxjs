@@ -93,6 +93,29 @@ public class SetTimeout extends Timer {
 		this.handler = handler;
 	}
 
+	public void startTimeout() {
+		SetTimeout setTimeout = this;
+
+		schedule(new TimerTask() {
+			@Override
+			public void run() {
+				LOGGER.info("开始执行定时器");
+				if (!handler.apply(setTimeout))
+					cancelTask();
+			}
+		}, delay * 1000);
+	}
+
+	public static void simpleTimeout(Runnable handler, int delay) {
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				LOGGER.info("开始执行定时器");
+				handler.run();
+			}
+		}, delay * 1000);
+	}
+
 	private static ScheduledExecutorService scheduledThreadPool;
 
 	public static ScheduledFuture<?> setTimeout(Runnable command, long delay) {
@@ -101,4 +124,21 @@ public class SetTimeout extends Timer {
 
 		return scheduledThreadPool.schedule(command, delay, TimeUnit.SECONDS);
 	}
+
+	public long getDelay() {
+		return delay;
+	}
+
+	public void setDelay(long delay) {
+		this.delay = delay;
+	}
+
+	public long getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(long period) {
+		this.period = period;
+	}
+
 }
