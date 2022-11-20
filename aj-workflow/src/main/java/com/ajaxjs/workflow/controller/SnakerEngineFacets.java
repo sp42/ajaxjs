@@ -30,13 +30,14 @@ import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.Surrogate;
 import com.ajaxjs.workflow.model.po.TaskHistoryPO;
 import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.service.BaseWfService;
 
 /**
- * @author yuqs
+ * 
  * @since 0.1
  */
 
-public class SnakerEngineFacets {
+public class SnakerEngineFacets extends BaseWfService {
 	private WorkflowEngine engine = new WorkflowEngine();
 
 	public void initFlows() {
@@ -49,7 +50,7 @@ public class SnakerEngineFacets {
 	}
 
 	public List<String> getAllProcessNames() {
-		List<ProcessPO> list = engine.process().findList();
+		List<ProcessPO> list = ProcessDAO.findList();
 		List<String> names = new ArrayList<>();
 
 		for (ProcessPO entity : list) {
@@ -111,7 +112,7 @@ public class SnakerEngineFacets {
 	}
 
 	public List<TaskPO> transferAidant(Long taskId, Long operator, Long... actors) {
-		List<TaskPO> tasks = engine.task().createNewTask(taskId, TaskType.Aidant.ordinal(), actors);
+		List<TaskPO> tasks = engine.task().createNewTask(taskId, TaskType.AIDANT, actors);
 		engine.task().complete(taskId, operator, null);
 		return tasks;
 	}
@@ -150,5 +151,4 @@ public class SnakerEngineFacets {
 		entity.setId(id);
 		engine.manager().delete(entity);
 	}
-
 }

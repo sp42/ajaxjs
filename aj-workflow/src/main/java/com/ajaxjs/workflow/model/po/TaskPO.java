@@ -6,7 +6,7 @@ import java.util.Map;
 import com.ajaxjs.sql.annotation.IgnoreDB;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfUtils;
-import com.ajaxjs.workflow.model.TaskModel;
+import com.ajaxjs.workflow.model.work.TaskModel;
 
 /**
  * 任务实体类

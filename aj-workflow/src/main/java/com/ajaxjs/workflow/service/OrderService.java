@@ -2,16 +2,15 @@ package com.ajaxjs.workflow.service;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
-import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfConstant;
@@ -31,7 +30,7 @@ import com.ajaxjs.workflow.model.po.TaskPO;
  *
  */
 @Component
-public class OrderService extends BaseService<OrderPO> {
+public class OrderService extends BaseWfService {
 	public static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
 
 	@Autowired(required = false)
@@ -89,15 +88,14 @@ public class OrderService extends BaseService<OrderPO> {
 	 * @param order 流程实例对象
 	 * @return 新建 id
 	 */
-	@Override
 	public Long create(OrderPO order) {
-		Long id = super.create(order);
+		Long id = (long) OrderDAO.create(order);
 
 		LOGGER.info("保存历史流程实例 " + order.getName());
 
 		OrderHistory history = new OrderHistory(order);// 复制一份
 		history.setStat(WfConstant.STATE_ACTIVE);
-		new OrderHistoryService().create(history);
+		OrderHistoryDAO.create(history);
 
 		return id;
 	}
@@ -107,19 +105,18 @@ public class OrderService extends BaseService<OrderPO> {
 	 * 
 	 * @return
 	 */
-	@Override
 	public int update(OrderPO order) {
-		return super.update(order);
+		return OrderDAO.update(order) ? 1 : 0;
 	}
 
 	/**
-	 * 向指定实例id添加全局变量数据
+	 * 向指定实例 id 添加全局变量数据
 	 * 
-	 * @param orderId 实例id
+	 * @param orderId 实例 id
 	 * @param args    变量数据
 	 */
 	public void addVariable(Long orderId, Map<String, Object> args) {
-		OrderPO order = findById(orderId);
+		OrderPO order = OrderHistoryDAO.findById(orderId);
 
 		Map<String, Object> data = JsonHelper.parseMap(order.getVariable());
 		if (data == null)
@@ -137,20 +134,20 @@ public class OrderService extends BaseService<OrderPO> {
 	/**
 	 * 更新历史流程
 	 * 
-	 * @param id    流程实例id
+	 * @param id    流程实例 id
 	 * @param state 历史流程状态
 	 * @return 历史流程
 	 */
 	private OrderHistory updateHistoryOrder(Long id, int state) {
 		OrderPO order = new OrderPO();
 		order.setId(id);
-		delete(order);
+		OrderHistoryDAO.delete(order);
 
 		OrderHistory history = new OrderHistory(); // 标记历史流程
 		history.setId(id);
 		history.setStat(state);
 		history.setEndDate(new Date());
-		historyDao.update(history);
+		OrderHistoryDAO.update(history);
 
 		getCompletion().accept(null, history);
 
@@ -189,14 +186,14 @@ public class OrderService extends BaseService<OrderPO> {
 	 * @return 活动实例对象
 	 */
 	public OrderPO resume(Long orderId) {
-		OrderHistory historyOrder = historyDao.findByOrderId(orderId);
+		OrderHistory historyOrder = OrderHistoryDAO.findByOrderId(orderId);
 		OrderPO order = historyOrder.undo();
 		create(order);
 
 		OrderHistory _historyOrder = new OrderHistory(); // 不用 update 那么多字段
 		_historyOrder.setId(historyOrder.getId());
 		_historyOrder.setStat(WfConstant.STATE_ACTIVE);
-		historyDao.update(_historyOrder);
+		OrderHistoryDAO.update(_historyOrder);
 
 		List<TaskHistoryPO> histTasks = taskService.findHistoryTasksByOrderId(orderId);
 
@@ -221,19 +218,19 @@ public class OrderService extends BaseService<OrderPO> {
 		List<TaskHistoryPO> historyTasks = taskService.findHistoryTasksByOrderId(orderId);
 
 		for (TaskPO task : activeTasks)
-			taskService.delete(task);
+			TaskDAO.delete(task);
 
 		for (TaskHistoryPO historyTask : historyTasks)
-			TaskService.historyDao.delete(historyTask);
+			TaskHistoryDAO.delete(historyTask);
 
 		List<CCOrderPO> ccOrders = ccOrderService.findByOrderId(orderId);
 
 		for (CCOrderPO ccOrder : ccOrders)
 			ccOrderService.delete(ccOrder);
 
-		OrderPO order = findById(orderId);
-		historyDao.delete(historyDao.findByOrderId(orderId));
-		delete(order);
+		OrderPO order = OrderDAO.findById(orderId);
+		OrderHistoryDAO.delete(OrderHistoryDAO.findByOrderId(orderId));
+		OrderDAO.delete(order);
 	}
 
 	/**
@@ -243,12 +240,12 @@ public class OrderService extends BaseService<OrderPO> {
 	 * @return
 	 */
 	public List<OrderPO> findByIdAndExcludedIds(Long parentId, Long childOrderId) {
-		Function<String, String> fn = by("parentId", parentId);
+		Map<String, Object> params = new HashMap<>();
+		params.put("parent_id", parentId);
+//		params.put("parent_id", parentId);
+//		fn.andThen(setWhere("id NOT IN(" + childOrderId + ")"));
 
-		if (childOrderId != null && childOrderId != 0)
-			fn.andThen(setWhere("id NOT IN(" + childOrderId + ")"));
-
-		return findList(fn);
+		return OrderDAO.setWhereQuery(params).findList();
 	}
 
 	/**

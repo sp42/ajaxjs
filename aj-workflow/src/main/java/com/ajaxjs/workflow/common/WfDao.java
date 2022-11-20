@@ -11,6 +11,7 @@ import com.ajaxjs.workflow.model.po.CCOrderPO;
 import com.ajaxjs.workflow.model.po.OrderHistory;
 import com.ajaxjs.workflow.model.po.OrderPO;
 import com.ajaxjs.workflow.model.po.ProcessPO;
+import com.ajaxjs.workflow.model.po.Surrogate;
 import com.ajaxjs.workflow.model.po.TaskActor;
 import com.ajaxjs.workflow.model.po.TaskHistoryPO;
 import com.ajaxjs.workflow.model.po.TaskPO;
@@ -65,4 +66,9 @@ public interface WfDao {
 	}
 
 	public static final OrderCcDao OrderCcDAO = new Caller("wf", "order_cc").bind(OrderCcDao.class, CCOrderPO.class);
+	
+	interface SurrogateDao extends IDataService<Surrogate> {
+	}
+	
+	public static final SurrogateDao SurrogateDAO = new Caller("wf", "surrogate").bind(SurrogateDao.class, Surrogate.class);
 }

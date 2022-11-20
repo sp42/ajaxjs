@@ -13,15 +13,16 @@ import org.springframework.util.StringUtils;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfConstant;
+import com.ajaxjs.workflow.common.WfDao;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.NodeModel;
 import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.StartModel;
-import com.ajaxjs.workflow.model.TaskModel;
 import com.ajaxjs.workflow.model.TransitionModel;
+import com.ajaxjs.workflow.model.node.NodeModel;
+import com.ajaxjs.workflow.model.node.StartModel;
 import com.ajaxjs.workflow.model.po.OrderPO;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.OrderService;
 import com.ajaxjs.workflow.service.ProcessService;
 import com.ajaxjs.workflow.service.SurrogateService;
@@ -30,7 +31,7 @@ import com.ajaxjs.workflow.service.TaskService;
 /**
  * 基本的流程引擎实现类
  * 
- * @author yuqs
+ * 
  * @since 1.0
  */
 
@@ -77,7 +78,8 @@ public class WorkflowEngine {
 	 */
 	public OrderPO startInstanceByExecution(Execution execution) {
 		ProcessPO process = execution.getProcess();
-		Execution current = createExecute(process, execution.getOperator(), execution.getArgs(), execution.getParentOrder().getId(), execution.getParentNodeName());
+		Execution current = createExecute(process, execution.getOperator(), execution.getArgs(), execution.getParentOrder().getId(),
+				execution.getParentNodeName());
 		runStart(process, current);
 
 		return current.getOrder();
@@ -127,7 +129,7 @@ public class WorkflowEngine {
 	 * @param process        流程定义
 	 * @param operator       操作人
 	 * @param args           参数列表
-	 * @param parentId       父流程实例id
+	 * @param parentId       父流程实例 id
 	 * @param parentNodeName 启动子流程的父流程节点名称
 	 * @return Execution 执行对象
 	 */
@@ -155,7 +157,7 @@ public class WorkflowEngine {
 
 		TaskPO task = task().complete(taskId, operator, args);
 
-		OrderPO order = order().findById(task.getOrderId());
+		OrderPO order = WfDao.OrderDAO.findById(task.getOrderId());
 		Objects.requireNonNull(order, "指定的流程实例[id=" + task.getOrderId() + "]已完成或不存在");
 
 		OrderPO _update = new OrderPO();
@@ -221,7 +223,7 @@ public class WorkflowEngine {
 	 * 根据流程实例ID，操作人ID，参数列表按照节点模型model创建新的自由任务
 	 */
 	public List<TaskPO> createFreeTask(Long orderId, Long operator, Map<String, Object> args, TaskModel model) {
-		OrderPO order = order().findById(orderId);
+		OrderPO order = WfDao.OrderDAO.findById(orderId);
 		Objects.requireNonNull(order, "指定的流程实例[id=" + orderId + "]已完成或不存在");
 		order.setUpdator(operator);
 //		order.setLastUpdateTime(DateHelper.getTime());

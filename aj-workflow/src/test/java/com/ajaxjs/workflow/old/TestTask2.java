@@ -9,11 +9,11 @@ import org.junit.Test;
 
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
-import com.ajaxjs.workflow.interceptor.WorkflowInterceptor;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.TaskModel;
 import com.ajaxjs.workflow.model.po.OrderPO;
 import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.work.TaskModel;
+import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
 
 public class TestTask2 extends BaseTest {
 	@Test

@@ -12,8 +12,8 @@ import com.ajaxjs.util.cache.CacheManager;
 import com.ajaxjs.util.cache.CacheManagerAware;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.parser.ProcessModelParser;
 import com.ajaxjs.workflow.model.po.ProcessPO;
+import com.ajaxjs.workflow.service.parser.ProcessModelParser;
 
 /**
  * 流程处理

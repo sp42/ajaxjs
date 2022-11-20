@@ -10,6 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ajaxjs.workflow.model.node.NodeModel;
+import com.ajaxjs.workflow.model.node.StartModel;
+import com.ajaxjs.workflow.model.work.TaskModel;
+import com.ajaxjs.workflow.model.work.WorkModel;
+
 /**
  * 流程定义 process 元素 ；
  */

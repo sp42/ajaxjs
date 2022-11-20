@@ -2,20 +2,8 @@ package com.ajaxjs.workflow.service;
 
 import org.springframework.stereotype.Component;
 
-import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.workflow.dao.SurrogateDao;
-import com.ajaxjs.workflow.model.po.Surrogate;
-
 @Component
-public class SurrogateService extends BaseService<Surrogate> {
-	{
-
-		setDao(dao);
-	}
-
-	public static SurrogateDao dao = new Repository().bind(SurrogateDao.class);
-	
+public class SurrogateService  extends BaseWfService {
 	/**
 	 * 根据授权人、流程名称获取最终代理人 如存在user1->user2->user3，那么最终返回user3
 	 * 

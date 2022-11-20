@@ -22,18 +22,17 @@ import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.NodeModel;
 import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.TaskModel;
+import com.ajaxjs.workflow.model.node.NodeModel;
 import com.ajaxjs.workflow.model.po.OrderPO;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.TaskActor;
 import com.ajaxjs.workflow.model.po.TaskHistoryPO;
 import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.work.TaskModel;
 
-public abstract class TaskBaseService extends BaseService<TaskPO> {
+public abstract class TaskBaseService extends BaseWfService {
 	public static final LogHelper LOGGER = LogHelper.getLog(TaskBaseService.class);
-
 
 	@Autowired
 	private OrderService orderService;
@@ -48,7 +47,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return 所有的任务
 	 */
 	public List<TaskPO> findByOrderId(Long orderId) {
-		return findList(by("orderId", orderId));
+		return TaskDAO.setWhereQuery("order_id", orderId).findList();
 	}
 
 	/**
@@ -58,7 +57,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return 所有的历史任务
 	 */
 	public List<TaskHistoryPO> findHistoryTasksByOrderId(Long orderId) {
-		return historyDao.findList(by("orderId", orderId));
+		return TaskHistoryDAO.setWhereQuery("order_id", orderId).findList();
 	}
 
 	/**
@@ -69,7 +68,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return 所有的历史任务
 	 */
 	public List<TaskHistoryPO> findHistoryTasksByOrderIdAndTaskName(Long orderId, String taskName) {
-		return historyDao.findList(by("orderId", orderId).andThen(by("name", taskName)));
+		return TaskHistoryDAO.findList(by("orderId", orderId).andThen(by("name", taskName)));
 	}
 
 	/**
@@ -78,7 +77,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return
 	 */
 	private List<TaskActor> findTaskActorsByTaskId(Long id) {
-		return dao.findTaskActorsByTaskId(id);
+		return TaskDAO.findTaskActorsByTaskId(id);
 	}
 
 	/**
@@ -126,7 +125,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 		task.setName(taskModel.getName());
 		task.setDisplayName(taskModel.getDisplayName());
 		task.setCreateDate(new Date());
-		task.setTaskType(taskModel.isMajor() ? TaskType.Major.ordinal() : TaskType.Aidant.ordinal());
+		task.setTaskType(taskModel.isMajor() ? TaskType.MAJOR : TaskType.AIDANT);
 //		task.setParentTaskId(execution.getTask() == null ? "start" : execution.getTask().getId());
 		task.setParentId(execution.getTask() == null ? 0 : execution.getTask().getId());
 		task.setModel(taskModel);
@@ -170,8 +169,8 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @param actors   参与者列表
 	 * @return 任务列表
 	 */
-	public List<TaskPO> createNewTask(Long taskId, int taskType, Long... actors) {
-		TaskPO task = findById(taskId);
+	public List<TaskPO> createNewTask(Long taskId, TaskType taskType, Long... actors) {
+		TaskPO task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		List<TaskPO> tasks = new ArrayList<>();
 
@@ -195,8 +194,8 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return TaskModel
 	 */
 	public TaskModel getTaskModel(Long taskId) {
-		TaskPO task = findById(taskId);
-		OrderPO order = orderService.findById(task.getOrderId());
+		TaskPO task = TaskDAO.findById(taskId);
+		OrderPO order = OrderDAO.findById(task.getOrderId());
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		Objects.requireNonNull(order);
 
@@ -220,7 +219,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return
 	 */
 	public TaskPO complete(Long taskId, Long operator, Map<String, Object> args) {
-		TaskPO task = findById(taskId);
+		TaskPO task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		task.setVariable(JsonHelper.toJson(args));
 
@@ -245,8 +244,8 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 		}
 
 		initCreate(history);
-		historyDao.create(history);
-		delete(task);
+		TaskHistoryDAO.create(history);
+		TaskDAO.delete(task);
 
 //		orderService.getCompletion().accept(history, null);
 
@@ -271,7 +270,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 			taskActor.setTaskId(taskId);
 			taskActor.setActorId(actorId);
 
-			dao.createTaskActor(taskId, actorId);
+			TaskDAO.createTaskActor(taskId, actorId);
 		}
 	}
 
@@ -285,7 +284,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	public TaskPO take(Long taskId, Long operator) {
 		LOGGER.info("提取任务 [{0}]", taskId);
 
-		TaskPO task = findById(taskId);
+		TaskPO task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (!isAllowed(task, operator))
@@ -295,7 +294,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 		u.setId(taskId);
 		u.setOperator(operator);
 		u.setFinishDate(new Date());
-		update(u);
+		TaskDAO.update(u);
 
 		task.setOperator(operator);
 		task.setFinishDate(u.getFinishDate());
@@ -311,17 +310,18 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return Task 任务对象
 	 */
 	public TaskPO withdrawTask(Long taskId, Long operator) {
-		TaskHistoryPO hist = historyDao.findById(taskId);
+		TaskHistoryPO hist = TaskHistoryDAO.findById(taskId);
 		Objects.requireNonNull(hist, "指定的历史任务[id=" + taskId + "]不存在");
 
 		// getNextActiveTasks
-		List<TaskPO> tasks = hist.isPerformAny() ? findList(by("parentTaskId", hist.getId())) : dao.getNextActiveTasks(hist.getOrderId(), hist.getName(), hist.getParentId());
+		List<TaskPO> tasks = hist.isPerformAny() ? findList(by("parentTaskId", hist.getId()))
+				: dao.getNextActiveTasks(hist.getOrderId(), hist.getName(), hist.getParentId());
 
 		if (ObjectUtils.isEmpty(tasks))
 			throw new WfException("后续活动任务已完成或不存在，无法撤回.");
 
 		for (TaskPO task : tasks)
-			delete(task);
+			TaskDAO.delete(task);
 
 		TaskPO task = hist.undoTask();
 		create(task);
@@ -344,7 +344,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 			throw new WfException("上一步任务ID为空，无法驳回至上一步处理");
 
 		NodeModel current = model.getNode(currentTask.getName());
-		TaskHistoryPO history = historyDao.findById(parentTaskId);
+		TaskHistoryPO history = TaskHistoryDAO.findById(parentTaskId);
 		NodeModel parent = model.getNode(history.getName());
 
 		if (!NodeModel.canRejected(current, parent))
@@ -366,7 +366,7 @@ public abstract class TaskBaseService extends BaseService<TaskPO> {
 	 * @return Task 唤醒后的任务对象
 	 */
 	public TaskPO resume(Long taskId, Long operator) {
-		TaskHistoryPO histTask = historyDao.findById(taskId);
+		TaskHistoryPO histTask = TaskHistoryDAO.findById(taskId);
 		Objects.requireNonNull(histTask, "指定的历史任务[id=" + taskId + "]不存在");
 		boolean isAllowed = true;
 

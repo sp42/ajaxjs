@@ -7,9 +7,9 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.ajaxjs.workflow.WorkflowEngine;
-import com.ajaxjs.workflow.model.TaskModel;
 import com.ajaxjs.workflow.model.po.OrderPO;
 import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.work.TaskModel;
 
 public class TestFreeFlow extends BaseTest {
 	// 自由流

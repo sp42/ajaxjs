@@ -12,7 +12,7 @@ import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.model.po.OrderPO;
 import com.ajaxjs.workflow.model.po.TaskPO;
 import com.ajaxjs.workflow.old.BaseTest;
-import com.ajaxjs.workflow.scheduling.JobCallback;
+import com.ajaxjs.workflow.service.scheduling.JobCallback;
 
 public class TestExpire extends BaseTest {
 	private static final String PROCESSNAME = "expire";

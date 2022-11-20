@@ -1,9 +1,3 @@
-/*
- * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
 package com.ajaxjs.workflow.model;
 
 import java.io.Serializable;
@@ -24,7 +18,7 @@ import com.ajaxjs.workflow.model.po.TaskPO;
  */
 public class Execution implements Serializable {
 	public static final LogHelper LOGGER = LogHelper.getLog(Execution.class);
-	
+
 	private static final long serialVersionUID = 3730741790729624400L;
 
 	/**
@@ -36,7 +30,7 @@ public class Execution implements Serializable {
 	 */
 	public Execution(WorkflowEngine engine, ProcessPO process, OrderPO order, Map<String, Object> args) {
 		if (process == null || order == null)
-			throw new WfException("构造Execution对象失败，请检查process、order是否为空");
+			throw new WfException("构造 Execution 对象失败，请检查 process、order 是否为空");
 
 		this.engine = engine;
 		this.process = process;
@@ -53,7 +47,7 @@ public class Execution implements Serializable {
 	 */
 	public Execution(Execution execution, ProcessPO process, String parentNodeName) {
 		if (execution == null || process == null || parentNodeName == null)
-			throw new WfException("构造Execution对象失败，请检查execution、process、parentNodeName是否为空");
+			throw new WfException("构造 Execution 对象失败，请检查 execution、process、parentNodeName 是否为空");
 
 		this.engine = execution.getEngine();
 		this.process = process;
@@ -68,14 +62,14 @@ public class Execution implements Serializable {
 	 */
 	public void execute() {
 		ProcessModel model = process.getModel();
-		
+
 		String taskName = task.getName();
 		LOGGER.info("正在执行任务 {0}", taskName);
 		model.getNode(taskName).execute(this);
 	}
 
 	/**
-	 * 根据当前执行对象 execution、子流程定 义process、当前节点名称产生子流程的执行对象
+	 * 根据当前执行对象 execution、子流程定义 process、当前节点名称产生子流程的执行对象
 	 * 
 	 * @param execution      执行对象
 	 * @param process        接收流程定义

@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 工作项（待办、已处理任务的查询结果实体）
  * 
- * @author yuqs
+ 
  * @since 1.0
  */
 public class WorkItem implements Serializable {

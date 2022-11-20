@@ -6,19 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.TaskModel;
 import com.ajaxjs.workflow.model.po.TaskActor;
 import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.work.TaskModel;
 
 /**
  * Actor
@@ -46,7 +44,7 @@ public class TaskService extends TaskBaseService {
 	 * @param actors      参与者
 	 */
 	public void addTaskActor(Long taskId, Integer performType, Long... actors) {
-		TaskPO task = findById(taskId);
+		TaskPO task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (!task.isMajor())
@@ -66,7 +64,7 @@ public class TaskService extends TaskBaseService {
 			String oldActor = (String) data.get(TaskPO.KEY_ACTOR);
 			data.put(TaskPO.KEY_ACTOR, oldActor + "," + WfUtils.join(actors));
 			task.setVariable(JsonHelper.toJson(data));
-			update(task);
+			TaskDAO.update(task);
 			break;
 		case 1:
 			try {
@@ -80,7 +78,7 @@ public class TaskService extends TaskBaseService {
 
 					taskData.put(TaskPO.KEY_ACTOR, actor);
 					task.setVariable(JsonHelper.toJson(taskData));
-					create(newTask);
+					TaskDAO.create(newTask);
 					assignTask(newTask.getId(), actor);
 				}
 			} catch (CloneNotSupportedException ex) {
@@ -94,13 +92,13 @@ public class TaskService extends TaskBaseService {
 	}
 
 	/**
-	 * 对指定的任务id删除参与者
+	 * 对指定的任务 id 删除参与者
 	 * 
-	 * @param taskId 任务id
+	 * @param taskId 任务 id
 	 * @param actors 参与者
 	 */
 	public void removeTaskActor(Long taskId, Long... actors) {
-		TaskPO task = findById(taskId);
+		TaskPO task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (actors == null || actors.length == 0)
@@ -130,14 +128,14 @@ public class TaskService extends TaskBaseService {
 
 					if (isMatch)
 						continue;
-					
+
 					newActor.append(actor).append(",");
 				}
 
 				newActor.deleteCharAt(newActor.length() - 1);
 				taskData.put(TaskPO.KEY_ACTOR, newActor.toString());
 				task.setVariable(JsonHelper.toJson(taskData));
-				update(task);
+				TaskDAO.update(task);
 			}
 		}
 	}
@@ -247,23 +245,23 @@ public class TaskService extends TaskBaseService {
 	 * @param activeNodes
 	 * @return
 	 */
-	public List<TaskPO> findByOrderIdAndExcludedIds(Long id, Long childOrderId, String[] activeNodes) {
-		Function<String, String> fn = by("orderId", id);
-
-		if (childOrderId != null && childOrderId != 0)
-			fn.andThen(setWhere("id NOT IN(" + childOrderId + ")"));
-
-		if (!ObjectUtils.isEmpty(activeNodes)) {
-			int i = 0;
-
-			for (String str : activeNodes)
-				activeNodes[i++] = "'" + str + "'";
-
-			fn.andThen(setWhere("name IN(" + String.join(",", activeNodes) + ")"));
-		}
-
-		return findList(fn);
-	}
+//	public List<TaskPO> findByOrderIdAndExcludedIds(Long id, Long childOrderId, String[] activeNodes) {
+//		Function<String, String> fn = by("orderId", id);
+//
+//		if (childOrderId != null && childOrderId != 0)
+//			fn.andThen(setWhere("id NOT IN(" + childOrderId + ")"));
+//
+//		if (!ObjectUtils.isEmpty(activeNodes)) {
+//			int i = 0;
+//
+//			for (String str : activeNodes)
+//				activeNodes[i++] = "'" + str + "'";
+//
+//			fn.andThen(setWhere("name IN(" + String.join(",", activeNodes) + ")"));
+//		}
+//
+//		return findList(fn);
+//	}
 
 	@Override
 	public BiFunction<Long, List<TaskActor>, Boolean> getTaskAccessStrategy() {
