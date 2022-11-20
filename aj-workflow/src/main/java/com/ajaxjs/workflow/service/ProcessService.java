@@ -1,43 +1,36 @@
 package com.ajaxjs.workflow.service;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.CacheManager;
 import com.ajaxjs.util.cache.CacheManagerAware;
-import com.ajaxjs.workflow.WorkflowConstant;
-import com.ajaxjs.workflow.dao.ProcessDao;
+import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.entity.Process;
 import com.ajaxjs.workflow.model.parser.ProcessModelParser;
+import com.ajaxjs.workflow.model.po.ProcessPO;
 
-@Component
-public class ProcessService extends BaseService<Process> implements CacheManagerAware {
-	{
-
-		setDao(dao);
-	}
-	
-	public static ProcessDao dao = new Repository().bind(ProcessDao.class);
-
+/**
+ * 流程处理
+ *
+ */
+@Service
+public class ProcessService extends BaseWfService implements CacheManagerAware {
 	private static final String SEPARATOR = ".";
 
-	@Override
-	public Process findById(Long id) {
-		Process p;
+	public ProcessPO findById(Long id) {
+		ProcessPO p;
 		String name = nameCache.get(id);
 
 		if (name != null && beanCache.get(name) != null) // 先通过 cache 获取，如果返回空，就从数据库读取并 put
 			p = beanCache.get(name);
-		 else {
-			p = super.findById(id);
+		else {
+			p = ProcessDAO.findById(id);
 			p.setModel(ProcessModelParser.parse(p.getContent()));
 			saveCache(id, p);
 		}
@@ -46,14 +39,10 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 		return p;
 	}
 
-	private void saveCache(Long id, Process p) {
+	private void saveCache(Long id, ProcessPO p) {
 		String name = p.getName() + SEPARATOR + p.getVersion();
 		nameCache.put(id, name);
 		beanCache.put(name, p);
-	}
-
-	public PageResult<Process> list(int start, int limit) {
-		return dao.findPagedList(start, limit, null);
 	}
 
 	/**
@@ -65,24 +54,24 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 	 */
 	public long deploy(String processXml, Long creator) {
 		ProcessModel model = ProcessModelParser.parse(processXml);
-		Process bean = new Process();
+		ProcessPO bean = new ProcessPO();
 
 		bean.setName(model.getName());
 		bean.setDisplayName(model.getDisplayName());
 		bean.setContent(processXml);
-		bean.setStat(WorkflowConstant.STATE_ACTIVE);
+		bean.setStat(WfConstant.STATE_ACTIVE);
 		bean.setCreator(creator);
 
-		Integer ver = dao.getLatestProcessVersion(model.getName());
+		Integer ver = ProcessDAO.getLatestProcessVersion(model.getName());
 		bean.setVersion(ver == null || ver < 0 ? 0 : ver + 1);
 
-		long newlyId = create(bean);
+		long newlyId = (long) ProcessDAO.create(bean);
 
 		bean.setModel(model);
 		saveCache(newlyId, bean);
 
 		lastDeployProcessId = newlyId;
-		
+
 		return newlyId;
 	}
 
@@ -92,16 +81,16 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 	 * @param id 流程 id
 	 */
 	public void undeploy(long id) {
-		Process bean = new Process();
+		ProcessPO bean = new ProcessPO();
 		bean.setId(id);
-		bean.setStat(WorkflowConstant.STATE_FINISH);
+		bean.setStat(WfConstant.STATE_FINISH);
 
-		update(bean);
+		ProcessDAO.update(bean);
 
-		Process p = beanCache.get(nameCache.get(id));
+		ProcessPO p = beanCache.get(nameCache.get(id));
 
 		if (p != null)
-			p.setStat(WorkflowConstant.STATE_FINISH); // 只是修改了 状态
+			p.setStat(WfConstant.STATE_FINISH); // 只是修改了 状态
 	}
 
 	/**
@@ -110,7 +99,7 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 	 * @param name 流程名称
 	 * @return 流程列表
 	 */
-	public Process findByName(String name) {
+	public ProcessPO findByName(String name) {
 		return findByVersion(name, null);
 	}
 
@@ -121,18 +110,18 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 	 * @param name 流程版本号
 	 * @return 流程列表
 	 */
-	public Process findByVersion(String name, Integer version) {
-		Function<String, String> fn = by("name", name);
-
+	public ProcessPO findByVersion(String name, Integer version) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("name", name);
 		if (version != null)
-			fn.andThen(by("version", version));
+			params.put("version", version);
 
-		List<Process> list = findList(fn);
+		List<ProcessPO> list = ProcessDAO.setWhereQuery(params).findList();
 
 		if (ObjectUtils.isEmpty(list))
 			return null;
 		else {
-			Process p = list.get(0);
+			ProcessPO p = list.get(0);
 			p.setModel(ProcessModelParser.parse(p.getContent()));
 			saveCache(p.getId(), p);
 
@@ -148,11 +137,11 @@ public class ProcessService extends BaseService<Process> implements CacheManager
 	/**
 	 * 
 	 */
-	private Cache<String, Process> beanCache;
+	private Cache<String, ProcessPO> beanCache;
 
 	@Override
 	public void setCacheManager(CacheManager cacheManager) {
 		nameCache = cacheManager.getCache("process-id-name");
-		beanCache = cacheManager.getCache("process-name-bean", Process.class);
+		beanCache = cacheManager.getCache("process-name-bean", ProcessPO.class);
 	}
 }

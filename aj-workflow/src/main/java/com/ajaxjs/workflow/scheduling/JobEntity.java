@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.po.TaskPO;
 
 /**
  * job 实体，用于传递给具体的调度框架
@@ -62,7 +62,7 @@ public class JobEntity implements Serializable {
 	/**
 	 * 任务对象
 	 */
-	private Task task;
+	private TaskPO task;
 
 	/**
 	 * 启动时间
@@ -79,22 +79,22 @@ public class JobEntity implements Serializable {
 	 */
 	private Map<String, Object> args;
 
-	public JobEntity(String id, Task task, Date startTime) {
+	public JobEntity(String id, TaskPO task, Date startTime) {
 		this(id, task, startTime, 0);
 	}
 
-	public JobEntity(String id, Task task, Date startTime, int period) {
+	public JobEntity(String id, TaskPO task, Date startTime, int period) {
 		this.id = id;
 		this.task = task;
 		this.startTime = startTime;
 		this.period = period;
 	}
 
-	public JobEntity(String id, Task task, Date startTime, Map<String, Object> args) {
+	public JobEntity(String id, TaskPO task, Date startTime, Map<String, Object> args) {
 		this(id, task, startTime, args, 0);
 	}
 
-	public JobEntity(String id, Task task, Date startTime, Map<String, Object> args, int period) {
+	public JobEntity(String id, TaskPO task, Date startTime, Map<String, Object> args, int period) {
 		this.id = id;
 		this.task = task;
 		this.startTime = startTime;
@@ -102,11 +102,11 @@ public class JobEntity implements Serializable {
 		this.args = args;
 	}
 
-	public Task getTask() {
+	public TaskPO getTask() {
 		return task;
 	}
 
-	public void setTask(Task task) {
+	public void setTask(TaskPO task) {
 		this.task = task;
 	}
 

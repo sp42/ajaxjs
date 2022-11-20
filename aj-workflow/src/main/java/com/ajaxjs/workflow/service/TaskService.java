@@ -13,12 +13,12 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.workflow.WorkflowException;
-import com.ajaxjs.workflow.WorkflowUtils;
+import com.ajaxjs.workflow.common.WfException;
+import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TaskModel;
-import com.ajaxjs.workflow.model.entity.Task;
-import com.ajaxjs.workflow.model.entity.TaskActor;
+import com.ajaxjs.workflow.model.po.TaskActor;
+import com.ajaxjs.workflow.model.po.TaskPO;
 
 /**
  * Actor
@@ -46,7 +46,7 @@ public class TaskService extends TaskBaseService {
 	 * @param actors      参与者
 	 */
 	public void addTaskActor(Long taskId, Integer performType, Long... actors) {
-		Task task = findById(taskId);
+		TaskPO task = findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (!task.isMajor())
@@ -63,28 +63,28 @@ public class TaskService extends TaskBaseService {
 			if (data == null)
 				data = Collections.emptyMap();
 
-			String oldActor = (String) data.get(Task.KEY_ACTOR);
-			data.put(Task.KEY_ACTOR, oldActor + "," + WorkflowUtils.join(actors));
+			String oldActor = (String) data.get(TaskPO.KEY_ACTOR);
+			data.put(TaskPO.KEY_ACTOR, oldActor + "," + WfUtils.join(actors));
 			task.setVariable(JsonHelper.toJson(data));
 			update(task);
 			break;
 		case 1:
 			try {
 				for (Long actor : actors) {
-					Task newTask = (Task) task.clone();
+					TaskPO newTask = (TaskPO) task.clone();
 					newTask.setOperator(actor);
 
 					Map<String, Object> taskData = JsonHelper.parseMap(task.getVariable());
 					if (taskData == null)
 						taskData = Collections.emptyMap();
 
-					taskData.put(Task.KEY_ACTOR, actor);
+					taskData.put(TaskPO.KEY_ACTOR, actor);
 					task.setVariable(JsonHelper.toJson(taskData));
 					create(newTask);
 					assignTask(newTask.getId(), actor);
 				}
 			} catch (CloneNotSupportedException ex) {
-				throw new WorkflowException("任务对象不支持复制", ex.getCause());
+				throw new WfException("任务对象不支持复制", ex.getCause());
 			}
 
 			break;
@@ -100,7 +100,7 @@ public class TaskService extends TaskBaseService {
 	 * @param actors 参与者
 	 */
 	public void removeTaskActor(Long taskId, Long... actors) {
-		Task task = findById(taskId);
+		TaskPO task = findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (actors == null || actors.length == 0)
@@ -109,7 +109,7 @@ public class TaskService extends TaskBaseService {
 		if (task.isMajor()) {
 			removeTaskActor(task.getId(), actors);
 			Map<String, Object> taskData = JsonHelper.parseMap(task.getVariable());
-			String actorStr = (String) taskData.get(Task.KEY_ACTOR);
+			String actorStr = (String) taskData.get(TaskPO.KEY_ACTOR);
 
 			if (StringUtils.hasText(actorStr)) {
 				String[] actorArray = actorStr.split(",");
@@ -135,7 +135,7 @@ public class TaskService extends TaskBaseService {
 				}
 
 				newActor.deleteCharAt(newActor.length() - 1);
-				taskData.put(Task.KEY_ACTOR, newActor.toString());
+				taskData.put(TaskPO.KEY_ACTOR, newActor.toString());
 				task.setVariable(JsonHelper.toJson(taskData));
 				update(task);
 			}
@@ -204,7 +204,7 @@ public class TaskService extends TaskBaseService {
 			results = (Long[]) actors;// 如果为String[]类型，则直接返回
 		} else {
 			// 其它类型，抛出不支持的类型异常
-			throw new WorkflowException("任务参与者对象[" + actors + "]类型不支持." + "合法参数示例:Long,Integer,new String[]{},'10000,20000',List<String>");
+			throw new WfException("任务参与者对象[" + actors + "]类型不支持." + "合法参数示例:Long,Integer,new String[]{},'10000,20000',List<String>");
 		}
 
 		return results;
@@ -247,7 +247,7 @@ public class TaskService extends TaskBaseService {
 	 * @param activeNodes
 	 * @return
 	 */
-	public List<Task> findByOrderIdAndExcludedIds(Long id, Long childOrderId, String[] activeNodes) {
+	public List<TaskPO> findByOrderIdAndExcludedIds(Long id, Long childOrderId, String[] activeNodes) {
 		Function<String, String> fn = by("orderId", id);
 
 		if (childOrderId != null && childOrderId != 0)

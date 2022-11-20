@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.workflow.BaseTest;
-import com.ajaxjs.workflow.model.entity.Order;
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.old.BaseTest;
 
 public class TestSubProcess extends BaseTest {
 	
@@ -19,10 +19,10 @@ public class TestSubProcess extends BaseTest {
 
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
-		Order order = engine.startInstanceByName("subprocess1", 0, 2L, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		OrderPO order = engine.startInstanceByName("subprocess1", 0, 2L, args);
+		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
 
-		for (Task task : tasks) {
+		for (TaskPO task : tasks) {
 			System.out.println("************************begin:::::" + task);
 			engine.executeTask(task.getId(), 1L, args);
 			System.out.println("************************end:::::" + task);
@@ -42,11 +42,11 @@ public class TestSubProcess extends BaseTest {
 //		WorlflowEngine engine = (WorlflowEngine) init("test/subprocess/subprocess2.xml");
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
-		Order order = engine.startInstanceByName("subprocess2", 0, 2L, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		OrderPO order = engine.startInstanceByName("subprocess2", 0, 2L, args);
+		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
 
 		if (tasks != null)
-			for (Task task : tasks) {
+			for (TaskPO task : tasks) {
 				engine.executeTask(task.getId(), 1L, args);
 			}
 	}

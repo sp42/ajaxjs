@@ -24,12 +24,12 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
-import com.ajaxjs.workflow.model.TaskModel.TaskType;
-import com.ajaxjs.workflow.model.entity.Order;
-import com.ajaxjs.workflow.model.entity.Process;
-import com.ajaxjs.workflow.model.entity.Surrogate;
-import com.ajaxjs.workflow.model.entity.Task;
-import com.ajaxjs.workflow.model.entity.TaskHistory;
+import com.ajaxjs.workflow.common.WfConstant.TaskType;
+import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.ProcessPO;
+import com.ajaxjs.workflow.model.po.Surrogate;
+import com.ajaxjs.workflow.model.po.TaskHistoryPO;
+import com.ajaxjs.workflow.model.po.TaskPO;
 
 /**
  * @author yuqs
@@ -49,10 +49,10 @@ public class SnakerEngineFacets {
 	}
 
 	public List<String> getAllProcessNames() {
-		List<Process> list = engine.process().findList();
+		List<ProcessPO> list = engine.process().findList();
 		List<String> names = new ArrayList<>();
 
-		for (Process entity : list) {
+		for (ProcessPO entity : list) {
 			if (names.contains(entity.getName()))
 				continue;
 			else
@@ -62,56 +62,56 @@ public class SnakerEngineFacets {
 		return names;
 	}
 
-	public Order startInstanceById(Long processId, Long operator, Map<String, Object> args) {
+	public OrderPO startInstanceById(Long processId, Long operator, Map<String, Object> args) {
 		return engine.startInstanceById(processId, operator, args);
 	}
 
-	public Order startInstanceByName(String name, Integer version, Long operator, Map<String, Object> args) {
+	public OrderPO startInstanceByName(String name, Integer version, Long operator, Map<String, Object> args) {
 		return engine.startInstanceByName(name, version, operator, args);
 	}
 
-	public Order startAndExecute(String name, Integer version, Long operator, Map<String, Object> args) {
-		Order order = engine.startInstanceByName(name, version, operator, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
-		List<Task> newTasks = new ArrayList<>();
+	public OrderPO startAndExecute(String name, Integer version, Long operator, Map<String, Object> args) {
+		OrderPO order = engine.startInstanceByName(name, version, operator, args);
+		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		List<TaskPO> newTasks = new ArrayList<>();
 
 		if (tasks != null && tasks.size() > 0) {
-			Task task = tasks.get(0);
+			TaskPO task = tasks.get(0);
 			newTasks.addAll(engine.executeTask(task.getId(), operator, args));
 		}
 
 		return order;
 	}
 
-	public Order startAndExecute(Long processId, Long operator, Map<String, Object> args) {
-		Order order = engine.startInstanceById(processId, operator, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
-		List<Task> newTasks = new ArrayList<>();
+	public OrderPO startAndExecute(Long processId, Long operator, Map<String, Object> args) {
+		OrderPO order = engine.startInstanceById(processId, operator, args);
+		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		List<TaskPO> newTasks = new ArrayList<>();
 
 		if (tasks != null && tasks.size() > 0) {
-			Task task = tasks.get(0);
+			TaskPO task = tasks.get(0);
 			newTasks.addAll(engine.executeTask(task.getId(), operator, args));
 		}
 
 		return order;
 	}
 
-	public List<Task> execute(Long taskId, Long operator, Map<String, Object> args) {
+	public List<TaskPO> execute(Long taskId, Long operator, Map<String, Object> args) {
 		return engine.executeTask(taskId, operator, args);
 	}
 
-	public List<Task> executeAndJump(Long taskId, Long operator, Map<String, Object> args, String nodeName) {
+	public List<TaskPO> executeAndJump(Long taskId, Long operator, Map<String, Object> args, String nodeName) {
 		return engine.executeAndJumpTask(taskId, operator, args, nodeName);
 	}
 
-	public List<Task> transferMajor(Long taskId, Long operator, Long... actors) {
-		List<Task> tasks = engine.task().createNewTask(taskId, TaskType.Major.ordinal(), actors);
+	public List<TaskPO> transferMajor(Long taskId, Long operator, Long... actors) {
+		List<TaskPO> tasks = engine.task().createNewTask(taskId, TaskType.MAJOR, actors);
 		engine.task().complete(taskId, operator, null);
 		return tasks;
 	}
 
-	public List<Task> transferAidant(Long taskId, Long operator, Long... actors) {
-		List<Task> tasks = engine.task().createNewTask(taskId, TaskType.Aidant.ordinal(), actors);
+	public List<TaskPO> transferAidant(Long taskId, Long operator, Long... actors) {
+		List<TaskPO> tasks = engine.task().createNewTask(taskId, TaskType.Aidant.ordinal(), actors);
 		engine.task().complete(taskId, operator, null);
 		return tasks;
 	}
@@ -120,10 +120,10 @@ public class SnakerEngineFacets {
 		Map<String, Object> data = new HashMap<>();
 
 		if (orderId != null && orderId != 0 && StringUtils.hasText(taskName)) {
-			List<TaskHistory> histTasks = engine.task().findHistoryTasksByOrderIdAndTaskName(orderId, taskName);
+			List<TaskHistoryPO> histTasks = engine.task().findHistoryTasksByOrderIdAndTaskName(orderId, taskName);
 			List<Map<String, Object>> vars = new ArrayList<>();
 
-			for (TaskHistory hist : histTasks) {
+			for (TaskHistoryPO hist : histTasks) {
 				Map<String, Object> map = JsonHelper.parseMap(hist.getVariable());
 				if (map == null)
 					map = Collections.emptyMap();

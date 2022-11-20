@@ -14,7 +14,8 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.WorkflowException;
+import com.ajaxjs.workflow.common.WfException;
+import com.ajaxjs.workflow.service.handler.DecisionHandler;
 
 import de.odysseus.el.util.SimpleContext;
 
@@ -104,7 +105,7 @@ public class DecisionModel extends NodeModel {
 		}
 
 		if (!isfound)
-			throw new WorkflowException(execution.getOrder().getId() + "->decision 节点无法确定下一步执行路线");
+			throw new WfException(execution.getOrder().getId() + "->decision 节点无法确定下一步执行路线");
 	}
 
 	public String getExpr() {

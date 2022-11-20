@@ -60,14 +60,55 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<!-- servlet3 不需要 web.xml 问题 -->
 		<failOnMissingWebXml>false</failOnMissingWebXml>
+
+		<!-- 当发生javadoc编译错误时继续执行 -->
+		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+	<!-- <distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
+		</snapshotRepository> </distributionManagement> -->
+
+	<!-- <distributionManagement> <repository> <id>rdc</id> <name>releases</name> 
+		<url>https://packages.aliyun.com/maven/repository/2190421-release-MPawzZ/</url> 
+		</repository> <snapshotRepository> <id>rdc-snapshots-local</id> <name>snapshots</name> 
+		<url>https://packages.aliyun.com/maven/repository/2190421-snapshot-2w5sDL/</url> 
+		</snapshotRepository> </distributionManagement> -->
+
+	<!-- maven 的 pom.xml 多个仓库配置 -->
+	<profiles>
+		<profile>
+			<id>Nexus</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+
+		<profile>
+			<id>rdc</id>
+			<distributionManagement>
+				<repository>
+					<id>rdc-releases</id>
+					<name>releases</name>
+					<url>https://packages.aliyun.com/maven/repository/2190421-release-MPawzZ/</url>
+				</repository>
+				<snapshotRepository>
+					<id>rdc-snapshots-local</id>
+					<name>snapshots</name>
+					<url>https://packages.aliyun.com/maven/repository/2190421-snapshot-2w5sDL/</url>
+				</snapshotRepository>
+			</distributionManagement>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+	</profiles>
 
 	<build>
 
@@ -90,6 +131,8 @@
 		<!-- </testResource> -->
 		<!-- </testResources> -->
 
+
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -104,17 +147,10 @@
 			</plugin>
 
 			<!-- 发布到中央库 -->
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
+			<!-- <plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
+				<version>1.6.8</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
+				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
+				</configuration> </plugin> -->
 
 			<!-- 复制 META-INF 目录 不让 Maven 打包时生成 maven 自己的描述文件 -->
 			<plugin>
@@ -131,7 +167,8 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
+				<!-- <version>1.5</version> -->
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -147,7 +184,8 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
+				<!-- <version>2.2.1</version> -->
+				<version>3.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -162,7 +200,8 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<!-- <version>2.9.1</version> -->
+				<version>3.4.0</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>

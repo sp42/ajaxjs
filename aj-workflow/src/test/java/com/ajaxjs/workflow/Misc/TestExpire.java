@@ -8,10 +8,10 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.WorkflowEngine;
-import com.ajaxjs.workflow.model.entity.Order;
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.old.BaseTest;
 import com.ajaxjs.workflow.scheduling.JobCallback;
 
 public class TestExpire extends BaseTest {
@@ -21,7 +21,7 @@ public class TestExpire extends BaseTest {
 		public static final LogHelper LOGGER = LogHelper.getLog(TestCallback.class);
 
 		@Override
-		public void callback(Long taskId, List<Task> newTasks) {
+		public void callback(Long taskId, List<TaskPO> newTasks) {
 			LOGGER.info("callback taskId=" + taskId);
 			LOGGER.info("newTasks=" + newTasks);
 		}
@@ -38,7 +38,7 @@ public class TestExpire extends BaseTest {
 
 		WorkflowEngine engine = (WorkflowEngine) init("test/timeExpire.xml");
 
-		Order order = engine.startInstanceByName(PROCESSNAME, null, 2L, args);
+		OrderPO order = engine.startInstanceByName(PROCESSNAME, null, 2L, args);
 		System.out.println(order);
 //		List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
 //		for(Task task : tasks) {

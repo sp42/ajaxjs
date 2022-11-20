@@ -16,6 +16,8 @@ package com.ajaxjs.workflow.model;
 
 import java.util.List;
 
+import com.ajaxjs.workflow.service.handler.AbstractMergeHandler;
+
 /**
  * 合并定义 join 元素
  * 

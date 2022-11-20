@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.WorkflowEngine;
-import com.ajaxjs.workflow.model.entity.Order;
+import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.old.BaseTest;
 
 public class TestSurrogate extends BaseTest {
 	// 委托代理
@@ -18,7 +18,7 @@ public class TestSurrogate extends BaseTest {
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "test" });
 
-		Order order = engine.startInstanceByName("surrogate", 0, 2L, args);
+		OrderPO order = engine.startInstanceByName("surrogate", 0, 2L, args);
 		System.out.println(order);
 //		List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
 //		for(Task task : tasks) {

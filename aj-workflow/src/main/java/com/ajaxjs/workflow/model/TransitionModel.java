@@ -20,7 +20,9 @@ import java.util.Map;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.interceptor.WorkflowInterceptor;
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.service.handler.IHandler;
+import com.ajaxjs.workflow.service.handler.SubProcessHandler;
 
 /**
  * 变迁定义 transition 元素
@@ -79,7 +81,7 @@ public class TransitionModel extends BaseWfModel {
 				public void handle(Execution execution) {
 					LOGGER.info("创建 {0} 任务", tm.getName());
 
-					List<Task> tasks = execution.getEngine().task().createTask(tm, execution);
+					List<TaskPO> tasks = execution.getEngine().task().createTask(tm, execution);
 					execution.addTasks(tasks);
 
 					// 从服务上下文中查找任务拦截器列表，依次对 task 集合进行拦截处理

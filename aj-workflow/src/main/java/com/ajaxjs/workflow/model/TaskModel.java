@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.scheduling.JobCallback;
+import com.ajaxjs.workflow.service.handler.AbstractMergeHandler;
 
 /**
  * 任务定义 task 元素
@@ -47,19 +48,6 @@ public class TaskModel extends WorkModel {
 	 */
 	public static final String TASKTYPE_AIDANT = "Aidant";
 
-	/**
-	 * 参与类型
-	 */
-	public enum PerformType {
-		ANY, ALL;
-	}
-
-	/**
-	 * 任务类型(Major:主办的,Aidant:协助的,Record:仅仅作为记录的)
-	 */
-	public enum TaskType {
-		Major, Aidant, Record;
-	}
 
 	/**
 	 * 参与者变量名称

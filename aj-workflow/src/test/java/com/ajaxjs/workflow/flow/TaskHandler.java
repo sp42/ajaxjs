@@ -1,7 +1,7 @@
 package com.ajaxjs.workflow.flow;
 
-import com.ajaxjs.workflow.model.DecisionHandler;
 import com.ajaxjs.workflow.model.Execution;
+import com.ajaxjs.workflow.service.handler.DecisionHandler;
 
 public class TaskHandler implements DecisionHandler {
 	@Override

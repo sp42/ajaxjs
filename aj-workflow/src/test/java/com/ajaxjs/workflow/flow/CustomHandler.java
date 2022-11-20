@@ -1,7 +1,7 @@
 package com.ajaxjs.workflow.flow;
 
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.IHandler;
+import com.ajaxjs.workflow.service.handler.IHandler;
 
 public class CustomHandler implements IHandler {
 	@Override

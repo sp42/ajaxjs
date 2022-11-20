@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.orm.Repository;
-import com.ajaxjs.workflow.dao.MiscDao;
+import com.ajaxjs.workflow.common.MiscDao;
 
 /**
  * 其他查询服务

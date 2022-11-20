@@ -7,7 +7,7 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.WorkflowException;
+import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.interceptor.WorkflowInterceptor;
 
 /**
@@ -97,7 +97,7 @@ public abstract class NodeModel extends BaseWfModel {
 				interceptor.intercept(execution);
 		} catch (Exception e) {
 			LOGGER.warning("拦截器执行失败=" + e.getMessage());
-			throw new WorkflowException(e);
+			throw new WfException(e);
 		}
 	}
 

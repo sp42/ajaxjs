@@ -11,10 +11,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ajaxjs.workflow.WorkflowUtils;
+import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TaskModel;
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.po.TaskPO;
 import com.ajaxjs.workflow.scheduling.IScheduler;
 import com.ajaxjs.workflow.scheduling.JobEntity;
 import com.ajaxjs.workflow.scheduling.JobEntity.JobType;
@@ -45,7 +45,7 @@ public class SchedulerInterceptor implements WorkflowInterceptor {
 		if (!isScheduled)
 			return;
 
-		for (Task task : execution.getTasks()) {
+		for (TaskPO task : execution.getTasks()) {
 			// 流程 id + 流程实例 id + 任务 id
 			String id = execution.getProcess().getId() + "-" + execution.getOrder().getId() + "-" + task.getId();
 
@@ -70,7 +70,7 @@ public class SchedulerInterceptor implements WorkflowInterceptor {
 	 * @param jobType   任务类型
 	 * @param args      执行参数
 	 */
-	private void schedule(String id, Task task, Date startDate, int jobType, Map<String, Object> args) {
+	private void schedule(String id, TaskPO task, Date startDate, int jobType, Map<String, Object> args) {
 		JobEntity entity = new JobEntity(id, task, startDate, args);
 		entity.setModelName(task.getName());
 		entity.setJobType(jobType);
@@ -79,7 +79,7 @@ public class SchedulerInterceptor implements WorkflowInterceptor {
 			TaskModel model = (TaskModel) task.getModel();
 
 			// TODO getReminderRepeat 为什么不直接设为 int
-			if (model != null && WorkflowUtils.isNumeric(model.getReminderRepeat()))
+			if (model != null && WfUtils.isNumeric(model.getReminderRepeat()))
 				entity.setPeriod(Integer.parseInt(model.getReminderRepeat()));
 		}
 

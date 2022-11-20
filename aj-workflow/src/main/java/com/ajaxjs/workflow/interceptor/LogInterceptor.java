@@ -8,7 +8,7 @@ package com.ajaxjs.workflow.interceptor;
 
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.po.TaskPO;
 
 
 /**
@@ -25,7 +25,7 @@ public class LogInterceptor implements WorkflowInterceptor {
 	 */
 	@Override
 	public void intercept(Execution execution) {
-		for (Task task : execution.getTasks()) {
+		for (TaskPO task : execution.getTasks()) {
 			StringBuffer buffer = new StringBuffer(100);
 			buffer.append("创建任务[标识=").append(task.getId());
 			buffer.append(",名称=").append(task.getDisplayName());

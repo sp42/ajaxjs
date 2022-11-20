@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.workflow.dao.SurrogateDao;
-import com.ajaxjs.workflow.model.entity.Surrogate;
+import com.ajaxjs.workflow.model.po.Surrogate;
 
 @Component
 public class SurrogateService extends BaseService<Surrogate> {

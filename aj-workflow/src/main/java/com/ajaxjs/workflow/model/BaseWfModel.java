@@ -16,6 +16,8 @@ package com.ajaxjs.workflow.model;
 
 import java.io.Serializable;
 
+import com.ajaxjs.workflow.service.handler.IHandler;
+
 /**
  * 模型元素基类
  * 

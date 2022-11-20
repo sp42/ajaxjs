@@ -8,7 +8,7 @@ package com.ajaxjs.workflow.interceptor;
 
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.entity.Task;
+import com.ajaxjs.workflow.model.po.TaskPO;
 
 /**
  * 新创建的任务通过 SurrogateInterceptor 创建委托。 查询 wf_surrogate 表获取委托代理人，并通过
@@ -22,7 +22,7 @@ public class SurrogateInterceptor implements WorkflowInterceptor {
 	public void intercept(Execution execution) {
 		WorkflowEngine engine = execution.getEngine();
 
-		for (Task task : execution.getTasks()) {
+		for (TaskPO task : execution.getTasks()) {
 			if (task.getActorIds() == null)
 				continue;
 

@@ -12,20 +12,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import com.ajaxjs.framework.BaseService;
-import com.ajaxjs.sql.orm.Repository;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.workflow.WorkflowConstant;
-import com.ajaxjs.workflow.WorkflowUtils;
-import com.ajaxjs.workflow.dao.OrderDao;
-import com.ajaxjs.workflow.dao.OrderHistoryDao;
+import com.ajaxjs.workflow.common.WfConstant;
+import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.entity.CCOrder;
-import com.ajaxjs.workflow.model.entity.Order;
-import com.ajaxjs.workflow.model.entity.OrderHistory;
-import com.ajaxjs.workflow.model.entity.Process;
-import com.ajaxjs.workflow.model.entity.Task;
-import com.ajaxjs.workflow.model.entity.TaskHistory;
+import com.ajaxjs.workflow.model.po.CCOrderPO;
+import com.ajaxjs.workflow.model.po.OrderHistory;
+import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.ProcessPO;
+import com.ajaxjs.workflow.model.po.TaskHistoryPO;
+import com.ajaxjs.workflow.model.po.TaskPO;
 
 /**
  * 流程实例
@@ -34,22 +31,14 @@ import com.ajaxjs.workflow.model.entity.TaskHistory;
  *
  */
 @Component
-public class OrderService extends BaseService<Order> {
+public class OrderService extends BaseService<OrderPO> {
 	public static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
-
-	{
-		setDao(dao);
-	}
-
-	public static OrderDao dao = new Repository().bind(OrderDao.class);
-
-	public static OrderHistoryDao historyDao = new Repository().bind(OrderHistoryDao.class);
 
 	@Autowired(required = false)
 	private TaskService taskService;
 
 	@Autowired(required = false)
-	private CCOrderService ccOrderService;
+	private OrderCcService ccOrderService;
 
 	/**
 	 * 根据流程、操作人员、父流程实例 ID 创建流程实例
@@ -61,10 +50,10 @@ public class OrderService extends BaseService<Order> {
 	 * @param parentNodeName 父流程节点模型
 	 * @return 活动流程实例对象
 	 */
-	public Order create(Process process, Long operator, Map<String, Object> args, Long parentId, String parentNodeName) {
+	public OrderPO create(ProcessPO process, Long operator, Map<String, Object> args, Long parentId, String parentNodeName) {
 		LOGGER.info("创建流程实例 " + process.getName());
 
-		Order order = new Order();
+		OrderPO order = new OrderPO();
 		order.setParentId(parentId);
 		order.setParentNodeName(parentNodeName);
 		order.setCreator(operator);
@@ -86,7 +75,7 @@ public class OrderService extends BaseService<Order> {
 			if (args.get("ajFlow.orderNo") != null) // 生成编号
 				order.setOrderNo((String) args.get("ajFlow.orderNo"));
 			else
-				order.setOrderNo(WorkflowUtils.generate(model));
+				order.setOrderNo(WfUtils.generate(model));
 		}
 
 		create(order);
@@ -101,13 +90,13 @@ public class OrderService extends BaseService<Order> {
 	 * @return 新建 id
 	 */
 	@Override
-	public Long create(Order order) {
+	public Long create(OrderPO order) {
 		Long id = super.create(order);
 
 		LOGGER.info("保存历史流程实例 " + order.getName());
 
 		OrderHistory history = new OrderHistory(order);// 复制一份
-		history.setStat(WorkflowConstant.STATE_ACTIVE);
+		history.setStat(WfConstant.STATE_ACTIVE);
 		new OrderHistoryService().create(history);
 
 		return id;
@@ -119,7 +108,7 @@ public class OrderService extends BaseService<Order> {
 	 * @return
 	 */
 	@Override
-	public int update(Order order) {
+	public int update(OrderPO order) {
 		return super.update(order);
 	}
 
@@ -130,7 +119,7 @@ public class OrderService extends BaseService<Order> {
 	 * @param args    变量数据
 	 */
 	public void addVariable(Long orderId, Map<String, Object> args) {
-		Order order = findById(orderId);
+		OrderPO order = findById(orderId);
 
 		Map<String, Object> data = JsonHelper.parseMap(order.getVariable());
 		if (data == null)
@@ -138,7 +127,7 @@ public class OrderService extends BaseService<Order> {
 
 		data.putAll(args);
 
-		Order _order = new Order();
+		OrderPO _order = new OrderPO();
 		_order.setId(orderId);
 		_order.setVariable(JsonHelper.toJson(data));
 
@@ -153,7 +142,7 @@ public class OrderService extends BaseService<Order> {
 	 * @return 历史流程
 	 */
 	private OrderHistory updateHistoryOrder(Long id, int state) {
-		Order order = new Order();
+		OrderPO order = new OrderPO();
 		order.setId(id);
 		delete(order);
 
@@ -175,7 +164,7 @@ public class OrderService extends BaseService<Order> {
 	 */
 	public void complete(Long orderId) {
 		LOGGER.info("结束 {0} 流程", orderId);
-		updateHistoryOrder(orderId, WorkflowConstant.STATE_FINISH);
+		updateHistoryOrder(orderId, WfConstant.STATE_FINISH);
 	}
 
 	/**
@@ -185,12 +174,12 @@ public class OrderService extends BaseService<Order> {
 	 * @param operator 处理人员
 	 */
 	public void terminate(Long orderId, Long operator) {
-		List<Task> tasks = taskService.findByOrderId(orderId);
+		List<TaskPO> tasks = taskService.findByOrderId(orderId);
 
-		for (Task task : tasks)
+		for (TaskPO task : tasks)
 			taskService.complete(task.getId(), operator, null);
 
-		updateHistoryOrder(orderId, WorkflowConstant.STATE_TERMINATION);
+		updateHistoryOrder(orderId, WfConstant.STATE_TERMINATION);
 	}
 
 	/**
@@ -199,20 +188,20 @@ public class OrderService extends BaseService<Order> {
 	 * @param orderId 流程实例id
 	 * @return 活动实例对象
 	 */
-	public Order resume(Long orderId) {
+	public OrderPO resume(Long orderId) {
 		OrderHistory historyOrder = historyDao.findByOrderId(orderId);
-		Order order = historyOrder.undo();
+		OrderPO order = historyOrder.undo();
 		create(order);
 
 		OrderHistory _historyOrder = new OrderHistory(); // 不用 update 那么多字段
 		_historyOrder.setId(historyOrder.getId());
-		_historyOrder.setStat(WorkflowConstant.STATE_ACTIVE);
+		_historyOrder.setStat(WfConstant.STATE_ACTIVE);
 		historyDao.update(_historyOrder);
 
-		List<TaskHistory> histTasks = taskService.findHistoryTasksByOrderId(orderId);
+		List<TaskHistoryPO> histTasks = taskService.findHistoryTasksByOrderId(orderId);
 
 		if (!ObjectUtils.isEmpty(histTasks)) {
-			TaskHistory histTask = histTasks.get(0);
+			TaskHistoryPO histTask = histTasks.get(0);
 			taskService.resume(histTask.getId(), histTask.getOperator());
 		}
 
@@ -228,21 +217,21 @@ public class OrderService extends BaseService<Order> {
 	 * @param id 流程实例id
 	 */
 	public void cascadeRemove(Long orderId) {
-		List<Task> activeTasks = taskService.findByOrderId(orderId);
-		List<TaskHistory> historyTasks = taskService.findHistoryTasksByOrderId(orderId);
+		List<TaskPO> activeTasks = taskService.findByOrderId(orderId);
+		List<TaskHistoryPO> historyTasks = taskService.findHistoryTasksByOrderId(orderId);
 
-		for (Task task : activeTasks)
+		for (TaskPO task : activeTasks)
 			taskService.delete(task);
 
-		for (TaskHistory historyTask : historyTasks)
+		for (TaskHistoryPO historyTask : historyTasks)
 			TaskService.historyDao.delete(historyTask);
 
-		List<CCOrder> ccOrders = ccOrderService.findByOrderId(orderId);
+		List<CCOrderPO> ccOrders = ccOrderService.findByOrderId(orderId);
 
-		for (CCOrder ccOrder : ccOrders)
+		for (CCOrderPO ccOrder : ccOrders)
 			ccOrderService.delete(ccOrder);
 
-		Order order = findById(orderId);
+		OrderPO order = findById(orderId);
 		historyDao.delete(historyDao.findByOrderId(orderId));
 		delete(order);
 	}
@@ -253,7 +242,7 @@ public class OrderService extends BaseService<Order> {
 	 * @param childOrderId
 	 * @return
 	 */
-	public List<Order> findByIdAndExcludedIds(Long parentId, Long childOrderId) {
+	public List<OrderPO> findByIdAndExcludedIds(Long parentId, Long childOrderId) {
 		Function<String, String> fn = by("parentId", parentId);
 
 		if (childOrderId != null && childOrderId != 0)
@@ -265,7 +254,7 @@ public class OrderService extends BaseService<Order> {
 	/**
 	 * 默认的任务、实例完成时触发的动作
 	 */
-	private BiConsumer<TaskHistory, OrderHistory> completion = (TaskHistory task, OrderHistory order) -> {
+	private BiConsumer<TaskHistoryPO, OrderHistory> completion = (TaskHistoryPO task, OrderHistory order) -> {
 		if (task != null)
 			LOGGER.info("任务[{0}] 已经由用户 [{1}] 执行完成。", task.getId(), task.getOperator());
 
@@ -273,11 +262,11 @@ public class OrderService extends BaseService<Order> {
 			LOGGER.info("流程[{0}] 已经完成。", order.getId());
 	};
 
-	public BiConsumer<TaskHistory, OrderHistory> getCompletion() {
+	public BiConsumer<TaskHistoryPO, OrderHistory> getCompletion() {
 		return completion;
 	}
 
-	public void setCompletion(BiConsumer<TaskHistory, OrderHistory> completion) {
+	public void setCompletion(BiConsumer<TaskHistoryPO, OrderHistory> completion) {
 		this.completion = completion;
 	}
 }
