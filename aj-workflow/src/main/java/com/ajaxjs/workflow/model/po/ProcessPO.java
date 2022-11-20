@@ -8,7 +8,7 @@ import com.ajaxjs.workflow.model.ProcessModel;
  * @author Frank Cheung<sp42@qq.com>
  *
  */
-public class ProcessPO extends WfPersistantObject {
+public class ProcessPO extends BasePersistantObject {
 	/**
 	 * 版本
 	 */

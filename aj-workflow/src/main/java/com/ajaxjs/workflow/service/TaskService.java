@@ -13,10 +13,8 @@ import org.springframework.util.StringUtils;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
-import com.ajaxjs.workflow.model.Execution;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.po.TaskActor;
-import com.ajaxjs.workflow.model.po.TaskPO;
-import com.ajaxjs.workflow.model.work.TaskModel;
 
 /**
  * Actor
@@ -37,46 +35,43 @@ public class TaskService extends TaskBaseService {
 	}
 
 	/**
-	 * 向指定任务添加参与者 该方法根据performType类型判断是否需要创建新的活动任务
+	 * 向指定任务添加参与者 该方法根据 performType 类型判断是否需要创建新的活动任务
 	 * 
-	 * @param taskId      任务id
+	 * @param taskId      任务 id
 	 * @param performType 参与类型
 	 * @param actors      参与者
 	 */
-	public void addTaskActor(Long taskId, Integer performType, Long... actors) {
-		TaskPO task = TaskDAO.findById(taskId);
+	public void addTaskActor(Long taskId, PerformType performType, Long... actors) {
+		Task task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
-		if (!task.isMajor())
+		if (task.getTaskType() != TaskType.MAJOR)
 			return;
+
 		if (performType == null)
 			performType = task.getPerformType();
-		if (performType == null)
-			performType = 0;
 
-		switch (performType) {
-		case 0:
+		if (performType == null || performType == PerformType.ANY) {
 			assignTask(task.getId(), actors);
 			Map<String, Object> data = JsonHelper.parseMap(task.getVariable());
 			if (data == null)
 				data = Collections.emptyMap();
 
-			String oldActor = (String) data.get(TaskPO.KEY_ACTOR);
-			data.put(TaskPO.KEY_ACTOR, oldActor + "," + WfUtils.join(actors));
+			String oldActor = (String) data.get(Task.KEY_ACTOR);
+			data.put(Task.KEY_ACTOR, oldActor + "," + WfUtils.join(actors));
 			task.setVariable(JsonHelper.toJson(data));
 			TaskDAO.update(task);
-			break;
-		case 1:
+		} else if (performType == PerformType.ALL) {
 			try {
 				for (Long actor : actors) {
-					TaskPO newTask = (TaskPO) task.clone();
+					Task newTask = (Task) task.clone();
 					newTask.setOperator(actor);
 
 					Map<String, Object> taskData = JsonHelper.parseMap(task.getVariable());
 					if (taskData == null)
 						taskData = Collections.emptyMap();
 
-					taskData.put(TaskPO.KEY_ACTOR, actor);
+					taskData.put(Task.KEY_ACTOR, actor);
 					task.setVariable(JsonHelper.toJson(taskData));
 					TaskDAO.create(newTask);
 					assignTask(newTask.getId(), actor);
@@ -84,10 +79,6 @@ public class TaskService extends TaskBaseService {
 			} catch (CloneNotSupportedException ex) {
 				throw new WfException("任务对象不支持复制", ex.getCause());
 			}
-
-			break;
-		default:
-			break;
 		}
 	}
 
@@ -98,16 +89,16 @@ public class TaskService extends TaskBaseService {
 	 * @param actors 参与者
 	 */
 	public void removeTaskActor(Long taskId, Long... actors) {
-		TaskPO task = TaskDAO.findById(taskId);
+		Task task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (actors == null || actors.length == 0)
 			return;
 
-		if (task.isMajor()) {
+		if (task.getTaskType() == TaskType.MAJOR) {
 			removeTaskActor(task.getId(), actors);
 			Map<String, Object> taskData = JsonHelper.parseMap(task.getVariable());
-			String actorStr = (String) taskData.get(TaskPO.KEY_ACTOR);
+			String actorStr = (String) taskData.get(Task.KEY_ACTOR);
 
 			if (StringUtils.hasText(actorStr)) {
 				String[] actorArray = actorStr.split(",");
@@ -133,79 +124,11 @@ public class TaskService extends TaskBaseService {
 				}
 
 				newActor.deleteCharAt(newActor.length() - 1);
-				taskData.put(TaskPO.KEY_ACTOR, newActor.toString());
+				taskData.put(Task.KEY_ACTOR, newActor.toString());
 				task.setVariable(JsonHelper.toJson(taskData));
 				TaskDAO.update(task);
 			}
 		}
-	}
-
-	@Override
-	public Long[] getTaskActors(TaskModel model, Execution execution) {
-		Object assigneeObject = null;
-		BiFunction<TaskModel, Execution, Object> handler = model.getAssignment();
-
-		if (StringUtils.hasText(model.getAssignee()))
-			assigneeObject = execution.getArgs().get(model.getAssignee());
-		else if (handler != null)
-			assigneeObject = handler.apply(model, execution);
-
-		System.out.println("SSSSSSSSS:" + (assigneeObject == null));
-
-		return getTaskActors(assigneeObject == null ? model.getAssignee() : assigneeObject);
-	}
-
-	/**
-	 * 根据 taskmodel 指定的 assignee 属性，从 args 中取值将取到的值处理为 String[] 类型。
-	 * 
-	 * @param actors 参与者对象
-	 * @return 参与者数组
-	 */
-	Long[] getTaskActors(Object actors) {
-		if (actors == null)
-			return null;
-
-		Long[] results;
-
-		if (actors instanceof String[]) {
-			String[] arr = (String[]) actors;
-			results = new Long[arr.length];
-
-			for (int i = 0; i < arr.length; i++)
-				results[i] = Long.parseLong(arr[i]);
-
-		} else if (actors instanceof String) {// 如果值为字符串类型，则使用逗号,分隔
-			if (actors.toString().indexOf(",") != -1) {
-				String[] arr = actors.toString().split(",");
-				results = new Long[arr.length];
-
-				for (int i = 0; i < arr.length; i++)
-					results[i] = Long.parseLong(arr[i]);
-			} else {
-				results = new Long[1];
-				results[0] = Long.parseLong(actors.toString());
-			}
-		} else if (actors instanceof List) {
-			// jackson会把stirng[]转成arraylist，此处增加arraylist的逻辑判断,by 红豆冰沙2014.11.21
-			List<?> list = (List<?>) actors;
-			results = new Long[list.size()];
-
-			for (int i = 0; i < list.size(); i++)
-				results[i] = Long.parseLong(list.get(i).toString());
-		} else if (actors instanceof Long) {// 如果为Long类型，则返回1个元素的String[]
-			results = new Long[1];
-			results[0] = (Long) actors;
-		} else if (actors instanceof Integer) {// 如果为Integer类型，则返回1个元素的String[]
-			results = new Long[1];
-			results[0] = Long.parseLong(actors + "");
-		} else if (actors instanceof Long[]) {
-			results = (Long[]) actors;// 如果为String[]类型，则直接返回
-		} else {
-			// 其它类型，抛出不支持的类型异常
-			throw new WfException("任务参与者对象[" + actors + "]类型不支持." + "合法参数示例:Long,Integer,new String[]{},'10000,20000',List<String>");
-		}
-
-		return results;
 	}
 
 	/**

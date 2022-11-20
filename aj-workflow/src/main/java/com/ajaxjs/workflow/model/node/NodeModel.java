@@ -69,24 +69,24 @@ public abstract class NodeModel extends BaseWfModel {
 	/**
 	 * 对执行逻辑增加前置、后置拦截处理
 	 * 
-	 * @param execution 执行对象
+	 * @param exec 执行对象
 	 */
 
-	public void execute(Execution execution) {
-		intercept(preInterceptorList, execution);
-		exec(execution);
-		intercept(postInterceptorList, execution);
+	public void execute(Execution exec) {
+		intercept(preInterceptorList, exec);
+		exec(exec);
+		intercept(postInterceptorList, exec);
 	}
 
 	/**
 	 * 运行变迁继续执行
 	 * 
-	 * @param execution 执行对象
+	 * @param exec 执行对象
 	 */
-	protected void runOutTransition(Execution execution) {
+	protected void runOutTransition(Execution exec) {
 		for (TransitionModel tm : getOutputs()) {
 			tm.setEnabled(true);
-			tm.execute(execution);
+			tm.execute(exec);
 		}
 	}
 

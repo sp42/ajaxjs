@@ -6,15 +6,14 @@ import org.springframework.util.CollectionUtils;
 
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.po.OrderPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Order;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.work.SubProcessModel;
 import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.TaskService;
 
 /**
  * 合并处理的抽象处理器 需要子类提供查询无法合并的 task 集合的参数 map
- * 
  */
 public abstract class AbstractMergeHandler implements IHandler {
 	/**
@@ -28,7 +27,7 @@ public abstract class AbstractMergeHandler implements IHandler {
 		boolean isSubProcessMerged = false, isTaskMerged = false;
 
 		if (model.containsNodeNames(SubProcessModel.class, activeNodes)) {
-			List<OrderPO> orders = execution.getEngine().order().findByIdAndExcludedIds(orderId, execution.getChildOrderId());
+			List<Order> orders = execution.getEngine().order().findByIdAndExcludedIds(orderId, execution.getChildOrderId());
 
 			if (CollectionUtils.isEmpty(orders)) // 如果所有 task 都已完成，则表示可合并
 				isSubProcessMerged = true;
@@ -38,7 +37,7 @@ public abstract class AbstractMergeHandler implements IHandler {
 		TaskService taskService = execution.getEngine().task();
 
 		if (isSubProcessMerged && model.containsNodeNames(TaskModel.class, activeNodes)) {
-			List<TaskPO> tasks = taskService.findByOrderIdAndExcludedIds(orderId, execution.getTask().getId(), activeNodes);
+			List<Task> tasks = taskService.findByOrderIdAndExcludedIds(orderId, execution.getTask().getId(), activeNodes);
 
 			if (CollectionUtils.isEmpty(tasks)) // 如果所有 task 都已完成，则表示可合并
 				isTaskMerged = true;

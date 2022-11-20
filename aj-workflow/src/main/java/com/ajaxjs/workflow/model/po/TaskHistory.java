@@ -1,19 +1,14 @@
-/*
- * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
 package com.ajaxjs.workflow.model.po;
 
 import com.ajaxjs.sql.annotation.IgnoreDB;
+import com.ajaxjs.workflow.common.WfConstant.PerformType;
 
 /**
  * 历史任务实体类。
  * 
  * history 减少了 version 字段
  */
-public class TaskHistoryPO extends TaskPO {
+public class TaskHistory extends Task {
 	@IgnoreDB
 	@Override
 	public Integer getVersion() {
@@ -23,7 +18,7 @@ public class TaskHistoryPO extends TaskPO {
 	/**
 	 * 创建历史任务
 	 */
-	public TaskHistoryPO() {
+	public TaskHistory() {
 	}
 
 	/**
@@ -31,7 +26,7 @@ public class TaskHistoryPO extends TaskPO {
 	 * 
 	 * @param task 任务对象
 	 */
-	public TaskHistoryPO(TaskPO task) {
+	public TaskHistory(Task task) {
 		setId(task.getId());
 		setOrderId(task.getOrderId());
 		setCreateDate(task.getCreateDate());
@@ -51,8 +46,8 @@ public class TaskHistoryPO extends TaskPO {
 	 * 
 	 * @return 任务对象
 	 */
-	public TaskPO undoTask() {
-		TaskPO task = new TaskPO();
+	public Task undoTask() {
+		Task task = new Task();
 		task.setOrderId(getOrderId());
 		task.setName(getName());
 		task.setDisplayName(getDisplayName());
@@ -74,6 +69,6 @@ public class TaskHistoryPO extends TaskPO {
 	 */
 	@IgnoreDB
 	public boolean isPerformAny() {
-		return getPerformType().intValue() == PerformType.ANY.ordinal();
+		return getPerformType() == PerformType.ANY;
 	}
 }

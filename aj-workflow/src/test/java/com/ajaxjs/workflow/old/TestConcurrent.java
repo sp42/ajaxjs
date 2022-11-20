@@ -17,6 +17,7 @@ package com.ajaxjs.workflow.old;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.WorkflowEngine;
 
 /**

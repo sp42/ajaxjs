@@ -10,7 +10,7 @@ import java.util.concurrent.Future;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.work.SubProcessModel;
 
@@ -45,13 +45,13 @@ public class SubProcessHandler implements IHandler {
 		ProcessPO process = engine.process().findByVersion(model.getProcessName(), model.getVersion());
 
 		Execution child = Execution.createSubExecution(execution, process, model.getName());
-		OrderPO order = null;
+		Order order = null;
 
 		if (isFutureRunning) {
 			// 创建单个线程执行器来执行启动子流程的任务
 			ExecutorService es = Executors.newSingleThreadExecutor();
-			// 提交执行任务，并返回future
-			Future<OrderPO> future = es.submit(new ExecuteTask(execution, process, model.getName()));
+			// 提交执行任务，并返回 future
+			Future<Order> future = es.submit(new ExecuteTask(execution, process, model.getName()));
 
 			try {
 				es.shutdown();
@@ -69,10 +69,10 @@ public class SubProcessHandler implements IHandler {
 	}
 
 	/**
-	 * Future模式的任务执行。通过call返回任务结果集
+	 * Future 模式的任务执行。通过 call 返回任务结果集
 	 * 
 	 */
-	class ExecuteTask implements Callable<OrderPO> {
+	class ExecuteTask implements Callable<Order> {
 		private WorkflowEngine engine;
 
 		private Execution child;
@@ -90,7 +90,7 @@ public class SubProcessHandler implements IHandler {
 		}
 
 		@Override
-		public OrderPO call() throws Exception {
+		public Order call() throws Exception {
 			return engine.startInstanceByExecution(child);
 		}
 	}

@@ -1,24 +1,11 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package com.ajaxjs.workflow.service.scheduling;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Task;
 
 /**
  * job 实体，用于传递给具体的调度框架
@@ -62,7 +49,7 @@ public class JobEntity implements Serializable {
 	/**
 	 * 任务对象
 	 */
-	private TaskPO task;
+	private Task task;
 
 	/**
 	 * 启动时间
@@ -79,22 +66,22 @@ public class JobEntity implements Serializable {
 	 */
 	private Map<String, Object> args;
 
-	public JobEntity(String id, TaskPO task, Date startTime) {
+	public JobEntity(String id, Task task, Date startTime) {
 		this(id, task, startTime, 0);
 	}
 
-	public JobEntity(String id, TaskPO task, Date startTime, int period) {
+	public JobEntity(String id, Task task, Date startTime, int period) {
 		this.id = id;
 		this.task = task;
 		this.startTime = startTime;
 		this.period = period;
 	}
 
-	public JobEntity(String id, TaskPO task, Date startTime, Map<String, Object> args) {
+	public JobEntity(String id, Task task, Date startTime, Map<String, Object> args) {
 		this(id, task, startTime, args, 0);
 	}
 
-	public JobEntity(String id, TaskPO task, Date startTime, Map<String, Object> args, int period) {
+	public JobEntity(String id, Task task, Date startTime, Map<String, Object> args, int period) {
 		this.id = id;
 		this.task = task;
 		this.startTime = startTime;
@@ -102,11 +89,11 @@ public class JobEntity implements Serializable {
 		this.args = args;
 	}
 
-	public TaskPO getTask() {
+	public Task getTask() {
 		return task;
 	}
 
-	public void setTask(TaskPO task) {
+	public void setTask(Task task) {
 		this.task = task;
 	}
 

@@ -5,13 +5,15 @@ import java.util.Map;
 
 import com.ajaxjs.sql.annotation.IgnoreDB;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.workflow.common.WfConstant.PerformType;
+import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.work.TaskModel;
 
 /**
  * 任务实体类
  */
-public class TaskPO extends WfPersistantObject {
+public class Task extends BasePersistantObject {
 	/**
 	 * 
 	 */
@@ -35,7 +37,7 @@ public class TaskPO extends WfPersistantObject {
 	/**
 	 * 参与方式（0：普通任务；1：参与者会签任务）
 	 */
-	private Integer performType;
+	private PerformType performType;
 
 	/**
 	 * 任务类型（0：主办任务；1：协办任务）
@@ -43,7 +45,7 @@ public class TaskPO extends WfPersistantObject {
 	private TaskType taskType;
 
 	/**
-	 * 任务处理者ID
+	 * 任务处理者 id
 	 */
 	private Long operator;
 
@@ -53,17 +55,17 @@ public class TaskPO extends WfPersistantObject {
 	private Date finishDate;
 
 	/**
-	 * 期望的完成时间date类型
+	 * 期望的完成时间 date 类型
 	 */
 	private Date expireDate;
 
 	/**
-	 * 提醒时间date类型
+	 * 提醒时间 date 类型
 	 */
 	private Date remindDate;
 
 	/**
-	 * 任务关联的表单url
+	 * 任务关联的表单 url
 	 */
 	private String actionUrl;
 	/**
@@ -85,13 +87,6 @@ public class TaskPO extends WfPersistantObject {
 	 * 保持模型对象
 	 */
 	private TaskModel model;
-
-	public TaskPO() {
-	}
-
-	public TaskPO(Long id) {
-		setId(id);
-	}
 
 	public Long getParentId() {
 		return parentId;
@@ -180,11 +175,11 @@ public class TaskPO extends WfPersistantObject {
 		this.actorIds = actorIds;
 	}
 
-	public Integer getPerformType() {
+	public PerformType getPerformType() {
 		return performType;
 	}
 
-	public void setPerformType(Integer performType) {
+	public void setPerformType(PerformType performType) {
 		this.performType = performType;
 	}
 
@@ -238,15 +233,5 @@ public class TaskPO extends WfPersistantObject {
 		sb.append(",performType=").append(performType).append(")");
 
 		return sb.toString();
-	}
-
-	/**
-	 * 任务是否主办类型
-	 * 
-	 * @return true 表示为主办类型
-	 */
-	@IgnoreDB
-	public boolean isMajor() {
-		return getTaskType() == TaskType.MAJOR;
 	}
 }

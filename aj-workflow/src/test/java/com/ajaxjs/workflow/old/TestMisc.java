@@ -20,26 +20,91 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.workflow.WorkflowEngine;
-import com.ajaxjs.workflow.model.po.OrderPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.model.po.Order;
+import com.ajaxjs.workflow.model.po.Task;
+import com.ajaxjs.workflow.model.work.TaskModel;
+import com.ajaxjs.workflow.service.scheduling.JobCallback;
 
 public class TestMisc extends BaseTest {
 	// 实例编号自定义
 	@Test
 	public void testGenerator() {
-		WorkflowEngine engine = (WorkflowEngine) init("test/generator.xml");
+		init("test/generator.xml");
 
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
-		OrderPO order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, args);
+		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, args);
 
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 			engine.executeTask(task.getId(), 1L, null);
 		}
 	}
 
+	// 自由流
+	@Test
+	public void testFreeFlow() {
+		init("test/freeflow.xml");
 
+		Map<String, Object> args = new HashMap<>();
+		args.put("task1.operator", new String[] { "1" });
+
+		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, args);
+		TaskModel tm1 = new TaskModel();
+		tm1.setName("task1");
+		tm1.setDisplayName("任务1");
+		TaskModel tm2 = new TaskModel();
+		tm2.setName("task2");
+		tm2.setDisplayName("任务2");
+		List<Task> tasks = engine.createFreeTask(order.getId(), 1L, args, tm1);
+
+		for (Task task : tasks) {
+			engine.task().complete(task.getId(), 1L, null);
+		}
+
+//		tasks = engine.createFreeTask(order.getId(), "1", args, tm2);
+//		for(Task task : tasks) {
+//			engine.task().complete(task.getId(), "1", null);
+//		}
+		engine.order().terminate(order.getId(), null);
+	}
+
+	private static final String PROCESSNAME = "expire";
+
+	public static class TestCallback implements JobCallback {
+		public static final LogHelper LOGGER = LogHelper.getLog(TestCallback.class);
+
+		@Override
+		public void callback(Long taskId, List<Task> newTasks) {
+			LOGGER.info("callback taskId=" + taskId);
+			LOGGER.info("newTasks=" + newTasks);
+		}
+	}
+
+	@Test
+	public void testExpire() {
+//		System.out.println(DateHelper.parseTime(new DateTime(2014, 4, 6, 16, 41).toDate()));
+
+		Map<String, Object> args = new HashMap<>();
+		args.put("task1.operator", new String[] { "1" });
+//		args.put("task1.expireTime", new DateTime(2014, 4, 15, 9, 0).toDate());
+//		args.put("task1.reminderTime", new DateTime(2014, 4, 15, 8, 57).toDate());
+
+		init("test/timeExpire.xml");
+
+		Order order = engine.startInstanceByName(PROCESSNAME, null, 2L, args);
+		System.out.println(order);
+//		List<Task> tasks = queryService.getActiveTasks(new QueryFilter().setOrderId(order.getId()));
+//		for(Task task : tasks) {
+//			engine.executeTask(task.getId(), "1", args);
+//		}
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }

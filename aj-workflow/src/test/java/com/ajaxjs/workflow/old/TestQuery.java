@@ -7,17 +7,14 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.ajaxjs.workflow.BaseTest;
+
 public class TestQuery extends BaseTest {
 	public void testRead() {
-		assertNotNull(service.findById(1L));
-		assertNotNull(service.findById(1L));
-		assertNotNull(service.findList());
-		assertNotNull(service.findByName("simple"));
-		assertNotNull(service.findByVersion("simple", 1));
-	}
-
-	public void testUndeploy() {
-		service.undeploy(2L);
+		assertNotNull(processService.findById(1L));
+		assertNotNull(processService.findById(1L));
+		assertNotNull(processService.findByName("simple"));
+		assertNotNull(processService.findByVersion("simple", 1));
 	}
 
 	@Test
@@ -27,7 +24,7 @@ public class TestQuery extends BaseTest {
 
 //		e.startInstanceByName("simple", 0, null, args);
 		engine.startInstanceById(1L, 0L, args);
-		service.undeploy(1L);
+		processService.undeploy(1L);
 	}
 
 	@Test

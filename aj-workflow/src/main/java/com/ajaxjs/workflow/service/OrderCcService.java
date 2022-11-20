@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.workflow.common.WfConstant;
-import com.ajaxjs.workflow.model.po.CCOrderPO;
+import com.ajaxjs.workflow.model.po.OrderCc;
 
 /**
  * 委托
@@ -16,14 +16,14 @@ import com.ajaxjs.workflow.model.po.CCOrderPO;
  *
  */
 @Component
-public class OrderCcService extends BaseService<CCOrderPO> {
+public class OrderCcService extends BaseService<OrderCc> {
 	/**
 	 * 根据实例 id 查找抄送列表
 	 * 
 	 * @param orderId 流程实例 id
 	 * @return 抄送列表
 	 */
-	public List<CCOrderPO> findByOrderId(Long orderId) {
+	public List<OrderCc> findByOrderId(Long orderId) {
 		return findList(by("orderId", orderId));
 	}
 
@@ -34,7 +34,7 @@ public class OrderCcService extends BaseService<CCOrderPO> {
 	 * @param actorIds 参与者 id 列表
 	 * @return 抄送列表
 	 */
-	public List<CCOrderPO> findList(Long orderId, Long... actorIds) {
+	public List<OrderCc> findList(Long orderId, Long... actorIds) {
 		return findList(by("orderId", orderId));
 	}
 
@@ -47,7 +47,7 @@ public class OrderCcService extends BaseService<CCOrderPO> {
 	 */
 	public void createCCOrder(Long orderId, Long creator, Long... actorIds) {
 		for (Long actorId : actorIds) {
-			CCOrderPO ccorder = new CCOrderPO();
+			OrderCc ccorder = new OrderCc();
 			ccorder.setOrderId(orderId);
 			ccorder.setCreator(creator);
 			ccorder.setActorId(actorId);
@@ -64,10 +64,10 @@ public class OrderCcService extends BaseService<CCOrderPO> {
 	 * @param actorIds 参与者 id 列表
 	 */
 	public void updateCCStatus(Long orderId, Long... actorIds) {
-		List<CCOrderPO> ccorders = findList(orderId, actorIds);
+		List<OrderCc> ccorders = findList(orderId, actorIds);
 		Objects.nonNull(ccorders);
 
-		for (CCOrderPO ccorder : ccorders) {
+		for (OrderCc ccorder : ccorders) {
 			ccorder.setStat(WfConstant.STATE_FINISH);
 			ccorder.setFinishTime(new Date());
 			update(ccorder);
@@ -81,9 +81,9 @@ public class OrderCcService extends BaseService<CCOrderPO> {
 	 * @param actorId 参与者 id
 	 */
 	public void deleteCCOrder(Long orderId, Long actorId) {
-		List<CCOrderPO> ccorders = findList(orderId, actorId);
+		List<OrderCc> ccorders = findList(orderId, actorId);
 
-		for (CCOrderPO ccorder : ccorders)
+		for (OrderCc ccorder : ccorders)
 			delete(ccorder);
 	}
 }

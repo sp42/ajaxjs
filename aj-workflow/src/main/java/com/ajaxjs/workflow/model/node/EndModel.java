@@ -9,12 +9,13 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfDao;
 import com.ajaxjs.workflow.common.WfException;
+import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.TransitionModel;
-import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.work.SubProcessModel;
 import com.ajaxjs.workflow.service.handler.IHandler;
 
@@ -35,12 +36,12 @@ public class EndModel extends NodeModel {
 				LOGGER.info("准备要完成了，运行  End 节点");
 
 				WorkflowEngine engine = execution.getEngine();
-				OrderPO order = execution.getOrder();
-				List<TaskPO> tasks = engine.task().findByOrderId(order.getId());// 查找当前活动的任务
+				Order order = execution.getOrder();
+				List<Task> tasks = engine.task().findByOrderId(order.getId());// 查找当前活动的任务
 
 				if (!ObjectUtils.isEmpty(tasks))
-					for (TaskPO task : tasks) {
-						if (task.isMajor())
+					for (Task task : tasks) {
+						if (task.getTaskType() == TaskType.MAJOR)
 							throw new WfException("存在未完成的主办任务，请确认！？");
 
 //					engine.task().complete(task.getId(), SnakerEngine.AUTO);
@@ -52,7 +53,7 @@ public class EndModel extends NodeModel {
 				// 如果存在父流程，则重新构造 Execution 执行对象，交给父流程的 SubProcessModel 模型 execute
 
 				if (order != null && (order.getParentId() != null /* || order.getParentId() != 0 */)) {
-					OrderPO parentOrder = WfDao.OrderDAO.findById(order.getParentId());
+					Order parentOrder = WfDao.OrderDAO.findById(order.getParentId());
 
 					if (parentOrder == null)
 						return;

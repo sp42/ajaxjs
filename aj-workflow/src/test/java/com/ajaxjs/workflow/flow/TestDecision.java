@@ -9,9 +9,9 @@ import java.util.function.Function;
 
 import org.junit.Test;
 
+import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.po.OrderPO;
-import com.ajaxjs.workflow.old.BaseTest;
+import com.ajaxjs.workflow.model.po.Order;
 
 public class TestDecision extends BaseTest {
 	// 测试决策分支流程1：决策节点decision使用expr属性决定后置路线
@@ -24,7 +24,7 @@ public class TestDecision extends BaseTest {
 		// args.put("task1.operator", new String[]{"1","2"});
 		// args.put("task3.operator", new String[]{"1","2"});
 		args.put("content", "toTask2");
-		OrderPO order = engine.startInstanceByName("decision1", 0, 2L, args);
+		Order order = engine.startInstanceByName("decision1", 0, 2L, args);
 		System.out.println(order);
 
 		assertNotNull(order);
@@ -41,7 +41,7 @@ public class TestDecision extends BaseTest {
 		args.put("task3.operator", new String[] { "1" });
 		args.put("content", 200);
 
-		OrderPO order = engine.startInstanceByName("decision2", 0, 2L, args);
+		Order order = engine.startInstanceByName("decision2", 0, 2L, args);
 		assertNotNull(order);
 		System.out.println(order);
 	}
@@ -75,7 +75,7 @@ public class TestDecision extends BaseTest {
 		args.put("task2.operator", new String[] { "1" });
 		args.put("task3.operator", new String[] { "1" });
 		args.put("content", "toTask3");
-		OrderPO order = engine.startInstanceByName("decision3", 0, 2L, args);
+		Order order = engine.startInstanceByName("decision3", 0, 2L, args);
 		System.out.println(order);
 		assertNotNull(order);
 	}

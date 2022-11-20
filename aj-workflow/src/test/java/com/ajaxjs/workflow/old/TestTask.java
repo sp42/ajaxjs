@@ -8,17 +8,17 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.workflow.WorkflowEngine;
+import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.po.OrderPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Order;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.work.TaskModel;
 
 public class TestTask extends BaseTest {
 //	@Test
 	public void testConfig() {
-		deploy("test/task/config.xml");
-		OrderPO order = engine.startInstanceByName("config", 0, 1000L, null);
+		init("test/task/config.xml");
+		Order order = engine.startInstanceByName("config", 0, 1000L, null);
 		assertNotNull(order);
 
 		Map<String, Object> args = new HashMap<>();
@@ -34,12 +34,12 @@ public class TestTask extends BaseTest {
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
 
-		OrderPO order = engine.startInstanceByName("simple", 0, 87L, args);
+		Order order = engine.startInstanceByName("simple", 0, 87L, args);
 
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 		assertNotNull(tasks);
 
-		for (TaskPO task : tasks)
+		for (Task task : tasks)
 			engine.executeTask(task.getId(), 87L, args);
 	}
 
@@ -52,11 +52,11 @@ public class TestTask extends BaseTest {
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
 
-		OrderPO order = engine.startInstanceById(155L, 2L, args);
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		Order order = engine.startInstanceById(155L, 2L, args);
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 		assertNotNull(tasks);
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 			engine.task().take(task.getId(), 1L);
 		}
 	}
@@ -66,11 +66,11 @@ public class TestTask extends BaseTest {
 	public void testTransfer() {
 //		deploy("test/task/transfer.xml");
 
-		OrderPO order = engine.startInstanceByName("transfer", 0, 1000L, null);
+		Order order = engine.startInstanceByName("transfer", 0, 1000L, null);
 
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 //			engine.task().createNewTask(task.getId(), 0, 1000L);
 //			engine.task().complete(task.getId(), null, null);
 		}
@@ -79,7 +79,7 @@ public class TestTask extends BaseTest {
 	// 驳回
 //	@Test
 	public void testReject() {
-		WorkflowEngine engine = (WorkflowEngine) init("test/task/reject.xml");
+		init("test/task/reject.xml");
 		engine.startInstanceById(engine.process().lastDeployProcessId, null, null);
 
 		Map<String, Object> args = new HashMap<>();
@@ -91,15 +91,15 @@ public class TestTask extends BaseTest {
 	// 唤醒
 //	@Test
 	public void testResume() {
-		deploy("test/task/simple.xml");
+		init("test/task/simple.xml");
 
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
 
-		OrderPO order = engine.startInstanceByName("simple", null, 2L, args);
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		Order order = engine.startInstanceByName("simple", null, 2L, args);
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks)
+		for (Task task : tasks)
 			engine.executeTask(task.getId(), 2L, args);
 
 		engine.order().resume(order.getId());
@@ -114,7 +114,7 @@ public class TestTask extends BaseTest {
 	// 字段模型
 //	@Test
 	public void TestField() {
-		Long processId = deploy("test/task/field.xml");
+		Long processId = init("test/task/field.xml");
 
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
@@ -127,15 +127,15 @@ public class TestTask extends BaseTest {
 
 //	@Test
 	public void testModel() {
-		Long processId = deploy("test/task/process.xml");
+		Long processId = init("test/task/process.xml");
 
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1" });
 
-		OrderPO order = engine.startInstanceByName("simple", null, 2L, args);
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		Order order = engine.startInstanceByName("simple", null, 2L, args);
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 			TaskModel model = engine.task().getTaskModel(task.getId());
 			System.out.println(model.getName());
 			List<TaskModel> models = model.getNextModels(TaskModel.class);

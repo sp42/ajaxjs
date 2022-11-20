@@ -71,7 +71,8 @@ public class ProcessModelParser {
 		String str = node.getNodeName() + "Parser";
 		str = str.substring(0, 1).toUpperCase() + str.substring(1);
 
-		Class<?> clz = ReflectUtil.getClassByName("com.ajaxjs.workflow.model." + str);
+		String packageName = AbstractNodeParser.class.getPackage().getName() + ".";
+		Class<?> clz = ReflectUtil.getClassByName(packageName + str);
 		Object p = DiContextUtil.getBean(clz);
 		Objects.requireNonNull(p, "不存在这类型的解释器 " + str);
 

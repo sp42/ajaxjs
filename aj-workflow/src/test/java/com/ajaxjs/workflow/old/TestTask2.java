@@ -8,21 +8,21 @@ import java.util.function.BiFunction;
 import org.junit.Test;
 
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.workflow.WorkflowEngine;
+import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.po.OrderPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Order;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
 
 public class TestTask2 extends BaseTest {
 	@Test
 	public void testAssignmentHandler() {
-		WorkflowEngine engine = (WorkflowEngine) init("test/task/assignmenthandler/process.snaker");
-		OrderPO order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, null);
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		init("test/task/assignmenthandler/process.snaker");
+		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, null);
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 //			engine.executeTask(task.getId(), "admin");
 			engine.executeTask(task.getId(), null, null);
 		}
@@ -31,25 +31,25 @@ public class TestTask2 extends BaseTest {
 	// 协办流程
 	@Test
 	public void testAidant() {
-		WorkflowEngine engine = (WorkflowEngine) init("test/task/aidant/process.snaker");
-		OrderPO order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, null);
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		init("test/task/aidant/process.snaker");
+		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, null);
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
-			engine.task().createNewTask(task.getId(), 1, 1000L);
+		for (Task task : tasks) {
+//			engine.task().createNewTask(task.getId(), 1, 1000L);
 		}
 	}
 
 	// 测试无权限执行任务
 	@Test
 	public void TestNotAllow() {
-		WorkflowEngine engine = (WorkflowEngine) init("test/task/right/process.snaker");
+		init("test/task/right/process.snaker");
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "2" });
-		OrderPO order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, args);
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, args);
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 //			engine.executeTask(task.getId(), SnakerEngine.ADMIN, args);
 		}
 	}
@@ -76,14 +76,14 @@ public class TestTask2 extends BaseTest {
 	// 测试该类时，确认是否配置了自定义的访问策略，请检查snaker.xml中的配置
 	@Test
 	public void testCustomAccess() {
-		WorkflowEngine engine = (WorkflowEngine) init("test/task/group/process.snaker");
-		Map<String, Object> args = new HashMap<String, Object>();
+		init("test/task/group/process.snaker");
+		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "role1" });
-		OrderPO order = engine.startInstanceByName("group", 0, 2L, args);
+		Order order = engine.startInstanceByName("group", 0, 2L, args);
 		System.out.println("order=" + order);
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 			// 操作人改为test时，角色对应test，会无权处理
 			engine.executeTask(task.getId(), 1000L, args);
 		}
@@ -95,7 +95,7 @@ public class TestTask2 extends BaseTest {
 		public void intercept(Execution execution) {
 			LOGGER.info("LocalTaskInterceptor start...");
 
-			for (TaskPO task : execution.getTasks()) {
+			for (Task task : execution.getTasks()) {
 				StringBuffer buffer = new StringBuffer(100);
 				buffer.append("创建任务[标识=").append(task.getId());
 				buffer.append(",名称=").append(task.getDisplayName());

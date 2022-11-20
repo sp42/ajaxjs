@@ -14,13 +14,12 @@ import com.ajaxjs.workflow.common.WfDao;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.po.TaskHistoryPO;
+import com.ajaxjs.workflow.model.po.TaskHistory;
 import com.ajaxjs.workflow.service.TaskBaseService;
 import com.ajaxjs.workflow.service.handler.IHandler;
 
 /**
  * 自定义模型
- * 
  */
 public class CustomModel extends WorkModel {
 	private static final long serialVersionUID = 8796192915721758769L;
@@ -85,8 +84,8 @@ public class CustomModel extends WorkModel {
 	 * @param model     自定义节点模型
 	 * @return 历史任务对象
 	 */
-	private static TaskHistoryPO createHistory(Execution execution, CustomModel model) {
-		TaskHistoryPO task = new TaskHistoryPO();
+	private static TaskHistory createHistory(Execution execution, CustomModel model) {
+		TaskHistory task = new TaskHistory();
 		task.setOrderId(execution.getOrder().getId());
 		task.setName(model.getName());
 		task.setFinishDate(new Date());

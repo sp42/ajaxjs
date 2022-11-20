@@ -8,9 +8,9 @@ import java.util.Map;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfException;
-import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Task;
 
 /**
  * 流程执行过程中所传递的执行对象，其中包含流程定义、流程模型、流程实例对象、执行参数、返回的任务列表
@@ -28,7 +28,7 @@ public class Execution implements Serializable {
 	 * @param order   流程实例对象
 	 * @param args    执行参数
 	 */
-	public Execution(WorkflowEngine engine, ProcessPO process, OrderPO order, Map<String, Object> args) {
+	public Execution(WorkflowEngine engine, ProcessPO process, Order order, Map<String, Object> args) {
 		if (process == null || order == null)
 			throw new WfException("构造 Execution 对象失败，请检查 process、order 是否为空");
 
@@ -93,12 +93,12 @@ public class Execution implements Serializable {
 	/**
 	 * 流程实例对象
 	 */
-	private OrderPO order;
+	private Order order;
 
 	/**
 	 * 父流程实例
 	 */
-	private OrderPO parentOrder;
+	private Order parentOrder;
 
 	/**
 	 * 父流程实例节点名称
@@ -123,12 +123,12 @@ public class Execution implements Serializable {
 	/**
 	 * 任务
 	 */
-	private TaskPO task;
+	private Task task;
 
 	/**
 	 * 返回的任务列表
 	 */
-	private List<TaskPO> tasks = new ArrayList<>();
+	private List<Task> tasks = new ArrayList<>();
 
 	/**
 	 * 是否已合并 针对join节点的处理
@@ -158,7 +158,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @return
 	 */
-	public OrderPO getOrder() {
+	public Order getOrder() {
 		return order;
 	}
 
@@ -176,7 +176,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @return
 	 */
-	public List<TaskPO> getTasks() {
+	public List<Task> getTasks() {
 		return tasks;
 	}
 
@@ -185,7 +185,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @param tasks
 	 */
-	public void addTasks(List<TaskPO> tasks) {
+	public void addTasks(List<Task> tasks) {
 		this.tasks.addAll(tasks);
 	}
 
@@ -194,7 +194,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @param task
 	 */
-	public void addTask(TaskPO task) {
+	public void addTask(Task task) {
 		this.tasks.add(task);
 	}
 
@@ -221,7 +221,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @return
 	 */
-	public TaskPO getTask() {
+	public Task getTask() {
 		return task;
 	}
 
@@ -230,7 +230,7 @@ public class Execution implements Serializable {
 	 * 
 	 * @param task
 	 */
-	public void setTask(TaskPO task) {
+	public void setTask(Task task) {
 		this.task = task;
 	}
 
@@ -261,7 +261,7 @@ public class Execution implements Serializable {
 		return engine;
 	}
 
-	public OrderPO getParentOrder() {
+	public Order getParentOrder() {
 		return parentOrder;
 	}
 

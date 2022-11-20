@@ -26,6 +26,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.sql.annotation.IgnoreDB;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.XmlHelper;
@@ -208,6 +210,10 @@ public class MapTool {
 
 				// 得到 property 对应的 getter 方法
 				Method getter = property.getReadMethod();
+
+				if (getter.getAnnotation(IgnoreDB.class) != null)
+					continue;
+
 				Object value = getter.invoke(bean); // 原始默认值，不过通常是没有指定的
 
 				fn.item(key, value, property);
@@ -307,8 +313,7 @@ public class MapTool {
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				if (e instanceof IllegalArgumentException) {
 					LOGGER.warning(value + " JSON in DB " + IBaseModel.class.isAssignableFrom(t));
-					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value,
-							value != null ? value.getClass().toString() : "null");
+					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value, value != null ? value.getClass().toString() : "null");
 				} else
 					LOGGER.warning(e);
 			}
@@ -369,8 +374,9 @@ public class MapTool {
 		Map<String, Object> map = new HashMap<>();
 
 		eachField(bean, (k, v, property) -> {
-			if (v != null && !k.equals("class")) // 过滤 class 属性
+			if (v != null && !k.equals("class")) { // 过滤 class 属性
 				map.put(k, v);
+			}
 		});
 
 		// 处理无 getter/setter 的
@@ -378,6 +384,9 @@ public class MapTool {
 
 		if (!ObjectUtils.isEmpty(fields)) {
 			for (Field field : fields) {
+				if (Modifier.isStatic(field.getModifiers()))// static 的不要
+					continue;
+
 				String key = field.getName();
 
 				try {

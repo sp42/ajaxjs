@@ -1,17 +1,3 @@
-/* Copyright 2013-2015 www.snakerflow.com.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.ajaxjs.workflow.model;
 
 import java.util.List;
@@ -20,7 +6,7 @@ import java.util.Map;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.model.node.NodeModel;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.work.SubProcessModel;
 import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.handler.IHandler;
@@ -47,7 +33,7 @@ public class TransitionModel extends BaseWfModel {
 	private NodeModel target;
 
 	/**
-	 * 变迁的目标节点name名称
+	 * 变迁的目标节点 name 名称
 	 */
 	private String to;
 
@@ -84,7 +70,7 @@ public class TransitionModel extends BaseWfModel {
 				public void handle(Execution execution) {
 					LOGGER.info("创建 {0} 任务", tm.getName());
 
-					List<TaskPO> tasks = execution.getEngine().task().createTask(tm, execution);
+					List<Task> tasks = execution.getEngine().task().createTask(tm, execution);
 					execution.addTasks(tasks);
 
 					// 从服务上下文中查找任务拦截器列表，依次对 task 集合进行拦截处理
@@ -99,7 +85,7 @@ public class TransitionModel extends BaseWfModel {
 				}
 			}, execution);
 		} else if (target instanceof SubProcessModel)
-			fire(new SubProcessHandler((SubProcessModel) target), execution);// 如果目标节点模型为SubProcessModel，则启动子流程
+			fire(new SubProcessHandler((SubProcessModel) target), execution);// 如果目标节点模型为 SubProcessModel，则启动子流程
 		else
 			target.execute(execution);// 如果目标节点模型为其它控制类型，则继续由目标节点执行
 	}

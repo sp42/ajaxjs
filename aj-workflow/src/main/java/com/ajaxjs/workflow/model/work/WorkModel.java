@@ -10,7 +10,7 @@ public abstract class WorkModel extends NodeModel {
 	private static final long serialVersionUID = 761102386160546149L;
 
 	/**
-	 * 表单
+	 * 来自
 	 */
 	private String form;
 

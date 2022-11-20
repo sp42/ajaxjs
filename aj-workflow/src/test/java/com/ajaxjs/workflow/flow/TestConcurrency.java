@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.workflow.model.po.OrderPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
-import com.ajaxjs.workflow.old.BaseTest;
+import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.model.po.Order;
+import com.ajaxjs.workflow.model.po.Task;
 
 public class TestConcurrency extends BaseTest {
 	@Test
@@ -18,7 +18,7 @@ public class TestConcurrency extends BaseTest {
 		Map<String, Object> args = new HashMap<>();
 		args.put("task1.operator", new String[] { "1", "2" });
 		
-		OrderPO order = engine.startInstanceByName("actorall", 0, 2L, args);
+		Order order = engine.startInstanceByName("actorall", 0, 2L, args);
 		System.out.println(order);
 		// Assert.assertEquals(2, tasks.size());
 		// execute(tasks, args);
@@ -33,11 +33,11 @@ public class TestConcurrency extends BaseTest {
 		args.put("task2.operator", new String[] { "1" });
 		args.put("task3.operator", new String[] { "1" });
 
-		OrderPO order = engine.startInstanceByName("forkjoin", 0, 2L, args);
+		Order order = engine.startInstanceByName("forkjoin", 0, 2L, args);
 
-		List<TaskPO> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.task().findByOrderId(order.getId());
 
-		for (TaskPO task : tasks) {
+		for (Task task : tasks) {
 			engine.executeTask(task.getId(), 1L, null);
 		}
 	}

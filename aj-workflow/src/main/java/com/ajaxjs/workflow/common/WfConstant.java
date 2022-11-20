@@ -2,9 +2,6 @@ package com.ajaxjs.workflow.common;
 
 /**
  * 常量表
- * 
- * @author Administrator
- *
  */
 public interface WfConstant {
 	/**

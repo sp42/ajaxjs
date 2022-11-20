@@ -1,14 +1,9 @@
-/*
- * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
 package com.ajaxjs.workflow.service.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,8 +15,8 @@ import com.ajaxjs.workflow.model.work.TaskModel;
 
 /**
  * 任务节点解析类
- * 
  */
+@Component
 public class TaskParser extends AbstractNodeParser {
 	@Override
 	protected NodeModel newModel() {
@@ -29,7 +24,7 @@ public class TaskParser extends AbstractNodeParser {
 	}
 
 	/**
-	 * 由于任务节点需要解析form、assignee属性，这里覆盖抽象类方法实现
+	 * 由于任务节点需要解析 form、assignee 属性，这里覆盖抽象类方法实现
 	 */
 	@Override
 	protected void parseNode(NodeModel node, Element element) {

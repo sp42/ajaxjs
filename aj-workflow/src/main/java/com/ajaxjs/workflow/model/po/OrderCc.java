@@ -6,7 +6,7 @@ import java.util.Date;
  * 抄送实例实体
  * 
  */
-public class CCOrderPO extends WfPersistantObject {
+public class OrderCc extends BasePersistantObject {
 	private Long orderId;
 
 	private Long actorId;

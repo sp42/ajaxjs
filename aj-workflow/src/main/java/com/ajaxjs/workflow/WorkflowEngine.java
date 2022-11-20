@@ -14,14 +14,15 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.common.WfDao;
+import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.model.node.NodeModel;
 import com.ajaxjs.workflow.model.node.StartModel;
-import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.OrderService;
 import com.ajaxjs.workflow.service.ProcessService;
@@ -31,23 +32,20 @@ import com.ajaxjs.workflow.service.TaskService;
 /**
  * 基本的流程引擎实现类
  * 
- * 
- * @since 1.0
  */
-
 @Component
 public class WorkflowEngine {
 	public static final LogHelper LOGGER = LogHelper.getLog(WorkflowEngine.class);
 
 	/**
-	 * 根据流程定义 ID，操作人 ID，参数列表启动流程实例
+	 * 根据流程定义 id，操作人 id，参数列表启动流程实例
 	 * 
-	 * @param id       流程定义 ID
-	 * @param operator 操作人 ID
+	 * @param id       流程定义 id
+	 * @param operator 操作人 id
 	 * @param args     参数列表
 	 * @return 流程实例
 	 */
-	public OrderPO startInstanceById(Long id, Long operator, Map<String, Object> args) {
+	public Order startInstanceById(Long id, Long operator, Map<String, Object> args) {
 		if (args == null)
 			args = new HashMap<>();
 
@@ -59,11 +57,11 @@ public class WorkflowEngine {
 	 * 
 	 * @param name     流程名称
 	 * @param version  版本号
-	 * @param operator 操作人 ID
+	 * @param operator 操作人 id
 	 * @param args     参数列表
 	 * @return 流程实例
 	 */
-	public OrderPO startInstanceByName(String name, Integer version, Long operator, Map<String, Object> args) {
+	public Order startInstanceByName(String name, Integer version, Long operator, Map<String, Object> args) {
 		if (args == null)
 			args = new HashMap<>();
 
@@ -76,7 +74,7 @@ public class WorkflowEngine {
 	 * @param execution 父执行对象
 	 * @return 流程实例
 	 */
-	public OrderPO startInstanceByExecution(Execution execution) {
+	public Order startInstanceByExecution(Execution execution) {
 		ProcessPO process = execution.getProcess();
 		Execution current = createExecute(process, execution.getOperator(), execution.getArgs(), execution.getParentOrder().getId(),
 				execution.getParentNodeName());
@@ -89,11 +87,11 @@ public class WorkflowEngine {
 	 * 启动流程实例
 	 * 
 	 * @param process  流程对象
-	 * @param operator 操作人 ID
+	 * @param operator 操作人 id
 	 * @param args     参数列表
 	 * @return 流程实例
 	 */
-	private OrderPO startInstance(ProcessPO process, Long operator, Map<String, Object> args) {
+	private Order startInstance(ProcessPO process, Long operator, Map<String, Object> args) {
 		// 检查流程状态
 		String idOrName = process.getName();
 		Objects.requireNonNull(process, "指定的流程定义[id/name=" + idOrName + "]不存在");
@@ -101,26 +99,26 @@ public class WorkflowEngine {
 		if (process.getStat() != null && process.getStat() == WfConstant.STATE_FINISH)
 			throw new IllegalArgumentException("指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
 
-		Execution execution = createExecute(process, operator, args, null, null);
+		Execution exec = createExecute(process, operator, args, null, null);
 
 		if (process.getModel() != null)
-			runStart(process, execution);
+			runStart(process, exec);
 
-		return execution.getOrder();
+		return exec.getOrder();
 	}
 
 	/**
 	 * 运行 start 节点
 	 * 
 	 * @param process
-	 * @param execution
+	 * @param exec
 	 */
-	private static void runStart(ProcessPO process, Execution execution) {
+	private static void runStart(ProcessPO process, Execution exec) {
 		StartModel start = process.getModel().getStart();
 		Objects.requireNonNull(start, "流程定义[id=" + process.getId() + "]没有开始节点");
 
 		LOGGER.info("运行 start 节点");
-		start.execute(execution);
+		start.execute(exec);
 	}
 
 	/**
@@ -134,7 +132,7 @@ public class WorkflowEngine {
 	 * @return Execution 执行对象
 	 */
 	private Execution createExecute(ProcessPO process, Long operator, Map<String, Object> args, Long parentId, String parentNodeName) {
-		OrderPO order = orderService.create(process, operator, args, parentId, parentNodeName);
+		Order order = orderService.create(process, operator, args, parentId, parentNodeName);
 
 		Execution current = new Execution(this, process, order, args);
 		current.setOperator(operator);
@@ -144,7 +142,7 @@ public class WorkflowEngine {
 	}
 
 	/**
-	 * 根据任务主键 ID，操作人ID，参数列表完成任务，并且构造执行对象
+	 * 根据任务主键 id，操作人id，参数列表完成任务，并且构造执行对象
 	 * 
 	 * @param taskId   任务id
 	 * @param operator 操作人
@@ -155,19 +153,19 @@ public class WorkflowEngine {
 		if (args == null)
 			args = new HashMap<String, Object>();
 
-		TaskPO task = task().complete(taskId, operator, args);
+		Task task = task().complete(taskId, operator, args);
 
-		OrderPO order = WfDao.OrderDAO.findById(task.getOrderId());
+		Order order = WfDao.OrderDAO.findById(task.getOrderId());
 		Objects.requireNonNull(order, "指定的流程实例[id=" + task.getOrderId() + "]已完成或不存在");
 
-		OrderPO _update = new OrderPO();
+		Order _update = new Order();
 		_update.setId(order.getId());
 		_update.setUpdator(operator);
 		order().update(_update);
 		LOGGER.info("更新流程实例 {0} 完成", _update.getId());
 
 		// 协办任务完成不产生执行对象
-		if (!task.isMajor())
+		if (task.getTaskType() != TaskType.MAJOR)
 			return null;
 
 		Map<String, Object> orderMaps = JsonHelper.parseMap(order.getVariable());
@@ -194,14 +192,14 @@ public class WorkflowEngine {
 	}
 
 	/**
-	 * 根据任务主键ID，操作人ID，参数列表执行任务
+	 * 根据任务主键id，操作人id，参数列表执行任务
 	 * 
 	 * @param taskId
 	 * @param operator
 	 * @param args
 	 * @return
 	 */
-	public List<TaskPO> executeTask(Long taskId, Long operator, Map<String, Object> args) {
+	public List<Task> executeTask(Long taskId, Long operator, Map<String, Object> args) {
 		LOGGER.info("开始执行对象，先初始化相关的参数");
 
 		Execution execution = executeTaskCore(taskId, operator, args); // 完成任务，并且构造执行对象
@@ -220,10 +218,10 @@ public class WorkflowEngine {
 	}
 
 	/**
-	 * 根据流程实例ID，操作人ID，参数列表按照节点模型model创建新的自由任务
+	 * 根据流程实例id，操作人id，参数列表按照节点模型model创建新的自由任务
 	 */
-	public List<TaskPO> createFreeTask(Long orderId, Long operator, Map<String, Object> args, TaskModel model) {
-		OrderPO order = WfDao.OrderDAO.findById(orderId);
+	public List<Task> createFreeTask(Long orderId, Long operator, Map<String, Object> args, TaskModel model) {
+		Order order = WfDao.OrderDAO.findById(orderId);
 		Objects.requireNonNull(order, "指定的流程实例[id=" + orderId + "]已完成或不存在");
 		order.setUpdator(operator);
 //		order.setLastUpdateTime(DateHelper.getTime());
@@ -236,10 +234,10 @@ public class WorkflowEngine {
 	}
 
 	/**
-	 * 根据任务主键ID，操作人ID，参数列表执行任务，并且根据nodeName跳转到任意节点 1、nodeName为null时，则驳回至上一步处理
+	 * 根据任务主键 id，操作人 id，参数列表执行任务，并且根据 nodeName 跳转到任意节点 1、nodeName 为 null 时，则驳回至上一步处理
 	 * 2、nodeName不为null时，则任意跳转，即动态创建转移
 	 */
-	public List<TaskPO> executeAndJumpTask(Long taskId, Long operator, Map<String, Object> args, String nodeName) {
+	public List<Task> executeAndJumpTask(Long taskId, Long operator, Map<String, Object> args, String nodeName) {
 		Execution execution = executeTaskCore(taskId, operator, args);
 
 		if (execution == null)
@@ -249,12 +247,12 @@ public class WorkflowEngine {
 		Objects.requireNonNull(model, "当前任务未找到流程定义模型");
 
 		if (!StringUtils.hasText(nodeName)) {
-			TaskPO newTask = task().rejectTask(model, execution.getTask());
+			Task newTask = task().rejectTask(model, execution.getTask());
 			execution.addTask(newTask);
 		} else {
 			NodeModel nodeModel = model.getNode(nodeName);
 			Objects.requireNonNull(nodeModel, "根据节点名称[" + nodeName + "]无法找到节点模型");
-			// 动态创建转移对象，由转移对象执行execution实例
+			// 动态创建转移对象，由转移对象执行 execution 实例
 			TransitionModel tm = new TransitionModel();
 			tm.setTarget(nodeModel);
 			tm.setEnabled(true);

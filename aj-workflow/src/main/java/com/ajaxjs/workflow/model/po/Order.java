@@ -2,30 +2,22 @@ package com.ajaxjs.workflow.model.po;
 
 import java.util.Date;
 
-import com.ajaxjs.framework.BaseModel;
-
 /**
  * 流程工作单实体类（一般称为流程实例）
- * 
  */
-public class OrderPO extends BaseModel {
+public class Order extends BasePersistantObject {
 	/**
 	 * 版本
 	 */
 	private Integer version;
 
 	/**
-	 * 流程定义ID
+	 * 流程定义 id
 	 */
 	private Long processId;
 
 	/**
-	 * 流程实例创建者ID
-	 */
-	private Long creator;
-
-	/**
-	 * 流程实例为子流程时，该字段标识父流程实例ID
+	 * 流程实例为子流程时，该字段标识父流程实例 id
 	 */
 	private Long parentId;
 
@@ -38,11 +30,6 @@ public class OrderPO extends BaseModel {
 	 * 流程实例期望完成时间
 	 */
 	private Date expireDate;
-
-	/**
-	 * 流程实例上一次更新人员ID
-	 */
-	private Long updator;
 
 	/**
 	 * 流程实例优先级
@@ -67,14 +54,6 @@ public class OrderPO extends BaseModel {
 		this.processId = processId;
 	}
 
-	public Long getCreator() {
-		return creator;
-	}
-
-	public void setCreator(Long creator) {
-		this.creator = creator;
-	}
-
 	public Long getParentId() {
 		return parentId;
 	}
@@ -89,14 +68,6 @@ public class OrderPO extends BaseModel {
 
 	public void setExpireDate(Date expireDate) {
 		this.expireDate = expireDate;
-	}
-
-	public Long getUpdator() {
-		return updator;
-	}
-
-	public void setUpdator(Long lastUpdator) {
-		this.updator = lastUpdator;
 	}
 
 	public Integer getPriority() {
@@ -143,7 +114,7 @@ public class OrderPO extends BaseModel {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Order(id=").append(getId());
 		sb.append(",processId=").append(processId);
-		sb.append(",creator=").append(creator);
+		sb.append(",creator=").append(getCreator());
 		sb.append(",createDate").append(getCreateDate());
 		sb.append(",orderNo=").append(orderNo).append(")");
 

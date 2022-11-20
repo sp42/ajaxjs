@@ -1,9 +1,3 @@
-/*
-'   * Copyright 2013-2015 www.snakerflow.com. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
 package com.ajaxjs.workflow.service.interceptor;
 
 import java.util.Date;
@@ -13,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.scheduling.IScheduler;
 import com.ajaxjs.workflow.service.scheduling.JobEntity;
@@ -45,7 +39,7 @@ public class SchedulerInterceptor implements WorkflowInterceptor {
 		if (!isScheduled)
 			return;
 
-		for (TaskPO task : execution.getTasks()) {
+		for (Task task : execution.getTasks()) {
 			// 流程 id + 流程实例 id + 任务 id
 			String id = execution.getProcess().getId() + "-" + execution.getOrder().getId() + "-" + task.getId();
 
@@ -70,7 +64,7 @@ public class SchedulerInterceptor implements WorkflowInterceptor {
 	 * @param jobType   任务类型
 	 * @param args      执行参数
 	 */
-	private void schedule(String id, TaskPO task, Date startDate, int jobType, Map<String, Object> args) {
+	private void schedule(String id, Task task, Date startDate, int jobType, Map<String, Object> args) {
 		JobEntity entity = new JobEntity(id, task, startDate, args);
 		entity.setModelName(task.getName());
 		entity.setJobType(jobType);

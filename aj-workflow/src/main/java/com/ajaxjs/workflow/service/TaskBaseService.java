@@ -2,7 +2,6 @@ package com.ajaxjs.workflow.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -10,32 +9,24 @@ import java.util.function.BiFunction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
-import com.ajaxjs.framework.BaseService;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfConstant;
-import com.ajaxjs.workflow.common.WfConstant.PerformType;
-import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.common.WfException;
-import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.node.NodeModel;
-import com.ajaxjs.workflow.model.po.OrderPO;
+import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
+import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.model.po.TaskActor;
-import com.ajaxjs.workflow.model.po.TaskHistoryPO;
-import com.ajaxjs.workflow.model.po.TaskPO;
+import com.ajaxjs.workflow.model.po.TaskHistory;
 import com.ajaxjs.workflow.model.work.TaskModel;
 
 public abstract class TaskBaseService extends BaseWfService {
 	public static final LogHelper LOGGER = LogHelper.getLog(TaskBaseService.class);
-
-	@Autowired
-	private OrderService orderService;
 
 	@Autowired
 	private ProcessService processService;
@@ -46,7 +37,7 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param orderId 流程 id
 	 * @return 所有的任务
 	 */
-	public List<TaskPO> findByOrderId(Long orderId) {
+	public List<Task> findByOrderId(Long orderId) {
 		return TaskDAO.setWhereQuery("order_id", orderId).findList();
 	}
 
@@ -56,7 +47,7 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param orderId 流程 id
 	 * @return 所有的历史任务
 	 */
-	public List<TaskHistoryPO> findHistoryTasksByOrderId(Long orderId) {
+	public List<TaskHistory> findHistoryTasksByOrderId(Long orderId) {
 		return TaskHistoryDAO.setWhereQuery("order_id", orderId).findList();
 	}
 
@@ -67,8 +58,8 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param taskName
 	 * @return 所有的历史任务
 	 */
-	public List<TaskHistoryPO> findHistoryTasksByOrderIdAndTaskName(Long orderId, String taskName) {
-		return TaskHistoryDAO.findList(by("orderId", orderId).andThen(by("name", taskName)));
+	public List<TaskHistory> findHistoryTasksByOrderIdAndTaskName(Long orderId, String taskName) {
+		return TaskHistoryDAO.setWhereQuery("order_id = " + orderId + " AND name ='" + taskName + "'").findList();
 	}
 
 	/**
@@ -87,67 +78,44 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param actors
 	 * @return
 	 */
-	private TaskPO create(TaskPO task, Long... actors) {
-		task.setPerformType(PerformType.ANY.ordinal());
-		create(task);
-		assignTask(task.getId(), actors);
+	private Task create(Task task, Long... actors) {
+		task.setPerformType(PerformType.ANY);
+		Long newlyId = (Long) TaskDAO.create(task);
+		assignTask(newlyId, actors);
 		task.setActorIds(actors);
 
 		return task;
 	}
 
 	/**
-	 * 创建task，并根据model类型决定是否分配参与者
+	 * 创建 task，并根据 model 类型决定是否分配参与者
 	 * 
 	 * @param taskModel 模型
-	 * @param execution 执行对象
-	 * @return List<Task> 任务列表
+	 * @param exec      执行对象
+	 * @return 任务列表
 	 */
-	public List<TaskPO> createTask(TaskModel taskModel, Execution execution) {
+	public List<Task> createTask(TaskModel taskModel, Execution exec) {
 		LOGGER.info("创建新任务 " + taskModel.getName());
 
-		Map<String, Object> args = execution.getArgs();
-		if (args == null)
-			args = new HashMap<String, Object>();
-
-//		Date expireDate = DateHelper.processTime(args, taskModel.getExpireTime());
 //		Date remindDate = DateHelper.processTime(args, taskModel.getReminderTime());
-		Date expireDate = taskModel.getExpireTime();
+		Long[] actors = TaskFactory.getActors(taskModel, exec);
+		Task task = TaskFactory.create(taskModel, exec, actors);
 		Date remindDate = taskModel.getReminderTime();
-		String form = (String) args.get(taskModel.getForm());
-		String actionUrl = StringUtils.hasText(form) ? form : taskModel.getForm();
 
-		Long[] actors = getTaskActors(taskModel, execution);
-		args.put(TaskPO.KEY_ACTOR, WfUtils.join(actors));
-
-		TaskPO task = new TaskPO();// 根据模型、执行对象、任务类型构建基本的 task 对象
-		task.setOrderId(execution.getOrder().getId());
-		task.setName(taskModel.getName());
-		task.setDisplayName(taskModel.getDisplayName());
-		task.setCreateDate(new Date());
-		task.setTaskType(taskModel.isMajor() ? TaskType.MAJOR : TaskType.AIDANT);
-//		task.setParentTaskId(execution.getTask() == null ? "start" : execution.getTask().getId());
-		task.setParentId(execution.getTask() == null ? 0 : execution.getTask().getId());
-		task.setModel(taskModel);
-		task.setActionUrl(actionUrl);
-		task.setExpireDate(expireDate);
-		task.setExpireDate(expireDate);
-		task.setVariable(JsonHelper.toJson(args));
-
-		List<TaskPO> tasks = new ArrayList<>();
+		List<Task> tasks = new ArrayList<>();
 
 		if (taskModel.isPerformAny()) {
-			// 任务执行方式为参与者中任何一个执行即可驱动流程继续流转，该方法只产生一个task
+			// 任务执行方式为参与者中任何一个执行即可驱动流程继续流转，该方法只产生一个 task
 			task = create(task, actors);
 			task.setRemindDate(remindDate);
 			tasks.add(task);
 		} else if (taskModel.isPerformAll()) {
-			// 任务执行方式为参与者中每个都要执行完才可驱动流程继续流转，该方法根据参与者个数产生对应的task数量
+			// 任务执行方式为参与者中每个都要执行完才可驱动流程继续流转，该方法根据参与者个数产生对应的 task 数量
 			for (Long actor : actors) {
-				TaskPO singleTask;
+				Task singleTask;
 
 				try {
-					singleTask = (TaskPO) task.clone();
+					singleTask = (Task) task.clone();
 				} catch (CloneNotSupportedException e) {
 					singleTask = task;
 				}
@@ -169,13 +137,13 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param actors   参与者列表
 	 * @return 任务列表
 	 */
-	public List<TaskPO> createNewTask(Long taskId, TaskType taskType, Long... actors) {
-		TaskPO task = TaskDAO.findById(taskId);
+	public List<Task> createNewTask(Long taskId, TaskType taskType, Long... actors) {
+		Task task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
-		List<TaskPO> tasks = new ArrayList<>();
+		List<Task> tasks = new ArrayList<>();
 
 		try {
-			TaskPO newTask = (TaskPO) task.clone();
+			Task newTask = (Task) task.clone();
 			newTask.setParentId(taskId);
 			newTask.setTaskType(taskType);
 			tasks.add(create(newTask, actors));
@@ -194,8 +162,8 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @return TaskModel
 	 */
 	public TaskModel getTaskModel(Long taskId) {
-		TaskPO task = TaskDAO.findById(taskId);
-		OrderPO order = OrderDAO.findById(task.getOrderId());
+		Task task = TaskDAO.findById(taskId);
+		Order order = OrderDAO.findById(task.getOrderId());
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		Objects.requireNonNull(order);
 
@@ -218,8 +186,8 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param args
 	 * @return
 	 */
-	public TaskPO complete(Long taskId, Long operator, Map<String, Object> args) {
-		TaskPO task = TaskDAO.findById(taskId);
+	public Task complete(Long taskId, Long operator, Map<String, Object> args) {
+		Task task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 		task.setVariable(JsonHelper.toJson(args));
 
@@ -227,7 +195,7 @@ public abstract class TaskBaseService extends BaseWfService {
 //			throw new WorkflowException("当前参与者[" + operator + "]不允许执行任务[taskId=" + taskId + "]");
 
 		LOGGER.info("完成任务：创建历史任务，然后删除 Task");
-		TaskHistoryPO history = new TaskHistoryPO(task);
+		TaskHistory history = new TaskHistory(task);
 		history.setFinishDate(new Date());
 		history.setStat(WfConstant.STATE_FINISH);
 		history.setOperator(operator);
@@ -243,7 +211,6 @@ public abstract class TaskBaseService extends BaseWfService {
 			history.setActorIds(actorIds);
 		}
 
-		initCreate(history);
 		TaskHistoryDAO.create(history);
 		TaskDAO.delete(task);
 
@@ -255,8 +222,8 @@ public abstract class TaskBaseService extends BaseWfService {
 	/**
 	 * 对指定的任务分配参与者。参与者可以为用户、部门、角色
 	 * 
-	 * @param taskId   任务id
-	 * @param actorIds 参与者id集合
+	 * @param taskId   任务 id
+	 * @param actorIds 参与者 id 集合
 	 */
 	static void assignTask(Long taskId, Long... actorIds) {
 		if (ObjectUtils.isEmpty(actorIds))
@@ -265,32 +232,32 @@ public abstract class TaskBaseService extends BaseWfService {
 		for (Long actorId : actorIds) {
 			if (actorId == null)
 				continue;
-
-			TaskActor taskActor = new TaskActor();
-			taskActor.setTaskId(taskId);
-			taskActor.setActorId(actorId);
+			// TODO:needs?
+//			TaskActor taskActor = new TaskActor();
+//			taskActor.setTaskId(taskId);
+//			taskActor.setActorId(actorId);
 
 			TaskDAO.createTaskActor(taskId, actorId);
 		}
 	}
 
 	/**
-	 * 根据任务主键 ID，操作人 ID 提取任务。
+	 * 根据任务主键 id和操作人 id 提取任务。
 	 * 
-	 * @param taskId   任务id
-	 * @param operator 操作人id
+	 * @param taskId   任务 id
+	 * @param operator 操作人 id
 	 * @return Task 任务对象
 	 */
-	public TaskPO take(Long taskId, Long operator) {
+	public Task take(Long taskId, Long operator) {
 		LOGGER.info("提取任务 [{0}]", taskId);
 
-		TaskPO task = TaskDAO.findById(taskId);
+		Task task = TaskDAO.findById(taskId);
 		Objects.requireNonNull(task, "指定的任务[id=" + taskId + "]不存在");
 
 		if (!isAllowed(task, operator))
 			throw new WfException("当前参与者[" + operator + "]不允许提取任务[taskId=" + taskId + "]");
 
-		TaskPO u = new TaskPO();
+		Task u = new Task();
 		u.setId(taskId);
 		u.setOperator(operator);
 		u.setFinishDate(new Date());
@@ -309,21 +276,21 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param operator 操作人
 	 * @return Task 任务对象
 	 */
-	public TaskPO withdrawTask(Long taskId, Long operator) {
-		TaskHistoryPO hist = TaskHistoryDAO.findById(taskId);
+	public Task withdrawTask(Long taskId, Long operator) {
+		TaskHistory hist = TaskHistoryDAO.findById(taskId);
 		Objects.requireNonNull(hist, "指定的历史任务[id=" + taskId + "]不存在");
 
 		// getNextActiveTasks
-		List<TaskPO> tasks = hist.isPerformAny() ? findList(by("parentTaskId", hist.getId()))
-				: dao.getNextActiveTasks(hist.getOrderId(), hist.getName(), hist.getParentId());
+		List<Task> tasks = hist.isPerformAny() ? TaskDAO.setWhereQuery("parent_task_id", hist.getId()).findList()
+				: TaskDAO.getNextActiveTasks(hist.getOrderId(), hist.getName(), hist.getParentId());
 
 		if (ObjectUtils.isEmpty(tasks))
 			throw new WfException("后续活动任务已完成或不存在，无法撤回.");
 
-		for (TaskPO task : tasks)
+		for (Task task : tasks)
 			TaskDAO.delete(task);
 
-		TaskPO task = hist.undoTask();
+		Task task = hist.undoTask();
 		create(task);
 		assignTask(task.getId(), task.getOperator());
 
@@ -337,20 +304,20 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param currentTask 当前任务对象
 	 * @return Task 任务对象
 	 */
-	public TaskPO rejectTask(ProcessModel model, TaskPO currentTask) {
+	public Task rejectTask(ProcessModel model, Task currentTask) {
 		Long parentTaskId = currentTask.getParentId();
 
 		if (parentTaskId == null || parentTaskId == 0)
 			throw new WfException("上一步任务ID为空，无法驳回至上一步处理");
 
 		NodeModel current = model.getNode(currentTask.getName());
-		TaskHistoryPO history = TaskHistoryDAO.findById(parentTaskId);
+		TaskHistory history = TaskHistoryDAO.findById(parentTaskId);
 		NodeModel parent = model.getNode(history.getName());
 
 		if (!NodeModel.canRejected(current, parent))
 			throw new WfException("无法驳回至上一步处理，请确认上一步骤并非fork、join、suprocess以及会签任务");
 
-		TaskPO task = history.undoTask();
+		Task task = history.undoTask();
 		task.setOperator(history.getOperator());
 		create(task);
 		assignTask(task.getId(), task.getOperator());
@@ -365,8 +332,8 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param operator 操作人id
 	 * @return Task 唤醒后的任务对象
 	 */
-	public TaskPO resume(Long taskId, Long operator) {
-		TaskHistoryPO histTask = TaskHistoryDAO.findById(taskId);
+	public Task resume(Long taskId, Long operator) {
+		TaskHistory histTask = TaskHistoryDAO.findById(taskId);
 		Objects.requireNonNull(histTask, "指定的历史任务[id=" + taskId + "]不存在");
 		boolean isAllowed = true;
 
@@ -374,7 +341,7 @@ public abstract class TaskBaseService extends BaseWfService {
 			isAllowed = histTask.getOperator() == operator;
 
 		if (isAllowed) {
-			TaskPO task = histTask.undoTask();
+			Task task = histTask.undoTask();
 			create(task);
 			assignTask(task.getId(), task.getOperator());
 
@@ -390,7 +357,7 @@ public abstract class TaskBaseService extends BaseWfService {
 	 * @param operator 操作人
 	 * @return boolean 是否允许操作
 	 */
-	private boolean isAllowed(TaskPO task, Long operator) {
+	private boolean isAllowed(Task task, Long operator) {
 		if (operator != null && operator != 0) {
 //			if (SnakerEngine.ADMIN.equalsIgnoreCase(operator) || SnakerEngine.AUTO.equalsIgnoreCase(operator))
 //				return true;
@@ -406,15 +373,6 @@ public abstract class TaskBaseService extends BaseWfService {
 
 		return operator != null && operator != 0 && getTaskAccessStrategy().apply(operator, actors);
 	}
-
-	/**
-	 * 根据Task模型的assignee、assignmentHandler属性以及运行时数据，确定参与者
-	 * 
-	 * @param model     模型
-	 * @param execution 执行对象
-	 * @return 参与者数组
-	 */
-	public abstract Long[] getTaskActors(TaskModel model, Execution execution);
 
 	/**
 	 * 

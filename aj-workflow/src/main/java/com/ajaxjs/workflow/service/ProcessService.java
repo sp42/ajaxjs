@@ -10,6 +10,7 @@ import org.springframework.util.ObjectUtils;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.CacheManager;
 import com.ajaxjs.util.cache.CacheManagerAware;
+import com.ajaxjs.util.cache.MemoryCacheManager;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.po.ProcessPO;
@@ -87,10 +88,14 @@ public class ProcessService extends BaseWfService implements CacheManagerAware {
 
 		ProcessDAO.update(bean);
 
-		ProcessPO p = beanCache.get(nameCache.get(id));
+		String name = nameCache.get(id);
 
-		if (p != null)
-			p.setStat(WfConstant.STATE_FINISH); // 只是修改了 状态
+		if (name != null) {
+			ProcessPO p = beanCache.get(nameCache.get(id));
+
+			if (p != null)
+				p.setStat(WfConstant.STATE_FINISH); // 只是修改了 状态
+		}
 	}
 
 	/**
@@ -134,10 +139,11 @@ public class ProcessService extends BaseWfService implements CacheManagerAware {
 
 	private Cache<Long, String> nameCache;
 
-	/**
-	 * 
-	 */
 	private Cache<String, ProcessPO> beanCache;
+
+	{
+		setCacheManager(new MemoryCacheManager());
+	}
 
 	@Override
 	public void setCacheManager(CacheManager cacheManager) {
