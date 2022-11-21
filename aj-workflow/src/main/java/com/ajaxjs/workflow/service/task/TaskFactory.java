@@ -1,6 +1,7 @@
-package com.ajaxjs.workflow.service;
+package com.ajaxjs.workflow.service.task;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -9,13 +10,18 @@ import java.util.function.BiFunction;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.workflow.WorkflowEngine;
+import com.ajaxjs.workflow.common.WfDao;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
-import com.ajaxjs.workflow.common.WfConstant.TaskType;
+import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.Execution;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
+import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.work.TaskModel;
+import com.ajaxjs.workflow.service.BaseWfService;
+import com.ajaxjs.workflow.service.TaskService;
 
 /**
  * Task 怎么生成？ Task 就是根据 XML 里面的定义转换到 Java 对象，再持久化
@@ -23,7 +29,110 @@ import com.ajaxjs.workflow.model.work.TaskModel;
  * @author Frank Cheung<sp42@qq.com>
  *
  */
-public class TaskFactory {
+public class TaskFactory extends BaseWfService {
+	/**
+	 * 根据流程实例 id，操作人 id，参数列表按照节点模型 model 创建新的自由任务
+	 * 
+	 * @param engine
+	 * @param orderId
+	 * @param operator
+	 * @param args
+	 * @param model
+	 * @return
+	 */
+	public static List<Task> createFreeTask(WorkflowEngine engine, Long orderId, Long operator, Args args, TaskModel model) {
+		Order order = WfDao.OrderDAO.findById(orderId);
+		Objects.requireNonNull(order, "指定的流程实例[id=" + orderId + "]已完成或不存在");
+		order.setUpdator(operator);
+//		order.setLastUpdateTime(DateHelper.getTime());
+
+		ProcessPO process = engine.processService.findById(order.getProcessId());
+		Execution execution = new Execution(engine, process, order, args);
+		execution.setOperator(operator);
+
+		return createTask(model, execution);
+	}
+
+	/**
+	 * 根据已有任务、任务类型、参与者创建新的任务 适用于转派，动态协办处理
+	 * 
+	 * @param taskId   任务 id
+	 * @param taskType 任务类型
+	 * @param actors   参与者列表
+	 * @return 任务列表
+	 */
+	public static List<Task> createNewTask(Long taskId, TaskType taskType, Long... actors) {
+		Task task = TaskService.getTaskById(taskId);
+		List<Task> tasks = new ArrayList<>();
+
+		try {
+			Task newTask = (Task) task.clone();
+			newTask.setParentId(taskId);
+			newTask.setTaskType(taskType);
+			tasks.add(create(newTask, actors));
+		} catch (CloneNotSupportedException e) {
+			throw new WfException("任务对象不支持复制", e.getCause());
+		}
+
+		return tasks;
+	}
+
+	/**
+	 * 创建 task 对象
+	 * 
+	 * @param task
+	 * @param actors
+	 * @return
+	 */
+	public static Task create(Task task, Long... actors) {
+		task.setPerformType(PerformType.ANY);
+		Long newlyId = (Long) TaskDAO.create(task);
+		TaskService.assignTask(newlyId, actors);
+		task.setActorIds(actors);
+
+		return task;
+	}
+
+	/**
+	 * 创建 task，并根据 model 类型决定是否分配参与者
+	 * 
+	 * @param taskModel 模型
+	 * @param exec      执行对象
+	 * @return 任务列表
+	 */
+	public static List<Task> createTask(TaskModel taskModel, Execution exec) {
+//		Date remindDate = DateHelper.processTime(args, taskModel.getReminderTime());
+		Long[] actors = TaskFactory.getActors(taskModel, exec);
+		Task task = TaskFactory.create(taskModel, exec, actors);
+		Date remindDate = taskModel.getReminderTime();
+
+		List<Task> tasks = new ArrayList<>();
+
+		if (taskModel.isPerformAny()) {
+			// 任务执行方式为参与者中任何一个执行即可驱动流程继续流转，该方法只产生一个 task
+			task = create(task, actors);
+			task.setRemindDate(remindDate);
+			tasks.add(task);
+		} else if (taskModel.isPerformAll()) {
+			// 任务执行方式为参与者中每个都要执行完才可驱动流程继续流转，该方法根据参与者个数产生对应的 task 数量
+			for (Long actor : actors) {
+				Task singleTask;
+
+				try {
+					singleTask = (Task) task.clone();
+				} catch (CloneNotSupportedException e) {
+					singleTask = task;
+				}
+
+				singleTask = create(singleTask, actor);
+				singleTask.setRemindDate(remindDate);
+				tasks.add(singleTask);
+			}
+		}
+
+		return tasks;
+	}
+
 	/**
 	 * 根据模型、执行对象、任务类型构建基本的 task 对象
 	 * 
@@ -64,11 +173,8 @@ public class TaskFactory {
 	}
 
 	private static Map<String, Object> getArgs(Execution exec, Long[] actors) {
-		Map<String, Object> args = exec.getArgs();
-
-		if (args == null)
-			args = new HashMap<String, Object>();
-
+		Args args = exec.getArgs();
+		args = Args.getEmpty(args);
 		args.put(Task.KEY_ACTOR, WfUtils.join(actors));
 
 		return args;
@@ -89,7 +195,7 @@ public class TaskFactory {
 	}
 
 	/**
-	 * 根据 Task 模型的 assignee、assignmentHandler 属性以及运行时数据，确定参与者 actor = assignee
+	 * 根据 Task 模型的 assignee、assignmentHandler 属性以及运行时数据， 确定参与者 actor = assignee
 	 * 
 	 * @param model 模型
 	 * @param exec  执行对象

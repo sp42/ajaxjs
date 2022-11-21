@@ -11,7 +11,7 @@ import org.w3c.dom.NodeList;
 import com.ajaxjs.util.date.DateUtil;
 import com.ajaxjs.workflow.model.FieldModel;
 import com.ajaxjs.workflow.model.node.NodeModel;
-import com.ajaxjs.workflow.model.work.TaskModel;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 
 /**
  * 任务节点解析类

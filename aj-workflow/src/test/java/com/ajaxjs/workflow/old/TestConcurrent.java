@@ -14,11 +14,9 @@
  */
 package com.ajaxjs.workflow.old;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.WorkflowEngine;
+import com.ajaxjs.workflow.model.Args;
 
 /**
  * 测试并发
@@ -45,7 +43,7 @@ class StartProcess implements Runnable {
 
 	@Override
 	public void run() {
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 
 		try {

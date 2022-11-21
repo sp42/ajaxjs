@@ -1,26 +1,25 @@
 package com.ajaxjs.workflow.old;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.junit.Test;
 
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.Execution;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
 
 public class TestTask2 extends BaseTest {
 	@Test
 	public void testAssignmentHandler() {
 		init("test/task/assignmenthandler/process.snaker");
-		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, null);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, null);
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 
 		for (Task task : tasks) {
 //			engine.executeTask(task.getId(), "admin");
@@ -32,11 +31,11 @@ public class TestTask2 extends BaseTest {
 	@Test
 	public void testAidant() {
 		init("test/task/aidant/process.snaker");
-		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, null);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, null);
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 
 		for (Task task : tasks) {
-//			engine.task().createNewTask(task.getId(), 1, 1000L);
+//			engine.taskService.createNewTask(task.getId(), 1, 1000L);
 		}
 	}
 
@@ -44,10 +43,10 @@ public class TestTask2 extends BaseTest {
 	@Test
 	public void TestNotAllow() {
 		init("test/task/right/process.snaker");
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "2" });
-		Order order = engine.startInstanceById(engine.process().lastDeployProcessId, 2L, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, args);
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 
 		for (Task task : tasks) {
 //			engine.executeTask(task.getId(), SnakerEngine.ADMIN, args);
@@ -77,11 +76,11 @@ public class TestTask2 extends BaseTest {
 	@Test
 	public void testCustomAccess() {
 		init("test/task/group/process.snaker");
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "role1" });
 		Order order = engine.startInstanceByName("group", 0, 2L, args);
 		System.out.println("order=" + order);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			// 操作人改为test时，角色对应test，会无权处理
@@ -118,7 +117,7 @@ public class TestTask2 extends BaseTest {
 
 //	@Before
 //	public void before() {
-//		processId = engine.process().deploy(WorkflowUtils.getStreamFromClasspath("test/task/interceptor/process.snaker"));
+//		processId = engine.processService.deploy(WorkflowUtils.getStreamFromClasspath("test/task/interceptor/process.snaker"));
 //	}
 //
 //	@Test

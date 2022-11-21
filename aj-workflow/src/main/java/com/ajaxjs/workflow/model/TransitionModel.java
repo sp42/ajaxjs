@@ -6,16 +6,16 @@ import java.util.Map;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.model.node.NodeModel;
+import com.ajaxjs.workflow.model.node.work.SubProcessModel;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.work.SubProcessModel;
-import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.handler.IHandler;
 import com.ajaxjs.workflow.service.handler.SubProcessHandler;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
+import com.ajaxjs.workflow.service.task.TaskFactory;
 
 /**
  * 变迁定义 transition 元素
- * 
  */
 public class TransitionModel extends BaseWfModel {
 	public static final LogHelper LOGGER = LogHelper.getLog(TransitionModel.class);
@@ -57,7 +57,7 @@ public class TransitionModel extends BaseWfModel {
 	 */
 	private boolean enabled = false;
 
-	public void execute(Execution execution) {
+	public void execute(Execution exec) {
 		if (!enabled)
 			return;
 
@@ -67,27 +67,27 @@ public class TransitionModel extends BaseWfModel {
 			// 如果目标节点模型为 TaskModel，则创建 task，这是 CreateTaskHandler
 			fire(new IHandler() {
 				@Override
-				public void handle(Execution execution) {
+				public void handle(Execution exec) {
 					LOGGER.info("创建 {0} 任务", tm.getName());
 
-					List<Task> tasks = execution.getEngine().task().createTask(tm, execution);
-					execution.addTasks(tasks);
+					List<Task> tasks = TaskFactory.createTask(tm, exec);
+					exec.addTasks(tasks);
 
 					// 从服务上下文中查找任务拦截器列表，依次对 task 集合进行拦截处理
 					Map<String, WorkflowInterceptor> interceptors = DiContextUtil.findByInterface(WorkflowInterceptor.class);
 
 					try {
 						for (String id : interceptors.keySet())
-							interceptors.get(id).intercept(execution);
+							interceptors.get(id).intercept(exec);
 					} catch (Exception e) {
 						LOGGER.warning("拦截器执行失败=" + e.getMessage());
 					}
 				}
-			}, execution);
+			}, exec);
 		} else if (target instanceof SubProcessModel)
-			fire(new SubProcessHandler((SubProcessModel) target), execution);// 如果目标节点模型为 SubProcessModel，则启动子流程
+			fire(new SubProcessHandler((SubProcessModel) target), exec);// 如果目标节点模型为 SubProcessModel，则启动子流程
 		else
-			target.execute(execution);// 如果目标节点模型为其它控制类型，则继续由目标节点执行
+			target.execute(exec);// 如果目标节点模型为其它控制类型，则继续由目标节点执行
 	}
 
 	public NodeModel getSource() {

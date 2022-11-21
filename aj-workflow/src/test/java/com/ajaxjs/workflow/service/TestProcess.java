@@ -3,9 +3,7 @@ package com.ajaxjs.workflow.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +15,7 @@ import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.TestConfig;
 import com.ajaxjs.workflow.common.WfUtils;
+import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 
@@ -54,7 +53,7 @@ public class TestProcess extends BaseTest {
 
 	@Test
 	public void testStartOrder() {
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", "1");
 
 		Order order = engine.startInstanceByName("simple", 0, null, args);

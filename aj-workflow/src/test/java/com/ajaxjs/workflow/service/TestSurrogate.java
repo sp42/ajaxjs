@@ -1,11 +1,9 @@
 package com.ajaxjs.workflow.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Test;
 
 import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.po.Order;
 
 public class TestSurrogate extends BaseTest {
@@ -14,7 +12,7 @@ public class TestSurrogate extends BaseTest {
 	public void testSurrogate() {
 		init("test/surrogate.xml");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "test" });
 
 		Order order = engine.startInstanceByName("surrogate", 0, 2L, args);

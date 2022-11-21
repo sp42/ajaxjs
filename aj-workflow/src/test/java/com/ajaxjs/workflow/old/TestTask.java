@@ -2,17 +2,15 @@ package com.ajaxjs.workflow.old;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
 
 import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.ProcessModel;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.work.TaskModel;
+import com.ajaxjs.workflow.service.task.TaskActorMgr;
 
 public class TestTask extends BaseTest {
 //	@Test
@@ -21,22 +19,22 @@ public class TestTask extends BaseTest {
 		Order order = engine.startInstanceByName("config", 0, 1000L, null);
 		assertNotNull(order);
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 		engine.executeTask(1L, 1L, args);// 任务执行
 	}
 
-	@Test
+//	@Test
 	public void testSimple() {
 //		deploy("test/task/simple.xml");
-//		engine.process().updateType(processId, "预算管理流程");
+//		engine.processService.updateType(processId, "预算管理流程");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 
 		Order order = engine.startInstanceByName("simple", 0, 87L, args);
 
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 		assertNotNull(tasks);
 
 		for (Task task : tasks)
@@ -49,15 +47,15 @@ public class TestTask extends BaseTest {
 //		Long id = deploy("test/task/take.xml");
 //		assertNotNull(id);
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 
 		Order order = engine.startInstanceById(155L, 2L, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 		assertNotNull(tasks);
 
 		for (Task task : tasks) {
-			engine.task().take(task.getId(), 1L);
+			engine.taskService.take(task.getId(), 1L);
 		}
 	}
 
@@ -68,11 +66,11 @@ public class TestTask extends BaseTest {
 
 		Order order = engine.startInstanceByName("transfer", 0, 1000L, null);
 
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 
 		for (Task task : tasks) {
-//			engine.task().createNewTask(task.getId(), 0, 1000L);
-//			engine.task().complete(task.getId(), null, null);
+//			engine.taskService.createNewTask(task.getId(), 0, 1000L);
+//			engine.taskService.complete(task.getId(), null, null);
 		}
 	}
 
@@ -80,9 +78,9 @@ public class TestTask extends BaseTest {
 //	@Test
 	public void testReject() {
 		init("test/task/reject.xml");
-		engine.startInstanceById(engine.process().lastDeployProcessId, null, null);
+		engine.startInstanceById(engine.processService.lastDeployProcessId, null, null);
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("number", 2);
 		engine.executeTask(1L, null, args);
 		engine.executeAndJumpTask(1L, null, args, "task1");
@@ -93,22 +91,23 @@ public class TestTask extends BaseTest {
 	public void testResume() {
 		init("test/task/simple.xml");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 
 		Order order = engine.startInstanceByName("simple", null, 2L, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 
 		for (Task task : tasks)
 			engine.executeTask(task.getId(), 2L, args);
 
-		engine.order().resume(order.getId());
+		engine.orderService.resume(order.getId());
 	}
 
 //	@Test
 	public void testActor() {
-		engine.task().addTaskActor(130L, 1L, 2L);
-		engine.task().removeTaskActor(132L, 2L);
+		TaskActorMgr mgr = new TaskActorMgr();
+		mgr.addTaskActor(130L, 1L, 2L);
+		mgr.removeTaskActor(132L, 2L);
 	}
 
 	// 字段模型
@@ -116,10 +115,10 @@ public class TestTask extends BaseTest {
 	public void TestField() {
 		Long processId = init("test/task/field.xml");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 
-		ProcessModel model = engine.process().findById(processId).getModel();
+		ProcessModel model = engine.processService.findById(processId).getModel();
 		TaskModel taskModel = (TaskModel) model.getNode("task1");
 
 		assertNotNull(taskModel.getFields());
@@ -129,14 +128,14 @@ public class TestTask extends BaseTest {
 	public void testModel() {
 		Long processId = init("test/task/process.xml");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 
 		Order order = engine.startInstanceByName("simple", null, 2L, args);
-		List<Task> tasks = engine.task().findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
 
 		for (Task task : tasks) {
-			TaskModel model = engine.task().getTaskModel(task.getId());
+			TaskModel model = engine.taskService.getTaskModel(task.getId());
 			System.out.println(model.getName());
 			List<TaskModel> models = model.getNextModels(TaskModel.class);
 
@@ -145,7 +144,7 @@ public class TestTask extends BaseTest {
 			}
 		}
 
-		List<TaskModel> models = engine.process().findById(processId).getModel().getModels(TaskModel.class);
+		List<TaskModel> models = engine.processService.findById(processId).getModel().getModels(TaskModel.class);
 		for (TaskModel tm : models) {
 			System.out.println(tm.getName());
 		}

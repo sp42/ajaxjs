@@ -7,8 +7,8 @@ import com.ajaxjs.sql.annotation.IgnoreDB;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfConstant.PerformType;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.common.WfUtils;
-import com.ajaxjs.workflow.model.work.TaskModel;
 
 /**
  * 任务实体类

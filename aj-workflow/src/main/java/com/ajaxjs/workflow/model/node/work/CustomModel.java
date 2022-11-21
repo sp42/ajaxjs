@@ -1,4 +1,4 @@
-package com.ajaxjs.workflow.model.work;
+package com.ajaxjs.workflow.model.node.work;
 
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -15,7 +15,6 @@ import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.po.TaskHistory;
-import com.ajaxjs.workflow.service.TaskBaseService;
 import com.ajaxjs.workflow.service.handler.IHandler;
 
 /**
@@ -50,7 +49,7 @@ public class CustomModel extends WorkModel {
 	private Object invokeObject;
 
 	@Override
-	public void exec(Execution execution) {
+	public void exec(Execution exec) {
 		if (invokeObject == null)
 			invokeObject = ReflectUtil.newInstance(clazz);
 
@@ -59,42 +58,41 @@ public class CustomModel extends WorkModel {
 
 		if (invokeObject instanceof IHandler) {
 			IHandler handler = (IHandler) invokeObject;
-			handler.handle(execution);
+			handler.handle(exec);
 		} else {
 			Method method = WfUtils.findMethod(invokeObject.getClass(), methodName);
 
 			if (method == null)
 				throw new WfException("自定义模型[class=" + clazz + "]无法找到方法名称:" + methodName);
 
-			Object[] objects = getArgs(execution.getArgs(), args);
+			Object[] objects = getArgs(exec.getArgs(), args);
 			Object returnValue = ReflectUtil.executeMethod(invokeObject, method, objects);
 
 			if (StringUtils.hasText(var))
-				execution.getArgs().put(var, returnValue);
+				exec.getArgs().put(var, returnValue);
 		}
 
-		createHistory(execution, this);
-		runOutTransition(execution);
+		createHistory(exec, this);
+		runOutTransition(exec);
 	}
 
 	/**
 	 * 任务历史记录方法
 	 * 
-	 * @param execution 执行对象
-	 * @param model     自定义节点模型
+	 * @param exec  执行对象
+	 * @param model 自定义节点模型
 	 * @return 历史任务对象
 	 */
-	private static TaskHistory createHistory(Execution execution, CustomModel model) {
+	private static TaskHistory createHistory(Execution exec, CustomModel model) {
 		TaskHistory task = new TaskHistory();
-		task.setOrderId(execution.getOrder().getId());
+		task.setOrderId(exec.getOrder().getId());
 		task.setName(model.getName());
 		task.setFinishDate(new Date());
 		task.setDisplayName(model.getDisplayName());
 		task.setStat(WfConstant.STATE_FINISH);
 		task.setTaskType(TaskType.RECORD);
-		task.setParentId(execution.getTask() == null ? 0 : execution.getTask().getId());
-		task.setVariable(JsonHelper.toJson(execution.getArgs()));
-		TaskBaseService.initCreate(task);
+		task.setParentId(exec.getTask() == null ? 0 : exec.getTask().getId());
+		task.setVariable(JsonHelper.toJson(exec.getArgs()));
 		WfDao.TaskHistoryDAO.create(task);
 
 		return task;

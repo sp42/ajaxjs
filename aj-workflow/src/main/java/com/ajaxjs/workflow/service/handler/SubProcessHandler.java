@@ -10,9 +10,9 @@ import java.util.concurrent.Future;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.Execution;
+import com.ajaxjs.workflow.model.node.work.SubProcessModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
-import com.ajaxjs.workflow.model.work.SubProcessModel;
 
 /**
  * 启动子流程的处理器
@@ -26,32 +26,22 @@ public class SubProcessHandler implements IHandler {
 	 */
 	private boolean isFutureRunning = false;
 
-	public SubProcessHandler(SubProcessModel model) {
-		this.model = model;
-	}
-
-	public SubProcessHandler(SubProcessModel model, boolean isFutureRunning) {
-		this.model = model;
-		this.isFutureRunning = isFutureRunning;
-	}
-
 	/**
 	 * 子流程执行的处理
 	 */
 	@Override
-	public void handle(Execution execution) {
+	public void handle(Execution exec) {
 		// 根据子流程模型名称获取子流程定义对象
-		WorkflowEngine engine = execution.getEngine();
-		ProcessPO process = engine.process().findByVersion(model.getProcessName(), model.getVersion());
-
-		Execution child = Execution.createSubExecution(execution, process, model.getName());
+		WorkflowEngine engine = exec.getEngine();
+		ProcessPO process = engine.processService.findByVersion(model.getProcessName(), model.getVersion());
+		Execution child = new Execution(exec, process, model.getName());
 		Order order = null;
 
 		if (isFutureRunning) {
 			// 创建单个线程执行器来执行启动子流程的任务
 			ExecutorService es = Executors.newSingleThreadExecutor();
 			// 提交执行任务，并返回 future
-			Future<Order> future = es.submit(new ExecuteTask(execution, process, model.getName()));
+			Future<Order> future = es.submit(new ExecuteTask(exec, process, model.getName()));
 
 			try {
 				es.shutdown();
@@ -65,12 +55,11 @@ public class SubProcessHandler implements IHandler {
 			order = engine.startInstanceByExecution(child);
 
 		Objects.requireNonNull(order, "子流程创建失败");
-		execution.addTasks(engine.task().findByOrderId(order.getId()));
+		exec.addTasks(engine.taskService.findByOrderId(order.getId()));
 	}
 
 	/**
 	 * Future 模式的任务执行。通过 call 返回任务结果集
-	 * 
 	 */
 	class ExecuteTask implements Callable<Order> {
 		private WorkflowEngine engine;
@@ -80,18 +69,27 @@ public class SubProcessHandler implements IHandler {
 		/**
 		 * 构造函数
 		 * 
-		 * @param execution
+		 * @param exec
 		 * @param process
 		 * @param parentNodeName
 		 */
-		public ExecuteTask(Execution execution, ProcessPO process, String parentNodeName) {
-			engine = execution.getEngine();
-			child = Execution.createSubExecution(execution, process, parentNodeName);
+		public ExecuteTask(Execution exec, ProcessPO process, String parentNodeName) {
+			engine = exec.getEngine();
+			child = new Execution(exec, process, parentNodeName);
 		}
 
 		@Override
 		public Order call() throws Exception {
 			return engine.startInstanceByExecution(child);
 		}
+	}
+
+	public SubProcessHandler(SubProcessModel model) {
+		this.model = model;
+	}
+
+	public SubProcessHandler(SubProcessModel model, boolean isFutureRunning) {
+		this.model = model;
+		this.isFutureRunning = isFutureRunning;
 	}
 }

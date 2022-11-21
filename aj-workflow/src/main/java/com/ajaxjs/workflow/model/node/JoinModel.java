@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TransitionModel;
-import com.ajaxjs.workflow.model.work.WorkModel;
+import com.ajaxjs.workflow.model.node.work.WorkModel;
 import com.ajaxjs.workflow.service.handler.AbstractMergeHandler;
 
 /**

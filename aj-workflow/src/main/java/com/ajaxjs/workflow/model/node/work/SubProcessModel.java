@@ -1,4 +1,4 @@
-package com.ajaxjs.workflow.model.work;
+package com.ajaxjs.workflow.model.node.work;
 
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;

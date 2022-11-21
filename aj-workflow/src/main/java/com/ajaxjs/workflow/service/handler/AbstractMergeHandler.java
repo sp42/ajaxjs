@@ -6,10 +6,10 @@ import org.springframework.util.CollectionUtils;
 
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
+import com.ajaxjs.workflow.model.node.work.SubProcessModel;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.work.SubProcessModel;
-import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.TaskService;
 
 /**
@@ -20,30 +20,30 @@ public abstract class AbstractMergeHandler implements IHandler {
 	 * 查询当前流程实例的无法参与合并的 node 列表。 若所有中间 node 都完成，则设置为已合并状态，告诉 model 可继续执行 join 的输出变迁
 	 */
 	@Override
-	public void handle(Execution execution) {
-		Long orderId = execution.getOrder().getId();
-		ProcessModel model = execution.getModel();
+	public void handle(Execution exec) {
+		Long orderId = exec.getOrder().getId();
+		ProcessModel model = exec.getModel();
 		String[] activeNodes = findActiveNodes();
 		boolean isSubProcessMerged = false, isTaskMerged = false;
 
 		if (model.containsNodeNames(SubProcessModel.class, activeNodes)) {
-			List<Order> orders = execution.getEngine().order().findByIdAndExcludedIds(orderId, execution.getChildOrderId());
+			List<Order> orders = exec.getEngine().orderService.findByIdAndExcludedIds(orderId, exec.getChildOrderId());
 
 			if (CollectionUtils.isEmpty(orders)) // 如果所有 task 都已完成，则表示可合并
 				isSubProcessMerged = true;
 		} else
 			isSubProcessMerged = true;
 
-		TaskService taskService = execution.getEngine().task();
+		TaskService taskService = exec.getEngine().taskService;
 
 		if (isSubProcessMerged && model.containsNodeNames(TaskModel.class, activeNodes)) {
-			List<Task> tasks = taskService.findByOrderIdAndExcludedIds(orderId, execution.getTask().getId(), activeNodes);
+			List<Task> tasks = taskService.findByOrderIdAndExcludedIds(orderId, exec.getTask().getId(), activeNodes);
 
 			if (CollectionUtils.isEmpty(tasks)) // 如果所有 task 都已完成，则表示可合并
 				isTaskMerged = true;
 		}
 
-		execution.setMerged(isSubProcessMerged && isTaskMerged);
+		exec.setMerged(isSubProcessMerged && isTaskMerged);
 	}
 
 	/**

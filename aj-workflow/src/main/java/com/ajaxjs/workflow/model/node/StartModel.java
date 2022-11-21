@@ -7,7 +7,7 @@ import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TransitionModel;
 
 /**
- * 开始节点定义 start 元素
+ * 开始节点 start 元素
  */
 public class StartModel extends NodeModel {
 	private static final long serialVersionUID = -4550530562581330477L;

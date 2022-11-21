@@ -6,7 +6,6 @@ import com.ajaxjs.workflow.service.handler.IHandler;
 
 /**
  * 模型元素基类
- * 
  */
 public class BaseWfModel implements Serializable {
 	private static final long serialVersionUID = 3082741431225739241L;
@@ -22,14 +21,13 @@ public class BaseWfModel implements Serializable {
 	private String displayName;
 
 	/**
-	 * 将执行对象 execution 交给具体的处理器处理
-	 * TODO 或者取消？
+	 * 将执行对象 execution 交给具体的处理器处理 TODO 或者取消？
 	 * 
-	 * @param handler   具体的处理器
-	 * @param execution 执行对象
+	 * @param handler 具体的处理器
+	 * @param exec    执行对象
 	 */
-	protected void fire(IHandler handler, Execution execution) {
-		handler.handle(execution);
+	protected void fire(IHandler handler, Execution exec) {
+		handler.handle(exec);
 	}
 
 	public String getName() {

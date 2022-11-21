@@ -9,6 +9,7 @@ package com.ajaxjs.workflow.service.interceptor;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.po.Task;
+import com.ajaxjs.workflow.service.task.TaskActorMgr;
 
 /**
  * 新创建的任务通过 SurrogateInterceptor 创建委托。 查询 wf_surrogate 表获取委托代理人，并通过
@@ -18,6 +19,7 @@ import com.ajaxjs.workflow.model.po.Task;
  *
  */
 public class SurrogateInterceptor implements WorkflowInterceptor {
+
 	@Override
 	public void intercept(Execution execution) {
 		WorkflowEngine engine = execution.getEngine();
@@ -31,10 +33,10 @@ public class SurrogateInterceptor implements WorkflowInterceptor {
 					continue;
 
 				// 查询 wf_surrogate 获取委托代理人
-				Long agent = engine.manager().getSurrogate(actor, execution.getProcess().getName());
+				Long agent = engine.surrogateService.getSurrogate(actor, execution.getProcess().getName());
 
 				if (agent != null && agent != 0)
-					engine.task().addTaskActor(task.getId(), agent);
+					new TaskActorMgr().addTaskActor(task.getId(), agent);
 			}
 		}
 	}

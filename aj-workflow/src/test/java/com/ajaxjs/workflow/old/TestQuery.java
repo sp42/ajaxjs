@@ -2,12 +2,10 @@ package com.ajaxjs.workflow.old;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.Test;
 
 import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.model.Args;
 
 public class TestQuery extends BaseTest {
 	public void testRead() {
@@ -19,7 +17,7 @@ public class TestQuery extends BaseTest {
 
 	@Test
 	public void testStartOrder() {
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", "1");
 
 //		e.startInstanceByName("simple", 0, null, args);

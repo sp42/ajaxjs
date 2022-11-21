@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
 import com.ajaxjs.workflow.model.node.NodeModel;
-import com.ajaxjs.workflow.model.work.CustomModel;
+import com.ajaxjs.workflow.model.node.work.CustomModel;
 
 /**
  * 自定义节点解析器

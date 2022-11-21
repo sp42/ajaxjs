@@ -1,4 +1,4 @@
-package com.ajaxjs.workflow.model.work;
+package com.ajaxjs.workflow.model.node.work;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +18,6 @@ import com.ajaxjs.workflow.service.scheduling.JobCallback;
 
 /**
  * 任务定义 task 元素
- * 
  */
 public class TaskModel extends WorkModel {
 	public static final LogHelper LOGGER = LogHelper.getLog(TaskModel.class);
@@ -44,7 +43,6 @@ public class TaskModel extends WorkModel {
 	 * 类型：协办任务
 	 */
 	public static final String TASKTYPE_AIDANT = "Aidant";
-
 
 	/**
 	 * 参与者变量名称
@@ -102,11 +100,11 @@ public class TaskModel extends WorkModel {
 	private List<FieldModel> fields = null;
 
 	@Override
-	protected void exec(Execution execution) {
+	protected void exec(Execution exec) {
 		LOGGER.info("任务模型的执行");
 
 		if (performType == null || performType.equalsIgnoreCase(PERFORMTYPE_ANY))
-			runOutTransition(execution);// any方式，直接执行输出变迁
+			runOutTransition(exec);// any方式，直接执行输出变迁
 		else {
 			String taskName = getName(); // all的任务名称
 
@@ -118,10 +116,10 @@ public class TaskModel extends WorkModel {
 				protected String[] findActiveNodes() {
 					return new String[] { taskName };
 				}
-			}, execution);
+			}, exec);
 
-			if (execution.isMerged())
-				runOutTransition(execution);
+			if (exec.isMerged())
+				runOutTransition(exec);
 		}
 	}
 

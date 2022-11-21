@@ -3,13 +3,12 @@ package com.ajaxjs.workflow.flow;
 import static org.junit.Assert.assertNotNull;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 import org.junit.Test;
 
 import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.po.Order;
 
@@ -19,7 +18,7 @@ public class TestDecision extends BaseTest {
 	public void TestDecision1() {
 //		WorlflowEngine engine = (WorlflowEngine) init("test/decision/expression.xml");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task2.operator", new String[] { "1" });
 		// args.put("task1.operator", new String[]{"1","2"});
 		// args.put("task3.operator", new String[]{"1","2"});
@@ -35,7 +34,7 @@ public class TestDecision extends BaseTest {
 	public void TestDecision2() {
 //		WorlflowEngine engine = (WorlflowEngine) init("test/decision/condition.xml");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 		args.put("task2.operator", new String[] { "1" });
 		args.put("task3.operator", new String[] { "1" });
@@ -70,7 +69,7 @@ public class TestDecision extends BaseTest {
 	public void TestDecision3() {
 //		WorlflowEngine engine = (WorlflowEngine) init("test/decision/handler.xml");
 
-		Map<String, Object> args = new HashMap<>();
+		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 		args.put("task2.operator", new String[] { "1" });
 		args.put("task3.operator", new String[] { "1" });

@@ -16,11 +16,6 @@ public abstract class BasePersistantObject implements IBaseModel {
 	private Long id;
 
 	/**
-	 * 唯一 id
-	 */
-	private Long uid;
-
-	/**
 	 * 数据字典：状态
 	 */
 	private Integer stat;
@@ -65,14 +60,6 @@ public abstract class BasePersistantObject implements IBaseModel {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getUid() {
-		return uid;
-	}
-
-	public void setUid(Long uid) {
-		this.uid = uid;
 	}
 
 	public Integer getStat() {

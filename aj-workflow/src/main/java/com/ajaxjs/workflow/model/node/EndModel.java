@@ -13,10 +13,10 @@ import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.TransitionModel;
+import com.ajaxjs.workflow.model.node.work.SubProcessModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.work.SubProcessModel;
 import com.ajaxjs.workflow.service.handler.IHandler;
 
 /**
@@ -37,18 +37,18 @@ public class EndModel extends NodeModel {
 
 				WorkflowEngine engine = execution.getEngine();
 				Order order = execution.getOrder();
-				List<Task> tasks = engine.task().findByOrderId(order.getId());// 查找当前活动的任务
+				List<Task> tasks = engine.taskService.findByOrderId(order.getId());// 查找当前活动的任务
 
 				if (!ObjectUtils.isEmpty(tasks))
 					for (Task task : tasks) {
 						if (task.getTaskType() == TaskType.MAJOR)
 							throw new WfException("存在未完成的主办任务，请确认！？");
 
-//					engine.task().complete(task.getId(), SnakerEngine.AUTO);
-						engine.task().complete(task.getId(), null, null);
+//					engine.taskService.complete(task.getId(), SnakerEngine.AUTO);
+						engine.taskService.complete(task.getId(), null, null);
 					}
 
-				engine.order().complete(order.getId());// 结束当前流程实例
+				engine.orderService.complete(order.getId());// 结束当前流程实例
 
 				// 如果存在父流程，则重新构造 Execution 执行对象，交给父流程的 SubProcessModel 模型 execute
 
@@ -58,7 +58,7 @@ public class EndModel extends NodeModel {
 					if (parentOrder == null)
 						return;
 
-					ProcessPO process = engine.process().findById(parentOrder.getProcessId());
+					ProcessPO process = engine.processService.findById(parentOrder.getProcessId());
 					ProcessModel pm = process.getModel();
 
 					if (pm == null)

@@ -11,13 +11,10 @@ import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.BaseWfModel;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TransitionModel;
-import com.ajaxjs.workflow.model.work.SubProcessModel;
-import com.ajaxjs.workflow.model.work.TaskModel;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
 
 /**
  * 节点元素（存在输入输出的变迁）
- * 
  */
 public abstract class NodeModel extends BaseWfModel {
 	public static final LogHelper LOGGER = LogHelper.getLog(NodeModel.class);
@@ -62,9 +59,9 @@ public abstract class NodeModel extends BaseWfModel {
 	/**
 	 * 具体节点模型需要完成的执行逻辑
 	 * 
-	 * @param execution 执行对象
+	 * @param exec 执行对象
 	 */
-	protected abstract void exec(Execution execution);
+	protected abstract void exec(Execution exec);
 
 	/**
 	 * 对执行逻辑增加前置、后置拦截处理
@@ -93,45 +90,17 @@ public abstract class NodeModel extends BaseWfModel {
 	/**
 	 * 拦截方法
 	 * 
-	 * @param interceptorList 拦截器列表
-	 * @param execution       执行对象
+	 * @param interceptos 拦截器列表
+	 * @param exec        执行对象
 	 */
-	private static void intercept(List<WorkflowInterceptor> interceptorList, Execution execution) {
+	private static void intercept(List<WorkflowInterceptor> interceptos, Execution exec) {
 		try {
-			for (WorkflowInterceptor interceptor : interceptorList)
-				interceptor.intercept(execution);
+			for (WorkflowInterceptor interceptor : interceptos)
+				interceptor.intercept(exec);
 		} catch (Exception e) {
 			LOGGER.warning("拦截器执行失败=" + e.getMessage());
 			throw new WfException(e);
 		}
-	}
-
-	/**
-	 * 根据父节点模型、当前节点模型判断是否可退回。可退回条件： 1、满足中间无fork、join、subprocess模型
-	 * 2、满足父节点模型如果为任务模型时，参与类型为any
-	 * 
-	 * @param parent 父节点模型
-	 * @return 是否可以退回
-	 */
-	public static boolean canRejected(NodeModel current, NodeModel parent) {
-		if (parent instanceof TaskModel && !((TaskModel) parent).isPerformAny())
-			return false;
-
-		boolean result = false;
-
-		for (TransitionModel tm : current.getInputs()) {
-			NodeModel source = tm.getSource();
-
-			if (source == parent)
-				return true;
-
-			if (source instanceof ForkModel || source instanceof JoinModel || source instanceof SubProcessModel || source instanceof StartModel)
-				continue;
-
-			result = result || canRejected(source, parent);
-		}
-
-		return result;
 	}
 
 	/**

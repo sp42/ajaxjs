@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
 import com.ajaxjs.workflow.model.node.NodeModel;
-import com.ajaxjs.workflow.model.work.SubProcessModel;
+import com.ajaxjs.workflow.model.node.work.SubProcessModel;
 
 /**
  * 子流程节点解析类
