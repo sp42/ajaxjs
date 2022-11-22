@@ -9,7 +9,6 @@ import com.ajaxjs.workflow.service.handler.AbstractMergeHandler;
 
 /**
  * 合并定义 join 元素
- * 
  */
 public class JoinModel extends NodeModel {
 	private static final long serialVersionUID = 5296621319088076775L;
@@ -17,8 +16,8 @@ public class JoinModel extends NodeModel {
 	@Override
 	public void exec(Execution execution) {
 		JoinModel model = this;
-		// 合并分支操作的处理器
-		fire(new AbstractMergeHandler() {
+
+		fire(new AbstractMergeHandler() {// 合并分支操作的处理器
 			@Override
 			protected String[] findActiveNodes() {
 				StringBuilder sb = new StringBuilder(20);
@@ -28,8 +27,7 @@ public class JoinModel extends NodeModel {
 			}
 		}, execution);
 
-		// 如果已经合并成功，则进行下一步变迁
-		if (execution.isMerged())
+		if (execution.isMerged())// 如果已经合并成功，则进行下一步变迁
 			runOutTransition(execution);
 	}
 

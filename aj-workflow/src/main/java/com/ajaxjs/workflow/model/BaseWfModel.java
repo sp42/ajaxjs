@@ -7,7 +7,7 @@ import com.ajaxjs.workflow.service.handler.IHandler;
 /**
  * 模型元素基类
  */
-public class BaseWfModel implements Serializable {
+public class BaseWfModel implements Serializable, Cloneable {
 	private static final long serialVersionUID = 3082741431225739241L;
 
 	/**

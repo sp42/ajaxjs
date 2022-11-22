@@ -32,11 +32,11 @@ public class EndModel extends NodeModel {
 	public void exec(Execution execution) {
 		fire(new IHandler() {
 			@Override
-			public void handle(Execution execution) {
+			public void handle(Execution exec) {
 				LOGGER.info("准备要完成了，运行  End 节点");
 
-				WorkflowEngine engine = execution.getEngine();
-				Order order = execution.getOrder();
+				WorkflowEngine engine = exec.getEngine();
+				Order order = exec.getOrder();
 				List<Task> tasks = engine.taskService.findByOrderId(order.getId());// 查找当前活动的任务
 
 				if (!ObjectUtils.isEmpty(tasks))
@@ -65,13 +65,13 @@ public class EndModel extends NodeModel {
 						return;
 
 					SubProcessModel spm = (SubProcessModel) pm.getNode(order.getParentNodeName());
-					Execution newExecution = new Execution(engine, process, parentOrder, execution.getArgs());
+					Execution newExecution = new Execution(engine, process, parentOrder, exec.getArgs());
 					newExecution.setChildOrderId(order.getId());
-					newExecution.setTask(execution.getTask());
+					newExecution.setTask(exec.getTask());
 					spm.execute(newExecution);
 
 					// SubProcessModel 执行结果的 tasks 合并到当前执行对象 execution 的 tasks 列表中
-					execution.addTasks(newExecution.getTasks());
+					exec.addTasks(newExecution.getTasks());
 				}
 			}
 		}, execution);
