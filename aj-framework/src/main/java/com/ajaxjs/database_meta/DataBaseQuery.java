@@ -57,8 +57,10 @@ public class DataBaseQuery extends BaseMetaQuery {
 	 * @return
 	 */
 	public Database[] getDataBaseWithTable() {
-		String[] databases = getDatabase();
+		return getDataBaseWithTable(getDatabase());
+	}
 
+	public Database[] getDataBaseWithTable(String[] databases) {
 		List<Database> list = new ArrayList<>();
 		TableQuery tableQuery = new TableQuery(conn);
 
@@ -77,6 +79,7 @@ public class DataBaseQuery extends BaseMetaQuery {
 		}
 
 		return list.toArray(new Database[list.size()]);
+
 	}
 
 	public Database[] getDataBaseWithTableFull() {
@@ -93,8 +96,8 @@ public class DataBaseQuery extends BaseMetaQuery {
 	/**
 	 * 获取表和所有列的信息
 	 * 
-	 * @param tableNames	表名
-	 * @param dbName 		数据库名，可选
+	 * @param tableNames 表名
+	 * @param dbName     数据库名，可选
 	 * @return
 	 */
 	public List<Table> getDataBaseWithTableFull(List<String> tableNames, String dbName) {
