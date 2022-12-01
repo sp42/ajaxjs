@@ -45,7 +45,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 		resp.setCharacterEncoding("UTF-8"); // 避免乱码
 		resp.setHeader("Cache-Control", "no-cache, must-revalidate");
 
-		if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError)// 设置状态码
+		if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError || _ex instanceof IllegalAccessException)// 设置状态码
 			resp.setStatus(HttpStatus.UNAUTHORIZED.value());
 		else
 			resp.setStatus(HttpStatus.OK.value());
