@@ -1,4 +1,4 @@
-package com.ajaxjs.system_log;
+package com.ajaxjs.base.business.model;
 
 import java.util.Date;
 
@@ -6,9 +6,7 @@ import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.sql.annotation.IgnoreDB;
 
 /**
- * @description 操作日志
- * @author Frank Cheung
- * @date 2021-11-07
+ * 操作日志
  */
 public class ServiceLog implements IBaseModel {
 	/**
@@ -121,7 +119,7 @@ public class ServiceLog implements IBaseModel {
 		done = error == null || "".equals(error);
 		return done;
 	}
-	
+
 	@IgnoreDB
 	public Boolean getDone() {
 		done = error == null || "".equals(error);

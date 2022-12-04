@@ -1,4 +1,3 @@
-
 -- Dumping structure for table shop.delivery_address
 CREATE TABLE IF NOT EXISTS `delivery_address` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '收货地址表id',
@@ -15,7 +14,8 @@ CREATE TABLE IF NOT EXISTS `delivery_address` (
   `isDefaultAddress` tinyint(4) DEFAULT NULL COMMENT '是否默认收货地址',
   `createdTime` datetime DEFAULT NULL COMMENT '创建时间',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='收货地址';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '收货地址';
+
 -- Dumping structure for table shop.order
 CREATE TABLE IF NOT EXISTS `order` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '订单表主键id',
@@ -41,10 +41,9 @@ CREATE TABLE IF NOT EXISTS `order` (
   `orderSettlementStatus` tinyint(4) DEFAULT NULL COMMENT '订单结算状态,货到付款、分期付款等',
   `orderSettlementTime` datetime DEFAULT NULL COMMENT '订单结算时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单';
 
 -- Dumping data for table shop.order: ~0 rows (approximately)
-
 -- Dumping structure for table shop.order_auditbiz
 CREATE TABLE IF NOT EXISTS `order_auditbiz` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '订单业务审核流程表id',
@@ -68,10 +67,9 @@ CREATE TABLE IF NOT EXISTS `order_auditbiz` (
   `storekeeperAuditedTime` datetime DEFAULT NULL COMMENT '仓管员审核时间',
   `accountantAuditedTime` datetime DEFAULT NULL COMMENT '财务审核时间',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单业务审核流程';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单业务审核流程';
 
 -- Dumping data for table shop.order_auditbiz: ~0 rows (approximately)
-
 -- Dumping structure for table shop.order_commission
 CREATE TABLE IF NOT EXISTS `order_commission` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '订单提成表id',
@@ -82,10 +80,9 @@ CREATE TABLE IF NOT EXISTS `order_commission` (
   `settlementTime` datetime DEFAULT NULL COMMENT '结算时间',
   `cashierUid` int(20) DEFAULT NULL COMMENT '财务人员用户id',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单提成';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单提成';
 
 -- Dumping data for table shop.order_commission: ~0 rows (approximately)
-
 -- Dumping structure for table shop.order_detail
 CREATE TABLE IF NOT EXISTS `order_detail` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单商品详情表id',
@@ -104,10 +101,9 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
   `isProductExists` tinyint(1) DEFAULT NULL COMMENT '商品是否有效',
   `remark` varchar(50) DEFAULT NULL COMMENT '客户商品备注',
   KEY `orderDetailId` (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单商品详情';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单商品详情';
 
 -- Dumping data for table shop.order_detail: ~0 rows (approximately)
-
 -- Dumping structure for table shop.order_dispatch
 CREATE TABLE IF NOT EXISTS `order_dispatch` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '订单调度表id',
@@ -118,10 +114,9 @@ CREATE TABLE IF NOT EXISTS `order_dispatch` (
   `adminUid` varchar(50) DEFAULT NULL COMMENT '调度管理员',
   `createdTime` datetime DEFAULT NULL COMMENT '调度日期',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单调度';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单调度';
 
 -- Dumping data for table shop.order_dispatch: ~0 rows (approximately)
-
 -- Dumping structure for table shop.order_invoice
 CREATE TABLE IF NOT EXISTS `order_invoice` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '订单发票表ID',
@@ -139,10 +134,9 @@ CREATE TABLE IF NOT EXISTS `order_invoice` (
   `vatBankAccount` int(20) DEFAULT NULL COMMENT '银行帐号[增值税]',
   `createdTime` datetime DEFAULT NULL COMMENT '开票时间',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单发票';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单发票';
 
 -- Dumping data for table shop.order_invoice: ~0 rows (approximately)
-
 -- Dumping structure for table shop.order_logistics
 CREATE TABLE IF NOT EXISTS `order_logistics` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '订单物流表id',
@@ -170,10 +164,9 @@ CREATE TABLE IF NOT EXISTS `order_logistics` (
   `reconciliationStatus` tinyint(4) DEFAULT NULL COMMENT '物流公司已对账状态,已对账,未对账',
   `reconciliationTime` datetime DEFAULT NULL COMMENT '物流公司对账日期',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单物流';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单物流';
 
 -- Dumping data for table shop.order_logistics: ~0 rows (approximately)
-
 -- Dumping structure for table shop.order_returns
 CREATE TABLE IF NOT EXISTS `order_returns` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '订单退货表id',
@@ -201,10 +194,9 @@ CREATE TABLE IF NOT EXISTS `order_returns` (
   `handlingTime` datetime DEFAULT NULL COMMENT '退货处理时间',
   `reasonForReturn` varchar(50) DEFAULT NULL COMMENT '退货原因',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单退货';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '订单退货';
 
 -- Dumping data for table shop.order_returns: ~0 rows (approximately)
-
 -- Dumping structure for table shop.shoppingcart
 CREATE TABLE IF NOT EXISTS `shoppingcart` (
   `id` int(20) NOT NULL AUTO_INCREMENT COMMENT '购物车表id',
@@ -215,6 +207,6 @@ CREATE TABLE IF NOT EXISTS `shoppingcart` (
   `number` int(20) DEFAULT NULL COMMENT '购买数量',
   `createdTime` datetime DEFAULT NULL COMMENT '创建时间',
   KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车';
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '购物车';
 
 -- Dumping data for table shop.shoppingcart: ~0 rows (approximately)

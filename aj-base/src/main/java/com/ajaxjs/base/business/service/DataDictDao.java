@@ -1,7 +1,8 @@
-package com.ajaxjs.entity.datadict;
+package com.ajaxjs.base.business.service;
 
 import java.util.List;
 
+import com.ajaxjs.base.business.model.DataDict;
 import com.ajaxjs.data_service.sdk.Caller;
 import com.ajaxjs.data_service.sdk.IDataService;
 import com.ajaxjs.data_service.sdk.KeyOfMapParams;

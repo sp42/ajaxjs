@@ -1,6 +1,9 @@
-package com.ajaxjs.attachment;
+package com.ajaxjs.base.business.model;
 
 import java.util.Date;
+
+import com.ajaxjs.base.business.common.BaseEntityConstant.AttachmentType;
+import com.ajaxjs.framework.IBaseModel;
 
 /**
  * 附件
@@ -8,7 +11,7 @@ import java.util.Date;
  * @author Frank Cheung<sp42@qq.com>
  *
  */
-public class Attachment {
+public class Attachment implements IBaseModel {
 
 	/**
 	 * 主键 id，自增
@@ -28,7 +31,7 @@ public class Attachment {
 	/**
 	 * 分类：null/0/1=普通图片、2=头像/封面图片、3=相册图片
 	 */
-	private Long type;
+	private AttachmentType type;
 
 	/**
 	 * 租户 id。0 = 不设租户
@@ -99,11 +102,11 @@ public class Attachment {
 		this.desc = desc;
 	}
 
-	public Long getType() {
+	public AttachmentType getType() {
 		return type;
 	}
 
-	public void setType(Long type) {
+	public void setType(AttachmentType type) {
 		this.type = type;
 	}
 

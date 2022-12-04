@@ -4,10 +4,17 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 import com.ajaxjs.data_service.DataServiceDAO;
 import com.ajaxjs.data_service.model.DataServiceDTO;
-import com.ajaxjs.data_service.model.MyDataSource;
+import com.ajaxjs.data_service.model.DataSourceInfo;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.spring.easy_controller.ControllerMethod;
+import com.ajaxjs.util.filter.DataBaseFilter;
 
 /**
  * 数据源管理
@@ -15,15 +22,16 @@ import com.ajaxjs.framework.PageResult;
  * @author Frank Cheung<sp42@qq.com>
  *
  */
-public interface IDataSourceService extends DataServiceDAO, DataServiceDTO {
+public interface DataSourceService extends DataServiceDAO, DataServiceDTO {
 	/**
 	 * 数据源列表
 	 * 
-	 * @param req
-	 * @param appId
 	 * @return
 	 */
-	List<MyDataSource> list(String appId);
+	@GetMapping
+	@DataBaseFilter
+	@ControllerMethod("数据源列表")
+	List<DataSourceInfo> list();
 
 	/**
 	 * 创建数据源
@@ -31,7 +39,9 @@ public interface IDataSourceService extends DataServiceDAO, DataServiceDTO {
 	 * @param entity
 	 * @return
 	 */
-	Long create(MyDataSource entity);
+	@PostMapping
+	@ControllerMethod("创建数据源")
+	Long create(DataSourceInfo entity);
 
 	/**
 	 * 修改数据源
@@ -39,7 +49,9 @@ public interface IDataSourceService extends DataServiceDAO, DataServiceDTO {
 	 * @param id
 	 * @return
 	 */
-	Boolean update(long id);
+	@PutMapping("/{id}")
+	@ControllerMethod("修改数据源")
+	Boolean update(@PathVariable long id);
 
 	/**
 	 * 获取某个数据源下面的所有表
@@ -47,10 +59,10 @@ public interface IDataSourceService extends DataServiceDAO, DataServiceDTO {
 	 * @param dataSourceId 数据源 id
 	 * @param dbName
 	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
 	 */
-	List<TableInfo> getSelectTables(Long dataSourceId, String dbName) throws ClassNotFoundException, SQLException;
+	@GetMapping("/{id}/getSelectTables")
+	@ControllerMethod("获取某个数据源下面的所有表")
+	List<TableInfo> getSelectTables(@PathVariable("id") Long dataSourceId, String dbName);
 
 	/**
 	 * 单数据源返回数据源下的表名和表注释
@@ -61,6 +73,8 @@ public interface IDataSourceService extends DataServiceDAO, DataServiceDTO {
 	 * @return
 	 * @throws SQLException
 	 */
+	@GetMapping("/getAllTables")
+	@ControllerMethod("单数据源返回数据源下的表名和表注释")
 	PageResult<Map<String, Object>> getAllTables(Integer start, Integer limit, String tablename, String dbName) throws SQLException;
 
 	/**
@@ -74,6 +88,8 @@ public interface IDataSourceService extends DataServiceDAO, DataServiceDTO {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
+	@GetMapping("/{id}/getAllTables")
+	@ControllerMethod("指定数据源返回数据源下的表名和表注释")
 	PageResult<Map<String, Object>> getTableAndComment(Long dataSourceId, Integer start, Integer limit, String tablename, String dbName)
 			throws ClassNotFoundException, SQLException;
 
@@ -87,6 +103,7 @@ public interface IDataSourceService extends DataServiceDAO, DataServiceDTO {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
+	@GetMapping("/{id}/getFields/{tableName}")
+	@ControllerMethod("获取所有字段")
 	List<Map<String, String>> getFields(Long datasourceId, String tableName, String dbName) throws ClassNotFoundException, SQLException;
-
 }

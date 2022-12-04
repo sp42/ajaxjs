@@ -1,4 +1,4 @@
-package com.ajaxjs.company;
+package com.ajaxjs.address;
 
 import com.ajaxjs.framework.BaseModel;
 

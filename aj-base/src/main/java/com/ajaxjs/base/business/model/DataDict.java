@@ -1,4 +1,4 @@
-package com.ajaxjs.entity.datadict;
+package com.ajaxjs.base.business.model;
 
 import java.util.Date;
 

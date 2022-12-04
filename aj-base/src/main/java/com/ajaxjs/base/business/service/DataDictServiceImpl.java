@@ -1,4 +1,4 @@
-package com.ajaxjs.entity.datadict;
+package com.ajaxjs.base.business.service;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import com.ajaxjs.base.business.model.DataDict;
 import com.ajaxjs.data_service.sdk.IDataService;
 import com.ajaxjs.entity.CRUD;
 import com.ajaxjs.framework.PageResult;
@@ -22,7 +23,7 @@ import com.ajaxjs.util.StrUtil;
  *
  */
 @Service
-public class DataDictServiceImpl implements IDataDictService {
+public class DataDictServiceImpl implements DataDictService {
 	public List<DataDict> getDataDictChildren(Long parentId) {
 		List<DataDict> list = DataDictDAO.getListByParentId(parentId);
 

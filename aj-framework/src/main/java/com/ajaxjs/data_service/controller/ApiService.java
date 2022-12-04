@@ -1,4 +1,4 @@
-package com.ajaxjs.data_service.service;
+package com.ajaxjs.data_service.controller;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -17,10 +17,19 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.ajaxjs.data_service.DataServiceDAO;
 import com.ajaxjs.data_service.api.ApiController;
 import com.ajaxjs.data_service.api.MyDataSourceController;
 import com.ajaxjs.data_service.model.DataServiceConfig;
+import com.ajaxjs.data_service.model.DataServiceConstant;
+import com.ajaxjs.data_service.model.DataServiceDTO;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.DataServiceFieldsMapping;
 import com.ajaxjs.data_service.model.DataServiceTable;
@@ -28,9 +37,11 @@ import com.ajaxjs.data_service.model.MyDataSource;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.mybatis.MSUtils;
 import com.ajaxjs.data_service.plugin.IPlugin;
+import com.ajaxjs.data_service.service.ApiCommander;
 import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.framework.Status;
 import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.WebHelper;
@@ -38,15 +49,23 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 
-public class ApiService extends ApiCommander implements IApiService {
+/**
+ * 数据服务 API 基类 数据服务向外提供的基础API
+ *
+ */
+@RestController
+@RequestMapping("${DataService.api_root:/api}/**")
+public class ApiService extends ApiCommander implements DataServiceDAO, DataServiceDTO, DataServiceConstant {
 	private static final LogHelper LOGGER = LogHelper.getLog(ApiService.class);
 
-	@Override
+	@GetMapping
+	@ControllerMethod("数据服务 GET")
 	public Object get(HttpServletRequest req) {
 		return get(getServiceContext(req, GET, null), plugins);
 	}
 
-	@Override
+	@PostMapping
+	@ControllerMethod("数据服务 创建实体")
 	public Serializable post(Map<String, Object> formPostMap, HttpServletRequest req) {
 		Serializable newlyId = create(getServiceContext(req, POST, formPostMap), plugins);
 
@@ -59,12 +78,14 @@ public class ApiService extends ApiCommander implements IApiService {
 			throw new NullPointerException("创建失败，未能返回新创建实体之 id");
 	}
 
-	@Override
+	@PutMapping
+	@ControllerMethod("数据服务 修改实体")
 	public Boolean put(Map<String, Object> formPostMap, HttpServletRequest req) {
 		return update(getServiceContext(req, PUT, formPostMap), plugins);
 	}
 
-	@Override
+	@DeleteMapping
+	@ControllerMethod("数据服务 删除实体/批量删除")
 	public Boolean delete(HttpServletRequest req) {
 		return delete(getServiceContext(req, DELETE, null), plugins);
 	}

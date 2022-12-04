@@ -15,13 +15,8 @@ public class BaseWebInit extends BaseWebInitializer {
 	public static class ScanComponent {
 	}
 
-	@Override
-	public String getMainConfig() {
-		return "com.ajaxjs.base.BaseWebInit.ScanComponent";
-	}
-
 	@Bean
 	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-		return new ServiceBeanDefinitionRegistry("com.ajaxjs.adp");
+		return new ServiceBeanDefinitionRegistry("com.ajaxjs.base");
 	}
 }
