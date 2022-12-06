@@ -16,7 +16,10 @@
             <i-Form ref="editForm" :model="form.data" :rules="form.createRules" :label-width="120"
                 style="margin-right:100px">
                 <form-item label="数据源名称" prop="name">
-                    <i-Input v-model="form.data.name" placeholder="数据源名称全局唯一不重复" />
+                    <i-Input v-model="form.data.name" placeholder="数据源名称" />
+                </form-item>
+                <form-item label="数据源编码" prop="urlDir">
+                    <i-Input v-model="form.data.urlDir" placeholder="数据源编码全局唯一不重复" />
                 </form-item>
                 <form-item label="数据库类型" prop="type">
                     <i-Select v-model="form.data.type">
@@ -33,8 +36,8 @@
                 <form-item label="登录密码" prop="password">
                     <i-Input v-model="form.data.password" type="password" password placeholder="请输入账号密码" />
                 </form-item>
-                <form-item label="是否跨库" prop="crossDB">
-                    <i-switch v-model="form.data.crossDB" />
+                <form-item label="是否跨库" prop="crossDb">
+                    <i-switch v-model="form.data.crossDb" />
                 </form-item>
             </i-Form>
 
