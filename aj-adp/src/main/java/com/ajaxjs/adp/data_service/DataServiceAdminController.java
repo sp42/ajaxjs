@@ -32,7 +32,7 @@ public class DataServiceAdminController {
 		List<String> databases;
 
 		try (Connection conn = DataSourceController.initDb()) {
-			String sql = "SELECT * FROM sys_datasource WHERE id = ?";
+			String sql = "SELECT * FROM aj_base.adp_datasource WHERE id = ?";
 			DataSourceInfo info = JdbcHelper.queryAsBean(DataSourceInfo.class, conn, sql, datasourceId);
 
 			if (info.getCrossDb() == null || !info.getCrossDb())

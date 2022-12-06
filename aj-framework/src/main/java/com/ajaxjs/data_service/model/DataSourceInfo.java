@@ -22,6 +22,11 @@ public class DataSourceInfo extends BaseModel implements IBaseModel {
 	private String url;
 
 	/**
+	 * 数据源编码，唯一
+	 */
+	private String urlDir;
+
+	/**
 	 * 数据库用户账号
 	 */
 	private String username;
@@ -74,6 +79,14 @@ public class DataSourceInfo extends BaseModel implements IBaseModel {
 
 	public void setCrossDb(Boolean crossDb) {
 		this.crossDb = crossDb;
+	}
+
+	public String getUrlDir() {
+		return urlDir;
+	}
+
+	public void setUrlDir(String urlDir) {
+		this.urlDir = urlDir;
 	}
 
 }

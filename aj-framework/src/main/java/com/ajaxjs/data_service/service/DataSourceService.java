@@ -24,36 +24,6 @@ import com.ajaxjs.util.filter.DataBaseFilter;
  */
 public interface DataSourceService extends DataServiceDAO, DataServiceDTO {
 	/**
-	 * 数据源列表
-	 * 
-	 * @return
-	 */
-	@GetMapping
-	@DataBaseFilter
-	@ControllerMethod("数据源列表")
-	List<DataSourceInfo> list();
-
-	/**
-	 * 创建数据源
-	 * 
-	 * @param entity
-	 * @return
-	 */
-	@PostMapping
-	@ControllerMethod("创建数据源")
-	Long create(DataSourceInfo entity);
-
-	/**
-	 * 修改数据源
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@PutMapping("/{id}")
-	@ControllerMethod("修改数据源")
-	Boolean update(@PathVariable long id);
-
-	/**
 	 * 获取某个数据源下面的所有表
 	 * 
 	 * @param dataSourceId 数据源 id

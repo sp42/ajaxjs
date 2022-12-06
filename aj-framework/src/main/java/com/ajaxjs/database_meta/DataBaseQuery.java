@@ -12,6 +12,9 @@ import com.ajaxjs.database_meta.model.Database;
 import com.ajaxjs.database_meta.model.Table;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.util.SnowflakeId;
+import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.regexp.RegExpUtils;
 
 import net.sf.jsqlparser.JSQLParserException;
@@ -60,15 +63,17 @@ public class DataBaseQuery extends BaseMetaQuery {
 		return getDataBaseWithTable(getDatabase());
 	}
 
+	static final String[] IGNORE_SYSTEM_TABLE = { "information_schema", "performance_schema", "mysql", "sys" };
+
 	public Database[] getDataBaseWithTable(String[] databases) {
 		List<Database> list = new ArrayList<>();
 		TableQuery tableQuery = new TableQuery(conn);
 
 		for (String datebaseName : databases) {
+
 			// ignore system table
-			if ("information_schema".equals(datebaseName) || "performance_schema".equals(datebaseName) || "mysql".equals(datebaseName)) {
+			if (StrUtil.isWordOneOfThem(datebaseName, IGNORE_SYSTEM_TABLE))
 				continue;
-			}
 
 			Database database = new Database();
 			database.setUuid(SnowflakeId.get() + "");
@@ -79,9 +84,13 @@ public class DataBaseQuery extends BaseMetaQuery {
 		}
 
 		return list.toArray(new Database[list.size()]);
-
 	}
 
+	/**
+	 * 完整的信息，包括 CreateDDL
+	 * 
+	 * @return
+	 */
 	public Database[] getDataBaseWithTableFull() {
 		Database[] databases = getDataBaseWithTable();
 
@@ -188,5 +197,13 @@ public class DataBaseQuery extends BaseMetaQuery {
 		comment = comment.substring(0, comment.length() - 1);
 
 		return comment;
+	}
+
+	public static void saveToDiskJson(Connection conn, String path) {
+		DataBaseQuery d = new DataBaseQuery(conn);
+		Database[] dataBaseWithTable = d.getDataBaseWithTableFull();
+		String json = JsonHelper.toJson(dataBaseWithTable);
+
+		FileHelper.saveText(path, "DOC_DATA = " + json);
 	}
 }

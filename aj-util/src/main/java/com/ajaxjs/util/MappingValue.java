@@ -227,7 +227,7 @@ public class MappingValue {
 		} else if (value instanceof String && IBaseModel.class.isAssignableFrom(target)) {
 			// json2bean
 			value = JsonHelper.parseMapAsBean((String) value, target);
-		} else if (target.isEnum()) { // 枚举
+		} else if (target != null && target.isEnum()) { // 枚举
 			Object[] enumConstants = target.getEnumConstants();
 
 			boolean isNumber = value instanceof Integer;
