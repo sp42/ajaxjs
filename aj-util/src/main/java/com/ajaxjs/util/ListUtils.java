@@ -1,9 +1,9 @@
 package com.ajaxjs.util;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.catalina.tribes.util.Arrays;
 import org.springframework.util.CollectionUtils;
 
 import com.ajaxjs.util.logger.LogHelper;
