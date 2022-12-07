@@ -61,7 +61,7 @@ MAIN = new Vue({
             }
         },
         dataSource: {
-            isShowDataSource: true
+            isShowDataSource: false
         },
 
         list: DOC_DATA
@@ -107,6 +107,19 @@ MAIN = new Vue({
         copyJava() {
             aj.copyToClipboard(this.java);
             this.$Message.success('复制成功');
+        },
+        onChangeDatasource(datasource) {
+            this.$Loading.start();
+            this.dataSource.isShowDataSource = false;
+            aj.xhr.postJson('http://localhost:8080/adp/make_database_doc', datasource, j => {
+                if (j.status === 1) {
+                    setTimeout(() => {
+                        this.$Loading.finish();
+                        this.$Message.success('切换数据源成功');
+                        setTimeout('location.reload()', 1000);
+                    }, 500);
+                }
+            });
         }
     }
 });

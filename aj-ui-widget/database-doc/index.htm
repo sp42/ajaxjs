@@ -104,7 +104,7 @@
             </Modal>
 
             <Modal title="数据源配置" v-model="dataSource.isShowDataSource" ok-text="关闭" cancel-text="" width="900">
-                <Datasource></Datasource>
+                <Datasource @change_datasource="onChangeDatasource"></Datasource>
             </Modal>
         </menu>
         <iframe src="doc.htm" name="targetFrame" frameborder="no"></iframe>
