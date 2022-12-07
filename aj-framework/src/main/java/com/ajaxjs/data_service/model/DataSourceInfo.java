@@ -12,28 +12,33 @@ import com.ajaxjs.framework.IBaseModel;
  */
 public class DataSourceInfo extends BaseModel implements IBaseModel {
 	/**
-	    * 数据库厂商：my_sql， sql_server， oracle， postgre_sql， db2， sqlite， spark 
-	    */
+	 * 数据库厂商：my_sql， sql_server， oracle， postgre_sql， db2， sqlite， spark
+	 */
 	private DatabaseType type;
 
 	/**
-	* 连接地址 
-	*/
+	 * 连接地址
+	 */
 	private String url;
 
 	/**
-	* 数据库用户账号 
-	*/
+	 * 数据源编码，唯一
+	 */
+	private String urlDir;
+
+	/**
+	 * 数据库用户账号
+	 */
 	private String username;
 
 	/**
-	* 数据库账号密码 
-	*/
+	 * 数据库账号密码
+	 */
 	private String password;
 
 	/**
-	* 是否跨库
-	*/
+	 * 是否跨库
+	 */
 	private Boolean crossDb;
 
 	public DatabaseType getType() {
@@ -74,6 +79,14 @@ public class DataSourceInfo extends BaseModel implements IBaseModel {
 
 	public void setCrossDb(Boolean crossDb) {
 		this.crossDb = crossDb;
+	}
+
+	public String getUrlDir() {
+		return urlDir;
+	}
+
+	public void setUrlDir(String urlDir) {
+		this.urlDir = urlDir;
 	}
 
 }

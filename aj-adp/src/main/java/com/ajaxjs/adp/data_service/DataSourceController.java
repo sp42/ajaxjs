@@ -26,7 +26,7 @@ import com.ajaxjs.util.logger.LogHelper;
 public class DataSourceController {
 	private static final LogHelper LOGGER = LogHelper.getLog(DataSourceController.class);
 
-	final static String tableName = "sys_datasource";
+	final static String tableName = "aj_base.adp_datasource";
 
 	@GetMapping
 	public List<DataSourceInfo> list() throws SQLException {
@@ -55,7 +55,7 @@ public class DataSourceController {
 	@PostMapping
 	Long create(@RequestBody DataSourceInfo entity) throws SQLException {
 		try (Connection conn = initDb()) {
-			checkIfIsRepeat(conn, entity);
+			checkIfIsRepeat(conn, entity, null);
 
 			Long newlyId = (Long) JdbcHelper.createBean(conn, entity, tableName);
 
@@ -68,12 +68,20 @@ public class DataSourceController {
 	 * 
 	 * @param conn
 	 * @param entity
+	 * @param dsId   数据源 id，非 null 时候表示更新排除自己
 	 */
-	private void checkIfIsRepeat(Connection conn, DataSourceInfo entity) {
-		Long id = JdbcHelper.queryOne(conn, "SELECT id FROM " + tableName + " WHERE name = ? LIMIT 1", Long.class, entity.getName());
+	private void checkIfIsRepeat(Connection conn, DataSourceInfo entity, Long dsId) {
+		String sql;
+
+		if (dsId != null)
+			sql = "SELECT id FROM " + tableName + " WHERE url_dir = ? AND id != " + dsId + " LIMIT 1";
+		else
+			sql = "SELECT id FROM " + tableName + " WHERE url_dir = ? LIMIT 1";
+
+		Long id = JdbcHelper.queryOne(conn, sql, Long.class, entity.getUrlDir());
 
 		if (id != null)
-			throw new IllegalArgumentException("已存在相同名称的数据源 " + entity.getName());
+			throw new IllegalArgumentException("已存在相同编码的数据源 " + entity.getUrlDir());
 	}
 
 	@PutMapping
@@ -82,7 +90,7 @@ public class DataSourceController {
 			throw new IllegalArgumentException("缺少 id 参数");
 
 		try (Connection conn = initDb()) {
-			checkIfIsRepeat(conn, entity);
+			checkIfIsRepeat(conn, entity, entity.getId());
 			return JdbcHelper.updateBean(conn, entity, tableName) > 0;
 		}
 	}

@@ -278,4 +278,31 @@ public class StrUtil {
 			return null;
 		}
 	}
+
+	/**
+	 * word 是否数组里面的其中一员
+	 * 
+	 * @param word
+	 * @param strs
+	 * @return
+	 */
+	public static boolean isWordOneOfThem(String word, String[] strs) {
+		for (String str : strs) {
+			if (word.equals(str))
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * word 是否数组里面的其中一员
+	 * 
+	 * @param word
+	 * @param strs
+	 * @return
+	 */
+	public static boolean isWordOneOfThem(String word, List<String> strs) {
+		return isWordOneOfThem(word, strs.toArray(new String[strs.size()]));
+	}
 }
