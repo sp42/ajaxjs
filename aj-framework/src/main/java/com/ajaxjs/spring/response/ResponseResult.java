@@ -50,6 +50,8 @@ public class ResponseResult {
 	private final static String OK = "{\"status\": %s, \"message\": \"%s\", \"data\": %s}";
 
 	private final static String OK_PAGE = "{\"status\": %s, \"message\": \"%s\", \"total\": %s, \"data\": %s}";
+	
+	public static final String PLAIN_TEXT_OUTPUT = "PLAIN_TEXT_OUTPUT";
 
 	@Override
 	public String toString() {
@@ -75,18 +77,6 @@ public class ResponseResult {
 
 	public void setData(String data) {
 		this.data = data;
-	}
-
-	public static void main(String[] args) {
-		ResponseResult r = new ResponseResult();
-		r.setErrorCode("121");
-		String result = r.toString();
-		System.out.println(result);
-
-		r.setErrorCode(null);
-		r.setData("[]");
-		result = r.toString();
-		System.out.println(result);
 	}
 
 	/**

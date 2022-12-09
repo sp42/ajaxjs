@@ -75,29 +75,41 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 		return null;
 	}
 
+	
+
 	@Override
 	protected void writeInternal(Object result, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-		/*
-		 * Spring Boot 如果 RestController 中返回 null，则不会走进自定义 HttpMessageConverter
-		 * https://www.v2ex.com/t/452195 暂时无解，请不要返回 null
-		 */
-		ResponseResult resultWarpper = new ResponseResult();
-		String json = JsonHelper.toJson(result);
-		resultWarpper.setData(json);
+		if (result instanceof String && ((String) result).startsWith(ResponseResult.PLAIN_TEXT_OUTPUT)) {
+			// 字符串原文输出
+			String str = (String) result;
+			str = str.replace(ResponseResult.PLAIN_TEXT_OUTPUT, "");
 
-		if (result instanceof PageResult) { // 分页总数
-			PageResult<?> p = (PageResult<?>) result;
-			resultWarpper.setTotal(p.getTotalCount());
-		}
+			try (OutputStream out = outputMessage.getBody();) {
+				out.write(str.getBytes());
+			}
+		} else {
+			/*
+			 * Spring Boot 如果 RestController 中返回 null，则不会走进自定义 HttpMessageConverter
+			 * https://www.v2ex.com/t/452195 暂时无解，请不要返回 null
+			 */
+			ResponseResult resultWarpper = new ResponseResult();
+			String json = JsonHelper.toJson(result);
+			resultWarpper.setData(json);
 
-		String comment = ControllerProxy.ACTION_COMMNET.get();
-		if (StringUtils.hasText(comment))
-			resultWarpper.setMessage(comment);
+			if (result instanceof PageResult) { // 分页总数
+				PageResult<?> p = (PageResult<?>) result;
+				resultWarpper.setTotal(p.getTotalCount());
+			}
+
+			String comment = ControllerProxy.ACTION_COMMNET.get();
+			if (StringUtils.hasText(comment))
+				resultWarpper.setMessage(comment);
 //		MediaType.APPLICATION_JSON_UTF8
-		outputMessage.getHeaders().setContentType(CONTENT_TYPE);
+			outputMessage.getHeaders().setContentType(CONTENT_TYPE);
 
-		try (OutputStream out = outputMessage.getBody();) {
-			out.write(resultWarpper.getBytes());
+			try (OutputStream out = outputMessage.getBody();) {
+				out.write(resultWarpper.getBytes());
+			}
 		}
 	}
 }

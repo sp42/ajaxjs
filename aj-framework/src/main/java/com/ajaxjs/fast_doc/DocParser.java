@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ValueConstants;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.spring.easy_controller.Example;
 import com.ajaxjs.spring.easy_controller.Info;
+import com.ajaxjs.spring.easy_controller.PathForDoc;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -82,14 +83,24 @@ public class DocParser implements Model {
 	 * @return
 	 */
 	public List<Item> parse(Class<?> clz) {
+		String rootUrl = null;// 根 url，可以为空
 		RequestMapping rm = clz.getAnnotation(RequestMapping.class);
-		String rootUrl = ObjectUtils.isEmpty(rm.value()) ? null : rm.value()[0]; // 根 url，可以为空
+
+		if (rm != null && !ObjectUtils.isEmpty(rm.value()))
+			rootUrl = rm.value()[0];
+		else {
+			PathForDoc pd = clz.getAnnotation(PathForDoc.class);
+			if (pd != null)
+				rootUrl = pd.value();
+		}
+
+		final String _rootUrl = rootUrl;
 
 		// 遍历每个方法
 		List<Item> list = Util.makeListByArray(clz.getDeclaredMethods(), method -> {
 			Item item = new Item();
 
-			getInfo(item, method, rootUrl);
+			getInfo(item, method, _rootUrl);
 			getReturnType(item, method);
 			getArgs(item, method);
 
