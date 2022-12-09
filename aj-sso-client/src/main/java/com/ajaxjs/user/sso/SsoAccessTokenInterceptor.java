@@ -25,33 +25,33 @@ public class SsoAccessTokenInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
 		return true;
-//		String accessToken = req.getParameter("access_token");
-//
-//		if (!StringUtils.hasText(accessToken)) {
-//			err(resp, "缺少 access_token 参数");
-//
-//			return false;
-//		}
-//
-//		Object object = req.getSession().getAttribute(accessToken);
-//
-//		if (object == null) {
-//			// TODO 是否拿 Token 去 SSO 中心再校验一下
-//			err(resp, "非法 AccessToken");
-//
-//			return false;
-//		} else {
-//		}
-//
-//		UserSession userSess = (UserSession) object;
-//
-//		// 如果 Access Token 已经失效，则返回错误提示
-//		if (checkIfExpire(userSess.accessToken)) {
-//			// TODO 是否要删除过期 token？
-//			err(resp, "access_token 已超时");
-//			return false;
-//		} else
-//			return true;
+		String accessToken = req.getParameter("access_token");
+
+		if (!StringUtils.hasText(accessToken)) {
+			err(resp, "缺少 access_token 参数");
+
+			return false;
+		}
+
+		Object object = req.getSession().getAttribute(accessToken);
+
+		if (object == null) {
+			// TODO 是否拿 Token 去 SSO 中心再校验一下
+			err(resp, "非法 AccessToken");
+
+			return false;
+		} else {
+		}
+
+		UserSession userSess = (UserSession) object;
+
+		// 如果 Access Token 已经失效，则返回错误提示
+		if (checkIfExpire(userSess.accessToken)) {
+			// TODO 是否要删除过期 token？
+			err(resp, "access_token 已超时");
+			return false;
+		} else
+			return true;
 	}
 
 	/**
