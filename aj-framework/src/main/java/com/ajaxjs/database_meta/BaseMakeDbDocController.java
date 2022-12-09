@@ -1,0 +1,37 @@
+package com.ajaxjs.database_meta;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.ajaxjs.data_service.model.DataSourceInfo;
+import com.ajaxjs.sql.JdbcConnection;
+
+/**
+ * 生成数据库信息的 JSON，用于显示数据库文档
+ * 
+ * @author Frank Cheung<sp42@qq.com>
+ *
+ */
+public abstract class BaseMakeDbDocController {
+	private String jsonPath="D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\database-doc\\";
+
+	@PostMapping
+	public Boolean genJsonFile(@RequestBody DataSourceInfo ds) throws SQLException {
+		try (Connection conn = JdbcConnection.getMySqlConnection(ds.getUrl(), ds.getUsername(), ds.getPassword())) {
+			DataBaseQuery.saveToDiskJson(conn, getJsonPath() + "json.js");
+			return true;
+		}
+	}
+
+	public String getJsonPath() {
+		return jsonPath;
+	}
+
+	public void setJsonPath(String jsonPath) {
+		this.jsonPath = jsonPath;
+	}
+
+}

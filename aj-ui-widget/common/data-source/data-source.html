@@ -45,7 +45,7 @@
                 <i-Button v-if="!activedItem" icon="md-checkmark" @click="create">新建</i-Button>
                 <i-Button v-if="activedItem" @click="update">保存</i-Button>&nbsp;&nbsp;
                 <i-Button v-if="activedItem" @click="test">测试连接</i-Button>&nbsp;&nbsp;
-                <i-Button v-if="activedItem" @click="update">切换</i-Button>
+                <i-Button v-if="activedItem" @click="$emit('change_datasource', form.data)">切换</i-Button>
             </div>
             <!--                 <i-Input v-model="editing.name" ref="inputName">
                 <span slot="prepend">环境名称</span>
