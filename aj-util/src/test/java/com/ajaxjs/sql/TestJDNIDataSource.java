@@ -7,8 +7,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.junit.Test;
-import org.sqlite.SQLiteDataSource;
-import org.sqlite.SQLiteJDBCLoader;
 
 import com.ajaxjs.util.logger.LogHelper;
 //import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
@@ -73,25 +71,25 @@ public class TestJDNIDataSource {
 	 * @param url 以 jdbc:sqlite: 开头
 	 */
 	public static void initSqliteDBConnection(String url) {
-		String perfix = "jdbc:sqlite:";
-
-		if (!url.startsWith(perfix))
-			url = perfix + url;
-
-		try {
-			SQLiteJDBCLoader.initialize();
-		} catch (Exception e) {
-			LOGGER.warning(e);
-		}
-
-		SQLiteDataSource dataSource = new SQLiteDataSource();
-		dataSource.setUrl(url);
-
-		try {
-			initIc().bind("java:/comp/env/jdbc/sqlite", dataSource);
-		} catch (NamingException e) {
-			LOGGER.warning(e);
-		}
+//		String perfix = "jdbc:sqlite:";
+//
+//		if (!url.startsWith(perfix))
+//			url = perfix + url;
+//
+//		try {
+//			SQLiteJDBCLoader.initialize();
+//		} catch (Exception e) {
+//			LOGGER.warning(e);
+//		}
+//
+//		SQLiteDataSource dataSource = new SQLiteDataSource();
+//		dataSource.setUrl(url);
+//
+//		try {
+//			initIc().bind("java:/comp/env/jdbc/sqlite", dataSource);
+//		} catch (NamingException e) {
+//			LOGGER.warning(e);
+//		}
 	}
 
 	@Test

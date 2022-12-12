@@ -7,6 +7,7 @@
 	<name>ajaxjs-parent</name>
 	<version>1.7</version>
 	<packaging>pom</packaging>
+	<description>Top pom.xml, public config</description>
 
 	<!--Maven 的基本使用终结版 https://segmentfault.com/a/1190000020380580 -->
 
@@ -130,8 +131,6 @@
 		<!-- </testResource> -->
 		<!-- </testResources> -->
 
-
-
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -173,7 +172,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<!-- <version>1.5</version> -->
 				<version>3.0.1</version>
 				<executions>
 					<execution>
@@ -190,7 +188,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<!-- <version>2.2.1</version> -->
 				<version>3.2.1</version>
 				<executions>
 					<execution>
@@ -206,7 +203,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<!-- <version>2.9.1</version> -->
 				<version>3.4.0</version>
 				<executions>
 					<execution>
@@ -295,5 +291,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	<description>Top pom.xml, public config</description>
 </project>
