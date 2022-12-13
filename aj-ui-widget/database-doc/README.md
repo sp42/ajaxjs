@@ -12,8 +12,16 @@
 如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。请接着继续看如何集成。
 
 ## 添加依赖
-该工具不是一个独立运行的工程，而是提供 jar 集成到你的项目中。故你需依赖下面的 Maven：
+该工具不是一个独立运行的工程，而是提供 jar 包集成到你的项目中。故你需依赖下面的 Maven：
 
+```xml
+<dependency>
+	<groupId>com.ajaxjs</groupId>
+	<artifactId>ajaxjs-framework</artifactId>
+	<version>1.0.4</version>
+</dependency>
+```
+这个 jar 包通过 Servlet 3.0 打包技术，将前端都集成进去 jar 包里了。
 
 
 ## 创建数据库
@@ -86,6 +94,7 @@ public class DataSourceController extends BaseDataSourceController {
 # 使用答疑
 
 - 这原理是什么？
+
 很简单，JDBC API 就有强大的数据库元数据获取能力。JDBC MetaData 一种方式是遍历各字段信息。但这种方式通用性不强，依靠 MySQL，换别的数据库不一定。
 另外一种方式就是获取 CREATE DDL（本工具使用的方式），解析这个 DDL 通过开源 SQL 解析工具 `com.github.jsqlparser` 完成。最后一股脑把所有信息生成 JSON 给 UI。
 
@@ -98,7 +107,7 @@ public class DataSourceController extends BaseDataSourceController {
 
 - 如何打印？
 
-左侧的菜单中，右键鼠标打开新的浏览器创建，这是完成页面，直接打印
+左侧的菜单中，右键鼠标打开新的浏览器创建，这是完成页面，直接打印。
 
 - 如何导出 PDF?
 
