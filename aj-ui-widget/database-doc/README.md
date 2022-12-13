@@ -61,7 +61,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ajaxjs.data_service.controller.BaseDataSourceController;
 
 @RestController
-@RequestMapping("/data_service/datasource")
+@RequestMapping("/data_service/datasource") // 这个接口地址不能自定义了，否则前端要跟着改
 public class DataSourceController extends BaseDataSourceController {
     // 配置表名。注意你的数据连接（一般是连接字符串）如果不指定库名（为了跨库），则要添加上完整的库名
 	final static String TABLE_NAME = "aj_base.adp_datasource"; 
@@ -89,7 +89,23 @@ public class DataSourceController extends BaseDataSourceController {
 
 我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。当前配置有两个,分别对应两个 Java 抽象的方法：一个是配置表名，另外一个是配置数据库的连接。
 
+## 配置 MakeDbDocController
 
+
+生成数据库信息的 JSON，用于显示数据库文档。
+
+```java
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ajaxjs.database_meta.BaseMakeDbDocController;
+
+@RestController
+@RequestMapping("/make_database_doc")
+public class MakeDbDocController extends BaseMakeDbDocController {
+
+}
+```
 
 # 使用答疑
 
