@@ -47,7 +47,7 @@ public class SiteStru extends ArrayList<Map<String, Object>> {
 	 */
 	public SiteStru() {
 		super();
-		filePath = Resources.getResourcesFromClasspath("site-stru.json");
+		filePath = Resources.getResourcesFromClasspath("site_stru.json");
 		load();
 	}
 
@@ -65,7 +65,7 @@ public class SiteStru extends ArrayList<Map<String, Object>> {
 		try {
 			String jsonStr = FileHelper.openAsText(filePath);
 			List<Map<String, Object>> map = JsonHelper.parseList(jsonStr);
-			
+
 			ListMap.buildPath(map, true);
 
 			clear();
@@ -131,14 +131,17 @@ public class SiteStru extends ArrayList<Map<String, Object>> {
 		return request.getRequestURI().replace(request.getContextPath(), "").replaceFirst("/\\w+\\.\\w+$", "");
 	}
 
+	static String CTX_KEY = "SITE_STRU";
+
 	/**
 	 * 获取当前页面节点，并带有丰富的节点信息
 	 * 
 	 * @param request 请求对象
 	 * @return 当前页面节点
 	 */
-	public Map<String, Object> getPageNode(HttpServletRequest request) {
-		return getPageNode(request.getRequestURI(), request.getContextPath());
+	public static Map<String, Object> getPageNode(HttpServletRequest request) {
+		SiteStru stru = (SiteStru) request.getServletContext().getAttribute(CTX_KEY);
+		return stru.getPageNode(request.getRequestURI(), request.getContextPath());
 	}
 
 	/**
@@ -247,7 +250,8 @@ public class SiteStru extends ArrayList<Map<String, Object>> {
 				if (0 == (int) map.get(ListMap.LEVEL)) // 新的一列
 					sb.append(NEW_COL);
 
-				sb.append(String.format(A_LINK, cxtPath + map.get(ListMap.PATH).toString(), map.get(ListMap.LEVEL).toString(), map.get("name").toString()));
+				sb.append(String.format(A_LINK, cxtPath + map.get(ListMap.PATH).toString(), map.get(ListMap.LEVEL).toString(),
+						map.get("name").toString()));
 
 				if (map.get(ListMap.CHILDREN) != null && map.get(ListMap.CHILDREN) instanceof List)
 					getSiteMap((List<Map<String, Object>>) map.get(ListMap.CHILDREN), sb, cxtPath);
