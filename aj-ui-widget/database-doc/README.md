@@ -3,7 +3,7 @@
 
 - 读取数据库的元数据（Meta data）转化为 HTML 呈现。
 - 支持多数据源切换。当前仅支持 MySQL 数据库
-- 提供一个简单的代码生成器，可快速地将某张表转化为 JavaBeanBean
+- 提供一个简单的代码生成器，可快速地将某张表转化为 JavaBean
 - Java Spring 项目，依赖少，方便集成
 
 # 集成方法
@@ -11,7 +11,7 @@
 如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。
 请接着继续看如何集成。
 
-- 创建数据库，仅需一张表。新建数据源表 adp_datasource 如下：
+- 创建数据库，仅需一张表。新建数据源表 `adp_datasource` 如下：
 
 ```sql
 CREATE TABLE `adp_datasource` (
@@ -38,7 +38,7 @@ CREATE TABLE `adp_datasource` (
 COMMENT='数据源'
 ```
 
-- Java API 部分，主要分为数据源本身的 CRUD 服务，和切换数据源产生文档 JSON 这么两个部分。数据源的 CRUD 由下面 `DataSourceController` 控制器处理：
+- Java API 部分，主要分为数据源本身的 CRUD 服务，和切换数据源产生文档 JSON 这么两个部分。数据源的 CRUD 由下面 `DataSourceController` 控制器处理（这是一个标准的 Spring MVC 控制器）：
 
 ```java
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,10 +55,21 @@ public class DataSourceController extends BaseDataSourceController {
 	protected String getTableName() { 
 		return TABLE_NAME;
 	}
+
+	@Override
+	protected Connection initDb() { // 返回数据库连接。当前的例子从 Spring IOC 返回 DataSource 再得到 Connection，现实中可以按照你的注入方式得到 Connection
+		DataSource ds = DiContextUtil.getBean(DataSource.class);
+
+		try {
+			return ds.getConnection();
+		} catch (SQLException e) {
+			return null;
+		}
+	}
 }
 ```
 
-我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
+我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。当前配置有两个：一个是配置表名，另外一个是配置数据库的连接。
 
 
 
