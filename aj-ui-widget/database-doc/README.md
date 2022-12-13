@@ -11,7 +11,13 @@
 如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。
 请接着继续看如何集成。
 
-- 创建数据库，仅需一张表。新建数据源表 `adp_datasource` 如下：
+## 添加依赖
+该工具不是一个独立运行的工程，而是提供 jar 集成到你的项目中。故你需依赖下面的 Maven：
+
+
+
+## 创建数据库
+创建数据库，仅需一张表。新建数据源表 `adp_datasource` 如下：
 
 ```sql
 CREATE TABLE `adp_datasource` (
@@ -49,15 +55,19 @@ import com.ajaxjs.data_service.controller.BaseDataSourceController;
 @RestController
 @RequestMapping("/data_service/datasource")
 public class DataSourceController extends BaseDataSourceController {
-	final static String TABLE_NAME = "aj_base.adp_datasource"; // 配置表名。注意你的数据连接如果不指定库名（为了跨库），则要添加上完整的库名
+    // 配置表名。注意你的数据连接（一般是连接字符串）如果不指定库名（为了跨库），则要添加上完整的库名
+	final static String TABLE_NAME = "aj_base.adp_datasource"; 
 
 	@Override
 	protected String getTableName() { 
 		return TABLE_NAME;
 	}
 
+    /*
+     返回数据库连接。当前的例子从 Spring IOC 返回 DataSource 再得到 Connection，现实中可以按照你的注入方式得到 Connection
+    */
 	@Override
-	protected Connection initDb() { // 返回数据库连接。当前的例子从 Spring IOC 返回 DataSource 再得到 Connection，现实中可以按照你的注入方式得到 Connection
+	protected Connection initDb() { 
 		DataSource ds = DiContextUtil.getBean(DataSource.class);
 
 		try {
@@ -69,10 +79,20 @@ public class DataSourceController extends BaseDataSourceController {
 }
 ```
 
-我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。当前配置有两个：一个是配置表名，另外一个是配置数据库的连接。
+我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。当前配置有两个,分别对应两个 Java 抽象的方法：一个是配置表名，另外一个是配置数据库的连接。
 
 
 
-# 使用技巧
+# 使用答疑
 
-TODO
+- 源码在哪里？
+前端 https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/database-doc，后端其实是 AJ Framework，具体部分在  [1](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/database_meta)、[2](https://gitee.com/sp42_admin/ajaxjs/blob/master/aj-framework/src/main/java/com/ajaxjs/data_service/controller/BaseDataSourceController.java)
+
+- 如何打印？
+左侧的菜单中，右键鼠标打开新的浏览器创建，这是完成页面，直接打印
+
+- 如何导出 PDF?
+参考“打印”，选择 PDF 格式打印到文件。
+
+- 有否计划其他数据库，如 SQL Server?
+很可能不会，精力有限，除非……
