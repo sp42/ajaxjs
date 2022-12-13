@@ -8,8 +8,8 @@
 
 # 集成方法
 提示：该工具使用“前后端分类”架构，如果单纯只为展示数据库文档，那么只提供前端 UI 读取的 JSON 数据即可，不需要后台服务。
-如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。
-请接着继续看如何集成。
+
+如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。请接着继续看如何集成。
 
 ## 添加依赖
 该工具不是一个独立运行的工程，而是提供 jar 集成到你的项目中。故你需依赖下面的 Maven：
@@ -43,8 +43,8 @@ CREATE TABLE `adp_datasource` (
 )
 COMMENT='数据源'
 ```
-
-- Java API 部分，主要分为数据源本身的 CRUD 服务，和切换数据源产生文档 JSON 这么两个部分。数据源的 CRUD 由下面 `DataSourceController` 控制器处理（这是一个标准的 Spring MVC 控制器）：
+## 配置 API
+Java API 部分，主要分为数据源本身的 CRUD 服务，和切换数据源产生文档 JSON 这么两个部分。数据源的 CRUD 由下面 `DataSourceController` 控制器处理（这是一个标准的 Spring MVC 控制器）：
 
 ```java
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,14 +85,25 @@ public class DataSourceController extends BaseDataSourceController {
 
 # 使用答疑
 
+- 这原理是什么？
+很简单，JDBC API 就有强大的数据库元数据获取能力。JDBC MetaData 一种方式是遍历各字段信息。但这种方式通用性不强，依靠 MySQL，换别的数据库不一定。
+另外一种方式就是获取 CREATE DDL（本工具使用的方式），解析这个 DDL 通过开源 SQL 解析工具 `com.github.jsqlparser` 完成。最后一股脑把所有信息生成 JSON 给 UI。
+
+前端基于 Vue2/iView 搞定，没啥难度，就是把那个大 JSON 渲染 UI 出来。
+
+
 - 源码在哪里？
-前端 https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/database-doc，后端其实是 AJ Framework，具体部分在  [1](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/database_meta)、[2](https://gitee.com/sp42_admin/ajaxjs/blob/master/aj-framework/src/main/java/com/ajaxjs/data_service/controller/BaseDataSourceController.java)
+
+前端 https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/database-doc，后端其实是 AJ Framework，具体部分在  [1](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/database_meta)、[2](https://gitee.com/sp42_admin/ajaxjs/blob/master/aj-framework/src/main/java/com/ajaxjs/data_service/controller/BaseDataSourceController.java)。
 
 - 如何打印？
+
 左侧的菜单中，右键鼠标打开新的浏览器创建，这是完成页面，直接打印
 
 - 如何导出 PDF?
+
 参考“打印”，选择 PDF 格式打印到文件。
 
 - 有否计划其他数据库，如 SQL Server?
+
 很可能不会，精力有限，除非……
