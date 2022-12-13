@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ajaxjs.data_service.model.DataSourceInfo;
 import com.ajaxjs.data_service.service.BaseDataSourceService;
-import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -34,6 +31,13 @@ public abstract class BaseDataSourceController {
 	 * @return
 	 */
 	protected abstract String getTableName();
+
+	/**
+	 * 返回数据库连接
+	 * 
+	 * @return
+	 */
+	protected abstract Connection initDb();
 
 	@GetMapping
 	public List<DataSourceInfo> list() throws SQLException {
@@ -106,17 +110,6 @@ public abstract class BaseDataSourceController {
 	Boolean delete(@PathVariable Long id) throws SQLException {
 		try (Connection conn = initDb()) {
 			return JdbcHelper.deleteById(conn, getTableName(), id);
-		}
-	}
-
-	public static Connection initDb() {
-		DataSource ds = DiContextUtil.getBean(DataSource.class);
-
-		try {
-			return ds.getConnection();
-		} catch (SQLException e) {
-			LOGGER.warning(e);
-			return null;
 		}
 	}
 }
