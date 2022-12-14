@@ -1,5 +1,9 @@
 # 数据库文档展示工具
-数据库文档展示工具（database doc），又叫数据库注释浏览工具，是一个简单的数据库展示各个字段注释的开源工具。如下截图所示，它包含下面的功能。
+数据库文档展示工具（database doc），又叫数据库注释浏览工具，是一个简单的数据库展示各个字段注释的开源工具。如下截图所示，
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/5d8f58d6e9b845448aa861832f75dab3.png)
+
+它包含下面的功能。
 
 - 读取数据库的元数据（Meta data）转化为 HTML 呈现。
 - 支持多数据源切换。当前仅支持 MySQL 数据库
@@ -10,7 +14,7 @@
 ![多数据源管理](https://img-blog.csdnimg.cn/39e110471b104af897a26eec2b78143c.png)
 
 ## 生成 Java Bean
-[生成 Java Bean 代码](https://img-blog.csdnimg.cn/acb5f3b506ff4a0380b7f409fd01cc29.png)
+![生成 Java Bean 代码](https://img-blog.csdnimg.cn/acb5f3b506ff4a0380b7f409fd01cc29.png)
 
 # 集成方法
 提示：该工具使用“前后端分类”架构，如果单纯只为展示数据库文档，那么只提供前端 UI 读取的 JSON 数据即可，不需要后台服务。
