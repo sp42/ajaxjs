@@ -202,8 +202,8 @@ function openDownloadDialog(url, saveName) {
     aLink.dispatchEvent(event);
 }
 
-function getQueryParam(variable) {
-    var query = window.location.search.substring(1);
+function getQueryParam(variable, isParent) {
+    var query = (isParent ? parent.location : window.location).search.substring(1);
     var vars = query.split("&");
 
     for (var i = 0; i < vars.length; i++) {

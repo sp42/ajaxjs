@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>数据库文档</title>
+    <script src="../common/utils.js"></script>
     <script src="../libs/vue.js"></script>
 
     <style>
@@ -104,8 +105,16 @@
             </diiv>
         </section>
     </div>
+    <script>
+        let API_ROOT = getQueryParam('api', true);
+        alert(API_ROOT)
 
-    <script src="json.js"></script>
+        if (API_ROOT)
+            document.writeln('<script src="' + API_ROOT + '"><\/script>');
+        else
+            document.writeln('<script src="json.js"><\/script>');
+    </script>
+
     <script>
 
         new Vue({

@@ -6,6 +6,12 @@
 - 提供一个简单的代码生成器，可快速地将某张表转化为 JavaBean
 - Java Spring 项目，依赖少，方便集成
 
+## 多数据源管理
+![多数据源管理](https://img-blog.csdnimg.cn/39e110471b104af897a26eec2b78143c.png)
+
+## 生成 Java Bean
+[生成 Java Bean 代码](https://img-blog.csdnimg.cn/acb5f3b506ff4a0380b7f409fd01cc29.png)
+
 # 集成方法
 提示：该工具使用“前后端分类”架构，如果单纯只为展示数据库文档，那么只提供前端 UI 读取的 JSON 数据即可，不需要后台服务。
 
@@ -75,7 +81,7 @@ public class DataSourceController extends BaseDataSourceController {
      返回数据库连接。当前的例子从 Spring IOC 返回 DataSource 再得到 Connection，现实中可以按照你的注入方式得到 Connection
     */
 	@Override
-	protected Connection initDb() { 
+	protected Connection getConnection() { 
 		DataSource ds = DiContextUtil.getBean(DataSource.class);
 
 		try {
