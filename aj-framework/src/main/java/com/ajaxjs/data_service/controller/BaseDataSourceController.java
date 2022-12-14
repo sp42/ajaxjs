@@ -37,13 +37,13 @@ public abstract class BaseDataSourceController {
 	 * 
 	 * @return
 	 */
-	protected abstract Connection initDb();
+	protected abstract Connection getConnection();
 
 	@GetMapping
 	public List<DataSourceInfo> list() throws SQLException {
 		List<DataSourceInfo> list = null;
 
-		try (Connection conn = initDb()) {
+		try (Connection conn = getConnection()) {
 			list = JdbcHelper.queryAsBeanList(DataSourceInfo.class, conn, "SELECT * FROM " + getTableName());
 		}
 
@@ -52,7 +52,7 @@ public abstract class BaseDataSourceController {
 
 	@GetMapping("/test/{id}")
 	Boolean test(@PathVariable Long id) throws SQLException {
-		try (Connection conn = initDb()) {
+		try (Connection conn = getConnection()) {
 			String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
 			DataSourceInfo info = JdbcHelper.queryAsBean(DataSourceInfo.class, conn, sql, id);
 
@@ -65,7 +65,7 @@ public abstract class BaseDataSourceController {
 
 	@PostMapping
 	Long create(@RequestBody DataSourceInfo entity) throws SQLException {
-		try (Connection conn = initDb()) {
+		try (Connection conn = getConnection()) {
 			checkIfIsRepeat(conn, entity, null);
 
 			Long newlyId = (Long) JdbcHelper.createBean(conn, entity, getTableName());
@@ -100,7 +100,7 @@ public abstract class BaseDataSourceController {
 		if (entity.getId() == null)
 			throw new IllegalArgumentException("缺少 id 参数");
 
-		try (Connection conn = initDb()) {
+		try (Connection conn = getConnection()) {
 			checkIfIsRepeat(conn, entity, entity.getId());
 			return JdbcHelper.updateBean(conn, entity, getTableName()) > 0;
 		}
@@ -108,7 +108,7 @@ public abstract class BaseDataSourceController {
 
 	@DeleteMapping("/{id}")
 	Boolean delete(@PathVariable Long id) throws SQLException {
-		try (Connection conn = initDb()) {
+		try (Connection conn = getConnection()) {
 			return JdbcHelper.deleteById(conn, getTableName(), id);
 		}
 	}
