@@ -199,11 +199,15 @@ public class DataBaseQuery extends BaseMetaQuery {
 		return comment;
 	}
 
-	public static void saveToDiskJson(Connection conn, String path) {
+	public static String getDoc(Connection conn) {
 		DataBaseQuery d = new DataBaseQuery(conn);
 		Database[] dataBaseWithTable = d.getDataBaseWithTableFull();
 		String json = JsonHelper.toJson(dataBaseWithTable);
 
-		FileHelper.saveText(path, "DOC_DATA = " + json);
+		return json;
+	}
+
+	public static void saveToDiskJson(Connection conn, String path) {
+		FileHelper.saveText(path, "DOC_DATA = " + getDoc(conn));
 	}
 }

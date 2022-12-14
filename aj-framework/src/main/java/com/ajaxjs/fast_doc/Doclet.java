@@ -17,6 +17,11 @@ import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Type;
 import com.sun.tools.javadoc.Main;
 
+/**
+ * 
+ * @author Frank Cheung<sp42@qq.com>
+ *
+ */
 public class Doclet implements Model {
 	private static final LogHelper LOGGER = LogHelper.getLog(Doclet.class);
 

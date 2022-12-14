@@ -16,7 +16,6 @@ import com.ajaxjs.data_service.mybatis.MSUtils;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.spring.response.MyJsonConverter;
 import com.ajaxjs.util.config.EasyConfig;
-import com.ajaxjs.web.http_auth.DigestAuthentication;
 
 @Configuration
 public class ADPWebConfig extends BaseWebMvcConfigurer {

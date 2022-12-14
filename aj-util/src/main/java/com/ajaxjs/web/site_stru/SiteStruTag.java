@@ -51,7 +51,8 @@ public class SiteStruTag extends SimpleTagSupport {
 		PageContext pageContext = (PageContext) getJspContext();
 		SiteStru sitestru = (SiteStru) pageContext.getServletContext().getAttribute("SITE_STRU");
 		if (sitestru == null)
-			throw new UnsupportedOperationException(" 未定义 SiteStru 类型的 SITE_STRU，该常量应在 Servlet 初始化时定义。");
+			return;
+//			throw new UnsupportedOperationException(" 未定义 SiteStru 类型的 SITE_STRU，该常量应在 Servlet 初始化时定义。");
 
 		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
 		String output = "Error Type for tag : ";

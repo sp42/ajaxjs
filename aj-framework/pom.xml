@@ -20,7 +20,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.12</version>
-			<scope>compile</scope>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-util</artifactId>
-			<version>1.0.6</version>
+			<version>1.0.7</version>
 		</dependency>
 
 		<dependency>

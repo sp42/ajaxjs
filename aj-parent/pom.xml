@@ -7,6 +7,7 @@
 	<name>ajaxjs-parent</name>
 	<version>1.7</version>
 	<packaging>pom</packaging>
+	<description>Top pom.xml, public config</description>
 
 	<!--Maven 的基本使用终结版 https://segmentfault.com/a/1190000020380580 -->
 
@@ -66,8 +67,12 @@
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
-	<!-- <distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
-		</snapshotRepository> </distributionManagement> -->
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<!-- <distributionManagement> <repository> <id>rdc</id> <name>releases</name> 
 		<url>https://packages.aliyun.com/maven/repository/2190421-release-MPawzZ/</url> 
@@ -104,15 +109,10 @@
 					<url>https://packages.aliyun.com/maven/repository/2190421-snapshot-2w5sDL/</url>
 				</snapshotRepository>
 			</distributionManagement>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 		</profile>
 	</profiles>
 
 	<build>
-
-
 		<!-- 这两个目录中的文件也会分别被复制到 target/classes 和 target/test-classes 目录中。 -->
 		<!-- <resources> -->
 		<!-- <resource> -->
@@ -131,8 +131,6 @@
 		<!-- </testResource> -->
 		<!-- </testResources> -->
 
-
-
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -147,10 +145,17 @@
 			</plugin>
 
 			<!-- 发布到中央库 -->
-			<!-- <plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
-				<version>1.6.8</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
-				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
-				</configuration> </plugin> -->
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
 
 			<!-- 复制 META-INF 目录 不让 Maven 打包时生成 maven 自己的描述文件 -->
 			<plugin>
@@ -167,7 +172,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<!-- <version>1.5</version> -->
 				<version>3.0.1</version>
 				<executions>
 					<execution>
@@ -184,7 +188,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<!-- <version>2.2.1</version> -->
 				<version>3.2.1</version>
 				<executions>
 					<execution>
@@ -200,7 +203,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<!-- <version>2.9.1</version> -->
 				<version>3.4.0</version>
 				<executions>
 					<execution>
@@ -212,6 +214,9 @@
 						<configuration>
 							<!-- add this to disable checking -->
 							<additionalparam>-Xdoclint:none</additionalparam>
+							<charset>UTF-8</charset><!-- utf-8读取文件 -->
+							<encoding>UTF-8</encoding><!-- utf-8进行编码代码 -->
+							<docencoding>UTF-8</docencoding><!-- utf-8进行编码文档 -->
 						</configuration>
 					</execution>
 				</executions>
@@ -286,5 +291,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	<description>Top pom.xml, public config</description>
 </project>
