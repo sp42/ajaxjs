@@ -132,9 +132,11 @@ public class MakeDbDocController extends BaseMakeDbDocController {
 
 参考“打印”，选择 PDF 格式打印到文件。
 
-- 我不想任何访问页面，怎么加用户登录、验证？
+- 我不想任何人可以访问页面，怎么加用户登录、验证？
 
 本工具不考虑这方面问题。如同上述集成方式，不直接提供 Controller，而是让你去继承它，至于如何配置用户身份识别，悉随尊便，加过滤器、拦截器都行，是你的事~
+
+提示：简单点搞个 HTTP Basic 认证即可，安全性高点就 HTTP Digest。
 
 - 有否计划其他数据库，如 SQL Server?
 
