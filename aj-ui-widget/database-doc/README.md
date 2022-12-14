@@ -1,7 +1,7 @@
 # 数据库文档展示工具
 数据库文档展示工具（database doc），又叫数据库注释浏览工具，是一个简单的数据库展示各个字段注释的开源工具。如下截图所示，
 
-<img src="https://img-blog.csdnimg.cn/c579f9f3177f401186bdd02e5a2205b4.png" alt="example2" width="600" >
+<img src="https://img-blog.csdnimg.cn/c579f9f3177f401186bdd02e5a2205b4.png" alt="example2" width="600" style="display:block; margin:0 auto;" >
 
 
 
