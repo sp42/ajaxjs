@@ -22,7 +22,11 @@ public class DataSourceController extends BaseDataSourceController {
 	}
 
 	@Override
-	protected Connection initDb() {
+	protected Connection getConnection() {
+		return initDb();
+	}
+	
+	public static Connection initDb() {
 		DataSource ds = DiContextUtil.getBean(DataSource.class);
 
 		try {
