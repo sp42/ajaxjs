@@ -251,6 +251,8 @@ public class MapTool {
 					if (value != null) {
 						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
+						if(value.toString().startsWith("{\"zjxt_height\""))
+							LOGGER.info(value);
 						if (t == List.class) { // List 容器类，要处理里面的泛型
 							Type[] genericReturnType = ReflectUtil.getGenericReturnType(property.getReadMethod());
 							Type beanT = genericReturnType[0];

@@ -173,8 +173,17 @@ public class MappingValue {
 //				System.out.println("::::::" + value.getClass());
 //				System.out.println("::::::" + value.getClass().getName());
 
-			} else
-				value = StringUtils.hasText(value.toString()) ? Integer.parseInt(value.toString()) : 0;
+			} else {
+				String str = value.toString();
+
+				if (StringUtils.hasText(str)) {
+					if (str.contains(".")) { // 小数
+						value = ((Float) Float.parseFloat(str)).intValue();
+					} else
+						value = Integer.parseInt(str);
+				} else
+					value = 0;
+			}
 		} else if (target == int[].class || target == Integer[].class) {
 			// 复数
 			if (value instanceof String)
