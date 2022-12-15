@@ -81,7 +81,8 @@ CREATE TABLE `adp_datasource` (
 COMMENT='数据源'
 ```
 ## 配置 API
-Java API 部分，主要分为数据源本身的 CRUD 服务，和切换数据源产生文档 JSON 这么两个部分。数据源的 CRUD 由下面 `DataSourceController` 控制器处理（这是一个标准的 Spring MVC 控制器）：
+Java API 部分，主要分为数据源本身的 CRUD 服务，和切换数据源产生文档 JSON 这么两个部分。我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
+具体来说就是你要复制下面两个类到你的项目中，并适当修改配置。第一个是`DataSourceController`，数据源的 CRUD 由这个控制器来处理（这是一个标准的 Spring MVC 控制器）：
 
 ```java
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -116,7 +117,7 @@ public class DataSourceController extends BaseDataSourceController {
 }
 ```
 
-我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。当前配置有两个,分别对应两个 Java 抽象的方法：一个是配置表名，另外一个是配置数据库的连接。
+当前配置有两个,分别对应两个 Java 抽象的方法：一个是配置表名，另外一个是配置数据库的连接。
 
 ## 配置 MakeDbDocController
 
