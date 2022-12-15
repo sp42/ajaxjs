@@ -1,8 +1,15 @@
-# 数据库文档展示工具
-数据库文档展示工具（database doc），又叫数据库注释浏览工具，是一个简单的数据库展示各个字段注释的开源工具。如下截图所示，
+# 适用工具：数据库文档展示工具
 
-<div align=center><img src="https://img-blog.csdnimg.cn/c579f9f3177f401186bdd02e5a2205b4.png" alt="example2" width="600" align="center" /></div>
+## 简介
+数据库文档展示工具（database doc），又叫数据库注释浏览工具，是一个简单的数据库展示各个字段注释的开源工具。在日常开发工作，您有否这样的体验？
 
+- 想给前端开发或者其他人员浏览数据库结构、表详情等的信息，出于管理的原因，却又不想告诉他们数据库账号、密码；
+- 要生成数据库结构文档或报表，不知有什么好工具。即使生成了，结构变动了，又要再生成一次，——有一个同步的问题
+- 根据表结构快速生成 Java 实体
+
+数据库文档展示工具如下截图所示，
+
+<div align="center"><img src="https://img-blog.csdnimg.cn/c579f9f3177f401186bdd02e5a2205b4.png" alt="example2" width="600" /></div>
 
 
 
@@ -13,11 +20,15 @@
 - 提供一个简单的代码生成器，可快速地将某张表转化为 JavaBean
 - Java Spring 项目，依赖少，方便集成
 
-## 多数据源管理
-![多数据源管理](https://img-blog.csdnimg.cn/39e110471b104af897a26eec2b78143c.png)
+## 使用方法
 
-## 生成 Java Bean
-![生成 Java Bean 代码](https://img-blog.csdnimg.cn/acb5f3b506ff4a0380b7f409fd01cc29.png)
+### 多数据源管理
+
+<div align="center"><img src="https://img-blog.csdnimg.cn/39e110471b104af897a26eec2b78143c.png"  width="600" /></div>
+
+### 生成 Java Bean
+
+<div align="center"><img src="https://img-blog.csdnimg.cn/acb5f3b506ff4a0380b7f409fd01cc29.png"  width="600" /></div>
 
 # 集成方法
 提示：该工具使用“前后端分类”架构，如果单纯只为展示数据库文档，那么只提供前端 UI 读取的 JSON 数据即可，不需要后台服务。
