@@ -30,8 +30,13 @@
 
 <div align="center"><img src="https://img-blog.csdnimg.cn/acb5f3b506ff4a0380b7f409fd01cc29.png"  width="600" /></div>
 
+批量下载 Java Bean，打包整个库的 Bean 文件转换 zip 包下载。
+
+<div align="center"><img src="https://img-blog.csdnimg.cn/5f1b79abb0b247ecbef3d331a1b94cf8.png"  width="600" /></div>
+
+
 # 集成方法
-提示：该工具使用“前后端分类”架构，如果单纯只为展示数据库文档，那么只提供前端 UI 读取的 JSON 数据即可，不需要后台服务。
+提示：该工具使用“前后端分离”架构，如果单纯只为展示数据库文档，那么只提供前端 UI 读取的 JSON 数据即可，不需要后台服务。看阁下需要，当然那 JSON 要符合特定的格式。
 
 如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。请接着继续看如何集成。
 
