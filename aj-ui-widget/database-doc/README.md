@@ -32,7 +32,7 @@
 
 批量下载 Java Bean，打包整个库的 Bean 文件转换 zip 包下载。
 
-<div align="center"><img src="https://img-blog.csdnimg.cn/5f1b79abb0b247ecbef3d331a1b94cf8.png"  width="600" /></div>
+<div align="center"><img src="https://img-blog.csdnimg.cn/5f1b79abb0b247ecbef3d331a1b94cf8.png"  width="200" /></div>
 
 
 # 集成方法
