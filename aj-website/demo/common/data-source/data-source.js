@@ -1,6 +1,6 @@
 const DBType = { 'MY_SQL': 'MySQL', 'ORACLE': 'Oracle', 'SQL_SERVER': 'Sql Server', 'SPARK': 'Spark', 'SQLITE': 'SQLite', DB2: 'DB2' };
 
-DATASOURCE_API = window.API_ROOT ? API_ROOT + '/data_service/datasource' : '../../data_service/datasource';
+DATASOURCE_API = window.API_ROOT ? API_ROOT + '/mock-data/datasource.json' : '../../data_service/datasource';
 
 Vue.component('Datasource', {
 	template: '#data-source-tpl',
