@@ -13,7 +13,7 @@ new Vue({
                 title: '数据库文档浏览器',
                 content: `<p>
                     <object id="svg1" data="asset/database.svg" type="image/svg+xml" width="32" style="vertical-align: middle;"></object>
-                    一个简单的数据库文档浏览器</p><p>Powered by AJAXJS Framework.</p><p>ver 2022.10.31</p>`
+                    一个简单的数据库文档浏览器，<a href="https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/database-doc" target="_blank">主页</a>。</p><p>Powered by AJAXJS Framework.</p><p>ver 2022.11.31</p>`
             });
         },
     }

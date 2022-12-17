@@ -20,6 +20,8 @@
 - 提供一个简单的代码生成器，可快速地将某张表转化为 JavaBean
 - Java Spring 项目，依赖少，方便集成
 
+在线演示地址请点击 [https://framework.ajaxjs.com/demo/database-doc/](https://framework.ajaxjs.com/demo/database-doc/)。
+
 ## 使用方法
 
 ### 多数据源管理
