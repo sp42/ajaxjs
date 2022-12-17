@@ -111,7 +111,9 @@ MAIN = new Vue({
         onChangeDatasource(datasource) {
             this.$Loading.start();
             this.dataSource.isShowDataSource = false;
-            aj.xhr.postJson('http://localhost:8080/adp/make_database_doc', datasource, j => {
+			let api = window.API_ROOT ? API_ROOT + "/make_database_doc" : '../../make_database_doc';
+			
+            aj.xhr.postJson(api, datasource, j => {
                 if (j.status === 1) {
                     setTimeout(() => {
                         this.$Loading.finish();

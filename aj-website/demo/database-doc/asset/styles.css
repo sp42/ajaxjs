@@ -1,0 +1,112 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body>div.main {
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin: 0 auto;
+    max-width: 1400px;
+}
+
+/*定义整个滚动条高宽及背景：高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+    width: 5px;
+    background-color: #F5F5F5;
+}
+
+/*定义滚动条轨道：内阴影+圆角*/
+::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+}
+
+/*定义滑块：内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: lightgray;
+}
+
+nav {
+    height: 4%;
+    display: table;
+    /*垂直居中*/
+    border-bottom: 1px solid lightgray;
+    vertical-align: middle;
+    padding: 0 20px;
+    background-color: #eaeaea;
+    width: 100%;
+}
+
+nav>div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+menu {
+    height: 96%;
+    flex: 0 0 300px;
+    margin: 0;
+    padding: 0;
+    padding-right: 5px;
+    border-right: 1px solid lightgray;
+    padding-left: 2%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+iframe {
+    height: 96%;
+    flex: 1;
+    /*div占据所有剩余宽度 */
+}
+
+.links {
+    float: right;
+}
+
+h1 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 10px 0;
+    margin-top: 30px;
+    line-height: 130%;
+}
+
+li.table {
+    margin-left: 0px;
+    margin-bottom: 10px;
+    word-break: break-all;
+    overflow: hidden;
+    line-height: 140%;
+}
+
+h1:hover .cache {
+    display: block;
+}
+
+.cache {
+    display: none;
+    width: 32px;
+    height: 32px;
+    float: right;
+    cursor: pointer;
+}
+
+.eng {
+    font-family: 'Courier New', Courier, monospace;
+    color: gray;
+    font-size: 1rem;
+}
+
+a:hover .eng {
+    color: black;
+}
+
+.gen-form>.ivu-input-wrapper {
+    margin-bottom: 20px;
+}
