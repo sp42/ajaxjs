@@ -46,7 +46,7 @@
             "type": "MY_SQL",
             "uid": "7574982380097536",
             "updateDate": "2022-12-07 12:11:50",
-            "url": "jdbc:mysql://60.160.190.182:33305?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8",
+            "url": "jdbc:mysql://127.0.0.1?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8",
             "urlDir": "yuxi2",
             "username": "root"
         },
