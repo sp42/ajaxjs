@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author Frank Cheung
  */
-public class DataServiceTable extends BaseModel implements IBaseModel {
+public class DataServiceEntity extends BaseModel implements IBaseModel {
 	private String tableName;
 
 	private String urlDir;

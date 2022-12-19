@@ -20,11 +20,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 /**
- * 
- *
+ * MyBatis 工具类
  */
 public class MSUtils {
 	/**
@@ -40,37 +38,6 @@ public class MSUtils {
 	public MSUtils(Configuration cfg) {
 		this.configuration = cfg;
 		languageDriver = cfg.getDefaultScriptingLanguageInstance();
-	}
-
-	/**
-	 * 手动创建连接池。这里使用了 Tomcat JDBC Pool
-	 *
-	 * @param driver
-	 * @param url
-	 * @param user
-	 * @param psw
-	 * @return 数据源
-	 */
-	public static DataSource setupJdbcPool(String driver, String url, String user, String psw) {
-		PoolProperties p = new PoolProperties();
-		p.setDriverClassName(driver);
-		p.setUrl(url);
-		p.setUsername(user);
-		p.setPassword(psw);
-		p.setMaxActive(100);
-		p.setInitialSize(10);
-		p.setMaxWait(10000);
-		p.setMaxIdle(30);
-		p.setMinIdle(5);
-		p.setTestOnBorrow(true);
-		p.setTestWhileIdle(true);
-		p.setTestOnReturn(true);
-		p.setValidationInterval(18800);
-		p.setDefaultAutoCommit(true);
-		org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
-		ds.setPoolProperties(p);
-
-		return ds;
 	}
 
 	/**

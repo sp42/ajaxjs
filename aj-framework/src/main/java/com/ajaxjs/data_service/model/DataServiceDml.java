@@ -109,7 +109,7 @@ public class DataServiceDml extends HashMap<String, Object> {
 	 */
 	private DataSource dataSource;
 
-	private DataServiceTable tableInfo;
+	private DataServiceEntity tableInfo;
 
 	public String getType() {
 		return type;
@@ -127,11 +127,11 @@ public class DataServiceDml extends HashMap<String, Object> {
 		this.dataSource = dataSource;
 	}
 
-	public DataServiceTable getTableInfo() {
+	public DataServiceEntity getTableInfo() {
 		return tableInfo;
 	}
 
-	public void setTableInfo(DataServiceTable tableInfo) {
+	public void setTableInfo(DataServiceEntity tableInfo) {
 		this.tableInfo = tableInfo;
 	}
 }

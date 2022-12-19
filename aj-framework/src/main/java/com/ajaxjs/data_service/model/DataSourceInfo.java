@@ -1,5 +1,7 @@
 package com.ajaxjs.data_service.model;
 
+import javax.sql.DataSource;
+
 import com.ajaxjs.data_service.DataServiceConstant.DatabaseType;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
@@ -40,6 +42,11 @@ public class DataSourceInfo extends BaseModel implements IBaseModel {
 	 * 是否跨库
 	 */
 	private Boolean crossDb;
+
+	/**
+	 * 数据源实例
+	 */
+	private DataSource instance;
 
 	public DatabaseType getType() {
 		return type;
@@ -87,6 +94,14 @@ public class DataSourceInfo extends BaseModel implements IBaseModel {
 
 	public void setUrlDir(String urlDir) {
 		this.urlDir = urlDir;
+	}
+
+	public DataSource getInstance() {
+		return instance;
+	}
+
+	public void setInstance(DataSource instance) {
+		this.instance = instance;
 	}
 
 }

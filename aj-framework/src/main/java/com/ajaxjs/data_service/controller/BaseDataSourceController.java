@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataSourceInfo;
-import com.ajaxjs.data_service.service.BaseDataSourceService;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 数据源配置的 CRUD
+ * 数据源配置的 CRUD，另外有一些实用工具方法。
  * 
  * @author Frank Cheung<sp42@qq.com>
  *
@@ -53,11 +53,9 @@ public abstract class BaseDataSourceController {
 	@GetMapping("/test/{id}")
 	Boolean test(@PathVariable Long id) throws SQLException {
 		try (Connection conn = getConnection()) {
-			String sql = "SELECT * FROM " + getTableName() + " WHERE id = ?";
-			DataSourceInfo info = JdbcHelper.queryAsBean(DataSourceInfo.class, conn, sql, id);
-
-			try (Connection connection = BaseDataSourceService.getConnectionByDataSourceInfo(info);) {
+			try (Connection connection = DataSerivceUtils.getConnByDataSourceInfo(conn, getTableName(), id)) {
 				LOGGER.info(connection.getMetaData().getURL());
+
 				return true;
 			}
 		}
@@ -112,4 +110,5 @@ public abstract class BaseDataSourceController {
 			return JdbcHelper.deleteById(conn, getTableName(), id);
 		}
 	}
+
 }

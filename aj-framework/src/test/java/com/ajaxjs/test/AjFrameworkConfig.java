@@ -1,4 +1,4 @@
-package com.ajaxjs.user;
+package com.ajaxjs.test;
 
 import javax.sql.DataSource;
 
@@ -9,15 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataServiceConfig;
 import com.ajaxjs.data_service.service.DataService;
+import com.ajaxjs.spring.BaseWebMvcConfigurer;
 
-/**
- * 数据库连接配置 & 数据服务
- * 
- * @author Frank Cheung
- *
- */
 @Configuration
-public class Database {
+public class AjFrameworkConfig extends BaseWebMvcConfigurer {
 	@Value("${db.url}")
 	private String url;
 
@@ -27,25 +22,19 @@ public class Database {
 	@Value("${db.psw}")
 	private String psw;
 
-	/**
-	 * 数据服务配置
-	 * 
-	 * @return
-	 */
-	@Bean
-	DataService DataServiceConfig() {
-		DataServiceConfig cfg = new DataServiceConfig();
-		cfg.setEmbed(false);
-		cfg.setDataSource(getDs());
-
-		DataService ds = new DataService();
-		ds.setCfg(cfg);
-
-		return ds;
-	}
-
 	@Bean(value = "dataSource", destroyMethod = "close")
 	DataSource getDs() {
 		return DataSerivceUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
+	}
+
+	@Bean
+	DataService dataService() {
+		DataService ds = new DataService();
+		DataServiceConfig cfg = new DataServiceConfig();
+		cfg.setMultiDataSource(false);
+		cfg.setDataSource(getDs());
+		ds.setCfg(cfg);
+
+		return ds;
 	}
 }

@@ -84,7 +84,12 @@ public class JdbcConnection {
 	 */
 	public static Connection getConnection(DataSource source) {
 		try {
-			return source.getConnection();
+			Connection conn = source.getConnection();
+
+			if (connection == null)
+				LOGGER.warning("DataSource 不能建立数据库连接");
+
+			return conn;
 		} catch (SQLException e) {
 			LOGGER.warning(e, "通过数据源对象获得数据库连接对象失败！");
 			return null;

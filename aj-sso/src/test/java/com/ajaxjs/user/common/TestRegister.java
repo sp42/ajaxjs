@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.ajaxjs.data_service.api.ApiController;
+import com.ajaxjs.data_service.controller.DataServiceApiController;
 import com.ajaxjs.user.common.controller.RegisterController;
 
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -32,7 +32,7 @@ public class TestRegister {
 	RegisterController registerController;
 
 	@Autowired
-	ApiController apiController;
+	DataServiceApiController apiController;
 
 	@Autowired
 	DataSource ds;

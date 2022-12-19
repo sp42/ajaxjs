@@ -1,6 +1,6 @@
 package com.ajaxjs.data_service.plugin;
 
-import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
+import com.ajaxjs.data_service.DataServiceConstant;
 import com.ajaxjs.data_service.model.ServiceContext;
 
 /**
@@ -18,8 +18,8 @@ public class Log_DataServicePlugin implements IPlugin {
 	private Boolean logRead = false;
 
 	@Override
-	public void after(CRUD type, ServiceContext ctx, Object result) {
-		if ((type == CRUD.INFO || type == CRUD.LIST || type == CRUD.PAGE_LIST) && !logRead)
+	public void after(DataServiceConstant.CRUD type, ServiceContext ctx, Object result) {
+		if ((type == DataServiceConstant.CRUD.INFO || type == DataServiceConstant.CRUD.LIST || type == DataServiceConstant.CRUD.PAGE_LIST) && !logRead)
 			return;
 
 		/* TODO 是否改为 DS 的 DAO 写法 */

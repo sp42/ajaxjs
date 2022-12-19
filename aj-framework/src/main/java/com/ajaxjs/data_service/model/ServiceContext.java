@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 
-import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
+import com.ajaxjs.data_service.DataServiceConstant;
 
 /**
  * 数据服务上下文对象
@@ -15,7 +15,7 @@ import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 public class ServiceContext {
 	private Map<String, Object> requestParams;
 
-	private CRUD crudType;
+	private DataServiceConstant.CRUD crudType;
 
 	private String uri;
 
@@ -65,8 +65,7 @@ public class ServiceContext {
 	 * @param params
 	 * @return
 	 */
-	public static ServiceContext factory(String uri, HttpServletRequest req, DataServiceDml node,
-			Map<String, Object> params) {
+	public static ServiceContext factory(String uri, HttpServletRequest req, DataServiceDml node, Map<String, Object> params) {
 		ServiceContext ctx = new ServiceContext(uri, req);
 		ctx.setNode(node);
 		ctx.setDatasource(node.getDataSource());
@@ -108,11 +107,11 @@ public class ServiceContext {
 		this.requestParams = requestParams;
 	}
 
-	public CRUD getCrudType() {
+	public DataServiceConstant.CRUD getCrudType() {
 		return crudType;
 	}
 
-	public void setCrudType(CRUD crudType) {
+	public void setCrudType(DataServiceConstant.CRUD crudType) {
 		this.crudType = crudType;
 	}
 

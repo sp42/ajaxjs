@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,27 +17,135 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.util.CollectionUtils;
 
-import com.ajaxjs.data_service.model.DataServiceConstant;
+import com.ajaxjs.data_service.DataServiceConstant;
+import com.ajaxjs.data_service.model.DataServiceConfig;
 import com.ajaxjs.data_service.model.DataServiceDml;
+import com.ajaxjs.data_service.model.DataServiceEntity;
 import com.ajaxjs.data_service.model.DataServiceFieldsMapping;
-import com.ajaxjs.data_service.model.DataServiceTable;
+import com.ajaxjs.data_service.model.DataSourceInfo;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.mybatis.MSUtils;
 import com.ajaxjs.data_service.mybatis.SqlMapper;
 import com.ajaxjs.data_service.plugin.IPlugin;
+import com.ajaxjs.entity.BaseEntityConstants;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * 核心 CRUD
+ * 数据服务核心类
  * 
- * @author Frank Cheung
+ * @author Frank Cheung<sp42@qq.com>
  *
  */
-public abstract class ApiCommander implements DataServiceConstant {
-	private static final LogHelper LOGGER = LogHelper.getLog(ApiCommander.class);
+public class DataService {
+	private static final LogHelper LOGGER = LogHelper.getLog(DataService.class);
+
+	/**
+	 * 是否已初始化的标识
+	 */
+	private static AtomicBoolean INITIALIZED = new AtomicBoolean(false);
+
+	/**
+	 * 数据服务的配置，由 Spring 注入
+	 */
+//	@Autowired
+	private DataServiceConfig cfg;
+
+	public DataServiceConfig getCfg() {
+		return cfg;
+	}
+
+	public void setCfg(DataServiceConfig cfg) {
+		this.cfg = cfg;
+	}
+
+	/**
+	 * 数据服务的插件列表，由 Spring 注入
+	 */
+//	@Autowired(required = false)
+//	@Qualifier("DataServicePlugins")
+	protected List<IPlugin> plugins;
+
+	public List<IPlugin> getPlugins() {
+		return plugins;
+	}
+
+	public void setPlugins(List<IPlugin> plugins) {
+		this.plugins = plugins;
+	}
+
+	/**
+	 * 请求与配置信息对应起来之后的信息。key 是各个 url dir 之组合
+	 */
+	public static Map<String, DataServiceDml> GET = new ConcurrentHashMap<>();
+
+	public static Map<String, DataServiceDml> POST = new ConcurrentHashMap<>();
+
+	public static Map<String, DataServiceDml> PUT = new ConcurrentHashMap<>();
+
+	public static Map<String, DataServiceDml> DELETE = new ConcurrentHashMap<>();
+
+	public static Map<String, DataServiceDml> HEAD = new ConcurrentHashMap<>();
+
+	public static Map<String, DataServiceDml> OPTION = new ConcurrentHashMap<>();
+
+	public static Map<String, DataServiceDml> PATCH = new ConcurrentHashMap<>();
+
+	/**
+	 * 保存多个数据源
+	 */
+	private Map<Long, DataSourceInfo> mulitDataSource = new HashMap<>();
+
+	/**
+	 * 初始化（带缓存控制）
+	 */
+	public void init() {
+		LOGGER.info("初始化数据服务");
+
+		if (INITIALIZED.compareAndSet(false, true)) // 如果为 false，更新为 true
+			new DataServiceStarter(cfg).init(mulitDataSource);
+	}
+
+	/**
+	 * URL 匹配命令。根据两个输入条件找到匹配的 DML 命令
+	 * 
+	 * @param uri    命令 URL
+	 * @param states 状态 Map
+	 * @return
+	 */
+	public static DataServiceDml exec(String uri, Map<String, DataServiceDml> states) {
+		if (states.containsKey(uri)) {
+			DataServiceDml node = states.get(uri);
+
+			if (node.isEnable())
+				return node;
+			else
+				throw new RuntimeException("该命令 [" + uri + "] 未启用");
+		} else {
+			if (states == null || states.size() == 0) {
+				// 自定义类型好像不会触发 ds 初始化，这里强制执行
+				DataService api = DiContextUtil.getBean(DataService.class);
+				api.init();
+
+//				throw new RuntimeException("未初始化数据服务");
+				// do again!
+				DataServiceDml node = states.get(uri);
+
+				if (node.isEnable())
+					return node;
+				else
+					throw new RuntimeException("该命令 [" + uri + "] 未启用");
+			} else {
+				for (String key : states.keySet())
+					System.out.println(key);
+
+				throw new RuntimeException("不存在该路径 [" + uri + "] 之配置");
+			}
+		}
+	}
 
 	/**
 	 * 
@@ -43,7 +153,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 	 * @param plugins
 	 * @return
 	 */
-	public static Object get(ServiceContext ctx, List<IPlugin> plugins) {
+	public Object get(ServiceContext ctx) {
 		DataServiceDml node = ctx.getNode();
 
 		if ("list".equals(node.getType()) || "getRows".equals(node.getType()) || "getRowsPage".equals(node.getType())) {
@@ -55,7 +165,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 			return info(ctx, plugins);
 	}
 
-	private static boolean before(CRUD type, ServiceContext ctx, List<IPlugin> plugins) {
+	private static boolean before(DataServiceConstant.CRUD type, ServiceContext ctx, List<IPlugin> plugins) {
 		boolean hasPlugins = !CollectionUtils.isEmpty(plugins);
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
@@ -75,7 +185,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 	 */
 	public static Map<String, Object> info(ServiceContext ctx, List<IPlugin> plugins) {
 		String sql = where(ctx);
-		boolean hasPlugins = before(CRUD.INFO, ctx, plugins);
+		boolean hasPlugins = before(DataServiceConstant.CRUD.INFO, ctx, plugins);
 		Map<String, Object> result = null;
 
 		try (SqlSession session = MSUtils.getMyBatisSession(ctx.getDatasource())) {
@@ -103,7 +213,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
-				plugin.after(CRUD.INFO, ctx, result);
+				plugin.after(DataServiceConstant.CRUD.INFO, ctx, result);
 			}
 
 		return result;
@@ -139,7 +249,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 	 */
 	public static List<Map<String, Object>> list(ServiceContext ctx, List<IPlugin> plugins) {
 		String sql = where(ctx);
-		boolean hasPlugins = before(CRUD.LIST, ctx, plugins);
+		boolean hasPlugins = before(DataServiceConstant.CRUD.LIST, ctx, plugins);
 		List<Map<String, Object>> list = null;
 
 		if (isDynamicSQL(sql)) // 是否包含 mybatis 脚本控制标签，有的话特殊处理
@@ -153,7 +263,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
-				plugin.after(CRUD.LIST, ctx, list);
+				plugin.after(DataServiceConstant.CRUD.LIST, ctx, list);
 			}
 
 		return list;
@@ -168,13 +278,13 @@ public abstract class ApiCommander implements DataServiceConstant {
 	 */
 	public static PageResult<Map<String, Object>> page(ServiceContext ctx, List<IPlugin> plugins) {
 		String sql = where(ctx);
-		boolean hasPlugins = before(CRUD.PAGE_LIST, ctx, plugins);
+		boolean hasPlugins = before(DataServiceConstant.CRUD.PAGE_LIST, ctx, plugins);
 		PageResult<Map<String, Object>> page = page(ctx.getDatasource(), sql, ctx.getRequestParams());
 		toCaemlCase(ctx, page);
 
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
-				plugin.after(CRUD.PAGE_LIST, ctx, page);
+				plugin.after(DataServiceConstant.CRUD.PAGE_LIST, ctx, page);
 			}
 
 		return page;
@@ -294,14 +404,13 @@ public abstract class ApiCommander implements DataServiceConstant {
 	/**
 	 * 
 	 * @param ctx
-	 * @param plugins
 	 * @return
 	 */
-	public static Serializable create(ServiceContext ctx, List<IPlugin> plugins) {
+	public Serializable create(ServiceContext ctx) {
 		LOGGER.info("数据服务 创建实体");
 
 		DataServiceDml node = ctx.getNode();
-		DataServiceTable tableInfo = node.getTableInfo();
+		DataServiceEntity tableInfo = node.getTableInfo();
 		DataServiceFieldsMapping fieldsMapping = tableInfo.getFieldsMapping();
 
 		boolean hasMapping = fieldsMapping != null; // 是否有字段映射
@@ -316,10 +425,10 @@ public abstract class ApiCommander implements DataServiceConstant {
 		// id
 		Integer keyGen = tableInfo.getKeyGen();
 		if (keyGen != null && !hasIdValue) {// 如果已指定 id 参数，则不覆盖
-			if (keyGen == KeyGen.SNOWFLAKE)
+			if (keyGen == DataServiceConstant.KeyGen.SNOWFLAKE)
 				_params.put(idField, SnowflakeId.get());
 
-			if (keyGen == KeyGen.UUID) {
+			if (keyGen == DataServiceConstant.KeyGen.UUID) {
 				String uuid = UUID.randomUUID().toString();
 				_params.put(idField, uuid);
 			}
@@ -330,24 +439,45 @@ public abstract class ApiCommander implements DataServiceConstant {
 		if (node.isAddUuid())
 			_params.put("uid", SnowflakeId.get());
 
-		if (node.isAutoDate()) {// 创建修改时间
-			Date now = new Date();
-			_params.put(hasMapping ? fieldsMapping.getCreateDate() : "updateDate", now);
-			_params.put(hasMapping ? fieldsMapping.getUpdateDate() : "createDate", now);
-		}
-
-		boolean hasPlugins = before(CRUD.CREATE, ctx, plugins);
+		boolean hasPlugins = before(DataServiceConstant.CRUD.CREATE, ctx, plugins);
 
 		// 是否转换数据库风格
 		if (fieldsMapping.getCamelCase2DbStyle() != null && fieldsMapping.getCamelCase2DbStyle()) {
 			// 驼峰 转换 数据库风格
-			Map<String, Object> dbStyle = new HashMap<>(_params.size());
+			Map<String, Object> dbStyle = new HashMap<>();
 
 			for (String key : _params.keySet())
 				dbStyle.put(JdbcUtil.changeFieldToColumnName(key), _params.get(key));
 
 			_params.clear(); // 提早清除
 			_params = dbStyle;
+		}
+
+		if (node.isAutoDate()) {// 创建修改时间
+			Date now = new Date();
+//			_params.put(hasMapping ? fieldsMapping.getCreateDate() : "createDate", now);
+
+			String createDateField = hasMapping ? fieldsMapping.getCreateDate() : "createDate";
+
+			if (_params.containsKey(createDateField) && _params.get(createDateField) != null) {
+				// 已有值
+			} else
+				_params.put(createDateField, now);
+
+			String updateDateField = hasMapping ? fieldsMapping.getUpdateDate() : "updateDate";
+
+			if (_params.containsKey(updateDateField) && _params.get(updateDateField) != null) {
+				// 已有值
+			} else
+				_params.put(updateDateField, now);
+		}
+
+		// 插入 null 值的处理（业务处理）
+		for (String key : _params.keySet()) {
+			if (BaseEntityConstants.NULL_DATE.equals(_params.get(key)))
+				_params.put(key, null);
+//			if (Double.NaN == _params.get(key) || Float.NaN == _params.get(key) || Double.NaN == _params.get(key))
+//				_params.put(key, null);
 		}
 
 		Map<String, Object> params;
@@ -371,12 +501,12 @@ public abstract class ApiCommander implements DataServiceConstant {
 			if (effectedRow > 0) {
 				if (hasPlugins)
 					for (IPlugin plugin : plugins) {
-						plugin.after(CRUD.CREATE, ctx, params);
+						plugin.after(DataServiceConstant.CRUD.CREATE, ctx, params);
 					}
 
 				if (params != null && params.containsKey(idField)) {
 					Object id = params.get(idField);
-					
+
 					if (id instanceof String) {
 						String idStr = id.toString();
 						// might be UUID, that is the string
@@ -418,7 +548,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 	 * @param plugins
 	 * @return
 	 */
-	public static boolean update(ServiceContext ctx, List<IPlugin> plugins) {
+	public boolean update(ServiceContext ctx) {
 //		LOGGER.info("数据服务 修改实体");
 		DataServiceDml node = ctx.getNode();
 		Map<String, Object> _params = ctx.getRequestParams();
@@ -427,7 +557,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 		if (node.isUpdateDate())
 			_params.put(fieldsMapping != null ? fieldsMapping.getUpdateDate() : "updateDate", new Date());
 
-		boolean hasPlugins = before(CRUD.UPDATE, ctx, plugins);
+		boolean hasPlugins = before(DataServiceConstant.CRUD.UPDATE, ctx, plugins);
 
 		// 是否转换数据库风格
 		if (fieldsMapping.getCamelCase2DbStyle() != null && fieldsMapping.getCamelCase2DbStyle()) {
@@ -469,7 +599,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 				params.put("isOk", isOK); // 添加一个是否修改成功的状态
 
 				for (IPlugin plugin : plugins)
-					plugin.after(CRUD.UPDATE, ctx, params);
+					plugin.after(DataServiceConstant.CRUD.UPDATE, ctx, params);
 			}
 
 			return isOK;
@@ -480,17 +610,16 @@ public abstract class ApiCommander implements DataServiceConstant {
 	 * 删除实体/批量删除
 	 * 
 	 * @param ctx
-	 * @param plugins
 	 * @return
 	 */
-	public static boolean delete(ServiceContext ctx, List<IPlugin> plugins) {
+	public boolean delete(ServiceContext ctx) {
 		DataServiceDml node = ctx.getNode();
 		Map<String, Object> params = ctx.getRequestParams();
 		String sql = node.getSql();
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
 
-		boolean hasPlugins = before(CRUD.DELETE, ctx, plugins);
+		boolean hasPlugins = before(DataServiceConstant.CRUD.DELETE, ctx, plugins);
 		boolean result = false;
 
 		if (node.isPhysicallyDelete()) {
@@ -514,7 +643,7 @@ public abstract class ApiCommander implements DataServiceConstant {
 
 		if (hasPlugins)
 			for (IPlugin plugin : plugins) {
-				plugin.after(CRUD.DELETE, ctx, params);
+				plugin.after(DataServiceConstant.CRUD.DELETE, ctx, params);
 			}
 
 		return result;

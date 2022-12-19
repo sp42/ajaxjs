@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.data_service.api.ApiController;
+import com.ajaxjs.data_service.controller.DataServiceApiController;
 import com.ajaxjs.user.TestConfig;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
@@ -39,7 +39,7 @@ public class TestSSO {
     private SsoService ssoService;
 
     @Autowired
-    ApiController apiController;
+    DataServiceApiController apiController;
 
     @Before
     public void init() {

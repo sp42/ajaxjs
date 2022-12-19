@@ -19,7 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.data_service.api.ApiController;
+import com.ajaxjs.data_service.controller.DataServiceApiController;
 import com.ajaxjs.user.TestConfig;
 import com.ajaxjs.user.common.service.RegisterService;
 
@@ -36,7 +36,7 @@ public class TestUser {
     private RegisterService registerService;
 
     @Autowired
-    ApiController apiController;
+    DataServiceApiController apiController;
 
     HttpServletRequest req = mock(HttpServletRequest.class);
 

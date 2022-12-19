@@ -4,8 +4,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 import com.ajaxjs.data_service.plugin.IPlugin;
+import com.ajaxjs.data_service.DataServiceConstant;
+import com.ajaxjs.data_service.DataServiceConstant.CRUD;
 import com.ajaxjs.data_service.model.ServiceContext;
 
 /**
@@ -18,7 +19,7 @@ public class GoogleCapchta_DataServicePlugin implements IPlugin {
 	private GoogleFilter g;
 
 	@Override
-	public boolean before(CRUD type, ServiceContext ctx) {
+	public boolean before(DataServiceConstant.CRUD type, ServiceContext ctx) {
 		Map<String, Object> requestParams = ctx.getRequestParams();
 		
 		if (g != null && requestParams.containsKey(GoogleFilter.PARAM_NAME)) {

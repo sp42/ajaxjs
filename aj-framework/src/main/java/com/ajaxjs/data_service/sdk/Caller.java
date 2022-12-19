@@ -14,7 +14,7 @@ import org.springframework.util.CollectionUtils;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.plugin.IPlugin;
-import com.ajaxjs.data_service.service.RuntimeData;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.Identity;
 import com.ajaxjs.framework.PageResult;
@@ -55,7 +55,7 @@ public class Caller extends BaseCaller {
 				throw new IllegalArgumentException("缺少 id 参数");
 
 			params.put("id", args[0]);
-			node = RuntimeData.exec(uri, RuntimeData.GET);
+			node = exec(uri, GET);
 
 			ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 			Map<String, Object> info = info(ctx, null);
@@ -72,7 +72,7 @@ public class Caller extends BaseCaller {
 			}
 		} else if (isFindOne || methodName.equals("findList") || methodName.equals("findListAsListMap")) {
 			uri += "/list";
-			node = RuntimeData.exec(uri, RuntimeData.GET);
+			node = exec(uri, GET);
 
 			ctx = ServiceContext.factory(uri, DiContextUtil.getRequest(), node, params);
 			List<Map<String, Object>> list = list(ctx, null);
@@ -98,7 +98,7 @@ public class Caller extends BaseCaller {
 			return list;
 		} else if (methodName.equals("findPagedList") || methodName.equals("findPagedListAsMap")) {
 			uri += "/list";
-			node = RuntimeData.exec(uri, RuntimeData.GET);
+			node = exec(uri, GET);
 
 			params.put("start", args[0]);
 			params.put("limit", args[1]);
@@ -117,7 +117,7 @@ public class Caller extends BaseCaller {
 
 			// 其他类型
 			uri += "/" + methodName;
-			node = RuntimeData.exec(uri, RuntimeData.GET);
+			node = exec(uri, GET);
 //			LOGGER.info(params);
 
 			if (args != null && args.length >= 1) {
@@ -244,11 +244,11 @@ public class Caller extends BaseCaller {
 		return _list;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<IPlugin> getPlugins() {
-		Object bean = DiContextUtil.getBean("DataServicePlugins");
+		DataService ds = DiContextUtil.getBean(DataService.class);
 
-		return bean == null ? null : (List<IPlugin>) bean;
+		return ds == null ? null : ds.getPlugins();
 	}
 
 	@Override
@@ -257,7 +257,8 @@ public class Caller extends BaseCaller {
 		if ("create".equals(methodName))
 			methodName = null;
 
-		return create(getServiceContext(RuntimeData.POST, methodName, args), getPlugins());
+		setPlugins(getPlugins());
+		return create(getServiceContext(POST, methodName, args));
 	}
 
 	@Override
@@ -265,7 +266,8 @@ public class Caller extends BaseCaller {
 		if ("update".equals(methodName))
 			methodName = null;
 
-		return update(getServiceContext(RuntimeData.PUT, methodName, args), getPlugins());
+		setPlugins(getPlugins());
+		return update(getServiceContext(PUT, methodName, args));
 	}
 
 	/**
@@ -301,7 +303,9 @@ public class Caller extends BaseCaller {
 		}
 
 		LOGGER.info("删除实体" + args[0]);
-		return delete(getServiceContext(RuntimeData.DELETE, methodName, args), getPlugins());
+		setPlugins(getPlugins());
+
+		return delete(getServiceContext(DELETE, methodName, args));
 	}
 
 	/**
@@ -314,7 +318,7 @@ public class Caller extends BaseCaller {
 	@SuppressWarnings("unchecked")
 	private ServiceContext getServiceContext(Map<String, DataServiceDml> map, String methodName, Object[] args) {
 		String uri = methodName == null ? getUri() : getUri() + "/" + methodName;
-		DataServiceDml node = RuntimeData.exec(uri, map);
+		DataServiceDml node = exec(uri, map);
 
 		Map<String, Object> params;
 

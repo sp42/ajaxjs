@@ -7,21 +7,21 @@ import javax.sql.DataSource;
  */
 public class DataServiceConfig {
 	/**
-	 * 是否嵌入模式（是否单数据源）
+	 * 是否多数据源
 	 */
-	private boolean embed;
+	private boolean multiDataSource;
 
 	/**
 	 * 数据源，配置表所在的数据源。当 isEmbed = true 时也是业务数据的数据源
 	 */
 	private DataSource dataSource;
 
-	public boolean isEmbed() {
-		return embed;
+	public boolean isMultiDataSource() {
+		return multiDataSource;
 	}
 
-	public void setEmbed(boolean embed) {
-		this.embed = embed;
+	public void setMultiDataSource(boolean multiDataSource) {
+		this.multiDataSource = multiDataSource;
 	}
 
 	public DataSource getDataSource() {

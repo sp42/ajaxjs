@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.data_service.api.ApiController;
+import com.ajaxjs.data_service.controller.DataServiceApiController;
 import com.ajaxjs.user.sso.controller.OauthController;
 import com.ajaxjs.user.sso.model.ClientDetails;
 
@@ -22,7 +22,7 @@ import com.ajaxjs.user.sso.model.ClientDetails;
 @WebAppConfiguration
 public class TestAdmin {
 	@Autowired
-	ApiController apiController;
+	DataServiceApiController apiController;
 
 	MockMvc mockMvc;
 

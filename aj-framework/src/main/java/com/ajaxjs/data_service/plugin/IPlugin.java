@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.util.CollectionUtils;
 
-import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
+import com.ajaxjs.data_service.DataServiceConstant;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -26,7 +26,7 @@ public interface IPlugin {
 	 * @param ctx
 	 * @return true 表示执行，false 表示不继续执行
 	 */
-	default boolean onRequest(CRUD type, ServiceContext ctx) {
+	default boolean onRequest(DataServiceConstant.CRUD type, ServiceContext ctx) {
 		return true;
 	}
 
@@ -35,7 +35,7 @@ public interface IPlugin {
 	 * 
 	 * @return true 表示执行，false 表示不继续执行
 	 */
-	default boolean before(CRUD type, ServiceContext ctx) {
+	default boolean before(DataServiceConstant.CRUD type, ServiceContext ctx) {
 		return true;
 	}
 
@@ -46,7 +46,7 @@ public interface IPlugin {
 	 * @param ctx
 	 * @param result
 	 */
-	default void after(CRUD type, ServiceContext ctx, Object result) {
+	default void after(DataServiceConstant.CRUD type, ServiceContext ctx, Object result) {
 
 	}
 
@@ -57,7 +57,7 @@ public interface IPlugin {
 	 * @param ctx
 	 * @return true 表示执行，false 表示不继续执行
 	 */
-	public static boolean before(List<IPlugin> plugins, CRUD type, ServiceContext ctx) {
+	public static boolean before(List<IPlugin> plugins, DataServiceConstant.CRUD type, ServiceContext ctx) {
 		if (CollectionUtils.isEmpty(plugins))
 			return true;
 
@@ -69,7 +69,7 @@ public interface IPlugin {
 		return true;
 	}
 
-	public static void after(List<IPlugin> plugins, CRUD type, ServiceContext ctx, Object result) {
+	public static void after(List<IPlugin> plugins, DataServiceConstant.CRUD type, ServiceContext ctx, Object result) {
 		if (CollectionUtils.isEmpty(plugins))
 			return;
 

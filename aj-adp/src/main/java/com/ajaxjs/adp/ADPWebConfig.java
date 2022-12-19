@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-import com.ajaxjs.data_service.mybatis.MSUtils;
+import com.ajaxjs.data_service.DataSerivceUtils;
+import com.ajaxjs.data_service.model.DataServiceConfig;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.spring.response.MyJsonConverter;
 import com.ajaxjs.util.config.EasyConfig;
@@ -63,9 +65,20 @@ public class ADPWebConfig extends BaseWebMvcConfigurer {
 //		return cfg;
 //	}
 
+	@Bean
+	DataService dataService() {
+		DataService ds = new DataService();
+		DataServiceConfig cfg = new DataServiceConfig();
+		cfg.setMultiDataSource(false);
+		cfg.setDataSource(getDs());
+		ds.setCfg(cfg);
+
+		return ds;
+	}
+
 	@Bean(value = "dataSource", destroyMethod = "close")
 	DataSource getDs() {
-		return MSUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
+		return DataSerivceUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
 	}
 
 	@Override

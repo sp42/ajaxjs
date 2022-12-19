@@ -21,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.ajaxjs.data_service.api.ApiController;
+import com.ajaxjs.data_service.controller.DataServiceApiController;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.common.controller.LoginController;
 import com.ajaxjs.user.common.service.LoginService;
@@ -36,7 +36,7 @@ public class TestLogin {
 	LoginController loginController;
 
 	@Autowired
-	ApiController apiController;
+	DataServiceApiController apiController;
 
 	@Autowired
 	DataSource ds;

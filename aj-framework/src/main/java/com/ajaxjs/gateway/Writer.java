@@ -1,10 +1,11 @@
 package com.ajaxjs.gateway;
 
+import com.ajaxjs.data_service.DataServiceConstant;
+import com.ajaxjs.data_service.DataServiceConstant.CRUD;
 import com.ajaxjs.data_service.model.ServiceContext;
 
 import java.util.Map;
 
-import com.ajaxjs.data_service.model.DataServiceConstant.CRUD;
 import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.spring.DiContextUtil;
 
@@ -16,9 +17,9 @@ import com.ajaxjs.spring.DiContextUtil;
  */
 public class Writer implements IPlugin {
 	@Override
-	public boolean before(CRUD type, ServiceContext ctx) {
+	public boolean before(DataServiceConstant.CRUD type, ServiceContext ctx) {
 
-		if (type == CRUD.CREATE ) {// 非 null 表明 passportFilter 已激活
+		if (type == DataServiceConstant.CRUD.CREATE ) {// 非 null 表明 passportFilter 已激活
 			PassportFilter passportFilter = DiContextUtil.getBean(PassportFilter.class);
 			if(passportFilter != null){
 				

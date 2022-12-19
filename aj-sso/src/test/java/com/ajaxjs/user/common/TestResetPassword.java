@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.ajaxjs.base.ISendSMS;
-import com.ajaxjs.data_service.api.ApiController;
+import com.ajaxjs.data_service.controller.DataServiceApiController;
 import com.ajaxjs.user.common.controller.ResetPasswordController;
 import com.ajaxjs.user.common.service.ResetPasswordService;
 import com.ajaxjs.user.common.service.SendEmail;
@@ -29,7 +29,7 @@ import com.ajaxjs.user.common.service.SendEmail;
 @WebAppConfiguration
 public class TestResetPassword {
 	@Autowired
-	ApiController apiController;
+	DataServiceApiController apiController;
 
 	@Autowired
 	ResetPasswordController resetPasswordController;

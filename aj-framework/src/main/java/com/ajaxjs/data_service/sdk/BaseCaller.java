@@ -9,9 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ajaxjs.data_service.api.ApiController;
 import com.ajaxjs.data_service.mybatis.MybatisInterceptor;
-import com.ajaxjs.data_service.service.ApiCommander;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -20,7 +19,7 @@ import com.ajaxjs.util.logger.LogHelper;
  *
  * @author Frank Cheung
  */
-public abstract class BaseCaller extends ApiCommander implements InvocationHandler {
+public abstract class BaseCaller extends DataService implements InvocationHandler {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseCaller.class);
 
 	/**
@@ -86,10 +85,15 @@ public abstract class BaseCaller extends ApiCommander implements InvocationHandl
 		return bind(daoClz, null);
 	}
 
+	private DataService dataService;
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-		initDataService();
+		if (dataService == null) {
+			dataService = DiContextUtil.getBean(DataService.class);
+		}
+
 		String methodName = method.getName();
 
 		if (methodName.equals("setQuery")) {
@@ -110,7 +114,7 @@ public abstract class BaseCaller extends ApiCommander implements InvocationHandl
 			} else if (args.length == 2) { // 两个参数
 				String value;
 				Object arg = args[1];
-				
+
 				if (arg instanceof String)
 					value = "'" + arg + "'";
 				else
@@ -178,14 +182,6 @@ public abstract class BaseCaller extends ApiCommander implements InvocationHandl
 			list.add(key + " = " + MybatisInterceptor.getParameterValue(map.get(key)));
 
 		return String.join(" AND ", list);
-	}
-
-	/**
-	 * 初始化数据服务
-	 */
-	private void initDataService() {
-		ApiController api = DiContextUtil.getBean(ApiController.class);
-		api.initCache();
 	}
 
 	/**
@@ -276,4 +272,12 @@ public abstract class BaseCaller extends ApiCommander implements InvocationHandl
 	 * @return SQL 执行结果
 	 */
 	abstract boolean delete(String methodName, Object[] args);
+
+	public DataService getDataService() {
+		return dataService;
+	}
+
+	public void setDataService(DataService dataService) {
+		this.dataService = dataService;
+	}
 }

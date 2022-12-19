@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataServiceConfig;
-import com.ajaxjs.data_service.mybatis.MSUtils;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.util.cache.CacheManager;
 import com.ajaxjs.util.cache.MemoryCacheManager;
@@ -41,17 +42,20 @@ public class WfWebConfig extends BaseWebMvcConfigurer {
 	 * @return
 	 */
 	@Bean
-	DataServiceConfig DataServiceConfig() {
+	DataService DataService() {
 		DataServiceConfig cfg = new DataServiceConfig();
 		cfg.setEmbed(false);
 		cfg.setDataSource(getDs());
 
-		return cfg;
+		DataService ds = new DataService();
+		ds.setCfg(cfg);
+
+		return ds;
 	}
 
 	@Bean(value = "dataSource", destroyMethod = "close")
 	DataSource getDs() {
-		return MSUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
+		return DataSerivceUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
 	}
 
 	@Bean
