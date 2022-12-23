@@ -55,6 +55,10 @@ public class DiContextUtil implements ApplicationContextAware {
 	 * @return 组件对象
 	 */
 	public static <T> T getBean(Class<T> clz) {
+		if (context == null) {
+			System.out.println("Spring Bean 未准备好");
+		}
+		
 		try {
 			return context.getBean(clz);
 		} catch (NoSuchBeanDefinitionException e) {

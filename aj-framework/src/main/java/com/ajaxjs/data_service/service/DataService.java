@@ -46,7 +46,7 @@ public class DataService {
 	/**
 	 * 是否已初始化的标识
 	 */
-	private static AtomicBoolean INITIALIZED = new AtomicBoolean(false);
+	public static AtomicBoolean INITIALIZED = new AtomicBoolean(false);
 
 	/**
 	 * 数据服务的配置，由 Spring 注入
@@ -102,7 +102,7 @@ public class DataService {
 	/**
 	 * 初始化（带缓存控制）
 	 */
-	public void init() {
+	public synchronized void init() {
 		LOGGER.info("初始化数据服务");
 
 		if (INITIALIZED.compareAndSet(false, true)) // 如果为 false，更新为 true
@@ -133,7 +133,6 @@ public class DataService {
 //				throw new RuntimeException("未初始化数据服务");
 				// do again!
 				DataServiceDml node = states.get(uri);
-
 				if (node.isEnable())
 					return node;
 				else
@@ -407,7 +406,7 @@ public class DataService {
 	 * @return
 	 */
 	public Serializable create(ServiceContext ctx) {
-		LOGGER.info("数据服务 创建实体");
+//		LOGGER.info("数据服务 创建实体");
 
 		DataServiceDml node = ctx.getNode();
 		DataServiceEntity tableInfo = node.getTableInfo();
@@ -492,7 +491,7 @@ public class DataService {
 
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
-		LOGGER.info("创建实体:" + params);
+//		LOGGER.info("创建实体:" + params);
 
 		try (SqlSession session = MSUtils.getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).insert(sql, params);
@@ -587,7 +586,7 @@ public class DataService {
 		ctx.setSql(sql);
 		ctx.setSqlParam(params);
 
-		LOGGER.info("修改实体:" + params);
+//		LOGGER.info("修改实体:" + params);
 
 		try (SqlSession session = MSUtils.getMyBatisSession(node.getDataSource())) {
 			int effectedRow = new SqlMapper(session).update(sql, params);

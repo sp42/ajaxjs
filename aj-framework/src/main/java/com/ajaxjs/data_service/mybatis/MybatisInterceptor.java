@@ -25,7 +25,8 @@ import org.apache.ibatis.type.TypeHandlerRegistry;
  * @author https://blog.csdn.net/y368769/article/details/110479957
  *
  */
-@Intercepts({ @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
+@Intercepts({
+		@Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
 		@Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class }) })
 public class MybatisInterceptor implements Interceptor {
 	private static final LogHelper LOGGER = LogHelper.getLog(MybatisInterceptor.class);
@@ -56,7 +57,12 @@ public class MybatisInterceptor implements Interceptor {
 				TEMP_SQL = sql;
 			}
 
-			LOGGER.infoYellow("执行 SQL：" + sql);
+			if (sql.startsWith("UPDATE uav SET") || sql.startsWith("SELECT * FROM dtc_detect_task WHERE `detect_task_id`")
+					|| sql.startsWith("SELECT u.*, u.id AS uav_id FROM uav u WHERE u.id")||
+					sql.startsWith("INSERT INTO uav_state_history")) {
+
+			} else
+				LOGGER.infoYellow("执行 SQL：" + sql);
 		} catch (Exception e) {
 			LOGGER.warning(e);
 		}

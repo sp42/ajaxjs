@@ -108,7 +108,7 @@ public class WebSocketClient {
 	 */
 	@OnMessage
 	public void onMessage(Session session, String msg) {
-		LOGGER.info(msg);
+//		LOGGER.info(msg);
 
 		if (onMessage != null)
 			onMessage.accept(session, msg);

@@ -49,6 +49,8 @@ public class DataServiceStarter {
 		DataSource ds = cfg.getDataSource(); // 总配置的数据源
 
 		List<DataServiceEntity> list = null;
+		com.mysql.cj.jdbc.Driver d =null;
+		
 
 		try (Connection conn = JdbcConnection.getConnection(ds)) {
 			if (cfg.isMultiDataSource())
