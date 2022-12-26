@@ -167,7 +167,7 @@ public class DocParser implements Model {
 		item.args = Util.makeListByArray(method.getParameters(), param -> {
 			Class<?> clz = param.getType();
 
-			Arg arg = new Arg();
+			ArgInfo arg = new ArgInfo();
 			arg.name = param.getName();
 			arg.type = clz.getSimpleName();
 
@@ -232,7 +232,7 @@ public class DocParser implements Model {
 		}
 
 		return rootUrl;
-	}
+	}  
 
 	/**
 	 * 生成返回值信息

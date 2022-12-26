@@ -26,6 +26,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 
@@ -306,8 +307,23 @@ public class StrUtil {
 	public static boolean isWordOneOfThem(String word, List<String> strs) {
 		return isWordOneOfThem(word, strs.toArray(new String[strs.size()]));
 	}
-	
+
 	public static String md5(String str) {
 		return DigestUtils.md5DigestAsHex(str.getBytes());
+	}
+
+	/**
+	 * Spring 提供的算法性能远远高于 JDK 的
+	 * 
+	 * @return
+	 */
+	public static String uuid(boolean isRemove) {
+		String uuid = new AlternativeJdkIdGenerator().generateId().toString();
+
+		return isRemove ? uuid.replace("-", "") : uuid;
+	}
+
+	public static String uuid() {
+		return uuid(true);
 	}
 }

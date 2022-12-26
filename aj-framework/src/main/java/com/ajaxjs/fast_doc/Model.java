@@ -44,7 +44,7 @@ public interface Model {
 
 		public String methodName;
 
-		public List<Arg> args;
+		public List<ArgInfo> args;
 
 		public Return returnValue;
 
@@ -60,7 +60,7 @@ public interface Model {
 		}
 	}
 
-	public static class Arg extends CommonValue {
+	public static class ArgInfo extends CommonValue {
 		public String position;
 
 		public boolean isRequired;

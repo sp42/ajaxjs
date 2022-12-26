@@ -58,8 +58,7 @@ public class MybatisInterceptor implements Interceptor {
 			}
 
 			if (sql.startsWith("UPDATE uav SET") || sql.startsWith("SELECT * FROM dtc_detect_task WHERE `detect_task_id`")
-					|| sql.startsWith("SELECT u.*, u.id AS uav_id FROM uav u WHERE u.id")||
-					sql.startsWith("INSERT INTO uav_state_history")) {
+					|| sql.startsWith("SELECT u.*, u.id AS uav_id FROM uav u WHERE u.id")) {
 
 			} else
 				LOGGER.infoYellow("执行 SQL：" + sql);

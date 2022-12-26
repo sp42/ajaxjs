@@ -230,12 +230,19 @@ public class Doclet implements Model {
 		init(params.sources, params.sourcePath, params.classPath);
 	}
 
+	/**
+	 * 
+	 * @param sources    Java 源码列表
+	 * @param sourcePath 你所有项目的源码目录，用分号隔开，例如
+	 *                   <code>C:\\code\\oba\\src\\main\\java\\;C:\\code\\aj\\aj-framework\\src\\main\\java;C:\\code\\aj\\aj-util\\src\\main\\java
+	 * @param classPath  依赖库的 class 或者 jar 包目录，例如
+	 *                   <code>C:\\sp42\\profile\\eclipse\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\aj-sso\\WEB-INF\\lib
+	 */
 	private static void init(List<String> sources, String sourcePath, String classPath) {
 		List<String> params = new ArrayList<>();
 		params.add("-doclet");
 		params.add(Doclet.class.getName());
 		params.add("-docletpath");
-
 		params.add(Doclet.class.getResource("/").getPath());
 		params.add("-encoding");
 		params.add("utf-8");

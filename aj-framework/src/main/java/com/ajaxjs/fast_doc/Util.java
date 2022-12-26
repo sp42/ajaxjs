@@ -27,7 +27,7 @@ public class Util {
 		return values;
 	}
 
-	static boolean isSimpleValueType(Class<?> type) {
+	public static boolean isSimpleValueType(Class<?> type) {
 		return type.isPrimitive() || type == Boolean.class || type == Integer.class || type == Long.class || type == String.class
 				|| type == Double.class || type == Float.class;
 	}

@@ -613,6 +613,17 @@ public class ReflectUtil {
 		return getActualType(genericReturnType);
 	}
 
+	public static Class<?> getGenericFirstReturnType(Method method) {
+		Type[] type = getGenericReturnType(method);
+
+		if (type == null || type.length == 0) {
+			LOGGER.warning("这很可能不是一个泛型");
+			return null;
+		}
+
+		return type2class(type[0]);
+	}
+
 	/**
 	 * 
 	 * @param type
