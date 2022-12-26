@@ -40,7 +40,7 @@ public interface Model {
 
 		public String name;
 
-		public String description = "fooooooooooooo";
+		public String description;
 
 		public String methodName;
 
