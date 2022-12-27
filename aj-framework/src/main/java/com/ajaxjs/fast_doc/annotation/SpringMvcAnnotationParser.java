@@ -1,6 +1,7 @@
 package com.ajaxjs.fast_doc.annotation;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +25,6 @@ import com.ajaxjs.fast_doc.Model.ControllerInfo;
 import com.ajaxjs.fast_doc.Model.Item;
 import com.ajaxjs.fast_doc.Model.Return;
 import com.ajaxjs.fast_doc.Util;
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
-import com.ajaxjs.spring.easy_controller.Example;
-import com.ajaxjs.spring.easy_controller.PathForDoc;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -37,14 +35,14 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Frank Cheung<sp42@qq.com>
  *
  */
-public class AnnotationParser {
-	private static final LogHelper LOGGER = LogHelper.getLog(AnnotationParser.class);
+public class SpringMvcAnnotationParser {
+	private static final LogHelper LOGGER = LogHelper.getLog(SpringMvcAnnotationParser.class);
 
 	/**
 	 * 
 	 * @param clz
 	 */
-	public AnnotationParser(Class<?> clz) {
+	public SpringMvcAnnotationParser(Class<?> clz) {
 		this.clz = clz;
 	}
 
@@ -52,6 +50,14 @@ public class AnnotationParser {
 	 * 
 	 */
 	private Class<?> clz;
+
+	public Class<?> getClz() {
+		return clz;
+	}
+
+	public void setClz(Class<?> clz) {
+		this.clz = clz;
+	}
 
 	/**
 	 * 根 url，可以为空
@@ -99,13 +105,19 @@ public class AnnotationParser {
 
 		if (rm != null && !ObjectUtils.isEmpty(rm.value()))
 			rootUrl = rm.value()[0];
-		else {
-			PathForDoc pd = clz.getAnnotation(PathForDoc.class);
-			if (pd != null)
-				rootUrl = pd.value();
-		}
+		else
+			rootUrl = getRootUrlIfRequestMappingNull();
 
 		return rootUrl;
+	}
+
+	/**
+	 * 某些情况下控制器不能直接加 SpringMVC 的 @RequestMapping，于是可以用别的自定义注解代替，值一样的
+	 * 
+	 * @return
+	 */
+	String getRootUrlIfRequestMappingNull() {
+		return null;
 	}
 
 	/**
@@ -118,13 +130,7 @@ public class AnnotationParser {
 		item.methodName = method.getName();
 		item.id = StrUtil.uuid(); // 雪花算法会重复，改用 uuid
 
-		ControllerMethod cm = method.getAnnotation(ControllerMethod.class);
-
-		if (cm != null) { // 方法的一些信息，读取注解
-			item.name = cm.value();
-			item.description = cm.descrition();
-			item.image = cm.image();
-		}
+		getMethodInfo(item, method);
 
 		// HTTP 方法
 		GetMapping get = method.getAnnotation(GetMapping.class);
@@ -152,6 +158,9 @@ public class AnnotationParser {
 		}
 	}
 
+	void getMethodInfo(Item item, Method method) {
+	}
+
 	/**
 	 * 获取 URL。若注解上有则获取之，没有则表示是类定义的 rootUrl
 	 * 
@@ -177,9 +186,7 @@ public class AnnotationParser {
 		r.name = returnType.getSimpleName();
 		r.type = returnType.getName();
 
-		Example eg = method.getAnnotation(Example.class);
-		if (eg != null)
-			r.example = eg.value();
+		getReturnType(item, method, r);
 
 		if (Util.isSimpleValueType(returnType))
 			r.isObject = false;
@@ -207,6 +214,9 @@ public class AnnotationParser {
 		}
 
 		item.returnValue = r;
+	}
+
+	void getReturnType(Item item, Method method, Return r) {
 	}
 
 	/**
@@ -276,9 +286,7 @@ public class AnnotationParser {
 				arg.isRequired = rb.required();
 			}
 
-			Example eg = param.getAnnotation(Example.class);
-			if (eg != null)
-				arg.example = eg.value();
+			getArgs(item, method, param, arg);
 
 			LOGGER.info(">>>>>>>>>" + clz + !Util.isSimpleValueType(clz));
 
@@ -287,6 +295,9 @@ public class AnnotationParser {
 
 			return arg;
 		});
+	}
+
+	void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
 	}
 
 }
