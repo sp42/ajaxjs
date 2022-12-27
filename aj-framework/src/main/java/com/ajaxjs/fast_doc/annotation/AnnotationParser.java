@@ -5,7 +5,6 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.springframework.util.ObjectUtils;
@@ -20,18 +19,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ValueConstants;
 
-import com.ajaxjs.fast_doc.BeanParser;
 import com.ajaxjs.fast_doc.Model.ArgInfo;
 import com.ajaxjs.fast_doc.Model.ControllerInfo;
 import com.ajaxjs.fast_doc.Model.Item;
 import com.ajaxjs.fast_doc.Model.Return;
 import com.ajaxjs.fast_doc.Util;
-import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.spring.easy_controller.Example;
 import com.ajaxjs.spring.easy_controller.PathForDoc;
+import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 基于注解的提取，以 Spring MVC 的为主
@@ -212,6 +210,26 @@ public class AnnotationParser {
 	}
 
 	/**
+	 * 提取 JavaBean 的文档，由你自己的覆盖实现提供
+	 * 
+	 * @param clz JavaBean 类引用
+	 * @param r
+	 */
+	void getBeanInfo(Class<?> clz, Return r) {
+
+	}
+
+	/**
+	 * 提取 JavaBean 的文档，由你自己的覆盖实现提供
+	 * 
+	 * @param clz JavaBean 类引用
+	 * @param arg
+	 */
+	void getBeanInfo(Class<?> clz, ArgInfo arg) {
+//		arg.bean = getBeanInfo(clz);
+	}
+
+	/**
 	 * 参数 入参
 	 * 
 	 * @param item
@@ -265,7 +283,7 @@ public class AnnotationParser {
 			LOGGER.info(">>>>>>>>>" + clz + !Util.isSimpleValueType(clz));
 
 			if (!Util.isSimpleValueType(clz))
-				arg.bean = BeanParser.getBeanInfo(clz, params);
+				getBeanInfo(clz, arg);
 
 			return arg;
 		});
