@@ -219,9 +219,7 @@ public class SpringMvcAnnotationParser {
 
 		item.returnValue = r;
 	}
-
-	void getReturnType(Item item, Method method, Return r) {
-	}
+	
 
 	/**
 	 * 提取 JavaBean 的文档，由你自己的覆盖实现提供
@@ -242,6 +240,17 @@ public class SpringMvcAnnotationParser {
 	void getBeanInfo(Class<?> clz, ArgInfo arg) {
 //		arg.bean = getBeanInfo(clz);
 	}
+
+	/**
+	 * 由你自己的覆盖实现提供
+	 * 
+	 * @param item
+	 * @param method
+	 * @param r
+	 */
+	void getReturnType(Item item, Method method, Return r) {
+	}
+
 
 	/**
 	 * 参数 入参
@@ -301,6 +310,14 @@ public class SpringMvcAnnotationParser {
 		});
 	}
 
+	/**
+	 * 由你自己的覆盖实现提供
+	 * 
+	 * @param item
+	 * @param method
+	 * @param param
+	 * @param arg
+	 */
 	void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
 	}
 
