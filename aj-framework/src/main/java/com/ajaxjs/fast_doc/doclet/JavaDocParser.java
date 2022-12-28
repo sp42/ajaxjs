@@ -167,6 +167,8 @@ public class JavaDocParser extends Doclet implements DocModel {
 		ParameterInfo[] parameterInfos = new ParameterInfo[parameters.length];
 		ParamTag[] paramTags = method.paramTags();
 
+//		method.paramTags();
+
 		int i = 0;
 		for (Parameter p : parameters) {
 			ParameterInfo info = new ParameterInfo();
@@ -185,7 +187,7 @@ public class JavaDocParser extends Doclet implements DocModel {
 			return null;
 
 		try {
-			if (paramTags[i] == null || StringUtils.hasText(paramTags[i].parameterComment()))
+			if (paramTags[i] == null || !StringUtils.hasText(paramTags[i].parameterComment()))
 				return null;
 			return paramTags[i].parameterComment();
 		} catch (ArrayIndexOutOfBoundsException e) {

@@ -64,7 +64,11 @@ public class SpringMvcAnnotationParser {
 	 */
 	private String rootUrl;
 
-	public ControllerInfo parser() {
+	/**
+	 * 
+	 * @return
+	 */
+	public ControllerInfo parse() {
 		rootUrl = getRootUrl();
 
 		ControllerInfo ci = new ControllerInfo();
@@ -255,6 +259,8 @@ public class SpringMvcAnnotationParser {
 
 			RequestParam queryP = param.getAnnotation(RequestParam.class);
 
+			getArgs(item, method, param, arg);
+
 			if (queryP != null) {
 				arg.position = "query";
 				arg.isRequired = queryP.required();
@@ -285,8 +291,6 @@ public class SpringMvcAnnotationParser {
 				arg.position = "body";
 				arg.isRequired = rb.required();
 			}
-
-			getArgs(item, method, param, arg);
 
 			LOGGER.info(">>>>>>>>>" + clz + !Util.isSimpleValueType(clz));
 
