@@ -56,6 +56,14 @@ public class FastDoc {
 
 			if (!AnnotationResult.containsKey(fullName)) {
 				CustomAnnotationParser info = new CustomAnnotationParser(clz);
+				info.setTakeBeanInfo((clz2, argInfo) -> {
+					argInfo.bean = null;
+				});
+
+				info.setTakeReturnBeanInfo((clz2, returnInfo) -> {
+//					returnInfo.bean = null;
+				});
+
 				ControllerInfo controllerInfo = info.parse();
 				AnnotationResult.put(fullName, controllerInfo);
 

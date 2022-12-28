@@ -6,6 +6,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.springframework.util.ObjectUtils;
@@ -205,7 +206,9 @@ public class SpringMvcAnnotationParser {
 				r.isObject = false;
 			else {
 				r.isObject = true;
-				getBeanInfo(real, r);
+
+				if (takeReturnBeanInfo != null)
+					takeReturnBeanInfo.accept(real, r);
 			}
 		} else if (returnType.isArray()) {
 			r.isMany = true;
@@ -214,32 +217,22 @@ public class SpringMvcAnnotationParser {
 			r.isMany = false;
 			r.isObject = true;
 
-			getBeanInfo(returnType, r);
+			if (takeReturnBeanInfo != null)
+				takeReturnBeanInfo.accept(returnType, r);
 		}
 
 		item.returnValue = r;
 	}
-	
 
 	/**
-	 * 提取 JavaBean 的文档，由你自己的覆盖实现提供
-	 * 
-	 * @param clz JavaBean 类引用
-	 * @param r
+	 * 提取 JavaBean 的文档
 	 */
-	void getBeanInfo(Class<?> clz, Return r) {
-
-	}
+	private BiConsumer<Class<?>, ArgInfo> takeBeanInfo;
 
 	/**
-	 * 提取 JavaBean 的文档，由你自己的覆盖实现提供
-	 * 
-	 * @param clz JavaBean 类引用
-	 * @param arg
+	 * 提取 JavaBean 的文档
 	 */
-	void getBeanInfo(Class<?> clz, ArgInfo arg) {
-//		arg.bean = getBeanInfo(clz);
-	}
+	private BiConsumer<Class<?>, Return> takeReturnBeanInfo;
 
 	/**
 	 * 由你自己的覆盖实现提供
@@ -250,7 +243,6 @@ public class SpringMvcAnnotationParser {
 	 */
 	void getReturnType(Item item, Method method, Return r) {
 	}
-
 
 	/**
 	 * 参数 入参
@@ -303,8 +295,8 @@ public class SpringMvcAnnotationParser {
 
 			LOGGER.info(">>>>>>>>>" + clz + !Util.isSimpleValueType(clz));
 
-			if (!Util.isSimpleValueType(clz))
-				getBeanInfo(clz, arg);
+			if (!Util.isSimpleValueType(clz) && takeBeanInfo != null)
+				takeBeanInfo.accept(clz, arg);
 
 			return arg;
 		});
@@ -319,6 +311,22 @@ public class SpringMvcAnnotationParser {
 	 * @param arg
 	 */
 	void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
+	}
+
+	public BiConsumer<Class<?>, ArgInfo> getTakeBeanInfo() {
+		return takeBeanInfo;
+	}
+
+	public void setTakeBeanInfo(BiConsumer<Class<?>, ArgInfo> takeBeanInfo) {
+		this.takeBeanInfo = takeBeanInfo;
+	}
+
+	public BiConsumer<Class<?>, Return> getTakeReturnBeanInfo() {
+		return takeReturnBeanInfo;
+	}
+
+	public void setTakeReturnBeanInfo(BiConsumer<Class<?>, Return> takeReturnBeanInfo) {
+		this.takeReturnBeanInfo = takeReturnBeanInfo;
 	}
 
 }

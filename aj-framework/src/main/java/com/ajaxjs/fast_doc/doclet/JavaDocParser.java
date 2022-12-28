@@ -167,8 +167,6 @@ public class JavaDocParser extends Doclet implements DocModel {
 		ParameterInfo[] parameterInfos = new ParameterInfo[parameters.length];
 		ParamTag[] paramTags = method.paramTags();
 
-//		method.paramTags();
-
 		int i = 0;
 		for (Parameter p : parameters) {
 			ParameterInfo info = new ParameterInfo();
