@@ -31,7 +31,7 @@ public interface FooController {
 	 * @return
 	 */
 	@PostMapping("/detect_point/{taskId}")
-	Boolean saveAllDetectPoint(@PathVariable @Example("task-20220232") String taskId, @RequestBody List<Map<String, Object>> detectPoints);
+	Boolean saveAllDetectPoint(@PathVariable @Example("{\"a\":20220232}") String taskId, @RequestBody List<Map<String, Object>> detectPoints);
 
 	/**
 	 * 
@@ -53,4 +53,14 @@ public interface FooController {
 	@Example("[\"task-20220232\", \"task-20220233\"]")
 	List<String> routePlan(@PathVariable String taskId);
 
+	/**
+	 * 资源规划
+	 * 
+	 * @param taskId 任务 id
+	 * @return
+	 */
+	@GetMapping("/route_plan/{taskId}/foo")
+	@ControllerMethod("资源规划")
+	@Example("[\"task-20220232\", \"task-20220233\"]")
+	List<FooBean> resPlan(@PathVariable String taskId);
 }

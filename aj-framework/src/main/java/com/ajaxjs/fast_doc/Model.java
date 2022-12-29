@@ -2,6 +2,8 @@ package com.ajaxjs.fast_doc;
 
 import java.util.List;
 
+import com.ajaxjs.fast_doc.doclet.DocModel.FieldInfo;
+
 public interface Model {
 
 	/**
@@ -71,8 +73,15 @@ public interface Model {
 
 		/**
 		 * 如果参数是一个 bean，这里说明 bean 的各个字段
+		 * 
+		 * @deprecated
 		 */
 		public BeanInfo bean;
+
+		/**
+		 * 如果参数是一个 bean，这里说明 bean 的各个字段
+		 */
+		public FieldInfo[] fields;
 	}
 
 	public static class Return extends CommonValue {
@@ -94,5 +103,10 @@ public interface Model {
 		 * 例子
 		 */
 		public String example;
+
+		/**
+		 * 如果返回值是一个 bean，这里说明 bean 的各个字段
+		 */
+		public FieldInfo[] fields;
 	}
 }

@@ -16,8 +16,11 @@ import com.ajaxjs.fast_doc.doclet.DocModel.MethodInfo;
 import com.ajaxjs.fast_doc.doclet.DocModel.ParameterInfo;
 import com.ajaxjs.fast_doc.doclet.JavaDocParser;
 import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.map.JsonHelper;
 
 /**
+ * FastDoc 主程序，单例
  * 
  * @author Frank Cheung<sp42@qq.com>
  *
@@ -29,7 +32,7 @@ public class FastDoc {
 	 * 用 JavaDocParser 得到 Bean 的注释文档
 	 * 
 	 * @param dir    源码磁盘目录
-	 * @param clazzs Bean 类
+	 * @param clazzs Bean 类，其实任意 Java 类都可以，包括控制器
 	 */
 	static void loadBeans(String dir, Class<?>... clazzs) {
 		Params params = new Params();
@@ -46,7 +49,7 @@ public class FastDoc {
 	/**
 	 * 
 	 * @param dir    源码磁盘目录
-	 * @param clazzs
+	 * @param clazzs 控制器类列表
 	 */
 	static void loadControllersDoc(String dir, Class<?>... clazzs) {
 		loadBeans(dir, clazzs);
@@ -57,11 +60,28 @@ public class FastDoc {
 			if (!AnnotationResult.containsKey(fullName)) {
 				CustomAnnotationParser info = new CustomAnnotationParser(clz);
 				info.setTakeBeanInfo((clz2, argInfo) -> {
-					argInfo.bean = null;
+					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(clz2.getName());
+
+					if (classDocInfo != null) {
+						argInfo.fields = classDocInfo.fields;
+
+						if (StringUtils.hasText(argInfo.description))
+							argInfo.description += classDocInfo.commentText;
+						else
+							argInfo.description = classDocInfo.commentText;
+					}
 				});
 
 				info.setTakeReturnBeanInfo((clz2, returnInfo) -> {
-//					returnInfo.bean = null;
+					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(clz2.getName());
+
+					if (classDocInfo != null)
+						returnInfo.fields = classDocInfo.fields;
+
+					if (StringUtils.hasText(returnInfo.description))
+						returnInfo.description += " " + classDocInfo.commentText;
+					else
+						returnInfo.description = classDocInfo.commentText;
 				});
 
 				ControllerInfo controllerInfo = info.parse();
@@ -74,39 +94,60 @@ public class FastDoc {
 		}
 	}
 
-	static void mix(String fullName, ControllerInfo controllerInfo) {
+	/**
+	 * 基础信息来自于注解，然后加上来自于 JavaDoc 的信息，合二为一，得到最终结果
+	 * 
+	 * @param fullName       类全称
+	 * @param controllerInfo 最终信息合并到这个对象
+	 */
+	private static void mix(String fullName, ControllerInfo controllerInfo) {
 		ClassDocInfo javaDocInfo = JavaDocParser.CACHE.get(fullName);
-		if (javaDocInfo != null) {
-			if (StringUtils.hasText(controllerInfo.description))
-				controllerInfo.description += javaDocInfo.commentText;
-			else
-				controllerInfo.description = javaDocInfo.commentText;
+		if (javaDocInfo == null)
+			return;
 
-			List<Item> methodItems = controllerInfo.items;
+		if (StringUtils.hasText(controllerInfo.description))
+			controllerInfo.description += javaDocInfo.commentText;
+		else
+			controllerInfo.description = javaDocInfo.commentText;
 
-			for (Item item : methodItems) {
-				String methodName = item.methodName;
+		List<Item> methodItems = controllerInfo.items;
 
-				for (MethodInfo mJavaDoc : javaDocInfo.methods) {
-					if (mJavaDoc.name.equals(methodName)) { // 方法名称匹配
-						if (StringUtils.hasText(item.name))
-							item.description = mJavaDoc.commentText;
-						else
-							item.name = mJavaDoc.commentText;
+		for (Item item : methodItems) {
+			String methodName = item.methodName;
 
-						for (ArgInfo argInfo : item.args) {// 参数列表的 mix
-							for (ParameterInfo pInfo : mJavaDoc.parameters) {
-								if (argInfo.name.equals(pInfo.name)) {
+			for (MethodInfo mJavaDoc : javaDocInfo.methods) {
+				if (mJavaDoc.name.equals(methodName)) { // 方法名称匹配
+					if (StringUtils.hasText(item.name))
+						item.description = mJavaDoc.commentText;
+					else
+						item.name = mJavaDoc.commentText;
+
+					for (ArgInfo argInfo : item.args) {// 参数列表的 mix
+						for (ParameterInfo pInfo : mJavaDoc.parameters) {
+							if (argInfo.name.equals(pInfo.name)) {
+
+								if (StringUtils.hasText(argInfo.description))
+									argInfo.description += " " + pInfo.commentText;
+								else
 									argInfo.description = pInfo.commentText;
-									break;
-								}
+								break;
 							}
 						}
-
-						break;
 					}
+
+					break;
 				}
 			}
 		}
+	}
+
+	public static String getJsonStr() {
+		return JsonHelper.toJson(AnnotationResult);
+	}
+
+	public static void saveToDisk(String path) {
+		String json = getJsonStr();
+
+		FileHelper.saveText(path, "var DOC_JSON = " + json + ";");
 	}
 }

@@ -56,5 +56,10 @@ public class TestFastDoc {
 	public void testFastDoc() {
 		FastDoc.loadBeans("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class);
 		FastDoc.loadControllersDoc("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
+
+//		System.out.println(FastDoc.getJsonStr());
+
+		FastDoc.saveToDisk("D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\fast-doc\\json.js");
 	}
+
 }
