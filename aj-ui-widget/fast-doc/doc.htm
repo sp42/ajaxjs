@@ -79,17 +79,18 @@
                         <td>{{arg.position}}</td>
                         <td>{{arg.type}}</td>
                         <td>
-
-
-                            <span v-if="arg.bean && arg.bean.values.length">
-                                {{arg.bean.description}}，各字段如下：
-                                <ul v-if="arg.bean.values" style="text-align: left;">
-                                    <li v-for="i in arg.bean.values">{{i.name}}:
-                                        {{i.type}}，{{i.description}}，必填：{{i.isRequired}}</li>
-                                </ul>
+                            {{arg.description}}
+                            <span v-if="arg.fields && arg.fields.length">
+                                ，各字段如下：
+                                <table style="text-align: left;" class="inner-table">
+                                    <tr v-for="i in arg.fields">
+                                        <td>{{i.name}}: <span style="font-family:'Courier New'">{{i.type}}</span></td>
+                                        <td>{{i.commentText}}</td>
+                                        <td>必填：<span style="font-family:'Courier New'">{{i.isRequired? 'true' :
+                                                'false'}}</span></td>
+                                    </tr>
+                                </table>
                             </span>
-
-
 
                         </td>
                         <td>{{arg.isRequired ? '必填' : '选填'}}</td>
@@ -114,19 +115,19 @@
                                 <div style="margin-left: 20px;"> "message": "{{item.name}}", </div>
                                 <div style="margin-left: 20px;"> "data": <span
                                         v-if="item.returnValue.isMany">[</span><span v-if="item.returnValue.isObject">{
-                                        <span class="comment">// {{item.returnValue.name}}</span> </span>
+                                        <span class="comment">// {{item.returnValue.name}} {{item.returnValue.description}}</span> </span>
                                     <!--- 简单值 --->
                                     <span class="type" v-if="!item.returnValue.isObject">
                                         {{item.returnValue.type}}</span>
                                 </div>
 
                                 <ul style="margin-left: 10px;" v-if="item.returnValue.isObject">
-                                    <li v-for="reVal in item.returnValue.values">
+                                    <li v-for="reVal in item.returnValue.fields">
                                         <div class="block">
                                             <span class="key">{{reVal.name}}</span>: <span
                                                 class="type">{{reVal.type}}</span>,
                                         </div>
-                                        <span class="comment">// {{reVal.description}}</span>
+                                        <span class="comment">// {{reVal.commentText}}</span>
                                     </li>
                                 </ul>
 
@@ -186,7 +187,7 @@
         </ul>
     </div>
     <script>
-        var arr = location.search.match(/key\=(\w+)/);
+        var arr = location.search.match(/key\=([\w\.]+)/);
         if (!arr || !arr[1])
             alert('未指定 key 参数');
 

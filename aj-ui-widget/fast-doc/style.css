@@ -1,5 +1,6 @@
 body {
 	font-size: .9rem;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 a {
@@ -151,4 +152,12 @@ td.td-json {
 
 td.td-json pre {
 	font-family: 'Courier New', Courier, monospace !important;
+}
+
+.inner-table td {
+	border: 0 !important;
+	background-color: #efeeee;
+	padding: 5px 10px !important;
+	font-size: 13px;
+	color: gray;
 }

@@ -135,6 +135,12 @@
 			content: none;
 		}
 
+		html,
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			/* height: 100%; */
+		}
+
 		body {
 			font-size: .9rem;
 			padding: 10px;
@@ -178,6 +184,7 @@
 
 		li .url {
 			color: gray;
+			font-family: 'Courier New';
 		}
 
 		/*定义整个滚动条高宽及背景：高宽分别对应横竖滚动条的尺寸*/
@@ -193,6 +200,25 @@
 
 		/*定义滑块：内阴影+圆角*/
 		::-webkit-scrollbar-thumb {
+			border-radius: 10px;
+			background-color: lightgray;
+		}
+
+
+
+
+		::-scrollbar {
+			width: 5px;
+			background-color: #F5F5F5;
+		}
+
+		/*定义滚动条轨道：内阴影+圆角*/
+		::-scrollbar-track {
+			background-color: #F5F5F5;
+		}
+
+		/*定义滑块：内阴影+圆角*/
+		::-scrollbar-thumb {
 			border-radius: 10px;
 			background-color: lightgray;
 		}
