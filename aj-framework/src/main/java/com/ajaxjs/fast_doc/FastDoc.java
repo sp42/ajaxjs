@@ -8,12 +8,14 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.fast_doc.Model.ArgInfo;
+import com.ajaxjs.fast_doc.Model.CommonValue;
 import com.ajaxjs.fast_doc.Model.ControllerInfo;
 import com.ajaxjs.fast_doc.Model.Item;
 import com.ajaxjs.fast_doc.annotation.CustomAnnotationParser;
 import com.ajaxjs.fast_doc.doclet.DocModel.ClassDocInfo;
 import com.ajaxjs.fast_doc.doclet.DocModel.MethodInfo;
 import com.ajaxjs.fast_doc.doclet.DocModel.ParameterInfo;
+import com.ajaxjs.fast_doc.doclet.DocModel.WithComment;
 import com.ajaxjs.fast_doc.doclet.JavaDocParser;
 import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.io.FileHelper;
@@ -60,28 +62,23 @@ public class FastDoc {
 			if (!AnnotationResult.containsKey(fullName)) {
 				CustomAnnotationParser info = new CustomAnnotationParser(clz);
 				info.setTakeBeanInfo((clz2, argInfo) -> {
-					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(clz2.getName());
+					String fullArgClzName = getInnerClzFullName(clz2);
+					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullArgClzName);
 
 					if (classDocInfo != null) {
 						argInfo.fields = classDocInfo.fields;
-
-						if (StringUtils.hasText(argInfo.description))
-							argInfo.description += classDocInfo.commentText;
-						else
-							argInfo.description = classDocInfo.commentText;
+						setDescByComment(argInfo, classDocInfo);
 					}
 				});
 
 				info.setTakeReturnBeanInfo((clz2, returnInfo) -> {
-					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(clz2.getName());
+					String fullReturnName = getInnerClzFullName(clz2);
+					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullReturnName);
 
 					if (classDocInfo != null)
 						returnInfo.fields = classDocInfo.fields;
 
-					if (StringUtils.hasText(returnInfo.description))
-						returnInfo.description += " " + classDocInfo.commentText;
-					else
-						returnInfo.description = classDocInfo.commentText;
+					setDescByComment(returnInfo, classDocInfo);
 				});
 
 				ControllerInfo controllerInfo = info.parse();
@@ -92,6 +89,21 @@ public class FastDoc {
 				TestHelper.printJson(controllerInfo);
 			}
 		}
+	}
+
+	/**
+	 * JavaDoc 对于内部类也可以正常解析。但类全称不是 $ 区分的，而是 xxx.yyy，于是这里要统一一下
+	 * 
+	 * @param clz2
+	 * @return
+	 */
+	private static String getInnerClzFullName(Class<?> clz2) {
+		String fullReturnName = clz2.getName();
+
+		if (fullReturnName.contains("$"))
+			fullReturnName = fullReturnName.replaceAll("\\$", ".");
+
+		return fullReturnName;
 	}
 
 	/**
@@ -125,11 +137,7 @@ public class FastDoc {
 					for (ArgInfo argInfo : item.args) {// 参数列表的 mix
 						for (ParameterInfo pInfo : mJavaDoc.parameters) {
 							if (argInfo.name.equals(pInfo.name)) {
-
-								if (StringUtils.hasText(argInfo.description))
-									argInfo.description += " " + pInfo.commentText;
-								else
-									argInfo.description = pInfo.commentText;
+								setDescByComment(argInfo, pInfo);
 								break;
 							}
 						}
@@ -139,6 +147,16 @@ public class FastDoc {
 				}
 			}
 		}
+	}
+
+	private static void setDescByComment(CommonValue info, WithComment info2) {
+		if (info2 == null)
+			return;
+
+		if (StringUtils.hasText(info.description))
+			info.description += " " + info2.commentText;
+		else
+			info.description = info2.commentText;
 	}
 
 	public static String getJsonStr() {

@@ -3,6 +3,7 @@ package com.ajaxjs.fast_doc;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ajaxjs.fast_doc.InnerClass.HelloBean;
+import com.ajaxjs.fast_doc.InnerClass.HelloWorld;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.spring.easy_controller.Example;
 
@@ -63,4 +66,14 @@ public interface FooController {
 	@ControllerMethod("资源规划")
 	@Example("[\"task-20220232\", \"task-20220233\"]")
 	List<FooBean> resPlan(@PathVariable String taskId);
+
+	/**
+	 * 删除
+	 * 
+	 * @param taskId
+	 * @return
+	 */
+	@DeleteMapping("/route_plan/{taskId}/foo")
+	@Example("[\"task-20220232\", \"task-20220233\"]")
+	HelloWorld delete(@RequestBody HelloBean helloBean);
 }

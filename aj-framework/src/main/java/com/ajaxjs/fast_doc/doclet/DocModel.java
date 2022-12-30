@@ -1,10 +1,19 @@
 package com.ajaxjs.fast_doc.doclet;
 
 public interface DocModel {
-	public static class ClassDocInfo {
+	/**
+	 * 带有 commentText 的对象
+	 * 
+	 * @author Frank Cheung<sp42@qq.com>
+	 *
+	 */
+	abstract static class WithComment {
+		public String commentText;
+	}
+
+	public static class ClassDocInfo extends WithComment {
 		public String name;
 		public String fullName;
-		public String commentText;
 		public MethodInfo[] methods;
 		public FieldInfo[] fields;
 	}
@@ -22,12 +31,10 @@ public interface DocModel {
 		public ParameterInfo[] parameters;
 	}
 
-	abstract static class BaseInfo {
+	abstract static class BaseInfo extends WithComment {
 		public String name;
-		public String commentText;
 		public String type;
 		public String typeFullName;
-
 	}
 
 	public static class ParameterInfo extends BaseInfo {
