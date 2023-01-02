@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -12,10 +11,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.MediaType;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.UriUtils;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.util.io.StreamHelper;
@@ -28,9 +25,6 @@ import com.ajaxjs.util.map.MapTool;
  * @author Frank Cheung
  */
 public class WebHelper {
-	public static String uriDecode(String str) {
-		return UriUtils.decode(str, "utf-8");
-	}
 
 	/**
 	 * 获取请求 ip
@@ -253,32 +247,6 @@ public class WebHelper {
 	}
 
 	/**
-	 * 获取所有 QueryString 参数，并转化为真实的值，最后返回一个 Map
-	 *
-	 * @param request 请求对象
-	 * @return 所有 QueryString 参数
-	 */
-	public static Map<String, Object> getQueryParameters(HttpServletRequest request) {
-		String queryString = request.getQueryString();
-
-		if (!StringUtils.hasText(queryString))
-			return null;
-
-		String[] parameters = queryString.split("&");
-		Map<String, Object> map = new HashMap<>();
-
-		for (String parameter : parameters) {
-			String[] keyValuePair = parameter.split("=");
-			String v = keyValuePair[1];
-			v = uriDecode(v);
-
-			map.put(keyValuePair[0], keyValuePair.length == 1 ? "" : MappingValue.toJavaValue(v));
-		}
-
-		return map;
-	}
-
-	/**
 	 * 输出 JSON 字符串
 	 * 
 	 * @param resp
@@ -293,7 +261,7 @@ public class WebHelper {
 			json = JsonHelper.toJson(toJson);
 
 		resp.setCharacterEncoding("UTF-8"); // 避免乱码
-		resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
+		resp.setContentType("application/json"); // 设置 ContentType
 
 		try (PrintWriter writer = resp.getWriter()) {
 			writer.write(json);

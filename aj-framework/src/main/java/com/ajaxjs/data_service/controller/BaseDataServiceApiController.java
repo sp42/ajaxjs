@@ -19,6 +19,7 @@ import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.util.WebHelper2;
 
 /**
  * 数据服务 API 基类 数据服务向外提供的基础 API
@@ -83,7 +84,7 @@ public abstract class BaseDataServiceApiController implements DataServiceDAO, Da
 		DataServiceDml node = DataService.exec(uri, dml);
 
 		if (dml == DataService.GET || dml == DataService.DELETE)
-			return ServiceContext.factory(uri, req, node, WebHelper.getQueryParameters(req));
+			return ServiceContext.factory(uri, req, node, WebHelper2.getQueryParameters(req));
 		if (dml == DataService.POST || dml == DataService.PUT)
 			return ServiceContext.factory(uri, req, node, WebHelper.getParamMap(req, formPostMap));
 
