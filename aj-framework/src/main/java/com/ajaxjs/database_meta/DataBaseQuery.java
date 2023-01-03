@@ -91,15 +91,38 @@ public class DataBaseQuery extends BaseMetaQuery {
 	 * 
 	 * @return
 	 */
-	public Database[] getDataBaseWithTableFull() {
+	public Database[] getDataBaseWithTableFull(String dbName) {
 		Database[] databases = getDataBaseWithTable();
 
-		for (Database database : databases) {
-			List<Table> full = getDataBaseWithTableFull(database.getTables(), database.getName());
-			database.setTableInfo(full);
-		}
+		if (StringUtils.hasText(dbName)) {
+			Database _database = null;
+			for (Database database : databases) {
+				if (database.getName().equals(dbName)) {
+					_database = database;
+					break;
+				}
+			}
 
-		return databases;
+			if (_database == null)
+				return null; // 找不到 dbName 的
+			else {
+				List<Table> full = getDataBaseWithTableFull(_database.getTables(), _database.getName());
+				_database.setTableInfo(full);
+
+				return new Database[] { _database };
+			}
+		} else {
+			for (Database database : databases) {
+				List<Table> full = getDataBaseWithTableFull(database.getTables(), database.getName());
+				database.setTableInfo(full);
+			}
+
+			return databases;
+		}
+	}
+
+	public Database[] getDataBaseWithTableFull() {
+		return getDataBaseWithTableFull(null);
 	}
 
 	/**
@@ -199,15 +222,15 @@ public class DataBaseQuery extends BaseMetaQuery {
 		return comment;
 	}
 
-	public static String getDoc(Connection conn) {
+	public static String getDoc(Connection conn, String dbName) {
 		DataBaseQuery d = new DataBaseQuery(conn);
-		Database[] dataBaseWithTable = d.getDataBaseWithTableFull();
+		Database[] dataBaseWithTable = d.getDataBaseWithTableFull(dbName);
 		String json = JsonHelper.toJson(dataBaseWithTable);
 
 		return json;
 	}
 
-	public static void saveToDiskJson(Connection conn, String path) {
-		FileHelper.saveText(path, "DOC_DATA = " + getDoc(conn));
+	public static void saveToDiskJson(Connection conn, String path, String dbName) {
+		FileHelper.saveText(path, "DOC_DATA = " + getDoc(conn, dbName));
 	}
 }

@@ -3,11 +3,14 @@ package com.ajaxjs.database_meta;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ajaxjs.data_service.model.DataSourceInfo;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.spring.response.ResponseResult;
 import com.ajaxjs.sql.JdbcConnection;
 
@@ -24,7 +27,7 @@ public abstract class BaseMakeDbDocController {
 	public Boolean genJsonFile(@RequestBody DataSourceInfo ds) throws SQLException {
 		try (Connection conn = JdbcConnection.getMySqlConnection(ds.getUrl(), ds.getUsername(), ds.getPassword())) {
 //			DataBaseQuery.saveToDiskJson(conn, getJsonPath() + "json.js");
-			DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn);
+			DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, null);
 
 			return true;
 		}
@@ -34,7 +37,18 @@ public abstract class BaseMakeDbDocController {
 
 	@GetMapping
 	public String getJson() {
+		getSingleDataSource();
 		return ResponseResult.PLAIN_TEXT_OUTPUT + DB_DOC_JSON;
+	}
+
+	void getSingleDataSource() {
+		DataSource ds = DiContextUtil.getBean(DataSource.class);
+
+		try (Connection conn = JdbcConnection.getConnection(ds)) {
+			DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, conn.getCatalog());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getJsonPath() {
