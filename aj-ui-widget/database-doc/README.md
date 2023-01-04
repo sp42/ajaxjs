@@ -41,7 +41,7 @@
 # 集成方法
 提示：该工具使用“前后端分离”架构，如果单纯只为展示数据库文档，那么只提供前端 UI 读取的 JSON 数据即可，不需要后台服务。看阁下需要，当然那 JSON 要符合特定的格式。
 
-如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。请接着继续看如何集成。
+当然，更常见的情况是配合我们所提供的服务端程序一起使用——我们接着来看。
 
 ## 添加依赖
 该工具不是一个独立运行的工程，而是提供 jar 包集成到你的项目中。故你需依赖下面的 Maven：
@@ -55,6 +55,30 @@
 ```
 这个 jar 包通过 Servlet 3.0 打包技术，将前端都集成进去 jar 包里了。
 
+
+## 配置 MakeDbDocController
+这 MakeDbDocController （这是一个标准的 Spring MVC 控制器）的作用是，生成数据库信息的 JSON，用于显示数据库文档。使用它，您要将其继承于 BaseMakeDbDocController。我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
+
+```java
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ajaxjs.database_meta.BaseMakeDbDocController;
+
+@RestController
+@RequestMapping("/make_database_doc") // 这个接口地址不能自定义了，否则前端要跟着改
+public class MakeDbDocController extends BaseMakeDbDocController {
+
+}
+```
+当前这个 MakeDbDocController 非常简单，并没有什么要配置的地方，所以您需要做的就是复制 MakeDbDocController 到你的工程中去。
+
+至于 BaseMakeDbDocController 里面，最主要就是封装了一个 GET 的方法，用于返回配置的 JSON。
+
+这样，启动您的项目，在浏览器访问 `{前缀}/html/database-doc/`，例如 `http://localhost:8080/oba/html/database-doc/` 即可访问页面。
+
+## 配置多数据源的支持
+如果你希望管理多个数据库的库或数据源，就要涉及 SQL （存储起来）和 Java 后台服务。请接着继续看如何集成（相对会麻烦一些）。
 
 ## 创建数据库
 创建数据库，仅需一张表。新建数据源表 `adp_datasource` 如下：
@@ -84,8 +108,7 @@ CREATE TABLE `adp_datasource` (
 COMMENT='数据源'
 ```
 ## 配置 API
-Java API 部分，主要分为数据源本身的 CRUD 服务，和切换数据源产生文档 JSON 这么两个部分。我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
-具体来说就是你要复制下面两个类到你的项目中，并适当修改配置。第一个是`DataSourceController`，数据源的 CRUD 由这个控制器来处理（这是一个标准的 Spring MVC 控制器）：
+Java API 部分主要是数据源本身的 CRUD 服务。具体来说就是你要复制下面这个 `DataSourceController` 类到你的项目中，并适当修改配置。数据源的 CRUD 由这个控制器来处理：
 
 ```java
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,25 +143,18 @@ public class DataSourceController extends BaseDataSourceController {
 }
 ```
 
-当前配置有两个,分别对应两个 Java 抽象的方法：一个是配置表名，另外一个是配置数据库的连接。
-
-## 配置 MakeDbDocController
-
-
-生成数据库信息的 JSON，用于显示数据库文档。
+当前配置有两个，分别对应两个 Java 抽象的方法：一个是配置表名，另外一个是配置数据库的连接。这个数据源是能访问到表 `TABLE_NAME = "aj_base.adp_datasource"` 的地方。怎么返回数据库的连接？一般 Spring 项目可以通过注入返回标准 DataSource，从而返回 Connection，例如下面的一个例子。
 
 ```java
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.ajaxjs.database_meta.BaseMakeDbDocController;
-
-@RestController
-@RequestMapping("/make_database_doc") // 这个接口地址不能自定义了，否则前端要跟着改
-public class MakeDbDocController extends BaseMakeDbDocController {
-
+@Bean(value = "dataSource", destroyMethod = "close")
+DataSource getDs() {
+	return DataSerivceUtils.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
 }
 ```
+
+具体配置视乎你实际配置而定。只要返回 Connection 就行。
+
+
 
 # 使用答疑
 

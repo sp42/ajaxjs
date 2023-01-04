@@ -21,8 +21,18 @@ import com.ajaxjs.sql.JdbcConnection;
  *
  */
 public abstract class BaseMakeDbDocController {
+	/**
+	 * 使用了缓存，就不用保持到磁盘
+	 */
 	private String jsonPath = "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\database-doc\\";
 
+	/**
+	 * 生成配置 JSON。这个操作会比较久。这是给多数据源的时候用的。
+	 * 
+	 * @param ds
+	 * @return
+	 * @throws SQLException
+	 */
 	@PostMapping
 	public Boolean genJsonFile(@RequestBody DataSourceInfo ds) throws SQLException {
 		try (Connection conn = JdbcConnection.getMySqlConnection(ds.getUrl(), ds.getUsername(), ds.getPassword())) {
@@ -33,11 +43,16 @@ public abstract class BaseMakeDbDocController {
 		}
 	}
 
-	public static String DB_DOC_JSON = "DOC_DATA =[];";
+	/**
+	 * JSON 缓存
+	 */
+	public static String DB_DOC_JSON;
 
 	@GetMapping
 	public String getJson() {
-		getSingleDataSource();
+		if (DB_DOC_JSON == null) // 第一次启动，不管是不是多数据源，先加载当前数据源的
+			getSingleDataSource();
+
 		return ResponseResult.PLAIN_TEXT_OUTPUT + DB_DOC_JSON;
 	}
 
