@@ -3,11 +3,14 @@ package com.ajaxjs.database_meta;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ajaxjs.data_service.model.DataSourceInfo;
+import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.spring.response.ResponseResult;
 import com.ajaxjs.sql.JdbcConnection;
 
@@ -18,23 +21,49 @@ import com.ajaxjs.sql.JdbcConnection;
  *
  */
 public abstract class BaseMakeDbDocController {
+	/**
+	 * 使用了缓存，就不用保持到磁盘
+	 */
 	private String jsonPath = "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\database-doc\\";
 
+	/**
+	 * 生成配置 JSON。这个操作会比较久。这是给多数据源的时候用的。
+	 * 
+	 * @param ds
+	 * @return
+	 * @throws SQLException
+	 */
 	@PostMapping
 	public Boolean genJsonFile(@RequestBody DataSourceInfo ds) throws SQLException {
 		try (Connection conn = JdbcConnection.getMySqlConnection(ds.getUrl(), ds.getUsername(), ds.getPassword())) {
 //			DataBaseQuery.saveToDiskJson(conn, getJsonPath() + "json.js");
-			DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn);
+			DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, null);
 
 			return true;
 		}
 	}
 
-	public static String DB_DOC_JSON = "DOC_DATA =[];";
+	/**
+	 * JSON 缓存
+	 */
+	public static String DB_DOC_JSON;
 
 	@GetMapping
 	public String getJson() {
+		if (DB_DOC_JSON == null) // 第一次启动，不管是不是多数据源，先加载当前数据源的
+			getSingleDataSource();
+
 		return ResponseResult.PLAIN_TEXT_OUTPUT + DB_DOC_JSON;
+	}
+
+	void getSingleDataSource() {
+		DataSource ds = DiContextUtil.getBean(DataSource.class);
+
+		try (Connection conn = JdbcConnection.getConnection(ds)) {
+			DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, conn.getCatalog());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getJsonPath() {

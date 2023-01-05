@@ -1,25 +1,14 @@
 package com.ajaxjs.spring;
 
 import javax.servlet.FilterRegistration;
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
-import javax.servlet.ServletRegistration.Dynamic;
 
-import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.ajaxjs.util.WebHelper;
-import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -27,7 +16,7 @@ import com.ajaxjs.util.logger.LogHelper;
  *
  * @author Frank Cheung
  */
-public abstract class BaseWebInitializer implements WebApplicationInitializer, BaseWebInitializerExtender {
+public abstract class BaseWebInitializer extends BaseSpringWebInitializer implements BaseWebInitializerExtender {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseWebInitializer.class);
 
 	/**
@@ -82,68 +71,4 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer, B
 		initUpload(cxt, registration);
 		LOGGER.info("WEB 程序启动完毕");
 	}
-
-	/**
-	 * 初始化文件上传
-	 * 
-	 * @param cxt
-	 * @param registration
-	 */
-	private static void initUpload(ServletContext cxt, Dynamic registration) {
-		String tempDir = WebHelper.mappath(cxt, "upload_temp");
-		// 如果不存在则创建
-		FileHelper.mkDir(tempDir);
-		registration.setMultipartConfig(new MultipartConfigElement(tempDir, 50000000, 50000000, 0));// 文件上传
-	}
-
-	/**
-	 * 文件上传
-	 * 
-	 * @return
-	 */
-	@Bean(name = "multipartResolver") // 此处 id 为固定写法，不能随便取名
-	public MultipartResolver multipartResolver() {
-		StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-		resolver.setResolveLazily(true);// resolveLazily 属性启用是为了推迟文件解析，以在在 UploadAction 中捕获文件大小异常
-
-		return resolver;
-	}
-
-	/**
-	 * YAML 配置文件
-	 * 
-	 * @return YAML 配置文件
-	 */
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer properties() {
-		PropertySourcesPlaceholderConfigurer cfger = new PropertySourcesPlaceholderConfigurer();
-		// Don't fail if @Value is not supplied in properties. Ignore if not found
-		cfger.setIgnoreUnresolvablePlaceholders(true);
-		YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-		yaml.setResources(new ClassPathResource("application.yml"));
-		cfger.setProperties(yaml.getObject());
-
-		return cfger;
-	}
-
-	/**
-	 * 全局异常拦截器
-	 * 
-	 * @return 全局异常拦截器
-	 */
-	@Bean
-	public GlobalExceptionHandler GlobalExceptionHandler() {
-		return new GlobalExceptionHandler();
-	}
-
-	/**
-	 * Spring IoC 工具
-	 * 
-	 * @return IoC 工具
-	 */
-	@Bean
-	public DiContextUtil DiContextUtil() {
-		return new DiContextUtil();
-	}
-
 }

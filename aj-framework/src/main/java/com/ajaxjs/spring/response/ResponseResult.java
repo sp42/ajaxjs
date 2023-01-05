@@ -50,7 +50,10 @@ public class ResponseResult {
 	private final static String OK = "{\"status\": %s, \"message\": \"%s\", \"data\": %s}";
 
 	private final static String OK_PAGE = "{\"status\": %s, \"message\": \"%s\", \"total\": %s, \"data\": %s}";
-	
+
+	/**
+	 * 字符串原文输出。在返回的字符串前面加上这个字符串即可识别。
+	 */
 	public static final String PLAIN_TEXT_OUTPUT = "PLAIN_TEXT_OUTPUT";
 
 	@Override
