@@ -47,10 +47,7 @@ public class DataServiceStarter {
 		}
 
 		DataSource ds = cfg.getDataSource(); // 总配置的数据源
-
 		List<DataServiceEntity> list = null;
-		com.mysql.cj.jdbc.Driver d =null;
-		
 
 		try (Connection conn = JdbcConnection.getConnection(ds)) {
 			if (cfg.isMultiDataSource())
@@ -76,7 +73,8 @@ public class DataServiceStarter {
 				Map<String, Object> json = JsonHelper.parseMap(jsonStr);
 
 				if (json.containsKey("fieldsMapping")) {// 字段映射
-					DataServiceFieldsMapping fieldsMapping = MapTool.map2Bean((Map<String, ?>) json.get("fieldsMapping"), DataServiceFieldsMapping.class);
+					DataServiceFieldsMapping fieldsMapping = MapTool.map2Bean((Map<String, ?>) json.get("fieldsMapping"),
+							DataServiceFieldsMapping.class);
 					item.setFieldsMapping(fieldsMapping);
 				}
 
@@ -89,14 +87,14 @@ public class DataServiceStarter {
 							LOGGER.info("非嵌入模式下，命令必须有数据源 id");
 							continue;
 						}
-						
+
 						// LOGGER.info(item.getDatasourceId() + "");
 						DataSourceInfo myds = mulitDataSource.get(item.getDatasourceId());
 						if (myds == null) {
 //							LOGGER.warning("不存在 id 为 {0} 的数据源", item.getDatasourceId());
 							continue;
 						}
-						
+
 						_ds = myds.getInstance();
 						urlDir = StrUtil.concatUrl(myds.getUrlDir(), item.getUrlDir());
 					} else {

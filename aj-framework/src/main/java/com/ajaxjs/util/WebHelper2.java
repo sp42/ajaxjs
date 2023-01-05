@@ -1,18 +1,12 @@
 package com.ajaxjs.util;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;
-
-import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * Web 工具类
