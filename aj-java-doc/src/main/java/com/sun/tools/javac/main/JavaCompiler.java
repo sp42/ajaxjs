@@ -1488,7 +1488,7 @@ public class JavaCompiler {
                 if (shouldStop(CompileState.UNLAMBDA))
                     return;
 
-                env.tree = LambdaToMethod.instance(context).translateTopLevelClass(env, env.tree, localMake);
+//                env.tree = LambdaToMethod.instance(context).translateTopLevelClass(env, env.tree, localMake);
                 compileStates.put(env, CompileState.UNLAMBDA);
             }
 

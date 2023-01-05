@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ajaxjs-javadoc</artifactId>
 	<description>裁剪自 JDK tools.jar 的关于 JavaDoc 源码</description>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
 	<properties>
