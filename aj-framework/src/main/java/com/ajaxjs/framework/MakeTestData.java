@@ -18,18 +18,21 @@ public class MakeTestData {
 		conn.setRequestProperty("Authorization", "Bearer " + token);
 	};
 
-	static String[] project_id = { "702d92fc-3e7a-43b7-a3e2-af814fdacffd", "ab84fde9-580e-4a89-8d8d-79769c39e129", "8052a861-2b5d-4fe8-a9f6-a85863b96b69" };
+	static String[] project_id = { "702d92fc-3e7a-43b7-a3e2-af814fdacffd", "ab84fde9-580e-4a89-8d8d-79769c39e129",
+			"8052a861-2b5d-4fe8-a9f6-a85863b96b69" };
 	static String[] project_name = { "与湖南德山资本洽谈在龙泉园区建设100万吨磷酸铁锂正极材料项目", "智能装备（军民融合）产业园项目", "京东（玉溪）新经济产业园总部经济项目" };
 	static String[] project_industry = { "信息传输、制造业/专用设备制造", "制造业/化学原料及化学制品/合成材料", "制造业/专用设备制造" };
 	static String[] project_location = { "北京", "上海", "广州" };
 
 	static String[] phones = { "老人手机", "智能手机", "三防手机", "智能电视", "投影仪", "收音机" };
 	static String[] brands = { "华为", "荣耀", "苹果", "小米", "中兴", "Oppo" };
-	static String[] covers = { "https://file08.c.hihonor.com/pimages/product/6973316859874/428_428_36CBF00AC6B17C125B5FA98988C1F97446EB33AC0328B7DCmp.png",
+	static String[] covers = {
+			"https://file08.c.hihonor.com/pimages/product/6973316859874/428_428_36CBF00AC6B17C125B5FA98988C1F97446EB33AC0328B7DCmp.png",
 			"https://file08.c.hihonor.com/pimages/product/6973316858433/428_428_7C3CE8569FDABE56DC5F9FD14FD18BC5BF1CFFF67D0BC73Dmp.png",
 			"https://file08.c.hihonor.com/pimages/product/6936520803637/428_428_0C026E0F21285DFC33277D2FA54D92914459A0145DBAEA1Amp.png" };
 	static String[] coverPrice = { "1200", "最低 1000", "2000 七折", "2100", "首付200", "2001" };
-	static String[] intros = { "【中国电信国企品质保障】限时享直降", "5000mAh长续航，22.5w快充", "6.74英寸高刷护眼屏，评论有赏返京豆！", "荣耀honor是全球领先的智能终端提供商，致力于成为构建全场景、面向全渠道、服务全人群的全球标志性科技品牌" };
+	static String[] intros = { "【中国电信国企品质保障】限时享直降", "5000mAh长续航，22.5w快充", "6.74英寸高刷护眼屏，评论有赏返京豆！",
+			"荣耀honor是全球领先的智能终端提供商，致力于成为构建全场景、面向全渠道、服务全人群的全球标志性科技品牌" };
 
 //	static void createGoods() {
 //		Goods goods = new Goods();
@@ -58,8 +61,6 @@ public class MakeTestData {
 	static double[] prices = { 2331.3d, 33f, 2333d };
 	static String[] goodsFormatNames = { "8G/16G RAM", "16G/32G RAM", "16G/64G RAM", "32G/256G RAM" };
 
-
-
 	static void cleanNull(Map<String, Object> map) {
 		List<String> list = new ArrayList<>();
 		for (String k : map.keySet()) {
@@ -86,7 +87,8 @@ public class MakeTestData {
 	}
 
 	static void createMeetingProject() {
-		String[] meeting_id = { "2ab26e67-add2-48f9-b72f-c8557e7a1bba", "2af07cb7-ee71-448a-abab-678330cd6279", "2f0be9cc-ea49-4b27-9fd7-b513a6318843" };
+		String[] meeting_id = { "2ab26e67-add2-48f9-b72f-c8557e7a1bba", "2af07cb7-ee71-448a-abab-678330cd6279",
+				"2f0be9cc-ea49-4b27-9fd7-b513a6318843" };
 		String[] project_agreement = { "投资协议", "框架协议" };
 
 		Map<String, Object> params = new HashMap<>();
@@ -149,7 +151,8 @@ public class MakeTestData {
 	}
 
 	static void createFormalitiesInfo() {
-		String[] formalities_id = { "0077f4f4-d64c-4855-a620-477ba7ee7c6e", "02642956-51d2-4fad-9626-3b15d85eb70c", "02e41a06-00ff-4b0a-b686-bdd3a417dfb0" };
+		String[] formalities_id = { "0077f4f4-d64c-4855-a620-477ba7ee7c6e", "02642956-51d2-4fad-9626-3b15d85eb70c",
+				"02e41a06-00ff-4b0a-b686-bdd3a417dfb0" };
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("company", Gen.getItem(company));
@@ -165,7 +168,8 @@ public class MakeTestData {
 		return (int) (Math.random() * (Max - Min)) + Min;
 	}
 
-	static String[] owner_id = { "01162a6b-c47e-41a1-825c-8e6f5d688e96", "03d3d495-67e7-4259-a00e-650351ab5974", "05da5b17-4a08-4043-8b0d-fb2e7e45f53a" };
+	static String[] owner_id = { "01162a6b-c47e-41a1-825c-8e6f5d688e96", "03d3d495-67e7-4259-a00e-650351ab5974",
+			"05da5b17-4a08-4043-8b0d-fb2e7e45f53a" };
 
 	static void createAttachemnt() {
 		Map<String, Object> params = new HashMap<>();
@@ -180,7 +184,8 @@ public class MakeTestData {
 
 	static void simpleImg() {
 		String[] sample_ids = { "9057286485381120", "9057286485381121", "9057286485381122", "9057286485381123" };
-		String[] imgs = { "https://upload-images.jianshu.io/upload_images/5809200-a99419bb94924e6d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
+		String[] imgs = {
+				"https://upload-images.jianshu.io/upload_images/5809200-a99419bb94924e6d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
 				"https://upload-images.jianshu.io/upload_images/5809200-736bc3917fe92142.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
 				"https://upload-images.jianshu.io/upload_images/5809200-7fe8c323e533f656.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
 				"https://upload-images.jianshu.io/upload_images/5809200-c12521fbde6c705b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240",
@@ -219,7 +224,6 @@ public class MakeTestData {
 			System.out.println(result);
 		}
 	}
-	
 
 	public static void main(String[] args) {
 		createEvent();

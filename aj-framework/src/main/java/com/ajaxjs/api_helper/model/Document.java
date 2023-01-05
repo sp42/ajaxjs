@@ -11,4 +11,38 @@ public class Document extends BaseModel implements IBaseModel, Constant {
 	private HttpMethod httpMethod;
 
 	private String url;
+
+	public Long getCatalogId() {
+		return catalogId;
+	}
+
+	public void setCatalogId(Long catalogId) {
+		this.catalogId = catalogId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public HttpMethod getHttpMethod() {
+		return httpMethod;
+	}
+
+	public void setHttpMethod(HttpMethod httpMethod) {
+		this.httpMethod = httpMethod;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	
 }
