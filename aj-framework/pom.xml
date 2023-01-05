@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ajaxjs-framework</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<description>业务的封装</description>
 
 	<parent>
@@ -14,7 +14,19 @@
 	</parent>
 
 	<packaging>jar</packaging>
-
+	
+	<!-- 打包资源文件 -->
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources/META-INF</directory>
+				<includes>
+					<include>META-INF/*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+	
 	<dependencies>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -48,11 +60,8 @@
 			<version>1.0.8</version>
 		</dependency>
 
-	<!-- 	<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-javadoc</artifactId>
-			<version>1.0.1</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.ajaxjs</groupId> <artifactId>ajaxjs-javadoc</artifactId> 
+			<version>1.0.1</version> </dependency> -->
 
 		<dependency>
 			<groupId>javax.validation</groupId>
