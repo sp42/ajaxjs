@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ajaxjs-util</artifactId>
 	<description>Small Java Utils Library with many powerful components</description>
-	<version>1.0.7</version>
+	<version>1.0.8</version>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.7</version>
+		<version>1.8</version>
 		<relativePath />
 	</parent>
 	<!-- <properties> <maven.javadoc.skip>true</maven.javadoc.skip> </properties> -->
