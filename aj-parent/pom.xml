@@ -5,7 +5,7 @@
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-parent</artifactId>
 	<name>ajaxjs-parent</name>
-	<version>1.8</version>
+	<version>1.10</version>
 	<packaging>pom</packaging>
 	<description>Top pom.xml, public config</description>
 
@@ -64,7 +64,7 @@
 
 		<!-- 当发生javadoc编译错误时继续执行 -->
 		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<!-- <maven.javadoc.skip>true</maven.javadoc.skip> -->
 	</properties>
 
 	<distributionManagement>
@@ -214,7 +214,7 @@
 
 						<configuration>
 							<!-- add this to disable checking -->
-							<!--<additionalparam>-Xdoclint:none</additionalparam>-->
+							<additionalparam>-Xdoclint:none</additionalparam>
 							<charset>UTF-8</charset><!-- utf-8读取文件 -->
 							<encoding>UTF-8</encoding><!-- utf-8进行编码代码 -->
 							<docencoding>UTF-8</docencoding><!-- utf-8进行编码文档 -->
