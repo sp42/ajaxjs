@@ -23,6 +23,6 @@ public class TestDatabaseDoc {
 
 	@Test
 	public void test() throws SQLException {
-		DataBaseQuery.saveToDiskJson(ds.getConnection(), "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\database-doc\\json.js");
+		DataBaseQuery.saveToDiskJson(ds.getConnection(), "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\database-doc\\json.js", null);
 	}
 }

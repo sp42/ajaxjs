@@ -1,5 +1,7 @@
 package com.ajaxjs.fast_doc.doclet;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,7 @@ import com.sun.javadoc.ParamTag;
 import com.sun.javadoc.Parameter;
 import com.sun.javadoc.RootDoc;
 import com.sun.javadoc.Tag;
-import com.sun.tools.javadoc.Main;
+//import com.sun.tools.javadoc.Main;
 
 /**
  * Java 标准文档的提取器 当前只提取 Field 和 Method 两种成员
@@ -252,6 +254,20 @@ public class JavaDocParser extends Doclet implements DocModel {
 
 		params.addAll(sources);
 
-		Main.execute(params.toArray(new String[params.size()]));
+		String[] array = params.toArray(new String[params.size()]);
+
+		// 反射调用 JavaDoc，避免强依赖
+		try {
+			Class<?> clz = Class.forName("com.sun.tools.javadoc.Main");
+
+			try {
+				Method method = clz.getMethod("execute", String[].class);
+				method.invoke(null, new Object[] { array });
+			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				LOGGER.warning(e);
+			}
+		} catch (ClassNotFoundException e) {
+			LOGGER.warning("找不到类 com.sun.tools.javadoc.Main，请保证 Maven 依赖");
+		}
 	}
 }

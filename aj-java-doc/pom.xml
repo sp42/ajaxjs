@@ -7,18 +7,6 @@
 	<version>1.0.1</version>
 	<packaging>jar</packaging>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<!-- IDEA Maven 插件默认 Java 1.5 编译，这里强制声明一下 -->
-		<java.version>1.8</java.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-
-		<!-- servlet3 不需要 web.xml 问题 -->
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-	</properties>
-
 	<parent>
 		<groupId>com.ajaxjs</groupId>
 		<artifactId>ajaxjs-parent</artifactId>

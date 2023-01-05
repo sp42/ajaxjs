@@ -52,7 +52,7 @@ public class TestFastDoc {
 		TestHelper.printJson(info);
 	}
 
-//	@Test
+	@Test
 	public void testFastDoc() {
 		FastDoc.loadBeans("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
 		FastDoc.loadControllersDoc("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
@@ -62,7 +62,7 @@ public class TestFastDoc {
 		FastDoc.saveToDisk("D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\fast-doc\\json.js");
 	}
 
-	@Test
+//	@Test
 	public void testFastDocWorkwe() {
 		FastDoc.loadBeans("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
 		FastDoc.loadControllersDoc("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooController.class);
