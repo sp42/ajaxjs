@@ -1162,7 +1162,7 @@ public class LambdaToMethod extends TreeTranslator {
      * accessed by the lambda being translated (as well as other useful info).
      * It also translates away problems for LambdaToMethod.
      */
-    class LambdaAnalyzerPreprocessor extends TreeTranslator {
+   public class LambdaAnalyzerPreprocessor extends TreeTranslator {
 
         /** the frame stack - used to reconstruct translation info about enclosing scopes */
         private List<Frame> frameStack;
@@ -1222,7 +1222,7 @@ public class LambdaToMethod extends TreeTranslator {
             }
         }
 
-        @Override
+//        @Override
         public void visitClassDef(JCClassDecl tree) {
             List<Frame> prevStack = frameStack;
             SyntheticMethodNameCounter prevSyntheticMethodNameCounts =
@@ -1262,7 +1262,7 @@ public class LambdaToMethod extends TreeTranslator {
             }
         }
 
-        @Override
+//        @Override
         public void visitIdent(JCIdent tree) {
             if (context() != null && lambdaIdentSymbolFilter(tree.sym)) {
                 if (tree.sym.kind == VAR &&
@@ -1301,7 +1301,7 @@ public class LambdaToMethod extends TreeTranslator {
             super.visitIdent(tree);
         }
 
-        @Override
+//        @Override
         public void visitLambda(JCLambda tree) {
             List<Frame> prevStack = frameStack;
             try {
@@ -1320,7 +1320,7 @@ public class LambdaToMethod extends TreeTranslator {
             }
         }
 
-        @Override
+//        @Override
         public void visitMethodDef(JCMethodDecl tree) {
             List<Frame> prevStack = frameStack;
             try {
@@ -1332,7 +1332,7 @@ public class LambdaToMethod extends TreeTranslator {
             }
         }
 
-        @Override
+//        @Override
         public void visitNewClass(JCNewClass tree) {
             if (lambdaNewClassFilter(context(), tree)) {
                 TranslationContext<?> localContext = context();
@@ -1392,7 +1392,7 @@ public class LambdaToMethod extends TreeTranslator {
          *
          * @param tree
          */
-        @Override
+//        @Override
         public void visitReference(JCMemberReference tree) {
             if (tree.getMode() == ReferenceMode.NEW
                     && tree.kind != ReferenceKind.ARRAY_CTOR
@@ -1431,7 +1431,7 @@ public class LambdaToMethod extends TreeTranslator {
             }
         }
 
-        @Override
+//        @Override
         public void visitSelect(JCFieldAccess tree) {
             if (context() != null && tree.sym.kind == VAR &&
                         (tree.sym.name == names._this ||
@@ -1451,7 +1451,7 @@ public class LambdaToMethod extends TreeTranslator {
             super.visitSelect(tree);
         }
 
-        @Override
+//        @Override
         public void visitVarDef(JCVariableDecl tree) {
             TranslationContext<?> context = context();
             LambdaTranslationContext ltc = (context != null && context instanceof LambdaTranslationContext)?
