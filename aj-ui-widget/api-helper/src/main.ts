@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import UiDesigner from './ui-designer/demo.vue';
+import UiDesigner from './components/api-selector/index.vue';
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
 

@@ -19,6 +19,7 @@ new Vue({
             dataSource: {
                 isShowDataSource: false
             },
+            treeData2: [],
             treeData: [
                 {
                     title: 'parent 1',
@@ -84,7 +85,82 @@ new Vue({
             },
         }
     },
+    mounted() {
+        this.getTreeData();
+    },
     methods: {
+        getTreeData() {
+            let arr = [{
+                title: '文章',
+                children: [
+                    {
+                        method: 'GET',
+                        path: "/foo/bar"
+                    }
+                    // {
+                    //     title: "leaf 1-1-2",
+                    //     render: (h, { root, node, data }) => {
+                    //         return [
+                    //             h("span", { class: "http-method get" }, "GET"),
+                    //             h("span", data.title),
+                    //         ];
+                    //     },
+                    // },
+                ]
+            }];
+
+            this.treeData = [];
+
+            arr.forEach(node => {
+                let title = node.title, _children = node.children;
+
+                let children = this.getTreeNode(_children);
+
+                this.treeData.push({
+                    title: title,
+                    children: children
+                });
+
+                console.log(children)
+            });
+        },
+        getTreeNode(children) {
+            let arr = [];
+            children.forEach(({ method, path }) => {
+
+                arr.push({
+                    title: path,
+                    render: (h, { root, node, data }) => {
+                        let nodeCfg = { // 节点事件的配置
+                            on: {
+                                // click: () => this.appendApiDetail(data) 
+                            }// 点击加载接口详情
+                        };
+
+                        // 右键点击事件
+                        nodeCfg.on['contextmenu'] = (e) => {
+                            e.preventDefault();
+                            // this.contextSelectdNode.root = root;
+                            // this.contextSelectdNode.node = node;
+
+                            // // this.contextSelectdNode.data = data;
+                            // this.$refs.contentFileMenu.$refs.reference = e.target;
+                            // this.$refs.contentFileMenu.currentVisible = !this.$refs.contentFileMenu.currentVisible;
+                        };
+
+                        let arr = [
+                            h('span', Object.assign({ class: 'http-method ' + method.toLowerCase() }, nodeCfg), method),
+                            h('span', nodeCfg, path)
+                        ];
+
+                        return arr;
+                    }
+                });
+            });
+
+            return arr;
+        },
+
         showAbout() {
             this.$Modal.confirm({
                 title: '关于 DataService',
