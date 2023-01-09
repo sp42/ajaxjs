@@ -12,45 +12,48 @@ import com.ajaxjs.spring.easy_controller.PathForDoc;
 
 /**
  * 自定义注解的提取器
- * 
- * @author Frank Cheung<sp42@qq.com>
  *
+ * @author Frank Cheung<sp42@qq.com>
  */
 public class CustomAnnotationParser extends SpringMvcAnnotationParser {
-	public CustomAnnotationParser(Class<?> clz) {
-		super(clz);
-	}
+    public CustomAnnotationParser() {
 
-	@Override
-	String getRootUrlIfRequestMappingNull() {
-		PathForDoc pd = getClz().getAnnotation(PathForDoc.class);
+    }
 
-		return pd == null ? null : pd.value();
-	}
+    public CustomAnnotationParser(Class<?> clz) {
+        super(clz);
+    }
 
-	@Override
-	void getMethodInfo(Item item, Method method) {
-		ControllerMethod cm = method.getAnnotation(ControllerMethod.class);
+    @Override
+    String getRootUrlIfRequestMappingNull() {
+        PathForDoc pd = getClz().getAnnotation(PathForDoc.class);
 
-		if (cm != null) { // 方法的一些信息，读取注解
-			item.name = cm.value();
-			item.description = cm.descrition();
-			item.image = cm.image();
-		}
-	}
+        return pd == null ? null : pd.value();
+    }
 
-	@Override
-	void getReturnType(Item item, Method method, Return r) {
-		Example eg = method.getAnnotation(Example.class);
-		if (eg != null)
-			r.example = eg.value();
-	}
+    @Override
+    public void getMethodInfo(Item item, Method method) {
+        ControllerMethod cm = method.getAnnotation(ControllerMethod.class);
 
-	@Override
-	void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
-		Example eg = param.getAnnotation(Example.class);
-		if (eg != null)
-			arg.example = eg.value();
-	}
+        if (cm != null) { // 方法的一些信息，读取注解
+            item.name = cm.value();
+            item.description = cm.descrition();
+            item.image = cm.image();
+        }
+    }
+
+    @Override
+    void getReturnType(Item item, Method method, Return r) {
+        Example eg = method.getAnnotation(Example.class);
+        if (eg != null)
+            r.example = eg.value();
+    }
+
+    @Override
+    public void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
+        Example eg = param.getAnnotation(Example.class);
+        if (eg != null)
+            arg.example = eg.value();
+    }
 
 }

@@ -1,8 +1,11 @@
 package com.ajaxjs.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.util.CollectionUtils;
 
@@ -58,5 +61,58 @@ public class ListUtils {
 		System.arraycopy(second, 0, result, first.length, second.length);
 
 		return result;
+	}
+
+	/**
+	 * 数组转换为 List
+	 * 
+	 * @param <E>
+	 * @param elements
+	 * @return
+	 */
+	@SafeVarargs
+	public static <E> List<E> arrayList(E... elements) {
+		List<E> list = new ArrayList<E>(elements.length);
+
+		for (E e : elements)
+			list.add(e);
+
+		return list;
+	}
+
+	/**
+	 * Create a new {@link HashMap}
+	 */
+	public static <K, V> Map<K, V> hashMap(K k1, V v1) {
+		Map<K, V> map = new HashMap<>();
+
+		map.put(k1, v1);
+
+		return map;
+	}
+
+	/**
+	 * Create a new {@link HashMap}
+	 */
+	public static <K, V> Map<K, V> hashMap(K k1, V v1, K k2, V v2) {
+		Map<K, V> map = new HashMap<>();
+
+		map.put(k1, v1);
+		map.put(k2, v2);
+
+		return map;
+	}
+
+	/**
+	 * Create a new {@link HashMap}
+	 */
+	public static <K, V> Map<K, V> hashMap(K k1, V v1, K k2, V v2, K k3, V v3) {
+		Map<K, V> map = new HashMap<>();
+
+		map.put(k1, v1);
+		map.put(k2, v2);
+		map.put(k3, v3);
+
+		return map;
 	}
 }

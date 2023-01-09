@@ -55,7 +55,7 @@ public class TestFastDoc {
 	@Test
 	public void testFastDoc() {
 		FastDoc.loadBeans("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
-		FastDoc.loadControllersDoc("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
+		FastDoc.loadControllersDoc(null, "D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
 
 //		System.out.println(FastDoc.getJsonStr());
 
@@ -65,7 +65,7 @@ public class TestFastDoc {
 //	@Test
 	public void testFastDocWorkwe() {
 		FastDoc.loadBeans("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
-		FastDoc.loadControllersDoc("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooController.class);
+		FastDoc.loadControllersDoc( null, "C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooController.class);
 
 //		System.out.println(FastDoc.getJsonStr());
 

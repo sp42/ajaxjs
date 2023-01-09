@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ajaxjs.fast_doc.annotation.SpringMvcAnnotationParser;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.fast_doc.Model.ArgInfo;
@@ -23,149 +24,158 @@ import com.ajaxjs.util.map.JsonHelper;
 
 /**
  * FastDoc 主程序，单例
- * 
- * @author Frank Cheung<sp42@qq.com>
  *
+ * @author Frank Cheung<sp42@qq.com>
  */
 public class FastDoc {
-	static Map<String, ControllerInfo> AnnotationResult = new HashMap<>();
+    static Map<String, ControllerInfo> AnnotationResult = new HashMap<>();
 
-	/**
-	 * 用 JavaDocParser 得到 Bean 的注释文档
-	 * 
-	 * @param dir    源码磁盘目录
-	 * @param clazzs Bean 类，其实任意 Java 类都可以，包括控制器
-	 */
-	static void loadBeans(String dir, Class<?>... clazzs) {
-		Params params = new Params();
-		params.sources = new ArrayList<>();
+    /**
+     * 用 JavaDocParser 得到 Bean 的注释文档
+     *
+     * @param dir    源码磁盘目录
+     * @param clazzs Bean 类，其实任意 Java 类都可以，包括控制器
+     */
+    public static void loadBeans(String dir, Class<?>... clazzs) {
+        Params params = new Params();
+        params.sources = new ArrayList<>();
 
-		for (Class<?> clz : clazzs) {
-			String name = Util.className2JavaFileName(clz);
-			params.sources.add(dir + name);
-		}
+        for (Class<?> clz : clazzs) {
+            String name = Util.className2JavaFileName(clz);
+            params.sources.add(dir + name);
+        }
 
-		JavaDocParser.init(params);
-	}
+        JavaDocParser.init(params);
+    }
 
-	/**
-	 * 
-	 * @param dir    源码磁盘目录
-	 * @param clazzs 控制器类列表
-	 */
-	static void loadControllersDoc(String dir, Class<?>... clazzs) {
-		loadBeans(dir, clazzs);
+    /**
+     * @param dir    源码磁盘目录
+     * @param clazzs 控制器类列表
+     */
+    public static void loadControllersDoc(Class<? extends SpringMvcAnnotationParser> parserClz, String dir, Class<?>... clazzs) {
+        loadBeans(dir, clazzs);
 
-		for (Class<?> clz : clazzs) {
-			String fullName = clz.getName();
+        for (Class<?> clz : clazzs) {
+            String fullName = clz.getName();
 
-			if (!AnnotationResult.containsKey(fullName)) {
-				CustomAnnotationParser info = new CustomAnnotationParser(clz);
-				info.setTakeBeanInfo((clz2, argInfo) -> {
-					String fullArgClzName = getInnerClzFullName(clz2);
-					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullArgClzName);
+            if (!AnnotationResult.containsKey(fullName)) {
+                SpringMvcAnnotationParser info = null;
 
-					if (classDocInfo != null) {
-						argInfo.fields = classDocInfo.fields;
-						setDescByComment(argInfo, classDocInfo);
-					}
-				});
+                try {
+                    info = parserClz.newInstance();
+                } catch (IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
+                }
 
-				info.setTakeReturnBeanInfo((clz2, returnInfo) -> {
-					String fullReturnName = getInnerClzFullName(clz2);
-					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullReturnName);
+                if (info == null)
+                    info = new CustomAnnotationParser();
 
-					if (classDocInfo != null)
-						returnInfo.fields = classDocInfo.fields;
+                info.setClz(clz);
+                info.setTakeBeanInfo((clz2, argInfo) -> {
+                    String fullArgClzName = getInnerClzFullName(clz2);
+                    ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullArgClzName);
 
-					setDescByComment(returnInfo, classDocInfo);
-				});
+                    if (classDocInfo != null) {
+                        argInfo.fields = classDocInfo.fields;
+                        setDescByComment(argInfo, classDocInfo);
+                    }
+                });
 
-				ControllerInfo controllerInfo = info.parse();
-				AnnotationResult.put(fullName, controllerInfo);
+                info.setTakeReturnBeanInfo((clz2, returnInfo) -> {
+                    String fullReturnName = getInnerClzFullName(clz2);
+                    ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullReturnName);
 
-				mix(fullName, controllerInfo);
+                    if (classDocInfo != null)
+                        returnInfo.fields = classDocInfo.fields;
 
-				TestHelper.printJson(controllerInfo);
-			}
-		}
-	}
+                    setDescByComment(returnInfo, classDocInfo);
+                });
 
-	/**
-	 * JavaDoc 对于内部类也可以正常解析。但类全称不是 $ 区分的，而是 xxx.yyy，于是这里要统一一下
-	 * 
-	 * @param clz2
-	 * @return
-	 */
-	private static String getInnerClzFullName(Class<?> clz2) {
-		String fullReturnName = clz2.getName();
+                ControllerInfo controllerInfo = info.parse();
+                AnnotationResult.put(fullName, controllerInfo);
 
-		if (fullReturnName.contains("$"))
-			fullReturnName = fullReturnName.replaceAll("\\$", ".");
+                mix(fullName, controllerInfo);
 
-		return fullReturnName;
-	}
+                TestHelper.printJson(controllerInfo);
+            }
+        }
+    }
 
-	/**
-	 * 基础信息来自于注解，然后加上来自于 JavaDoc 的信息，合二为一，得到最终结果
-	 * 
-	 * @param fullName       类全称
-	 * @param controllerInfo 最终信息合并到这个对象
-	 */
-	private static void mix(String fullName, ControllerInfo controllerInfo) {
-		ClassDocInfo javaDocInfo = JavaDocParser.CACHE.get(fullName);
-		if (javaDocInfo == null)
-			return;
+    /**
+     * JavaDoc 对于内部类也可以正常解析。但类全称不是 $ 区分的，而是 xxx.yyy，于是这里要统一一下
+     *
+     * @param clz2
+     * @return
+     */
+    private static String getInnerClzFullName(Class<?> clz2) {
+        String fullReturnName = clz2.getName();
 
-		if (StringUtils.hasText(controllerInfo.description))
-			controllerInfo.description += javaDocInfo.commentText;
-		else
-			controllerInfo.description = javaDocInfo.commentText;
+        if (fullReturnName.contains("$"))
+            fullReturnName = fullReturnName.replaceAll("\\$", ".");
 
-		List<Item> methodItems = controllerInfo.items;
+        return fullReturnName;
+    }
 
-		for (Item item : methodItems) {
-			String methodName = item.methodName;
+    /**
+     * 基础信息来自于注解，然后加上来自于 JavaDoc 的信息，合二为一，得到最终结果
+     *
+     * @param fullName       类全称
+     * @param controllerInfo 最终信息合并到这个对象
+     */
+    private static void mix(String fullName, ControllerInfo controllerInfo) {
+        ClassDocInfo javaDocInfo = JavaDocParser.CACHE.get(fullName);
+        if (javaDocInfo == null)
+            return;
 
-			for (MethodInfo mJavaDoc : javaDocInfo.methods) {
-				if (mJavaDoc.name.equals(methodName)) { // 方法名称匹配
-					if (StringUtils.hasText(item.name))
-						item.description = mJavaDoc.commentText;
-					else
-						item.name = mJavaDoc.commentText;
+        if (StringUtils.hasText(controllerInfo.description))
+            controllerInfo.description += javaDocInfo.commentText;
+        else
+            controllerInfo.description = javaDocInfo.commentText;
 
-					for (ArgInfo argInfo : item.args) {// 参数列表的 mix
-						for (ParameterInfo pInfo : mJavaDoc.parameters) {
-							if (argInfo.name.equals(pInfo.name)) {
-								setDescByComment(argInfo, pInfo);
-								break;
-							}
-						}
-					}
+        List<Item> methodItems = controllerInfo.items;
 
-					break;
-				}
-			}
-		}
-	}
+        for (Item item : methodItems) {
+            String methodName = item.methodName;
 
-	private static void setDescByComment(CommonValue info, WithComment info2) {
-		if (info2 == null)
-			return;
+            for (MethodInfo mJavaDoc : javaDocInfo.methods) {
+                if (mJavaDoc.name.equals(methodName)) { // 方法名称匹配
+                    if (StringUtils.hasText(item.name))
+                        item.description = mJavaDoc.commentText;
+                    else
+                        item.name = mJavaDoc.commentText;
 
-		if (StringUtils.hasText(info.description))
-			info.description += " " + info2.commentText;
-		else
-			info.description = info2.commentText;
-	}
+                    for (ArgInfo argInfo : item.args) {// 参数列表的 mix
+                        for (ParameterInfo pInfo : mJavaDoc.parameters) {
+                            if (argInfo.name.equals(pInfo.name)) {
+                                setDescByComment(argInfo, pInfo);
+                                break;
+                            }
+                        }
+                    }
 
-	public static String getJsonStr() {
-		return JsonHelper.toJson(AnnotationResult);
-	}
+                    break;
+                }
+            }
+        }
+    }
 
-	public static void saveToDisk(String path) {
-		String json = getJsonStr();
+    private static void setDescByComment(CommonValue info, WithComment info2) {
+        if (info2 == null)
+            return;
 
-		FileHelper.saveText(path, "var DOC_JSON = " + json + ";");
-	}
+        if (StringUtils.hasText(info.description))
+            info.description += " " + info2.commentText;
+        else
+            info.description = info2.commentText;
+    }
+
+    public static String getJsonStr() {
+        return JsonHelper.toJson(AnnotationResult);
+    }
+
+    public static void saveToDisk(String path) {
+        String json = getJsonStr();
+
+        FileHelper.saveText(path, "var DOC_JSON = " + json + ";");
+    }
 }
