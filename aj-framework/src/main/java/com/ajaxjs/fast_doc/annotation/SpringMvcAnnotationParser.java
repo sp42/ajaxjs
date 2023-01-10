@@ -77,7 +77,12 @@ public class SpringMvcAnnotationParser {
         ci.type = clz.getName();
         ci.items = parseControllerMethod();
 
+        onClzInfo(ci, clz);
         return ci;
+    }
+
+    public void onClzInfo(ControllerInfo ci, Class<?> clz) {
+
     }
 
     /**
@@ -135,7 +140,6 @@ public class SpringMvcAnnotationParser {
         item.methodName = method.getName();
         item.id = StrUtil.uuid(); // 雪花算法会重复，改用 uuid
 
-        getMethodInfo(item, method);
 
         // HTTP 方法
         GetMapping get = method.getAnnotation(GetMapping.class);
@@ -161,6 +165,17 @@ public class SpringMvcAnnotationParser {
             item.httpMethod = "DELETE";
             item.url = setUrl(del.value());
         }
+
+        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+        if (requestMapping != null) {
+            if (!StringUtils.hasText(item.url))
+                item.url = setUrl(requestMapping.value());
+
+            if (!StringUtils.hasText(item.httpMethod))
+                item.httpMethod = "ANY";
+        }
+
+        getMethodInfo(item, method);
     }
 
     public void getMethodInfo(Item item, Method method) {
@@ -193,11 +208,15 @@ public class SpringMvcAnnotationParser {
 
         getReturnType(item, method, r);
 
+//        System.out.println("-----------------------" + method.toString());
+//        if (method.toString().contains("list")) {
+//            System.out.println("-----------------------");
+//        }
         if (Util.isSimpleValueType(returnType))
             r.isObject = false;
         else if (returnType == Map.class) {
             // TODO
-        } else if (returnType == List.class || returnType == ArrayList.class || returnType == AbstractList.class) {
+        } else if (returnType == List.class || returnType == ArrayList.class || returnType == AbstractList.class || returnType.toString().contains("PageList")) {
             r.isMany = true;
 
             Class<?> real = ReflectUtil.getGenericFirstReturnType(method);
