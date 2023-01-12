@@ -50,14 +50,14 @@
 <dependency>
 	<groupId>com.ajaxjs</groupId>
 	<artifactId>ajaxjs-framework</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.6</version>
 </dependency>
 ```
 这个 jar 包通过 Servlet 3.0 打包技术，将前端都集成进去 jar 包里了。
 
 
 ## 配置 MakeDbDocController
-这 MakeDbDocController （这是一个标准的 Spring MVC 控制器）的作用是，生成数据库信息的 JSON，用于显示数据库文档。使用它，您要将其继承于 BaseMakeDbDocController。我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
+我们需要生成数据库信息的 JSON，用于显示数据库文档。怎么生存？必须通过后端也就是一个控制器来生成。这个就是 `MakeDbDocController`，它是一个标准的 Spring MVC 控制器。使用它，您要将其继承于基类 `BaseMakeDbDocController`（这个类我们已经提供了）。我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
 
 ```java
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,9 +71,9 @@ public class MakeDbDocController extends BaseMakeDbDocController {
 
 }
 ```
-当前这个 MakeDbDocController 非常简单，并没有什么要配置的地方，所以您需要做的就是复制 MakeDbDocController 到你的工程中去。
+当前这个 `MakeDbDocController` 非常简单，并没有什么要配置的地方，所以您需要做的就是复制 MakeDbDocController 到你的工程中去。
 
-至于 BaseMakeDbDocController 里面，最主要就是封装了一个 GET 的方法，用于返回配置的 JSON。
+至于 `BaseMakeDbDocController` 里面，最主要就是封装了一个 GET 的方法，用于返回配置的 JSON。
 
 这样，启动您的项目，在浏览器访问 `{前缀}/html/database-doc/`，例如 `http://localhost:8080/oba/html/database-doc/` 即可访问页面。
 
