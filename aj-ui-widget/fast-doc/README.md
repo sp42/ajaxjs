@@ -1,8 +1,10 @@
-# 实用工具：FastDoc 文档实现工具
+# 实用工具：FastDoc 文档提取工具
 简单、实用的 HTTP API 文档生成工具，支持 Spring MVC/Spring Boot 下的控制器信息提取，类似 Swagger 但稍有不同的机制。 
 
-关于研发者这工具的动机，请参考我博客[《写文档是件大事情，怎么弄好它？》](https://zhangxin.blog.csdn.net/article/details/127632794)。
+<div align="center"><img src="https://img-blog.csdnimg.cn/b974ab686fa246228fdac278e9f1b091.png" alt="example2" width="600" /></div>
 
+
+关于研发者这工具的动机，请参考我博客[《写文档是件大事情，怎么弄好它？》](https://zhangxin.blog.csdn.net/article/details/127632794)。
 
 文档的信息来自哪里？换句话说，根据哪些的信息，才能形成文档？笔者愚以为，来自下面几个方面：
 
