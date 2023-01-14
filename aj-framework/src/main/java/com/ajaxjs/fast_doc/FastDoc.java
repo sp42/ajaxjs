@@ -236,4 +236,16 @@ public class FastDoc {
 			}
 		}
 	}
+
+	/**
+	 * 生成 JSON 配置
+	 * 
+	 * @param run
+	 */
+	public static void run(FastDocRun run) {
+		loadBeans(run.sourceDir, run.beanClasses);
+		loadControllersDoc(run.sourceDir, run.controllerClasses);
+
+		saveToDisk(run.jsonDir);
+	}
 }

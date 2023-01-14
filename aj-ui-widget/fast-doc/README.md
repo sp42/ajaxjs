@@ -40,10 +40,46 @@
 
 ## 生成 JSON
 
+### 添加依赖
+在你的项目工程中，添加下面两个依赖：
+
+```xml
+<dependency>
+    <groupId>com.ajaxjs</groupId>
+    <artifactId>ajaxjs-framework</artifactId>
+    <version>1.0.7</version>
+    <scope>test</scope>
+</dependency>
+
+<dependency>
+    <groupId>com.ajaxjs</groupId>
+    <artifactId>ajaxjs-javadoc</artifactId>
+    <version>1.0.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
+使用 test 的 scope 即可，这是非入侵的。然后新建一个 JUnit 单元测试（虽然 `main()` 函数执行也可以，但是前面已经是 test 的 Maven 依赖了，故无法 `main()`）。
+
+### 调用方法
+新建单测方法，配置参数 `FastDocRun` 并运行 `FastDoc.run(run)`：
+
+```java
+FastDocRun run = new FastDocRun();
+run.sourceDir = "D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\"; // 源码目录，到 java 那一层
+run.beanClasses = new Class<?>[] { FooBean.class, BarBean.class, InnerClass.class }; // 有哪些 Java Bean，都列出来
+run.controllerClasses = new Class<?>[] { FooController.class }; // 有哪些 Spring MVC 控制器类，都列出来
+run.jsonDir = "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\fast-doc\\json.js"; // 最终 JSON 保存的地方
+
+FastDoc.run(run);
+```
+`jsonDir` 就是你前端要读取 json.js 文件的那个地方。
+
 
 # 高级用法
 
 # FAQ 答疑
 - 如果出现如下图所示，只有成员的名称、类型等的信息，而没有注释信息，是什么原因？
 ![输入图片说明](https://foruda.gitee.com/images/1671896389538968487/625a4c04_784269.png "屏幕截图")
+
  配置有问题。能提取成员的名称、类型等的信息，已说明 `classPath` 配置正确，但没配置好所需的 `sourcePath`。你想想看，编译好的 .class 哪里有注释？肯定在 .java 文件里面才有。
