@@ -13,11 +13,11 @@
 - Java 的注释。前面我的博文说过，基于 Java 本身的注释就够了，不是基于 Swagger 那样的自定义注解
 - 前两者是主要的信息提供者。若不够或者不满足，就来像 Swagger 那样子采取自定义注解的方式。但这种方式不会太多。
 
-有人疑问，既然有了 Swagger 注解为什么还要 Java 的注释呢？——因为没有了 Java 注释，你编码的时候就没有语法提示呀，IDE 又不会智能到可以提取注解的信息。当然，你可以复制一份到 Java 注释，但岂不是重复了么，手工复制？——那不符合我们程序员“懒”的追求哦。——呃～重复不是问题～～你有代码生成器？我控制器方法不需要给其他 Java 代码提示啊～～——呃～那好吧。
+有人疑问，既然有了 Swagger 注解为什么还要 Java 的注释呢？——因为没有了 Java 注释，你编码的时候就没有语法提示呀，IDE 又不会智能到可以提取注解的信息。当然，你可以复制一份到 Java 注释，但岂不是重复了么，而且手工复制？——那不符合我们程序员“懒”的追求哦。——呃～重复不是问题～～你有代码生成器？再加上，，我控制器方法不需要给其他 Java 代码提示啊～～——呃～那好吧。
 
-综上，笔者编写了这个小巧的工具，不仅代码行数少，精简、轻量级，而且非入侵，不会影响你原有的工程依赖，无论使用还是部署也很方便。
+Anyway，综上，笔者编写了这个小巧的工具，不仅代码行数少，精简、轻量级，而且非入侵，不会影响你原有的工程依赖，无论使用还是部署也很方便。
 
-这一个小小的工具，不例外地，也是由前、后端两部分程序所组成。但这所谓的“后端”并不是一个 Web 程序，严格说只是一个 `main()` 函数或者单元测试就是运行的 Java 程序，目的是生成供给前端渲染的 JSON，这个 JSON 就包含了所有文档信息。
+尽管这一个小小的工具，但不例外地，也是由前、后端两部分程序所组成。但这所谓的“后端”并不是一个 Web 程序，严格说只是一个 `main()` 函数或者单元测试就能运行的 Java 程序，目的是生成供给前端渲染的 JSON，这个 JSON 就包含了所有文档信息。
 
 - 前端源码在 [https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/fast-doc](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/fast-doc)。
 - 生成 JSON 程序，其实是 AJAXJS Framework 的一部分，源码在 [https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/fast_doc](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/fast_doc)。
@@ -75,13 +75,13 @@ FastDoc.run(run);
 ```
 `jsonDir` 就是你前端要读取 json.js 文件的那个地方。运行通过之后，你要手动复制 json.js 到前端覆盖。
 
-提示：如果 class 太多怎么办？可以通过 `FastDoc.findAndAddClassesInPackageByFile()` 指定某个目录返回目录下所有的类。返回的数组太多，可以通过实用工具 `ListUtils.addAll(T[]... arrays)` 合并。
+提示：如果 class 太多怎么办？可以通过 `FastDoc.findAndAddClassesInPackageByFile()` 指定某个目录返回目录下所有的类。返回的数组太多，可以通过实用工具 `ListUtils.addAll(T[]... arrays)` 合并为一个数组然后传到方法中。
 
 
 # 高级用法
 如果你使用 Swagger 的注解，或者自定义的注解声明文档信息，可以通过自定义提取器的方式生成 JSON。
 
-下面假设 @Doc 是你自定义的注解，我们通过新建 `DashuAnnotationParser` 来提取它。
+下面假设 `@Doc` 是你自定义的注解，我们通过新建 `DashuAnnotationParser` 来提取它。
 
 ```java
 import com.ajaxjs.fast_doc.Model;
@@ -181,6 +181,6 @@ FastDoc.saveToDisk("C:\\code\\aj\\aj-all\\ajaxjs\\aj-ui-widget\\fast-doc\\json.j
 
 # FAQ 答疑
 - 如果出现如下图所示，只有成员的名称、类型等的信息，而没有注释信息，是什么原因？
-![输入图片说明](https://foruda.gitee.com/images/1671896389538968487/625a4c04_784269.png "屏幕截图")
+![输入图片说明](https://img-blog.csdnimg.cn/334a7a954aab4693a5740b2a1add39e7.png "屏幕截图")
 
  配置有问题。能提取成员的名称、类型等的信息，已说明 `classPath` 配置正确，但没配置好所需的 `sourcePath`。你想想看，编译好的 .class 哪里有注释？肯定在 .java 文件里面才有。
