@@ -73,10 +73,111 @@ run.jsonDir = "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\fast-doc\\json.js";
 
 FastDoc.run(run);
 ```
-`jsonDir` 就是你前端要读取 json.js 文件的那个地方。
+`jsonDir` 就是你前端要读取 json.js 文件的那个地方。运行通过之后，你要手动复制 json.js 到前端覆盖。
+
+提示：如果 class 太多怎么办？可以通过 `FastDoc.findAndAddClassesInPackageByFile()` 指定某个目录返回目录下所有的类。返回的数组太多，可以通过实用工具 `ListUtils.addAll(T[]... arrays)` 合并。
 
 
 # 高级用法
+如果你使用 Swagger 的注解，或者自定义的注解声明文档信息，可以通过自定义提取器的方式生成 JSON。
+
+下面假设 @Doc 是你自定义的注解，我们通过新建 `DashuAnnotationParser` 来提取它。
+
+```java
+import com.ajaxjs.fast_doc.Model;
+import com.ajaxjs.fast_doc.annotation.SpringMvcAnnotationParser;
+import com.ajaxjs.spring.easy_controller.ControllerMethod;
+import com.dashu.lazyapidoc.annotation.Doc;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+
+public class DashuAnnotationParser extends SpringMvcAnnotationParser {
+    @Override
+    public void onClzInfo(Model.ControllerInfo ci, Class<?> clz) {
+        Doc doc = clz.getAnnotation(Doc.class);
+        if (doc != null) {
+            ci.description = doc.value();
+        }
+    }
+
+    @Override
+    public void getMethodInfo(Model.Item item, Method method) {
+        Doc[] annotationsByType = method.getAnnotationsByType(Doc.class);
+
+        if (annotationsByType != null) {
+            if (annotationsByType.length == 1) {
+                Doc doc = annotationsByType[0];
+                item.name = doc.value();
+
+                if (StringUtils.hasText(doc.remark()))
+                    item.description = doc.remark();
+
+                return;
+            }
+
+            // 多个，name 为空的那个就是
+            for (Doc doc : annotationsByType) {
+                if (StringUtils.isEmpty(doc.name())) {
+                    item.name = doc.value();
+
+                    if (StringUtils.hasText(doc.remark()))
+                        item.description = doc.remark();
+
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void getArgs(Model.Item item, Method method, Parameter param, Model.ArgInfo arg) {
+        Doc[] annotationsByType = method.getAnnotationsByType(Doc.class);
+
+        if (ObjectUtils.isEmpty(annotationsByType))
+            return;
+
+        for (Doc doc : annotationsByType) {
+            String argName = doc.name();
+
+            if (StringUtils.hasText(argName) && argName.equals(arg.name)) {
+                arg.description = doc.value();
+
+                if (StringUtils.hasText(doc.remark()))
+                    arg.description += "。" + doc.remark();
+
+                break;
+            }
+        }
+    }
+}
+```
+
+`DashuAnnotationParser` 继承于 `SpringMvcAnnotationParser`，覆盖了相关的模板方法（又称虚方法），分别对应获取类信息、方法信息和金额参数信息的时候。
+
+这样，调用 FastDoc 的方法有所不同，如下是：
+
+```java
+Class<?>[] beans = FastDoc.findAndAddClassesInPackageByFile("org.basecode.protocol.sys.model", "C:\\code\\auth-git\\security-console-parent\\security-console-service-protocol\\src\\main\\java\\org\\basecode\\protocol\\sys\\model");
+Class<?>[] dtos = FastDoc.findAndAddClassesInPackageByFile("org.basecode.protocol.sys.dto", "C:\\code\\auth-git\\security-console-parent\\security-console-service-protocol\\src\\main\\java\\org\\basecode\\protocol\\sys\\dto");
+Class<?>[] vos = FastDoc.findAndAddClassesInPackageByFile("org.basecode.protocol.sys.vo", "C:\\code\\auth-git\\security-console-parent\\security-console-service-protocol\\src\\main\\java\\org\\basecode\\protocol\\sys\\vo");
+Class<?>[] forms = FastDoc.findAndAddClassesInPackageByFile("org.basecode.protocol.sys.form", "C:\\code\\auth-git\\security-console-parent\\security-console-service-protocol\\src\\main\\java\\org\\basecode\\protocol\\sys\\form");
+
+Class<?>[] all = ListUtils.concat(ListUtils.concat(beans, dtos), vos);
+all = ListUtils.concat(all, forms);
+
+FastDoc.loadBeans("C:\\code\\auth-git\\security-console-parent\\security-console-service-protocol\\src\\main\\java\\",
+        all);
+
+Class<?>[] services = FastDoc.findAndAddClassesInPackageByFile("org.basecode.protocol.sys.service", "C:\\code\\auth-git\\security-console-parent\\security-console-service-protocol\\src\\main\\java\\org\\basecode\\protocol\\sys\\service");
+FastDoc.loadControllersDoc(DashuAnnotationParser.class, "C:\\code\\auth-git\\security-console-parent\\security-console-service-protocol\\src\\main\\java\\",
+        services);
+
+FastDoc.saveToDisk("C:\\code\\aj\\aj-all\\ajaxjs\\aj-ui-widget\\fast-doc\\json.js");
+```
 
 # FAQ 答疑
 - 如果出现如下图所示，只有成员的名称、类型等的信息，而没有注释信息，是什么原因？

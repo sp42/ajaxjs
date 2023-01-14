@@ -88,6 +88,7 @@
 			<artifactId>ajaxjs-util</artifactId>
 			<version>1.0.8</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-javadoc</artifactId>
