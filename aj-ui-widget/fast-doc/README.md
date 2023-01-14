@@ -3,6 +3,7 @@
 
 <div align="center"><img src="https://img-blog.csdnimg.cn/b974ab686fa246228fdac278e9f1b091.png" alt="example2" width="600" /></div>
 
+在线演示地址在 [https://framework.ajaxjs.com/demo/fast-doc/](https://framework.ajaxjs.com/demo/fast-doc/)。
 
 关于研发者这工具的动机，请参考我博客[《写文档是件大事情，怎么弄好它？》](https://zhangxin.blog.csdn.net/article/details/127632794)。
 
@@ -15,3 +16,8 @@
 有人疑问，既然有了 Swagger 注解为什么还要 Java 的注释呢？——因为没有了 Java 注释，你编码的时候就没有语法提示呀，IDE 又不会智能到可以提取注解的信息。当然，你可以复制一份到 Java 注释，但岂不是重复了么，手工复制？——那不符合我们程序员“懒”的追求哦。——呃～重复不是问题～～你有代码生成器？我控制器方法不需要给其他 Java 代码提示啊～～——呃～那好吧。
 
 综上，笔者编写了这个小巧的工具，不仅代码行数少，精简、轻量级，而且非入侵，不会影响你原有的工程依赖，无论使用还是部署也很方便。
+
+这一个小小的工具，不例外地，也是由前、后端两部分程序所组成。但这所谓的“后端”并不是一个 Web 程序，严格说只是一个 `Main()` 函数或者单元测试就是运行的 Java 程序，目的是生成供给前端渲染的 JSON，这个 JSON 就包含了所有文档信息。
+
+- 前端源码在 [https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/fast-doc](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/fast-doc)。
+- 生成 JSON 程序，其实是 AJAXJS Framework 的一部分，源码在 [https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/fast_doc](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/fast_doc)。
