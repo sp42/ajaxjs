@@ -17,7 +17,19 @@
 
 综上，笔者编写了这个小巧的工具，不仅代码行数少，精简、轻量级，而且非入侵，不会影响你原有的工程依赖，无论使用还是部署也很方便。
 
-这一个小小的工具，不例外地，也是由前、后端两部分程序所组成。但这所谓的“后端”并不是一个 Web 程序，严格说只是一个 `Main()` 函数或者单元测试就是运行的 Java 程序，目的是生成供给前端渲染的 JSON，这个 JSON 就包含了所有文档信息。
+这一个小小的工具，不例外地，也是由前、后端两部分程序所组成。但这所谓的“后端”并不是一个 Web 程序，严格说只是一个 `main()` 函数或者单元测试就是运行的 Java 程序，目的是生成供给前端渲染的 JSON，这个 JSON 就包含了所有文档信息。
 
 - 前端源码在 [https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/fast-doc](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/fast-doc)。
 - 生成 JSON 程序，其实是 AJAXJS Framework 的一部分，源码在 [https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/fast_doc](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-framework/src/main/java/com/ajaxjs/fast_doc)。
+
+# 使用方法
+## 前端网页
+前端网页很简单，能读取 `json.js` 就能解析了。你甚至可以把网站直接用浏览器 `file://` 方式打开，当然更常见的是放在 Nginx/Tomcat 上面。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/f2f7e0749700406d86e32ee07d34659d.png)
+
+注意 `fast-doc` 是里面那层目录，外面一层还有与之平级的 `libs` 和 `common` 的依赖。
+
+另外，还有一个地方要配置，就是接口地址的前缀，更改你具体的地址。你要进入源码简单改下，编辑 `doc.htm` 文件约第 197 行，修改 `data.root` 即可。
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/b65d7d5b989f4a55a76757d77cbc706f.png)
