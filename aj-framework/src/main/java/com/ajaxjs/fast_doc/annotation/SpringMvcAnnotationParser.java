@@ -36,7 +36,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Frank Cheung<sp42@qq.com>
  */
 public class SpringMvcAnnotationParser {
-    private static final LogHelper LOGGER = LogHelper.getLog(SpringMvcAnnotationParser.class);
+//    private static final LogHelper LOGGER = LogHelper.getLog(SpringMvcAnnotationParser.class);
 
     public SpringMvcAnnotationParser() {
     }
