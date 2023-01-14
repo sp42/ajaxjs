@@ -27,212 +27,213 @@ import com.ajaxjs.util.map.JsonHelper;
  * @author Frank Cheung<sp42@qq.com>
  */
 public class FastDoc {
-    static Map<String, ControllerInfo> AnnotationResult = new HashMap<>();
+	static Map<String, ControllerInfo> AnnotationResult = new HashMap<>();
 
-    /**
-     * 用 JavaDocParser 得到 Bean 的注释文档
-     *
-     * @param dir    源码磁盘目录
-     * @param clazzs Bean 类，其实任意 Java 类都可以，包括控制器
-     */
-    public static void loadBeans(String dir, Class<?>... clazzs) {
-        Params params = new Params();
-        params.sources = new ArrayList<>();
+	/**
+	 * 用 JavaDocParser 得到 Bean 的注释文档
+	 *
+	 * @param dir    源码磁盘目录
+	 * @param clazzs Bean 类，其实任意 Java 类都可以，包括控制器
+	 */
+	public static void loadBeans(String dir, Class<?>... clazzs) {
+		Params params = new Params();
+		params.sources = new ArrayList<>();
 
-        for (Class<?> clz : clazzs) {
-            String name = Util.className2JavaFileName(clz);
-            params.sources.add(dir + name);
-        }
+		for (Class<?> clz : clazzs) {
+			String name = Util.className2JavaFileName(clz);
+			params.sources.add(dir + name);
+		}
 
-        JavaDocParser.init(params);
-    }
+		JavaDocParser.init(params);
+	}
 
-    /**
-     * @param dir    源码磁盘目录
-     * @param clazzs 控制器类列表
-     */
-    public static void loadControllersDoc(Class<? extends SpringMvcAnnotationParser> parserClz, String dir, Class<?>... clazzs) {
-        loadBeans(dir, clazzs);
+	/**
+	 * @param dir    源码磁盘目录
+	 * @param clazzs 控制器类列表
+	 */
+	public static void loadControllersDoc(String dir, Class<?>... clazzs) {
+		loadControllersDoc(CustomAnnotationParser.class, dir, clazzs);
+	}
 
-        for (Class<?> clz : clazzs) {
-            String fullName = clz.getName();
+	public static void loadControllersDoc(Class<? extends SpringMvcAnnotationParser> parserClz, String dir, Class<?>... clazzs) {
+		loadBeans(dir, clazzs);
 
-            if (!AnnotationResult.containsKey(fullName)) {
-                SpringMvcAnnotationParser info = null;
+		for (Class<?> clz : clazzs) {
+			String fullName = clz.getName();
 
-                try {
-                    info = parserClz.newInstance();
-                } catch (IllegalAccessException | InstantiationException e) {
-                    e.printStackTrace();
-                }
+			if (!AnnotationResult.containsKey(fullName)) {
+				SpringMvcAnnotationParser info = null;
 
-                if (info == null)
-                    info = new CustomAnnotationParser();
+				try {
+					info = parserClz.newInstance();
+				} catch (IllegalAccessException | InstantiationException e) {
+					e.printStackTrace();
+				}
 
-                info.setClz(clz);
-                info.setTakeBeanInfo((clz2, argInfo) -> {
-                    String fullArgClzName = getInnerClzFullName(clz2);
-                    ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullArgClzName);
+				if (info == null)
+					info = new CustomAnnotationParser();
 
-                    if (classDocInfo != null) {
-                        argInfo.fields = classDocInfo.fields;
-                        setDescByComment(argInfo, classDocInfo);
-                    }
-                });
+				info.setClz(clz);
+				info.setTakeBeanInfo((clz2, argInfo) -> {
+					String fullArgClzName = getInnerClzFullName(clz2);
+					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullArgClzName);
 
-                info.setTakeReturnBeanInfo((clz2, returnInfo) -> {
-                    String fullReturnName = getInnerClzFullName(clz2);
-                    ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullReturnName);
+					if (classDocInfo != null) {
+						argInfo.fields = classDocInfo.fields;
+						setDescByComment(argInfo, classDocInfo);
+					}
+				});
 
-                    if (classDocInfo != null)
-                        returnInfo.fields = classDocInfo.fields;
+				info.setTakeReturnBeanInfo((clz2, returnInfo) -> {
+					String fullReturnName = getInnerClzFullName(clz2);
+					ClassDocInfo classDocInfo = JavaDocParser.CACHE.get(fullReturnName);
 
-                    setDescByComment(returnInfo, classDocInfo);
-                });
+					if (classDocInfo != null)
+						returnInfo.fields = classDocInfo.fields;
 
-                ControllerInfo controllerInfo = info.parse();
-                AnnotationResult.put(fullName, controllerInfo);
+					setDescByComment(returnInfo, classDocInfo);
+				});
 
-                mix(fullName, controllerInfo);
+				ControllerInfo controllerInfo = info.parse();
+				AnnotationResult.put(fullName, controllerInfo);
 
-                TestHelper.printJson(controllerInfo);
-            }
-        }
-    }
+				mix(fullName, controllerInfo);
 
-    /**
-     * JavaDoc 对于内部类也可以正常解析。但类全称不是 $ 区分的，而是 xxx.yyy，于是这里要统一一下
-     *
-     * @param clz2
-     * @return
-     */
-    private static String getInnerClzFullName(Class<?> clz2) {
-        String fullReturnName = clz2.getName();
+				TestHelper.printJson(controllerInfo);
+			}
+		}
+	}
 
-        if (fullReturnName.contains("$"))
-            fullReturnName = fullReturnName.replaceAll("\\$", ".");
+	/**
+	 * JavaDoc 对于内部类也可以正常解析。但类全称不是 $ 区分的，而是 xxx.yyy，于是这里要统一一下
+	 *
+	 * @param clz2
+	 * @return
+	 */
+	private static String getInnerClzFullName(Class<?> clz2) {
+		String fullReturnName = clz2.getName();
 
-        return fullReturnName;
-    }
+		if (fullReturnName.contains("$"))
+			fullReturnName = fullReturnName.replaceAll("\\$", ".");
 
-    /**
-     * 基础信息来自于注解，然后加上来自于 JavaDoc 的信息，合二为一，得到最终结果
-     *
-     * @param fullName       类全称
-     * @param controllerInfo 最终信息合并到这个对象
-     */
-    private static void mix(String fullName, ControllerInfo controllerInfo) {
-        ClassDocInfo javaDocInfo = JavaDocParser.CACHE.get(fullName);
-        if (javaDocInfo == null)
-            return;
+		return fullReturnName;
+	}
 
-        if (StringUtils.hasText(controllerInfo.description))
-            controllerInfo.description += javaDocInfo.commentText;
-        else
-            controllerInfo.description = javaDocInfo.commentText;
+	/**
+	 * 基础信息来自于注解，然后加上来自于 JavaDoc 的信息，合二为一，得到最终结果
+	 *
+	 * @param fullName       类全称
+	 * @param controllerInfo 最终信息合并到这个对象
+	 */
+	private static void mix(String fullName, ControllerInfo controllerInfo) {
+		ClassDocInfo javaDocInfo = JavaDocParser.CACHE.get(fullName);
+		if (javaDocInfo == null)
+			return;
 
-        List<Item> methodItems = controllerInfo.items;
+		if (StringUtils.hasText(controllerInfo.description))
+			controllerInfo.description += javaDocInfo.commentText;
+		else
+			controllerInfo.description = javaDocInfo.commentText;
 
-        for (Item item : methodItems) {
-            String methodName = item.methodName;
+		List<Item> methodItems = controllerInfo.items;
 
-            for (MethodInfo mJavaDoc : javaDocInfo.methods) {
-                if (mJavaDoc.name.equals(methodName)) { // 方法名称匹配
-                    if (StringUtils.hasText(item.name))
-                        item.description = mJavaDoc.commentText;
-                    else
-                        item.name = mJavaDoc.commentText;
+		for (Item item : methodItems) {
+			String methodName = item.methodName;
 
-                    for (ArgInfo argInfo : item.args) {// 参数列表的 mix
-                        for (ParameterInfo pInfo : mJavaDoc.parameters) {
-                            if (argInfo.name.equals(pInfo.name)) {
-                                setDescByComment(argInfo, pInfo);
-                                break;
-                            }
-                        }
-                    }
+			for (MethodInfo mJavaDoc : javaDocInfo.methods) {
+				if (mJavaDoc.name.equals(methodName)) { // 方法名称匹配
+					if (StringUtils.hasText(item.name))
+						item.description = mJavaDoc.commentText;
+					else
+						item.name = mJavaDoc.commentText;
 
-                    break;
-                }
-            }
-        }
-    }
+					for (ArgInfo argInfo : item.args) {// 参数列表的 mix
+						for (ParameterInfo pInfo : mJavaDoc.parameters) {
+							if (argInfo.name.equals(pInfo.name)) {
+								setDescByComment(argInfo, pInfo);
+								break;
+							}
+						}
+					}
 
-    private static void setDescByComment(CommonValue info, WithComment info2) {
-        if (info2 == null)
-            return;
+					break;
+				}
+			}
+		}
+	}
 
-        if (StringUtils.hasText(info.description))
-            info.description += " " + info2.commentText;
-        else
-            info.description = info2.commentText;
-    }
+	private static void setDescByComment(CommonValue info, WithComment info2) {
+		if (info2 == null)
+			return;
 
-    public static String getJsonStr() {
-        return JsonHelper.toJson(AnnotationResult);
-    }
+		if (StringUtils.hasText(info.description))
+			info.description += " " + info2.commentText;
+		else
+			info.description = info2.commentText;
+	}
 
-    public static void saveToDisk(String path) {
-        String json = getJsonStr();
+	public static String getJsonStr() {
+		return JsonHelper.toJson(AnnotationResult);
+	}
 
-        FileHelper.saveText(path, "var DOC_JSON = " + json + ";");
-    }
+	public static void saveToDisk(String path) {
+		String json = getJsonStr();
 
-    public static Class<?>[] findAndAddClassesInPackageByFile(String packageName, String packagePath) {
-        Set<Class<?>> classes = new LinkedHashSet<>();
-        findAndAddClassesInPackageByFile(packageName, packagePath, true, classes);
+		FileHelper.saveText(path, "var DOC_JSON = " + json + ";");
+	}
 
-        Class<?>[] arr = new Class[classes.size()];
+	public static Class<?>[] findAndAddClassesInPackageByFile(String packageName, String packagePath) {
+		Set<Class<?>> classes = new LinkedHashSet<>();
+		findAndAddClassesInPackageByFile(packageName, packagePath, true, classes);
 
-        int i = 0;
-        for (Class<?> clz : classes)
-            arr[i++] = clz;
+		Class<?>[] arr = new Class[classes.size()];
 
-        return arr;
-    }
+		int i = 0;
+		for (Class<?> clz : classes)
+			arr[i++] = clz;
 
-    /**
-     * 以文件的形式来获取包下的所有Class
-     *
-     * @param packagePath
-     * @param recursive
-     * @param classes
-     */
-    public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, boolean recursive, Set<Class<?>> classes) {
-        //获取此包的目录 建立一个File
-        File dir = new File(packagePath);
-        //如果不存在或者 也不是目录就直接返回
-        if (!dir.exists() || !dir.isDirectory()) {
+		return arr;
+	}
+
+	/**
+	 * 以文件的形式来获取包下的所有Class
+	 *
+	 * @param packagePath
+	 * @param recursive
+	 * @param classes
+	 */
+	public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, boolean recursive, Set<Class<?>> classes) {
+		// 获取此包的目录 建立一个File
+		File dir = new File(packagePath);
+		// 如果不存在或者 也不是目录就直接返回
+		if (!dir.exists() || !dir.isDirectory()) {
 //            log.warn("用户定义包名 " + packageName + " 下没有任何文件");
-            return;
-        }
+			return;
+		}
 
-        //如果存在 就获取包下的所有文件 包括目录
-        File[] dirfiles = dir.listFiles(new FileFilter() {
-            //自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
-            public boolean accept(File file) {
-                return (recursive && file.isDirectory()) || (file.getName().endsWith(".java"));
-            }
-        });
-        //循环所有文件
-        for (File file : dirfiles) {
-            //如果是目录 则继续扫描
-            if (file.isDirectory()) {
-                findAndAddClassesInPackageByFile(packageName + "." + file.getName(),
-                        file.getAbsolutePath(),
-                        recursive,
-                        classes);
-            } else {
-                //如果是java类文件 去掉后面的.class 只留下类名
-                String className = file.getName().substring(0, file.getName().length() - 5);
-                try {
-                    //添加到集合中去
-                    classes.add(Class.forName(packageName + '.' + className));
-                } catch (ClassNotFoundException e) {
+		// 如果存在 就获取包下的所有文件 包括目录
+		File[] dirfiles = dir.listFiles(new FileFilter() {
+			// 自定义过滤规则 如果可以循环(包含子目录) 或则是以.class结尾的文件(编译好的java类文件)
+			public boolean accept(File file) {
+				return (recursive && file.isDirectory()) || (file.getName().endsWith(".java"));
+			}
+		});
+		// 循环所有文件
+		for (File file : dirfiles) {
+			// 如果是目录 则继续扫描
+			if (file.isDirectory()) {
+				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
+			} else {
+				// 如果是java类文件 去掉后面的.class 只留下类名
+				String className = file.getName().substring(0, file.getName().length() - 5);
+				try {
+					// 添加到集合中去
+					classes.add(Class.forName(packageName + '.' + className));
+				} catch (ClassNotFoundException e) {
 //                    log.error("添加用户自定义视图类错误 找不到此类的.class文件");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

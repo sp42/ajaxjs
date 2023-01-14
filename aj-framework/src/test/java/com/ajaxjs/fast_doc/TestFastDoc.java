@@ -21,8 +21,8 @@ public class TestFastDoc {
 //		params.sources.add("D:\\code\\oba\\src\\main\\java\\com\\toway\\oba\\service\\IKoEvaService.java");
 
 		params.sourcePath = "d:\\code\\oba\\src\\main\\java\\;D:\\code\\websites2\\uav-common\\src\\main\\java;d:\\code\\aj\\aj-framework\\src\\main\\java;d:\\code\\aj\\aj-util\\src\\main\\java";
-		params.classPath = Util.getClzPath(
-				"D:\\sp42\\profile\\dev\\Eclipse\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\droneswarm\\WEB-INF\\lib");
+		params.classPath = Util
+				.getClzPath("D:\\sp42\\profile\\dev\\Eclipse\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\droneswarm\\WEB-INF\\lib");
 		JavaDocParser.init(params);
 	}
 
@@ -55,7 +55,7 @@ public class TestFastDoc {
 	@Test
 	public void testFastDoc() {
 		FastDoc.loadBeans("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
-		FastDoc.loadControllersDoc(null, "D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
+		FastDoc.loadControllersDoc("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
 
 //		System.out.println(FastDoc.getJsonStr());
 
@@ -65,7 +65,7 @@ public class TestFastDoc {
 //	@Test
 	public void testFastDocWorkwe() {
 		FastDoc.loadBeans("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
-		FastDoc.loadControllersDoc( null, "C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooController.class);
+		FastDoc.loadControllersDoc("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooController.class);
 
 //		System.out.println(FastDoc.getJsonStr());
 

@@ -42,6 +42,7 @@
     <!-- <link href="../common/table-selector/table-selector.css" rel="stylesheet" /> -->
     <script src="../common/table-selector/table-selector.js"></script>
 
+
     <div class="data-service">
         <nav>
             <div style="float:right;">
@@ -58,8 +59,10 @@
                 <!--                <i-Select v-model="datasource.id" style="margin: 15px 8px;width: 91%;" placeholder="请选择数据源">
                     <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{ item.name }}</Option>
                 </i-Select> -->
+                <div style="height: 93%;overflow-y: auto;">
 
-                <Tree :data="treeData" style="margin-left: 10px;"></Tree>
+                    <Tree :data="treeData" style="margin-left: 10px;"></Tree>
+                </div>
             </div>
             <div slot="right" class="split-pane-right">
 
@@ -145,12 +148,17 @@
                                     </i-Select> -->
                                 </li>
                                 <li>
-                                    <i-input ref="inputName">
+                                    <i-input ref="inputName" placeholder="必填的" v-model="currentData.name">
+                                        <span slot="prepend">命令名称</span>
+                                    </i-input>
+                                </li>
+                                <li>
+                                    <i-input ref="inputName" v-model="currentData.tableName">
                                         <span slot="prepend">数据库表名</span>
                                     </i-input>
                                 </li>
                                 <li>
-                                    <i-input ref="inputName" placeholder="实体的 URL 目录，必填的">
+                                    <i-input ref="inputName" placeholder="实体的 URL 目录，必填的" v-model="currentData.urlDir">
                                         <span slot="prepend">URL 目录</span>
                                     </i-input>
                                 </li>
@@ -332,7 +340,7 @@
     </div>
 
 
-
+    <script src="js/tree.js"></script>
     <script src="js/api.js"> </script>
     <script src="js/main.js"> </script>
 </body>

@@ -57,7 +57,7 @@
 
 
 ## 配置 MakeDbDocController
-我们需要生成数据库信息的 JSON，用于显示数据库文档。怎么生存？必须通过后端也就是一个控制器来生成。这个就是 `MakeDbDocController`，它是一个标准的 Spring MVC 控制器。使用它，您要将其继承于基类 `BaseMakeDbDocController`（这个类我们已经提供了）。我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
+我们需要生成数据库信息的 JSON，用于显示数据库文档。怎么生成？必须通过后端也就是一个控制器来生成——那就是 `MakeDbDocController`，它是一个标准的 Spring MVC 控制器。使用它，您要将其继承于基类 `BaseMakeDbDocController`（这个类我们已经提供了）。我们的 API 设计风格即是，类库提供抽象基类，让用户继承它，并提供相关的参数配置。
 
 ```java
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -177,9 +177,9 @@ DataSource getDs() {
 
 左侧的菜单中，右键鼠标打开新的浏览器创建，这是完成页面，直接打印。
 
-- 如何导出 PDF?
+- 如何导出 Word/PDF?
 
-参考“打印”，选择 PDF 格式打印到文件。
+Word 的话，全文 Copy & Paste 即可。PDF 的话，在浏览器里面“打印”，选择 PDF 格式打印到文件。
 
 - 我不想任何人可以访问页面，怎么加用户登录、验证？
 

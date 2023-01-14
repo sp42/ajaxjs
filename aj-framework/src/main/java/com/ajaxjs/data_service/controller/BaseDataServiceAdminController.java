@@ -31,6 +31,7 @@ import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.util.DataBaseMetaHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.regexp.RegExpUtils;
 
 /**
@@ -67,7 +68,14 @@ public abstract class BaseDataServiceAdminController implements DataServiceDAO {
 		LOGGER.info("获取表配置列表");
 
 		try (Connection conn = getConnection()) {
-			return JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM " + getDataServiceTableName());
+			List<DataServiceEntity> list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM " + getDataServiceTableName());
+			for (DataServiceEntity e : list) {
+				String json = e.getJson();
+				Map<String, Object> map = JsonHelper.parseMap(json);
+				e.setData(map);
+			}
+
+			return list;
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 			return Collections.emptyList();

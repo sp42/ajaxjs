@@ -34,6 +34,8 @@ public class DataServiceEntity extends BaseModel implements IBaseModel {
 	 */
 	private Map<String, String> fields;
 
+	private Map<String, Object> data;
+
 	/**
 	 * 字段映射
 	 */
@@ -111,5 +113,13 @@ public class DataServiceEntity extends BaseModel implements IBaseModel {
 
 	public void setConfig(String config) {
 		this.config = config;
+	}
+
+	public Map<String, Object> getData() {
+		return data;
+	}
+
+	public void setData(Map<String, Object> data) {
+		this.data = data;
 	}
 }
