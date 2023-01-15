@@ -103,7 +103,7 @@ public class TaskService extends BaseWfService {
 		ProcessPO process = processService.findById(order.getProcessId());
 
 		NodeModel nodeModel = process.getModel().getNode(task.getName());
-		Objects.requireNonNull(nodeModel, "任务 id 无法找到节点模型.");
+		Objects.requireNonNull(nodeModel, "任务 id 无法找到节点模型");
 
 		if (nodeModel instanceof TaskModel)
 			return (TaskModel) nodeModel;
@@ -222,7 +222,7 @@ public class TaskService extends BaseWfService {
 			TaskDAO.delete(task);
 
 		Task task = hist.undoTask();
-		TaskFactory.create(task);
+		TaskFactory.saveTask(task);
 		assignTask(task.getId(), task.getOperator());
 
 		return task;
@@ -250,7 +250,7 @@ public class TaskService extends BaseWfService {
 
 		Task task = history.undoTask();
 		task.setOperator(history.getOperator());
-		TaskFactory.create(task);
+		TaskFactory.saveTask(task);
 		assignTask(task.getId(), task.getOperator());
 
 		return task;
@@ -303,7 +303,7 @@ public class TaskService extends BaseWfService {
 
 		if (isAllowed) {
 			Task task = histTask.undoTask();
-			TaskFactory.create(task);
+			TaskFactory.saveTask(task);
 			assignTask(task.getId(), task.getOperator());
 
 			return task;
@@ -312,7 +312,7 @@ public class TaskService extends BaseWfService {
 	}
 
 	/**
-	 * 根据 taskId、operator，判断当前操作人operator是否允许执行 taskId 指定的任务
+	 * 根据 taskId、operator，判断当前操作人 operator 是否允许执行 taskId 指定的任务
 	 * 
 	 * @param task     任务对象
 	 * @param operator 操作人

@@ -70,7 +70,7 @@ public class TransitionModel extends BaseWfModel {
 				public void handle(Execution exec) {
 					LOGGER.info("创建 {0} 任务", tm.getName());
 
-					List<Task> tasks = TaskFactory.createTask(tm, exec);
+					List<Task> tasks = TaskFactory.createTaskByModel(tm, exec);
 					exec.addTasks(tasks);
 
 					// 从服务上下文中查找任务拦截器列表，依次对 task 集合进行拦截处理

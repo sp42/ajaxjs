@@ -42,7 +42,7 @@ public abstract class BasePersistantObject implements IBaseModel {
 	/**
 	 * 上一次更新人员 id
 	 */
-	private Long updator;
+	private Long updater;
 
 	/**
 	 * 创建日期
@@ -110,12 +110,12 @@ public abstract class BasePersistantObject implements IBaseModel {
 		this.creator = creator;
 	}
 
-	public Long getUpdator() {
-		return updator;
+	public Long getUpdater() {
+		return updater;
 	}
 
-	public void setUpdator(Long updator) {
-		this.updator = updator;
+	public void setUpdater(Long updator) {
+		this.updater = updator;
 	}
 
 }

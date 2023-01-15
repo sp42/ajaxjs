@@ -2,6 +2,8 @@ package com.ajaxjs.workflow.model.po;
 
 import java.util.Date;
 
+import org.springframework.beans.BeanUtils;
+
 /**
  * 历史流程实例实体类
  * 
@@ -20,15 +22,8 @@ public class OrderHistory extends Order {
 	 * @param order 活动实例对象
 	 */
 	public OrderHistory(Order order) {
-		setId(order.getId());
-		setProcessId(order.getProcessId());
-		setCreateDate(order.getCreateDate());
-		setExpireDate(order.getExpireDate());
-		setCreator(order.getCreator());
-		setParentId(order.getParentId());
-		setPriority(order.getPriority());
-		setOrderNo(order.getOrderNo());
-		setVariable(order.getVariable());
+		BeanUtils.copyProperties(order, this);
+		setVersion(null); // 排除 version，历史表里面没有该字段
 	}
 
 	/**
@@ -43,7 +38,7 @@ public class OrderHistory extends Order {
 		order.setParentId(getParentId());
 		order.setCreator(getCreator());
 		order.setCreateDate(getCreateDate());
-		order.setUpdator(getUpdator());
+		order.setUpdater(getUpdater());
 		order.setUpdateDate(getEndDate());
 		order.setExpireDate(getExpireDate());
 		order.setOrderNo(getOrderNo());

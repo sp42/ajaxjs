@@ -6,14 +6,13 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.workflow.common.WfConstant;
-import com.ajaxjs.workflow.common.WfDao;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.po.Task;
+import com.ajaxjs.workflow.service.BaseWfService;
 import com.ajaxjs.workflow.service.TaskService;
 
-public class TaskActorMgr implements WfConstant, WfDao {
+public class TaskActorMgr extends BaseWfService {
 	/**
 	 * 向指定的任务 id 添加参与者
 	 * 
@@ -86,7 +85,7 @@ public class TaskActorMgr implements WfConstant, WfDao {
 			return;
 
 		if (task.getTaskType() == TaskType.MAJOR) {
-			removeTaskActor(task.getId(), actors);
+//			removeTaskActor(task.getId(), actors);
 			Map<String, Object> taskData = JsonHelper.parseMap(task.getVariable());
 			String actorStr = (String) taskData.get(Task.KEY_ACTOR);
 

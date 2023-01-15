@@ -38,8 +38,9 @@ public interface WfDao {
 		@KeyOfMapParams({ "task_id", "actor_id" })
 		Object createTaskActor(Long taskId, Long actorId);
 
-		@Select("SELECT * FROM wf_task_actor WHERE taskId = ?")
-		public List<TaskActor> findTaskActorsByTaskId(Long taskId);
+//		@Select("SELECT * FROM wf_task_actor WHERE taskId = ?")
+		@KeyOfMapParams("taskId")
+		List<TaskActor> findTaskActorsByTaskId(Long taskId);
 	}
 
 	public static final TaskDao TaskDAO = new Caller("cms", "wf_task").bind(TaskDao.class, Task.class);
@@ -47,7 +48,7 @@ public interface WfDao {
 	interface TaskHistoryDao extends IDataService<TaskHistory> {
 	}
 
-	public static final TaskHistoryDao TaskHistoryDAO = new Caller("wf", "task_history").bind(TaskHistoryDao.class, TaskHistory.class);
+	public static final TaskHistoryDao TaskHistoryDAO = new Caller("cms", "wf_task_history").bind(TaskHistoryDao.class, TaskHistory.class);
 
 	interface OrderDao extends IDataService<Order> {
 	}

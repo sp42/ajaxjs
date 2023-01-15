@@ -58,8 +58,8 @@ public class TestProcess extends BaseTest {
 
 		Order order = engine.startInstanceByName("simple", 0, null, args);
 		assertNotNull(order);
+		
 //		engine.startInstanceById(1L, 1L, args);
-
 	}
 
 //	@Test

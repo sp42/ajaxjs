@@ -56,7 +56,7 @@ public class OrderService extends BaseWfService {
 		order.setParentId(parentId);
 		order.setParentNodeName(parentNodeName);
 		order.setCreator(operator);
-		order.setUpdator(operator);
+		order.setUpdater(operator);
 		order.setProcessId(process.getId());
 		order.setVersion(0);
 		order.setVariable(JsonHelper.toJson(args));
@@ -83,7 +83,7 @@ public class OrderService extends BaseWfService {
 	}
 
 	/**
-	 * 保存流程实例。流程实例数据会保存至活动实例表、历史实例表
+	 * 保存流程实例。流程实例数据会保存至 活动实例表、历史实例表
 	 * 
 	 * @param order 流程实例对象
 	 * @return 新建 id

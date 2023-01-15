@@ -20,7 +20,7 @@ import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.service.handler.IHandler;
 
 /**
- * 结束节点end元素
+ * 结束节点 end 元素
  * 
  */
 public class EndModel extends NodeModel {
@@ -29,7 +29,7 @@ public class EndModel extends NodeModel {
 	private static final long serialVersionUID = -7793175180140842894L;
 
 	@Override
-	public void exec(Execution execution) {
+	public void exec(Execution exec) {
 		fire(new IHandler() {
 			@Override
 			public void handle(Execution exec) {
@@ -74,7 +74,7 @@ public class EndModel extends NodeModel {
 					exec.addTasks(newExecution.getTasks());
 				}
 			}
-		}, execution);
+		}, exec);
 	}
 
 	/**

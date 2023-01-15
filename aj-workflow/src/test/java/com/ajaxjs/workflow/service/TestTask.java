@@ -20,9 +20,13 @@ public class TestTask extends BaseTest {
 	@Autowired
 	TaskService taskService;
 
-	@Test
 	public void testGetTaskModel() {
 		TaskModel taskModel = taskService.getTaskModel(1L);
 		assertNotNull(taskModel);
+	}
+
+	@Test
+	public void executeTask() {
+		engine.executeTask(3l, 1l, null);
 	}
 }

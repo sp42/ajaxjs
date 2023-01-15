@@ -43,14 +43,14 @@ public class TaskFactory extends BaseWfService {
 	public static List<Task> createFreeTask(WorkflowEngine engine, Long orderId, Long operator, Args args, TaskModel model) {
 		Order order = WfDao.OrderDAO.findById(orderId);
 		Objects.requireNonNull(order, "指定的流程实例[id=" + orderId + "]已完成或不存在");
-		order.setUpdator(operator);
+		order.setUpdater(operator);
 //		order.setLastUpdateTime(DateHelper.getTime());
 
 		ProcessPO process = engine.processService.findById(order.getProcessId());
 		Execution execution = new Execution(engine, process, order, args);
 		execution.setOperator(operator);
 
-		return createTask(model, execution);
+		return createTaskByModel(model, execution);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class TaskFactory extends BaseWfService {
 			Task newTask = (Task) task.clone();
 			newTask.setParentId(taskId);
 			newTask.setTaskType(taskType);
-			tasks.add(create(newTask, actors));
+			tasks.add(saveTask(newTask, actors));
 		} catch (CloneNotSupportedException e) {
 			throw new WfException("任务对象不支持复制", e.getCause());
 		}
@@ -84,7 +84,7 @@ public class TaskFactory extends BaseWfService {
 	 * @param actors
 	 * @return
 	 */
-	public static Task create(Task task, Long... actors) {
+	public static Task saveTask(Task task, Long... actors) {
 		task.setPerformType(PerformType.ANY);
 		Long newlyId = (Long) TaskDAO.create(task);
 		TaskService.assignTask(newlyId, actors);
@@ -100,17 +100,17 @@ public class TaskFactory extends BaseWfService {
 	 * @param exec      执行对象
 	 * @return 任务列表
 	 */
-	public static List<Task> createTask(TaskModel taskModel, Execution exec) {
+	public static List<Task> createTaskByModel(TaskModel taskModel, Execution exec) {
 //		Date remindDate = DateHelper.processTime(args, taskModel.getReminderTime());
-		Long[] actors = TaskFactory.getActors(taskModel, exec);
-		Task task = TaskFactory.create(taskModel, exec, actors);
+		Long[] actors = getActors(taskModel, exec);
+		Task task = create(taskModel, exec, actors);
 		Date remindDate = taskModel.getReminderTime();
 
 		List<Task> tasks = new ArrayList<>();
 
 		if (taskModel.isPerformAny()) {
 			// 任务执行方式为参与者中任何一个执行即可驱动流程继续流转，该方法只产生一个 task
-			task = create(task, actors);
+			task = saveTask(task, actors);
 			task.setRemindDate(remindDate);
 			tasks.add(task);
 		} else if (taskModel.isPerformAll()) {
@@ -124,7 +124,7 @@ public class TaskFactory extends BaseWfService {
 					singleTask = task;
 				}
 
-				singleTask = create(singleTask, actor);
+				singleTask = saveTask(singleTask, actor);
 				singleTask.setRemindDate(remindDate);
 				tasks.add(singleTask);
 			}
@@ -140,11 +140,9 @@ public class TaskFactory extends BaseWfService {
 	 * @param exec  执行对象
 	 * @return 任务列表
 	 */
-	public static Task create(TaskModel model, Execution exec, Long[] actors) {
+	private static Task create(TaskModel model, Execution exec, Long[] actors) {
 		Task task = new Task();
-
-		linkOrder(task, exec.getOrder());
-
+		task.setOrderId(exec.getOrder().getId());// 关联流程实例 order
 		task.setName(model.getName());
 		task.setDisplayName(model.getDisplayName());
 		task.setTaskType(model.isMajor() ? TaskType.MAJOR : TaskType.AIDANT);
@@ -178,20 +176,6 @@ public class TaskFactory extends BaseWfService {
 		args.put(Task.KEY_ACTOR, WfUtils.join(actors));
 
 		return args;
-	}
-
-	/**
-	 * order 是流程实例，这里关联之
-	 * 
-	 * @param task
-	 * @param order
-	 */
-	private static void linkOrder(Task task, Order order) {
-		Objects.requireNonNull(order);
-		Long orderId = order.getId();
-		Objects.requireNonNull(order, "缺少流程实例 id");
-
-		task.setOrderId(orderId);
 	}
 
 	/**

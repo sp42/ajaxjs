@@ -18,7 +18,6 @@ import com.ajaxjs.workflow.service.parser.ProcessModelParser;
 
 /**
  * 流程处理
- *
  */
 @Service
 public class ProcessService extends BaseWfService implements CacheManagerAware {
@@ -63,7 +62,7 @@ public class ProcessService extends BaseWfService implements CacheManagerAware {
 		bean.setStat(WfConstant.STATE_ACTIVE);
 		bean.setCreator(creator);
 
-		Integer ver = ProcessDAO.getLatestProcessVersion(model.getName());
+		Integer ver = ProcessDAO.getLatestProcessVersion(model.getName()); // 同名的，设置不同的版本号
 		bean.setVersion(ver == null || ver < 0 ? 0 : ver + 1);
 
 		long newlyId = (long) ProcessDAO.create(bean);

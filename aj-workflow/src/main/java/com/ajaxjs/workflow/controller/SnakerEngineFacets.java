@@ -108,18 +108,23 @@ public class SnakerEngineFacets extends BaseWfService {
 			List<Args> vars = new ArrayList<>();
 
 			for (TaskHistory hist : histTasks) {
-				Args map = JsonHelper.parseMap(hist.getVariable());
+				Map<String, Object> map = JsonHelper.parseMap(hist.getVariable());
 				if (map == null)
 					map = Collections.emptyMap();
 
-				vars.add(map);
+				Args args = new Args();
+				args.putAll(map);
+				vars.add(args);
 			}
 
 			data.put("vars", vars);
 			data.put("histTasks", histTasks);
 		}
 
-		return data;
+		Args args = new Args();
+		args.putAll(data);
+
+		return args;
 	}
 
 	public void addSurrogate(Surrogate entity) {

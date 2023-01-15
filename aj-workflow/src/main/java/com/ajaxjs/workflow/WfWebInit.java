@@ -17,6 +17,6 @@ public class WfWebInit extends BaseWebInitializer {
 
 	@Bean
 	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-		return new ServiceBeanDefinitionRegistry("com.ajaxjs.workflow");
+		return new ServiceBeanDefinitionRegistry(getClass().getPackage().getName());
 	}
 }

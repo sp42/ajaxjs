@@ -2,6 +2,7 @@ package com.ajaxjs.workflow.model.node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.springframework.util.StringUtils;
 
@@ -88,6 +89,81 @@ public abstract class NodeModel extends BaseWfModel {
 	}
 
 	/**
+	 * 获取下一步的模型
+	 * 
+	 * @param <T>
+	 * @param clazz
+	 * @return 下一步模型的列表
+	 */
+	public <T> List<T> getNextModels(Class<T> clazz) {
+		List<T> models = new ArrayList<>();
+
+		for (TransitionModel tm : this.getOutputs())
+			addNextModels(models, tm, clazz);
+
+		return models;
+	}
+
+	/**
+	 * 
+	 * @param <T>
+	 * @param models
+	 * @param tm
+	 * @param clazz
+	 */
+	@SuppressWarnings("unchecked")
+	protected <T> void addNextModels(List<T> models, TransitionModel tm, Class<T> clazz) {
+		NodeModel next = tm.getTarget();
+
+		if (clazz.isInstance(next))
+			models.add((T) next);
+		else {
+			for (TransitionModel tm2 : next.getOutputs())
+				addNextModels(models, tm2, clazz);
+		}
+	}
+
+	/**
+	 * 设置 前置拦截器
+	 * 
+	 * @param preInterceptors 前置拦截器
+	 */
+	public void setPreInterceptors(String preInterceptors) {
+		this.preInterceptors = preInterceptors;
+		addInterceptors(preInterceptors, instance -> preInterceptorList.add(instance));
+	}
+
+	/**
+	 * 设置后置拦截器
+	 * 
+	 * @param postInterceptors 后置拦截器
+	 */
+	public void setPostInterceptors(String postInterceptors) {
+		this.postInterceptors = postInterceptors;
+		addInterceptors(postInterceptors, instance -> postInterceptorList.add(instance));
+	}
+
+	/**
+	 * 输入拦截器字符串，通过反射创建实例加入到节点中
+	 * 
+	 * @param interceptors 拦截器字符串，由 , 隔开
+	 * @param fn
+	 */
+	private static void addInterceptors(String interceptors, Consumer<WorkflowInterceptor> fn) {
+		if (!StringUtils.hasText(interceptors))
+			return;
+
+		String[] arr = interceptors.split(",");
+
+		for (String interceptor : arr) {
+			WorkflowInterceptor instance = ReflectUtil.newInstance(WorkflowInterceptor.class, interceptor);
+
+			if (instance != null)
+				fn.accept(instance);
+		}
+	}
+
+	/**
 	 * 拦截方法
 	 * 
 	 * @param interceptos 拦截器列表
@@ -103,32 +179,8 @@ public abstract class NodeModel extends BaseWfModel {
 		}
 	}
 
-	/**
-	 * 获取下一步的模型
-	 * 
-	 * @param <T>
-	 * @param clazz
-	 * @return
-	 */
-	public <T> List<T> getNextModels(Class<T> clazz) {
-		List<T> models = new ArrayList<>();
-
-		for (TransitionModel tm : this.getOutputs())
-			addNextModels(models, tm, clazz);
-
-		return models;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected <T> void addNextModels(List<T> models, TransitionModel tm, Class<T> clazz) {
-		NodeModel next = tm.getTarget();
-
-		if (clazz.isInstance(next))
-			models.add((T) next);
-		else {
-			for (TransitionModel tm2 : next.getOutputs())
-				addNextModels(models, tm2, clazz);
-		}
+	public String getPostInterceptors() {
+		return postInterceptors;
 	}
 
 	public List<TransitionModel> getInputs() {
@@ -157,43 +209,5 @@ public abstract class NodeModel extends BaseWfModel {
 
 	public String getPreInterceptors() {
 		return preInterceptors;
-	}
-
-	/**
-	 * 
-	 * @param preInterceptors
-	 */
-	public void setPreInterceptors(String preInterceptors) {
-		this.preInterceptors = preInterceptors;
-
-		if (StringUtils.hasText(preInterceptors)) {
-			for (String interceptor : preInterceptors.split(",")) {
-				WorkflowInterceptor instance = (WorkflowInterceptor) ReflectUtil.newInstance(interceptor);
-
-				if (instance != null)
-					this.preInterceptorList.add(instance);
-			}
-		}
-	}
-
-	public String getPostInterceptors() {
-		return postInterceptors;
-	}
-
-	/**
-	 * 
-	 * @param postInterceptors
-	 */
-	public void setPostInterceptors(String postInterceptors) {
-		this.postInterceptors = postInterceptors;
-
-		if (StringUtils.hasText(postInterceptors)) {
-			for (String interceptor : postInterceptors.split(",")) {
-				WorkflowInterceptor instance = (WorkflowInterceptor) ReflectUtil.newInstance(interceptor);
-
-				if (instance != null)
-					this.postInterceptorList.add(instance);
-			}
-		}
 	}
 }
