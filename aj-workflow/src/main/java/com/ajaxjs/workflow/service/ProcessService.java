@@ -1,5 +1,6 @@
 package com.ajaxjs.workflow.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,6 +132,25 @@ public class ProcessService extends BaseWfService implements CacheManagerAware {
 
 			return p;
 		}
+	}
+
+	/**
+	 * 获取所有流程定义的名称（不重复 name）
+	 * 
+	 * @return 流程定义的名称列表
+	 */
+	public List<String> getAllProcessNames() {
+		List<ProcessPO> list = ProcessDAO.findList();
+		List<String> names = new ArrayList<>();
+
+		for (ProcessPO entity : list) {
+			if (names.contains(entity.getName()))
+				continue;
+			else
+				names.add(entity.getName());
+		}
+
+		return names;
 	}
 
 	// 上次加载的流程 id，测试用

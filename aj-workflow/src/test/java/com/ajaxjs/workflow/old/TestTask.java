@@ -10,20 +10,9 @@ import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.service.task.TaskActorMgr;
+import com.ajaxjs.workflow.service.TaskService;
 
 public class TestTask extends BaseTest {
-//	@Test
-	public void testConfig() {
-		init("test/task/config.xml");
-		Order order = engine.startInstanceByName("config", 0, 1000L, null);
-		assertNotNull(order);
-
-		Args args = new Args();
-		args.put("task1.operator", new String[] { "1" });
-		engine.executeTask(1L, 1L, args);// 任务执行
-	}
-
 //	@Test
 	public void testSimple() {
 //		deploy("test/task/simple.xml");
@@ -105,9 +94,8 @@ public class TestTask extends BaseTest {
 
 //	@Test
 	public void testActor() {
-		TaskActorMgr mgr = new TaskActorMgr();
-		mgr.addTaskActor(130L, 1L, 2L);
-		mgr.removeTaskActor(132L, 2L);
+		TaskService.addTaskActor(130L, 1L, 2L);
+		TaskService.removeTaskActor(132L, 2L);
 	}
 
 	// 字段模型

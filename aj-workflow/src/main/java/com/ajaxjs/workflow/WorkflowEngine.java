@@ -1,5 +1,6 @@
 package com.ajaxjs.workflow;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -20,6 +22,7 @@ import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.model.node.NodeModel;
 import com.ajaxjs.workflow.model.node.StartModel;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.Task;
@@ -37,17 +40,67 @@ public class WorkflowEngine {
 	public static final LogHelper LOGGER = LogHelper.getLog(WorkflowEngine.class);
 
 	/**
-	 * 根据流程定义 id，操作人 id，参数列表启动流程实例
+	 * 启动
+	 * 
+	 * @param name     流程名称
+	 * @param ver      版本号
+	 * @param operator 操作人 id
+	 * @param args     参数列表
+	 * @return 流程实例
+	 */
+	public Order startAndExecute(String name, Integer version, Long operator, Args args) {
+		Order order = startInstanceByName(name, version, operator, args);
+		execTask(order, operator, args);
+
+		return order;
+	}
+
+	/**
+	 * 启动
 	 * 
 	 * @param id       流程定义 id
 	 * @param operator 操作人 id
 	 * @param args     参数列表
 	 * @return 流程实例
 	 */
-	public Order startInstanceById(Long id, Long operator, Args args) {
+
+	public Order startAndExecute(Long processId, Long operator, Args args) {
+		Order order = startInstanceById(processId, operator, args);
+		execTask(order, operator, args);
+
+		return order;
+	}
+
+	/**
+	 * 
+	 * 为什么要用数组保存起来，却不使用？
+	 * 
+	 * @param order
+	 * @param operator 操作人 id
+	 * @param args     参数列表
+	 */
+	private void execTask(Order order, Long operator, Args args) {
+		List<Task> tasks = taskService.findByOrderId(order.getId());
+		List<Task> newTasks = new ArrayList<>();
+
+		if (!CollectionUtils.isEmpty(tasks)) {
+			Task task = tasks.get(0);
+			newTasks.addAll(executeTask(task.getId(), operator, args));
+		}
+	}
+
+	/**
+	 * 根据流程定义 id，操作人 id，参数列表启动流程实例
+	 * 
+	 * @param processId 流程定义 id
+	 * @param operator  操作人 id
+	 * @param args      参数列表
+	 * @return 流程实例
+	 */
+	public Order startInstanceById(Long processId, Long operator, Args args) {
 		args = Args.getEmpty(args);
 
-		return startInstance(processService.findById(id), operator, args);
+		return startInstance(processService.findById(processId), operator, args);
 	}
 
 	/**
@@ -140,9 +193,9 @@ public class WorkflowEngine {
 	/**
 	 * 根据任务主键 id，操作人 id，参数列表执行任务
 	 * 
-	 * @param taskId
-	 * @param operator
-	 * @param args
+	 * @param taskId   任务 id
+	 * @param operator 操作人
+	 * @param args     参数列表
 	 * @return
 	 */
 	public List<Task> executeTask(Long taskId, Long operator, Args args) {
@@ -172,9 +225,9 @@ public class WorkflowEngine {
 	 * 根据任务主键 id，操作人 id，参数列表执行任务，并且根据 nodeName 跳转到任意节点 1、nodeName 为 null 时，则驳回至上一步处理
 	 * 2、nodeName不为null时，则任意跳转，即动态创建转移
 	 * 
-	 * @param taskId
-	 * @param operator
-	 * @param args
+	 * @param taskId   任务 id
+	 * @param operator 操作人
+	 * @param args     参数列表
 	 * @param nodeName
 	 * @return
 	 */
@@ -249,6 +302,28 @@ public class WorkflowEngine {
 		LOGGER.info("驱动任务 {0} 继续执行", task.getId());
 
 		return exec;
+	}
+
+	/**
+	 * 根据流程实例 id，操作人 id，参数列表按照节点模型 model 创建新的自由任务
+	 * 
+	 * @param orderId  流程 id
+	 * @param operator 操作人
+	 * @param args     参数列表
+	 * @param model    任务模型
+	 * @return
+	 */
+	public List<Task> createFreeTask(Long orderId, Long operator, Args args, TaskModel model) {
+		Order order = WfDao.OrderDAO.findById(orderId);
+		Objects.requireNonNull(order, "指定的流程实例[id=" + orderId + "]已完成或不存在");
+		order.setUpdater(operator);
+		// order.setLastUpdateTime(DateHelper.getTime());
+
+		ProcessPO process = processService.findById(order.getProcessId());
+		Execution exec = new Execution(this, process, order, args);
+		exec.setOperator(operator);
+
+		return TaskService.createTaskByModel(model, exec);
 	}
 
 	@Autowired

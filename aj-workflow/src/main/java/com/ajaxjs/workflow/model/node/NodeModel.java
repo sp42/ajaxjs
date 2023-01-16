@@ -98,7 +98,7 @@ public abstract class NodeModel extends BaseWfModel {
 	public <T> List<T> getNextModels(Class<T> clazz) {
 		List<T> models = new ArrayList<>();
 
-		for (TransitionModel tm : this.getOutputs())
+		for (TransitionModel tm : getOutputs())
 			addNextModels(models, tm, clazz);
 
 		return models;

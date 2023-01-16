@@ -9,10 +9,10 @@ import com.ajaxjs.workflow.model.node.NodeModel;
 import com.ajaxjs.workflow.model.node.work.SubProcessModel;
 import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Task;
+import com.ajaxjs.workflow.service.TaskService;
 import com.ajaxjs.workflow.service.handler.IHandler;
 import com.ajaxjs.workflow.service.handler.SubProcessHandler;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
-import com.ajaxjs.workflow.service.task.TaskFactory;
 
 /**
  * 变迁定义 transition 元素
@@ -70,7 +70,7 @@ public class TransitionModel extends BaseWfModel {
 				public void handle(Execution exec) {
 					LOGGER.info("创建 {0} 任务", tm.getName());
 
-					List<Task> tasks = TaskFactory.createTaskByModel(tm, exec);
+					List<Task> tasks = TaskService.createTaskByModel(tm, exec);
 					exec.addTasks(tasks);
 
 					// 从服务上下文中查找任务拦截器列表，依次对 task 集合进行拦截处理
