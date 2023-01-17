@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ajaxjs.file_upload.IFileUpload;
-import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.gateway.PassportFilter;
+import com.ajaxjs.my_data_framework.BaseController;
 import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.WebHelper;
 import com.ajaxjs.util.config.EasyConfig;

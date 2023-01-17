@@ -15,7 +15,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.ajaxjs.entity.BaseEntityConstants;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.QueryTools;
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.JdbcUtil;
@@ -211,11 +210,31 @@ public class JspHelper {
 		if (value == null)
 			return null;
 		else {
-			if (!QueryTools.preventSQLInject(value))
+			if (!preventSQLInject(value))
 				throw new SecurityException("SQL 注入！");
 			else
 				return value;
 		}
+	}
+	
+
+	/**
+	 * 简单检查字符串有否 SQL 关键字
+	 *
+	 * @param str
+	 * @return false 表示为字符串中有 SQL 关键字
+	 */
+	public static boolean preventSQLInject(String str) {
+		str = str.toUpperCase();
+
+		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0 || str.indexOf("SELECT") >= 0
+				|| str.indexOf("'") >= 0 || str.indexOf("SUBSTR(") >= 0 || str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0
+				|| str.indexOf(" AND ") >= 0 || str.indexOf("DROP") >= 0 || str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0
+				|| str.indexOf("TRUNCATE") >= 0 || str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0 || str.indexOf("MASTER") >= 0) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public static String getState(int state) {

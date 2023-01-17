@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.my_data_framework.BaseController;
 import com.ajaxjs.user.sso.model.AccessToken;
 import com.ajaxjs.user.sso.model.UserSession;
 import com.ajaxjs.util.date.LocalDateUtils;

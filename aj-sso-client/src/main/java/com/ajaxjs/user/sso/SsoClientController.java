@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ajaxjs.framework.BaseController;
+import com.ajaxjs.my_data_framework.BaseController;
 import com.ajaxjs.net.http.Post;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.sso.model.AccessToken;

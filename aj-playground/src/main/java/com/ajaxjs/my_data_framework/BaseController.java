@@ -1,4 +1,4 @@
-package com.ajaxjs.framework;
+package com.ajaxjs.my_data_framework;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.util.map.JsonHelper;
 
 /**

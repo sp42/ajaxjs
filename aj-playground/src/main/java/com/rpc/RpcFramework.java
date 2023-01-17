@@ -22,7 +22,7 @@ public class RpcFramework {
 	 * @param port    服务端口
 	 * @throws Exception
 	 */
-	public static void export(Object service, int port) throws Exception {
+	public static void export(final Object service, int port) throws Exception {
 		if (service == null)
 			throw new IllegalArgumentException("service instance == null");
 		if (port <= 0 || port > 65535)
@@ -38,7 +38,7 @@ public class RpcFramework {
 		ServerSocket server = new ServerSocket(port);
 
 		for (;;) {
-			Socket socket = server.accept();
+			final Socket socket = server.accept();
 
 			new Thread(new Runnable() {
 				@Override
@@ -78,7 +78,7 @@ public class RpcFramework {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T refer(Class<T> interfaceClass, String host, int port) {
+	public static <T> T refer(Class<T> interfaceClass, final String host, final int port) {
 		if (interfaceClass == null)
 			throw new IllegalArgumentException("Interface class == null");
 		if (!interfaceClass.isInterface())
