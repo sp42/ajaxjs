@@ -1,6 +1,4 @@
-package com.ajaxjs.sql.model;
-
-import com.ajaxjs.framework.IntegerValueEnum;
+package com.ajaxjs.my_data_framework.enmu_field;
 
 /**
  * 数据库类型

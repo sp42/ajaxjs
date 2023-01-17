@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.sql.DataBaseType;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.annotation.Delete;

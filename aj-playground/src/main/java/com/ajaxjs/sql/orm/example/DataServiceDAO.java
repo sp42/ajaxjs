@@ -1,6 +1,5 @@
-package com.ajaxjs.data_service;
+package com.ajaxjs.sql.orm.example;
 
-import com.ajaxjs.data_service.model.DataServiceEntity;
 import com.ajaxjs.sql.annotation.Select;
 import com.ajaxjs.sql.annotation.TableName;
 import com.ajaxjs.sql.orm.IBaseDao;

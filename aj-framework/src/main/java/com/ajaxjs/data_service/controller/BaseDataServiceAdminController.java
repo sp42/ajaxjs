@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ajaxjs.data_service.DataSerivceUtils;
-import com.ajaxjs.data_service.DataServiceDAO;
 import com.ajaxjs.data_service.model.DataServiceEntity;
 import com.ajaxjs.data_service.model.DataSourceInfo;
 import com.ajaxjs.data_service.service.DataService;
@@ -37,7 +36,7 @@ import com.ajaxjs.util.regexp.RegExpUtils;
 /**
  * 数据服务 后台控制器
  */
-public abstract class BaseDataServiceAdminController implements DataServiceDAO {
+public abstract class BaseDataServiceAdminController {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseDataServiceAdminController.class);
 
 	@Autowired

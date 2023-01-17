@@ -1,4 +1,4 @@
-package com.ajaxjs.framework;
+package com.ajaxjs.my_data_framework.enmu_field;
 
 /**
  * 实体状态 这是最通用的状态，供参考使用

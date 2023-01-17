@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.ajaxjs.data_service.DataServiceConstant;
-import com.ajaxjs.data_service.DataServiceDAO;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.service.DataService;
@@ -27,7 +26,7 @@ import com.ajaxjs.util.WebHelper2;
  * @author Frank Cheung<sp42@qq.com>
  *
  */
-public abstract class BaseDataServiceApiController implements DataServiceDAO, DataServiceConstant {
+public abstract class BaseDataServiceApiController implements DataServiceConstant {
 	@Autowired
 	private DataService dataService;
 	

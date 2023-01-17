@@ -15,18 +15,6 @@
  */
 package com.ajaxjs.sql.orm;
 
-import com.ajaxjs.framework.BaseModel;
-import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.sql.JdbcConnection;
-import com.ajaxjs.sql.annotation.Select;
-import com.ajaxjs.sql.annotation.TableName;
-import com.ajaxjs.sql.orm.model.ArgsInfo;
-import com.ajaxjs.sql.orm.model.PageParams;
-import com.ajaxjs.util.logger.LogHelper;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -37,6 +25,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+
+import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.sql.DataBaseType;
+import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.sql.annotation.Select;
+import com.ajaxjs.sql.annotation.TableName;
+import com.ajaxjs.sql.orm.model.ArgsInfo;
+import com.ajaxjs.sql.orm.model.PageParams;
+import com.ajaxjs.util.logger.LogHelper;
+
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
 /**
  * Data Access Object 负责对数据库的增删改查工作最后的工作。 框架中一般无须写出实现，提供接口即可。 通过 Java

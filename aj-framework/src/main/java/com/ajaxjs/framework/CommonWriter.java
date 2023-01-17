@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.sql.annotation.Delete;
 
 /**
  * 通用的写操作
@@ -65,7 +65,7 @@ public abstract class CommonWriter {
 		return rows > 0;
 	}
 
-	@Delete("/{id}")
+	@DeleteMapping("/{id}")
 	public Boolean delete(String tableName, @PathVariable Serializable id) {
 		Connection conn = null;
 		boolean isOk = false;

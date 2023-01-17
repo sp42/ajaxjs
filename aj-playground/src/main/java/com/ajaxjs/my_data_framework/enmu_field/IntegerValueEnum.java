@@ -1,4 +1,4 @@
-package com.ajaxjs.framework;
+package com.ajaxjs.my_data_framework.enmu_field;
 
 /**
  * 枚举值是 int 的

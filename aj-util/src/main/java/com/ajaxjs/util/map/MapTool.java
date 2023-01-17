@@ -51,7 +51,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.sql.annotation.IgnoreDB;
+import com.ajaxjs.sql.IgnoreDB;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.XmlHelper;
