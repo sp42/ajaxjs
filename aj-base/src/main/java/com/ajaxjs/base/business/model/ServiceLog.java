@@ -3,7 +3,7 @@ package com.ajaxjs.base.business.model;
 import java.util.Date;
 
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.sql.annotation.IgnoreDB;
+import com.ajaxjs.sql.IgnoreDB;
 
 /**
  * 操作日志

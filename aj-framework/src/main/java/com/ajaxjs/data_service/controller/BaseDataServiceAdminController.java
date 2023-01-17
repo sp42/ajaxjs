@@ -24,6 +24,7 @@ import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataServiceEntity;
 import com.ajaxjs.data_service.model.DataSourceInfo;
 import com.ajaxjs.data_service.service.DataService;
+import com.ajaxjs.framework.IBaseController;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.sql.JdbcConnection;
@@ -36,7 +37,7 @@ import com.ajaxjs.util.regexp.RegExpUtils;
 /**
  * 数据服务 后台控制器
  */
-public abstract class BaseDataServiceAdminController {
+public abstract class BaseDataServiceAdminController implements IBaseController<DataServiceEntity> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseDataServiceAdminController.class);
 
 	@Autowired
@@ -82,6 +83,7 @@ public abstract class BaseDataServiceAdminController {
 	}
 
 	@PostMapping
+	@Override
 	public DataServiceEntity create(@RequestBody DataServiceEntity entity) {
 		LOGGER.info("创建 DataService");
 
@@ -117,6 +119,7 @@ public abstract class BaseDataServiceAdminController {
 	}
 
 	@PutMapping
+	@Override
 	public Boolean update(@RequestBody DataServiceEntity entity) {
 		if (DataServiceAdminDAO.update(entity) >= 1) {
 			dataService.init();// 重新加载配置
@@ -127,6 +130,7 @@ public abstract class BaseDataServiceAdminController {
 	}
 
 	@DeleteMapping("/{id}")
+	@Override
 	public Boolean delete(@PathVariable long id) {
 		LOGGER.info("删除配置 {0}", id);
 		DataServiceEntity dataServiceTable = new DataServiceEntity();
@@ -141,7 +145,7 @@ public abstract class BaseDataServiceAdminController {
 	}
 
 	@RequestMapping("/{id}")
-	public DataServiceEntity getInfo(@PathVariable long id, String dbName) throws ClassNotFoundException, SQLException {
+	public DataServiceEntity info(@PathVariable long id, String dbName) throws ClassNotFoundException, SQLException {
 		LOGGER.info("加载表详情");
 
 		Connection conn;

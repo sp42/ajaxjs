@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ajaxjs.file_upload.IFileUpload;
 import com.ajaxjs.gateway.PassportFilter;
-import com.ajaxjs.my_data_framework.BaseController;
 import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.WebHelper;
 import com.ajaxjs.util.config.EasyConfig;
@@ -78,7 +77,7 @@ public class UploadController {
 	 * @throws IOException
 	 */
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	public String uploadFileHandler(@RequestHeader(PassportFilter.CLIENT_ID) String clientId,
+	public Boolean uploadFileHandler(@RequestHeader(PassportFilter.CLIENT_ID) String clientId,
 			@RequestHeader(PassportFilter.TOKEN) String token, @RequestParam("file") MultipartFile file,
 			HttpServletRequest req) throws IOException {
 		List<Map<String, Object>> list = config.getListMap("auth");
@@ -108,7 +107,7 @@ public class UploadController {
 			return makeJson(filename, newly);
 		}
 
-		return BaseController.jsonNoOk("上传失败");
+		return false;
 	}
 
 	private static String makeJson(String filename, String url) {
