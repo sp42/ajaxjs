@@ -79,7 +79,7 @@ li.inline a {
 			<br /> <br /> <a target="center" href="main.jsp">首页</a> | <a href="javascript:logout();">登出</a>
 		</li>
 		<li class="inline"><a target="center" href="list/user.jsp">用户</a> | <a target="center" href="list/org.jsp">组织</a> | <a target="center" href="list/tenant.jsp">租户</a></li>
-		<li class="inline"><a target="center" href="main.jsp">角色</a> | <a target="center" href="list/client.jsp">功能</a> | <a href="javascript:logout();">API</a></li>
+		<li class="inline"><a target="center" href="list/role.jsp">角色</a> | <a target="center" href="list/function.jsp">功能</a> | <a target="center" href="list/api.jsp">API</a></li>
 		<li class="inline"><a target="center" href="list/system.jsp">系统</a> | <a target="center" href="list/client.jsp">应用</a></li>
 		<li><a target="center" href="list/token.jsp">Token 管理</a></li>
 	</ul>

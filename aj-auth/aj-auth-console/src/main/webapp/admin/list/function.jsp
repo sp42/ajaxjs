@@ -2,19 +2,8 @@
 <%@ taglib prefix="myTag" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="/ajaxjs"%>
 <%
-/* String sql = "SELECT c.*, t.name AS tenantName FROM auth_client_details c LEFT JOIN sys_tenant t ON c.tenantId = t.id WHERE 1=1";
-
-if (request.getParameter("tenantId") != null) 
-	sql = sql.replace("1=1", "1=1 AND c.tenantId = " + JspHelper.safeGet(request, "tenantId"));
-
-if (request.getParameter("keyword") != null) {
-	String k = JspHelper.safeGet(request, "keyword");
-	sql = sql.replace("1=1", "1=1 AND (c.name LIKE '%" + k + "%' OR c.clientId LIKE '%" + k + "%')");
-}
-
-JspHelper.parepreListSql(request, sql, "client", "应用"); */
 	JspHelper.getJspHelper(request);
-	JspBack.list(request, "app", "应用");
+	JspBack.list(request, "function", "功能");
 %>
 <myTag:list namespace="${namespace}" namespace_chs="${namespace_chs}">
 	<script>
@@ -25,9 +14,12 @@ JspHelper.parepreListSql(request, sql, "client", "应用"); */
 		<thead>
 			<tr>
 				<th>#</th>
-				<th>${namespace_chs} id</th>
 				<th style="min-width: 200px;">${namespace_chs}名称</th>
+				<th>${namespace_chs}编码</th>
+				<th>${namespace_chs}类型</th>
+				<th>所属应用</th>
 				<th>所属系统</th>
+				<th>所属租户</th>
 				<th>状态</th>
 				<th>创建日期</th>
 				<th>修改日期</th>
@@ -38,9 +30,12 @@ JspHelper.parepreListSql(request, sql, "client", "应用"); */
 			<c:foreach items="${list}" var="item">
 				<tr>
 					<td>${item.id}</td>
-					<td>${item.clientId}</td>
 					<td>${item.name}</td>
+					<td>${item.code}</td>
+					<td>${item.type}</td>
+					<td>${item.appName}</td>
 					<td>${item.sysName}</td>
+					<td>${item.tenantName}</td>
 					<myTag:list-common-rol style="31" item="${item}" namespace="${namespace}" namespace_chs="${namespace_chs}" />
 				</tr>
 			</c:foreach>

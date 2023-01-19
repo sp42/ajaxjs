@@ -96,16 +96,16 @@ public class UploadController {
 		String originalFilename = file.getOriginalFilename();
 		String filename = isRename ? getAutoName(originalFilename) : originalFilename;
 
-		if (fileUpload == null) {
-			String newly = localFileUpload(filename, file, req);
-
-			if (newly != null)
-				return makeJson(filename, newly);
-		} else if (fileUpload.upload(filename, file.getBytes())) {// TODO add folder
-			String newly = FILE_URL_ROOT + "/" + filename;// 返回文件 url
-
-			return makeJson(filename, newly);
-		}
+//		if (fileUpload == null) {
+//			String newly = localFileUpload(filename, file, req);
+//
+//			if (newly != null)
+//				return makeJson(filename, newly);
+//		} else if (fileUpload.upload(filename, file.getBytes())) {// TODO add folder
+//			String newly = FILE_URL_ROOT + "/" + filename;// 返回文件 url
+//
+//			return makeJson(filename, newly);
+//		}
 
 		return false;
 	}
@@ -113,7 +113,7 @@ public class UploadController {
 	private static String makeJson(String filename, String url) {
 		String ext = String.format("\"filename\":\"%s\", \"url\": \"%s\"", filename, url);
 
-		return BaseController.jsonOk_Extension("上传成功", ext);
+		return ext;
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package com.ajaxjs.util.logger;
+package com.util.logger;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

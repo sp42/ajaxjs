@@ -175,6 +175,7 @@ public class DataBaseQuery extends BaseMetaQuery {
 
 		try {
 			CreateTable createTable = (CreateTable) CCJSqlParserUtil.parse(ddl);
+			
 			for (ColumnDefinition col : createTable.getColumnDefinitions()) {
 				Column colInfo = new Column();
 				list.add(colInfo);

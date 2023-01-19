@@ -3,10 +3,7 @@
 <%@ taglib prefix="c" uri="/ajaxjs" %>
 <%
 	JspBack.getInfo(request, "app");
-
-	String url = com.ajaxjs.util.WebHelper.getLocalService(request);
-	java.util.Map <String, Object> info = com.ajaxjs.net.http.Get.api(url + "/data_service/system/list" );
-	request.setAttribute("sys_list", info.get("data"));
+	JspBack.getList(request, "/data_service/system/list", "sys_list");
 %>
 <myTag:info namespace="app" namespace_chs="应用" date_style="3" field_style="15">
 	<tr>

@@ -17,7 +17,7 @@
 		tenantFilter();
 	</script>
 	
-	<table class="aj-table">
+	<table class="aj-table even">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -32,7 +32,6 @@
 			</tr>
 		</thead>
 		<tbody>
-		
 			<c:foreach items="${list}" var="item">
 				<tr>
 					<td>${item.id}</td>
