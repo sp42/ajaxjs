@@ -11,5 +11,5 @@ public interface AuthDao {
 		Integer getLatestProcessVersion(String name);
 	}
 
-	public static final SystematicDao SystematicDAO = new Caller("systematic").bind(SystematicDao.class, Systematic.class);
+	public static final SystematicDao SystematicDAO = new Caller("system").bind(SystematicDao.class, Systematic.class);
 }

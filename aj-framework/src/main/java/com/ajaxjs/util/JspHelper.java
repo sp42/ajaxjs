@@ -32,7 +32,6 @@ public class JspHelper {
 			DiContextUtil.registryBean(JspHelper.class);
 			self = DiContextUtil.getBean(JspHelper.class);
 		}
-
 		request.setAttribute("JSP_HELPER", self);
 
 		return self;
@@ -118,6 +117,10 @@ public class JspHelper {
 		return list.size() + "";
 	}
 
+	public static String formatDate(String date) {
+		return DateUtil.formatDateShorter(DateUtil.object2Date(date));
+	}
+	
 	public static String formatDate(Timestamp ts) {
 		if (ts == null)
 			return "";
@@ -216,7 +219,6 @@ public class JspHelper {
 				return value;
 		}
 	}
-	
 
 	/**
 	 * 简单检查字符串有否 SQL 关键字
@@ -227,10 +229,10 @@ public class JspHelper {
 	public static boolean preventSQLInject(String str) {
 		str = str.toUpperCase();
 
-		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0 || str.indexOf("SELECT") >= 0
-				|| str.indexOf("'") >= 0 || str.indexOf("SUBSTR(") >= 0 || str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0
-				|| str.indexOf(" AND ") >= 0 || str.indexOf("DROP") >= 0 || str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0
-				|| str.indexOf("TRUNCATE") >= 0 || str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0 || str.indexOf("MASTER") >= 0) {
+		if (str.indexOf("DELETE") >= 0 || str.indexOf("ASCII") >= 0 || str.indexOf("UPDATE") >= 0 || str.indexOf("SELECT") >= 0 || str.indexOf("'") >= 0
+				|| str.indexOf("SUBSTR(") >= 0 || str.indexOf("COUNT(") >= 0 || str.indexOf(" OR ") >= 0 || str.indexOf(" AND ") >= 0
+				|| str.indexOf("DROP") >= 0 || str.indexOf("EXECUTE") >= 0 || str.indexOf("EXEC") >= 0 || str.indexOf("TRUNCATE") >= 0
+				|| str.indexOf("INTO") >= 0 || str.indexOf("DECLARE") >= 0 || str.indexOf("MASTER") >= 0) {
 			return false;
 		}
 

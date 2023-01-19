@@ -10,8 +10,7 @@ import com.ajaxjs.auth.model.SystemModel.Systematic;
 public class SystematicService implements ISystematicService {
 	@Override
 	public List<Systematic> list() {
-		// TODO Auto-generated method stub
-		return null;
+		return SystematicDAO.findList();
 	}
 
 }
