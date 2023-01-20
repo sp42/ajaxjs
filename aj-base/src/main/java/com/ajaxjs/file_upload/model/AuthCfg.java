@@ -3,7 +3,7 @@ package com.ajaxjs.file_upload.model;
 /**
  * 认证配置
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class AuthCfg {

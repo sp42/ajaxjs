@@ -24,7 +24,7 @@ import com.ajaxjs.util.map.JsonHelper;
 /**
  * FastDoc 主程序，单例
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  */
 public class FastDoc {
 	static Map<String, ControllerInfo> AnnotationResult = new HashMap<>();

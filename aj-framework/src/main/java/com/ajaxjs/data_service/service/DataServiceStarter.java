@@ -27,7 +27,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 数据服务初始化
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class DataServiceStarter {

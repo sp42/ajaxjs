@@ -18,7 +18,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 工具类，主要是数据源的工具方法
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class DataSerivceUtils {

@@ -10,7 +10,7 @@ import com.ajaxjs.spring.DiContextUtil;
 /**
  * 保存租户信息
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Writer implements IPlugin {

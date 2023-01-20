@@ -8,14 +8,7 @@ public interface AuthConstant {
 	 * 应用类型 1.html web应用；2.API service应用；3.Web APi混合应用；4.原生应用；5.其他应用
 	 */
 	public static enum SystemAppType {
-		HTML, API_SERVICE, DESKTOP, NATIVE, MISC;
-	}
-
-	/**
-	 * 服务类型 REST_API/RPC/STATIC
-	 */
-	public static enum SystemServiceType {
-		REST_API, RPC, STATIC;
+		HTML, API_SERVICE, RPC_SERVICE, DESKTOP, NATIVE, MISC;
 	}
 
 	/**

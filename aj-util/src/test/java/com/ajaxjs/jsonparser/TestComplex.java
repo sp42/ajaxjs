@@ -192,7 +192,7 @@ public class TestComplex {
 	/**
 	 * 仅表示一个点
 	 * 
-	 * @author Frank Cheung<sp42@qq.com>
+	 * @author Frank Cheung sp42@qq.com
 	 *
 	 */
 	public static class GeoPoint implements IBaseModel {

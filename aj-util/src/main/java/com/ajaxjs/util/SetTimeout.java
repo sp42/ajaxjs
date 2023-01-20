@@ -14,7 +14,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 轮询定时器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 

@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 说明这是一个控制器配置接口
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 @Target(ElementType.TYPE)

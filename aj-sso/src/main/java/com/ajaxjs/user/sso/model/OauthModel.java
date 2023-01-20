@@ -5,7 +5,7 @@ import com.ajaxjs.framework.IBaseModel;
 /**
  * OAuth 协议标准对象
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface OauthModel {

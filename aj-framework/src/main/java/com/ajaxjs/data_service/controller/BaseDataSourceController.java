@@ -19,7 +19,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 数据源配置的 CRUD，另外有一些实用工具方法。
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public abstract class BaseDataSourceController {

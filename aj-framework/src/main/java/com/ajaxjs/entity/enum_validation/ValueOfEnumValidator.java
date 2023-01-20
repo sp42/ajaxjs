@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {

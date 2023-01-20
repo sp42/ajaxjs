@@ -3,7 +3,7 @@ package com.ajaxjs.fast_doc;
 /**
  * 运行配置参数
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class FastDocRun {

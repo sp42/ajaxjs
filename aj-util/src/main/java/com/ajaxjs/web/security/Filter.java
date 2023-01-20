@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 /**
  * 过滤器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Filter {

@@ -18,7 +18,7 @@ import com.ajaxjs.workflow.model.po.TaskHistory;
 /**
  * DAO
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface WfDao {

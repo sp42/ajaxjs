@@ -104,9 +104,9 @@ public class JspHelper {
 		return info;
 	}
 
-	public static void getList(HttpServletRequest req) {
+	public static void getList(HttpServletRequest req, String sql) {
 		Connection conn = (Connection) req.getAttribute("conn");
-		List<Map<String, Object>> list = JdbcHelper.queryAsMapList(conn, req.getAttribute("sql").toString());
+		List<Map<String, Object>> list = JdbcHelper.queryAsMapList(conn, req.getAttribute("sql") == null ? sql : req.getAttribute("sql").toString());
 		req.setAttribute("list", list);
 	}
 
@@ -120,7 +120,7 @@ public class JspHelper {
 	public static String formatDate(String date) {
 		return DateUtil.formatDateShorter(DateUtil.object2Date(date));
 	}
-	
+
 	public static String formatDate(Timestamp ts) {
 		if (ts == null)
 			return "";

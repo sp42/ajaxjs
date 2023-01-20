@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 获取用户是否登录、Token 是否合法
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface IStateService extends IBaseService {

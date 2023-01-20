@@ -10,7 +10,7 @@ import com.ajaxjs.spring.DiContextUtil;
 /**
  * 通过动态代理执行控制器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class ControllerProxy implements InvocationHandler {

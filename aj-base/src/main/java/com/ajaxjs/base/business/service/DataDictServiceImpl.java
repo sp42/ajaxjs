@@ -19,7 +19,7 @@ import com.ajaxjs.util.StrUtil;
 /**
  * 数据字典，也是树状结构
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 @Service

@@ -3,7 +3,7 @@ package com.ajaxjs.base.business.common;
 /**
  * 基础业务常量
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface BaseEntityConstant {

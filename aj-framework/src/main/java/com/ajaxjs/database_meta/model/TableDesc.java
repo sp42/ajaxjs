@@ -5,7 +5,7 @@ import com.ajaxjs.framework.IBaseModel;
 /**
  * 表的详情信息
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class TableDesc implements IBaseModel {

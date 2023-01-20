@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 实体一个
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class FooBean {

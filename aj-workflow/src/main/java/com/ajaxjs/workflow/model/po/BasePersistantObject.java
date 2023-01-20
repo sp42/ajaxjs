@@ -9,7 +9,7 @@ import com.ajaxjs.framework.IBaseModel;
  * 
  * PO 就是数据库中的记录，一个 PO 的数据结构对应着库中表的结构，表中的一条记录就是一个 PO 对象
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public abstract class BasePersistantObject implements IBaseModel {

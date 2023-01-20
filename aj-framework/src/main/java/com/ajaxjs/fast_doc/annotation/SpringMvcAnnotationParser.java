@@ -32,7 +32,7 @@ import com.ajaxjs.util.StrUtil;
 /**
  * 基于注解的提取，以 Spring MVC 的为主
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  */
 public class SpringMvcAnnotationParser {
 //    private static final LogHelper LOGGER = LogHelper.getLog(SpringMvcAnnotationParser.class);

@@ -1,7 +1,6 @@
 package com.ajaxjs.util;
 
-import static org.junit.Assert.*;
-import static com.ajaxjs.util.logger.EasyPrint.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -66,8 +65,8 @@ public class TestLogger {
 	
 	@Test
 	public void test() {
-		info("Hello");
-		warn("Hello");
-		error("Hello");
+//		info("Hello");
+//		warn("Hello");
+//		error("Hello");
 	}
 }

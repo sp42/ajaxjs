@@ -3,7 +3,7 @@ package com.ajaxjs.base;
 /**
  * 发送短信的服务
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface ISendSMS {

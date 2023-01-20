@@ -4,7 +4,7 @@ public interface DocModel {
 	/**
 	 * 带有 commentText 的对象
 	 * 
-	 * @author Frank Cheung<sp42@qq.com>
+	 * @author Frank Cheung sp42@qq.com
 	 *
 	 */
 	abstract static class WithComment {

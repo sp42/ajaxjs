@@ -9,7 +9,7 @@ import com.ajaxjs.framework.PageResult;
 /**
  * 传统分页
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class JspPageHelper {

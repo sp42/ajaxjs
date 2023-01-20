@@ -11,7 +11,7 @@ import com.ajaxjs.data_service.controller.BaseDataServiceAdminController;
 /**
  * 数据服务 后台控制器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 @RestController

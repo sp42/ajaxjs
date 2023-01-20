@@ -23,7 +23,7 @@ import com.ajaxjs.util.WebHelper2;
 /**
  * 数据服务 API 基类 数据服务向外提供的基础 API
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public abstract class BaseDataServiceApiController implements DataServiceConstant {

@@ -13,7 +13,7 @@ import com.ajaxjs.util.io.FileHelper;
 /**
  * 文件上传的辅助类
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class FileUploadHelper {

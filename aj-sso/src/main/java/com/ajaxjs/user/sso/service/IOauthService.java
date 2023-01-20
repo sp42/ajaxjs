@@ -9,7 +9,7 @@ import com.ajaxjs.user.sso.model.ClientDetails;
 /**
  * OAuth 使用，有部分暂时未使用
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface IOauthService extends IBaseService {

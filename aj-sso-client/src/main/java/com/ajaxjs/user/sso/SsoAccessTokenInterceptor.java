@@ -17,7 +17,7 @@ import com.ajaxjs.util.date.LocalDateUtils;
 /**
  * 校验 AccessToken 的拦截器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 @Component

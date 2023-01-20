@@ -9,7 +9,7 @@ import com.ajaxjs.framework.IBaseModel;
 /**
  * 数据库的数据源
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class DataSourceInfo extends BaseModel implements IBaseModel {

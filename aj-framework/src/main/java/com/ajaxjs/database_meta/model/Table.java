@@ -7,7 +7,7 @@ import com.ajaxjs.framework.IBaseModel;
 /**
  * 简单表信息
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Table implements IBaseModel {

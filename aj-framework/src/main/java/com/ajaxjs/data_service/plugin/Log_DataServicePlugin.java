@@ -6,7 +6,7 @@ import com.ajaxjs.data_service.model.ServiceContext;
 /**
  * 系统日志，记录所有写的操作
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Log_DataServicePlugin implements IPlugin {

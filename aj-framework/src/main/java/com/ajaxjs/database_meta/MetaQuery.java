@@ -17,7 +17,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 一些数据库的详情，好像没什么用
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class MetaQuery extends BaseMetaQuery {

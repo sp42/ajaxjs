@@ -5,7 +5,7 @@ import java.util.HashMap;
 /**
  * 参数
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Args extends HashMap<String, Object> {
