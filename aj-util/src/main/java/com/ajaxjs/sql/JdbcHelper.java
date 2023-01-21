@@ -211,6 +211,7 @@ public class JdbcHelper extends JdbcReader {
 		Serializable newlyId = create(conn, sb.toString(), values.toArray());
 
 		map.put("id", newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
+		
 		return newlyId;
 	}
 
