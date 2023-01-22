@@ -2,11 +2,7 @@ package com.ajaxjs.framework;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -21,7 +17,7 @@ public interface IBaseController<T> {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("/{id}")
+//	@GetMapping("/{id}")
 	default T Info(@PathVariable long id) {
 		return null;
 	}
@@ -31,7 +27,7 @@ public interface IBaseController<T> {
 	 * 
 	 * @return
 	 */
-	@GetMapping
+//	@GetMapping
 	default List<T> list() {
 		return null;
 	}
@@ -41,7 +37,7 @@ public interface IBaseController<T> {
 	 * 
 	 * @return
 	 */
-	@GetMapping("/page")
+//	@GetMapping("/page")
 	default PageResult<T> page() {
 		return null;
 	}
@@ -51,7 +47,7 @@ public interface IBaseController<T> {
 	 * @param entity
 	 * @return
 	 */
-	@PostMapping
+//	@PostMapping
 	default T create(@RequestBody T entity) {
 		return null;
 	}
@@ -61,7 +57,7 @@ public interface IBaseController<T> {
 	 * @param entity
 	 * @return
 	 */
-	@PutMapping
+//	@PutMapping
 	default Boolean update(@RequestBody T entity) {
 		return null;
 	}
@@ -71,7 +67,7 @@ public interface IBaseController<T> {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping("/{id}")
+//	@DeleteMapping("/{id}")
 	default Boolean delete(@PathVariable long id) {
 		return null;
 	}

@@ -25,6 +25,7 @@ public abstract class BaseWebMvcConfigurer implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(db());
+		registry.addInterceptor(new ShowControllerInterceptor());
 	}
 
 	/**

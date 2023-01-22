@@ -249,7 +249,14 @@
 
                             <div class="main-edit-panel">
                                 <ul class="command-list">
-                                    <li>
+                                    <li v-for="(item, k, index) in currentData.data" :key="index"  v-if="k != 'others'"
+                                     v-html="getDml(item, k)" :class="{selected: dmlSelected == index}" @click="code = item.sql;dmlSelected = index">
+                                    </li>
+
+                                    <li v-for="(item, k, index) in currentData.others" :key="index"
+                                    v-html="getDml(item, k)" :class="{selected: dmlSelected == index}" @click="code = item.sql;dmlSelected = index">
+                                   </li>
+          <!--                           <li>
                                         GET /foo
                                     </li>
                                     <li>
@@ -263,7 +270,7 @@
                                     </li>
                                     <li>
                                         GET /foo
-                                    </li>
+                                    </li> -->
                                     <li>
                                         + 新建命令
                                     </li>

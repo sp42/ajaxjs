@@ -3,7 +3,6 @@ package com.ajaxjs.data_service.controller;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataServiceEntity;
@@ -67,7 +65,53 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 	@GetMapping("/reload")
 	public Boolean reload() {
 		dataService.init();// 重新加载配置
+
 		return true;
+	}
+
+	@GetMapping("/{id}")
+	public DataServiceEntity info(@PathVariable long id, String dbName) throws ClassNotFoundException, SQLException {
+		LOGGER.info("加载表详情");
+
+		Connection conn;
+		DataServiceEntity info;
+
+		try (Connection _conn = getConnection()) {
+			String sql = "SELECT * FROM " + getDataServiceTableName() + " WHERE id = " + id;
+			info = JdbcHelper.queryAsBean(DataServiceEntity.class, _conn, sql);
+
+			if (info == null)
+				throw new NullPointerException("找不到 id 為 " + id + " 的数据服务配置。");
+
+			// 获取所有字段
+			if (dataService.getCfg().isMultiDataSource())
+				conn = DataSerivceUtils.getConnByDataSourceInfo(_conn, getDataSourceTableName(), info.getDatasourceId());
+			else
+				conn = JdbcConnection.getConnection();
+		}
+
+		List<Map<String, String>> columnComment = null;
+
+		try {
+			columnComment = DataBaseMetaHelper.getColumnComment(conn, info.getTableName(), dbName);
+		} catch (Throwable e) {
+			LOGGER.warning(e);
+		} finally {
+			conn.close();
+		}
+
+		if (columnComment != null) {
+			Map<String, String> map = new HashMap<>();
+
+			for (int i = 0; i < columnComment.size(); i++)
+				map.put(columnComment.get(i).get("name"), columnComment.get(i).get("comment"));
+
+			info.setFields(map);
+		}
+
+		str2Json(info);
+
+		return info;
 	}
 
 	@GetMapping
@@ -77,11 +121,8 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 		try (Connection conn = getConnection()) {
 			List<DataServiceEntity> list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM " + getDataServiceTableName());
 
-			for (DataServiceEntity e : list) {
-				String json = e.getJson();
-				Map<String, Object> map = JsonHelper.parseMap(json);
-				e.setData(map);
-			}
+			for (DataServiceEntity e : list)
+				str2Json(e);
 
 			return list;
 		} catch (SQLException e) {
@@ -90,25 +131,31 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 		}
 	}
 
+	private static void str2Json(DataServiceEntity e) {
+		String json = e.getJson();
+		Map<String, Object> map = JsonHelper.parseMap(json);
+		e.setData(map);
+		e.setJson(null);
+	}
+
 	@PostMapping
 	@Override
 	public DataServiceEntity create(@RequestBody DataServiceEntity entity) {
 		LOGGER.info("创建 DataService");
 
-		entity.setUrlDir(entity.getTableName());
 		String url = entity.getUrlDir().replaceAll("\\.", "_"); // 不能加 . 否则 URL 解析错误
 		entity.setUrlDir(url);
+		entity.setUrlDir(entity.getTableName());
 //        LOGGER.info("" + entity.getDatasourceId());
 //        LOGGER.info(DataServiceAdminService.DAO.toString());
 
 		try (Connection conn = getConnection()) {
-
 			Long dsId = entity.getDatasourceId();
-			DataServiceEntity repeatUrlDir = dsId == null ? DataServiceAdminDAO.findRepeatUrlDir(url) : DataServiceAdminDAO.findRepeatUrlDirAndDsId(url, dsId);
+			DataServiceEntity repeatUrlDir = getRepeatUrlDir(conn, dsId, url);
 
 			if (repeatUrlDir != null) {
 				// 已经有重复的
-				String maxId = dsId == null ? DataServiceAdminDAO.findRepeatUrlDirMaxId(url) : DataServiceAdminDAO.findRepeatUrlDirAndDsIdMaxId(url, dsId);
+				String maxId = getMaxId(conn, dsId, url);
 				String dig = "";
 
 				if (maxId != null) {
@@ -123,12 +170,36 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 
 			Long newlyId = (Long) JdbcHelper.createBean(conn, entity, getDataServiceTableName());
 			dataService.init(); // 重新加载配置
+			entity.setId(newlyId);
 
-//		return afterCreate(newlyId, entity);
 			return entity;
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 			throw new RuntimeException(e);
+		}
+	}
+
+	private DataServiceEntity getRepeatUrlDir(Connection conn, Long dsId, String url) {
+		String sql;
+
+		if (dsId == null) {
+			sql = "SELECT id FROM ${tableName} WHERE urlDir = ? LIMIT 1";
+			return JdbcHelper.queryAsBean(DataServiceEntity.class, conn, getDataServiceTableName(), sql, url);
+		} else {
+			sql = "SELECT id FROM ${tableName} WHERE urlDir = ? AND datasourceId = ? LIMIT 1";
+			return JdbcHelper.queryAsBean(DataServiceEntity.class, conn, getDataServiceTableName(), sql, url, dsId);
+		}
+	}
+
+	private String getMaxId(Connection conn, Long dsId, String url) {
+		String sql;
+
+		if (dsId == null) {
+			sql = "SELECT urlDir FROM ${tableName} WHERE urlDir REGEXP CONCAT(?, '_[0-9]+$') ORDER BY urlDir DESC LIMIT 1";
+			return JdbcHelper.queryOne(conn, sql, String.class, url);
+		} else {
+			sql = "SELECT urlDir FROM ${tableName} WHERE urlDir REGEXP CONCAT(?, '_[0-9]+$') AND datasourceId = ? ORDER BY urlDir DESC LIMIT 1";
+			return JdbcHelper.queryOne(conn, sql, String.class, url, dsId);
 		}
 	}
 
@@ -159,46 +230,6 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 			LOGGER.warning(e);
 			throw new RuntimeException(e);
 		}
-	}
-
-	@RequestMapping("/{id}")
-	public DataServiceEntity info(@PathVariable long id, String dbName) throws ClassNotFoundException, SQLException {
-		LOGGER.info("加载表详情");
-
-		Connection conn;
-		DataServiceEntity info;
-
-		try (Connection _conn = getConnection()) {
-			String sql = "SELECT * FROM " + getDataServiceTableName() + " WHERE id = " + id;
-			info = JdbcHelper.queryAsBean(DataServiceEntity.class, _conn, sql);
-
-			// 获取所有字段
-			if (dataService.getCfg().isMultiDataSource())
-				conn = JdbcConnection.getConnection();
-			else
-				conn = DataSerivceUtils.getConnByDataSourceInfo(_conn, getDataSourceTableName(), info.getDatasourceId());
-		}
-
-		List<Map<String, String>> columnComment = null;
-
-		try {
-			columnComment = DataBaseMetaHelper.getColumnComment(conn, info.getTableName(), dbName);
-		} catch (Throwable e) {
-			LOGGER.warning(e);
-		} finally {
-			conn.close();
-		}
-
-		if (columnComment != null) {
-			Map<String, String> map = new HashMap<>();
-
-			for (int i = 0; i < columnComment.size(); i++)
-				map.put(columnComment.get(i).get("name"), columnComment.get(i).get("comment"));
-
-			info.setFields(map);
-		}
-
-		return info;
 	}
 
 	@GetMapping("/get_databases/{datasourceId}")

@@ -32,6 +32,8 @@ function getTreeData() {
                                 this.allData.every(dml => {
                                     if (dml.id == id) {
                                         this.currentData = dml;
+                                        console.log(dml);
+
                                         return false;
                                     }
 

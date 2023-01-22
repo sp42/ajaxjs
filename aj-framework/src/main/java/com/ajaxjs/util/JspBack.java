@@ -13,17 +13,17 @@ public class JspBack {
 		request.setAttribute("isCreate", isCreate);
 
 		if (!isCreate) {
-			String url = WebHelper.getLocalService(request);
-			Map<String, Object> info = Get.api(url + "/data_service/" + namespace + "?id=" + id);
-			request.setAttribute("info", info.get("data"));
+//			String url = WebHelper.getLocalService(request);
+//			Map<String, Object> info = Get.api(url + "/data_service/" + namespace + "?id=" + id);
+//			request.setAttribute("info", info.get("data"));
 			// System.out.println(info.get("data"));
 		}
 	}
 
 	public static void getList(HttpServletRequest request, String _url, String key) {
-		String url = com.ajaxjs.util.WebHelper.getLocalService(request);
-		java.util.Map<String, Object> info = com.ajaxjs.net.http.Get.api(url + _url);
-		request.setAttribute(key, info.get("data"));
+//		String url = com.ajaxjs.util.WebHelper.getLocalService(request);
+//		java.util.Map<String, Object> info = com.ajaxjs.net.http.Get.api(url + _url);
+//		request.setAttribute(key, info.get("data"));
 	}
 
 	public static void list(HttpServletRequest request, String namespace, String namespaceChS) {

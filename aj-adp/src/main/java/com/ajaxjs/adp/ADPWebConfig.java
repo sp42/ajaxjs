@@ -56,20 +56,11 @@ public class ADPWebConfig extends BaseWebMvcConfigurer {
 	 * 
 	 * @return
 	 */
-//	@Bean
-//	DataServiceConfig DataServiceConfig() {
-//		DataServiceConfig cfg = new DataServiceConfig();
-//		cfg.setEmbed(false);
-//		cfg.setDataSource(getDs());
-//
-//		return cfg;
-//	}
-
 	@Bean
 	DataService dataService() {
 		DataService ds = new DataService();
 		DataServiceConfig cfg = new DataServiceConfig();
-		cfg.setMultiDataSource(false);
+		cfg.setMultiDataSource(true);
 		cfg.setDataSource(getDs());
 		ds.setCfg(cfg);
 
