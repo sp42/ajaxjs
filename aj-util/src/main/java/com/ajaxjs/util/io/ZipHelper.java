@@ -15,6 +15,8 @@
  */
 package com.ajaxjs.util.io;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -53,13 +55,13 @@ public class ZipHelper {
 
 		try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));) {
 			ZipEntry ze;
-			
+
 			while ((ze = zis.getNextEntry()) != null) {
 				File newFile = new File(save + File.separator + ze.getName());
 
 				if (ze.isDirectory()) // 大部分网络上的源码，这里没有判断子目录
 					newFile.mkdirs();
-				 else {
+				else {
 //					new File(newFile.getParent()).mkdirs();
 					FileHelper.initFolder(newFile);
 					FileOutputStream fos = new FileOutputStream(newFile);
@@ -130,9 +132,8 @@ public class ZipHelper {
 				zipOut.closeEntry();
 
 				File[] children = toZip.listFiles();
-				for (File childFile : children) {
+				for (File childFile : children)
 					zip(childFile, fileName + "/" + childFile.getName(), zipOut, everyFile);
-				}
 
 				return;
 			}
@@ -141,6 +142,68 @@ public class ZipHelper {
 
 			try (FileInputStream in = new FileInputStream(toZip);) {
 				StreamHelper.write(in, zipOut, false);
+			}
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+	}
+
+	/**
+	 * Zip压缩大文件从30秒到近乎1秒的优化过程 https://blog.csdn.net/hj7jay/article/details/102798664
+	 * 
+	 * 这是一个调用本地方法与原生操作系统进行交互，从磁盘中读取数据。
+	 * 每读取一个字节的数据就调用一次本地方法与操作系统交互，是非常耗时的。例如我们现在有30000个字节的数据，如果使用FileInputStream
+	 * 那么就需要调用30000次的本地方法来获取这些数据，而如果使用缓冲区的话（这里假设初始的缓冲区大小足够放下30000字节的数据）那么只需要调用一次就行。因为缓冲区在第一次调用read()方法的时候会直接从磁盘中将数据直接读取到内存中。
+	 * 随后再一个字节一个字节的慢慢返回。
+	 * 
+	 * @param toZip
+	 * @param saveZip
+	 */
+	public static void zipFileBuffer(String toZip, String saveZip) {
+		File fileToZip = new File(toZip);
+		try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(fileToZip));
+				BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(zipOut)) {
+
+			for (int i = 1; i < 11; i++) {
+				try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(saveZip + i + ".jpg"))) {
+					zipOut.putNextEntry(new ZipEntry(saveZip + i + ".jpg"));
+					int temp = 0;
+
+					while ((temp = bufferedInputStream.read()) != -1)
+						bufferedOutputStream.write(temp);
+				}
+			}
+
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+	}
+
+	/**
+	 * Java极快压缩方式 https://blog.csdn.net/weixin_44044915/article/details/115734457
+	 */
+	public static void zipFile(File[] fileConent, String saveZip) {
+		try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(saveZip));
+				BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(zipOut)) {
+
+			for (File fc : fileConent) {
+				try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(fc))) {
+					ZipEntry entry = new ZipEntry(fc.getName());
+					// 核心，和复制粘贴效果一样，并没有压缩，但速度很快
+					entry.setMethod(ZipEntry.STORED);
+					entry.setSize(fc.length());
+					entry.setCrc(FileIoHelper.getFileCRCCode(fc));
+					zipOut.putNextEntry(entry);
+
+					int len = 0;
+					byte[] data = new byte[8192];
+
+					while ((len = bufferedInputStream.read(data)) != -1)
+						bufferedOutputStream.write(data, 0, len);
+
+					bufferedInputStream.close();
+					bufferedOutputStream.flush();
+				}
 			}
 		} catch (IOException e) {
 			LOGGER.warning(e);
