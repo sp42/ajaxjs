@@ -20,7 +20,7 @@ import com.ajaxjs.spring.easy_controller.Example;
 /**
  * 抵近侦察区域控制器
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 @RestController

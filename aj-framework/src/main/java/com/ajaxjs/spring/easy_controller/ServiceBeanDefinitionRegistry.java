@@ -27,7 +27,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 用于 Spring 动态代理注入自定义接口
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPostProcessor, ResourceLoaderAware, ApplicationContextAware {

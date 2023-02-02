@@ -3,6 +3,8 @@ package com.ajaxjs.workflow.model.node;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.el.ExpressionFactory;
+
 //import org.apache.el.ExpressionFactoryImpl;
 import org.springframework.util.StringUtils;
 
@@ -13,6 +15,7 @@ import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.service.handler.DecisionHandler;
 
+import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 /**
@@ -47,10 +50,13 @@ public class DecisionModel extends NodeModel {
 	 */
 	private DecisionHandler decide;
 
-//	private ExpressionFactory factory = new ExpressionFactoryImpl();
+	/**
+	 * 表达式引擎
+	 */
+	private ExpressionFactory factory = new ExpressionFactoryImpl();
 
 	/**
-	 * 表达式解析器
+	 * 调用表达式解析器，运算表达式，返回结果
 	 * 
 	 * @param <T>
 	 * @param T    返回类型
@@ -58,50 +64,52 @@ public class DecisionModel extends NodeModel {
 	 * @param args 参数列表
 	 * @return 返回对象
 	 */
+	@SuppressWarnings("unchecked")
 	private <T> T eval(Class<T> T, String expr, Map<String, Object> args) {
-		SimpleContext context = new SimpleContext();
-		System.out.println(context);
+		SimpleContext cxt = new SimpleContext();
 
-		return null;
+		for (String key : args.keySet())
+			cxt.setVariable(key, factory.createValueExpression(args.get(key), Object.class));
 
-//		for (String key : args.keySet())
-//			context.setVariable(key, factory.createValueExpression(args.get(key), Object.class));
-//
-//		return (T) factory.createValueExpression(context, expr, T).getValue(context);
+		return (T) factory.createValueExpression(cxt, expr, T).getValue(cxt);
 	}
 
 	@Override
-	public void exec(Execution execution) {
-		LOGGER.info("任务[{0}]运行抉择表达式的参数是[{1}]", execution.getOrder().getId(), execution.getArgs());
+	public void exec(Execution exec) {
+		LOGGER.info("任务[{0}]运行抉择表达式的参数是[{1}]", exec.getOrder().getId(), exec.getArgs());
 
 		String next = null;
 
 		if (StringUtils.hasText(expr))
-			next = eval(String.class, expr, execution.getArgs());
+			next = eval(String.class, expr, exec.getArgs());
 		else if (decide != null)
-			next = decide.decide(execution);
+			next = decide.decide(exec);
+		else {
+			LOGGER.warning("任务[{0}]不能获取下一步的步骤！", exec.getOrder().getId());
+			return;
+		}
 
-		LOGGER.info("任务[{0}]运行抉择表达式[{1}]的结果是[{2}]", execution.getOrder().getId(), expr, next);
+		LOGGER.info("任务[{0}]运行抉择表达式[{1}]的结果是[{2}]", exec.getOrder().getId(), expr, next);
 		boolean isfound = false;
 
 		for (TransitionModel tm : getOutputs()) {
 			if (!StringUtils.hasText(next)) {
 				String expr = tm.getExpr();
 
-				if (StringUtils.hasText(expr) && eval(Boolean.class, expr, execution.getArgs())) {
+				if (StringUtils.hasText(expr) && eval(Boolean.class, expr, exec.getArgs())) {
 					tm.setEnabled(true);
-					tm.execute(execution);
+					tm.execute(exec);
 					isfound = true;
 				}
 			} else if (tm.getName().equals(next)) {
 				tm.setEnabled(true);
-				tm.execute(execution);
+				tm.execute(exec);
 				isfound = true;
 			}
 		}
 
 		if (!isfound)
-			throw new WfException(execution.getOrder().getId() + "->decision 节点无法确定下一步执行路线");
+			throw new WfException(exec.getOrder().getId() + "->decision 节点无法确定下一步执行路线");
 	}
 
 	public String getExpr() {

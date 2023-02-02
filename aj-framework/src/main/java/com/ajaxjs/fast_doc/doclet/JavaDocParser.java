@@ -27,7 +27,7 @@ import com.sun.javadoc.Tag;
 /**
  * Java 标准文档的提取器 当前只提取 Field 和 Method 两种成员
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  */
 public class JavaDocParser extends Doclet implements DocModel {
     private static final LogHelper LOGGER = LogHelper.getLog(JavaDocParser.class);

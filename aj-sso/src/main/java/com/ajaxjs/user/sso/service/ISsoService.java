@@ -10,7 +10,7 @@ import com.ajaxjs.user.sso.model.IssueTokenWithUser;
 /**
  * 单点登录接口
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface ISsoService extends IBaseService {

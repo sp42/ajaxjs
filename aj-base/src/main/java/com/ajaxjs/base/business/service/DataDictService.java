@@ -18,7 +18,7 @@ import com.ajaxjs.spring.easy_controller.ControllerMethod;
 /**
  * 既是数据字典，也是树状接口的数据业务
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface DataDictService extends DataDictDao {

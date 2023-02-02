@@ -19,7 +19,7 @@ public interface Model {
     /**
      * 一个完整的控制器信息
      *
-     * @author Frank Cheung<sp42@qq.com>
+     * @author Frank Cheung sp42@qq.com
      */
     public static class ControllerInfo extends CommonValue {
         /**
@@ -31,7 +31,7 @@ public interface Model {
     /**
      * 控制器方法的信息
      *
-     * @author Frank Cheung<sp42@qq.com>
+     * @author Frank Cheung sp42@qq.com
      */
     public static class Item implements Comparable<Item> {
         public String id;
@@ -61,7 +61,7 @@ public interface Model {
     /**
      * 参数信息
      *
-     * @author Frank Cheung<sp42@qq.com>
+     * @author Frank Cheung sp42@qq.com
      */
     public static class ArgInfo extends CommonValue {
         /**
@@ -93,7 +93,7 @@ public interface Model {
     /**
      * 返回值信息
      *
-     * @author Frank Cheung<sp42@qq.com>
+     * @author Frank Cheung sp42@qq.com
      */
     public static class Return extends CommonValue {
         /**

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 配置参数
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Params {

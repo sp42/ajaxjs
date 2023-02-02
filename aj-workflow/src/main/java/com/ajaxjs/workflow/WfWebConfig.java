@@ -16,7 +16,6 @@ import com.ajaxjs.util.cache.MemoryCacheManager;
 
 @Configuration
 public class WfWebConfig extends BaseWebMvcConfigurer {
-
 	/**
 	 * 跨域
 	 *
@@ -42,12 +41,11 @@ public class WfWebConfig extends BaseWebMvcConfigurer {
 	 * @return
 	 */
 	@Bean
-	DataService DataService() {
-		DataServiceConfig cfg = new DataServiceConfig();
-		cfg.setEmbed(false);
-		cfg.setDataSource(getDs());
-
+	DataService dataService() {
 		DataService ds = new DataService();
+		DataServiceConfig cfg = new DataServiceConfig();
+		cfg.setMultiDataSource(true);
+		cfg.setDataSource(getDs());
 		ds.setCfg(cfg);
 
 		return ds;

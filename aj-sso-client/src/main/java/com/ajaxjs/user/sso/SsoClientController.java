@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.net.http.Post;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.sso.model.AccessToken;
@@ -20,7 +19,7 @@ import com.ajaxjs.util.map.MapTool;
 
 @RestController
 @RequestMapping("/sso")
-public class SsoClientController extends BaseController {
+public class SsoClientController {
 	@Value("${OAuth.api}")
 	private String api;
 
@@ -42,8 +41,8 @@ public class SsoClientController extends BaseController {
 	 * @param req
 	 * @return
 	 */
-	@GetMapping(value = "clientLogin", produces = JSON)
-	public String clientLogin(@RequestParam String code, HttpServletRequest req) {
+	@GetMapping("clientLogin")
+	public Map<String, Object> clientLogin(@RequestParam String code, HttpServletRequest req) {
 		Map<String, Object> params = new HashMap<>();
 		params.put("code", code);
 		params.put("grant_type", GRANT_TYPE);
@@ -56,7 +55,12 @@ public class SsoClientController extends BaseController {
 		// 存入 session
 		req.getSession().setAttribute(saveSession.accessToken.getAccessToken(), saveSession);
 
-		return "${User.home}".equals(userHome) ? toJson(result) : "redirect:/" + userHome;
+		if ("${User.home}".equals(userHome))
+			return result;
+		else
+			return null;
+
+//		return "${User.home}".equals(userHome) ?result : "redirect:/" + userHome;
 	}
 
 	/**

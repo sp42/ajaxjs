@@ -3,6 +3,7 @@ package com.ajaxjs.workflow.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.po.Order;
@@ -13,9 +14,12 @@ import com.ajaxjs.workflow.model.po.Task;
  * 流程执行过程中所传递的执行对象，其中包含流程定义、流程模型、流程实例对象、执行参数、返回的任务列表
  */
 public class Execution {
+	public static final LogHelper LOGGER = LogHelper.getLog(Execution.class);
+
 	/**
 	 * 构造函数，接收流程定义、流程实例对象、执行参数
 	 * 
+	 * @param engine  引擎
 	 * @param process 接收流程定义
 	 * @param order   流程实例对象
 	 * @param args    执行参数
@@ -49,14 +53,14 @@ public class Execution {
 		this.operator = exec.getOperator();
 	}
 
-	/**
-	 * 将执行对象交给该任务对应的节点模型执行
-	 */
-	public void execute() {
-		String taskName = task.getName();
+//	/**
+//	 * 将执行对象交给该任务对应的节点模型执行
+//	 */
+//	public void execute() {
+//		String taskName = task.getName();
 //		LOGGER.info("正在执行任务 {0}", taskName);
-		process.getModel().getNode(taskName).execute(this);
-	}
+//		process.getModel().getNode(taskName).execute(this);
+//	}
 
 	/**
 	 * WorlflowEngine holder

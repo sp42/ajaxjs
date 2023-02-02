@@ -3,7 +3,6 @@ package com.ajaxjs.data_service.controller;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -18,13 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ajaxjs.data_service.DataSerivceUtils;
-import com.ajaxjs.data_service.DataServiceDAO;
 import com.ajaxjs.data_service.model.DataServiceEntity;
 import com.ajaxjs.data_service.model.DataSourceInfo;
 import com.ajaxjs.data_service.service.DataService;
+import com.ajaxjs.framework.IBaseController;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.sql.JdbcConnection;
@@ -37,7 +35,7 @@ import com.ajaxjs.util.regexp.RegExpUtils;
 /**
  * 数据服务 后台控制器
  */
-public abstract class BaseDataServiceAdminController implements DataServiceDAO {
+public abstract class BaseDataServiceAdminController implements IBaseController<DataServiceEntity> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseDataServiceAdminController.class);
 
 	@Autowired
@@ -45,118 +43,51 @@ public abstract class BaseDataServiceAdminController implements DataServiceDAO {
 
 	/**
 	 * 返回数据源配置所在的表名
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract String getDataSourceTableName();
 
 	/**
 	 * 返回数据服务配置所在的表名
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract String getDataServiceTableName();
 
+	/**
+	 * 返回数据库连接
+	 *
+	 * @return
+	 */
+	protected abstract Connection getConnection();
+
 	@GetMapping("/reload")
 	public Boolean reload() {
 		dataService.init();// 重新加载配置
+
 		return true;
 	}
 
-	@GetMapping
-	public List<DataServiceEntity> list(Long datasourceId) {
-		LOGGER.info("获取表配置列表");
-
-		try (Connection conn = getConnection()) {
-			List<DataServiceEntity> list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM " + getDataServiceTableName());
-			for (DataServiceEntity e : list) {
-				String json = e.getJson();
-				Map<String, Object> map = JsonHelper.parseMap(json);
-				e.setData(map);
-			}
-
-			return list;
-		} catch (SQLException e) {
-			LOGGER.warning(e);
-			return Collections.emptyList();
-		}
-	}
-
-	@PostMapping
-	public DataServiceEntity create(@RequestBody DataServiceEntity entity) {
-		LOGGER.info("创建 DataService");
-
-		entity.setUrlDir(entity.getTableName());
-		String url = entity.getUrlDir().replaceAll("\\.", "_"); // 不能加 . 否则 URL 解析错误
-		entity.setUrlDir(url);
-//        LOGGER.info("" + entity.getDatasourceId());
-//        LOGGER.info(DataServiceAdminService.DAO.toString());
-
-		Long dsId = entity.getDatasourceId();
-		DataServiceEntity repeatUrlDir = dsId == null ? DataServiceAdminDAO.findRepeatUrlDir(url) : DataServiceAdminDAO.findRepeatUrlDirAndDsId(url, dsId);
-
-		if (repeatUrlDir != null) {
-			// 已经有重复的
-			String maxId = dsId == null ? DataServiceAdminDAO.findRepeatUrlDirMaxId(url) : DataServiceAdminDAO.findRepeatUrlDirAndDsIdMaxId(url, dsId);
-			String dig = "";
-
-			if (maxId != null) {
-				dig = RegExpUtils.regMatch("\\d+$", maxId);
-				int i = Integer.parseInt(dig);
-				dig = (++i) + "";
-			} else
-				dig = "1";
-
-			entity.setUrlDir(entity.getUrlDir() + "_" + dig);
-		}
-
-		Long newlyId = DataServiceAdminDAO.create(entity);
-		dataService.init(); // 重新加载配置
-
-//		return afterCreate(newlyId, entity);
-		return entity;
-	}
-
-	@PutMapping
-	public Boolean update(@RequestBody DataServiceEntity entity) {
-		if (DataServiceAdminDAO.update(entity) >= 1) {
-			dataService.init();// 重新加载配置
-
-			return true;
-		} else
-			return false;
-	}
-
-	@DeleteMapping("/{id}")
-	public Boolean delete(@PathVariable long id) {
-		LOGGER.info("删除配置 {0}", id);
-		DataServiceEntity dataServiceTable = new DataServiceEntity();
-		dataServiceTable.setId(id);
-
-		if (DataServiceAdminDAO.delete(dataServiceTable)) {
-			dataService.init();// 重新加载配置
-
-			return true;
-		} else
-			return false;
-	}
-
-	@RequestMapping("/{id}")
-	public DataServiceEntity getInfo(@PathVariable long id, String dbName) throws ClassNotFoundException, SQLException {
+	@GetMapping("/{id}")
+	public DataServiceEntity info(@PathVariable long id, String dbName) throws ClassNotFoundException, SQLException {
 		LOGGER.info("加载表详情");
 
 		Connection conn;
 		DataServiceEntity info;
+
 		try (Connection _conn = getConnection()) {
 			String sql = "SELECT * FROM " + getDataServiceTableName() + " WHERE id = " + id;
 			info = JdbcHelper.queryAsBean(DataServiceEntity.class, _conn, sql);
 
+			if (info == null)
+				throw new NullPointerException("找不到 id 為 " + id + " 的数据服务配置。");
+
 			// 获取所有字段
 			if (dataService.getCfg().isMultiDataSource())
-				conn = JdbcConnection.getConnection();
-			else {
 				conn = DataSerivceUtils.getConnByDataSourceInfo(_conn, getDataSourceTableName(), info.getDatasourceId());
-			}
+			else
+				conn = JdbcConnection.getConnection();
 		}
 
 		List<Map<String, String>> columnComment = null;
@@ -178,15 +109,128 @@ public abstract class BaseDataServiceAdminController implements DataServiceDAO {
 			info.setFields(map);
 		}
 
+		str2Json(info);
+
 		return info;
 	}
 
-	/**
-	 * 返回数据库连接
-	 * 
-	 * @return
-	 */
-	protected abstract Connection getConnection();
+	@GetMapping
+	public List<DataServiceEntity> list(Long datasourceId) {
+		LOGGER.info("获取表配置列表");
+
+		try (Connection conn = getConnection()) {
+			List<DataServiceEntity> list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM " + getDataServiceTableName());
+
+			for (DataServiceEntity e : list)
+				str2Json(e);
+
+			return list;
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void str2Json(DataServiceEntity e) {
+		String json = e.getJson();
+		Map<String, Object> map = JsonHelper.parseMap(json);
+		e.setData(map);
+		e.setJson(null);
+	}
+
+	@PostMapping
+	@Override
+	public DataServiceEntity create(@RequestBody DataServiceEntity entity) {
+		LOGGER.info("创建 DataService");
+
+		String url = entity.getUrlDir().replaceAll("\\.", "_"); // 不能加 . 否则 URL 解析错误
+		entity.setUrlDir(url);
+		entity.setUrlDir(entity.getTableName());
+//        LOGGER.info("" + entity.getDatasourceId());
+//        LOGGER.info(DataServiceAdminService.DAO.toString());
+
+		try (Connection conn = getConnection()) {
+			Long dsId = entity.getDatasourceId();
+			DataServiceEntity repeatUrlDir = getRepeatUrlDir(conn, dsId, url);
+
+			if (repeatUrlDir != null) {
+				// 已经有重复的
+				String maxId = getMaxId(conn, dsId, url);
+				String dig = "";
+
+				if (maxId != null) {
+					dig = RegExpUtils.regMatch("\\d+$", maxId);
+					int i = Integer.parseInt(dig);
+					dig = (++i) + "";
+				} else
+					dig = "1";
+
+				entity.setUrlDir(entity.getUrlDir() + "_" + dig);
+			}
+
+			Long newlyId = (Long) JdbcHelper.createBean(conn, entity, getDataServiceTableName());
+			dataService.init(); // 重新加载配置
+			entity.setId(newlyId);
+
+			return entity;
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	private DataServiceEntity getRepeatUrlDir(Connection conn, Long dsId, String url) {
+		String sql;
+
+		if (dsId == null) {
+			sql = "SELECT id FROM ${tableName} WHERE urlDir = ? LIMIT 1";
+			return JdbcHelper.queryAsBean(DataServiceEntity.class, conn, getDataServiceTableName(), sql, url);
+		} else {
+			sql = "SELECT id FROM ${tableName} WHERE urlDir = ? AND datasourceId = ? LIMIT 1";
+			return JdbcHelper.queryAsBean(DataServiceEntity.class, conn, getDataServiceTableName(), sql, url, dsId);
+		}
+	}
+
+	private String getMaxId(Connection conn, Long dsId, String url) {
+		String sql;
+
+		if (dsId == null) {
+			sql = "SELECT urlDir FROM ${tableName} WHERE urlDir REGEXP CONCAT(?, '_[0-9]+$') ORDER BY urlDir DESC LIMIT 1";
+			return JdbcHelper.queryOne(conn, sql, String.class, url);
+		} else {
+			sql = "SELECT urlDir FROM ${tableName} WHERE urlDir REGEXP CONCAT(?, '_[0-9]+$') AND datasourceId = ? ORDER BY urlDir DESC LIMIT 1";
+			return JdbcHelper.queryOne(conn, sql, String.class, url, dsId);
+		}
+	}
+
+	@PutMapping
+	@Override
+	public Boolean update(@RequestBody DataServiceEntity entity) {
+		try (Connection conn = getConnection()) {
+			JdbcHelper.updateBean(conn, entity, getDataServiceTableName());
+			dataService.init();// 重新加载配置
+
+			return true;
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	@DeleteMapping("/{id}")
+	@Override
+	public Boolean delete(@PathVariable long id) {
+		LOGGER.info("删除配置 {0}", id);
+		DataServiceEntity dataServiceTable = new DataServiceEntity();
+		dataServiceTable.setId(id);
+
+		try (Connection conn = getConnection()) {
+			return JdbcHelper.delete(conn, dataServiceTable, getDataServiceTableName());
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+			throw new RuntimeException(e);
+		}
+	}
 
 	@GetMapping("/get_databases/{datasourceId}")
 	@ControllerMethod("查询数据库所有的库名")
@@ -279,8 +323,8 @@ public abstract class BaseDataServiceAdminController implements DataServiceDAO {
 			List<String> allTableName = DataBaseMetaHelper.getAllTableName(conn, dbName);
 
 			// 有可能出现配置表本身，删除
-			if (allTableName.contains("bdp_data_service"))
-				allTableName.remove("bdp_data_service");
+			if (allTableName.contains("adp_data_service"))
+				allTableName.remove("adp_data_service");
 
 			if (StringUtils.hasLength(tablename)) // 搜索关键字
 				allTableName = allTableName.stream().filter(item -> item.contains(tablename)).collect(Collectors.toList());

@@ -19,7 +19,6 @@ package com.ajaxjs.util.map;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +33,6 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.framework.ValueEnmu;
 import com.ajaxjs.jsonparser.JsonParseException;
 import com.ajaxjs.jsonparser.syntax.FMS;
 import com.ajaxjs.util.MappingValue;
@@ -188,15 +186,15 @@ public class JsonHelper {
 		} else if (obj instanceof Object[])
 			return jsonArr((Object[]) obj, JsonHelper::toJson);
 		else if (obj instanceof Enum) {
-			if (obj instanceof ValueEnmu) {
-				Serializable v = ((ValueEnmu) obj).getValue();
-
-				if (v instanceof String)
-					return "\"" + v + "\"";
-				else
-					return (String) v;
-			} else
-				return "\"" + obj.toString() + "\"";
+//			if (obj instanceof ValueEnmu) {
+//				Serializable v = ((ValueEnmu) obj).getValue();
+//
+//				if (v instanceof String)
+//					return "\"" + v + "\"";
+//				else
+//					return (String) v;
+//			} else
+			return "\"" + obj.toString() + "\"";
 		} else if (obj instanceof Object) { // 普通 Java Object
 			List<String> arr = new ArrayList<>();
 

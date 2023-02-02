@@ -27,7 +27,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 数据服务初始化
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class DataServiceStarter {
@@ -53,7 +53,7 @@ public class DataServiceStarter {
 			if (cfg.isMultiDataSource())
 				initMulitDataSource(conn, mulitDataSource);
 
-			list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM adp_data_service");
+			list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM aj_base.adp_data_service");
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}
@@ -135,7 +135,7 @@ public class DataServiceStarter {
 	 */
 	private void initMulitDataSource(Connection conn, Map<Long, DataSourceInfo> mulitDataSource) {
 		mulitDataSource.clear();
-		List<DataSourceInfo> findList = JdbcHelper.queryAsBeanList(DataSourceInfo.class, conn, "SELECT * FROM adp_datasource WHERE stat != 0");
+		List<DataSourceInfo> findList = JdbcHelper.queryAsBeanList(DataSourceInfo.class, conn, "SELECT * FROM aj_base.adp_datasource WHERE stat != 0");
 
 		findList.forEach(myds -> {
 			myds.setInstance(DataSerivceUtils.getDataSourceByDataSourceInfo(myds));

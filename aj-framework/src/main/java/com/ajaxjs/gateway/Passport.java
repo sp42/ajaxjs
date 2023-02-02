@@ -2,7 +2,7 @@ package com.ajaxjs.gateway;
 
 /**
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Passport {

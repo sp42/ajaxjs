@@ -5,7 +5,7 @@ import com.ajaxjs.user.sso.model.ErrorCodeEnum;
 /**
  * SSO 错误
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class SsoError extends SecurityException {

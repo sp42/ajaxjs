@@ -3,7 +3,7 @@ package com.ajaxjs.database_meta.model;
 /**
  * 列详情
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class TableColumns {

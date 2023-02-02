@@ -51,7 +51,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.sql.annotation.IgnoreDB;
+import com.ajaxjs.sql.IgnoreDB;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.XmlHelper;
@@ -251,7 +251,7 @@ public class MapTool {
 					if (value != null) {
 						t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
-						if(value.toString().startsWith("{\"zjxt_height\""))
+						if (value.toString().startsWith("{\"zjxt_height\""))
 							LOGGER.info(value);
 						if (t == List.class) { // List 容器类，要处理里面的泛型
 							Type[] genericReturnType = ReflectUtil.getGenericReturnType(property.getReadMethod());
@@ -315,8 +315,7 @@ public class MapTool {
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				if (e instanceof IllegalArgumentException) {
 					LOGGER.warning(value + " JSON in DB " + IBaseModel.class.isAssignableFrom(t));
-					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value,
-							value != null ? value.getClass().toString() : "null");
+					LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value, value != null ? value.getClass().toString() : "null");
 				} else
 					LOGGER.warning(e);
 			}
@@ -484,5 +483,35 @@ public class MapTool {
 			LOGGER.warning(e);
 			return null;
 		}
+	}
+
+	/**
+	 * 简单的 bean（没 getter/setter 的）转换为 Map。JSP 的 El 表达式会使用到。
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	public static Map<String, Object> simpleBean2Map(Object bean) {
+		Map<String, Object> map = new HashMap<>();
+		Field[] fields = bean.getClass().getFields();
+
+		for (Field field : fields) {
+			try {
+				map.put(field.getName(), field.get(bean));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				LOGGER.warning(e);
+			}
+		}
+
+		return map;
+	}
+
+	public static List<Map<String, Object>> simpleBean2Map(List<?> beanList) {
+		List<Map<String, Object>> list = new ArrayList<>();
+
+		for (Object bean : beanList)
+			list.add(simpleBean2Map(bean));
+
+		return list;
 	}
 }

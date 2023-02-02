@@ -1,106 +1,115 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>ajaxjs-framework</artifactId>
-    <version>1.0.6</version>
-    <description>业务的封装</description>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>ajaxjs-framework</artifactId>
+	<version>1.0.6</version>
+	<description>业务的封装</description>
 
-    <parent>
-        <groupId>com.ajaxjs</groupId>
-        <artifactId>ajaxjs-parent</artifactId>
-        <version>1.10</version>
-        <relativePath/>
-    </parent>
+	<parent>
+		<groupId>com.ajaxjs</groupId>
+		<artifactId>ajaxjs-parent</artifactId>
+		<version>1.10</version>
+		<relativePath />
+	</parent>
 
-    <packaging>jar</packaging>
+	<packaging>jar</packaging>
 
-    <!-- 打包资源文件 -->
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.2.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <!-- To use the plugin goals in your POM or parent POM -->
-        <plugins>
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <!-- <version>3.0.2</version> -->
-                <executions>
-                    <execution>
-                        <id>copy-resource-one</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/META-INF</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>/src/main/resources/META-INF</directory>
-                                    <includes>
-                                        <include>*.*</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    <dependencies>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.12</version>
-            <!-- <scope>runtime</scope> -->
-        </dependency>
+	<!-- 打包资源文件 -->
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<!-- To use the plugin goals in your POM or parent POM -->
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<!-- <version>3.0.2</version> -->
+				<executions>
+					<execution>
+						<id>copy-resource-one</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/META-INF</outputDirectory>
+							<resources>
+								<resource>
+									<directory>/src/main/resources/META-INF</directory>
+									<includes>
+										<include>*.*</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.12</version>
+			<!-- <scope>runtime</scope> -->
+		</dependency>
 
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.7</version>
-        </dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.5.7</version>
+		</dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>5.3.6</version>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<!-- <version>5.3.6</version> -->
+			<version>5.3.25</version>
+		</dependency>
 
-        <!-- YAML 配置文件 -->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.26</version>
-        </dependency>
+		<!-- YAML 配置文件 -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<!-- <version>1.26</version> -->
+			<version>1.33</version>
+		</dependency>
 
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
-            <artifactId>ajaxjs-util</artifactId>
-            <version>1.0.8</version>
-        </dependency>
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-util</artifactId>
+			<version>1.0.8</version>
+		</dependency>
 
-        <!-- <dependency> <groupId>com.ajaxjs</groupId> <artifactId>ajaxjs-javadoc</artifactId>
-            <version>1.0.1</version> </dependency> -->
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-javadoc</artifactId>
+			<version>1.0.2</version>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
-        </dependency>
+		<!-- <dependency> <groupId>com.ajaxjs</groupId> <artifactId>ajaxjs-javadoc</artifactId> 
+			<version>1.0.1</version> </dependency> -->
 
-        <dependency>
-            <groupId>com.github.jsqlparser</groupId>
-            <artifactId>jsqlparser</artifactId>
-            <version>4.4</version>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>4.4</version>
+		</dependency>
+	</dependencies>
 
 </project>

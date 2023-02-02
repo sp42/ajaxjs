@@ -24,7 +24,7 @@ import com.ajaxjs.util.map.MapTool;
 /**
  * 统一返回 JSON
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {

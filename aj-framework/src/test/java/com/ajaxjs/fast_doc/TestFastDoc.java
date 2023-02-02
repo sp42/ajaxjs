@@ -54,12 +54,18 @@ public class TestFastDoc {
 
 	@Test
 	public void testFastDoc() {
-		FastDoc.loadBeans("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
-		FastDoc.loadControllersDoc("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
+//		FastDoc.loadBeans("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
+//		FastDoc.loadControllersDoc("D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\", FooController.class);
+//
+//		FastDoc.saveToDisk("D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\fast-doc\\json.js");
 
-//		System.out.println(FastDoc.getJsonStr());
+		FastDocRun run = new FastDocRun();
+		run.sourceDir = "D:\\code\\ajaxjs\\aj-framework\\aj-framework\\src\\test\\java\\"; // 源码目录，到 java 那一层
+		run.beanClasses = new Class<?>[] { FooBean.class, BarBean.class, InnerClass.class }; // 有哪些 Java Bean，都列出来
+		run.controllerClasses = new Class<?>[] { FooController.class }; // 有哪些 Spring MVC 控制器类，都列出来
+		run.jsonDir = "D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\fast-doc\\json.js"; // 最终 JSON 保存的地方
 
-		FastDoc.saveToDisk("D:\\code\\ajaxjs\\aj-framework\\aj-ui-widget\\fast-doc\\json.js");
+		FastDoc.run(run);
 	}
 
 //	@Test

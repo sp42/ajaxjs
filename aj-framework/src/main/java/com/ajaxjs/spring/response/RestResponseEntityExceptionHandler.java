@@ -15,7 +15,7 @@ import com.ajaxjs.util.WebHelper;
 /**
  * 后端表单、数据校验的异常捕获
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 @ControllerAdvice

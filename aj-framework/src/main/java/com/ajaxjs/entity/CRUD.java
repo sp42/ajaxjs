@@ -14,7 +14,7 @@ import com.ajaxjs.util.regexp.RegExpUtils;
 /**
  * 通用的 CRUD 业务方法
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class CRUD {

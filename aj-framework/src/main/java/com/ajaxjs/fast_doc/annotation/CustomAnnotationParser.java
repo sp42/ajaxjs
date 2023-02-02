@@ -13,7 +13,7 @@ import com.ajaxjs.spring.easy_controller.PathForDoc;
 /**
  * 自定义注解的提取器
  *
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  */
 public class CustomAnnotationParser extends SpringMvcAnnotationParser {
     public CustomAnnotationParser() {

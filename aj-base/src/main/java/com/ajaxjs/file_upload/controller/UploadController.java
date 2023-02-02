@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ajaxjs.file_upload.IFileUpload;
-import com.ajaxjs.framework.BaseController;
 import com.ajaxjs.gateway.PassportFilter;
 import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.WebHelper;
@@ -78,7 +77,7 @@ public class UploadController {
 	 * @throws IOException
 	 */
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	public String uploadFileHandler(@RequestHeader(PassportFilter.CLIENT_ID) String clientId,
+	public Boolean uploadFileHandler(@RequestHeader(PassportFilter.CLIENT_ID) String clientId,
 			@RequestHeader(PassportFilter.TOKEN) String token, @RequestParam("file") MultipartFile file,
 			HttpServletRequest req) throws IOException {
 		List<Map<String, Object>> list = config.getListMap("auth");
@@ -97,24 +96,24 @@ public class UploadController {
 		String originalFilename = file.getOriginalFilename();
 		String filename = isRename ? getAutoName(originalFilename) : originalFilename;
 
-		if (fileUpload == null) {
-			String newly = localFileUpload(filename, file, req);
+//		if (fileUpload == null) {
+//			String newly = localFileUpload(filename, file, req);
+//
+//			if (newly != null)
+//				return makeJson(filename, newly);
+//		} else if (fileUpload.upload(filename, file.getBytes())) {// TODO add folder
+//			String newly = FILE_URL_ROOT + "/" + filename;// 返回文件 url
+//
+//			return makeJson(filename, newly);
+//		}
 
-			if (newly != null)
-				return makeJson(filename, newly);
-		} else if (fileUpload.upload(filename, file.getBytes())) {// TODO add folder
-			String newly = FILE_URL_ROOT + "/" + filename;// 返回文件 url
-
-			return makeJson(filename, newly);
-		}
-
-		return BaseController.jsonNoOk("上传失败");
+		return false;
 	}
 
 	private static String makeJson(String filename, String url) {
 		String ext = String.format("\"filename\":\"%s\", \"url\": \"%s\"", filename, url);
 
-		return BaseController.jsonOk_Extension("上传成功", ext);
+		return ext;
 	}
 
 	/**

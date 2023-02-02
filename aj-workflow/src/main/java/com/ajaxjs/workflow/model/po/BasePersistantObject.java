@@ -9,7 +9,7 @@ import com.ajaxjs.framework.IBaseModel;
  * 
  * PO 就是数据库中的记录，一个 PO 的数据结构对应着库中表的结构，表中的一条记录就是一个 PO 对象
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public abstract class BasePersistantObject implements IBaseModel {
@@ -42,7 +42,7 @@ public abstract class BasePersistantObject implements IBaseModel {
 	/**
 	 * 上一次更新人员 id
 	 */
-	private Long updator;
+	private Long updater;
 
 	/**
 	 * 创建日期
@@ -110,12 +110,12 @@ public abstract class BasePersistantObject implements IBaseModel {
 		this.creator = creator;
 	}
 
-	public Long getUpdator() {
-		return updator;
+	public Long getUpdater() {
+		return updater;
 	}
 
-	public void setUpdator(Long updator) {
-		this.updator = updator;
+	public void setUpdater(Long updator) {
+		this.updater = updator;
 	}
 
 }

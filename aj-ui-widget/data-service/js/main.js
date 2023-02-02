@@ -77,6 +77,7 @@ new Vue({
             showFields: false,
             fields: [],
 
+            dmlSelected: null, // 命令选中高亮显示
             code: `SELECT * FROM user\n`,
             cmOption: {
                 tabSize: 4,
@@ -126,6 +127,24 @@ new Vue({
             } else
                 config.style.height = '500px';
 
+        },
+        getDml(item, key) {
+            let method = 'UNKNOW', path = '/' + this.currentData.urlDir, id = this.currentData.id;
+
+            if (key == 'create')
+                method = '<span style="color:green;">POST</span>';
+            else if (key == 'update')
+                method = 'PUT';
+            else if (key == 'list' || key == 'info')
+                method = 'GET';
+            else if (key == 'delete') {
+                path += '/{id}'
+                method = 'DELETE';
+            } else if (key == 'others') {
+                return null;
+            }
+
+            return method + ' ' + path;
         }
     }
 });

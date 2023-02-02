@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
-import com.ajaxjs.framework.BaseService;
+import com.ajaxjs.my_data_framework.BaseService;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.model.po.OrderCc;
 

@@ -17,7 +17,7 @@ import com.ajaxjs.sql.JdbcConnection;
 /**
  * 生成数据库信息的 JSON，用于显示数据库文档
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public abstract class BaseMakeDbDocController {

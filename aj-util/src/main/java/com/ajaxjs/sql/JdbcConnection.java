@@ -29,7 +29,6 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.sql.orm.DaoContext;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

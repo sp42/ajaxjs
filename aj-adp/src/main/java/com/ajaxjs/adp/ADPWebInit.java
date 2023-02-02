@@ -17,7 +17,6 @@ public class ADPWebInit extends BaseWebInitializer {
 
 	@Bean
 	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-//		return new ServiceBeanDefinitionRegistry("com.ajaxjs.adp");
 		return new ServiceBeanDefinitionRegistry(getClass().getPackage().getName());
 	}
 }

@@ -9,6 +9,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.ajaxjs.spring.easy_controller.ServiceBeanDefinitionRegistry;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -70,5 +71,9 @@ public abstract class BaseWebInitializer extends BaseSpringWebInitializer implem
 
 		initUpload(cxt, registration);
 		LOGGER.info("WEB 程序启动完毕");
+	}
+
+	public ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry(Class<? extends BaseWebInitializer> clz) {
+		return new ServiceBeanDefinitionRegistry(clz.getPackage().getName());
 	}
 }

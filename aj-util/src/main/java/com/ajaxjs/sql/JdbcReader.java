@@ -32,10 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ajaxjs.framework.IntegerValueEnum;
 import com.ajaxjs.sql.Lambda.HasZeroResult;
 import com.ajaxjs.sql.Lambda.ResultSetProcessor;
-import com.ajaxjs.sql.orm.DataBaseType;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -199,9 +197,9 @@ public class JdbcReader {
 					Class<?> propertyType = property.getPropertyType();
 
 					// 枚举类型的支持
-					if (propertyType.isEnum()) // Enum.class.isAssignableFrom(propertyType) 这个方法也可以
-						value = dbValue2Enum(propertyType, _value);
-					else {
+//					if (propertyType.isEnum()) // Enum.class.isAssignableFrom(propertyType) 这个方法也可以
+//						value = dbValue2Enum(propertyType, _value);
+//					else {
 						try {
 							value = MappingValue.objectCast(_value, propertyType);
 						} catch (NumberFormatException e) {
@@ -209,7 +207,7 @@ public class JdbcReader {
 							LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, input, expect);
 							continue; // 转换失败，继续下一个字段
 						}
-					}
+//					}
 
 					ReflectUtil.executeMethod(bean, method, value);
 				} catch (IntrospectionException | IllegalArgumentException e) {
@@ -254,26 +252,26 @@ public class JdbcReader {
 	 * @param _value
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Object dbValue2Enum(Class<?> propertyType, Object _value) {
-		if (_value != null) {
-			boolean isNumber = _value instanceof Number, isString = _value instanceof String; // 写在这里不用在 for 里面每次判断
-
-			for (Object e : propertyType.getEnumConstants()) {
-				if (isNumber) {
-					IntegerValueEnum _e = (IntegerValueEnum) e;
-					Integer _int = ((Integer) _value) - (_e.isUsingOrdinal() ? 1 : 0);
-
-					if (_int == _e.getValue()) {
-						return e;
-					}
-				} else if (isString)
-					return Enum.valueOf((Class<Enum>) propertyType, _value + "");
-			}
-		}
-
-		return null;
-	}
+//	@SuppressWarnings({ "unchecked", "rawtypes" })
+//	private static Object dbValue2Enum(Class<?> propertyType, Object _value) {
+//		if (_value != null) {
+//			boolean isNumber = _value instanceof Number, isString = _value instanceof String; // 写在这里不用在 for 里面每次判断
+//
+//			for (Object e : propertyType.getEnumConstants()) {
+//				if (isNumber) {
+//					IntegerValueEnum _e = (IntegerValueEnum) e;
+//					Integer _int = ((Integer) _value) - (_e.isUsingOrdinal() ? 1 : 0);
+//
+//					if (_int == _e.getValue()) {
+//						return e;
+//					}
+//				} else if (isString)
+//					return Enum.valueOf((Class<Enum>) propertyType, _value + "");
+//			}
+//		}
+//
+//		return null;
+//	}
 
 	/**
 	 * 查询列表
@@ -344,9 +342,9 @@ public class JdbcReader {
 	static boolean hasZeoResult(Connection conn, ResultSet rs, String sql) throws SQLException {
 		boolean hasNext;
 
-		if (JdbcConnection.getDaoContext().getDbType() == DataBaseType.SQLITE)
-			hasNext = rs.isBeforeFirst(); // SQLite 比较特殊，要用 isBeforeFirst() 方法判断
-		else
+//		if (JdbcConnection.getDaoContext().getDbType() == DataBaseType.SQLITE)
+//			hasNext = rs.isBeforeFirst(); // SQLite 比较特殊，要用 isBeforeFirst() 方法判断
+//		else
 			hasNext = rs.next();
 
 		if (hasNext)

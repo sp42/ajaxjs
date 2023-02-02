@@ -3,7 +3,7 @@ package com.ajaxjs.gateway;
 /**
  * 带租户、门户字段的实体
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public interface TenantPortal {

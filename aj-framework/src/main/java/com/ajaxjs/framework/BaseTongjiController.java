@@ -34,7 +34,7 @@ import com.ajaxjs.util.map.JsonHelper;
  */
 @RestController
 @RequestMapping("${website.service_root:/service}/baidu_tongji")
-public class BaseTongjiController extends BaseController {
+public class BaseTongjiController {
 	@Value("${website.baidu_tongji.api_username}")
 	private String api_username;
 

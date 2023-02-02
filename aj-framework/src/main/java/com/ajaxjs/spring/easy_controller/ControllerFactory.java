@@ -8,7 +8,7 @@ import org.springframework.beans.factory.FactoryBean;
 /**
  * 接口实例工厂，这里主要是用于提供接口的实例对象
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  */
 public class ControllerFactory implements FactoryBean<Object> {
 	/**

@@ -8,7 +8,7 @@ import com.ajaxjs.framework.IBaseModel;
 /**
  * 附件
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class Attachment implements IBaseModel {

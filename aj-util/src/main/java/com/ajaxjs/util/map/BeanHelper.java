@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Java Bean 工具类
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class BeanHelper {

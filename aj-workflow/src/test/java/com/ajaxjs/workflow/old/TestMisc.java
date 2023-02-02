@@ -25,7 +25,6 @@ import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.service.scheduling.JobCallback;
-import com.ajaxjs.workflow.service.task.TaskFactory;
 
 public class TestMisc extends BaseTest {
 	// 实例编号自定义
@@ -59,7 +58,7 @@ public class TestMisc extends BaseTest {
 		TaskModel tm2 = new TaskModel();
 		tm2.setName("task2");
 		tm2.setDisplayName("任务2");
-		List<Task> tasks = TaskFactory.createFreeTask(engine, order.getId(), 1L, args, tm1);
+		List<Task> tasks = engine.createFreeTask(order.getId(), 1L, args, tm1);
 
 		for (Task task : tasks) {
 			engine.taskService.complete(task.getId(), 1L, null);

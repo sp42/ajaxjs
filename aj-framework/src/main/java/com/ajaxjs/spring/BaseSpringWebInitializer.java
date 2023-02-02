@@ -19,7 +19,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 通用的配置，可供 classic/little 使用
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public abstract class BaseSpringWebInitializer implements WebApplicationInitializer {

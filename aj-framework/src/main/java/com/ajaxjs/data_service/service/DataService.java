@@ -37,7 +37,7 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 数据服务核心类
  * 
- * @author Frank Cheung<sp42@qq.com>
+ * @author Frank Cheung sp42@qq.com
  *
  */
 public class DataService {

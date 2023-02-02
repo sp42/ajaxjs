@@ -104,9 +104,9 @@ public class TaskModel extends WorkModel {
 		LOGGER.info("任务模型的执行");
 
 		if (performType == null || performType.equalsIgnoreCase(PERFORMTYPE_ANY))
-			runOutTransition(exec);// any方式，直接执行输出变迁
+			runOutTransition(exec);// any 方式，直接执行输出变迁
 		else {
-			String taskName = getName(); // all的任务名称
+			String taskName = getName(); // all 的任务名称
 
 			// all 方式，需要判断是否已全部合并 由于 all 方式分配任务，是每人一个任务
 			// 那么此时需要判断之前分配的所有任务都执行完成后，才可执行下一步，否则不处理

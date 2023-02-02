@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
+import javax.management.MBeanServer;
+import javax.management.MBeanServerFactory;
+import javax.management.ObjectName;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -135,6 +140,48 @@ public class WebHelper {
 			prefix += ":" + port;
 
 		return prefix + req.getContextPath();
+	}
+
+	/**
+	 * 获取当前Tomcat端口
+	 * 
+	 * @return
+	 */
+	public static int getHttpPort() {
+		try {
+			MBeanServer server;
+
+			if (MBeanServerFactory.findMBeanServer(null).size() > 0)
+				server = MBeanServerFactory.findMBeanServer(null).get(0);
+			else
+				return -1;
+
+			Set<ObjectName> names = server.queryNames(new ObjectName("Catalina:type=Connector,*"),
+					javax.management.Query.match(javax.management.Query.attr("protocol"), javax.management.Query.value("HTTP/1.1")));
+
+			Iterator<ObjectName> iterator = names.iterator();
+
+			if (iterator.hasNext()) {
+				ObjectName name = iterator.next();
+				return Integer.parseInt(server.getAttribute(name, "port").toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
+
+	/**
+	 * 
+	 */
+	private static String LOCAL_SERVICE;
+
+	public static String getLocalService(HttpServletRequest req) {
+		if (LOCAL_SERVICE == null)
+			LOCAL_SERVICE = "http://127.0.0.1:" + getHttpPort() + req.getContextPath();
+
+		return LOCAL_SERVICE;
 	}
 
 	/**
