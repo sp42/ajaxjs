@@ -84,6 +84,21 @@ public class SpringMvcAnnotationParser {
 
 	}
 
+<<<<<<< HEAD
+    /**
+     * 遍历每个方法
+     *
+     * @return
+     */
+    private List<Item> parseControllerMethod() {
+        List<Item> list = Util.makeListByArray(clz.getDeclaredMethods(), method -> {
+            Deprecated dep = method.getAnnotation(Deprecated.class);
+
+            if (dep != null) // 遗弃的不加入
+                return null;
+
+            Item item = new Item();
+=======
 	/**
 	 * 遍历每个方法
 	 *
@@ -92,6 +107,7 @@ public class SpringMvcAnnotationParser {
 	private List<Item> parseControllerMethod() {
 		List<Item> list = Util.makeListByArray(clz.getDeclaredMethods(), method -> {
 			Item item = new Item();
+>>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
 
 			getInfo(item, method);
 			getReturnType(item, method);
@@ -100,8 +116,15 @@ public class SpringMvcAnnotationParser {
 			return item;
 		});
 
+<<<<<<< HEAD
+        return list;
+
+//        return list.stream().sorted().collect(Collectors.toList());// 按 url 排序
+    }
+=======
 		return list.stream().sorted().collect(Collectors.toList());// 按 url 排序
 	}
+>>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
 
 	/**
 	 * 获取根 url
@@ -139,6 +162,14 @@ public class SpringMvcAnnotationParser {
 		item.methodName = method.getName();
 		item.id = StrUtil.uuid(); // 雪花算法会重复，改用 uuid
 
+<<<<<<< HEAD
+        // HTTP 方法
+        GetMapping get = method.getAnnotation(GetMapping.class);
+        if (get != null) {
+            item.httpMethod = "GET";
+            item.url = setUrl(get.value());
+        }
+=======
 		// HTTP 方法
 		GetMapping get = method.getAnnotation(GetMapping.class);
 		if (get != null) {
@@ -151,6 +182,7 @@ public class SpringMvcAnnotationParser {
 			item.httpMethod = "POST";
 			item.url = setUrl(post.value());
 		}
+>>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
 
 		PutMapping put = method.getAnnotation(PutMapping.class);
 		if (put != null) {
@@ -280,9 +312,18 @@ public class SpringMvcAnnotationParser {
 
 			getArgs(item, method, param, arg);
 
+<<<<<<< HEAD
+            if (arg.name.contains("filename"))
+                System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + arg.name);
+
+            if (queryP != null) {
+                arg.position = "query";
+                arg.isRequired = queryP.required();
+=======
 			if (queryP != null) {
 				arg.position = "query";
 				arg.isRequired = queryP.required();
+>>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
 
 				if (StringUtils.hasText(queryP.value()))
 					arg.name = queryP.value();

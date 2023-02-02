@@ -323,8 +323,8 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 			List<String> allTableName = DataBaseMetaHelper.getAllTableName(conn, dbName);
 
 			// 有可能出现配置表本身，删除
-			if (allTableName.contains("bdp_data_service"))
-				allTableName.remove("bdp_data_service");
+			if (allTableName.contains("adp_data_service"))
+				allTableName.remove("adp_data_service");
 
 			if (StringUtils.hasLength(tablename)) // 搜索关键字
 				allTableName = allTableName.stream().filter(item -> item.contains(tablename)).collect(Collectors.toList());
