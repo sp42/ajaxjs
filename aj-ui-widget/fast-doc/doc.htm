@@ -79,7 +79,7 @@
                         <td>{{arg.position}}</td>
                         <td>{{arg.type}}</td>
                         <td>
-                            {{arg.description}}<span v-if="arg.fields && arg.fields.length">，各字段如下：
+                            {{arg.description || arg.type}}<span v-if="arg.fields && arg.fields.length">，各字段如下：
                                 <table style="text-align: left;" class="inner-table">
                                     <tr v-for="i in arg.fields">
                                         <td>{{i.name}}: <span style="font-family:'Courier New'">{{i.type}}</span></td>
@@ -194,7 +194,7 @@
         new Vue({
             el: document.getElementById('doc'),
             data: {
-                root: 'http://workwe.gz88.cc:18085/oba',
+                root: 'http://workwe.gz88.cc:8077/auth_way_console',
                 controllerInfo: DOC_JSON[key],
                 list: DOC_JSON[key].items
             },

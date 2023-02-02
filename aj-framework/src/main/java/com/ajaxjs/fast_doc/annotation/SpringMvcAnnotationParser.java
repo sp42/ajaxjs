@@ -92,6 +92,11 @@ public class SpringMvcAnnotationParser {
      */
     private List<Item> parseControllerMethod() {
         List<Item> list = Util.makeListByArray(clz.getDeclaredMethods(), method -> {
+            Deprecated dep = method.getAnnotation(Deprecated.class);
+
+            if (dep != null) // 遗弃的不加入
+                return null;
+
             Item item = new Item();
 
             getInfo(item, method);
@@ -101,7 +106,9 @@ public class SpringMvcAnnotationParser {
             return item;
         });
 
-        return list.stream().sorted().collect(Collectors.toList());// 按 url 排序
+        return list;
+
+//        return list.stream().sorted().collect(Collectors.toList());// 按 url 排序
     }
 
     /**
@@ -139,7 +146,6 @@ public class SpringMvcAnnotationParser {
     private void getInfo(Item item, Method method) {
         item.methodName = method.getName();
         item.id = StrUtil.uuid(); // 雪花算法会重复，改用 uuid
-
 
         // HTTP 方法
         GetMapping get = method.getAnnotation(GetMapping.class);
@@ -280,6 +286,9 @@ public class SpringMvcAnnotationParser {
             RequestParam queryP = param.getAnnotation(RequestParam.class);
 
             getArgs(item, method, param, arg);
+
+            if (arg.name.contains("filename"))
+                System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + arg.name);
 
             if (queryP != null) {
                 arg.position = "query";
