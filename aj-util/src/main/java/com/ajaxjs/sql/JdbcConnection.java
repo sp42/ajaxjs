@@ -257,6 +257,21 @@ public class JdbcConnection {
 	}
 
 	/**
+	 * 根据 Conn 获取连接字符串，在调试时候非常有用
+	 * 
+	 * @param conn
+	 * @return
+	 */
+	public static String getDbUrl(Connection conn) {
+		try {
+			return conn.getMetaData().getURL();
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+
+	/**
 	 * 清除内容
 	 */
 	private static void clean() {
