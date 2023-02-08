@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ajaxjs.spring.easy_controller.ControllerMethod;
 import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
 import com.ajaxjs.sso.model.ClientDetails;
-import com.ajaxjs.sso.model.OauthModel.Argee;
 import com.ajaxjs.sso.service.IOauthService;
 import com.ajaxjs.sso.service.OauthService;
 

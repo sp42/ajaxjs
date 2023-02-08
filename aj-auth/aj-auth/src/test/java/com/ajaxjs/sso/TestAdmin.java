@@ -1,6 +1,4 @@
-package com.ajaxjs.user.sso;
-
-import static org.junit.Assert.assertEquals;
+package com.ajaxjs.sso;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.data_service.controller.DataServiceApiController;
-import com.ajaxjs.user.sso.controller.OauthController;
-import com.ajaxjs.user.sso.model.ClientDetails;
+import com.ajaxjs.auth.controller.DataServiceApiController;
+import com.ajaxjs.sso.model.ClientDetails;
 
 @ContextConfiguration(locations = { "classpath*:applicationContext.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,7 +28,7 @@ public class TestAdmin {
 
 	@Before
 	public void init() {
-		apiController.initCache();
+//		apiController.init();
 		mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 	}
 

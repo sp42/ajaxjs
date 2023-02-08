@@ -1,4 +1,4 @@
-package com.ajaxjs.user.sso;
+package com.ajaxjs.sso;
 
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,13 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.user.TestConfig;
+import com.ajaxjs.TestConfig;
+import com.ajaxjs.sso.controller.SsoController;
+import com.ajaxjs.sso.controller.StateController;
+import com.ajaxjs.sso.model.IssueToken;
+import com.ajaxjs.sso.model.IssueTokenWithUser;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
-import com.ajaxjs.user.sso.controller.SsoController;
-import com.ajaxjs.user.sso.controller.StateController;
-import com.ajaxjs.user.sso.model.IssueToken;
-import com.ajaxjs.user.sso.model.IssueTokenWithUser;
 import com.ajaxjs.util.regexp.RegExpUtils;
 
 @ContextConfiguration(classes = TestConfig.class)
