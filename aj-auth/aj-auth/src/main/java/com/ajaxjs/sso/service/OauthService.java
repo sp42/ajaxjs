@@ -8,11 +8,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.auth.service.UserUtils;
+import com.ajaxjs.sso.common.SsoConstants;
 import com.ajaxjs.sso.model.ClientDetails;
 import com.ajaxjs.sso.model.ClientUser;
 import com.ajaxjs.sso.model.Scope;
 import com.ajaxjs.user.User;
-import com.ajaxjs.user.sso.common.SsoConstants;
 import com.ajaxjs.util.StrUtil;
 
 /**

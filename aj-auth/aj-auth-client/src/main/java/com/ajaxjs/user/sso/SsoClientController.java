@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ajaxjs.net.http.Post;
-import com.ajaxjs.user.User;
 import com.ajaxjs.user.sso.model.AccessToken;
+import com.ajaxjs.user.sso.model.SimpleUser;
 import com.ajaxjs.user.sso.model.UserSession;
 import com.ajaxjs.util.map.MapTool;
 
@@ -78,7 +78,7 @@ public class SsoClientController {
 
 		@SuppressWarnings("unchecked")
 		Map<String, Object> userJson = (Map<String, Object>) result.get("user");
-		User user = MapTool.map2Bean(userJson, User.class, true);
+		SimpleUser user = MapTool.map2Bean(userJson, SimpleUser.class, true);
 
 		UserSession userSession = new UserSession();
 		userSession.accessToken = accessToken;

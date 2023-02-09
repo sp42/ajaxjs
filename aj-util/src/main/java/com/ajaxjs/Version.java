@@ -12,6 +12,7 @@ package com.ajaxjs;
 
 import java.io.File;
 
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -76,7 +77,7 @@ public class Version {
 		 */
 		isDebug = !(OS_NAME.indexOf("nix") >= 0 || OS_NAME.indexOf("nux") >= 0 || OS_NAME.indexOf("aix") > 0);
 
-		if (!isRunningTest()) {
+		if (!TestHelper.isRunningTest()) {
 //			LOGGER.infoYellow("\n     ___       _       ___  __    __      _   _____        _          __  _____   _____  \n"
 //					+ "     /   |     | |     /   | \\ \\  / /     | | /  ___/      | |        / / | ____| |  _  \\ \n"
 //					+ "    / /| |     | |    / /| |  \\ \\/ /      | | | |___       | |  __   / /  | |__   | |_| |  \n"
@@ -86,21 +87,5 @@ public class Version {
 
 //			LOGGER.infoGreen("Util 加载完毕，当前是[" + (isDebug ? "调试" : "生产环境") + "]模式");
 		}
-	}
-
-	/**
-	 * 检测是否在运行单元测试
-	 * 
-	 * @return
-	 */
-	private static boolean isRunningTest() {
-		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-
-		for (StackTraceElement e : stackTrace) {
-			if (e.toString().lastIndexOf("junit.runners") > -1)
-				return true;
-		}
-
-		return false;
 	}
 }

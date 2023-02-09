@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.auth.service.UserUtils;
 import com.ajaxjs.sso.common.SsoError;
+import com.ajaxjs.sso.common.SsoUtil;
 import com.ajaxjs.sso.model.AccessToken;
 import com.ajaxjs.sso.model.ClientDetails;
 import com.ajaxjs.sso.model.ErrorCodeEnum;
@@ -19,7 +20,6 @@ import com.ajaxjs.sso.model.IssueTokenWithUser;
 import com.ajaxjs.sso.model.RefreshToken;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserCommonDAO;
-import com.ajaxjs.user.sso.common.SsoUtil;
 import com.ajaxjs.util.cache.ExpireCache;
 import com.ajaxjs.util.cryptography.Digest;
 import com.ajaxjs.util.logger.LogHelper;
