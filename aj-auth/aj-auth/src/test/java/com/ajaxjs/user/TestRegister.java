@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.ajaxjs.auth.controller.DataServiceApiController;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.user.controller.RegisterController;
 import com.ajaxjs.util.TestHelper;
 
@@ -33,7 +33,7 @@ public class TestRegister {
 	RegisterController registerController;
 
 	@Autowired
-	DataServiceApiController apiController;
+	DataService ds2;
 
 	@Autowired
 	DataSource ds;
@@ -42,7 +42,7 @@ public class TestRegister {
 
 	@Before
 	public void init() {
-		apiController.initCache();
+		ds2.init();
 	}
 
 	@Test

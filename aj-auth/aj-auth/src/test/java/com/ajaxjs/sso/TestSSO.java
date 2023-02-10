@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.TestConfig;
 import com.ajaxjs.auth.controller.DataServiceApiController;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.sso.model.IssueToken;
 import com.ajaxjs.sso.model.IssueTokenWithUser;
 import com.ajaxjs.sso.service.SsoService;
@@ -40,9 +41,12 @@ public class TestSSO {
 	@Autowired
 	DataServiceApiController apiController;
 
+	@Autowired
+	DataService ds;
+
 	@Before
 	public void init() {
-		apiController.initCache();
+		ds.init();
 	}
 
 	@Test

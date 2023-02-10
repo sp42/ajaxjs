@@ -18,8 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.ajaxjs.auth.controller.DataServiceApiController;
 import com.ajaxjs.base.ISendSMS;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.user.controller.ResetPasswordController;
 import com.ajaxjs.user.service.ResetPasswordService;
 import com.ajaxjs.user.service.SendEmail;
@@ -29,14 +29,14 @@ import com.ajaxjs.user.service.SendEmail;
 @WebAppConfiguration
 public class TestResetPassword {
 	@Autowired
-	DataServiceApiController apiController;
+	DataService ds;
 
 	@Autowired
 	ResetPasswordController resetPasswordController;
 
 	@Before
 	public void init() {
-		apiController.initCache();
+		ds.init();
 	}
 
 	@Autowired
@@ -90,12 +90,12 @@ public class TestResetPassword {
 
 //	@Test
 	public void sendRestPswEmail() {
-		assertNotNull(resetPasswordController.sendRestEmail("sp42@qq.com", 1));
+		assertNotNull(resetPasswordController.sendRestEmail("sp42@qq.com"));
 	}
 
 	@Test
 	public void verifyTokenUpdatePsw() {
 		String token = "9488ffe30b5bba032d52a9f93de2e2db6dcc0c047n/99+sXUgrWIC1rhgNTYA==";
-		resetPasswordController.verifyTokenUpdatePsw(token, "a123123abc", "sp42@qq.com", 1);
+		resetPasswordController.verifyTokenUpdatePsw(token, "a123123abc", "sp42@qq.com");
 	}
 }

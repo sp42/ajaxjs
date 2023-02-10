@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.ajaxjs.TestConfig;
-import com.ajaxjs.auth.controller.DataServiceApiController;
+import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.user.service.RegisterService;
 import com.ajaxjs.util.TestHelper;
 
@@ -37,13 +37,13 @@ public class TestUser {
     private RegisterService registerService;
 
     @Autowired
-    DataServiceApiController apiController;
+    DataService ds;
 
     HttpServletRequest req = mock(HttpServletRequest.class);
 
     @Before
     public void init() {
-        apiController.initCache();
+        ds.init();
     }
 
     //    @Test
