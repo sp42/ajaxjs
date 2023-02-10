@@ -54,14 +54,14 @@ public class TestUser {
         params.put("username", "Mike747");
         params.put("password", "asds555ads");
 
-        Boolean register = registerService.register(params, req);
+        Boolean register = registerService.register(params);
         assertTrue(register);
 //        TestHelper.printJson(m);
     }
 
     @Test
     public void testRepeat() {
-        Boolean repeat = registerService.checkRepeat("username", "Mike747", 1);
+        Boolean repeat = registerService.checkRepeat("username", "Mike747");
         assertTrue(repeat);
 
         assertTrue(RegisterService.isRepeat("email", "sp42@qq.com", 1));

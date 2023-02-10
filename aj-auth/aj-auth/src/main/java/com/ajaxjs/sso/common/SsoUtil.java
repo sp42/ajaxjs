@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sso.model.ExpiresCheck;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.date.LocalDateUtils;
 
 /**
@@ -51,8 +52,12 @@ public class SsoUtil {
 	public static int getTenantId() {
 		HttpServletRequest request = DiContextUtil.getRequest();
 
-		if (request == null)
-			return 0;
+		if (request == null) {
+			if (TestHelper.isRunningTest())
+				return 1; // 单测模式下，给个测试值
+			else
+				return 0;
+		}
 
 		String id = request.getHeader(AUTH_TENTANT_ID);
 

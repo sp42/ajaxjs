@@ -20,6 +20,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.TestHelper;
 
 /**
  * 
@@ -50,7 +51,7 @@ public class DiContextUtil implements ApplicationContextAware {
 	/**
 	 * 获取已注入的对象
 	 * 
-	 * @param     <T> 对象类型
+	 * @param <T> 对象类型
 	 * @param clz 对象类型引用
 	 * @return 组件对象
 	 */
@@ -59,7 +60,7 @@ public class DiContextUtil implements ApplicationContextAware {
 			System.out.println("Spring Bean 未准备好");
 			return null;
 		}
-		
+
 		try {
 			return context.getBean(clz);
 		} catch (NoSuchBeanDefinitionException e) {
@@ -92,7 +93,7 @@ public class DiContextUtil implements ApplicationContextAware {
 
 	/**
 	 * 
-	 * @param     <T>
+	 * @param <T>
 	 * @param clz
 	 * @return key 为 bean 的 id，value 为 bean 实例
 	 */
@@ -113,7 +114,7 @@ public class DiContextUtil implements ApplicationContextAware {
 	/**
 	 * 手动注入 Bean
 	 * 
-	 * @param        <T>
+	 * @param <T>
 	 * @param clz
 	 * @param beanId
 	 */
@@ -129,7 +130,7 @@ public class DiContextUtil implements ApplicationContextAware {
 	/**
 	 * 手动注入 Bean 并立即返回
 	 * 
-	 * @param        <T>
+	 * @param <T>
 	 * @param clz
 	 * @param beanId
 	 * @return
@@ -154,8 +155,15 @@ public class DiContextUtil implements ApplicationContextAware {
 
 	public static HttpServletRequest getRequest() {
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-		if (requestAttributes == null)
-			return null;
+
+		if (requestAttributes == null) {
+			HttpServletRequest i = TestHelper.getRequest();
+
+			if (TestHelper.isRunningTest())
+				return null;
+			else
+				return null;
+		}
 
 		return ((ServletRequestAttributes) requestAttributes).getRequest();
 	}
