@@ -157,10 +157,8 @@ public class DiContextUtil implements ApplicationContextAware {
 		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
 		if (requestAttributes == null) {
-			HttpServletRequest i = TestHelper.getRequest();
-
 			if (TestHelper.isRunningTest())
-				return null;
+				return TestHelper.request;
 			else
 				return null;
 		}

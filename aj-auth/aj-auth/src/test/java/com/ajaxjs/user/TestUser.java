@@ -22,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.ajaxjs.TestConfig;
 import com.ajaxjs.auth.controller.DataServiceApiController;
 import com.ajaxjs.user.service.RegisterService;
+import com.ajaxjs.util.TestHelper;
 
 @ContextConfiguration(classes = TestConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,6 +49,7 @@ public class TestUser {
     //    @Test
     public void testGetAuthCode() {
         when(req.getRemoteAddr()).thenReturn("35.220.250.107");
+        TestHelper.request = req;
 
         Map<String, Object> params = new HashMap<>();
         params.put("tenantId", 1);

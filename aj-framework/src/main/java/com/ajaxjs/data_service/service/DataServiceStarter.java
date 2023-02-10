@@ -47,14 +47,12 @@ public class DataServiceStarter {
 		}
 
 		DataSource ds = cfg.getDataSource(); // 总配置的数据源
-	
+
 		List<DataServiceEntity> list = null;
 
 		try (Connection conn = JdbcConnection.getConnection(ds)) {
 			if (cfg.isMultiDataSource())
 				initMulitDataSource(conn, mulitDataSource);
-			
-			
 
 			list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM adp_data_service");
 		} catch (SQLException e) {
@@ -76,8 +74,7 @@ public class DataServiceStarter {
 				Map<String, Object> json = JsonHelper.parseMap(jsonStr);
 
 				if (json.containsKey("fieldsMapping")) {// 字段映射
-					DataServiceFieldsMapping fieldsMapping = MapTool.map2Bean((Map<String, ?>) json.get("fieldsMapping"),
-							DataServiceFieldsMapping.class);
+					DataServiceFieldsMapping fieldsMapping = MapTool.map2Bean((Map<String, ?>) json.get("fieldsMapping"), DataServiceFieldsMapping.class);
 					item.setFieldsMapping(fieldsMapping);
 				}
 

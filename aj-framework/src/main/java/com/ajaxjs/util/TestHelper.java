@@ -1,5 +1,7 @@
 package com.ajaxjs.util;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.ajaxjs.util.map.JsonHelper;
 
 /**
@@ -29,6 +31,11 @@ public class TestHelper {
 	}
 
 	private static Boolean isRunningTest;
+	
+	/**
+	 * For static-way to get request in UNIT TEST
+	 */
+	public static HttpServletRequest request;
 
 	/**
 	 * 检测是否在运行单元测试

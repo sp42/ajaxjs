@@ -25,6 +25,7 @@ import com.ajaxjs.auth.controller.DataServiceApiController;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.controller.LoginController;
 import com.ajaxjs.user.service.LoginService;
+import com.ajaxjs.util.TestHelper;
 
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,6 +54,7 @@ public class TestLogin {
 		HttpSession s = mock(HttpSession.class);
 		when(request.getSession()).thenReturn(s);
 		when(request.getRemoteAddr()).thenReturn("35.220.250.107");
+		TestHelper.request = request;
 
 		try (Connection connection = ds.getConnection()) {
 			JdbcConnection.setConnection(connection);

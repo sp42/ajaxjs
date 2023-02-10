@@ -21,6 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.ajaxjs.auth.controller.DataServiceApiController;
 import com.ajaxjs.user.controller.RegisterController;
+import com.ajaxjs.util.TestHelper;
 
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,12 +48,13 @@ public class TestRegister {
 	@Test
 	public void testRegister() {
 		when(req.getRemoteAddr()).thenReturn("35.220.250.107");
+		TestHelper.request = req;
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("tenantId", 1);
 		params.put("username", "Mike7457");
 		params.put("password", "asdsads");
-		registerController.register(params, req);
+		registerController.register(params);
 	}
 
 //	@Test
@@ -63,7 +65,7 @@ public class TestRegister {
 		when(req.getSession()).thenReturn(s);
 		when(req.getRemoteAddr()).thenReturn("35.220.250.107");
 //		assertTrue(RegisterController.isRepeat("email", "sp42@qq.com", 1));
-		
+
 //		result = registerController.checkRepeat("email", "sp42@qq.com", 1);
 //		System.out.println(result);
 
