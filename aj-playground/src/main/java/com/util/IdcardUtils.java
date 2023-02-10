@@ -534,7 +534,7 @@ public class IdcardUtils {
 		if (len < CHINA_ID_MIN_LENGTH) 
 			return null;
 		 else if (len == CHINA_ID_MIN_LENGTH) 
-			idCard = conver15CardTo18(idCard)
+			idCard = conver15CardTo18(idCard);
 		
 		return Short.valueOf(idCard.substring(10, 12));
 	}

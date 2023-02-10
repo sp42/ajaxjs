@@ -47,13 +47,16 @@ public class DataServiceStarter {
 		}
 
 		DataSource ds = cfg.getDataSource(); // 总配置的数据源
+	
 		List<DataServiceEntity> list = null;
 
 		try (Connection conn = JdbcConnection.getConnection(ds)) {
 			if (cfg.isMultiDataSource())
 				initMulitDataSource(conn, mulitDataSource);
+			
+			
 
-			list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM aj_base.adp_data_service");
+			list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM adp_data_service");
 		} catch (SQLException e) {
 			LOGGER.warning(e);
 		}

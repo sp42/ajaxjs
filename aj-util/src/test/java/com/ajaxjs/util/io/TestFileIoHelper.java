@@ -13,23 +13,31 @@ import org.springframework.core.io.ClassPathResource;
 //import static com.ajaxjs.util.io.FileIoHelper.*;
 
 public class TestFileIoHelper {
-    @Test
-    public void testFileConcat() {
-        String content = FileIoHelper.openContent("C:\\project\\aj2\\aj-util\\src\\test\\java\\com\\ajaxjs\\util\\io\\test.txt");
-        System.out.println(content);
 
-        try {
+	public void testFileConcat() {
+		String content = FileIoHelper.openContent("C:\\project\\aj2\\aj-util\\src\\test\\java\\com\\ajaxjs\\util\\io\\test.txt");
+		System.out.println(content);
+
+		try {
 //            File file = ResourceUtils.getFile("classpath:test.txt");
 //            System.out.println(file);
-            ClassPathResource resource = new ClassPathResource("classpath:test.txt");
+			ClassPathResource resource = new ClassPathResource("classpath:test.txt");
 //            InputStream inputStream = resource.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-            content = reader.lines().collect(Collectors.joining("\n"));
-            reader.close();
-            System.out.println(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assertNotNull(content);
-    }
+			BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+			content = reader.lines().collect(Collectors.joining("\n"));
+			reader.close();
+			System.out.println(content);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		assertNotNull(content);
+	}
+
+	@Test
+	public void testReadFile() {
+		String content = FileIoHelper.readFile(Resources.getResourcesFromClass(getClass(), "test.txt"));
+		assertNotNull(content);
+		System.out.println(content);
+	}
 }

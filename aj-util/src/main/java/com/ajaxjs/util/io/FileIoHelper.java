@@ -10,13 +10,21 @@
  */
 package com.ajaxjs.util.io;
 
-import com.ajaxjs.util.logger.LogHelper;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.zip.CRC32;
+import java.util.zip.CheckedInputStream;
+
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.IOException;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  *
@@ -45,5 +53,36 @@ public class FileIoHelper {
 
 	public static String openContent(String path) {
 		return openContent(new FileSystemResource(path));
+	}
+
+	public static String readFile(String filePath) {
+		try {
+			return new String(Files.readAllBytes(Paths.get(filePath)));
+		} catch (IOException e) {
+			LOGGER.warning(e);
+			return null;
+		}
+	}
+
+	/**
+	 * 获取 CRC32
+	 * 
+	 * CheckedInputStream一种输入流，它还维护正在读取的数据的校验和。然后可以使用校验和来验证输入数据的完整性。
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static long getFileCRCCode(File file) {
+		CRC32 crc32 = new CRC32();
+
+		try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
+				CheckedInputStream checkedinputstream = new CheckedInputStream(bufferedInputStream, crc32)) {
+			while (checkedinputstream.read() != -1) {
+			}
+		} catch (IOException e) {
+			LOGGER.warning(e);
+		}
+
+		return crc32.getValue();
 	}
 }

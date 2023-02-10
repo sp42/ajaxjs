@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<taglib>
+	<description>自定义标签库</description>
+	<!-- 使用前，将该文件复制在项目 WEB-INF 目录下 -->
+	<tlib-version>1.2</tlib-version>
+	<jsp-version>2.1</jsp-version>
+	<short-name>utility</short-name>
+	<uri>/ajaxjs</uri>
+	<info> A simple tag library for ajaxjs </info>
+
+	<tag>
+		<name>if</name>
+		<tag-class>com.ajaxjs.web.view.If</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>test</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>choose</name>
+		<tag-class>com.ajaxjs.web.view.Choose</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+	<tag>
+		<name>when</name>
+		<tag-class>com.ajaxjs.web.view.When</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>test</name>
+			<description>判断的表达式</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>otherwise</name>
+		<tag-class>com.ajaxjs.web.view.OtherWise</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+
+	<tag>
+		<name>foreach</name>
+		<tag-class>com.ajaxjs.web.view.Foreach</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>变量名称</description>
+		</attribute>
+		<attribute>
+			<name>items</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>输入的数据集合</description>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>loop</name>
+		<tag-class>com.ajaxjs.web.view.Loop</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>cnt</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>dateFormatter</name>
+		<tag-class>com.ajaxjs.web.view.DateUtilTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>format</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<description>格式</description>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<description>输入日期</description>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>
