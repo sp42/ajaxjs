@@ -58,10 +58,4 @@ public class TestHelper {
 
 		return isRunningTest;
 	}
-
-	public static HttpServletRequest getRequest() {
-		return request;
-	}
-
-	
 }
