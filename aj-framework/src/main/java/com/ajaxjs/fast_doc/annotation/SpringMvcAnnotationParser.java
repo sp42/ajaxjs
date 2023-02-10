@@ -37,54 +37,53 @@ import com.ajaxjs.util.StrUtil;
 public class SpringMvcAnnotationParser {
 //    private static final LogHelper LOGGER = LogHelper.getLog(SpringMvcAnnotationParser.class);
 
-	public SpringMvcAnnotationParser() {
-	}
+    public SpringMvcAnnotationParser() {
+    }
 
-	/**
-	 * @param clz
-	 */
-	public SpringMvcAnnotationParser(Class<?> clz) {
-		this.clz = clz;
-	}
+    /**
+     * @param clz
+     */
+    public SpringMvcAnnotationParser(Class<?> clz) {
+        this.clz = clz;
+    }
 
-	/**
-	 *
-	 */
-	private Class<?> clz;
+    /**
+     *
+     */
+    private Class<?> clz;
 
-	public Class<?> getClz() {
-		return clz;
-	}
+    public Class<?> getClz() {
+        return clz;
+    }
 
-	public void setClz(Class<?> clz) {
-		this.clz = clz;
-	}
+    public void setClz(Class<?> clz) {
+        this.clz = clz;
+    }
 
-	/**
-	 * 根 url，可以为空
-	 */
-	private String rootUrl;
+    /**
+     * 根 url，可以为空
+     */
+    private String rootUrl;
 
-	/**
-	 * @return
-	 */
-	public ControllerInfo parse() {
-		rootUrl = getRootUrl();
+    /**
+     * @return
+     */
+    public ControllerInfo parse() {
+        rootUrl = getRootUrl();
 
-		ControllerInfo ci = new ControllerInfo();
-		ci.name = clz.getSimpleName();
-		ci.type = clz.getName();
-		ci.items = parseControllerMethod();
+        ControllerInfo ci = new ControllerInfo();
+        ci.name = clz.getSimpleName();
+        ci.type = clz.getName();
+        ci.items = parseControllerMethod();
 
-		onClzInfo(ci, clz);
-		return ci;
-	}
+        onClzInfo(ci, clz);
+        return ci;
+    }
 
-	public void onClzInfo(ControllerInfo ci, Class<?> clz) {
+    public void onClzInfo(ControllerInfo ci, Class<?> clz) {
 
-	}
+    }
 
-<<<<<<< HEAD
     /**
      * 遍历每个方法
      *
@@ -98,294 +97,258 @@ public class SpringMvcAnnotationParser {
                 return null;
 
             Item item = new Item();
-=======
-	/**
-	 * 遍历每个方法
-	 *
-	 * @return
-	 */
-	private List<Item> parseControllerMethod() {
-		List<Item> list = Util.makeListByArray(clz.getDeclaredMethods(), method -> {
-			Item item = new Item();
->>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
+            getInfo(item, method);
+            getReturnType(item, method);
+            getArgs(item, method);
 
-			getInfo(item, method);
-			getReturnType(item, method);
-			getArgs(item, method);
+            return item;
+        });
 
-			return item;
-		});
-
-<<<<<<< HEAD
         return list;
-
 //        return list.stream().sorted().collect(Collectors.toList());// 按 url 排序
     }
-=======
-		return list.stream().sorted().collect(Collectors.toList());// 按 url 排序
-	}
->>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
 
-	/**
-	 * 获取根 url
-	 *
-	 * @return
-	 */
-	private String getRootUrl() {
-		String rootUrl = null;
-		RequestMapping rm = clz.getAnnotation(RequestMapping.class);
 
-		if (rm != null && !ObjectUtils.isEmpty(rm.value()))
-			rootUrl = rm.value()[0];
-		else
-			rootUrl = getRootUrlIfRequestMappingNull();
+    /**
+     * 获取根 url
+     *
+     * @return
+     */
+    private String getRootUrl() {
+        String rootUrl = null;
+        RequestMapping rm = clz.getAnnotation(RequestMapping.class);
 
-		return rootUrl;
-	}
+        if (rm != null && !ObjectUtils.isEmpty(rm.value()))
+            rootUrl = rm.value()[0];
+        else
+            rootUrl = getRootUrlIfRequestMappingNull();
 
-	/**
-	 * 某些情况下控制器不能直接加 SpringMVC 的 @RequestMapping，于是可以用别的自定义注解代替，值一样的
-	 *
-	 * @return
-	 */
-	String getRootUrlIfRequestMappingNull() {
-		return null;
-	}
+        return rootUrl;
+    }
 
-	/**
-	 * 获取方法的一些基本信息
-	 *
-	 * @param item
-	 * @param method
-	 */
-	private void getInfo(Item item, Method method) {
-		item.methodName = method.getName();
-		item.id = StrUtil.uuid(); // 雪花算法会重复，改用 uuid
+    /**
+     * 某些情况下控制器不能直接加 SpringMVC 的 @RequestMapping，于是可以用别的自定义注解代替，值一样的
+     *
+     * @return
+     */
+    String getRootUrlIfRequestMappingNull() {
+        return null;
+    }
 
-<<<<<<< HEAD
+    /**
+     * 获取方法的一些基本信息
+     *
+     * @param item
+     * @param method
+     */
+    private void getInfo(Item item, Method method) {
+        item.methodName = method.getName();
+        item.id = StrUtil.uuid(); // 雪花算法会重复，改用 uuid
+
         // HTTP 方法
         GetMapping get = method.getAnnotation(GetMapping.class);
         if (get != null) {
             item.httpMethod = "GET";
             item.url = setUrl(get.value());
         }
-=======
-		// HTTP 方法
-		GetMapping get = method.getAnnotation(GetMapping.class);
-		if (get != null) {
-			item.httpMethod = "GET";
-			item.url = setUrl(get.value());
-		}
 
-		PostMapping post = method.getAnnotation(PostMapping.class);
-		if (post != null) {
-			item.httpMethod = "POST";
-			item.url = setUrl(post.value());
-		}
->>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
+        PostMapping post = method.getAnnotation(PostMapping.class);
+        if (post != null) {
+            item.httpMethod = "POST";
+            item.url = setUrl(post.value());
+        }
 
-		PutMapping put = method.getAnnotation(PutMapping.class);
-		if (put != null) {
-			item.httpMethod = "PUT";
-			item.url = setUrl(put.value());
-		}
+        PutMapping put = method.getAnnotation(PutMapping.class);
+        if (put != null) {
+            item.httpMethod = "PUT";
+            item.url = setUrl(put.value());
+        }
 
-		DeleteMapping del = method.getAnnotation(DeleteMapping.class);
-		if (del != null) {
-			item.httpMethod = "DELETE";
-			item.url = setUrl(del.value());
-		}
+        DeleteMapping del = method.getAnnotation(DeleteMapping.class);
+        if (del != null) {
+            item.httpMethod = "DELETE";
+            item.url = setUrl(del.value());
+        }
 
-		RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-		if (requestMapping != null) {
-			if (!StringUtils.hasText(item.url))
-				item.url = setUrl(requestMapping.value());
+        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+        if (requestMapping != null) {
+            if (!StringUtils.hasText(item.url))
+                item.url = setUrl(requestMapping.value());
 
-			if (!StringUtils.hasText(item.httpMethod))
-				item.httpMethod = "ANY";
-		}
+            if (!StringUtils.hasText(item.httpMethod))
+                item.httpMethod = "ANY";
+        }
 
-		getMethodInfo(item, method);
-	}
+        getMethodInfo(item, method);
+    }
 
-	public void getMethodInfo(Item item, Method method) {
-	}
+    public void getMethodInfo(Item item, Method method) {
+    }
 
-	/**
-	 * 获取 URL。若注解上有则获取之，没有则表示是类定义的 rootUrl
-	 *
-	 * @param arr
-	 * @return
-	 */
-	private String setUrl(String[] arr) {
-		if (!ObjectUtils.isEmpty(arr) && StringUtils.hasText(arr[0]))
-			return StrUtil.concatUrl(rootUrl, arr[0]);
+    /**
+     * 获取 URL。若注解上有则获取之，没有则表示是类定义的 rootUrl
+     *
+     * @param arr
+     * @return
+     */
+    private String setUrl(String[] arr) {
+        if (!ObjectUtils.isEmpty(arr) && StringUtils.hasText(arr[0]))
+            return StrUtil.concatUrl(rootUrl, arr[0]);
 
-		return rootUrl;
-	}
+        return rootUrl;
+    }
 
-	/**
-	 * 生成返回值信息
-	 *
-	 * @param item
-	 * @param method
-	 */
-	private void getReturnType(Item item, Method method) {
-		Class<?> returnType = method.getReturnType();
-		Return r = new Return();
-		r.name = returnType.getSimpleName();
-		r.type = returnType.getName();
+    /**
+     * 生成返回值信息
+     *
+     * @param item
+     * @param method
+     */
+    private void getReturnType(Item item, Method method) {
+        Class<?> returnType = method.getReturnType();
+        Return r = new Return();
+        r.name = returnType.getSimpleName();
+        r.type = returnType.getName();
 
-		getReturnType(item, method, r);
+        getReturnType(item, method, r);
 
 //        System.out.println("-----------------------" + method.toString());
 //        if (method.toString().contains("list")) {
 //            System.out.println("-----------------------");
 //        }
-		if (Util.isSimpleValueType(returnType))
-			r.isObject = false;
-		else if (returnType == Map.class) {
-			// TODO
-		} else if (returnType == List.class || returnType == ArrayList.class || returnType == AbstractList.class
-				|| returnType.toString().contains("PageList")) {
-			r.isMany = true;
+        if (Util.isSimpleValueType(returnType))
+            r.isObject = false;
+        else if (returnType == Map.class) {
+            // TODO
+        } else if (returnType == List.class || returnType == ArrayList.class || returnType == AbstractList.class
+                || returnType.toString().contains("PageList")) {
+            r.isMany = true;
 
-			Class<?> real = ReflectUtil.getGenericFirstReturnType(method);
+            Class<?> real = ReflectUtil.getGenericFirstReturnType(method);
 
-			if (Util.isSimpleValueType(real))
-				r.isObject = false;
-			else {
-				r.isObject = true;
+            if (Util.isSimpleValueType(real))
+                r.isObject = false;
+            else {
+                r.isObject = true;
 
-				if (takeReturnBeanInfo != null)
-					takeReturnBeanInfo.accept(real, r);
-			}
-		} else if (returnType.isArray()) {
-			r.isMany = true;
-			// TODO
-		} else { // it's single bean
-			r.isMany = false;
-			r.isObject = true;
+                if (takeReturnBeanInfo != null)
+                    takeReturnBeanInfo.accept(real, r);
+            }
+        } else if (returnType.isArray()) {
+            r.isMany = true;
+            // TODO
+        } else { // it's single bean
+            r.isMany = false;
+            r.isObject = true;
 
-			if (takeReturnBeanInfo != null)
-				takeReturnBeanInfo.accept(returnType, r);
-		}
+            if (takeReturnBeanInfo != null)
+                takeReturnBeanInfo.accept(returnType, r);
+        }
 
-		item.returnValue = r;
-	}
+        item.returnValue = r;
+    }
 
-	/**
-	 * 提取 JavaBean 的文档
-	 */
-	private BiConsumer<Class<?>, ArgInfo> takeBeanInfo;
+    /**
+     * 提取 JavaBean 的文档
+     */
+    private BiConsumer<Class<?>, ArgInfo> takeBeanInfo;
 
-	/**
-	 * 提取 JavaBean 的文档
-	 */
-	private BiConsumer<Class<?>, Return> takeReturnBeanInfo;
+    /**
+     * 提取 JavaBean 的文档
+     */
+    private BiConsumer<Class<?>, Return> takeReturnBeanInfo;
 
-	/**
-	 * 由你自己的覆盖实现提供
-	 *
-	 * @param item
-	 * @param method
-	 * @param r
-	 */
-	void getReturnType(Item item, Method method, Return r) {
-	}
+    /**
+     * 由你自己的覆盖实现提供
+     *
+     * @param item
+     * @param method
+     * @param r
+     */
+    void getReturnType(Item item, Method method, Return r) {
+    }
 
-	/**
-	 * 参数 入参
-	 *
-	 * @param item
-	 * @param method
-	 */
-	private void getArgs(Item item, Method method) {
-		item.args = Util.makeListByArray(method.getParameters(), param -> {
-			Class<?> clz = param.getType();
+    /**
+     * 参数 入参
+     *
+     * @param item
+     * @param method
+     */
+    private void getArgs(Item item, Method method) {
+        item.args = Util.makeListByArray(method.getParameters(), param -> {
+            Class<?> clz = param.getType();
 
-			ArgInfo arg = new ArgInfo();
-			arg.name = param.getName();
-			arg.type = clz.getSimpleName();
+            ArgInfo arg = new ArgInfo();
+            arg.name = param.getName();
+            arg.type = clz.getSimpleName();
 
-			RequestParam queryP = param.getAnnotation(RequestParam.class);
-
-			getArgs(item, method, param, arg);
-
-<<<<<<< HEAD
-            if (arg.name.contains("filename"))
-                System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + arg.name);
+            RequestParam queryP = param.getAnnotation(RequestParam.class);
+            getArgs(item, method, param, arg);
 
             if (queryP != null) {
                 arg.position = "query";
                 arg.isRequired = queryP.required();
-=======
-			if (queryP != null) {
-				arg.position = "query";
-				arg.isRequired = queryP.required();
->>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
 
-				if (StringUtils.hasText(queryP.value()))
-					arg.name = queryP.value();
+                if (StringUtils.hasText(queryP.value()))
+                    arg.name = queryP.value();
 
-				if (!queryP.defaultValue().equals(ValueConstants.DEFAULT_NONE))
-					arg.defaultValue = queryP.defaultValue();
+                if (!queryP.defaultValue().equals(ValueConstants.DEFAULT_NONE))
+                    arg.defaultValue = queryP.defaultValue();
 
-				return arg;
-			}
+                return arg;
+            }
 
-			PathVariable pv = param.getAnnotation(PathVariable.class);
+            PathVariable pv = param.getAnnotation(PathVariable.class);
 
-			if (pv != null) {
-				arg.position = "path";
-				arg.isRequired = true;
+            if (pv != null) {
+                arg.position = "path";
+                arg.isRequired = true;
 
-				if (StringUtils.hasText(pv.value()))
-					arg.name = pv.value();
+                if (StringUtils.hasText(pv.value()))
+                    arg.name = pv.value();
 
-				return arg;
-			}
+                return arg;
+            }
 
-			RequestBody rb = param.getAnnotation(RequestBody.class);
-			if (rb != null) {
-				arg.position = "body";
-				arg.isRequired = rb.required();
-			}
+            RequestBody rb = param.getAnnotation(RequestBody.class);
+            if (rb != null) {
+                arg.position = "body";
+                arg.isRequired = rb.required();
+            }
 
 //            LOGGER.info(">>>>>>>>>" + clz + !Util.isSimpleValueType(clz));
 
-			if (!Util.isSimpleValueType(clz) && takeBeanInfo != null)
-				takeBeanInfo.accept(clz, arg);
+            if (!Util.isSimpleValueType(clz) && takeBeanInfo != null)
+                takeBeanInfo.accept(clz, arg);
 
-			return arg;
-		});
-	}
+            return arg;
+        });
+    }
 
-	/**
-	 * 由你自己的覆盖实现提供
-	 *
-	 * @param item
-	 * @param method
-	 * @param param
-	 * @param arg
-	 */
-	public void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
-	}
+    /**
+     * 由你自己的覆盖实现提供
+     *
+     * @param item
+     * @param method
+     * @param param
+     * @param arg
+     */
+    public void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
+    }
 
-	public BiConsumer<Class<?>, ArgInfo> getTakeBeanInfo() {
-		return takeBeanInfo;
-	}
+    public BiConsumer<Class<?>, ArgInfo> getTakeBeanInfo() {
+        return takeBeanInfo;
+    }
 
-	public void setTakeBeanInfo(BiConsumer<Class<?>, ArgInfo> takeBeanInfo) {
-		this.takeBeanInfo = takeBeanInfo;
-	}
+    public void setTakeBeanInfo(BiConsumer<Class<?>, ArgInfo> takeBeanInfo) {
+        this.takeBeanInfo = takeBeanInfo;
+    }
 
-	public BiConsumer<Class<?>, Return> getTakeReturnBeanInfo() {
-		return takeReturnBeanInfo;
-	}
+    public BiConsumer<Class<?>, Return> getTakeReturnBeanInfo() {
+        return takeReturnBeanInfo;
+    }
 
-	public void setTakeReturnBeanInfo(BiConsumer<Class<?>, Return> takeReturnBeanInfo) {
-		this.takeReturnBeanInfo = takeReturnBeanInfo;
-	}
-
+    public void setTakeReturnBeanInfo(BiConsumer<Class<?>, Return> takeReturnBeanInfo) {
+        this.takeReturnBeanInfo = takeReturnBeanInfo;
+    }
 }

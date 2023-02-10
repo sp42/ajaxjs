@@ -242,29 +242,21 @@ public class FastDoc {
                     classes.add(Class.forName(packageName + '.' + className));
                 } catch (ClassNotFoundException e) {
 //                    log.error("添加用户自定义视图类错误 找不到此类的.class文件");
-<<<<<<< HEAD
                     e.printStackTrace();
                 }
             }
         }
     }
-=======
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 
-	/**
-	 * 生成 JSON 配置
-	 * 
-	 * @param run
-	 */
-	public static void run(FastDocRun run) {
-		loadBeans(run.sourceDir, run.beanClasses);
-		loadControllersDoc(run.sourceDir, run.controllerClasses);
+    /**
+     * 生成 JSON 配置
+     *
+     * @param run
+     */
+    public static void run(FastDocRun run) {
+        loadBeans(run.sourceDir, run.beanClasses);
+        loadControllersDoc(run.sourceDir, run.controllerClasses);
 
-		saveToDisk(run.jsonDir);
-	}
->>>>>>> d167e1498c8fb35af94464e5ae92a5ed586dfc62
+        saveToDisk(run.jsonDir);
+    }
 }

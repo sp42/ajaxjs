@@ -88,4 +88,11 @@ public class Head extends Base {
 	public final static Consumer<HttpURLConnection> GET_JSON = (head) -> {
 		head.setRequestProperty("Content-Type", "application/json");
 	};
+
+	/**
+	 * OAuth
+	 */
+	public final static Consumer<HttpURLConnection> oauth(String token) {
+		return (head) -> head.setRequestProperty("Authorization", "Bearer " + token);
+	}
 }
