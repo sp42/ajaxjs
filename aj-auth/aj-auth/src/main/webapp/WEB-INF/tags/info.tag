@@ -1,6 +1,5 @@
 
-<%@ tag description="HTML" pageEncoding="UTF-8"
-	import="com.ajaxjs.util.JspHelper"%>
+<%@ tag description="HTML" pageEncoding="UTF-8" import="com.ajaxjs.util.JspHelper"%>
 <%@ taglib uri="/ajaxjs" prefix="c"%>
 <%@ attribute fragment="false" required="true" name="namespace" description="命名"%>
 <%@ attribute fragment="false" required="true" name="namespace_chs" description="命名（中文）"%>

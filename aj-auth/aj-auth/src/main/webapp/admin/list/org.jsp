@@ -97,12 +97,30 @@ h1 {
 	</div>
 
 	<script>
-	function createTopNode(){
-		jsp.xhr.postForm('.', {name: 'xx', pid: -1});
-	}
-	function createUnderNode(){
-		jsp.xhr.postForm('.', {name: 'xx', pid: selectedId});
-	}
+		function createTopNode(){
+			jsp.xhr.postForm('.', {name: 'xx', pid: -1});
+		}
+		function createUnderNode(){
+			jsp.xhr.postForm('.', {name: 'xx', pid: selectedId});
+		}
+	
+	    var stack = [];
+	    
+	    function output(map, cb) {
+	    	stack.push(map);
+	    	for ( var i in map) {
+	    		map[i].level = stack.length;
+	    		cb(map[i], i);
+	    		
+	    		var c = map[i].children;
+	    		if (c) {
+	    			for (var q = 0, p = c.length; q < p; q++) 
+	    				output(c[q], cb);
+	    		}
+	    	}
+	    	stack.pop();
+	    }
+	    
 		new Vue({
 		    el: '.tree-like',
 		    data: {
@@ -111,7 +129,7 @@ h1 {
 		    },
 		    mounted() {
 		        // 新增顶级${uiName}
-		        jsp.xhr.form(".createTopNode", json => {
+		    /*     jsp.xhr.form(".createTopNode", json => {
 		            document.querySelector(".createTopNode input[name=name]").value = '';
 		            this.refresh(json);
 		        });
@@ -126,7 +144,7 @@ h1 {
 		        jsp.xhr.form(this.$el.querySelector('.rename'), json => {
 		            this.$refs.layer.close();
 		            this.refresh(json);
-		        });
+		        }); */
 	
 		        this.render();
 		    },
@@ -159,9 +177,10 @@ h1 {
 		                return;
 		            }
 	
-		            aj.showConfirm('确定删除该${uiName}[{0}]？<br />[{0}]下所有的子节点也会随着一并全部删除。'.replace(/\{0\}/g, this.selectedName),
-		                () => aj.xhr.dele("" + this.selectedId + "/", this.refresh)
-		            );
+		            let msg = '确定删除该${uiName}[{0}]？\n[{0}]下所有的子节点也会随着一并全部删除。'.replace(/\{0\}/g, this.selectedName);
+		            if(confirm(msg)){
+		            	 aj.xhr.dele("" + this.selectedId + "/", this.refresh);
+		            }
 		        },
 	
 		        refresh(json) {
@@ -178,6 +197,22 @@ h1 {
 		            //jsp.xhr.get('.', j => rendererOption(j.result, select));
 		            
 		            
+		            var result = [
+		            	{
+		            		id:1,
+		            		name:'dfdf', 
+		            		pid: -1, 
+		            		//level: 1
+		            		
+		            	},
+		            	{		            			
+                			id:2,
+                			name: 'dfdf22', 
+                			//level: 2,
+	            			pid:  1
+	            		}
+		            ];
+		            rendererOption(result, select);
 		        }
 		    }
 		});
@@ -272,6 +307,8 @@ h1 {
 
 	        select.appendChild(temp);
 	    }
+	    
+
 	</script>
 </body>
 </html>

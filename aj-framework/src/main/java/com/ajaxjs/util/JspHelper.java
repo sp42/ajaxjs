@@ -117,7 +117,7 @@ public class JspHelper {
 		return list.size() + "";
 	}
 
-	public static String formatDate(String date) {
+	public static String formatDate(Object date) {
 		return DateUtil.formatDateShorter(DateUtil.object2Date(date));
 	}
 

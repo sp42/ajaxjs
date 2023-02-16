@@ -13,9 +13,9 @@ public class JspBack {
 		request.setAttribute("isCreate", isCreate);
 
 		if (!isCreate) {
-//			String url = WebHelper.getLocalService(request);
-//			Map<String, Object> info = Get.api(url + "/data_service/" + namespace + "?id=" + id);
-//			request.setAttribute("info", info.get("data"));
+			String url = WebHelper.getLocalService(request);
+			Map<String, Object> info = Get.api(url + "/data_service/" + namespace + "?id=" + id);
+			request.setAttribute("info", info.get("data"));
 			// System.out.println(info.get("data"));
 		}
 	}

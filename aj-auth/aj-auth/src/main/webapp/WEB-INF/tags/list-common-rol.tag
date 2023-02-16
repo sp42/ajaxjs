@@ -17,6 +17,7 @@
 </c:if>
 
 <td> 
+	<jsp:doBody />
 	<c:if test="${JSP_HELPER.bit(8, style)}">
 		<a href="javascript:del(${item.id}, '${namespace_chs}: ${empty item.name ? item.id: item.name}')">
 			<i class="fa-solid fa-times" style="color:red;"></i> 删除

@@ -36,7 +36,9 @@
 					<td>${item.appName}</td>
 					<td>${item.sysName}</td>
 					<td>${item.tenantName}</td>
-					<myTag:list-common-rol style="31" item="${item}" namespace="${namespace}" namespace_chs="${namespace_chs}" />
+					<myTag:list-common-rol style="31" item="${item}" namespace="${namespace}" namespace_chs="${namespace_chs}" >
+						<a href="#">分配权限</a> | <a href="role/assignUsersToRole.jsp?roleId=${item.id}&roleName=${item.name}">分配用户</a> | 
+					</myTag:list-common-rol>
 				</tr>
 			</c:foreach>
 		</tbody>
