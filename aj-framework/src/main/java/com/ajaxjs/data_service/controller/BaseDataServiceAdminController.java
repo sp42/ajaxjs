@@ -35,7 +35,7 @@ import com.ajaxjs.util.regexp.RegExpUtils;
 /**
  * 数据服务 后台控制器
  */
-public abstract class BaseDataServiceAdminController implements IBaseController<DataServiceEntity> {
+public abstract class BaseDataServiceAdminController extends ProjectService implements IBaseController<DataServiceEntity> {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseDataServiceAdminController.class);
 
 	@Autowired
@@ -47,20 +47,6 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 	 * @return
 	 */
 	protected abstract String getDataSourceTableName();
-
-	/**
-	 * 返回数据服务配置所在的表名
-	 *
-	 * @return
-	 */
-	protected abstract String getDataServiceTableName();
-
-	/**
-	 * 返回数据库连接
-	 *
-	 * @return
-	 */
-	protected abstract Connection getConnection();
 
 	@GetMapping("/reload")
 	public Boolean reload() {
@@ -115,11 +101,15 @@ public abstract class BaseDataServiceAdminController implements IBaseController<
 	}
 
 	@GetMapping
-	public List<DataServiceEntity> list(Long datasourceId) {
+	public List<DataServiceEntity> list(Long projectId) {
 		LOGGER.info("获取表配置列表");
+		String sql = "SELECT * FROM " + getDataServiceTableName();
+
+		if (projectId != null)
+			sql += " WHERE project_id = " + projectId;
 
 		try (Connection conn = getConnection()) {
-			List<DataServiceEntity> list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, "SELECT * FROM " + getDataServiceTableName());
+			List<DataServiceEntity> list = JdbcHelper.queryAsBeanList(DataServiceEntity.class, conn, sql);
 
 			for (DataServiceEntity e : list)
 				str2Json(e);

@@ -35,6 +35,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import javax.sql.DataSource;
+
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -149,6 +151,15 @@ public class JdbcHelper extends JdbcReader {
 		}, conn, sql, params);
 	}
 
+	public static int update(DataSource ds, String sql, Object... params) {
+		try (Connection connection = ds.getConnection()) {
+			return JdbcHelper.update(connection, sql, params);
+		} catch (SQLException e) {
+			LOGGER.warning(e);
+			return 0;
+		}
+	}
+
 	/**
 	 * @param tableName 表格名称
 	 * @param isInsert  true=新建记录
@@ -211,7 +222,7 @@ public class JdbcHelper extends JdbcReader {
 		Serializable newlyId = create(conn, sb.toString(), values.toArray());
 
 		map.put("id", newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
-		
+
 		return newlyId;
 	}
 

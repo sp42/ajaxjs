@@ -60,8 +60,14 @@
                     <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{ item.name }}</Option>
                 </i-Select> -->
                 <div style="height: 93%;overflow-y: auto;">
+                    <Tree :data="projectTreeData" :load-data="loadTreeData" style="margin-left: 10px;" @on-contextmenu="handleContextMenu">
+                        <template slot="contextMenu">
+                                <Dropdown-Item @click.native="handleContextMenuEdit">编辑</Dropdown-Item>
+                                <Dropdown-Item @click.native="handleContextMenuDelete" style="color: #ed4014">删除</Dropdown-Item> 
+                        </template>
+                    </Tree>
 
-                    <Tree :data="treeData" style="margin-left: 10px;"></Tree>
+                   <!--  <Tree :data="treeData" style="margin-left: 10px;"></Tree> -->
                 </div>
             </div>
             <div slot="right" class="split-pane-right">
@@ -222,6 +228,8 @@
                                       </Select>
                                     </FormItem> -->
 
+                                   
+
                                     <FormItem label="逻辑删除的状态" prop="idField">
                                         <i-input v-model="table.fieldsMapping.delStatus" type="text"
                                             placeholder="不填写则默认为 stat" style="width:260px;"
@@ -249,14 +257,16 @@
 
                             <div class="main-edit-panel">
                                 <ul class="command-list">
-                                    <li v-for="(item, k, index) in currentData.data" :key="index"  v-if="k != 'others'"
-                                     v-html="getDml(item, k)" :class="{selected: dmlSelected == index}" @click="code = item.sql;dmlSelected = index">
+                                    <li v-for="(item, k, index) in currentData.data" :key="index" v-if="k != 'others'"
+                                        v-html="getDml(item, k)" :class="{selected: dmlSelected == index}"
+                                        @click="selectItem(item, index, k)">
                                     </li>
 
                                     <li v-for="(item, k, index) in currentData.others" :key="index"
-                                    v-html="getDml(item, k)" :class="{selected: dmlSelected == index}" @click="code = item.sql;dmlSelected = index">
-                                   </li>
-          <!--                           <li>
+                                        v-html="getDml(item, k)" :class="{selected: dmlSelected == index}"
+                                        @click="selectItem(item, index, k)">
+                                    </li>
+                                    <!--                           <li>
                                         GET /foo
                                     </li>
                                     <li>
@@ -277,15 +287,41 @@
 
                                 </ul>
                                 <div class="code-panel">
+                                    <!-- SQL 源码编辑器-->
                                     <codemirror class="code-editor" ref="cm" v-model="code" :options="cmOption">
                                     </codemirror>
+                                    <!-- {{currentType}}----
+                                    {{currentDML}}--------- -->
 
                                     <div>
+                                        <span style="float: right;"><label><input type="checkbox" v-model="currentDML.enable" /> 启用</label></span>
+                                        命令名称 <i-input type="text" placeholder="自定义命令必填" style="width:200px" size="small"></i-input>
+                                        <br />
+                                        <br />
+
+                                        <span v-if="currentType == 'create'">
+                                            <label>
+                                                <input type="checkbox" :value="true" /> 生成唯一 uid
+                                                <tips text="唯一 id，通过 uuid 生成不重复 id"></tips>
+                                            </label>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <label>
+                                                <input type="checkbox" :value="true" /> 插入创建/修改日期
+                                            </label>
+                                        </span>
+
                                         <div style="float:right">
-                                            <a>生成“物理删除”语句</a> |
-                                            <a>生成“逻辑删除”语句</a>
-                                            <tips text="在逻辑上数据是被删除的，但数据本身依然存在库中（仅仅是更新状态字段为已删除）"></tips> |
-                                            <a>格式化</a> |
+                                            <span v-if="currentType == 'create'">
+                                                <a>生成创建语句</a> |
+                                            </span>
+                                            <span v-if="currentType == 'delete'">
+                                                <a>生成删除语句</a> |
+                                                <!-- <a>生成“物理删除”语句</a> |
+                                                <a>生成“逻辑删除”语句</a> -->
+                                               <!--  <tips text="在逻辑上数据是被删除的，但数据本身依然存在库中（仅仅是更新状态字段为已删除）"></tips> | -->
+                                            </span>
+                                            
+                                            <a href="javascript:alert('暂未实现')">格式化</a> |
                                             <a>复制</a>
                                         </div>
 
@@ -299,25 +335,14 @@
                                         </Radio-Group>
 
                                         <div style="margin:20px 0">
-                                            <span style="float: right;"><label><input type="checkbox" />
-                                                    启用</label></span>
-                                            命令名称 <i-input type="text" placeholder="自定义命令必填" style="width:200px"
-                                                size="small"></i-input>
-                                            <br />
-                                            <br />
-                                            <label>
-                                                <input type="checkbox" :value="true" /> 生成唯一 uid
-                                                <tips text="唯一 id，通过 uuid 生成不重复 id"></tips>
-                                            </label>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <label>
-                                                <input type="checkbox" :value="true" /> 插入创建/修改日期
-                                            </label>
-                                            &nbsp;&nbsp;&nbsp;
+                                 
+
+
+                                    <!--         &nbsp;&nbsp;&nbsp;
                                             <label>
                                                 <input type="checkbox" :value="true" /> 当有 id 参数时采用“修改”的规则
                                                 <tips text="CreateOrSave，同一个接口处理"></tips>
-                                            </label>
+                                            </label> -->
                                             <br />
                                             <br />
                                             <Divider style="color:gray" size="small">API 接口</Divider>

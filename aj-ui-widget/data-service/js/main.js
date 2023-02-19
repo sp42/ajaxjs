@@ -20,8 +20,20 @@ new Vue({
                 isShowDataSource: false
             },
             allData: [], // 所有的数据
-            currentData: {}, // 当前编辑的数据
+            currentData: {}, // 当前编辑的数据（总数据）
+            currentDML: {}, // 当前编辑的数据（DML）
+            currentType: '',
+            contextData: null,
             treeData2: [],
+
+            projectTreeData: [
+                {
+                    title: 'parent',
+                    expand: true,
+                    loading: false,
+                    children: []
+                }
+            ],
             treeData: [
                 {
                     title: 'parent 1',
@@ -89,7 +101,8 @@ new Vue({
         }
     },
     mounted() {
-        getTreeData.call(this);
+        // getTreeData.call(this);
+        this.loadTreeProejct();
     },
     methods: {
         showAbout() {
@@ -118,6 +131,51 @@ new Vue({
                     this.activeTab = tabName;
                 }, 100);
             }
+        },
+
+        loadTreeProejct() {
+            aj.xhr.get('http://localhost:8080/adp/admin/data_service/project', j => {
+                // console.log(j)
+                if (j.status == 1) {
+                    // 添加 iView 树节点的字段
+                    j.data.forEach(item => {
+                        item.title = item.name;
+                        item.loading = false;
+                        item.contextmenu = true;
+                        item.children = [];
+                    });
+
+                    this.projectTreeData = j.data;
+                }
+            });
+        },
+
+        handleContextMenu(data) {
+            this.contextData = data;
+        },
+        handleContextMenuEdit() {
+            this.$Message.info('Click edit of' + this.contextData.title);
+        },
+        handleContextMenuDelete() {
+            this.$Message.info('Click delete of' + this.contextData.title);
+        },
+
+        // 异步加载树数据
+        loadTreeData(item, callback) {
+            console.log('-------', item)
+            aj.xhr.get('http://localhost:8080/adp/admin/data_service?projectId=' + item.id, j => {
+                if (j.status == 1) {
+                    getTreeData2.call(this, j, callback);
+                }
+            });
+        },
+
+        // 选择 DML
+        selectItem(item, index, type) {
+            this.code = item.sql;
+            this.dmlSelected = index;
+            this.currentDML = item;
+            this.currentType = type;
         },
 
         togglePanel() {

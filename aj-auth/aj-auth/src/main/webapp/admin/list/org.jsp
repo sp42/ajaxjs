@@ -1,4 +1,8 @@
-<%@ page pageEncoding="UTF-8"%>
+<%@ page pageEncoding="UTF-8" import="com.ajaxjs.util.JspBack, com.ajaxjs.util.JspHelper"%>
+<%
+	JspHelper.getJspHelper(request);
+	JspBack.getListToJson(request, "/data_service/org/list", "json");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,13 +77,13 @@ h1 {
 		<!-- 菜单工具栏-->
 		<ul class="toolbar">
 			<li>
-				<button>
+				<button @click="addTop">
 					<i class="fa fa-plus" style="color: #ffaf0a;"></i> 新增顶级${uiName}
 				</button>
 			</li>
 			<li>
 				<!-- <input type="text" name="name" required size="12" :class="{'aj-disable': selectedId == 0}" /> -->
-				<button :class="{'aj-disable': selectedId == 0}">
+				<button @click="add" :class="{'aj-disable': selectedId == 0}">
 					<i class="fa fa-plus" style="color: #ffaf0a;"></i> 新建子分类
 				</button>
 			</li>
@@ -159,15 +163,27 @@ h1 {
 		            this.selectedId = id;
 		            this.selectedName = name;
 		        },
+		        addTop() {
+		        	let name = prompt('顶级节点名称');
+		        	if (name) {
+		        		
+		        	}
+		        },
+		        add() {
+		            if (!this.selectedId) {
+		                alert('未选择任何分类');
+		                return;
+		            }
+		        },
 		        rename() {
 		            if (!this.selectedId) {
 		                alert('未选择任何分类');
 		                return;
 		            }
 	
-		        	var name = prompt('更新名称', selectedName);
+		        	let name = prompt('更新名称', this.selectedName);
 		        	if (name != null) {
-		        		jsp.xhr.put(selectedId + 'selectedId/', {name: selectedName}, j=> {});
+		        		jsp.xhr.put(selectedId + 'selectedId/', {name: this.selectedName}, j=> {});
 		        	}
 		        },
 		        // 删除
@@ -196,7 +212,7 @@ h1 {
 		            select.innerHTML = '';
 		            //jsp.xhr.get('.', j => rendererOption(j.result, select));
 		            
-		            
+		            // 按 ORDER BY pid ASC 排序
 		            var result = [
 		            	{
 		            		id:1,
@@ -212,6 +228,8 @@ h1 {
 	            			pid:  1
 	            		}
 		            ];
+		            
+		            result = ${json};
 		            rendererOption(result, select);
 		        }
 		    }

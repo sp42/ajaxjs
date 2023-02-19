@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.net.http.Get;
+import com.ajaxjs.util.map.JsonHelper;
 
 public class JspBack {
 	public static void getInfo(HttpServletRequest request, String namespace) {
@@ -24,6 +25,14 @@ public class JspBack {
 		String url = com.ajaxjs.util.WebHelper.getLocalService(request);
 		java.util.Map<String, Object> info = com.ajaxjs.net.http.Get.api(url + _url);
 		request.setAttribute(key, info.get("data"));
+	}
+	
+	public static void getListToJson(HttpServletRequest request, String _url, String key) {
+		String url = com.ajaxjs.util.WebHelper.getLocalService(request);
+		java.util.Map<String, Object> info = com.ajaxjs.net.http.Get.api(url + _url);
+		
+		System.out.println(info.get("data"));
+		request.setAttribute(key, JsonHelper.toJson(info.get("data")));
 	}
 
 	public static void list(HttpServletRequest request, String namespace, String namespaceChS) {
