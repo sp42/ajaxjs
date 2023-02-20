@@ -60,14 +60,18 @@
                     <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{ item.name }}</Option>
                 </i-Select> -->
                 <div style="height: 93%;overflow-y: auto;">
-                    <Tree :data="projectTreeData" :load-data="loadTreeData" style="margin-left: 10px;" @on-contextmenu="handleContextMenu">
+                    <Tree :data="project.treeData" :load-data="loadTreeData" style="margin-left: 10px;"
+                        @on-contextmenu="handleContextMenu">
                         <template slot="contextMenu">
-                                <Dropdown-Item @click.native="handleContextMenuEdit">编辑</Dropdown-Item>
-                                <Dropdown-Item @click.native="handleContextMenuDelete" style="color: #ed4014">删除</Dropdown-Item> 
+                            <Dropdown-Item @click.native="handleContextMenuCreate"
+                                style="color:green">新建项目</Dropdown-Item>
+                            <Dropdown-Item @click.native="handleContextMenuEdit">编辑项目</Dropdown-Item>
+                            <Dropdown-Item @click.native="handleContextMenuDelete"
+                                style="color: #ed4014">删除项目</Dropdown-Item>
                         </template>
                     </Tree>
 
-                   <!--  <Tree :data="treeData" style="margin-left: 10px;"></Tree> -->
+                    <!--  <Tree :data="treeData" style="margin-left: 10px;"></Tree> -->
                 </div>
             </div>
             <div slot="right" class="split-pane-right">
@@ -228,7 +232,7 @@
                                       </Select>
                                     </FormItem> -->
 
-                                   
+
 
                                     <FormItem label="逻辑删除的状态" prop="idField">
                                         <i-input v-model="table.fieldsMapping.delStatus" type="text"
@@ -294,8 +298,10 @@
                                     {{currentDML}}--------- -->
 
                                     <div>
-                                        <span style="float: right;"><label><input type="checkbox" v-model="currentDML.enable" /> 启用</label></span>
-                                        命令名称 <i-input type="text" placeholder="自定义命令必填" style="width:200px" size="small"></i-input>
+                                        <span style="float: right;"><label><input type="checkbox"
+                                                    v-model="currentDML.enable" /> 启用</label></span>
+                                        命令名称 <i-input type="text" placeholder="自定义命令必填" style="width:200px"
+                                            size="small"></i-input>
                                         <br />
                                         <br />
 
@@ -318,9 +324,9 @@
                                                 <a>生成删除语句</a> |
                                                 <!-- <a>生成“物理删除”语句</a> |
                                                 <a>生成“逻辑删除”语句</a> -->
-                                               <!--  <tips text="在逻辑上数据是被删除的，但数据本身依然存在库中（仅仅是更新状态字段为已删除）"></tips> | -->
+                                                <!--  <tips text="在逻辑上数据是被删除的，但数据本身依然存在库中（仅仅是更新状态字段为已删除）"></tips> | -->
                                             </span>
-                                            
+
                                             <a href="javascript:alert('暂未实现')">格式化</a> |
                                             <a>复制</a>
                                         </div>
@@ -335,10 +341,10 @@
                                         </Radio-Group>
 
                                         <div style="margin:20px 0">
-                                 
 
 
-                                    <!--         &nbsp;&nbsp;&nbsp;
+
+                                            <!--         &nbsp;&nbsp;&nbsp;
                                             <label>
                                                 <input type="checkbox" :value="true" /> 当有 id 参数时采用“修改”的规则
                                                 <tips text="CreateOrSave，同一个接口处理"></tips>
@@ -365,6 +371,19 @@
             <Datasource></Datasource>
         </Modal>
 
+        <Modal title="编辑项目" v-model="project.isShowEditProjectWin" ok-text="保存" @on-ok="saveProject" cancel-text=""
+            width="600">
+            <i-Form ref="editForm" :model="project.form.data" :rules="project.form.rules" :label-width="120"
+                style="margin-right:100px">
+                <form-item label="项目名称" prop="name">
+                    <i-Input v-model="project.form.data.name" placeholder="项目名称" />
+                </form-item>
+                <form-item label="项目简介" prop="content">
+                    <i-Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" v-model="project.form.data.content" />
+                </form-item>
+            </i-Form>
+        </Modal>
+
         <Modal title="选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
             <!--选择表格-->
             <table-selector></table-selector>
@@ -372,6 +391,8 @@
     </div>
 
 
+    <script src="config.js"></script>
+    <script src="js/project.js"></script>
     <script src="js/tree.js"></script>
     <script src="js/api.js"> </script>
     <script src="js/main.js"> </script>

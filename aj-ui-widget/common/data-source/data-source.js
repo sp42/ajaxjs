@@ -16,7 +16,12 @@ Vue.component('Datasource', {
 			activedItem: null,
 			editing: {},
 			form: {
-				data: {}
+				data: {},
+				rules: {
+					name: [
+						{ required: true, message: '数据源名称不能为空', trigger: 'blur' }
+					],
+				}
 			},
 			DBType: DBType
 		};
@@ -42,14 +47,18 @@ Vue.component('Datasource', {
 			};
 		},
 		create() {
-
-			aj.xhr.postJson(DATASOURCE_API, this.form.data, j => {
-				if (j.status === 1) {
-					let newlyId = j.data;
-					this.getList(() => this.activedItem = newlyId);
-					this.$Message.success('创建数据源成功');
-					this.form.data.id = newlyId;
-				}
+			this.$refs.editForm.validate((valid) => {
+				if (valid) {
+					aj.xhr.postJson(DATASOURCE_API, this.form.data, j => {
+						if (j.status === 1) {
+							let newlyId = j.data;
+							this.getList(() => this.activedItem = newlyId);
+							this.$Message.success('创建数据源成功');
+							this.form.data.id = newlyId;
+						}
+					});
+				} else
+					this.$Message.error('表单验证不通过');
 			});
 		},
 		update() {

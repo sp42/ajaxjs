@@ -12,6 +12,7 @@ Vue.component('tips', {
 
 new Vue({
     el: document.querySelector('.data-service'),
+    mixins: [project, ds_tree],
     data() {
         return {
             isShowSelectTable: false,
@@ -23,49 +24,6 @@ new Vue({
             currentData: {}, // 当前编辑的数据（总数据）
             currentDML: {}, // 当前编辑的数据（DML）
             currentType: '',
-            contextData: null,
-            treeData2: [],
-
-            projectTreeData: [
-                {
-                    title: 'parent',
-                    expand: true,
-                    loading: false,
-                    children: []
-                }
-            ],
-            treeData: [
-                {
-                    title: 'parent 1',
-                    expand: true,
-                    children: [
-                        {
-                            title: 'parent 1-1',
-                            expand: true,
-                            children: [
-                                {
-                                    title: 'leaf 1-1-1'
-                                },
-                                {
-                                    title: 'leaf 1-1-2'
-                                }
-                            ]
-                        },
-                        {
-                            title: 'parent 1-2',
-                            expand: true,
-                            children: [
-                                {
-                                    title: 'leaf 1-2-1'
-                                },
-                                {
-                                    title: 'leaf 1-2-1'
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
             activeTab: "tab1",
             mainTabs: [
                 {
@@ -113,7 +71,10 @@ new Vue({
             });
         },
         refreshConfig() {
-            this.$Message.success('刷新成功');
+            aj.xhr.get(DS_CONFIG.API_ROOT + '/admin/reload', j => {
+                if (j.status)
+                    this.$Message.success('刷新成功');
+            });
         },
         ifAdd(name) {
             if (name === "addTab") {
@@ -133,42 +94,6 @@ new Vue({
             }
         },
 
-        loadTreeProejct() {
-            aj.xhr.get('http://localhost:8080/adp/admin/data_service/project', j => {
-                // console.log(j)
-                if (j.status == 1) {
-                    // 添加 iView 树节点的字段
-                    j.data.forEach(item => {
-                        item.title = item.name;
-                        item.loading = false;
-                        item.contextmenu = true;
-                        item.children = [];
-                    });
-
-                    this.projectTreeData = j.data;
-                }
-            });
-        },
-
-        handleContextMenu(data) {
-            this.contextData = data;
-        },
-        handleContextMenuEdit() {
-            this.$Message.info('Click edit of' + this.contextData.title);
-        },
-        handleContextMenuDelete() {
-            this.$Message.info('Click delete of' + this.contextData.title);
-        },
-
-        // 异步加载树数据
-        loadTreeData(item, callback) {
-            console.log('-------', item)
-            aj.xhr.get('http://localhost:8080/adp/admin/data_service?projectId=' + item.id, j => {
-                if (j.status == 1) {
-                    getTreeData2.call(this, j, callback);
-                }
-            });
-        },
 
         // 选择 DML
         selectItem(item, index, type) {

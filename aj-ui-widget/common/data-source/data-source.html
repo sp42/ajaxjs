@@ -13,7 +13,7 @@
             <a class="add" @click="add">+ 新建……</a>
         </div>
         <div class="right">
-            <i-Form ref="editForm" :model="form.data" :rules="form.createRules" :label-width="120"
+            <i-Form ref="editForm" :model="form.data" :rules="form.rules" :label-width="120"
                 style="margin-right:100px">
                 <form-item label="数据源名称" prop="name">
                     <i-Input v-model="form.data.name" placeholder="数据源名称" />
@@ -42,7 +42,7 @@
             </i-Form>
 
             <div align="center">
-                <i-Button v-if="!activedItem" icon="md-checkmark" @click="create">新建</i-Button>
+                <i-Button v-if="!activedItem" icon="md-checkmark" @click="create">保存新建</i-Button>
                 <i-Button v-if="activedItem" @click="update">保存</i-Button>&nbsp;&nbsp;
                 <i-Button v-if="activedItem" @click="test">测试连接</i-Button>&nbsp;&nbsp;
                 <i-Button v-if="activedItem" @click="$emit('change_datasource', form.data)">切换</i-Button>
