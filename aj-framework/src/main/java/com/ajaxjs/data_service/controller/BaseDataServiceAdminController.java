@@ -222,7 +222,7 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 		}
 	}
 
-	@GetMapping("/get_databases/{datasourceId}")
+	@GetMapping("/{datasourceId}/get_databases")
 	@ControllerMethod("查询数据库所有的库名")
 	public List<String> getDatabases(@PathVariable Long datasourceId) throws SQLException {
 		LOGGER.info("查询数据库所有的库名 {0}", datasourceId);
@@ -248,7 +248,6 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 	 * @param start
 	 * @param limit
 	 * @param tablename 搜索的关键字
-	 * @deprecated
 	 * @return
 	 * @throws SQLException
 	 */
@@ -286,12 +285,26 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 				dbName);
 	}
 
+	/**
+	 * 获取所有字段
+	 * 
+	 * @param dataSourceId
+	 * @param tableName
+	 * @param dbName
+	 * @return
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	@GetMapping("/{dataSourceId}/getFields/{tableName}")
 	public List<Map<String, String>> getFields(@PathVariable Long dataSourceId, @PathVariable String tableName, String dbName)
 			throws SQLException, ClassNotFoundException {
 		LOGGER.info("获取所有字段:" + tableName + " 数据库：" + dbName);
 
-		return getField(dataSourceId, tableName, dbName);
+		try (Connection conn = getConnection(); Connection conn2 = DataSerivceUtils.getConnByDataSourceInfo(conn, getDataSourceTableName(), dataSourceId);) {
+			List<Map<String, String>> columnComment = DataBaseMetaHelper.getColumnComment(conn2, tableName, dbName);
+
+			return columnComment;
+		}
 	}
 
 	/**
@@ -345,22 +358,5 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 		result.setTotalCount(total);
 
 		return result;
-	}
-
-	/**
-	 * 获取所有字段
-	 *
-	 * @param datasourceId
-	 * @param tableName
-	 * @return
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
-	 */
-	private List<Map<String, String>> getField(Long datasourceId, String tableName, String dbName) throws SQLException, ClassNotFoundException {
-		try (Connection conn = getConnection(); Connection conn2 = DataSerivceUtils.getConnByDataSourceInfo(conn, getDataSourceTableName(), datasourceId);) {
-			List<Map<String, String>> columnComment = DataBaseMetaHelper.getColumnComment(conn2, tableName, dbName);
-
-			return columnComment;
-		}
 	}
 }
