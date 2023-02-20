@@ -51,6 +51,7 @@ public abstract class ProjectService {
 	public boolean delete(@PathVariable Long id) {
 		try (Connection conn = getConnection()) {
 			String ids = "SELECT id FROM " + getDataServiceTableName() + " WHERE project_id = " + id;
+
 			Jdbc.update(conn, "DELETE FROM " + tableName + " WHERE id IN (?)", ids);
 			Jdbc.deleteById(conn, tableName, id);
 

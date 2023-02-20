@@ -15,7 +15,7 @@ import com.ajaxjs.data_service.controller.BaseDataServiceAdminController;
  *
  */
 @RestController
-@RequestMapping("/admin/data_service")
+@RequestMapping("/data_service/admin")
 public class DataServiceAdminController extends BaseDataServiceAdminController {
 	@Override
 	protected String getDataSourceTableName() {
