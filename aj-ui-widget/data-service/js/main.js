@@ -15,7 +15,7 @@ new Vue({
     mixins: [project, ds_tree],
     data() {
         return {
-            isShowSelectTable: false,
+            isShowSelectTable: true,
             split1: 0.2,
             dataSource: {
                 isShowDataSource: false

@@ -384,9 +384,9 @@
             </i-Form>
         </Modal>
 
-        <Modal title="选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
+        <Modal title="从数据库的表定义选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
             <!--选择表格-->
-            <table-selector></table-selector>
+            <table-selector :dsid="1"></table-selector>
         </Modal>
     </div>
 

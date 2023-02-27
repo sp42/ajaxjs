@@ -11,6 +11,18 @@ Vue.component('table-selector', {
                     type: "index",
                     // type: 'selection'
                 },
+                {
+                    title: "表名",
+                    key: 'tableName',
+                },
+                {
+                    title: "说明",
+                    key: 'comment',
+                },
+                {
+                    title: "操作",
+                    slot: 'select'
+                }
             ],
             listData: [], // 显示数据
             data: [], // 全部数据
@@ -20,27 +32,38 @@ Vue.component('table-selector', {
             isFilter: false,
             start: 0,
             searchKeyword: "",
-
+            loading: false,
             databaseList: [],
             databaseName: "",
         }
     },
     props: {
-        listColumn: { type: Array, required: true },
         apiUrl: { type: String, required: true },
         dsid: {},
     },
+    mounted() {
+        this.isCrossDb = true;
+        // this.getData();
+    },
     methods: {
         getData() {
-            let p = {
-                start: this.start,
-                limit: this.pageSize,
-            };
+            this.loading = true;
+            let url = `${DS_CONFIG.API_ROOT}/admin/1/getAllTables?start=${this.start}&limit=${this.pageSize}`;
 
-            if (this.searchKeyword) p.tablename = this.searchKeyword;
-            if (this.databaseName) p.dbName = this.databaseName;
+            if (this.searchKeyword)
+                url += `&tablename=${this.searchKeyword}`;
+            if (this.databaseName)
+                url += `&dbName=${this.databaseName}`;
 
-            xhr_get(this.apiUrl, getPageList(this, this), p);
+            aj.xhr.get(url, j => {
+                if (j.status) {
+                    this.data = j.data;
+                    this.total = j.total;
+                } else
+                    this.$Message.error(j.message);
+
+                this.loading = false;
+            });
         },
         handleChangePageSize() {
             let start = (this.current - 1) * this.pageSize,
@@ -94,14 +117,12 @@ Vue.component('table-selector', {
         },
         isCrossDb(v) {
             if (v) {
-                xhr_get(this.$parent.$parent.API + "/getDatabases",
-                    (j) => {
-                        if (j.result) {
-                            this.databaseList = j.result;
-                        } else this.$Message.warning("获取数据库名失败");
-                    },
-                    { datasourceId: this.dsid }
-                );
+                aj.xhr.get(`${DS_CONFIG.API_ROOT}/admin/1/get_databases`, j => {
+                    if (j.status) {
+                        this.databaseList = j.data;
+                    } else
+                        this.$Message.error(j.message);
+                });
             }
         },
         databaseName(v) {

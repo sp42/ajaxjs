@@ -270,7 +270,6 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-
 	@GetMapping("/{dataSourceId}/getAllTables")
 	public PageResult<Map<String, Object>> getTableAndComment(@PathVariable Long dataSourceId, Integer start, Integer limit, String tablename, String dbName)
 			throws ClassNotFoundException, SQLException {
