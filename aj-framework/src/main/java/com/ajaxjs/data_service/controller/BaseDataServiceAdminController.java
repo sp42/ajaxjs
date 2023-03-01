@@ -103,7 +103,7 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 	@GetMapping
 	public List<DataServiceEntity> list(Long projectId) {
 		LOGGER.info("获取表配置列表");
-		String sql = "SELECT * FROM " + getDataServiceTableName();
+		String sql = "SELECT d.*, ds.name AS datasourceName FROM " + getDataServiceTableName() + " d LEFT JOIN aj_base.adp_datasource ds ON d.datasource_id = ds.id";
 
 		if (projectId != null)
 			sql += " WHERE project_id = " + projectId;

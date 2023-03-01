@@ -46,7 +46,7 @@
     <div class="data-service">
         <nav>
             <div style="float:right;">
-                <a>首页</a> | <a href="https://framework.ajaxjs.com" target="_blank">帮助</a> | <a @click="showAbout">关于</a>
+                数据源：<span>{{dataSource.name}}</span> | <a href="https://framework.ajaxjs.com" target="_blank">帮助</a> | <a @click="showAbout">关于</a>
             </div>
             <img src="asset/icon.png" width="16" style="vertical-align: middle;" /> 数据服务 Data Service
         </nav>
@@ -163,15 +163,17 @@
                                     </i-input>
                                 </li>
                                 <li>
-                                    <i-input ref="inputName" v-model="currentData.tableName">
-                                        <span slot="prepend">数据库表名</span>
-                                    </i-input>
-                                </li>
-                                <li>
                                     <i-input ref="inputName" placeholder="实体的 URL 目录，必填的" v-model="currentData.urlDir">
                                         <span slot="prepend">URL 目录</span>
                                     </i-input>
                                 </li>
+                                <li style="padding-top: 5px;">
+                                    数据源： {{currentData.datasourceName}}
+                                </li>
+                                <li style="padding-top: 5px;">
+                                    数据库表名： {{currentData.tableName}}
+                                </li>
+
                             </ul>
                             <fieldset>
                                 <legend>字段配置
@@ -368,7 +370,7 @@
         </Split>
 
         <Modal title="数据源配置" v-model="dataSource.isShowDataSource" ok-text="关闭" cancel-text="" width="900">
-            <Datasource></Datasource>
+            <Datasource @change_datasource="changeDatasource"></Datasource>
         </Modal>
 
         <Modal title="编辑项目" v-model="project.isShowEditProjectWin" ok-text="保存" @on-ok="saveProject" cancel-text=""

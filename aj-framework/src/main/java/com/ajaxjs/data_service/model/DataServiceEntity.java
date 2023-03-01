@@ -22,7 +22,11 @@ public class DataServiceEntity extends BaseModel implements IBaseModel {
 	 */
 	private String config;
 
+	private Long projectId;
+
 	private Long datasourceId;
+
+	private String datasourceName;
 
 	/**
 	 * 主键生成策略 1=自增 2=雪花 3=uuid
@@ -121,5 +125,21 @@ public class DataServiceEntity extends BaseModel implements IBaseModel {
 
 	public void setData(Map<String, Object> data) {
 		this.data = data;
+	}
+
+	public String getDatasourceName() {
+		return datasourceName;
+	}
+
+	public void setDatasourceName(String datasourceName) {
+		this.datasourceName = datasourceName;
+	}
+
+	public Long getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Long projectId) {
+		this.projectId = projectId;
 	}
 }

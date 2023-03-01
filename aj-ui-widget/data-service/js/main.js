@@ -18,7 +18,11 @@ new Vue({
             isShowSelectTable: true,
             split1: 0.2,
             dataSource: {
-                isShowDataSource: false
+                isShowDataSource: false,
+                isMulti: true, // 是否多个数据源
+                id: null,
+                name: null,
+                crossDb: null
             },
             allData: [], // 所有的数据
             currentData: {}, // 当前编辑的数据（总数据）
@@ -55,7 +59,7 @@ new Vue({
                 lineNumbers: true,
                 mode: 'text/x-mysql',
                 // theme: "monokai"
-            },
+            }
         }
     },
     mounted() {
@@ -128,6 +132,12 @@ new Vue({
             }
 
             return method + ' ' + path;
+        },
+        changeDatasource(ds) {
+            this.dataSource.id = ds.id;
+            this.dataSource.name = ds.name;
+            this.dataSource.crossDb = ds.crossDb;
+            debugger
         }
     }
 });
