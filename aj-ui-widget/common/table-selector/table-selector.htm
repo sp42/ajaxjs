@@ -14,7 +14,7 @@
             </i-Col>
         </Row>
 
-        <i-Table :columns="list_column" :data="data" width="100%" @on-selection-change="onSelect" max-height="300" :loading="loading">
+        <i-Table :columns="list_column" :data="data" width="100%" @on-selection-change="onSelect" max-height="300" :loading="loading" class="table-selector-table">
             <template slot-scope="{row}" slot="select">
                 <a @click="$emit('on-select', row, databaseName)">选择</a>
             </template>

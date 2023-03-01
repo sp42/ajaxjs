@@ -119,7 +119,12 @@ Vue.component('table-selector', {
             if (v) {
                 aj.xhr.get(`${DS_CONFIG.API_ROOT}/admin/1/get_databases`, j => {
                     if (j.status) {
-                        this.databaseList = j.data;
+                        // 过滤 mysql 自带的库
+                        let not = ['information_schema', 'performance_schema', 'sys', 'mysql'];
+                        let arr = j.data.filter(db => !not.includes(db));
+                        console.log(arr)
+
+                        this.databaseList = arr;
                     } else
                         this.$Message.error(j.message);
                 });
