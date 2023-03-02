@@ -256,13 +256,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.22</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- 编译为 jar 包时依赖的 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>

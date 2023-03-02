@@ -15,14 +15,14 @@ new Vue({
     mixins: [project, ds_tree],
     data() {
         return {
-            isShowSelectTable: true,
+            isShowSelectTable: false,
             split1: 0.2,
             dataSource: {
                 isShowDataSource: false,
                 isMulti: true, // 是否多个数据源
                 id: null,
                 name: null,
-                crossDb: null
+                crossDb: false
             },
             allData: [], // 所有的数据
             currentData: {}, // 当前编辑的数据（总数据）
@@ -137,7 +137,11 @@ new Vue({
             this.dataSource.id = ds.id;
             this.dataSource.name = ds.name;
             this.dataSource.crossDb = ds.crossDb;
-            debugger
+            this.dataSource.isShowDataSource = false;
+        },
+        copySql() {
+            aj.copyToClipboard(this.code);
+            this.$Message.success('复制 SQL 代码成功');
         }
     }
 });

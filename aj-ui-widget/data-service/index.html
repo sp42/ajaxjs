@@ -330,7 +330,7 @@
                                             </span>
 
                                             <a href="javascript:alert('暂未实现')">格式化</a> |
-                                            <a>复制</a>
+                                            <a @click="copySql">复制</a>
                                         </div>
 
                                         命令类型
@@ -388,7 +388,7 @@
 
         <Modal title="从数据库的表定义选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
             <!--选择表格-->
-            <table-selector :dsid="1"></table-selector>
+            <table-selector :dsid="1" :is-cross-db="dataSource.crossDb" :data-source-id="dataSource.id"></table-selector>
         </Modal>
     </div>
 
