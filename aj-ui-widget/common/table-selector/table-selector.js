@@ -2,7 +2,7 @@ Vue.component('table-selector', {
     template: '#table-selector-tpl',
     data() {
         return {
-            isCrossDb: false,
+            // isCrossDb: false,
             list_column: [
                 {
                     title: "#",
@@ -39,16 +39,17 @@ Vue.component('table-selector', {
     },
     props: {
         apiUrl: { type: String, required: true },
-        dsid: {},
+        isCrossDb: { type: Boolean, required: true },
+        dataSourceId: { type: Number, required: true },
     },
     mounted() {
-        this.isCrossDb = true;
+        // this.isCrossDb = true;
         // this.getData();
     },
     methods: {
         getData() {
             this.loading = true;
-            let url = `${DS_CONFIG.API_ROOT}/admin/1/getAllTables?start=${this.start}&limit=${this.pageSize}`;
+            let url = `${DS_CONFIG.API_ROOT}/admin/${this.dataSourceId}/getAllTables?start=${this.start}&limit=${this.pageSize}`;
 
             if (this.searchKeyword)
                 url += `&tablename=${this.searchKeyword}`;
@@ -78,6 +79,8 @@ Vue.component('table-selector', {
         },
         resetData() {
             this.searchKeyword = "";
+
+            this.start = 0;
             this.getData();
             this.$refs.inputEl.$el.querySelector("input").value = "";
         },
@@ -115,23 +118,32 @@ Vue.component('table-selector', {
             this.start = (v - 1) * this.pageSize;
             this.getData();
         },
-        isCrossDb(v) {
-            if (v) {
-                aj.xhr.get(`${DS_CONFIG.API_ROOT}/admin/1/get_databases`, j => {
-                    if (j.status) {
-                        // 过滤 mysql 自带的库
-                        let not = ['information_schema', 'performance_schema', 'sys', 'mysql'];
-                        let arr = j.data.filter(db => !not.includes(db));
-                        console.log(arr)
+        dataSourceId(id) {
+            if (id) {
+                if (this.isCrossDb)
+                    aj.xhr.get(`${DS_CONFIG.API_ROOT}/admin/${this.dataSourceId}/get_databases`, j => {
+                        if (j.status) {
+                            // 过滤 mysql 自带的库
+                            let not = ['information_schema', 'performance_schema', 'sys', 'mysql'];
+                            let arr = j.data.filter(db => !not.includes(db));
 
-                        this.databaseList = arr;
-                    } else
-                        this.$Message.error(j.message);
-                });
+                            this.databaseList = arr;
+
+                            // 默认选中第一个
+                            this.start = 0;
+                            this.current = 1;
+                            this.databaseName = arr[0];
+                        } else
+                            this.$Message.error(j.message);
+                    });
+                else {
+                    this.databaseName = null;
+                    this.getData();
+                }
             }
         },
         databaseName(v) {
-            this.getData();
+            this.getData(); // 会重复请求
         },
     },
 });
