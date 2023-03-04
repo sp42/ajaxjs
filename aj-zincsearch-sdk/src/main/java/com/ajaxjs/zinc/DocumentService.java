@@ -64,10 +64,26 @@ public class DocumentService extends BaseService {
 		return result(result);
 	}
 
+	/**
+	 * 更新实体
+	 * 
+	 * @param target index 名称
+	 * @param bean   Java 实体 Bean
+	 * @param id     实体 id
+	 * @return
+	 */
 	public ZincResponse update(String target, Object bean, Serializable id) {
 		return update(target, MapTool.bean2Map(bean), id);
 	}
 
+	/**
+	 * 更新实体
+	 * 
+	 * @param target index 名称
+	 * @param bean   Java 实体 Map
+	 * @param id     实体 id
+	 * @return
+	 */
 	public ZincResponse update(String target, Map<String, Object> doc, Serializable id) {
 		String url = apiWithId(target, id);
 		Map<String, Object> result = Post.putJsonBody(url, doc, SET_HEAD);
@@ -75,6 +91,13 @@ public class DocumentService extends BaseService {
 		return result(result);
 	}
 
+	/**
+	 * 删除实体
+	 * 
+	 * @param target index 名称
+	 * @param id     实体 id
+	 * @return
+	 */
 	public ZincResponse delete(String target, Serializable id) {
 		String url = apiWithId(target, id);
 		Map<String, Object> result = Delete.api(url, SET_HEAD);
