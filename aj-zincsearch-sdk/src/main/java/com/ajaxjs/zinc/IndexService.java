@@ -1,4 +1,4 @@
-package com.ajaxjs.zinc.api;
+package com.ajaxjs.zinc;
 
 /**
  * 索引服务 TODO

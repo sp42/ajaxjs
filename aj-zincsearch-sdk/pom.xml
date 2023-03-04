@@ -5,6 +5,8 @@
 	<artifactId>aj-zincsearch-sdk</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
+	<name>ZincSearch Java Client</name>
+	<description>ZincSearch Java Client</description>
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
@@ -27,5 +29,4 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
 </project>

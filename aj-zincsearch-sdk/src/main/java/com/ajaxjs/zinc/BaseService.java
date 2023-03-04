@@ -1,4 +1,4 @@
-package com.ajaxjs.zinc.api;
+package com.ajaxjs.zinc;
 
 import java.io.Serializable;
 import java.net.HttpURLConnection;
@@ -40,11 +40,14 @@ public abstract class BaseService {
 
 	ZincResponse result(Map<String, Object> result) {
 		ZincResponse response = new ZincResponse();
+		response.setRawResult(result);
+
+//		{"message":"ok","id":"1Wyool8vueY","_id":"1Wyool8vueY","_index":"tyest","_version":1,"_seq_no":0,"_primary_term":0,"result":"created"}
 
 		if (result.containsKey("error")) {
 			response.setHasError(true);
 			response.setErrMsg(result.get("error").toString());
-		} else {
+		} else if ("ok".equals(result.get("message")) || "deleted".equals(result.get("message"))) {
 			response.setHasError(false);
 		}
 
@@ -52,7 +55,7 @@ public abstract class BaseService {
 	}
 
 	String apiWithId(String target, Serializable id) {
-		String url = getApi() + "/api/" + target;
+		String url = getApi() + "/api/" + target + "/_doc";
 
 		if (id != null)
 			url += "/" + id;

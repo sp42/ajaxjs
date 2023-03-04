@@ -1,4 +1,4 @@
-package com.ajaxjs.zinc.api;
+package com.ajaxjs.zinc;
 
 import java.util.Map;
 

@@ -1,5 +1,7 @@
 package com.ajaxjs.zinc.model;
 
+import java.util.Map;
+
 import lombok.Data;
 
 /**
@@ -24,4 +26,9 @@ public class ZincResponse {
 	 * 异常信息
 	 */
 	private String errMsg;
+
+	/**
+	 * 原始返回的 JSON
+	 */
+	private Map<String, Object> rawResult;
 }
