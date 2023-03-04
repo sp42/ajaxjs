@@ -224,8 +224,23 @@ public class Post extends Base {
 	public static Map<String, Object> apiJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
 		String json = JsonHelper.toJson(params);
 		json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
-		
+
 		return api(url, json, fn);
+	}
+
+	/**
+	 * PUT JSON as RawBody
+	 * 
+	 * @param url
+	 * @param params
+	 * @param fn
+	 * @return
+	 */
+	public static Map<String, Object> putJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
+		String json = JsonHelper.toJson(params);
+		json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
+
+		return putApi(url, json, fn);
 	}
 
 	/**
