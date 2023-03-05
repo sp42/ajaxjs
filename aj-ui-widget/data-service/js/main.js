@@ -109,10 +109,10 @@ new Vue({
 
         togglePanel() {
             let config = this.$el.querySelector('.config');
-            if (config.style.height == '500px') {
+            if (config.style.height == '300px') {
                 config.style.height = '0';
             } else
-                config.style.height = '500px';
+                config.style.height = '300px';
 
         },
         getDml(item, key) {
@@ -142,6 +142,26 @@ new Vue({
         copySql() {
             aj.copyToClipboard(this.code);
             this.$Message.success('复制 SQL 代码成功');
+        },
+        // 保存命令
+        saveDML() {
+            let dml = Object.assign({}, this.currentData);
+            dml.json = JSON.stringify(dml.data);
+
+            delete dml.createDate;
+            delete dml.data;
+            delete dml.updateDate;
+            delete dml.datasourceName;
+            delete dml.extractData;
+
+            console.log(dml)
+
+
+            aj.xhr.putJson(DATA_SERVICE_API, dml, j => {
+                if (j.status === 1) {
+                    this.$Message.success('修改命令成功');
+                }
+            });
         }
     }
 });

@@ -46,7 +46,8 @@
     <div class="data-service">
         <nav>
             <div style="float:right;">
-                数据源：<span>{{dataSource.name}}</span> | <a href="https://framework.ajaxjs.com" target="_blank">帮助</a> | <a @click="showAbout">关于</a>
+                数据源：<span>{{dataSource.name}}</span> | <a href="https://framework.ajaxjs.com" target="_blank">帮助</a> |
+                <a @click="showAbout">关于</a>
             </div>
             <img src="asset/icon.png" width="16" style="vertical-align: middle;" /> 数据服务 Data Service
         </nav>
@@ -127,7 +128,7 @@
                             </span>
                         </div>
                     </li>
-                    <li>
+                    <li @click="saveDML">
                         <div>
                             <div class="icon">
                                 <Icon type="ios-create" size="25" style="color:#f90" />
@@ -176,58 +177,101 @@
 
                             </ul>
                             <fieldset>
-                                <legend>字段配置
+                                <legend>更多设置
                                     <Icon type="ios-arrow-down" style="cursor: pointer;" @click="togglePanel" />
                                 </legend>
                             </fieldset>
-                            <div class="config" style="height:0px">
-                                <Form ref="create" :model="table" :rules="table.createRules" :label-width="120">
-                                    <!-- <FormItem label="URL 前缀" prop="urlRoot">
-                                      <i-input v-model="table.urlRoot" placeholder="以 http://…… 开头，如不指定为 localhost" />
-                                    </FormItem> -->
+                            <div class="config" style="height:300px">
+                                <Row type="flex" justify="center" align="middle">
+                                    <i-Col span="10" style="padding-right:20px;">
+                                        <i-input placeholder="不填则按照项目的设置。以 http://…… 开头" v-model="currentData.urlRoot">
+                                            <span slot="prepend">API 地址前缀</span>
+                                        </i-input>
+                                        <br />
+                                        <i-input placeholder="逗号隔开多个标签" v-model="currentData.tags">
+                                            <span slot="prepend">标签</span>
+                                        </i-input>
+                                    </i-Col>
+                                    <i-Col span="14">
+                                        <i-input v-model="currentData.content" maxlength="200" show-word-limit
+                                            type="textarea" :rows="4" placeholder="描述" />
+                                    </i-Col>
+                                </Row>
 
-                                    <FormItem label="描述：" prop="name">
-                                        <i-input v-model="table.name" maxlength="100" show-word-limit type="textarea"
-                                            :rows="2" placeholder="描述" />
-                                    </FormItem>
-                                    <FormItem label="主键生成策略：" prop="keyGen">
+                                <!--       <FormItem label="主键生成策略：" prop="keyGen">
                                         <Select v-model="table.keyGen">
                                             <Option :value="3">UUID</Option>
                                             <Option :value="1">自增</Option>
                                             <Option :value="2">雪花</Option>
                                         </Select>
-                                    </FormItem>
-                                    <Divider style="color:gray" size="small">字段/参数映射 Mapping</Divider>
-                                    <FormItem label="唯一主键" prop="idField">
-                                        <i-input v-model="table.fieldsMapping.id" type="text" placeholder="不填写则默认为 id"
-                                            style="width:260px;" />
-                                        <a @click="showFields=true; toField = 'id'" style="float:right">选择字段
-                                            &nbsp;&nbsp;</a>
-                                    </FormItem>
-                                    <FormItem label="创建日期的字段" prop="idField">
-                                        <i-input v-model="table.fieldsMapping.createDate" type="text"
-                                            placeholder="不填写则默认为 createDate" style="width:260px;"
-                                            :disabled="!allDml.create.autoDate" />
-                                        <a @click="showFields=true; toField = 'createDate'" style="float:right"
-                                            :disabled="!allDml.create.autoDate">选择字段 &nbsp;&nbsp;</a>
-                                    </FormItem>
+                                    </FormItem> -->
+                                <br />
+                                <Divider style="color:gray" size="small">通用字段/参数映射 Mapping</Divider>
+                                <br />
+                                <Row type="flex" justify="center" align="middle" :gutter="16">
+                                    <i-Col span="8">
+                                        <i-input placeholder="不填写则默认为 id" v-model="table.fieldsMapping.id">
+                                            <span slot="prepend">唯一主键</span>
+                                        </i-input>
+                                    </i-Col>
+                                    <i-Col span="8">
+                                        <i-input placeholder="不填写则默认为 createDate" v-model="table.fieldsMapping.createDate">
+                                            <span slot="prepend">创建日期字段</span>
+                                        </i-input>
+                                    </i-Col>
+                                    <i-Col span="8">
+                                        <i-input placeholder="不填写则默认为 updateDate" v-model="table.fieldsMapping.updateDate">
+                                            <span slot="prepend">修改日期字段</span>
+                                        </i-input>
+                                    </i-Col>
+                                </Row>
+                                <br />
+                                <Row type="flex" justify="center" align="middle" :gutter="16">
+                                    <i-Col span="8">
+                                        <i-input placeholder="不填写则默认为 id" v-model="table.fieldsMapping.id">
+                                            <span slot="prepend">唯一主键</span>
+                                        </i-input>
+                                    </i-Col>
+                                    <i-Col span="8">
+                                        <i-input placeholder="不填写则默认为 createDate" v-model="table.fieldsMapping.createDate">
+                                            <span slot="prepend">创建日期字段</span>
+                                        </i-input>
+                                    </i-Col>
+                                    <i-Col span="8">
+                                        <a>复制项目设置</a>
+                                    </i-Col>
+                                </Row>
 
-                                    <FormItem label="修改日期的字段" prop="idField">
-                                        <i-input v-model="table.fieldsMapping.updateDate" type="text"
-                                            placeholder="不填写则默认为 updateDate" style="width:260px;"
-                                            :disabled="!allDml.create.autoDate" />
-                                        <a @click="showFields=true; toField = 'updateDate'" style="float:right"
-                                            :disabled="!allDml.create.autoDate">选择字段 &nbsp;&nbsp;</a>
-                                    </FormItem>
-                                    <FormItem label="UUID 的字段" prop="idField">
+              <!--                   <FormItem label="唯一主键" prop="idField">
+                                    <i-input v-model="currentData.fieldsMapping.id" type="text" placeholder="不填写则默认为 id"
+                                        style="width:260px;" />
+                                    <a @click="showFields=true; toField = 'id'" style="float:right">选择字段
+                                        &nbsp;&nbsp;</a>
+                                </FormItem> -->
+         <!--                        <FormItem label="创建日期的字段" prop="idField">
+                                    <i-input v-model="table.fieldsMapping.createDate" type="text"
+                                        placeholder="不填写则默认为 createDate" style="width:260px;"
+                                        :disabled="!allDml.create.autoDate" />
+                                    <a @click="showFields=true; toField = 'createDate'" style="float:right"
+                                        :disabled="!allDml.create.autoDate">选择字段 &nbsp;&nbsp;</a>
+                                </FormItem> -->
+
+<!--                                 <FormItem label="修改日期的字段" prop="idField">
+                                    <i-input v-model="table.fieldsMapping.updateDate" type="text"
+                                        placeholder="不填写则默认为 updateDate" style="width:260px;"
+                                        :disabled="!allDml.create.autoDate" />
+                                    <a @click="showFields=true; toField = 'updateDate'" style="float:right"
+                                        :disabled="!allDml.create.autoDate">选择字段 &nbsp;&nbsp;</a>
+                                </FormItem> -->
+                                <!--             <FormItem label="UUID 的字段" prop="idField">
                                         <i-input v-model="table.fieldsMapping.uuid" type="text"
                                             placeholder="不填写则默认为 uid" style="width:260px;"
                                             :disabled="!allDml.create.addUuid" />
                                         <a @click="showFields=true; toField = 'uuid'" :disabled="!allDml.create.addUuid"
                                             style="float:right">选择字段 &nbsp;&nbsp;</a>
-                                    </FormItem>
+                                    </FormItem> -->
 
-                                    <!--     <FormItem label="生成 UUID 算法" prop="idField">
+                                <!--     <FormItem label="生成 UUID 算法" prop="idField">
                                       <Select style="width:260px;" :disabled="!allDml.create.addUuid">
                                         <Option>GUID</Option>
                                         <Option>雪花算法</Option>
@@ -235,30 +279,35 @@
                                     </FormItem> -->
 
 
+<!-- 
+                                <FormItem label="逻辑删除的状态" prop="idField">
+                                    <i-input v-model="table.fieldsMapping.delStatus" type="text"
+                                        placeholder="不填写则默认为 stat" style="width:260px;"
+                                        :disabled="allDml.delete.isPhysicallyDelete" />
+                                    <a @click="showFields=true; toField = 'delStatus'" style="float:right"
+                                        :disabled="allDml.delete.isPhysicallyDelete">选择字段 &nbsp;&nbsp;</a>
+                                </FormItem> -->
 
-                                    <FormItem label="逻辑删除的状态" prop="idField">
-                                        <i-input v-model="table.fieldsMapping.delStatus" type="text"
-                                            placeholder="不填写则默认为 stat" style="width:260px;"
-                                            :disabled="allDml.delete.isPhysicallyDelete" />
-                                        <a @click="showFields=true; toField = 'delStatus'" style="float:right"
-                                            :disabled="allDml.delete.isPhysicallyDelete">选择字段 &nbsp;&nbsp;</a>
-                                    </FormItem>
-
-                                    <!-- <FormItem label="分类标签" prop="tags">
+                                <!-- <FormItem label="分类标签" prop="tags">
                                       <TagsPicker />
                                     </FormItem> -->
 
-                                    <Modal v-model="showFields" title="选择字段" cancel-text="" width="370">
-                                        <ul class="showFieldsList">
-                                            <li v-for="(v, k) in fields" :key="k">
-                                                <label>
-                                                    <div class="fieldsComments">{{table.fieldsComments[k]}}</div> <a
-                                                        @click="table.fieldsMapping[toField] = k; showFields = false;">{{k}}</a>
-                                                </label>
-                                            </li>
-                                        </ul>
-                                    </Modal>
-                                </Form>
+                                <Modal v-model="showFields" title="选择字段" cancel-text="" width="370">
+                                    <ul class="showFieldsList">
+                                        <li v-for="(v, k) in fields" :key="k">
+                                            <label>
+                                                <div class="fieldsComments">{{table.fieldsComments[k]}}</div> <a
+                                                    @click="table.fieldsMapping[toField] = k; showFields = false;">{{k}}</a>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </Modal>
+
+
+                                <div style="margin-top: 15px;text-align: right;color:lightgray;">
+                                    id#{{currentData.id}} 创建人： admin 创建日期：{{currentData.createDate}} 修改人： admin 修改日期
+                                    {{currentData.updateDate}}
+                                </div>
                             </div>
 
                             <div class="main-edit-panel">
@@ -388,7 +437,8 @@
 
         <Modal title="从数据库的表定义选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
             <!--选择表格-->
-            <table-selector :dsid="1" :is-cross-db="dataSource.crossDb" :data-source-id="dataSource.id"></table-selector>
+            <table-selector :dsid="1" :is-cross-db="dataSource.crossDb"
+                :data-source-id="dataSource.id"></table-selector>
         </Modal>
     </div>
 

@@ -1,6 +1,7 @@
 const DBType = { 'MY_SQL': 'MySQL', 'ORACLE': 'Oracle', 'SQL_SERVER': 'Sql Server', 'SPARK': 'Spark', 'SQLITE': 'SQLite', DB2: 'DB2' };
 
 DATASOURCE_API = window.API_ROOT ? API_ROOT + '/data_service/datasource' : '../../data_service/datasource';
+DATA_SERVICE_API = window.API_ROOT ? API_ROOT + '/data_service/admin' : '../../data_service/admin';
 
 Vue.component('Datasource', {
 	template: '#data-source-tpl',
