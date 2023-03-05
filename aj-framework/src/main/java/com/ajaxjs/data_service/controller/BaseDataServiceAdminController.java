@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,8 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 	@GetMapping
 	public List<DataServiceEntity> list(Long projectId) {
 		LOGGER.info("获取表配置列表");
-		String sql = "SELECT d.*, ds.name AS datasourceName FROM " + getDataServiceTableName() + " d LEFT JOIN aj_base.adp_datasource ds ON d.datasource_id = ds.id";
+		String sql = "SELECT d.*, ds.name AS datasourceName FROM " + getDataServiceTableName()
+				+ " d LEFT JOIN aj_base.adp_datasource ds ON d.datasource_id = ds.id";
 
 		if (projectId != null)
 			sql += " WHERE project_id = " + projectId;
@@ -196,6 +198,8 @@ public abstract class BaseDataServiceAdminController extends ProjectService impl
 	@PutMapping
 	@Override
 	public Boolean update(@RequestBody DataServiceEntity entity) {
+		entity.getData();
+
 		try (Connection conn = getConnection()) {
 			JdbcHelper.updateBean(conn, entity, getDataServiceTableName());
 			dataService.init();// 重新加载配置

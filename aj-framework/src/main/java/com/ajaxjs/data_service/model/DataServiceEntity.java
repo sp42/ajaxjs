@@ -27,6 +27,18 @@ public class DataServiceEntity extends BaseModel implements IBaseModel {
 	private Long datasourceId;
 
 	private String datasourceName;
+	
+	private String content;
+	
+	private String tags;
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	/**
 	 * 主键生成策略 1=自增 2=雪花 3=uuid
@@ -141,5 +153,13 @@ public class DataServiceEntity extends BaseModel implements IBaseModel {
 
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 }

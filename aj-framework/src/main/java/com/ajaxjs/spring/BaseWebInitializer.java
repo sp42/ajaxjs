@@ -41,6 +41,7 @@ public abstract class BaseWebInitializer extends BaseSpringWebInitializer implem
 		cxt.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
 		cxt.setInitParameter("contextConfigLocation", mainConfig);
 		cxt.addListener(new ContextLoaderListener()); // 监听器
+		cxt.addListener(new CleanUpMySql());
 
 		if (!"".equals(mainConfig)) {// 防呆设计
 			try {
