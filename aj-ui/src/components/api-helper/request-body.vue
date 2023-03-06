@@ -43,6 +43,7 @@
 
 <script lang="ts">
 import Table from "./table.vue";
+
 export default {
   components: { Table },
   data() {

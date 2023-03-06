@@ -25,7 +25,10 @@ const routes: Array<RouteConfig> = [
     component: () => import('../pages/factory-form-info.vue')
   },
 
-
+  {
+    path: '/api-helper',
+    component: () => import('../components/api-helper/api-helper.vue')
+  },
   {
     path: '/list',
     component: () => import('../pages/list-loader.vue')

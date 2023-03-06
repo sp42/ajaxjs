@@ -1,12 +1,11 @@
-import Vue from 'vue';
+import Vue from 'vue'
+import UiDesigner from './components/api-selector/index.vue';
 import ViewUI from 'view-design';
-import ApiHelper from './api-helper/index.vue';
 import 'view-design/dist/styles/iview.css';
-import '@/assets/common-functions.less';
 
 Vue.config.productionTip = false;
 Vue.use(ViewUI);
 
 new Vue({
-  render: h => h(ApiHelper)
+  render: h => h(UiDesigner)
 }).$mount('#app');
