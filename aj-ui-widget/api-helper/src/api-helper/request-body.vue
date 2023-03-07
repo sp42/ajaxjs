@@ -2,26 +2,24 @@
   <div>
     <RadioGroup v-model="requestType" type="button" size="small">
       <Radio label="Form"></Radio>
-      <Radio label="FormData"></Radio>
-      <Radio label="JSON"></Radio>
+
       <Radio label="Raw"></Radio>
     </RadioGroup>
-
+    <!-- 
     <span v-if="requestType == 'JSON'" class="jsonRootType">JSON 根类型
       <RadioGroup v-model="json.rootType" size="small">
         <Radio label="Object" size="small"></Radio>
         <Radio label="Array"></Radio>
       </RadioGroup>
-    </span>
+    </span>-->
 
     <div style="margin-top: 20px">
       <section v-if="requestType == 'Form'">
         <Table mode="SIMPLE" />
-
       </section>
+
       <section v-if="requestType == 'JSON'">
         <Table mode="SCHEME" />
-
       </section>
 
       <section v-if="requestType == 'Raw'">
