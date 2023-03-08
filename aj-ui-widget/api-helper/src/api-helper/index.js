@@ -11,8 +11,11 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/addon/hint/show-hint.css";
 import "codemirror/theme/base16-light.css";
 
+import xhr from "./xhr";
+
 export default {
     components: { RequestBody, Document, InputTable, codemirror },
+    mixins: [xhr],
     data() {
         return {
             url: {
@@ -68,7 +71,14 @@ export default {
             responseBody: "ddddddd",
         };
     },
+    mounted() {
+
+    },
     methods: {
+        load() {
+            // this.doRequest('GET', 'https://cors-anywhere.herokuapp.com/http://www.mocky.io/v2/5ea172973100006800c19d76');
+            this.doRequest('GET', 'https://api.chucknorris.io/jokes/random');
+        },
         authToken() {
             let token = ""; // 读取粘贴板
             this.requestParams.head.unshift({

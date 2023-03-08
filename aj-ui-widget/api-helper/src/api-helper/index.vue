@@ -16,7 +16,7 @@
           {{ url.prefix }}
         </span>
       </Input>
-      <Button style="width: 8%" type="primary">发送</Button>
+      <Button style="width: 8%" type="primary" @click="load" :disabled="loading">发送</Button>
       <Button style="width: 8%">保存</Button>
     </section>
 
@@ -78,11 +78,14 @@
 
     <Tabs class="response" name="response" value="responseContent" :animated="false">
       <TabPane tab="response" label="返回内容" name="responseContent">
-                <!-- JSON 源码编辑器-->
+        <div style="clear:both;height:30px;font-size:8pt;">
+          <div style="float:right;height:30px;">Elapsed: {{this.response.elapsed}}ms HTTP status code: <span v-html="formatStatusCode()"></span></div>
+        </div>
+        <!-- JSON 源码编辑器-->
         <codemirror
           class="code-editor"
           ref="cm"
-          v-model="requestParams.raw.json"
+          v-model="responseBody"
           :options="cmOption"
           style="height:300px;"
         ></codemirror>
