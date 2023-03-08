@@ -35,20 +35,20 @@ export default {
                 this.response.status = xhr.status;
 
                 if (xhr.readyState === 4) {
-                    console.log(xhr.responseText);
-                    if (!xhr.responseText) {
-                        this.$Message.error('服务端返回空的字符串');
-                        this.loading = false;
-
-                        return;
-                    }
-
-                    // 跨域可能不能获取完整的响应头 https://qzy.im/blog/2020/09/can-not-get-response-header-using-javascript-in-cors-request/
-                    let heads = xhr.getAllResponseHeaders();
-                    heads = heads.split(';').join('\n');
-                    this.responseHead = heads;
-
                     try {
+                        if (!xhr.responseText) {
+                            this.$Message.error('服务端返回空的字符串');
+                            this.loading = false;
+
+                            return;
+                        }
+
+                        // 跨域可能不能获取完整的响应头 https://qzy.im/blog/2020/09/can-not-get-response-header-using-javascript-in-cors-request/
+                        let heads = xhr.getAllResponseHeaders();
+                        heads = heads.split(';').join('\n');
+                        this.responseHead = heads;
+
+
                         var parseContentType = cfg && cfg.parseContentType;
                         switch (parseContentType) {
                             case "text":
@@ -63,10 +63,10 @@ export default {
                         }
                     } catch (e) {
                         alert("HTTP 请求错误:\n" + e + "\nURL: " + url); // 提示用户 异常
+                    } finally {
+                        this.loading = false;
+                        this.response.elapsed = new Date() - el;
                     }
-
-                    this.loading = false;
-                    this.response.elapsed = new Date() - el;
                 }
             };
 
