@@ -1,7 +1,7 @@
 <template>
   <!-- 渲染文档内容 -->
   <div>
-    <Button @click="value3 = true" type="primary">编辑文档</Button>
+    <!-- <Button @click="value3 = true" type="primary">编辑文档</Button> -->
     <Drawer title="编辑文档" v-model="value3" width="1090" :mask-closable="false" :styles="styles">
       <Form :model="documnetObj">
         <Row :gutter="32">

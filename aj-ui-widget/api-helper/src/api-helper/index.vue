@@ -78,11 +78,11 @@
 
     <Tabs class="response" name="response" value="responseContent" :animated="false">
       <TabPane tab="response" label="返回内容" name="responseContent">
-                <!-- JSON 源码编辑器-->
+        <!-- JSON 源码编辑器-->
         <codemirror
           class="code-editor"
           ref="cm"
-          v-model="requestParams.raw.json"
+          v-model="responseBody"
           :options="cmOption"
           style="height:300px;"
         ></codemirror>
@@ -98,7 +98,6 @@
 </template>
 
 <script src="./index.js"></script>
-
 
 <style lang="less" scoped>
 .request {
