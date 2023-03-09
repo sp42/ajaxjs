@@ -2,7 +2,7 @@
   <table class="input-table">
     <thead>
       <th width="50"></th>
-      <th>KEY</th>
+      <th>Key</th>
       <th>Value</th>
       <th>说明</th>
       <th>操作</th>
@@ -32,18 +32,6 @@ export default {
   data() {
     return {
       tableData: this.data,
-      //   tableData: [
-      //     {
-      //       enable: true,
-      //       key: "sdsd",
-      //       value: "sdssds3",
-      //     },
-      //     {
-      //       enable: false,
-      //       key: "sdsd",
-      //       value: "sdssds3",
-      //     },
-      //   ],
     };
   },
   props: {
@@ -60,7 +48,6 @@ export default {
         let tr = input.parentNode.parentNode;
         tr.classList.add("highlight");
       }
-      // console.log(input.parentNode.parentNode.tagName);
     },
     onInoutBlur(e) {
       let input = e.target;
@@ -110,10 +97,6 @@ export default {
     border: 1px solid lightgray !important;
     background-color: white !important;
   }
-
-  // tr:focus {
-  //     background-color: #f9f9f9;
-  // }
 
   tr {
     &.highlight {

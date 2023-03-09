@@ -12,17 +12,17 @@
             <Option value="HEAD">HEAD</Option>
             <Option value="OPTION">OPTION</Option>
           </Select>
-          <Divider type="vertical" />
-          {{ url.prefix }}
+        <!--   <Divider type="vertical" />
+          {{ url.prefix }} -->
         </span>
       </Input>
-      <Button style="width: 8%" type="primary">发送</Button>
-      <Button style="width: 8%">保存</Button>
+      <Button style="width: 8%" type="primary" @click="load" :disabled="loading">发送</Button>
+     <!--  <Button style="width: 8%">保存</Button> -->
     </section>
 
-    <Document />
+   <!--  <Document /> -->
 
-    <Tabs name="request" class="request" value="raw" :animated="false">
+    <Tabs name="request" class="request" v-model="mainTab" :animated="false">
       <TabPane label="请求体 Form" name="form" tab="request">
         <div style="margin:10px 0;">
           content-type
@@ -78,20 +78,17 @@
 
     <Tabs class="response" name="response" value="responseContent" :animated="false">
       <TabPane tab="response" label="返回内容" name="responseContent">
+        <div style="clear:both;height:30px;font-size:8pt;">
+          <div style="float:right;height:30px;">Elapsed: {{this.response.elapsed}}ms HTTP status code: <span v-html="formatStatusCode()"></span></div>
+        </div>
         <!-- JSON 源码编辑器-->
-        <codemirror
-          class="code-editor"
-          ref="cm"
-          v-model="responseBody"
-          :options="cmOption"
-          style="height:300px;"
-        ></codemirror>
+        <codemirror class="code-editor" v-model="responseBody" :options="cmOption" style="height:300px;"></codemirror>
       </TabPane>
       <TabPane tab="response" label="返回头部" name="responseHead">
-        <Input type="textarea" :rows="4" :readonly="true" v-model="responseHead" />
+        <Input type="textarea" :rows="8" :readonly="true" v-model="responseHead" />
       </TabPane>
       <TabPane tab="response" label="请求信息" name="requestHead">
-        <Input type="textarea" :rows="4" :readonly="true" v-model="requestAll" />
+        <Input type="textarea" :rows="8" :readonly="true" v-model="requestAll" />
       </TabPane>
     </Tabs>
   </div>
