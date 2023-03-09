@@ -19,37 +19,28 @@
               element/ant/iview
             </li>
             <li>
-              轻量级，原先打算做一个纯原生的 UI 库，啥都不依赖，后面入坑 vue
-              才只依赖 vue 2
+              轻量级，原先打算做一个纯原生的 UI 库，啥都不依赖，后面入坑 vue 才只依赖 vue 2
             </li>
             <li>
-              简单易懂的代码，不折腾。当然了，是 typescript。不过我没有用 class
-              风格，只是加入参数类型、返回值类型，这就足够了
+              简单易懂的代码，不折腾。当然了，是 typescript。不过我没有用 class 风格，只是加入参数类型、返回值类型，这就足够了
             </li>
             <li>CSS 基于 less.js</li>
           </ul>
           <p class="p">安装 npm i @ajaxjs/ui</p>
 
           <p>
-            <a
-              href="https://www.npmjs.com/package/@ajaxjs/ui"
-              >npm</a
-            >
+            <a href="https://www.npmjs.com/package/@ajaxjs/ui">npm</a>
             |
-            <a
-              href="https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/aj"
-              >源码</a
-            >
+            <a href="https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/aj"
+            >源码</a>
             |
             <a
               target="_blank"
               href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22"
-              >QQ 群：3150067</a
-            >
-            | <a href="mailto:frank@ajaxjs.com">Email</a> |
-            <a target="_blank" href="http://blog.csdn.net/zhangxin09"
-              >作者博客</a
-            >
+            >QQ 群：3150067</a>
+            |
+            <a href="mailto:frank@ajaxjs.com">Email</a> |
+            <a target="_blank" href="http://blog.csdn.net/zhangxin09">作者博客</a>
             <center>©1999-2022 Frank Cheung</center>
           </p>
         </td>
