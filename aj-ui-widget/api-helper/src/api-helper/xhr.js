@@ -3,16 +3,10 @@ export default {
     data() {
         return {
             loading: false,
-            request: {
-                header: null,
-                body: null,
-            },
             response: {
                 readyState: 0,
                 status: 0,
                 elapsed: 0,
-                /*                 header: null,
-                                text: null, */
             },
         };
     },
@@ -23,12 +17,7 @@ export default {
             let xhr = new XMLHttpRequest();
             xhr.open(method, url);
             xhr.timeout = 5000; // 设置超时时间为5秒
-            xhr.ontimeout = () => {
-                // 请求超时后的处理
-                this.loading = false;
-            };
-
-
+            xhr.ontimeout = () => this.loading = false;// 请求超时后的处理
             xhr.onreadystatechange = () => {
                 this.loading = true;
                 this.response.readyState = xhr.readyState;
@@ -48,8 +37,7 @@ export default {
                         heads = heads.split(';').join('\n');
                         this.responseHead = heads;
 
-
-                        var parseContentType = cfg && cfg.parseContentType;
+                        let parseContentType = cfg && cfg.parseContentType;
                         switch (parseContentType) {
                             case "text":
                                 data = responseText;
@@ -70,10 +58,9 @@ export default {
                 }
             };
 
-            let requestAll = method.toUpperCase() + ' ' + url;
+            let requestAll = 'HEAD \n' + method.toUpperCase() + ' ' + url + '\n';
 
             if (cfg && cfg.header) {
-
                 for (let i in cfg.header) {
                     requestAll += i + " : " + cfg.header[i] + '\n';
                     xhr.setRequestHeader(i, cfg.header[i]);
@@ -81,10 +68,9 @@ export default {
             }
 
             if (params)
-                requestAll += params;
+                requestAll += 'BODY:\n' + params;
 
             this.requestAll = requestAll;
-
             xhr.send(params || null);
         },
 
@@ -101,3 +87,14 @@ export default {
         }
     },
 };
+
+function json2fromParams(param) {
+    let result = "";
+
+    for (let name in param) {
+        if (typeof param[name] != "function")
+            result += "&" + name + "=" + encodeURIComponent(param[name]);
+    }
+
+    return result.substring(1);
+}

@@ -18,11 +18,13 @@ export default {
     mixins: [xhr],
     data() {
         return {
+            mainTab: 'form',
             url: {
                 prefix: "https://dd.com",
-                main: "/dfdf",
+                // main: "https://jsonplaceholder.typicode.com/posts",
+                main: "https://httpbin.org/post",
             },
-            httpMethod: "GET",
+            httpMethod: "POST",
 
             cmOption: {
                 tabSize: 4,
@@ -38,10 +40,22 @@ export default {
                     data: [
                         {
                             enable: true,
-                            key: "",
-                            value: "",
+                            key: "param1",
+                            value: "bar",
                             desc: "",
                         },
+                        {
+                            enable: true,
+                            key: "param2",
+                            value: "foo",
+                            desc: "",
+                        },
+                        // {
+                        //     enable: true,
+                        //     key: "",
+                        //     value: "",
+                        //     desc: "",
+                        // },
                     ]
                 },
                 head: [
@@ -54,7 +68,7 @@ export default {
                 ],
                 raw: {
                     contentType: 'application/json',
-                    json: '{"name": "Jack"}',
+                    json: '{ "title": "My post title", "body": "This is the body of my post." }',
                 },
                 queryString: [
                     {
@@ -66,9 +80,9 @@ export default {
                 ],
             },
 
-            requestAll: "dfdfd",
-            responseHead: "dffdfd",
-            responseBody: "ddddddd",
+            requestAll: "",
+            responseHead: "",
+            responseBody: "",
         };
     },
     mounted() {
@@ -76,17 +90,40 @@ export default {
     },
     methods: {
         load() {
-            // this.doRequest('GET', 'https://cors-anywhere.herokuapp.com/http://www.mocky.io/v2/5ea172973100006800c19d76');
-            this.doRequest('GET', 'https://api.chucknorris.io/jokes/random');
+            let params, contentType;
+
+            if ('form' === this.mainTab) {
+                contentType = this.requestParams.form.contentType;
+                params = json2fromParams(this.requestParams.form.data);
+            } else if ('raw' === this.mainTab) {
+                contentType = this.requestParams.raw.contentType;
+                params = this.requestParams.raw.json;
+            }
+
+            this.doRequest(this.httpMethod, this.url.main, params, {
+                header: {
+                    'content-type': contentType
+                }
+            });
         },
         authToken() {
-            let token = ""; // 读取粘贴板
-            this.requestParams.head.unshift({
-                enable: true,
-                key: "Authorization",
-                value: "Bearer " + token,
-                desc: "认证用的 token",
-            });
+            // 读取粘贴板
+            try {
+                navigator.clipboard.readText().then((v) => {
+                    console.log("获取剪贴板成功：", v);
+                    this.requestParams.head.unshift({
+                        enable: true,
+                        key: "Authorization",
+                        value: "Bearer " + v,
+                        desc: "认证用的 token",
+                    });
+                }).catch((v) => {
+                    console.log("获取剪贴板失败: ", v);
+                });
+            } catch (e) {
+                console.log(e);
+                this.$Message.error('不支持读取粘贴板');
+            }
         },
 
         formatJs() {
@@ -96,3 +133,10 @@ export default {
         }
     },
 };
+
+function json2fromParams(arr) {
+    let _arr = [];
+    arr.forEach(({ key, value }) => _arr.push(key + '=' + encodeURIComponent(value)));
+
+    return _arr.join('&');
+}
