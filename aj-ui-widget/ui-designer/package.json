@@ -24,7 +24,8 @@
   ],
   "dependencies": {
     "vue-codemirror": "^4.0.6",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "@ajaxjs/aj-api-helper": "1.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

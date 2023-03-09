@@ -1,23 +1,30 @@
 {
   "name": "@ajaxjs/aj-api-helper",
-  "version": "0.0.1-snapshot",
+  "version": "1.0.0",
   "description": "AJAXJS API Helper",
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.bingosoft.net/cloudappgroup/helper-web.git"
-  },
-  "bugs": {
-    "url": "https://gitlab.bingosoft.net/cloudappgroup/helper-web/issues"
-  },
   "main": "dist/index.js",
   "types": "dist/libs/common.d.ts",
+  "homepage": "https://framework.ajaxjs.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sp42/ajaxjs/tree/master/aj-ui-widget/aj"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/sp42/ajaxjs/issues"
+  },
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "release": "tsc && xcopy src\\libs dist\\libs /s /y /d && xcopy src\\widget dist\\widget /s /y /d && xcopy src\\components dist\\components /s /y /d && copy src\\*.d.ts dist\\ && npm publish --registry=https://packages.aliyun.com/6213a37673741507cb7dec1f/npm/npm-registry/",
-    "release:dev": "tsc && xcopy src\\widget dist\\widget /s /y /d && xcopy src\\components dist\\components /s /y /d && copy src\\*.d.ts dist\\ && npm publish --registry=https://repo.bingosoft.net/repository/npm-snapshot/"
+    "release": "tsc && xcopy src\\api-helper dist\\api-helper /s /y /d && copy src\\*.d.ts dist\\ && npm publish"
   },
-  "author": "sp42",
+  "keywords": [
+    "ajaxjs"
+  ],
+  "author": "sp42 <sp42@qq.com>",
   "license": "Apache License 2.0",
   "files": [
     "dist/"
