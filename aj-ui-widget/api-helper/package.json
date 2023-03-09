@@ -19,6 +19,7 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --entry src/api-helper/index.vue --name apiHelper",
     "release": "tsc && xcopy src\\api-helper dist\\api-helper /s /y /d && copy src\\*.d.ts dist\\ && npm publish"
   },
   "keywords": [
