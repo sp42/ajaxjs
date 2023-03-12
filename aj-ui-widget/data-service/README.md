@@ -1,12 +1,8 @@
+# 可视化 HTTP 请求工具
 
-需要一个 http server 跑这静态页面，原因是 less.js 导入外部 less 必须网络下，file:// 下不行：（
+![Api Helper](https://foruda.gitee.com/images/1678378502563913592/697d70c3_784269.png)
 
-推荐 node 的 http-server，安装：
 
-    npm install --global http-server
+教程 https://blog.csdn.net/zhangxin09/article/details/129391388
 
-启动：
-
-    http-server
-    OR 
-    http-server -c-1 
+[在线演示](https://framework.ajaxjs.com/demo/api-helper/) | [源码](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-ui-widget/api-helper) | [NPM 发布页](https://www.npmjs.com/package/@ajaxjs/aj-api-helper)

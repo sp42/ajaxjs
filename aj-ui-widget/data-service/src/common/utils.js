@@ -1,10 +1,10 @@
+if (!window.aj)
+    aj = {};
+
 // 数据服务 UI 配置
 window.DS_CONFIG = {
     API_ROOT: 'http://localhost:8080/adp/data_service',
 };
-
-if (!window.aj)
-    aj = {};
 
 /**
 * 复制文字到剪切板
