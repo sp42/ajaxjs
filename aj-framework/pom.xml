@@ -106,6 +106,14 @@
 		<!-- <dependency> <groupId>com.ajaxjs</groupId> <artifactId>ajaxjs-javadoc</artifactId> 
 			<version>1.0.1</version> </dependency> -->
 
+		<!-- IDEA 下面没 Tomcat，FOR JAR 启动 -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+			<version>8.5.84</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
