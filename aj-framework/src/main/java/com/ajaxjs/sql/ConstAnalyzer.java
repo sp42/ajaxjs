@@ -98,16 +98,17 @@ import net.sf.jsqlparser.statement.select.SubSelect;
 
 /**
  * 判断表达是否为常量的分析器
- * @author guyadong
  *
+ * @author guyadong
  */
-public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
+public class ConstAnalyzer implements ExpressionVisitor, ItemsListVisitor {
 
-    private static ThreadLocal<Boolean> constFlag = new ThreadLocal<Boolean>(){
+    private static ThreadLocal<Boolean> constFlag = new ThreadLocal<Boolean>() {
         @Override
         protected Boolean initialValue() {
             return true;
-        }};
+        }
+    };
 
     @Override
     public void visit(NullValue value) {
@@ -234,7 +235,7 @@ public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
     public void visit(InExpression expr) {
         if (expr.getLeftExpression() != null) {
             expr.getLeftExpression().accept(this);
-        } 
+        }
     }
 
     @Override
@@ -274,8 +275,8 @@ public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
 
     @Override
     public void visit(Column column) {
-		if (!ParserSupport.isBoolean(column)){
-            constFlag.set(false);            
+        if (!ParserSupport.isBoolean(column)) {
+            constFlag.set(false);
         }
     }
 
@@ -286,19 +287,19 @@ public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
 
     @Override
     public void visit(CaseExpression expr) {
-        constFlag.set(false);        
+        constFlag.set(false);
     }
 
     @Override
     public void visit(WhenClause expr) {
-        constFlag.set(false);   
+        constFlag.set(false);
     }
 
     @Override
     public void visit(ExistsExpression expr) {
         constFlag.set(false);
     }
-   
+
     @Override
     public void visit(AnyComparisonExpression expr) {
         constFlag.set(false);
@@ -456,17 +457,17 @@ public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
 
     @Override
     public void visit(AllColumns allColumns) {
-        
+
     }
 
     @Override
     public void visit(AllTableColumns allTableColumns) {
-        
+
     }
 
     @Override
     public void visit(AllValue allValue) {
-        
+
     }
 
     @Override
@@ -516,22 +517,21 @@ public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
     @Override
     public void visit(ArrayExpression array) {
         array.getObjExpression().accept(this);
-        if (array.getIndexExpression() != null) {
+
+        if (array.getIndexExpression() != null)
             array.getIndexExpression().accept(this);
-        }
-        if (array.getStartIndexExpression() != null) {
+
+        if (array.getStartIndexExpression() != null)
             array.getStartIndexExpression().accept(this);
-        }
-        if (array.getStopIndexExpression() != null) {
+
+        if (array.getStopIndexExpression() != null)
             array.getStopIndexExpression().accept(this);
-        }
     }
 
     @Override
     public void visit(ArrayConstructor aThis) {
-        for (Expression expression : aThis.getExpressions()) {
+        for (Expression expression : aThis.getExpressions())
             expression.accept(this);
-        }
     }
 
     @Override
@@ -552,28 +552,25 @@ public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
     @Override
     public void visit(JsonAggregateFunction expression) {
         Expression expr = expression.getExpression();
-        if (expr!=null) {
+        if (expr != null)
             expr.accept(this);
-        }
-        
+
         expr = expression.getFilterExpression();
-        if (expr!=null) {
+        if (expr != null)
             expr.accept(this);
-        }
     }
 
     @Override
     public void visit(JsonFunction expression) {
-        for (JsonFunctionExpression expr: expression.getExpressions()) {
+        for (JsonFunctionExpression expr : expression.getExpressions())
             expr.getExpression().accept(this);
-        }
     }
 
     @Override
     public void visit(ConnectByRootOperator connectByRootOperator) {
         constFlag.set(false);
     }
-    
+
     @Override
     public void visit(OracleNamedFunctionParameter oracleNamedFunctionParameter) {
         constFlag.set(false);
@@ -589,12 +586,14 @@ public class ConstAnalyzer implements ExpressionVisitor,ItemsListVisitor {
         constFlag.set(false);
     }
 
-    public boolean isConstExpression(Expression expression){
-        if(null != expression){
+    public boolean isConstExpression(Expression expression) {
+        if (null != expression) {
             constFlag.set(true);
             expression.accept(this);
-            return constFlag.get();            
+
+            return constFlag.get();
         }
+
         return false;
     }
 }

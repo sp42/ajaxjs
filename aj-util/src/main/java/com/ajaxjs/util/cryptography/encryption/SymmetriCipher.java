@@ -35,7 +35,7 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 对称算法 SymmetricCipher
- * 
+ *
  * @author sp42 frank@ajaxjs.com
  *
  */
@@ -50,7 +50,7 @@ public class SymmetriCipher {
 
 	/**
 	 * AES 加密
-	 * 
+	 *
 	 * @param str 要加密的内容
 	 * @param key 密钥
 	 * @return 密文，加密后的内容
@@ -66,7 +66,7 @@ public class SymmetriCipher {
 
 	/**
 	 * AES 解密
-	 * 
+	 *
 	 * @param str 密文，要解密的内容
 	 * @param key 密钥
 	 * @return 解密后的内容
@@ -84,7 +84,7 @@ public class SymmetriCipher {
 
 	/**
 	 * DES 加密
-	 * 
+	 *
 	 * @param str 要加密的内容
 	 * @param key 密钥
 	 * @return 密文，加密后的内容
@@ -96,7 +96,7 @@ public class SymmetriCipher {
 
 	/**
 	 * DES 解密
-	 * 
+	 *
 	 * @param str 密文，要解密的内容
 	 * @param key 密钥
 	 * @return 解密后的内容
@@ -109,7 +109,7 @@ public class SymmetriCipher {
 
 	/**
 	 * 定义加密方式 支持以下任意一种算法
-	 * 
+	 *
 	 * <pre>
 	 * DES
 	 * DESede
@@ -120,7 +120,7 @@ public class SymmetriCipher {
 
 	/**
 	 * TripleDES(3DES) 加解密
-	 * 
+	 *
 	 * @param isEnc 是否加密
 	 * @param key   密钥
 	 * @param data  数据
@@ -136,7 +136,7 @@ public class SymmetriCipher {
 
 	/**
 	 * TripleDES(3DES) 加密
-	 * 
+	 *
 	 * @param key  加密密钥，长度为24字节
 	 * @param data 字节数组（根据给定的字节数组构造一个密钥）
 	 * @return 加密结果
@@ -147,7 +147,7 @@ public class SymmetriCipher {
 
 	/**
 	 * TripleDES(3DES) 解密
-	 * 
+	 *
 	 * @param key  密钥
 	 * @param data 需要解密的数据
 	 * @return 解密结果
@@ -160,7 +160,7 @@ public class SymmetriCipher {
 
 	/**
 	 * 定义加密方式 支持以下任意一种算法
-	 * 
+	 *
 	 * <pre>
 	 * PBEWithMD5AndDES
 	 * PBEWithMD5AndTripleDES
@@ -186,7 +186,7 @@ public class SymmetriCipher {
 
 	/**
 	 * PBE 加解密
-	 * 
+	 *
 	 * @param isEnc 是否加密
 	 * @param key   密钥
 	 * @param data  数据
@@ -209,7 +209,7 @@ public class SymmetriCipher {
 
 	/**
 	 * PBE 加密
-	 * 
+	 *
 	 * @param key  加密密钥
 	 * @param data 字节数组(根据给定的字节数组构造一个密钥。 )
 	 * @return 加密结果
@@ -220,7 +220,7 @@ public class SymmetriCipher {
 
 	/**
 	 * PBE 解密
-	 * 
+	 *
 	 * @param key  密钥
 	 * @param data 需要解密的数据
 	 * @return 解密结果
