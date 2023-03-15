@@ -98,8 +98,7 @@ public class JdbcHelper extends JdbcReader {
 			try {
 				ps.executeUpdate();
 
-				// 当保存之后会自动获得数据库返回的主键
-				try (ResultSet rs = ps.getGeneratedKeys()) {
+				try (ResultSet rs = ps.getGeneratedKeys()) {// 当保存之后会自动获得数据库返回的主键
 					if (rs.next())
 						return rs.getObject(1);
 				}
@@ -122,6 +121,42 @@ public class JdbcHelper extends JdbcReader {
 		}
 
 		return newlyId == null ? 0 : (Serializable) newlyId;
+	}
+
+	/**
+	 * 批量插入
+	 * 
+	 * https://blog.csdn.net/C3245073527/article/details/122071045
+	 * 
+	 * @param conn
+	 * @param tableName
+	 * @param fields
+	 * @param values
+	 */
+	public static void createBatch(Connection conn, String tableName, String fields, String values) {
+		long start = System.currentTimeMillis();
+		String sql = "INSERT INTO " + tableName + "(" + fields + ") VALUES " + values;
+		int[] result = null;
+
+		try (PreparedStatement ps = conn.prepareStatement(sql);) {
+			conn.setAutoCommit(false);// 取消自动提交
+
+			ps.addBatch();
+			result = ps.executeBatch();
+			ps.clearBatch();
+
+			conn.commit();// 所有语句都执行完毕后才手动提交sql语句
+		} catch (Throwable e) {
+			try {
+				conn.rollback();// 回滚事务
+			} catch (SQLException ex) {
+				LOGGER.warning(ex);
+			}
+
+			LOGGER.warning(e);
+		}
+
+		LOGGER.info("批量插入完毕 " + (System.currentTimeMillis() - start));
 	}
 
 	/**
@@ -197,6 +232,38 @@ public class JdbcHelper extends JdbcReader {
 	}
 
 	/**
+	 * 根据 SQL 插入数据，数据类型是 Map
+	 * 
+	 * @param conn      数据库连接对象
+	 * @param tableName 表名
+	 * @param fields
+	 * @param values
+	 * @param map       Map 实体
+	 * @return
+	 */
+	public static Serializable createBean(Connection conn, String tableName, String fields, String values, Map<String, Object> map) {
+		String sql = String.format(INSERT_SQL, tableName, fields, values);
+
+		return createBean(conn, sql, map);
+	}
+
+	/**
+	 * 根据 SQL 插入数据，数据类型是 Map
+	 * 
+	 * @param conn 数据库连接对象
+	 * @param sql  INSERT SQL 可以有 #{} 的占位符
+	 * @param map  Map 实体
+	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
+	 */
+	public static Serializable createMap(Connection conn, String sql, Map<String, Object> map) {
+		if (needToReplace(sql, map)) {
+
+		}
+
+		return create(conn, sql);
+	}
+
+	/**
 	 * 新建记录，送入的数据是 Map
 	 *
 	 * @param conn      数据库连接对象
@@ -224,6 +291,26 @@ public class JdbcHelper extends JdbcReader {
 		map.put("id", newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
 
 		return newlyId;
+	}
+
+	private static boolean needToReplace(String sql, Object entity) {
+		return sql.contains("#{") && entity != null;
+	}
+
+	/**
+	 * 根据 SQL 更新数据，数据类型是 Map
+	 * 
+	 * @param conn 数据库连接对象
+	 * @param sql  UPDATE SQL 可以有 #{} 的占位符
+	 * @param map  Map 实体
+	 * @return 成功修改的行数，一般为 1
+	 */
+	public static int updateMap(Connection conn, String sql, Map<String, Object> map) {
+		if (needToReplace(sql, map)) {
+
+		}
+
+		return update(conn, sql);
 	}
 
 	/**
@@ -397,6 +484,33 @@ public class JdbcHelper extends JdbcReader {
 	}
 
 	/**
+	 * 创建语句
+	 */
+	private static final String INSERT_SQL = "INSERT INTO %s (%s) VALUIES (%s)";
+
+	public static Serializable createBean(Connection conn, String tableName, String fields, String values, Object bean) {
+		String sql = String.format(INSERT_SQL, tableName, fields, values);
+
+		return createBean(conn, sql, bean);
+	}
+
+	/**
+	 * 根据 SQL 插入数据，数据类型是 Java Bean
+	 * 
+	 * @param conn 数据库连接对象
+	 * @param sql  INSERT SQL 可以有 #{} 的占位符
+	 * @param bean Bean 实体
+	 * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
+	 */
+	public static Serializable createBean(Connection conn, String sql, Object bean) {
+		if (needToReplace(sql, bean)) {
+
+		}
+
+		return create(conn, sql);
+	}
+
+	/**
 	 * 新建记录，送入的数据是 Bean
 	 *
 	 * @param conn      数据库连接对象
@@ -436,6 +550,22 @@ public class JdbcHelper extends JdbcReader {
 		}
 
 		return newlyId;
+	}
+
+	/**
+	 * 根据 SQL 更新数据，数据类型是 Bean 实体
+	 * 
+	 * @param conn 数据库连接对象
+	 * @param sql  UPDATE SQL 可以有 #{} 的占位符
+	 * @param map  Bean 实体
+	 * @return 成功修改的行数，一般为 1
+	 */
+	public static int updateMap(Connection conn, String sql, Object bean) {
+		if (needToReplace(sql, bean)) {
+
+		}
+
+		return update(conn, sql);
 	}
 
 	/**
