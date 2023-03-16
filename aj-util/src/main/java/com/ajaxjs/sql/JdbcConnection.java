@@ -42,7 +42,7 @@ public class JdbcConnection {
     // jdbc:mysql://192.168.1.3:13306/saas_basecode_sys?characterEncoding=utf-8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
 
     public static Connection getConnection(String ipPort, String dbName, String userName, String password) {
-        String jdbcUrl = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai&user=%s&password=%s";
+        String jdbcUrl = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai&user=%s&password=%s";
         jdbcUrl = String.format(jdbcUrl, ipPort, dbName, userName, password);
 
         return getConnection(jdbcUrl, null);

@@ -29,13 +29,17 @@ public class Jdbc extends JdbcHelper {
 
     public <T> List<T> queryAsBeanList(String sql, Class<T> beanClz, Object... params) {
         try (Connection conn = (this.conn == null ? ds.getConnection() : this.conn)) {
-            List<T> beanList = queryAsBeanList(beanClz, conn, sql, params);
-
-            return ListUtils.getList(beanList);
+            return queryAsBeanList2(sql, beanClz, params);
         } catch (SQLException e) {
             LOGGER.warning(e);
             return Collections.emptyList();
         }
+    }
+
+    public <T> List<T> queryAsBeanList2(String sql, Class<T> beanClz, Object... params) {
+        List<T> beanList = queryAsBeanList(beanClz, conn, sql, params);
+
+        return ListUtils.getList(beanList);
     }
 
     public List<Map<String, Object>> queryAsMapList(String sql, Object... params) {

@@ -52,6 +52,10 @@ public class SnowflakeId {
         this.workerId = workerId;
     }
 
+    public static long get3() {
+        return get2() - new Random().nextInt(90000) + 10000;
+    }
+
     /**
      * 获得下一个ID (该方法是线程安全的)
      *
