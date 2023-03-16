@@ -135,7 +135,7 @@ public class JdbcHelper extends JdbcReader {
 	 */
 	public static void createBatch(Connection conn, String tableName, String fields, String values) {
 		long start = System.currentTimeMillis();
-		String sql = "INSERT INTO " + tableName + "(" + fields + ") VALUES " + values;
+		String sql = "INSERT INTO " + tableName + "(" + fields + ") VALUE " + values;
 		int[] result = null;
 
 		try (PreparedStatement ps = conn.prepareStatement(sql);) {
