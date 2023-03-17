@@ -56,8 +56,7 @@ public class JdbcHelper extends JdbcReader {
      * @param params 插入到 SQL 中的参数，可单个可多个可不填
      * @return PreparedStatement 对象
      */
-    static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, Function<PreparedStatement, T> exe, Connection conn, String sql,
-                            Object... params) {
+    static <T> T initAndExe(BiFunction<Connection, String, PreparedStatement> initPs, Function<PreparedStatement, T> exe, Connection conn, String sql, Object... params) {
         String _sql = JdbcUtil.printRealSql(sql, params);
         LOGGER.infoYellow("SQL-->" + _sql);
         JdbcConnection.addSql(_sql); // 用来保存日志
@@ -96,8 +95,7 @@ public class JdbcHelper extends JdbcReader {
                 ps.executeUpdate();
 
                 try (ResultSet rs = ps.getGeneratedKeys()) {// 当保存之后会自动获得数据库返回的主键
-                    if (rs.next())
-                        return rs.getObject(1);
+                    if (rs.next()) return rs.getObject(1);
                 }
             } catch (SQLException e) {
                 sqlE[0] = e;
@@ -118,6 +116,18 @@ public class JdbcHelper extends JdbcReader {
         }
 
         return newlyId == null ? 0 : (Serializable) newlyId;
+    }
+
+    public static void createBatch(Connection conn, String tableName, List<Object> beans) {
+        List<String> values = new ArrayList<>();
+
+        for (Object bean : beans) {
+            Bean2InsertSql r = bean2InsertSql(bean, tableName);
+
+        }
+
+//        TODO
+//        createBatch(conn, tableName, values);
     }
 
     public static void createBatch(Connection conn, String tableName, String fields, List<String> values) {
@@ -211,8 +221,7 @@ public class JdbcHelper extends JdbcReader {
         sb.append(isInsert ? "INSERT INTO " : "UPDATE ");
         sb.append(tableName + " ");
 
-        if (!isInsert)
-            sb.append("SET");
+        if (!isInsert) sb.append("SET");
 
         sb.append(" ");
 
@@ -226,12 +235,10 @@ public class JdbcHelper extends JdbcReader {
      * @param onField 每当访问一字段时的回调
      */
     private static void everyMap(Map<String, Object> map, BiConsumer<String, Object> onField) {
-        if (map.size() == 0)
-            throw new NullPointerException("该实体没有任何字段和数据");
+        if (map.size() == 0) throw new NullPointerException("该实体没有任何字段和数据");
 
         for (String field : map.keySet()) {
-            if ("id".equals(field))
-                continue; // 忽略 id 字段
+            if ("id".equals(field)) continue; // 忽略 id 字段
 
             onField.accept("`" + field + "`", map.get(field));
         }
@@ -426,8 +433,7 @@ public class JdbcHelper extends JdbcReader {
 
             for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
                 String filedName = property.getName();
-                if ("class".equals(filedName))
-                    continue;
+                if ("class".equals(filedName)) continue;
 
                 Method method = property.getReadMethod();
                 BeanMethod m = new BeanMethod();
@@ -458,12 +464,10 @@ public class JdbcHelper extends JdbcReader {
             BeanMethod info = infoMap.get(fieldName);
             Object value = valueHandler(bean, info);
 
-            if (!info.getIgnoreDB())
-                continue;
+            if (!info.getIgnoreDB()) continue;
 
             if (value != null) {// 有值的才进行操作
-                if ("id".equals(fieldName))
-                    continue; // 忽略 id 字段
+                if ("id".equals(fieldName)) continue; // 忽略 id 字段
 
                 onField.accept(fieldName, value);
             }
@@ -485,8 +489,7 @@ public class JdbcHelper extends JdbcReader {
         } else if (t != null && t.isEnum() && value != null) {
             String str = value.toString();
             return str;
-        } else
-            return value;
+        } else return value;
     }
 
     /**
@@ -517,14 +520,15 @@ public class JdbcHelper extends JdbcReader {
     }
 
     /**
-     * 新建记录，送入的数据是 Bean
-     *
-     * @param conn      数据库连接对象
-     * @param bean      Bean 实体
-     * @param tableName 表格名称
-     * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
+     * Bean 转换为 INSERT SQL 所需的成员
      */
-    public static Serializable createBean(Connection conn, Object bean, String tableName) {
+    public static class Bean2InsertSql {
+        public String fields;
+        public String placeholders;
+        public List<Object> values;
+    }
+
+    public static Bean2InsertSql bean2InsertSql(Object bean, String tableName) {
         List<String> fields = new ArrayList<>(), placeholders = new ArrayList<>();
         List<Object> values = new ArrayList<>();
 
@@ -534,11 +538,30 @@ public class JdbcHelper extends JdbcReader {
             values.add(value);
         });
 
-        StringBuilder sb = initSB(tableName, true);
-        sb.append("(" + String.join(", ", fields) + ")");
-        sb.append(" VALUES (" + String.join(", ", placeholders) + ")");
+        Bean2InsertSql r = new Bean2InsertSql();
+        r.fields = "(" + String.join(", ", fields) + ")";
+        r.placeholders = "(" + String.join(", ", placeholders) + ")";
+        r.values = values;
 
-        Serializable newlyId = create(conn, sb.toString(), values.toArray());
+        return r;
+    }
+
+    /**
+     * 新建记录，送入的数据是 Bean
+     *
+     * @param conn      数据库连接对象
+     * @param bean      Bean 实体
+     * @param tableName 表格名称
+     * @return 新增主键，为兼顾主键类型，返回的类型设为同时兼容 int/long/string 的 Serializable
+     */
+    public static Serializable createBean(Connection conn, Object bean, String tableName) {
+        Bean2InsertSql r = bean2InsertSql(bean, tableName);
+
+        StringBuilder sb = initSB(tableName, true);
+        sb.append("INSERT INTO " + r.fields);
+        sb.append(" VALUES " + r.placeholders);
+
+        Serializable newlyId = create(conn, sb.toString(), r.values.toArray());
 
         try {
             Class<?> idClz = bean.getClass().getMethod("getId").getReturnType();// 根据 getter 推断 id 类型
@@ -549,8 +572,7 @@ public class JdbcHelper extends JdbcReader {
             } else if (Long.class == idClz && newlyId instanceof BigInteger) {
                 newlyId = ((BigInteger) newlyId).longValue();
                 ReflectUtil.executeMethod(bean, "setId", newlyId);
-            } else
-                ReflectUtil.executeMethod(bean, "setId", newlyId); // 直接保存
+            } else ReflectUtil.executeMethod(bean, "setId", newlyId); // 直接保存
         } catch (Throwable e) {
             LOGGER.warning(e);
         }
@@ -615,11 +637,9 @@ public class JdbcHelper extends JdbcReader {
      */
     public static boolean delete(Connection conn, Object bean, String tableName) {
         if (bean instanceof Map) {
-            @SuppressWarnings("unchecked")
-            Map<String, Object> map = (Map<String, Object>) bean;
+            @SuppressWarnings("unchecked") Map<String, Object> map = (Map<String, Object>) bean;
             return deleteById(conn, tableName, (Serializable) map.get("id"));
-        } else
-            return deleteById(conn, tableName, (Serializable) ReflectUtil.executeMethod(bean, "getId"));
+        } else return deleteById(conn, tableName, (Serializable) ReflectUtil.executeMethod(bean, "getId"));
     }
 
     /**

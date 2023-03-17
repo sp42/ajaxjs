@@ -224,14 +224,17 @@ public class StrUtil {
      * @param data
      * @return
      */
-    public static String simpleTpl2(String template, Map<String, String> data) {
+    public static String simpleTpl2(String template, Map<String, Object> data) {
         String result = template;
 
-        for (Map.Entry<String, String> entry : data.entrySet()) {
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
             String key = entry.getKey();
-            String value = entry.getValue();
+            Object value = entry.getValue();
+
+            if (value == null)
+                value = "null";
             String placeholder = "#{" + key + "}";
-            result = result.replace(placeholder, value);
+            result = result.replace(placeholder, value.toString());
         }
 
         return result;
