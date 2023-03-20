@@ -33,7 +33,9 @@ public class LittleSpringBoot {
 
         // 读取项目路径
 //        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("C:\\code\\auth-git\\security-console-sync\\security-console-sync\\src\\main\\webapp").getAbsolutePath());
-        String jspDir = System.getProperty("user.dir") + "\\security-console-sync\\security-console-sync\\src\\main\\webapp";
+        System.out.println(System.getProperty("user.dir"));
+//        String jspDir = System.getProperty("user.dir") + "\\security-console-sync\\security-console-sync\\src\\main\\webapp";
+        String jspDir = System.getProperty("user.dir") + "\\src\\main\\webapp";
         StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(jspDir).getAbsolutePath());
         ctx.setReloadable(false);// 禁止重新载入
         WebResourceRoot resources = new StandardRoot(ctx);// 创建WebRoot
