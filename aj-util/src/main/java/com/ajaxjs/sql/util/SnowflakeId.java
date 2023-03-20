@@ -52,10 +52,6 @@ public class SnowflakeId {
         this.workerId = workerId;
     }
 
-    public static long get3() {
-        return get2() - new Random().nextInt(90000) + 10000;
-    }
-
     /**
      * 获得下一个ID (该方法是线程安全的)
      *
@@ -94,28 +90,15 @@ public class SnowflakeId {
         return timestamp;
     }
 
+    // 实例
+    private final static SnowflakeId INSTANCE = new SnowflakeId(1L);
+
     /**
      * 生成 id
      *
      * @return 雪花 id
      */
     public static synchronized long get() {
-        return new SnowflakeId(1L).nextId();
-    }
-
-    private static long _id = 0;
-
-    public static synchronized long get2() {
-        int randomNumber = 1 + new Random().nextInt(15);
-        long id = new SnowflakeId(randomNumber).nextId();
-
-        if (_id == id) {
-            // 重复
-            id = get2();
-        }
-
-        _id = id;
-
-        return id;
+        return INSTANCE.nextId();
     }
 }

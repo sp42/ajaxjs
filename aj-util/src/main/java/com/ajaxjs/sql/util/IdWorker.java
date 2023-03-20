@@ -73,6 +73,7 @@ public class IdWorker {
 		} else {
 			sequence = 0;
 		}
+
 		// 这儿记录一下最近一次生成id的时间戳，单位是毫秒
 		lastTimestamp = timestamp;
 		// 这儿就是最核心的二进制位运算操作，生成一个64bit的id

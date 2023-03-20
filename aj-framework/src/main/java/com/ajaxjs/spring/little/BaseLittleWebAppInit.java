@@ -22,7 +22,9 @@ public abstract class BaseLittleWebAppInit extends BaseSpringWebInitializer {
         // 注册 Spring 的配置类（替代传统项目中 xml 的 configuration）
         if (getConfigClz() != null)
             ac.register(getConfigClz());
+        ac.setServletContext(servletContext);
         ac.refresh();
+
 
         // 绑定 servlet
         ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcherServlet", new DispatcherServlet(ac));

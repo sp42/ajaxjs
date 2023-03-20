@@ -42,6 +42,11 @@ public class Jdbc extends JdbcHelper {
         return ListUtils.getList(beanList);
     }
 
+    public List<Map<String, Object>>  queryAsMapList2(String sql, Object... params) {
+        List<Map<String, Object>> beanList = queryAsMapList(conn, sql, params);
+        return ListUtils.getList(beanList);
+    }
+
     public List<Map<String, Object>> queryAsMapList(String sql, Object... params) {
         try (Connection conn = (this.conn == null ? ds.getConnection() : this.conn)) {
             List<Map<String, Object>> beanList = queryAsMapList(conn, sql, params);
