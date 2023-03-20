@@ -1,19 +1,17 @@
 package com.ajaxjs.spring;
 
-import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration;
+import javax.servlet.ServletException;
 
 import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import com.ajaxjs.spring.easy_controller.ServiceBeanDefinitionRegistry;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 配置 Spring MVC 实现该接口的类会在 Servlet 容器启动时自动加载并运行
+ * 
+ * 这是依赖 Tomcat（非嵌入式）的使用场景
  *
  * @author Frank Cheung
  */
@@ -31,12 +29,14 @@ public abstract class BaseWebInitializer extends BaseSpringWebInitializer implem
 	}
 
 	@Override
-	public void onStartup(ServletContext cxt) {
+	public void onStartup(ServletContext cxt) throws ServletException {
 		if (cxt == null) // 可能在测试
 			return;
 
+		super.onStartup(cxt);
+		
 		String mainConfig = getMainConfig();
-		cxt.setAttribute("ctx", cxt.getContextPath());
+
 //		servletCxt.setInitParameter("contextConfigLocation", "classpath:applicationContext.xml");
 		cxt.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
 		cxt.setInitParameter("contextConfigLocation", mainConfig);
@@ -59,19 +59,7 @@ public abstract class BaseWebInitializer extends BaseSpringWebInitializer implem
 			}
 		}
 
-		FilterRegistration.Dynamic filterReg = cxt.addFilter("InitMvcRequest", new CharacterEncodingFilter("UTF-8"));
-		filterReg.addMappingForUrlPatterns(null, true, "/*");
-
-//		GenericWebApplicationContext webCxt = new GenericWebApplicationContext();
-		AnnotationConfigWebApplicationContext webCxt = new AnnotationConfigWebApplicationContext();
-		initWeb(cxt, webCxt); // 如果不想在 WebApplicationInitializer 当前类中注入，可以另设一个类专门注入组件
-
-		ServletRegistration.Dynamic registration = cxt.addServlet("dispatcher", new DispatcherServlet(webCxt));
-		registration.addMapping("/");
-		registration.setLoadOnStartup(1);
-
-		initUpload(cxt, registration);
-		LOGGER.info("WEB 程序启动完毕");
+//		initWeb(cxt, webCxt); // 如果不想在 WebApplicationInitializer 当前类中注入，可以另设一个类专门注入组件
 	}
 
 	public ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry(Class<? extends BaseWebInitializer> clz) {
