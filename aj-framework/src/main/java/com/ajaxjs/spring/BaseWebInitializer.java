@@ -30,6 +30,7 @@ public abstract class BaseWebInitializer extends BaseSpringWebInitializer implem
 
 	@Override
 	public void onStartup(ServletContext cxt) throws ServletException {
+		System.out.println("9999999999999999999999999999999");
 		if (cxt == null) // 可能在测试
 			return;
 

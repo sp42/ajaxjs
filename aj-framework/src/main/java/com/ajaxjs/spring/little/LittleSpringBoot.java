@@ -15,7 +15,7 @@ import org.apache.catalina.webresources.StandardRoot;
  */
 public class LittleSpringBoot {
     /**
-     * 启动程序
+     * 嵌入式使用 Tomcat
      *
      * @param port
      */
