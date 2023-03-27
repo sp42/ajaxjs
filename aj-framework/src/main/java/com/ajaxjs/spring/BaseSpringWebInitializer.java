@@ -1,7 +1,7 @@
 package com.ajaxjs.spring;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.web.WebHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
@@ -32,7 +32,6 @@ import javax.servlet.*;
 import javax.servlet.ServletRegistration.Dynamic;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * 通用的配置，可供 classic/little 使用
@@ -238,7 +237,7 @@ public abstract class BaseSpringWebInitializer implements WebApplicationInitiali
             FileHelper.mkDir(jspFolder);
         }
 
-        System.out.println("jspFolder::::::" + Resources.getJarDir());
+//        System.out.println("jspFolder::::::" + Resources.getJarDir());
 //        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("/mycar/mycar-service-4.0/security-oauth2-uam/sync/jsp").getAbsolutePath());
         StandardContext ctx = (StandardContext) tomcat.addWebapp("/", jspFolder);
         ctx.setReloadable(false);// 禁止重新载入

@@ -17,7 +17,7 @@ import com.ajaxjs.fast_doc.doclet.DocModel.MethodInfo;
 import com.ajaxjs.fast_doc.doclet.DocModel.ParameterInfo;
 import com.ajaxjs.fast_doc.doclet.DocModel.WithComment;
 import com.ajaxjs.fast_doc.doclet.JavaDocParser;
-import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.map.JsonHelper;
 

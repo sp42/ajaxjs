@@ -7,7 +7,7 @@ import java.util.Objects;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ajaxjs.sql.util.SnowflakeId;
-import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.web.WebHelper;
 import com.ajaxjs.util.io.FileHelper;
 
 /**

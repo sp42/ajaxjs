@@ -117,7 +117,6 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 
 		return set;
 	}
-
 	
 	protected String resolveBasePackage(String basePackage) {
 		Environment env = ctx.getEnvironment();

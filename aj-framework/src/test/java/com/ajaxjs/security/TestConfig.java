@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.ajaxjs.util.config.EasyConfig;
+import com.ajaxjs.framework.config.EasyConfig;
 import com.ajaxjs.util.cryptography.encryption.SymmetriCipher;
 
 @ContextConfiguration(locations = { "classpath*:applicationContext.xml" })

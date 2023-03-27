@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.ajaxjs.security.web.Handle;
-import com.ajaxjs.security.web.ListCheck;
+import com.ajaxjs.web.security.ListCheck;
 import com.ajaxjs.security.web.checker.SqlInject;
 import com.ajaxjs.security.web.checker.Xss;
 

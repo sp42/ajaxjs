@@ -16,7 +16,7 @@ import com.ajaxjs.data_service.sdk.Caller;
 import com.ajaxjs.data_service.sdk.IDataService;
 import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.entity.BaseEntityConstants;
-import com.ajaxjs.util.TestHelper; 
+import com.ajaxjs.framework.TestHelper;
 
 @ContextConfiguration(classes = TestConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)

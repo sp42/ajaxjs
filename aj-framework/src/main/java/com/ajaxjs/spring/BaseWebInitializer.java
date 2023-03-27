@@ -3,6 +3,7 @@ package com.ajaxjs.spring;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import com.ajaxjs.framework.spring.filter.CleanUpMySql;
 import org.springframework.web.context.ContextLoaderListener;
 
 import com.ajaxjs.spring.easy_controller.ServiceBeanDefinitionRegistry;

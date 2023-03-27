@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.fast_doc.Params;
 import com.ajaxjs.util.ListUtils;
-import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.sun.javadoc.ClassDoc;
 import com.sun.javadoc.Doclet;

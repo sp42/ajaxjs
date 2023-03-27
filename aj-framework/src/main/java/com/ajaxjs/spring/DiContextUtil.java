@@ -20,7 +20,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 
 /**
  * 

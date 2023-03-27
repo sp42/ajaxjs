@@ -8,7 +8,7 @@ import com.ajaxjs.fast_doc.Model.ControllerInfo;
 import com.ajaxjs.fast_doc.annotation.CustomAnnotationParser;
 import com.ajaxjs.fast_doc.annotation.SpringMvcAnnotationParser;
 import com.ajaxjs.fast_doc.doclet.JavaDocParser;
-import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 
 public class TestFastDoc {
 //	@Test

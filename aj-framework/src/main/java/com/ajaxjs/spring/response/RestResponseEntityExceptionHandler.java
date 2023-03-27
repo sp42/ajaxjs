@@ -10,7 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.web.WebHelper;
 
 /**
  * 后端表单、数据校验的异常捕获

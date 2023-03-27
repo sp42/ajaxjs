@@ -8,24 +8,23 @@
  * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package com.ajaxjs.framework;
+package com.ajaxjs.web.google_captcha;
 
-import lombok.Data;
+import com.ajaxjs.framework.ClientAccessFullInfo;
 
 /**
- * 客户端访问的基本两个字段: App Id、App 密钥
+ * 谷歌验证码配置
  *
  * @author Frank Cheung
  */
-@Data
-public abstract class ClientAccessFullInfo {
-    /**
-     * App Id
-     */
-    private String accessKeyId;
+public class GoolgeCaptchaConfig extends ClientAccessFullInfo {
+    private Boolean enable;
 
-    /**
-     * App 密钥
-     */
-    private String accessSecret;
+    public Boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
+    }
 }
