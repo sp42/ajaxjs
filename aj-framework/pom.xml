@@ -15,6 +15,11 @@
 
 	<packaging>jar</packaging>
 
+
+	<properties>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+	</properties>
+
 	<!-- 打包资源文件 -->
 	<build>
 		<pluginManagement>

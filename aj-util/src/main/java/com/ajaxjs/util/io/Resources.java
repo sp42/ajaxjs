@@ -11,6 +11,7 @@
 package com.ajaxjs.util.io;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -20,85 +21,108 @@ import org.springframework.util.StringUtils;
  * 资源工具类
  */
 public class Resources {
-	/**
-	 * 获取 Classpath 根目录下的资源文件
-	 * 
-	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
-	 * @param isDecode 是否解码
-	 * @return 所在工程路径+资源路径，找不到文件则返回 null
-	 */
-	public static String getResourcesFromClasspath(String resource, boolean isDecode) {
-		URL url = Resources.class.getClassLoader().getResource(resource);
-		return url2path(url, isDecode);
-	}
+    /**
+     * 获取 Classpath 根目录下的资源文件
+     *
+     * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
+     * @param isDecode 是否解码
+     * @return 所在工程路径+资源路径，找不到文件则返回 null
+     */
+    public static String getResourcesFromClasspath(String resource, boolean isDecode) {
+        URL url = Resources.class.getClassLoader().getResource(resource);
 
-	/**
-	 * 获取当前类目录下的资源文件
-	 * 
-	 * @param clz      类引用
-	 * @param resource 资源文件名
-	 * @return 当前类的绝对路径，找不到文件则返回 null
-	 */
-	public static String getResourcesFromClass(Class<?> clz, String resource) {
-		return getResourcesFromClass(clz, resource, true);
-	}
+        if (url == null)
+//            throw new RuntimeException("获取资源  " + resource + "失败");
+            return null;
 
-	/**
-	 * 获取当前类目录下的资源文件
-	 * 
-	 * @param clz      类引用
-	 * @param resource 资源文件名
-	 * @param isDecode 是否解码
-	 * @return 当前类的绝对路径，找不到文件则返回 null
-	 */
-	public static String getResourcesFromClass(Class<?> clz, String resource, boolean isDecode) {
-		return url2path(clz.getResource(resource), isDecode);
-	}
+        return url2path(url, isDecode);
+    }
 
-	/**
-	 * 获取 Classpath 根目录下的资源文件
-	 * 
-	 * @param resource 文件名称，输入空字符串这返回 Classpath 根目录。可以支持包目录，例如
-	 *                 com\\ajaxjs\\newfile.txt
-	 * @return 所在工程路径+资源路径，找不到文件则返回 null
-	 */
-	public static String getResourcesFromClasspath(String resource) {
-		return getResourcesFromClasspath(resource, true);
-	}
+    /**
+     * 获取当前类目录下的资源文件
+     *
+     * @param clz      类引用
+     * @param resource 资源文件名
+     * @return 当前类的绝对路径，找不到文件则返回 null
+     */
+    public static String getResourcesFromClass(Class<?> clz, String resource) {
+        return getResourcesFromClass(clz, resource, true);
+    }
 
-	/**
-	 * url.getPath() 返回 /D:/project/a，需要转换一下
-	 * 
-	 * @param url
-	 * @param isDecode 是否解码
-	 * @return
-	 */
-	private static String url2path(URL url, boolean isDecode) {
-		if (url == null)
-			return null;
+    /**
+     * 获取当前类目录下的资源文件
+     *
+     * @param clz      类引用
+     * @param resource 资源文件名
+     * @param isDecode 是否解码
+     * @return 当前类的绝对路径，找不到文件则返回 null
+     */
+    public static String getResourcesFromClass(Class<?> clz, String resource, boolean isDecode) {
+        return url2path(clz.getResource(resource), isDecode);
+    }
 
-		String path;
-		if (isDecode) {
-			path = StringUtils.uriDecode(new File(url.getPath()).toString(), StandardCharsets.UTF_8);
-		} else {
-			path = url.getPath();
-			path = path.startsWith("/") ? path.substring(1) : path;
-		}
+    /**
+     * 获取 Classpath 根目录下的资源文件
+     *
+     * @param resource 文件名称，输入空字符串这返回 Classpath 根目录。可以支持包目录，例如
+     *                 com\\ajaxjs\\newfile.txt
+     * @return 所在工程路径+资源路径，找不到文件则返回 null
+     */
+    public static String getResourcesFromClasspath(String resource) {
+        return getResourcesFromClasspath(resource, true);
+    }
 
-		// path = path.replaceAll("file:\\", "");
-		return path;
-	}
+    /**
+     * url.getPath() 返回 /D:/project/a，需要转换一下
+     *
+     * @param url
+     * @param isDecode 是否解码
+     * @return
+     */
+    private static String url2path(URL url, boolean isDecode) {
+        if (url == null)
+            return null;
 
-	/**
-	 * Java 类文件 去掉后面的 .class 只留下类名
-	 * 
-	 * @param file        Java 类文件
-	 * @param packageName 包名称
-	 * @return 类名
-	 */
-	public static String getClassName(File file, String packageName) {
-		String clzName = file.getName().substring(0, file.getName().length() - 6);
+        String path;
+        if (isDecode) {
+            path = StringUtils.uriDecode(new File(url.getPath()).toString(), StandardCharsets.UTF_8);
+        } else {
+            path = url.getPath();
+            path = path.startsWith("/") ? path.substring(1) : path;
+        }
 
-		return packageName + '.' + clzName;
-	}
+        // path = path.replaceAll("file:\\", "");
+        return path;
+    }
+
+    /**
+     * Java 类文件 去掉后面的 .class 只留下类名
+     *
+     * @param file        Java 类文件
+     * @param packageName 包名称
+     * @return 类名
+     */
+    public static String getClassName(File file, String packageName) {
+        String clzName = file.getName().substring(0, file.getName().length() - 6);
+
+        return packageName + '.' + clzName;
+    }
+
+    /**
+     * 获取正在运行的 JAR 文件的目录
+     * 如果您在 IDE 中运行代码，则该代码可能会返回项目的根目录
+     *
+     * @return
+     */
+    public static String getJarDir() {
+        String jarDir = null;
+
+        try {
+            jarDir = new File(Resources.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+        return jarDir;
+    }
 }

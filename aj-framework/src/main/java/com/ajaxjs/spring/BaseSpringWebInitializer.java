@@ -1,7 +1,9 @@
 package com.ajaxjs.spring;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.util.WebHelper;
 import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.WebResourceRoot;
@@ -30,6 +32,7 @@ import javax.servlet.*;
 import javax.servlet.ServletRegistration.Dynamic;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * 通用的配置，可供 classic/little 使用
@@ -229,24 +232,29 @@ public abstract class BaseSpringWebInitializer implements WebApplicationInitiali
      * @return
      */
     private static StandardContext initContext(Tomcat tomcat) {
-        // 在对应的 host 下面创建一个 context 并制定他的工作路径,会加载该目录下的所有 class 文件,或者静态文件
-//        tomcat.setBaseDir(Thread.currentThread().getContextClassLoader().getResource("").getPath()); // 设置 tomcat 启动后的工作目录
-//        System.out.println(Thread.currentThread().getContextClassLoader().getResource("").getPath());
+        String jspFolder = Resources.getResourcesFromClasspath("META-INF\\resources");// 开放调试阶段，直接读取
+        if (jspFolder == null) {
+            jspFolder = Resources.getJarDir() + "/../webapp"; // 部署阶段。这个并不会实际保存 jsp。因为 jsp 都在 META-INF/resources 里面。但因为下面的 addWebapp() 又需要
+            FileHelper.mkDir(jspFolder);
+        }
 
-//        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("C:\\code\\auth-git\\security-console-sync\\security-console-sync\\src\\main\\webapp").getAbsolutePath());
-        System.out.println(System.getProperty("user.dir"));
-        String jspDir = System.getProperty("user.dir") + "\\security-console-sync\\security-console-sync\\src\\main\\webapp";
-//        String jspDir = System.getProperty("user.dir") + "\\src\\main\\webapp";
-        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(jspDir).getAbsolutePath());
+        System.out.println("jspFolder::::::" + Resources.getJarDir());
+//        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("/mycar/mycar-service-4.0/security-oauth2-uam/sync/jsp").getAbsolutePath());
+        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", jspFolder);
         ctx.setReloadable(false);// 禁止重新载入
-        WebResourceRoot resources = new StandardRoot(ctx);// 创建WebRoot
-        resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes", new File("target/classes").getAbsolutePath(), "/"));// tomcat 内部读取 Class 执行
+
+        // seems not work
+        WebResourceRoot resources = new StandardRoot(ctx);// 创建 WebRoot
+        String classDir = new File("target/classes").getAbsolutePath();
+        resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes", classDir, "/"));// tomcat 内部读取 Class 执行
 
         return ctx;
     }
 
     private static Tomcat initTomcat() {
         Tomcat tomcat = new Tomcat();
+        if (Version.isDebug)
+            tomcat.setBaseDir(Resources.getJarDir()); // 设置 tomcat 启动后的工作目录
         tomcat.enableNaming();
         tomcat.getHost().setAutoDeploy(false);
         tomcat.getHost().setAppBase("webapp");
@@ -277,7 +285,14 @@ public abstract class BaseSpringWebInitializer implements WebApplicationInitiali
     private static void setTomcatDisableScan(StandardContext ctx) {
         StandardJarScanFilter filter = (StandardJarScanFilter) ctx.getJarScanner().getJarScanFilter();
 //        filter.setDefaultTldScan(false);
-        filter.setDefaultPluggabilityScan(false);
+        /*
+            这个对启动 tomcat 时间影响很大
+            又
+            很多 Servlet 3.0 新特性，不能禁掉，比如在 jar 里面放 jsp（部署时候就会这样，但开放阶段不用）。
+            故，用 isDebug 判断下
+        */
+        if (Version.isDebug)
+            filter.setDefaultPluggabilityScan(false);
 //        String oldTldSkip = filter.getTldSkip();
 //        System.out.println("-------" + oldTldSkip);
 //        String newTldSkip = oldTldSkip == null || oldTldSkip.trim().isEmpty() ? "pdq.jar" : oldTldSkip + ",pdq.jar";

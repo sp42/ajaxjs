@@ -26,7 +26,7 @@ public class Version {
 	/**
 	 * 源码磁盘目录
 	 */
-	public static final String SRC_FOLDER = new File(Version.class.getClassLoader().getResource("").getPath()).toString();
+//	public static final String SRC_FOLDER = new File(Version.class.getClassLoader().getResource("").getPath()).toString();
 
 	/**
 	 * 获取操作系统名称
