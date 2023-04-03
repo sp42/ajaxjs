@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataServiceConfig;
 import com.ajaxjs.data_service.service.DataService;
-import com.ajaxjs.spring.BaseWebMvcConfigurer;
+import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
 
 @Configuration
-public class AjFrameworkConfig extends BaseWebMvcConfigurer {
+public class AjFrameworkConfig extends BaseWebMvcConfigure {
 	@Value("${db.url}")
 	private String url;
 

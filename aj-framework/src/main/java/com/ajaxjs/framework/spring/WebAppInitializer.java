@@ -4,6 +4,7 @@ import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import com.ajaxjs.framework.spring.filter.FileUploadHelper;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -21,8 +22,6 @@ import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 public class WebAppInitializer implements WebApplicationInitializer {
-	private static final LogHelper LOGGER = LogHelper.getLog(WebAppInitializer.class);
-	
 	private Class<?>[] clz;
 
 	public WebAppInitializer() {
@@ -57,48 +56,6 @@ public class WebAppInitializer implements WebApplicationInitializer {
 		FilterRegistration.Dynamic filterReg = ctx.addFilter("InitMvcRequest", new UTF8CharsetFilter());
 		filterReg.addMappingForUrlPatterns(null, true, "/*");
 
-		EmbeddedTomcatStarter.springTime = System.currentTimeMillis() - EmbeddedTomcatStarter.startedTime;
+		FileUploadHelper.initUpload(ctx, registration);
 	}
-	
-    /**
-     * YAML 配置文件
-     *
-     * @return YAML 配置文件
-     */
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer properties() {
-    	System.out.println("ddddddddd");
-        PropertySourcesPlaceholderConfigurer cfger = new PropertySourcesPlaceholderConfigurer();
-        cfger.setIgnoreUnresolvablePlaceholders(true);// Don't fail if @Value is not supplied in properties. Ignore if not found
-        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-        ClassPathResource c = new ClassPathResource("application.yml");
-
-        if (c.exists()) {
-            yaml.setResources(c);
-            cfger.setProperties(yaml.getObject());
-        } else LOGGER.warning("未设置 YAML 配置文件");
-
-        return cfger;
-    }
-
-    /**
-     * 全局异常拦截器
-     *
-     * @return 全局异常拦截器
-     */
-    @Bean
-    public GlobalExceptionHandler GlobalExceptionHandler() {
-    	System.out.println("ddddddddd");
-        return new GlobalExceptionHandler();
-    }
-
-    /**
-     * Spring IoC 工具
-     *
-     * @return IoC 工具
-     */
-    @Bean
-    public DiContextUtil DiContextUtil() {
-        return new DiContextUtil();
-    }
 }

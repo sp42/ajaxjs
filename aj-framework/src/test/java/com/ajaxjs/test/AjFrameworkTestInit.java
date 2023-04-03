@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.ajaxjs.spring.BaseWebInitializer;
+import com.ajaxjs.framework.spring.BaseWebInitializer;
 import com.ajaxjs.spring.easy_controller.ServiceBeanDefinitionRegistry;
 
 @Configuration

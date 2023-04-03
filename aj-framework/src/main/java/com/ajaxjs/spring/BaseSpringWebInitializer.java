@@ -1,6 +1,7 @@
 package com.ajaxjs.spring;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.spring.filter.FileUploadHelper;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.web.WebHelper;
 import com.ajaxjs.util.io.FileHelper;
@@ -82,22 +83,9 @@ public abstract class BaseSpringWebInitializer implements WebApplicationInitiali
         FilterRegistration.Dynamic filterReg = cxt.addFilter("InitMvcRequest", new CharacterEncodingFilter("UTF-8"));
         filterReg.addMappingForUrlPatterns(null, true, "/*");
 
-        initUpload(cxt, registration);
+        FileUploadHelper.initUpload(cxt, registration);
 
         LOGGER.info("WEB 程序启动完毕");
-    }
-
-    /**
-     * 初始化文件上传
-     *
-     * @param cxt
-     * @param registration
-     */
-    protected static void initUpload(ServletContext cxt, Dynamic registration) {
-        String tempDir = WebHelper.mappath(cxt, "upload_temp");
-        // 如果不存在则创建
-        FileHelper.mkDir(tempDir);
-        registration.setMultipartConfig(new MultipartConfigElement(tempDir, 50000000, 50000000, 0));// 文件上传
     }
 
     /**
@@ -107,10 +95,7 @@ public abstract class BaseSpringWebInitializer implements WebApplicationInitiali
      */
     @Bean(name = "multipartResolver") // 此处 id 为固定写法，不能随便取名
     public MultipartResolver multipartResolver() {
-        StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
-        resolver.setResolveLazily(true);// resolveLazily 属性启用是为了推迟文件解析，以在在 UploadAction 中捕获文件大小异常
-
-        return resolver;
+        return FileUploadHelper.multipartResolver();
     }
 
     /**
@@ -162,7 +147,6 @@ public abstract class BaseSpringWebInitializer implements WebApplicationInitiali
 
         @Override
         public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-
             request.setCharacterEncoding("UTF-8");
             response.setContentType("text/html; charset=UTF-8");
             response.setCharacterEncoding("UTF-8"); // 避免乱码
