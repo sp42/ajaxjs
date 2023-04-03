@@ -39,13 +39,23 @@ import com.ajaxjs.util.logger.LogHelper;
 public class JdbcConnection {
     private static final LogHelper LOGGER = LogHelper.getLog(JdbcConnection.class);
 
-    // jdbc:mysql://192.168.1.3:13306/saas_basecode_sys?characterEncoding=utf-8&useSSL=false&autoReconnect=true&serverTimezone=Asia/Shanghai
-
     public static Connection getConnection(String ipPort, String dbName, String userName, String password) {
-        String jdbcUrl = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai&user=%s&password=%s";
-        jdbcUrl = String.format(jdbcUrl, ipPort, dbName, userName, password);
+        String jdbcUrl = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai";
+        jdbcUrl = String.format(jdbcUrl, ipPort, dbName);
 
-        return getConnection(jdbcUrl, null);
+        Connection conn = null;
+
+        try {
+            // 有时不能把 user 和 password 写在第一个 jdbc 连接字符串上 那样会连不通
+            // 分开 user 和 password 就可以
+            conn = DriverManager.getConnection(jdbcUrl, userName, password);
+            LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            LOGGER.warning("数据库连接失败！", e);
+        }
+
+        return conn;
     }
 
     /**
