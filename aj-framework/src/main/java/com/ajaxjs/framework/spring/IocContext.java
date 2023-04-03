@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.spring;
 
-import com.ajaxjs.spring.GlobalExceptionHandler;
+import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.beans.BeansException;

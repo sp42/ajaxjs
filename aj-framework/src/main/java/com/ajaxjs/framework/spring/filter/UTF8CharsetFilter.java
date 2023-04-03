@@ -1,4 +1,4 @@
-package com.ajaxjs.spring.filter;
+package com.ajaxjs.framework.spring.filter;
 
 import java.io.IOException;
 

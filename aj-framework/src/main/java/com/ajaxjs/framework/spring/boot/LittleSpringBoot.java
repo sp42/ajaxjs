@@ -1,4 +1,4 @@
-package com.ajaxjs.spring.little;
+package com.ajaxjs.framework.spring.boot;
 
 import java.io.File;
 

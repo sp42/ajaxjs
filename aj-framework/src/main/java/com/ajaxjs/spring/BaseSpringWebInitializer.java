@@ -1,6 +1,7 @@
 package com.ajaxjs.spring;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.web.WebHelper;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.Resources;
