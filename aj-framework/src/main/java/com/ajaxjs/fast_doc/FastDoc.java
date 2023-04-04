@@ -55,9 +55,9 @@ public class FastDoc {
         loadControllersDoc(CustomAnnotationParser.class, dir, clazzs);
     }
 
-    static class MyComparator implements Comparator<Class> {
+    static class MyComparator implements Comparator<Class<?>> {
         @Override
-        public int compare(Class o1, Class o2) {
+        public int compare(Class<?> o1, Class<?> o2) {
             return o1.getName().length() > o1.getName().length() ? -1 : 1;
         }
     }
