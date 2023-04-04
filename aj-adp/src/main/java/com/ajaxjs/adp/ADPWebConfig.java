@@ -16,11 +16,11 @@ import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataServiceConfig;
 import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.framework.config.EasyConfig;
-import com.ajaxjs.spring.BaseWebMvcConfigurer;
+import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
 import com.ajaxjs.spring.response.MyJsonConverter;
 
 @Configuration
-public class ADPWebConfig extends BaseWebMvcConfigurer {
+public class ADPWebConfig extends BaseWebMvcConfigure {
 	/**
 	 * 跨域
 	 *
