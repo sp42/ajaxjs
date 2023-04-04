@@ -196,7 +196,7 @@ public abstract class BaseSpringWebInitializer implements WebApplicationInitiali
         ctx.addApplicationEventListener(new ContextLoaderListener(ac));
 
         //注册前端控制器
-        Wrapper servlet = tomcat.addServlet(ctx, "dispatcherServlet", new DispatcherServlet(ac));
+        Wrapper servlet = Tomcat.addServlet(ctx, "dispatcherServlet", new DispatcherServlet(ac));
         servlet.setLoadOnStartup(1);
         servlet.addMapping("/");
 

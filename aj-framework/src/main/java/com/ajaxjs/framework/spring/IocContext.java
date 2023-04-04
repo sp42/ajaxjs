@@ -1,8 +1,8 @@
 package com.ajaxjs.framework.spring;
 
-import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.logger.LogHelper;
+import java.util.Locale;
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -12,8 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.Locale;
-import java.util.Map;
+import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 提供一种方法快速获取 Spring 注入的 bean，均为静态方法
@@ -29,7 +29,7 @@ public class IocContext implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
-        this.context = context;
+    	IocContext.context = context;
     }
 
     /**

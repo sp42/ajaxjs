@@ -2,7 +2,7 @@ package com.ajaxjs.spring;
 
 import org.junit.Test;
 
-import com.ajaxjs.framework.spring.boot.EmbeddedTomcatStarter;
+import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
 
 public class TestEmbeddedTomcat {
 	@Test

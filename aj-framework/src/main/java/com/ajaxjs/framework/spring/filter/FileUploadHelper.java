@@ -4,20 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import com.ajaxjs.framework.spring.boot.EmbeddedTomcatStarter;
-import com.ajaxjs.spring.DiContextUtil;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.ajaxjs.sql.util.SnowflakeId;
-import com.ajaxjs.web.WebHelper;
-import com.ajaxjs.util.io.FileHelper;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
-
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
+
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+
+import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
+import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.sql.util.SnowflakeId;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.web.WebHelper;
 
 /**
  * 文件上传的辅助类

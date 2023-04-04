@@ -5,6 +5,7 @@
 package com.ajaxjs.framework;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,54 +17,55 @@ import java.util.List;
  * @author sp42 frank@ajaxjs.com
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class PageResult<T> extends ArrayList<T> {
-    private static final long serialVersionUID = 543109149479031294L;
+	private static final long serialVersionUID = 543109149479031294L;
 
-    private int totalCount; // 总记录数
-    private int start; // 从第几笔记录开始
-    private int pageSize; // 每页大小
-    private int totalPage; // 总页数
-    private int currentPage; // 当前第几页
-    private boolean isZero; // 是否没有数据，就是查询了之后，一条记录符合都没有
+	private int totalCount; // 总记录数
+	private int start; // 从第几笔记录开始
+	private int pageSize; // 每页大小
+	private int totalPage; // 总页数
+	private int currentPage; // 当前第几页
+	private boolean isZero; // 是否没有数据，就是查询了之后，一条记录符合都没有
 
-    /**
-     * 分页的逻辑运算
-     */
-    public void page() {
-        int totalPage = getTotalCount() / getPageSize(), yushu = getTotalCount() % getPageSize();
+	/**
+	 * 分页的逻辑运算
+	 */
+	public void page() {
+		int totalPage = getTotalCount() / getPageSize(), yushu = getTotalCount() % getPageSize();
 
-        totalPage = (yushu == 0 ? totalPage : totalPage + 1);
-        setTotalPage(totalPage);
+		totalPage = (yushu == 0 ? totalPage : totalPage + 1);
+		setTotalPage(totalPage);
 
-        int currentPage = (getStart() / getPageSize()) + 1;
+		int currentPage = (getStart() / getPageSize()) + 1;
 
-        setCurrentPage(currentPage);
-    }
+		setCurrentPage(currentPage);
+	}
 
-    /**
-     * 默认分页大小
-     */
-    public static final int DEFAULT_PAGE_SIZE = 12;
+	/**
+	 * 默认分页大小
+	 */
+	public static final int DEFAULT_PAGE_SIZE = 12;
 
-    /**
-     * 列表不分页，转换为 PageResult
-     *
-     * @param <T>  实体类型
-     * @param list 普通列表
-     * @return 分页结果
-     */
-    public static <T> PageResult<T> list2PageList(List<T> list) {
-        PageResult<T> result = new PageResult<>();
-        result.addAll(list);
-        result.setPageSize(list.size());
-        result.setTotalCount(list.size());
+	/**
+	 * 列表不分页，转换为 PageResult
+	 *
+	 * @param <T>  实体类型
+	 * @param list 普通列表
+	 * @return 分页结果
+	 */
+	public static <T> PageResult<T> list2PageList(List<T> list) {
+		PageResult<T> result = new PageResult<>();
+		result.addAll(list);
+		result.setPageSize(list.size());
+		result.setTotalCount(list.size());
 
-        return result;
-    }
+		return result;
+	}
 
-    /*
-     * 分页时高效的总页数计算 我们一般分页是这样来计算页码的： int row=200; //记录总数 int page=5;//每页数量 int
-     * count=row%5==0?row/page:row/page+1; 上面这种是用的最多的! 那么下面我们来一种最简单的，不用任何判断！ 看代码：
-     * int row=21; int pageCount=5; int sum=(row-1)/pageCount+1;//这样就计算好了页码数量，逢1进1
-     */
+	/*
+	 * 分页时高效的总页数计算 我们一般分页是这样来计算页码的： int row=200; //记录总数 int page=5;//每页数量 int
+	 * count=row%5==0?row/page:row/page+1; 上面这种是用的最多的! 那么下面我们来一种最简单的，不用任何判断！ 看代码：
+	 * int row=21; int pageCount=5; int sum=(row-1)/pageCount+1;//这样就计算好了页码数量，逢1进1
+	 */
 }
