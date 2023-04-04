@@ -25,7 +25,7 @@ import com.ajaxjs.data_service.model.DataSourceInfo;
 import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.framework.IBaseController;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
+import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.util.DataBaseMetaHelper;

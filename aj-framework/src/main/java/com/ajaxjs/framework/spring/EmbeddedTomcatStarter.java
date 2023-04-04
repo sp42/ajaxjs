@@ -139,7 +139,14 @@ public class EmbeddedTomcatStarter {
 		tomcat.getHost().setAutoDeploy(false);
 		tomcat.getHost().setAppBase("webapp");
 
-		close();
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				LOGGER.info("关闭 Tomcat");
+				tomcat.destroy();
+			} catch (LifecycleException e) {
+				LOGGER.warning(e);
+			}
+		}));
 	}
 
 	public static String getDevelopJspFolder() {
@@ -200,17 +207,12 @@ public class EmbeddedTomcatStarter {
 //      filter.setTldSkip(newTldSkip);
 	}
 
-	public void close() {
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			try {
-				LOGGER.info("关闭 Tomcat");
-				tomcat.destroy();
-			} catch (LifecycleException e) {
-				LOGGER.warning(e);
-			}
-		}));
-	}
-
+	/**
+	 * 启动 Web 程序
+	 * 
+	 * @param port 端口
+	 * @param clz  配置类列表
+	 */
 	public static void start(int port, Class<?>... clz) {
 		new EmbeddedTomcatStarter().init(port, clz);
 	}

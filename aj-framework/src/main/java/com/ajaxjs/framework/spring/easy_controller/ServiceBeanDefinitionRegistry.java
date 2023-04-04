@@ -1,4 +1,4 @@
-package com.ajaxjs.spring.easy_controller;
+package com.ajaxjs.framework.spring.easy_controller;
 
 import java.io.IOException;
 import java.util.LinkedHashSet;
@@ -10,10 +10,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -22,6 +19,7 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 
+import com.ajaxjs.framework.spring.easy_controller.anno.InterfaceBasedController;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -30,7 +28,7 @@ import com.ajaxjs.util.logger.LogHelper;
  * @author Frank Cheung sp42@qq.com
  *
  */
-public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPostProcessor, ResourceLoaderAware, ApplicationContextAware {
+public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPostProcessor, ResourceLoaderAware {
 	private static final LogHelper LOGGER = LogHelper.getLog(ServiceBeanDefinitionRegistry.class);
 
 	/**
@@ -80,7 +78,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 			registry.registerBeanDefinition(beanClazz.getSimpleName(), def);
 		}
 	}
-	
+
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory factory) throws BeansException {
 	}
@@ -97,7 +95,8 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 	 */
 	private Set<Class<?>> scannerPackages(String basePackage) {
 		Set<Class<?>> set = new LinkedHashSet<>();
-		String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
+		String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + ClassUtils.convertClassNameToResourcePath(basePackage) + '/'
+				+ DEFAULT_RESOURCE_PATTERN;
 
 		try {
 			Resource[] resources = resolver.getResources(packageSearchPath);
@@ -117,13 +116,6 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 
 		return set;
 	}
-	
-	protected String resolveBasePackage(String basePackage) {
-		Environment env = ctx.getEnvironment();
-		String holders = env.resolveRequiredPlaceholders(basePackage);
-
-		return ClassUtils.convertClassNameToResourcePath(holders);
-	}
 
 	private ResourcePatternResolver resolver;
 
@@ -133,11 +125,12 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 		metadataReaderFactory = new CachingMetadataReaderFactory(loader);
 	}
 
-	private ApplicationContext ctx;
-
-	@Override
-	public void setApplicationContext(ApplicationContext cxt) throws BeansException {
-		this.ctx = cxt;
+	/**
+	 * 
+	 * @param clz
+	 * @return
+	 */
+	public static ServiceBeanDefinitionRegistry init(Class<? > clz) {
+		return new ServiceBeanDefinitionRegistry(clz.getPackage().getName());
 	}
-
 }
