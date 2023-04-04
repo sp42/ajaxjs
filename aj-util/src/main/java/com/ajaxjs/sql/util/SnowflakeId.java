@@ -1,7 +1,5 @@
 package com.ajaxjs.sql.util;
 
-import java.util.Random;
-
 /**
  * Twitter 的分布式自增ID算法 Snowflake:雪花生成器。
  * <p>

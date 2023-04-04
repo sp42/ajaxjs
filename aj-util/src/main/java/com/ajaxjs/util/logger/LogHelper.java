@@ -26,10 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import com.ajaxjs.util.io.Resources;
-import org.springframework.util.StringUtils;
-
 import com.ajaxjs.Version;
+import com.ajaxjs.util.io.Resources;
 
 /**
  * 自定义日志工具类，封装了 Java 自带的日志类 java.util.logging.Logger。

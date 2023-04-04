@@ -1,4 +1,4 @@
-package com.ajaxjs.util.binrary;
+package com.ajaxjs.util;
 
 import java.util.*;
 

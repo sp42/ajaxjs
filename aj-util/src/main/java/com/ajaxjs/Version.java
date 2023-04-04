@@ -10,8 +10,6 @@
  */
 package com.ajaxjs;
 
-import java.io.File;
-
 import com.ajaxjs.util.logger.LogHelper;
 
 /**

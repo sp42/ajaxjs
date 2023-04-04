@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.ajaxjs.adp.TestConfig;
 import com.ajaxjs.data_service.model.DataSourceInfo;
-import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.framework.TestHelper;
 
 @ContextConfiguration(classes = TestConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)

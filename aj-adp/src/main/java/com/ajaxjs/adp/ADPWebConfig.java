@@ -15,9 +15,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import com.ajaxjs.data_service.DataSerivceUtils;
 import com.ajaxjs.data_service.model.DataServiceConfig;
 import com.ajaxjs.data_service.service.DataService;
+import com.ajaxjs.framework.config.EasyConfig;
 import com.ajaxjs.spring.BaseWebMvcConfigurer;
 import com.ajaxjs.spring.response.MyJsonConverter;
-import com.ajaxjs.util.config.EasyConfig;
 
 @Configuration
 public class ADPWebConfig extends BaseWebMvcConfigurer {
