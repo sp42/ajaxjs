@@ -1,12 +1,18 @@
 package com.ajaxjs.spring;
 
-import com.ajaxjs.Version;
-import com.ajaxjs.framework.spring.filter.FileUploadHelper;
-import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
-import com.ajaxjs.web.WebHelper;
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.Resources;
-import com.ajaxjs.util.logger.LogHelper;
+import java.io.File;
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration.Dynamic;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.Wrapper;
@@ -27,13 +33,14 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.*;
-import javax.servlet.ServletRegistration.Dynamic;
-import java.io.File;
-import java.io.IOException;
+import com.ajaxjs.Version;
+import com.ajaxjs.framework.spring.filter.FileUploadHelper;
+import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.Resources;
+import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 通用的配置，可供 classic/little 使用
