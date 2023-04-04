@@ -1,4 +1,4 @@
-package com.ajaxjs.spring.response;
+package com.ajaxjs.framework.spring.response;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.spring.easy_controller.ControllerProxy;
+import com.ajaxjs.framework.spring.easy_controller.ControllerProxy;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 

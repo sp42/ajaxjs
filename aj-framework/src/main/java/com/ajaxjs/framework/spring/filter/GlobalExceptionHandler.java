@@ -11,7 +11,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.framework.spring.ICustomException;
-import com.ajaxjs.spring.response.ResponseResult;
+import com.ajaxjs.framework.spring.response.ResponseResult;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 

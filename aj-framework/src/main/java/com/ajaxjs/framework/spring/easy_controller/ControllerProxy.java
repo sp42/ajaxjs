@@ -1,10 +1,12 @@
-package com.ajaxjs.spring.easy_controller;
+package com.ajaxjs.framework.spring.easy_controller;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import org.springframework.util.ReflectionUtils;
 
+import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
+import com.ajaxjs.framework.spring.easy_controller.anno.InterfaceBasedController;
 import com.ajaxjs.spring.DiContextUtil;
 
 /**

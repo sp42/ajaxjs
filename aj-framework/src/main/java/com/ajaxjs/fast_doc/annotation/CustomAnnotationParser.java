@@ -6,9 +6,9 @@ import java.lang.reflect.Parameter;
 import com.ajaxjs.fast_doc.Model.ArgInfo;
 import com.ajaxjs.fast_doc.Model.Item;
 import com.ajaxjs.fast_doc.Model.Return;
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
-import com.ajaxjs.spring.easy_controller.Example;
-import com.ajaxjs.spring.easy_controller.PathForDoc;
+import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
+import com.ajaxjs.framework.spring.easy_controller.anno.Example;
+import com.ajaxjs.framework.spring.easy_controller.anno.PathForDoc;
 
 /**
  * 自定义注解的提取器

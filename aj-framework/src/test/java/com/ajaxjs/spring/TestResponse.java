@@ -2,7 +2,7 @@ package com.ajaxjs.spring;
 
 import org.junit.Test;
 
-import com.ajaxjs.spring.response.ResponseResult;
+import com.ajaxjs.framework.spring.response.ResponseResult;
 
 public class TestResponse {
 	@Test

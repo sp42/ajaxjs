@@ -1,4 +1,4 @@
-package com.ajaxjs.spring.response;
+package com.ajaxjs.framework.spring.response;
 
 import lombok.Data;
 

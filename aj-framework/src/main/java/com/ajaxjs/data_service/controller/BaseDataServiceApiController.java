@@ -16,7 +16,7 @@ import com.ajaxjs.data_service.DataServiceConstant;
 import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.service.DataService;
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
+import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import com.ajaxjs.web.WebHelper;
 
 /**

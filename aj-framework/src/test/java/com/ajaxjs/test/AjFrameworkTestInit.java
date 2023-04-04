@@ -5,7 +5,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import com.ajaxjs.framework.spring.BaseWebInitializer;
-import com.ajaxjs.spring.easy_controller.ServiceBeanDefinitionRegistry;
+import com.ajaxjs.framework.spring.easy_controller.ServiceBeanDefinitionRegistry;
 
 @Configuration
 //@EnableWebMvc

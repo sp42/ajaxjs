@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ajaxjs.fast_doc.InnerClass.HelloBean;
 import com.ajaxjs.fast_doc.InnerClass.HelloWorld;
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
-import com.ajaxjs.spring.easy_controller.Example;
+import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
+import com.ajaxjs.framework.spring.easy_controller.anno.Example;
 
 /**
  * 抵近侦察区域控制器

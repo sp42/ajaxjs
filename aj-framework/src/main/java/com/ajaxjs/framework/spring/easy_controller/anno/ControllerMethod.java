@@ -1,4 +1,4 @@
-package com.ajaxjs.spring.easy_controller;
+package com.ajaxjs.framework.spring.easy_controller.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
