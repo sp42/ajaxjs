@@ -10,5 +10,4 @@ public class Project extends BaseModel {
 	 * 配置，JSON 格式
 	 */
 	private String config;
-
 }
