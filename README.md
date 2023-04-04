@@ -6,10 +6,10 @@
 [![QQ群](https://framework.ajaxjs.com/static/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22) 
 
 
-提供全栈的、分布式的、简单的基础支撑平台，开源、免费。
+提供全栈的、简单的、轻量级的基础支撑平台，开源、免费。
 
-- 前端：TypeScript + Vue.js 2 + iView UI + Less.js + Webpack
-- 后端：Java 1.8 + Tomcat 8.5 + MySQL 5.8 + Spring 5 + Dubbo 3
+- 前端：TypeScript + Vue.js 2 + iView UI
+- 后端：Java 1.8 + Tomcat + MySQL + Spring 
 
 [文档 Wiki](../../wikis) | [在线演示](https://cp-service.ajaxjs.com/demo/)
 
