@@ -15,7 +15,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.ajaxjs.entity.BaseEntityConstants;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.date.DateUtil;

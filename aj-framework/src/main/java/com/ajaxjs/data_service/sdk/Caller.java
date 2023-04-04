@@ -21,7 +21,7 @@ import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.Identity;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.sql.util.geo.LocationPoint;
 import com.ajaxjs.util.MappingValue;
 import com.ajaxjs.util.ReflectUtil;

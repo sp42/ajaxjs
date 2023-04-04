@@ -3,7 +3,6 @@ package com.ajaxjs.framework.spring;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.ShowControllerInterceptor;
 import com.ajaxjs.framework.spring.response.MyJsonConverter;
-import com.ajaxjs.spring.DiContextUtil;
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;

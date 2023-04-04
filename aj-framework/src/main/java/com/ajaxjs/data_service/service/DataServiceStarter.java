@@ -16,7 +16,7 @@ import com.ajaxjs.data_service.model.DataServiceDml;
 import com.ajaxjs.data_service.model.DataServiceEntity;
 import com.ajaxjs.data_service.model.DataServiceFieldsMapping;
 import com.ajaxjs.data_service.model.DataSourceInfo;
-import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.util.StrUtil;

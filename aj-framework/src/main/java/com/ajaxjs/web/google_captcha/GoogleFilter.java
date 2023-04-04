@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.net.http.Post;
-import com.ajaxjs.spring.DiContextUtil;
 
 /**
  * 校验核心

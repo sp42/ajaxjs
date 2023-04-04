@@ -5,7 +5,7 @@ import java.util.Map;
 import com.ajaxjs.data_service.DataServiceConstant;
 import com.ajaxjs.data_service.model.ServiceContext;
 import com.ajaxjs.data_service.plugin.IPlugin;
-import com.ajaxjs.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.DiContextUtil;
 
 /**
  * 保存租户信息
