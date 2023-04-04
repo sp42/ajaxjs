@@ -7,6 +7,7 @@ import javax.servlet.ServletRegistration.Dynamic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -18,24 +19,17 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 配置 Spring MVC 实现该接口的类会在 Servlet 容器启动时自动加载并运行
- * <p>
- * 这是依赖 Tomcat（非嵌入式）的使用场景
  *
  * @author Frank Cheung
  */
 public abstract class BaseWebInitializer implements WebApplicationInitializer {
 	private static final LogHelper LOGGER = LogHelper.getLog(BaseWebInitializer.class);
 
-//	/**
-//	 * 可以不用子类实现
-//	 */
-//	@Override
-//	public String getMainConfig() {
-////		System.out.println(getClass().getName());
-////		return "com.ajaxjs.adp.ADPWebInit.ScanComponent";
-//		return getClass().getName() + ".ScanComponent";
-//	}
-
+	/**
+	 * 这是依赖 Tomcat（非嵌入式）的使用场景
+	 *
+	 * @param cxt the {@code ServletContext} to initialize
+	 */
 	@Override
 	public void onStartup(ServletContext cxt) {
 		if (cxt == null) // 可能在测试
@@ -78,8 +72,8 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer {
 		ac.refresh();
 		ac.registerShutdownHook();
 
-//		ctx.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
-//		ctx.addListener(new ContextLoaderListener()); // 监听器
+		ctx.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+		ctx.addListener(new ContextLoaderListener()); // 监听器
 		ctx.setAttribute("ctx", ctx.getContextPath()); // 为 JSP 提供 shorthands
 
 		// 绑定 servlet
