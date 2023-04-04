@@ -212,6 +212,6 @@ public class EmbeddedTomcatStarter {
 	}
 
 	public static void start(int port, Class<?>... clz) {
-//		new EmbeddedTomcatStarter().init(port, clz);
+		new EmbeddedTomcatStarter().init(port, clz);
 	}
 }
