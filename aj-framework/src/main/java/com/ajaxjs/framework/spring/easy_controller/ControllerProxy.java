@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 
 import org.springframework.util.ReflectionUtils;
 
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import com.ajaxjs.framework.spring.easy_controller.anno.InterfaceBasedController;
-import com.ajaxjs.spring.DiContextUtil;
 
 /**
  * 通过动态代理执行控制器

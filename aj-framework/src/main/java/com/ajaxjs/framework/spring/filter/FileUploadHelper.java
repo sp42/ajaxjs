@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
-import com.ajaxjs.spring.DiContextUtil;
 import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.web.WebHelper;

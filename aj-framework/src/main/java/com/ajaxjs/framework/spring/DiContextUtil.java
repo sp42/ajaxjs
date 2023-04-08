@@ -1,4 +1,4 @@
-package com.ajaxjs.spring;
+package com.ajaxjs.framework.spring;
 
 import java.util.Locale;
 import java.util.Map;
@@ -32,11 +32,14 @@ import com.ajaxjs.framework.TestHelper;
  *
  */
 public class DiContextUtil implements ApplicationContextAware {
+	/**
+	 * Spring 上下文
+	 */
 	public static ApplicationContext context;
 
 	@Override
 	public void setApplicationContext(ApplicationContext contex) throws BeansException {
-		context = contex;
+		DiContextUtil.context = contex;
 	}
 
 	/**
@@ -168,5 +171,15 @@ public class DiContextUtil implements ApplicationContextAware {
 
 	public static HttpSession getSession() {
 		return getRequest().getSession();
+	}
+
+	/**
+	 * Environment.resolveRequiredPlaceholders 方法是 Spring Framework 中的一个工具方法，用于解析配置文件中的占位符（placeholder）。
+	 * 该方法会根据配置文件中的 ${...} 占位符，替换成对应的属性值，如果无法解析，则抛出 IllegalArgumentException 异常
+	 * 
+	 * @return
+	 */
+	public static String resolveRequiredPlaceholders(String str) {
+		return context.getEnvironment().resolveRequiredPlaceholders(str);
 	}
 }
