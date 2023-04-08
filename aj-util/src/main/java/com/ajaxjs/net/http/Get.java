@@ -85,7 +85,7 @@ public class Get extends Base {
 	 *
 	 * @param url 请求目标地址
 	 * @param fn  自定义 HTTP 头的时候可设置，可选的
-	 * @return 响应的 JSON，List<Map> 格式
+	 * @return 响应的 JSON，List Map 格式
 	 */
 	public static List<Map<String, Object>> apiList(String url, Consumer<HttpURLConnection> fn) {
 		ResponseEntity resp = get(url, fn);
@@ -97,7 +97,7 @@ public class Get extends Base {
 	 * GET API，返回 JSON List
 	 *
 	 * @param url 请求目标地址
-	 * @return 响应的 JSON，List<Map> 格式
+	 * @return 响应的 JSON，List Map 格式
 	 */
 	public static List<Map<String, Object>> apiList(String url) {
 		return apiList(url, null);
