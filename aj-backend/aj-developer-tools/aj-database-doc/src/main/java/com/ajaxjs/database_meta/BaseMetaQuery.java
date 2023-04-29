@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * 抽象基类，用于数据库元数据查询
+ */
 public abstract class BaseMetaQuery {
     private static final LogHelper LOGGER = LogHelper.getLog(BaseMetaQuery.class);
 
@@ -23,11 +26,13 @@ public abstract class BaseMetaQuery {
     }
 
     /**
-     * @param <T>
+     * 获取查询结果，返回 List 类型的数据集合
+     *
+     * @param <T> 范型，要返回的 List 中元素的类别
      * @param sql 要执行的 SQL 语句
-     * @param cb
-     * @param clz
-     * @return
+     * @param cb  对于每个查询结果行，执行回调函数，将 ResultSet 转成 Java 对象 T
+     * @param clz Java 对象的类别
+     * @return 返回转换后的 Java 对象 T 所组成的 List
      */
     public <T> List<T> getResult(String sql, Function<ResultSet, T> cb, Class<T> clz) {
         List<T> list = new ArrayList<>();
@@ -45,10 +50,14 @@ public abstract class BaseMetaQuery {
     }
 
     /**
+     * 获取查询结果，返回 Map 类型的数据集合
+     *
      * @param sql    要执行的 SQL 语句
-     * @param cb
-     * @param isLoop 是否 进行 while (rs.next())
-     * @return
+     * @param cb     对于每个查询结果行，执行回调函数，将 ResultSet 转成 Map<String, String>
+     *               <p>
+     *               注意：Map 的 key 是列名（column name），value 是列值（column value）
+     * @param isLoop 是否需要循环处理 ResultSet 中的每一行
+     * @return 返回转换后的 Map<String, String> 所组成的 Map 对象，可能包含多行数据
      */
     public Map<String, String> getMapResult(String sql, BiConsumer<ResultSet, Map<String, String>> cb, boolean isLoop) {
         Map<String, String> map = new HashMap<>();
@@ -67,9 +76,15 @@ public abstract class BaseMetaQuery {
     }
 
     /**
+     * 获取查询结果，返回 Map 类型的数据集合。
+     * <p>
+     * 默认为需要循环处理 ResultSet 中的每一行
+     *
      * @param sql 要执行的 SQL 语句
-     * @param cb
-     * @return SQL 语句
+     * @param cb  对于每个查询结果行，执行回调函数，将 ResultSet 转成 Map<String, String>
+     *            <p>
+     *            注意：Map 的 key 是列名（column name），value 是列值（column value）
+     * @return 返回转换后的 Map<String, String> 所组成的 Map 对象，可能包含多行数据
      */
     public Map<String, String> getMapResult(String sql, BiConsumer<ResultSet, Map<String, String>> cb) {
         return getMapResult(sql, cb, true);

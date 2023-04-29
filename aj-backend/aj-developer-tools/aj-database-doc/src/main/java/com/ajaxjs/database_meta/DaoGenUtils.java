@@ -9,12 +9,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * SQL 查询和生成工具类的一些方法
  * 可以根据 Java 对象 生成 Create table 语句
- * MYSQL 表转 JavaBean 工具类 <a href="https://www.cnblogs.com/niejunlei/p/10169654.html">...</a>
  *
  * @author Stephen Cai 2018-08-22 15:20
+ * @see <a href="https://www.cnblogs.com/niejunlei/p/10169654.html">MYSQL 表转 JavaBean 工具类</a>
  */
 public class DaoGenUtils {
+    /**
+     * 生成 Mybatis 查询语句中的参数
+     *
+     * @param params 参数列表
+     */
     public static void genParam(List<String> params) {
         StringBuilder sb = new StringBuilder();
         StringBuilder sb1 = new StringBuilder();
@@ -29,16 +35,19 @@ public class DaoGenUtils {
         System.out.println(sb1);
     }
 
-    public static void genDataSchema(Class<?> clazz) {
-        if (clazz == null)
-            return;
-
-        String tableName = "PN_" + clazz.getSimpleName();
+    /**
+     * 根据 Java 对象生成对应的数据表
+     *
+     * @param clazz Java 对象的 Class
+     */
+    public static String genDataSchema(Class<?> clazz) {
+        String tableName = "PN_" + clazz.getSimpleName();// 数据库表名
         // 获取关联的所有类，本类以及所有父类
         boolean ret = true;
-        List<Class<?>> clazzs = new ArrayList<>();
+        List<Class<?>> clazzs = new ArrayList<>();// 类和其父类列表
 
         // 需要关联父类时候打开这个注释
+        // 遍历当前类及其所有父类
         while (ret) {
             clazzs.add(clazz);
             clazz = clazz.getSuperclass();
@@ -78,9 +87,16 @@ public class DaoGenUtils {
         }
 
         sb.append(") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;\n");
-        System.out.println(sb);
+
+        return sb.toString();
     }
 
+    /**
+     * 获取 Java 对象字段对应的数据库类型
+     *
+     * @param field Java 对象的字段
+     * @return 字段对应的数据库类型
+     */
     private static String getSchemaType(Field field) {
         Class<?> fieldType = field.getType();
 
