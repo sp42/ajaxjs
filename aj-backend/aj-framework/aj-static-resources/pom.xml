@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>aj-static-resources</artifactId>
+    <description>专门存放 html/js/css/jsp 静态资源</description>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.ajaxjs</groupId>
+        <artifactId>ajaxjs-parent</artifactId>
+        <version>1.11</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <!--打包资源文件-->
+
+    <!--
+     <build>
+         <pluginManagement>
+             <plugins>
+                 <plugin>
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-resources-plugin</artifactId>
+                     <version>3.2.0</version>
+                 </plugin>
+             </plugins>
+         </pluginManagement>
+         &lt;!&ndash; To use the plugin goals in your POM or parent POM &ndash;&gt;
+         <plugins>
+             <plugin>
+                 <artifactId>maven-resources-plugin</artifactId>
+                 &lt;!&ndash; <version>3.0.2</version> &ndash;&gt;
+                 <executions>
+                     <execution>
+                         <id>copy-resource-one</id>
+                         <phase>generate-sources</phase>
+                         <goals>
+                             <goal>copy-resources</goal>
+                         </goals>
+                         <configuration>
+                             <outputDirectory>${basedir}/META-INF</outputDirectory>
+                             <resources>
+                                 <resource>
+                                     <directory>/src/main/resources/META-INF</directory>
+                                     <includes>
+                                         <include>*.*</include>
+                                     </includes>
+                                 </resource>
+                             </resources>
+                         </configuration>
+                     </execution>
+                 </executions>
+             </plugin>
+         </plugins>
+     </build>-->
+</project>

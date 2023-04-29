@@ -1,0 +1,345 @@
+.aj-form-html-editor {
+    ul.toolbar {
+        border          : 1px solid #C5C5C5;
+        border-radius   : 4px 4px 0 0;
+        border-bottom   : 0;
+        background-color: #E8E7E4;
+        width           : 100%;
+        min-height      : 30px;
+        margin          : 0;
+        box-sizing      : border-box;
+        padding         : 3px 4px;
+
+        &>li {
+            list-style: none;
+            float     : left;
+            cursor    : pointer;
+
+            &>i {
+                border     : 1px solid transparent;
+                min-width  : 25px;
+                height     : 20px;
+                line-height: 20px;
+                text-align : center;
+                display    : block;
+
+                &.text-icon{
+                    font-family:Times New Roman;font-weight: bold;font-style: normal;
+                }
+                
+                &.fontAwesome{
+                    padding-top: 2px;
+                    font       : normal normal normal 18px/1 FontAwesome;
+                }
+
+                &:hover {
+                    border-right-color : #aaa;
+                    border-bottom-color: #aaa;
+                    border-top-color   : #fff;
+                    border-left-color  : #fff;
+                }
+
+                &:active {
+                    border-right-color : #f3f8fc;
+                    border-bottom-color: #f3f8fc;
+                    border-top-color   : #ccc;
+                    border-left-color  : #ccc;
+                }
+            }
+
+            ul li {
+                padding: 3px;
+                cursor : pointer;
+
+                &:hover {
+                    background-color: lightgray;
+                }
+            }
+
+            .cleanHTML {
+                background-size: 16px 16px;
+            }
+
+            .noBg {
+                background-image: none;
+            }
+        }
+    }
+
+    .editorBody {
+        iframe,
+        textarea {
+            border          : 1px solid #C5C5C5;
+            border-radius   : 0 0 4px 4px;
+            border-top-width: 0;
+            box-sizing      : border-box;
+            background-color: white;
+            min-height          : 300px;
+            width           : 100%;
+        }
+
+        iframe.hide{
+            display: none;
+        }
+        textarea {
+            resize: none;
+            display: none;
+            &.show{
+                display: block;
+            }
+        }
+    }
+
+    .colorPicker {
+        width   : 210px;
+        border  : 1px solid #D3D3D3;
+        position: absolute;
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .colorhead {
+            height     : 23px;
+            line-height: 23px;
+            font-weight: bold;
+            width      : 100%;
+        }
+
+        .colortitle {
+            margin-left: 6px;
+            font-size  : 12px;
+        }
+
+        .colorpanel td {
+            border   : 1px solid #000;
+            height   : 10px;
+            width    : 10px;
+            overflow : hidden;
+            font-size: 1px;
+            cursor   : pointer;
+        }
+    }
+
+    // 字体演示
+    .fontfamilyChoser,
+    .fontsizeChoser {
+        a {
+            padding-right  : 2px;
+            display        : block;
+            padding-left   : 2px;
+            padding-bottom : 2px;
+            color          : #000;
+            line-height    : 120%;
+            padding-top    : 2px;
+            text-decoration: none;
+
+            &:hover {
+                background: #e5e5e5
+            }
+        }
+    }
+
+    // 登录面板 和忘记密码
+    .dorpdown {
+        position: relative;
+
+        &:hover .fontfamilyChoser,
+        .fontfamilyChoser:hover,
+        &:hover .fontsizeChoser,
+        .fontsizeChoser:hover,
+        &:hover .colorPicker,
+        .colorPicker:hover {
+            display: block;
+        }
+
+        &>div {
+            display         : none;
+            position        : absolute;
+            top             : 22px;
+            left            : 0;
+            background-color: #f5f5f5;
+            border          : 1px solid lightgray;
+            border-top      : 0;
+            padding         : 5px;
+            width           : 230px;
+        }
+
+        .fontsizeChoser {
+            top  : inherit;
+            right: 0;
+        }
+    }
+}.aj-form-html-editor {
+    ul.toolbar {
+        border          : 1px solid #C5C5C5;
+        border-radius   : 4px 4px 0 0;
+        border-bottom   : 0;
+        background-color: #E8E7E4;
+        width           : 100%;
+        min-height      : 30px;
+        margin          : 0;
+        box-sizing      : border-box;
+        padding         : 3px 4px;
+
+        &>li {
+            list-style: none;
+            float     : left;
+            cursor    : pointer;
+
+            &>i {
+                border     : 1px solid transparent;
+                min-width  : 25px;
+                height     : 20px;
+                line-height: 20px;
+                text-align : center;
+                display    : block;
+
+                &.text-icon{
+                    font-family:Times New Roman;font-weight: bold;font-style: normal;
+                }
+                
+                &.fontAwesome{
+                    padding-top: 2px;
+                    font       : normal normal normal 18px/1 FontAwesome;
+                }
+
+                &:hover {
+                    border-right-color : #aaa;
+                    border-bottom-color: #aaa;
+                    border-top-color   : #fff;
+                    border-left-color  : #fff;
+                }
+
+                &:active {
+                    border-right-color : #f3f8fc;
+                    border-bottom-color: #f3f8fc;
+                    border-top-color   : #ccc;
+                    border-left-color  : #ccc;
+                }
+            }
+
+            ul li {
+                padding: 3px;
+                cursor : pointer;
+
+                &:hover {
+                    background-color: lightgray;
+                }
+            }
+
+            .cleanHTML {
+                background-size: 16px 16px;
+            }
+
+            .noBg {
+                background-image: none;
+            }
+        }
+    }
+
+    .editorBody {
+        iframe,
+        textarea {
+            border          : 1px solid #C5C5C5;
+            border-radius   : 0 0 4px 4px;
+            border-top-width: 0;
+            box-sizing      : border-box;
+            background-color: white;
+            min-height          : 300px;
+            width           : 100%;
+        }
+
+        iframe.hide{
+            display: none;
+        }
+        textarea {
+            resize: none;
+            display: none;
+            &.show{
+                display: block;
+            }
+        }
+    }
+
+    .colorPicker {
+        width   : 210px;
+        border  : 1px solid #D3D3D3;
+        position: absolute;
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .colorhead {
+            height     : 23px;
+            line-height: 23px;
+            font-weight: bold;
+            width      : 100%;
+        }
+
+        .colortitle {
+            margin-left: 6px;
+            font-size  : 12px;
+        }
+
+        .colorpanel td {
+            border   : 1px solid #000;
+            height   : 10px;
+            width    : 10px;
+            overflow : hidden;
+            font-size: 1px;
+            cursor   : pointer;
+        }
+    }
+
+    // 字体演示
+    .fontfamilyChoser,
+    .fontsizeChoser {
+        a {
+            padding-right  : 2px;
+            display        : block;
+            padding-left   : 2px;
+            padding-bottom : 2px;
+            color          : #000;
+            line-height    : 120%;
+            padding-top    : 2px;
+            text-decoration: none;
+
+            &:hover {
+                background: #e5e5e5
+            }
+        }
+    }
+
+    // 登录面板 和忘记密码
+    .dorpdown {
+        position: relative;
+
+        &:hover .fontfamilyChoser,
+        .fontfamilyChoser:hover,
+        &:hover .fontsizeChoser,
+        .fontsizeChoser:hover,
+        &:hover .colorPicker,
+        .colorPicker:hover {
+            display: block;
+        }
+
+        &>div {
+            display         : none;
+            position        : absolute;
+            top             : 22px;
+            left            : 0;
+            background-color: #f5f5f5;
+            border          : 1px solid lightgray;
+            border-top      : 0;
+            padding         : 5px;
+            width           : 230px;
+        }
+
+        .fontsizeChoser {
+            top  : inherit;
+            right: 0;
+        }
+    }
+}

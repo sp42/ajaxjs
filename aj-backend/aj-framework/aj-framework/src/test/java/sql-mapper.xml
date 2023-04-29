@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqls>
+    <sql id="getOrderList">
+        SELECT * FROM mk_order o WHERE
+        <if test="tranType != null">
+            l.type = #{tranType}
+        </if>
+        <if test="startDate != null">
+            AND (o.create_time BETWEEN #{startDate} AND DATE_ADD(#{endDate}, interval 1 day) )
+        </if>
+        ORDER BY o.create_time DESC
+    </sql>
+</sqls>

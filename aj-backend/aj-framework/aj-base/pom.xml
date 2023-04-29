@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>aj-base</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+
+	<name>aj-base</name>
+	<description>基础服务框架</description>
+
+	<parent>
+		<groupId>com.ajaxjs</groupId>
+		<artifactId>ajaxjs-parent</artifactId>
+		<version>1.10</version>
+		<relativePath />
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ajaxjs</groupId>
+			<artifactId>ajaxjs-framework</artifactId>
+			<version>1.0.6</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.bval</groupId>
+			<artifactId>bval-jsr</artifactId>
+			<version>2.0.6</version>
+		</dependency>
+	</dependencies>
+</project>

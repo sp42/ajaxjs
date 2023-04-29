@@ -1,0 +1,1 @@
+专门存放 html/js/css/jsp 静态资源

@@ -1,0 +1,80 @@
+
+
+.form-designer {
+  .property-panel {
+    float: right;
+    width: 30%;
+    // border: 1px solid lightgray;
+    // border-radius: 5px;
+    min-height: 500px;
+    padding: 0px;
+
+    .input {
+      width: 100%;
+    }
+
+    .ivu-divider-horizontal.ivu-divider-with-text-center:before,
+    .ivu-divider-horizontal.ivu-divider-with-text-left:before,
+    .ivu-divider-horizontal.ivu-divider-with-text-right:before,
+    .ivu-divider-horizontal.ivu-divider-with-text-center:after,
+    .ivu-divider-horizontal.ivu-divider-with-text-left:after,
+    .ivu-divider-horizontal.ivu-divider-with-text-right:after {
+      top: 0;
+    }
+
+    .tab {
+      & > header {
+        float: left;
+        // width: 30px;
+        border-right: 1px solid lightgray;
+        margin-left: -1px;
+
+        div {
+          // width: 30px;
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+          border-bottom: 1px solid lightgray;
+          border-left: 1px solid transparent;
+          padding: 10px 5px;
+          cursor: pointer;
+
+          &:first-child {
+            border-top: 1px solid lightgray;
+          }
+
+          &.actived {
+            border-left: 1px solid white;
+            font-weight: bold;
+          }
+        }
+      }
+
+      & > div {
+        float: left;
+        width: 340px;
+        min-height: 500px;
+        border: 1px solid lightgray;
+        padding: 10px;
+        & > div {
+          display: none;
+          &.actived {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  .form-config-panel {
+    .select {
+      width: 170px;
+      margin-right: 10px;
+    }
+  }
+}
+
+code {
+  color: rgb(192, 52, 29);
+  background-color: rgb(251, 229, 225);
+  padding: 2px 3px;
+}

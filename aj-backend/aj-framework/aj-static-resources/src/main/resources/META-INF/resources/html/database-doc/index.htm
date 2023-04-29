@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>数据库文档</title>
+    <script src="../libs/vue.js"></script>
+
+    <!-- import stylesheet -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" />
+    <link rel="stylesheet" href="asset/styles.css" />
+
+    <script src="../libs/iview.js"></script>
+    <script src="../common/utils.js"></script>
+
+    <!-- Include the Codemirror library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-codemirror@4.0.0/dist/vue-codemirror.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.3/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/selection/active-line.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/theme/monokai.min.css" rel="stylesheet" />
+
+     <script>
+        window.API_ROOT = ''; // 如果为独立的前端模式，请在这里设置你接口的地址
+
+        if (API_ROOT)
+            document.writeln('<script src="json.js"><\/script>');
+        else
+            document.writeln('<script src="..\/..\/make_database_doc"><\/script>');
+    </script>
+    
+    <script src="js/generator.js"></script>
+    <script src="js/jszip.min.js"></script>
+
+    <link rel="icon" type="image/x-icon" href="asset/favicon.ico" />
+
+</head>
+
+<body>
+    <nav>
+        <div>
+            <div style="max-width: 1360px;margin: 0 auto;">
+
+                <span class="links">
+                    <a href="javascript:void(0);" @click="MAIN.codeGenerator.showCfg = true">代码生成器</a> |
+                    <a href="javascript:void(0);" @click="MAIN.dataSource.isShowDataSource = true">数据源</a> |
+                    <a href="javascript:void(0);" @click="showAbout">关于</a>
+                </span>
+                <object id="svg1" data="asset/database.svg" type="image/svg+xml" width="16"
+                    style="vertical-align: middle;"></object>
+                数据库文档浏览器
+            </div>
+        </div>
+    </nav>
+    <div class="main">
+        <menu>
+            <ul>
+                <li v-for="item in list">
+                    <h1>
+                        <div class="cache">
+                            <Icon type="ios-flash" v-if="cached" size="25" @click="batchDownload(item)"
+                                title="批量下载 Java Bean 代码" />
+                            <!-- <Icon type="ios-flash-outline" v-if="!cached" size="25" @click="makeCache" title="生成缓存" /> -->
+                        </div>
+                        {{item.name}}
+                    </h1>
+
+                    <ul>
+                        <li class="table" v-for="table in item.tableInfo">
+                            <a :href="'doc.htm#'+ table.uuid" target="targetFrame"> {{table.comment}}
+                                <span class="eng">{{table.name}}</span></a>
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>
+
+            <!--代码生成器-->
+            <Modal v-model="codeGenerator.showCfg" title="代码生成器配置" width="500" cancel-text="" :transfer="false">
+                <div class="gen-form" style="margin: 0 auto; width: 400px">
+                    <i-input v-model="codeGenerator.data.packageName" placeholder="如 com.foo.bar">
+                        <span slot="prepend">包名</span>
+                    </i-input>
+
+                    <i-input v-model="codeGenerator.data.author">
+                        <span slot="prepend">作者</span>
+                    </i-input>
+
+                    <i-switch v-model="codeGenerator.data.isGetter"></i-switch> Getter/Setter
+                </div>
+
+            </Modal>
+
+            <Modal v-model="java.showJavaEditor" title="Java Editor" width="900" height="600" cancel-text=""
+                :transfer="false">
+                <codemirror class="code-editor" ref="cm-java" v-model="java.code" :options="cmOptionJava">
+                </codemirror>
+                <br />
+                <div style="text-align: center;">
+                    <a @click="copyJava">复制</a> |
+                    <a @click="downloadJava">下载</a>
+                </div>
+            </Modal>
+
+            <Modal v-model="showSqlEditor" title="SQL Editor" width="900" height="600" cancel-text="" :transfer="false">
+                <codemirror class="code-editor" ref="cm" v-model="sql" :options="cmOption">
+                </codemirror>
+                <br />
+                <a @click="copySQL">复制</a>
+            </Modal>
+
+            <Modal title="数据源配置" v-model="dataSource.isShowDataSource" ok-text="关闭" cancel-text="" width="900">
+                <Datasource @change_datasource="onChangeDatasource"></Datasource>
+            </Modal>
+        </menu>
+        <iframe src="doc.htm" name="targetFrame" frameborder="no"></iframe>
+    </div>
+
+    <!-- 数据源 -->
+    <div w3-include-html="../common/data-source/data-source.html"></div>
+    <link href="../common/data-source/data-source.css" rel="stylesheet" />
+    <script src="../common/data-source/data-source.js"></script>
+
+    <script src="js/js.js"></script>
+</body>
+
+</html>

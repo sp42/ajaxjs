@@ -1,0 +1,508 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>AJAXJS Web</title>
+    <link rel="stylesheet" type="text/css" href="static/style.css" />
+    <meta name="keywords" content="ajaxjs java js javascript web ui framework html5 ioc aop orm restful" />
+    <meta name="description"
+        content="AJAXJS Web 是一款基于 Java 平台的开源 Web 框架，继承了 Java 平台的高效、安全、稳定、跨平台等诸多优势， 但却摒弃了传统企业级架构所带来的庞大和臃肿，强调轻量级，非常适合互联网小型网站的快速应用。" />
+    <meta name="viewport"
+        content="width=320, user-scalable=0, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+</head>
+
+<body>
+    <section class="page-header">
+        <h1>AJAXJS Web Framework</h1>
+        <h2 class="project-tagline">Full-stack, Lightweight &amp; Straightforward</h2>
+    </section>
+
+    <section class="main-content">
+        <h3>AJ-Framework 基础支撑平台</h3>
+        <p>提供完整的、全栈的、简单的基础支撑平台，开源、免费。</p>
+
+        
+        <p>᛫ 前端：TypeScript + Vue.js 2 + iView UI + Less.js + Webpack</p>
+        <p>᛫ 后端：Java 1.8 + Tomcat 8.5 + MySQL 5.7 + Spring 5</p>
+
+
+        <h3>资源</h3>   
+        <a target="_blank" href="https://gitee.com/sp42_admin/ajaxjs">源码</a> | 
+        <a target="_blank" href="https://gitee.com/sp42_admin/ajaxjs/wikis">文档</a> | 
+        <a target="_blank" href="https://cp-service.ajaxjs.com/demo">在线例子</a> | 
+        <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22">QQ 群：3150067</a> | 
+        <a href="mailto:frank@ajaxjs.com">Email</a> | 
+        <a target="_blank" href="http://blog.csdn.net/zhangxin09">作者博客</a>
+
+
+        <h3>需求目标</h3>
+        <table cellspacing="0" border="1">
+            <colgroup width="155"></colgroup>
+            <colgroup width="190"></colgroup>
+            <colgroup width="493"></colgroup>
+            <tr>
+                <td align="center" valign="middle">
+                    统一身份认证
+                </td>
+                <td align="center" valign="middle">
+                    统一认证服务
+                </td>
+                <td align="left" valign="middle">
+                    实现平台统一身份认证与适配第三方认证
+                </td>
+            </tr>
+            <tr>
+                <td rowspan=12 align="center" valign="middle">
+                    门户引擎
+                </td>
+                <td align="center" valign="middle">
+                    登录设计
+                </td>
+                <td align="left" valign="middle">
+                    预制多种登录模板，可对多种登录方式进行动态配置
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    模板管理
+                </td>
+                <td align="left" valign="middle">
+                    预制多种门户画布模板，供门户设计使用
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    门户设计
+                </td>
+                <td align="left" valign="middle">
+                    分别对PC、移动门户菜单、布局、组件进行配置，通过拖拉拽的形式在门户设计器画布上动态组合成各种门户
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    公共部件
+                </td>
+                <td align="left" valign="middle">
+                    为门户快捷方式、多级树、banner等公共组件源头配置内容
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    主题管理
+                </td>
+                <td align="left" valign="middle">
+                    预制多种色值、节日主题供用户使用，用户可自定义主题
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    定时主题
+                </td>
+                <td align="left" valign="middle">
+                    在配置的时间范围内使用某一种主题，到达结束时间后恢复正常
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    素材管理
+                </td>
+                <td align="left" valign="middle">
+                    对图片、图标、视频、音频素材进行保存，可供门户使用
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    栏目管理
+                </td>
+                <td align="left" valign="middle">
+                    对门户资讯栏目进行文章、视频、音频三种类型层级分类配置
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    内容发布
+                </td>
+                <td align="left" valign="middle">
+                    将文章、视频、音频三种类型的资讯发布到选中的栏目并设置可看时间和人员范围
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    标签色
+                </td>
+                <td align="left" valign="middle">
+                    预设置文章标题颜色，供文章发布时使用
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    公告弹窗
+                </td>
+                <td align="left" valign="middle">
+                    开启公告弹窗功能，用户进入门户自动显示公告内容
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    系统默认主题
+                </td>
+                <td align="left" valign="middle">
+                    设置系统默认主题
+                </td>
+            </tr>
+            <tr>
+                <td rowspan=4 align="center" valign="middle">
+                    表单引擎
+                </td>
+                <td align="center" valign="middle">
+                    表单设计
+                </td>
+                <td align="left" valign="middle">
+                    通过可视化页面布局的编辑，实现主流24格栅的前端布局划分。支持把各类组件及元素放置到布局内组合，支持布局的合并、拆分等能力
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    表单属性
+                </td>
+                <td align="left" valign="middle">
+                    表单的全局配置，主体功能包括表单名称、待办主题规则、表单规则、流水号规则。
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    表单权限
+                </td>
+                <td align="left" valign="middle">
+                    通过表单权限的能力，实现配置表单查看、编辑、新建的三种表单视图权限，支持表单内所有元素的状态进行权限细分，支持通过组织、人员角色等细分权限。
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    表单组件
+                </td>
+                <td align="left" valign="middle">
+                    提供单行文本、多行文本、人员选择、组织选择、单级下拉、多级数据集、自由子表、多标签、业务关联表单组件
+                </td>
+            </tr>
+            <tr>
+                <td rowspan=4 align="center" valign="middle">
+                    流程引擎
+                </td>
+                <td align="center" valign="middle">
+                    流程设计
+                </td>
+                <td align="left" valign="middle">
+                    所有流程的统一入口，可在此对流程进行设计
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    流程操作
+                </td>
+                <td align="left" valign="middle">
+                    规整流程操作按钮，仅保存和流程相关的按钮
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    流程监控
+                </td>
+                <td align="left" valign="middle">
+                    对流程运行情况进行人工干预（意外处理）
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    流程分析
+                </td>
+                <td align="left" valign="middle">
+                    使用图表对流程模板、流程数量、流程运行情况监查分析
+                </td>
+            </tr>
+            <tr>
+                <td rowspan=8 align="center" valign="middle">
+                    业务建模
+                </td>
+                <td align="center" valign="middle">
+                    应用分类
+                </td>
+                <td align="left" valign="middle">
+                    建模应用分类类型划分
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    应用列表
+                </td>
+                <td align="left" valign="middle">
+                    按应用分类类型新建应用及模块
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    数据模型
+                </td>
+                <td align="left" valign="middle">
+                    作为数据库表存放表单组件字段
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    列表视图
+                </td>
+                <td align="left" valign="middle">
+                    对实例列表高级搜索、排序、操作按钮、列表表头四类视图进行配置
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    查看视图
+                </td>
+                <td align="left" valign="middle">
+                    对非环节处理人可查看的实例表单视图进行配置
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    基础设置
+                </td>
+                <td align="left" valign="middle">
+                    按业务需求添加业务操作，实现不同模块显示不同操作按钮
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    数据集管理
+                </td>
+                <td align="left" valign="middle">
+                    仅可配置和业务建模有关的单级、多级数据字典
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    函数集管理
+                </td>
+                <td align="left" valign="middle">
+                    对业务建模-基础设置中可用的函数、代码片段进行预编辑
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    应用中心
+                </td>
+                <td align="center" valign="middle">
+                    应用中心
+                </td>
+                <td align="left" valign="middle">
+                    承接建模应用、自建专业子系统、第三方接入系统应用，进行统一管理
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    搜索引擎
+                </td>
+                <td align="center" valign="middle">
+                    搜索引擎
+                </td>
+                <td align="left" valign="middle">
+                    全站搜索设计实现用户可以快速的通过搜索功能查找到关注的信息，并进行查阅。
+                </td>
+            </tr>
+            <tr>
+                <td rowspan=2 align="center" valign="middle">
+                    消息中心
+                </td>
+                <td align="center" valign="middle">
+                    统一消息
+                </td>
+                <td align="left" valign="middle">
+                    建模应用及外部应用的统一消息接收推送
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    参数配置
+                </td>
+                <td align="left" valign="middle">
+                    外部系统推送消息时所需参数配置
+                </td>
+            </tr>
+            <tr>
+                <td rowspan=3 align="center" valign="middle">
+                    数据服务
+                </td>
+                <td align="center" valign="middle">
+                    系统数据集
+                </td>
+                <td align="left" valign="middle">
+                    系统整体数据集入口，可单独划分出属于业务建模的数据集
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    数据源
+                </td>
+                <td align="left" valign="middle">
+                    连接外部数据库，将数据库形成数据源头
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    BI数据集
+                </td>
+                <td align="left" valign="middle">
+                    通过数据库表、excel文件、sql语句整理为数据集
+                </td>
+            </tr>
+            <tr>
+                <td rowspan=11 align="center" valign="middle">
+                    系统管理<br>（组织权限中心、日志管理）
+                </td>
+                <td align="center" valign="middle">
+                    密码安全
+                </td>
+                <td align="left" valign="middle">
+                    对用户初始密码、密码策略进行配置
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    账号解锁
+                </td>
+                <td align="left" valign="middle">
+                    记录用户输错密码导致账号锁定的次数，并提供解锁功能
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    缓存管理
+                </td>
+                <td align="left" valign="middle">
+                    规整系统各模块缓存，实现统一缓存清理功能
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    生态组织架构
+                </td>
+                <td align="left" valign="middle">
+                    按分级组织树结构对机构、部门、人员、岗位、群组进行管理
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    角色管理
+                </td>
+                <td align="left" valign="middle">
+                    从资源的角度为角色赋予数据管理权限以及查看权限
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    字段拓展
+                </td>
+                <td align="left" valign="middle">
+                    根据企业不同需求灵活配置组织架构对象字段的值类型、控件类型。
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    群组配置
+                </td>
+                <td align="left" valign="middle">
+                    从群组分类的角度概览配置群组，关联相关用户。
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    职务配置
+                </td>
+                <td align="left" valign="middle">
+                    按照职务层级关系配置职务，关联相关用户。
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    岗位配置
+                </td>
+                <td align="left" valign="middle">
+                    从整体角度概览配置岗位，关联相关用户。
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    基础数据导入导出
+                </td>
+                <td align="left" valign="middle">
+                    对组织机构的机构、部门、岗位、职务、群组、人员基础数据导入导出
+                </td>
+            </tr>
+            <tr>
+                <td align="center" valign="middle">
+                    日志管理
+                </td>
+                <td align="left" valign="middle">
+                    将用户登录、使用等操作保存为日志，作为系统分析依据
+                </td>
+            </tr>
+        </table>
+        <!--         <h3>A Full Stack Web Framework</h3>
+
+        <p>AJAXJS Web aims to full-stack, not only the server-side framework, but also integrates the front-end library.
+            It's written in HTML5 + Java, runs on JVM platform, efficient, secure, stable, cross-platform
+            and many other advantages,
+            but it abandoned the traditional enterprise architecture brought about by the large and bloated, emphasizing
+            the lightweight, and fast, very suitable for the Internet fast application.</p>
+
+        <ul>
+            <li>Follow the "enough to use, suitable for teaching" thought, give priority to native API, basically don't
+                rely on other heavy 3rd-party library.</li>
+            <li>Using IOC/AOP/MVC/ORM/RESTful, Generic Controller/Service/DAO/Model
+            </li>
+            <li>With the style of SpringMVC, the code is simple but the core functions of MVC are basically available,
+                it's suitable for those who want to understand MVC.</li>
+            <li>MyBatis-like annotation SQL service, supports Java Bean or Map as entity, auto-paging, auto-query and
+                validtion.</li>
+            <li>Collecting many years of various HTML/DHTML/CSS best practices, providing many widgets. Small size, 13kb
+                for all base and widgets.
+            </li>
+            <li>Thanks to modern browser, the front end doesn't use jQuery, but the native API calls, more efficient and
+                fast.</li>
+            <li>Reuse responsive CSS/LESS.js for mobile.</li>
+            <li>Providing code comment, unit test and documentation as much as possible.</li>
+        </ul> -->
+
+        <!--         <p>
+            AJAXJS Web is built on <a href="base.jsp">AJAXJS
+                Base</a>, a pure Java library. Yet another high-level <a href="https://gitee.com/sp42/ajaxjs-cms">AJAXJS
+                CMS</a> is built on AJAXJS Web.
+        </p>
+        <h3>Demos</h3>
+        <a href="demo/index.html">HTML/CSS/JS</a> | <a href="ui_demo">Simple Admin</a> -->
+
+        <!-- <h3>Download &amp; Run</h3>
+        <p>Maven:</p>
+        <pre>&lt;dependency&gt;
+    &lt;groupId&gt;com.ajaxjs&lt;/groupId&gt;
+    &lt;artifactId&gt;ajaxjs-web&lt;/artifactId&gt;
+    &lt;version&gt;1.0.5&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+        <p>
+            <a href="http://ajaxjs.mydoc.io/">User Manual</a> | <a href="https://gitee.com/sp42_admin/ajaxjs">Source on
+                Git/SVN</a> | <a href="ajaxjs-web-doc">JavaDoc</a>
+        </p>
+        <p>Win/Mac/Linux/JRE1.8+/Tomcat8+</p>
+        <p>Apache License Version--2.0. Free to use, modify.</p> -->
+
+
+
+
+        <footer>
+            <span class="language"> </span> ©1999-2022
+            Frank Cheung
+        </footer>
+    </section>
+</body>
+
+</html>
