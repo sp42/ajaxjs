@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	<packaging>jar</packaging>
 	<artifactId>aj-workflow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>工作流服务</description>
@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>ajaxjs-framework</artifactId>
-			<version>1.0.6</version>
+			<version>1.0.8</version>
 		</dependency>
 
 		<dependency>
