@@ -8,7 +8,7 @@
 - Java Spring 项目，依赖少，方便集成
 
 该工具如下截图所示，
-<div align="center"><img src="https://img-blog.csdnimg.cn/c579f9f3177f401186bdd02e5a2205b4.png" alt="example2" width="600" /></div>
+<div align="center"><img src="https://foruda.gitee.com/images/1682750683847627505/bf927537_784269.png" alt="example2" width="600" /></div>
 
 - 在线演示地址请点击 <a href="https://framework.ajaxjs.com/demo/database-doc/" target="_blank">https://framework.ajaxjs.com/demo/database-doc/</a>。
 - 源码：[https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-backend/aj-developer-tools/aj-database-doc](https://gitee.com/sp42_admin/ajaxjs/tree/master/aj-backend/aj-developer-tools/aj-database-doc)。
