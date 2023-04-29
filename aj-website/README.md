@@ -1,1 +1,0 @@
-https://framework.ajaxjs.com 的静态页面
