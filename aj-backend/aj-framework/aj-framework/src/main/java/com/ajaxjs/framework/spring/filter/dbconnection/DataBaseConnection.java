@@ -98,7 +98,7 @@ public class DataBaseConnection implements HandlerInterceptor {
                 } catch (Throwable e) {
                     LOGGER.warning(e);
                 } finally {
-                    if (JdbcUtil.IS_DB_CONNECTION_AUTOCLOSE) // 保证一定关闭，哪怕有异常
+                    if (JdbcUtil.IS_DB_CONNECTION_AUTO_CLOSE) // 保证一定关闭，哪怕有异常
                         JdbcConnection.closeDb();
                 }
             }

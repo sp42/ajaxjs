@@ -10,25 +10,12 @@
  */
 package com.ajaxjs.util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
+import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.util.logger.LogHelper;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * 反射工具包
@@ -555,12 +542,9 @@ public class ReflectUtil {
      */
     public static void setProperty(Object bean, String name, Object value) {
         String setMethodName = "set" + StringUtils.capitalize(name);
-
         Objects.requireNonNull(bean, bean + "执行：" + setMethodName + " 未发现类");
 //		Objects.requireNonNull(value, bean + "执行：" + setMethodName + " 未发现参数 value");
-
         Class<?> clazz = bean.getClass();
-
         // 要把参数父类的也包括进来
         Method method = getMethodByUpCastingSearch(clazz, setMethodName, value);
 
@@ -579,10 +563,14 @@ public class ReflectUtil {
     }
 
     /**
-     * @param clz
-     * @return
+     * 常量转换为 Map
+     * 获取指定类中的所有 int 类型常量的名称和值，并返回它们构成的 Map 对象。
+     *
+     * @param clz 常量类，一般为接口
+     * @return 常量的 Map 格式
      */
     public static Map<String, Integer> getConstantsInt(Class<?> clz) {
+        // 创建一个空的 HashMap 对象，用于存储常量名称和值的映射关系
         Map<String, Integer> map = new HashMap<>();
 
         Field[] fields = clz.getDeclaredFields();
@@ -591,6 +579,7 @@ public class ReflectUtil {
         for (Field field : fields) {
             String descriptor = Modifier.toString(field.getModifiers());// 获得其属性的修饰
 
+            // 判断该属性是否为 public static final 修饰的 int 类型常量
             if (descriptor.equals("public static final")) {
                 try {
                     map.put(field.getName(), (int) field.get(instance));
@@ -604,31 +593,10 @@ public class ReflectUtil {
     }
 
     /**
-     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     * 获取泛型类型数组。
      *
-     * @param method 方法
-     * @return 实际类型，可能多个
-     */
-    public static Type[] getGenericReturnType(Method method) {
-        Type genericReturnType = method.getGenericReturnType();
-
-        return getActualType(genericReturnType);
-    }
-
-    public static Class<?> getGenericFirstReturnType(Method method) {
-        Type[] type = getGenericReturnType(method);
-
-        if (type == null || type.length == 0) {
-            LOGGER.warning("这很可能不是一个泛型");
-            return null;
-        }
-
-        return type2class(type[0]);
-    }
-
-    /**
-     * @param type
-     * @return
+     * @param type 要获取泛型类型数组的 Type 对象
+     * @return 返回泛型类型数组。如果指定的 Type 对象不是 ParameterizedType 类型，则返回 null。
      */
     public static Type[] getActualType(Type type) {
         if (type instanceof ParameterizedType) {
@@ -637,7 +605,31 @@ public class ReflectUtil {
             return pt.getActualTypeArguments();
         }
 
+        LOGGER.warning(type + " 很可能不是一个泛型");
         return null;
+    }
+
+    /**
+     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     *
+     * @param method 方法
+     * @return 实际类型，可能多个
+     */
+    public static Type[] getGenericReturnType(Method method) {
+        return getActualType(method.getGenericReturnType());
+    }
+
+    /**
+     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     * 这个方法获取第一个类型，并转换为 Class
+     *
+     * @param method 方法
+     * @return 第一个实际类型
+     */
+    public static Class<?> getGenericFirstReturnType(Method method) {
+        Type[] type = getGenericReturnType(method);
+
+        return type == null ? null : type2class(type[0]);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.ajaxjs.util.map.MapTool;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -33,6 +34,10 @@ public class TestHelper {
 
     public static void printJson2(Object obj) {
         System.out.println((JsonHelper.toJson(obj)));
+    }
+
+    public static void printArr(Object[] arr) {
+        System.out.println(Arrays.toString(arr));
     }
 
     private static Boolean isRunningTest;

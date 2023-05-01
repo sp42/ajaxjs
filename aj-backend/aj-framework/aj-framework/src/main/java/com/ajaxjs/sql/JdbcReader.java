@@ -65,8 +65,6 @@ public class JdbcReader {
      * @param handle 控制器
      */
     public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
-        LOGGER.info(sql);
-
         try (ResultSet rs = stmt.executeQuery(sql)) {
             handle.accept(rs);
         } catch (SQLException e) {
@@ -88,7 +86,7 @@ public class JdbcReader {
     /**
      * 执行查询
      *
-     * @param <T>
+     * @param <T>          结果的类型
      * @param conn         数据库连接对象 数据库连接对象
      * @param sql          SQL 语句，可以带有 ? 的占位符
      * @param hasZeoResult SQL 查询是否有数据返回，没有返回 true
@@ -120,7 +118,7 @@ public class JdbcReader {
     }
 
     /**
-     * 查询单行记录(单个结果)，保存为Map&lt;String, Object&gt; 结构。如果查询不到任何数据返回 null。
+     * 查询单行记录(单个结果)，保存为 Map&lt;String, Object&gt; 结构。如果查询不到任何数据返回 null。
      *
      * @param conn   数据库连接对象
      * @param sql    SQL 语句，可以带有 ? 的占位符
@@ -155,10 +153,10 @@ public class JdbcReader {
     public static Map<String, Object> getResultMap(ResultSet rs) throws SQLException {
         // LinkedHashMap 是 HashMap 的一个子类，保存了记录的插入顺序
         Map<String, Object> map = new LinkedHashMap<>();
-        ResultSetMetaData rsmd = rs.getMetaData();
+        ResultSetMetaData metaData = rs.getMetaData();
 
-        for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
-            String key = JdbcUtil.changeColumnToFieldName(rsmd.getColumnLabel(i));
+        for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
+            String key = JdbcUtil.changeColumnToFieldName(metaData.getColumnLabel(i));
             Object value = rs.getObject(i);
 
             map.put(key, value);
@@ -178,13 +176,14 @@ public class JdbcReader {
     public static <T> ResultSetProcessor<T> getResultBean(Class<T> beanClz) {
         return rs -> {
             T bean = ReflectUtil.newInstance(beanClz);
-            ResultSetMetaData rsmd = rs.getMetaData();
+            ResultSetMetaData metaData = rs.getMetaData();
 
-            if(beanClz.toString().contains("OrderProfitsharingReceivers")) {
-                System.out.println();
-            }
-            for (int i = 1; i <= rsmd.getColumnCount(); i++) {// 遍历结果集
-                String key = rsmd.getColumnLabel(i);
+//            if (beanClz.toString().contains("OrderProfitsharingReceivers")) {
+//                System.out.println();
+//            }
+
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
+                String key = metaData.getColumnLabel(i);
                 Object _value = rs.getObject(i); // Real value in DB
 
                 if (key.contains("_")) // 将以下划线分隔的数据库字段转换为驼峰风格的字符串
@@ -221,6 +220,7 @@ public class JdbcReader {
 
                         try {
                             if ((_value != null) && beanClz.getField("extractData") != null) {
+                                assert bean != null;
                                 Object obj = ReflectUtil.executeMethod(bean, "getExtractData");
 
 //								LOGGER.info(":::::::::key::"+ key +":::v:::" + _value);
@@ -318,7 +318,7 @@ public class JdbcReader {
      * @param rs        结果集合
      * @param processor 单行处理器
      * @return 多行记录列表集合
-     * @throws SQLException
+     * @throws SQLException 异常
      */
     static <T> List<T> forEachRs(ResultSet rs, ResultSetProcessor<T> processor) throws SQLException {
         List<T> list = new ArrayList<>();
@@ -338,7 +338,7 @@ public class JdbcReader {
      * @param rs   结果集合
      * @param sql  SQL 语句，可以带有 ? 的占位符
      * @return true 表示有数据
-     * @throws SQLException
+     * @throws SQLException 异常
      */
     static boolean hasZeoResult(Connection conn, ResultSet rs, String sql) throws SQLException {
         boolean hasNext;

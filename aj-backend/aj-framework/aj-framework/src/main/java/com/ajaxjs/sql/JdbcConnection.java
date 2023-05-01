@@ -33,10 +33,22 @@ import java.util.Properties;
 public class JdbcConnection {
     private static final LogHelper LOGGER = LogHelper.getLog(JdbcConnection.class);
 
-    public static Connection getConnection(String ipPort, String dbName, String userName, String password) {
-        String jdbcUrl = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai";
-        jdbcUrl = String.format(jdbcUrl, ipPort, dbName);
+    /**
+     * 一般情况用的数据库连接字符串
+     */
+    private static final String JDBC_TPL = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai";
 
+    /**
+     * 连接数据库
+     *
+     * @param ipPort   数据库地址和端口
+     * @param dbName   数据库名，可为空字符串
+     * @param userName 用户
+     * @param password 密码
+     * @return 数据库连接对象
+     */
+    public static Connection getConnection(String ipPort, String dbName, String userName, String password) {
+        String jdbcUrl = String.format(JDBC_TPL, ipPort, dbName);
         Connection conn = null;
 
         try {
@@ -53,38 +65,23 @@ public class JdbcConnection {
     }
 
     /**
-     * 连接数据库。这种方式最简单，但是没有经过数据库连接池，要采用池化的方式，请使用 getConnectionByJNDI()。
+     * 连接数据库。这种方式最简单，但是没有经过数据库连接池。
      *
-     * @param jdbcUrl 连接字符串
-     * @param props   连接属性，可选（可为 null）
+     * @param jdbcUrl 数据库连接字符串
      * @return 数据库连接对象
      */
-    public static Connection getConnection(String jdbcUrl, Properties props) {
+    public static Connection getConnection(String jdbcUrl) {
         Connection conn = null;
 
         try {
-            if (props == null)
-                conn = DriverManager.getConnection(jdbcUrl);
-            else
-                conn = DriverManager.getConnection(jdbcUrl, props);
-
-            LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
+            conn = DriverManager.getConnection(jdbcUrl);
+            LOGGER.info("数据库连接成功： " + getDbUrl(conn));
         } catch (SQLException e) {
             e.printStackTrace();
             LOGGER.warning("数据库连接失败！", e);
         }
 
         return conn;
-    }
-
-    /**
-     * 连接数据库。这种方式最简单，但是没有经过数据库连接池，要采用池化的方式，请使用 getConnectionByJNDI()。
-     *
-     * @param jdbcUrl 连接字符串
-     * @return 数据库连接对象
-     */
-    public static Connection getConnection(String jdbcUrl) {
-        return getConnection(jdbcUrl, null);
     }
 
     /**
@@ -153,8 +150,8 @@ public class JdbcConnection {
     /**
      * 根据 Conn 获取连接字符串，在调试时候非常有用
      *
-     * @param conn
-     * @return
+     * @param conn 连接对象
+     * @return 数据库连接字符串
      */
     public static String getDbUrl(Connection conn) {
         try {
@@ -186,18 +183,18 @@ public class JdbcConnection {
     /**
      * 手动创建连接池。这里使用了 Tomcat JDBC Pool
      *
-     * @param driver
-     * @param url
-     * @param user
-     * @param psw
+     * @param driver   驱动程序，如 com.mysql.cj.jdbc.Driver
+     * @param url      数据库连接字符串
+     * @param userName 用户
+     * @param password 密码
      * @return 数据源
      */
-    public static DataSource setupJdbcPool(String driver, String url, String user, String psw) {
+    public static DataSource setupJdbcPool(String driver, String url, String userName, String password) {
         PoolProperties p = new PoolProperties();
         p.setDriverClassName(driver);
         p.setUrl(url);
-        p.setUsername(user);
-        p.setPassword(psw);
+        p.setUsername(userName);
+        p.setPassword(password);
         p.setMaxActive(100);
         p.setInitialSize(10);
         p.setMaxWait(10000);

@@ -97,9 +97,8 @@ public class JdbcHelper extends JdbcReader {
                     try (ResultSet rs = ps.getGeneratedKeys()) {// 当保存之后会自动获得数据库返回的主键
                         if (rs.next())
                             return rs.getObject(1);
-                        else {// 插入成功 但没有自增
+                        else // 插入成功 但没有自增
                             return -1;
-                        }
                     }
                 }
             } catch (SQLException e) {

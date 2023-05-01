@@ -31,7 +31,7 @@ public class JdbcUtil {
     /**
      * 为方便单测，设一个开关
      */
-    public static boolean IS_DB_CONNECTION_AUTOCLOSE = true;
+    public static boolean IS_DB_CONNECTION_AUTO_CLOSE = true;
 
     /**
      * 是否关闭日志打印以便提高性能
