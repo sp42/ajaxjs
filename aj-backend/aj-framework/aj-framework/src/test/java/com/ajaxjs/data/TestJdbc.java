@@ -1,10 +1,10 @@
 package com.ajaxjs.data;
 
+import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.TestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

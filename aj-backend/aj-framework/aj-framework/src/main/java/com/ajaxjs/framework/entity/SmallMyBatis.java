@@ -38,7 +38,6 @@ public class SmallMyBatis {
 
         // 删除注释
         Pattern pattern = Pattern.compile("<!--.*?-->", Pattern.DOTALL);  // 使用 DOTALL 匹配多行注释
-        assert xmlBody != null;
         xmlBody = pattern.matcher(xmlBody).replaceAll("");
 //        System.out.println(xmlBody);
 

@@ -43,22 +43,6 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
         converters.add(new MyJsonConverter()); // 统一返回 JSON
     }
 
-    public static void main(String[] args) {
-        String fileName = "C:/code/new-fleet/source/trunk3.0/API/cdb-business-application/cdb-market/business/target/classes/application.yml";
-
-        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-        try {
-            //绝对路径
-            yaml.setResources(new FileSystemResource(fileName));
-//            yaml.setResources(new ClassPathResource(fileName));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Properties properties = yaml.getObject();
-        System.out.println(properties);
-//        String = properties.getProperty("key");
-    }
 
     /**
      * YAML 配置文件
@@ -66,7 +50,7 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
      * @return YAML 配置文件
      */
     @Bean
-    public  PropertySourcesPlaceholderConfigurer properties() {
+    public PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer cfger = new PropertySourcesPlaceholderConfigurer();
         cfger.setIgnoreUnresolvablePlaceholders(true);// Don't fail if @Value is not supplied in properties. Ignore if not found
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
@@ -74,8 +58,7 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
 
         if (c.exists()) {
             yaml.setResources(c);
-//            yaml.setResources(new FileSystemResource(fileName));
-//            System.out.println(">>>>>>>>>>>>" + yaml.getObject());
+            ;
             cfger.setProperties(Objects.requireNonNull(yaml.getObject()));
         } else System.err.println("未设置 YAML 配置文件");
 

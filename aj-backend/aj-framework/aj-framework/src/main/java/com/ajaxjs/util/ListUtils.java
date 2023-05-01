@@ -25,9 +25,9 @@ public class ListUtils {
     /**
      * 即使 List 为空（null），也要返回一个空的 List
      *
-     * @param <T>  范型，List中元素的类别
-     * @param list 给定的List对象，可以为null
-     * @return 如果给定的List不为null，则直接返回原List对象；如果为null，则返回一个空的List对象
+     * @param <T>  范型，List 中元素的类别
+     * @param list 给定的 List对象，可以为 null
+     * @return 如果给定的 List 不为 null，则直接返回原 List 对象；如果为 null，则返回一个空的 List 对象
      */
     public static <T> List<T> getList(List<T> list) {
         if (CollectionUtils.isEmpty(list))
