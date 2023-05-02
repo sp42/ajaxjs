@@ -17,11 +17,10 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.TestConfig;
-import com.ajaxjs.auth.controller.DataServiceApiController;
 import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.sso.model.IssueToken;
 import com.ajaxjs.sso.model.IssueTokenWithUser;
-import com.ajaxjs.sso.service.SsoService;
+import com.ajaxjs.sso.service.SsoServiceImpl;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.util.TestHelper;
@@ -36,7 +35,7 @@ public class TestSSO {
 	WebApplicationContext wac;
 
 	@Autowired
-	private SsoService ssoService;
+	private SsoServiceImpl ssoService;
 
 	@Autowired
 	DataServiceApiController apiController;

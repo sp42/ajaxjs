@@ -21,15 +21,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.ajaxjs.base.ISendSMS;
 import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.user.controller.ResetPasswordController;
-import com.ajaxjs.user.service.ResetPasswordService;
+import com.ajaxjs.user.service.ResetPasswordServiceImpl;
 import com.ajaxjs.user.service.SendEmail;
 
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public class TestResetPassword {
-	@Autowired
-	DataService ds;
 
 	@Autowired
 	ResetPasswordController resetPasswordController;
@@ -40,7 +38,7 @@ public class TestResetPassword {
 	}
 
 	@Autowired
-	ResetPasswordService resetPasswordService;
+    ResetPasswordServiceImpl resetPasswordService;
 
 	@Autowired
 	SendEmail sendEmail;

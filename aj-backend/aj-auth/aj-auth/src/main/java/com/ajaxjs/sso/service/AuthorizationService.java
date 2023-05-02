@@ -8,7 +8,6 @@ import com.ajaxjs.sso.model.AccessToken;
 import com.ajaxjs.sso.model.ClientDetails;
 import com.ajaxjs.sso.model.ExpireEnum;
 import com.ajaxjs.sso.model.RefreshToken;
-import com.ajaxjs.user.User;
 import com.ajaxjs.util.cryptography.Digest;
 import com.ajaxjs.util.date.LocalDateUtils;
 
@@ -30,7 +29,7 @@ public class AuthorizationService implements SsoDAO {
      * @param scope     允许访问的用户权限范围
      * @return
      */
-    public AccessToken createAccessToken(User user, ClientDetails client, String grantType, String scope) {
+    public AccessToken createAccessToken(UserModel.User user, ClientDetails client, String grantType, String scope) {
         // 过期时间
         Long expiresIn = LocalDateUtils.dayToSecond(ExpireEnum.ACCESS_TOKEN.getTime());
         // 过期的时间戳

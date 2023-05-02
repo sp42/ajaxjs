@@ -7,26 +7,6 @@ import com.ajaxjs.framework.SimpleBaseModel;
 
 public interface SystemModel extends AuthConstant {
 	/**
-	 * 系统
-	 */
-	public static class Systematic extends SimpleBaseModel {
-		/**
-		 * 开发厂商
-		 */
-		public String devFirm;
-
-		/**
-		 * 联系人及联系方式
-		 */
-		public String contact;
-
-		/**
-		 * 图标
-		 */
-		public String icon;
-	}
-
-	/**
 	 * 应用/客户端
 	 */
 	public class SystemApp extends SimpleBaseModel {

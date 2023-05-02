@@ -1,12 +1,16 @@
 package com.ajaxjs.base.business.service;
 
 import com.ajaxjs.base.business.model.Article;
+import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.PageResult;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article info(Long id) {
-        return null;
+        String sql = "SELECT * FROM article WHERE id = ?";
+        return CRUD.info(Article.class, sql, id);
     }
 
     @Override
@@ -16,7 +20,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Long create(Article entity) {
-        return null;
+        return CRUD.create(entity);
     }
 
     @Override

@@ -70,7 +70,8 @@ public class JdbcConn {
     /**
      * 一般情况用的数据库连接字符串
      */
-    public static final String JDBC_TPL = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai";
+    public static final String JDBC_TPL = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&" +
+            "allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai";
 
     /**
      * 连接数据库
@@ -96,6 +97,9 @@ public class JdbcConn {
             conn = source.getConnection();
 
             if (conn == null) LOGGER.warning("DataSource 不能建立数据库连接");
+
+            if (Version.isDebug)
+                LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
         } catch (SQLException e) {
             LOGGER.warning(e, "通过数据源对象获得数据库连接对象失败！");
         }

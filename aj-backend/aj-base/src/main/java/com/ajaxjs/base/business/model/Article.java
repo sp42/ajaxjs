@@ -1,6 +1,8 @@
 package com.ajaxjs.base.business.model;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.framework.entity.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,5 +11,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Article extends BaseModel {
+@TableName("article")
+public class Article extends BaseModel implements IBaseModel {
 }

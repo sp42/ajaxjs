@@ -21,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.ajaxjs.TestConfig;
 import com.ajaxjs.data_service.service.DataService;
-import com.ajaxjs.user.service.RegisterService;
+import com.ajaxjs.user.service.RegisterServiceImpl;
 import com.ajaxjs.util.TestHelper;
 
 @ContextConfiguration(classes = TestConfig.class)
@@ -34,7 +34,7 @@ public class TestUser {
     WebApplicationContext wac;
 
     @Autowired
-    private RegisterService registerService;
+    private RegisterServiceImpl registerService;
 
     @Autowired
     DataService ds;
@@ -66,6 +66,6 @@ public class TestUser {
         Boolean repeat = registerService.checkRepeat("username", "Mike747");
         assertTrue(repeat);
 
-        assertTrue(RegisterService.isRepeat("email", "sp42@qq.com", 1));
+        assertTrue(RegisterServiceImpl.isRepeat("email", "sp42@qq.com", 1));
     }
 }

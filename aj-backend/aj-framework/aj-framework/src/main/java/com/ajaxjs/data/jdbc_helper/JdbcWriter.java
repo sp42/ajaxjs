@@ -124,16 +124,16 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
     /**
      * 给 PrepareStatement 用的 SQL 语句和参数值列表
      */
-    static class SqlParams {
+    public static class SqlParams {
         /**
          * 给 PrepareStatement 用的 SQL 语句
          */
-        String sql;
+        public String sql;
 
         /**
          * 参数值列表
          */
-        Object[] values;
+        public Object[] values;
     }
 
     private static void everyMapField(Object entity, BiConsumer<String, Object> everyMapField) {

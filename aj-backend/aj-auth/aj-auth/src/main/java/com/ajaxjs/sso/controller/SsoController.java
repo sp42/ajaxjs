@@ -2,26 +2,26 @@ package com.ajaxjs.sso.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
+import com.ajaxjs.framework.spring.easy_controller.anno.InterfaceBasedController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
-import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
 import com.ajaxjs.sso.model.IssueToken;
 import com.ajaxjs.sso.model.IssueTokenWithUser;
-import com.ajaxjs.sso.service.ISsoService;
 import com.ajaxjs.sso.service.SsoService;
+import com.ajaxjs.sso.service.SsoServiceImpl;
 
 @RestController
 @RequestMapping("/sso")
-@InterfaceBasedController(serviceClass = SsoService.class)
-public interface SsoController extends ISsoService {
+@InterfaceBasedController(serviceClass = SsoServiceImpl.class)
+public interface SsoController extends SsoService {
     @RequestMapping("/authorize_code")
     @ControllerMethod("获取授权码")
     @Override
-    ModelAndView getAuthorizeCode(@RequestParam(required = true) String client_id, @RequestParam(required = true) String redirect_uri,
+    ModelAndView getAuthorizeCode(@RequestParam String client_id, @RequestParam String redirect_uri,
                                   @RequestParam(required = false) String scope, @RequestParam(required = false) String status, HttpServletRequest req);
 
     @RequestMapping("/authorize")

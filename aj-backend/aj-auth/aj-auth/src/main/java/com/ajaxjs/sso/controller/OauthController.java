@@ -1,18 +1,17 @@
 package com.ajaxjs.sso.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
+import com.ajaxjs.framework.spring.easy_controller.anno.InterfaceBasedController;
+import com.ajaxjs.sso.model.ClientDetails;
+import com.ajaxjs.sso.service.OauthService;
+import com.ajaxjs.sso.service.OauthServiceImpl;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ajaxjs.spring.easy_controller.ControllerMethod;
-import com.ajaxjs.spring.easy_controller.InterfaceBasedController;
-import com.ajaxjs.sso.model.ClientDetails;
-import com.ajaxjs.sso.service.IOauthService;
-import com.ajaxjs.sso.service.OauthService;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * OAuth 使用，有部分暂时未使用
@@ -21,8 +20,8 @@ import com.ajaxjs.sso.service.OauthService;
  */
 @RestController
 @RequestMapping("/oauth")
-@InterfaceBasedController(serviceClass = OauthService.class)
-public interface OauthController extends IOauthService {
+@InterfaceBasedController(serviceClass = OauthServiceImpl.class)
+public interface OauthController extends OauthService {
     @PostMapping("/clientRegister")
     @ControllerMethod("注册客户端")
     @Override

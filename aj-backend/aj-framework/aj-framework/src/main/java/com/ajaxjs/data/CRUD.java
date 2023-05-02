@@ -3,9 +3,11 @@ package com.ajaxjs.data;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.logger.LogHelper;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -76,5 +78,24 @@ public abstract class CRUD {
         List<T> list = jdbcReaderFactory().queryAsBeanList(beanClz, sql, params);
 
         return ListUtils.getList(list);
+    }
+
+    static String getTableName(Object entity) {
+        TableName tableNameA = entity.getClass().getAnnotation(TableName.class);
+        if (tableNameA == null)
+            throw new RuntimeException("实体类未提供表名");
+
+        return tableNameA.value();
+    }
+
+    public static Long create(String talebName, Object entity) {
+        JdbcWriter jdbcWriter = jdbcWriterFactory();
+        jdbcWriter.setTableName(talebName);
+
+        return (Long) jdbcWriter.create(entity);
+    }
+
+    public static Long create(Object entity) {
+        return create(getTableName(entity), entity);
     }
 }

@@ -1,5 +1,6 @@
 package com.ajaxjs.data.jdbc_helper;
 
+import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.ResultSetProcessor;
 import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.MappingValue;
@@ -33,6 +34,7 @@ public class JdbcReader extends JdbcConn {
      */
     public <T> T executeQuery(ResultSetProcessor<T> processor, String sql, Object... params) {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            LOGGER.infoYellow("执行 SQL-->[" + DataUtils.printRealSql(sql, params) + "]");
             setParam2Ps(ps, params);
 
             try (ResultSet rs = ps.executeQuery()) {

@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.auth.controller.DataServiceApiController;
 import com.ajaxjs.sso.model.ClientDetails;
 
 @ContextConfiguration(locations = { "classpath*:applicationContext.xml" })

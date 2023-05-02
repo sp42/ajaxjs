@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
+import com.ajaxjs.framework.TestHelper;
+import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,62 +23,53 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.ajaxjs.auth.controller.DataServiceApiController;
-import com.ajaxjs.data_service.service.DataService;
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.controller.LoginController;
-import com.ajaxjs.user.service.LoginService;
-import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.user.service.LoginServiceImpl;
 
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public class TestLogin {
-	HttpServletRequest request = mock(HttpServletRequest.class);
+    HttpServletRequest request = mock(HttpServletRequest.class);
 
-	@Autowired
-	LoginController loginController;
+    @Autowired
+    LoginController loginController;
 
-	@Autowired
-	DataServiceApiController apiController;
+    @Autowired
+    DataSource ds;
 
-	@Autowired
-	DataSource ds;
+    @Before
+    public void init() {
+        DataBaseConnection.initDb();
+    }
 
-	@Autowired
-	DataService ds2;
+    @Test
+    public void testLogin() throws SQLException {
+        assertNotNull(loginController);
 
-	@Before
-	public void init() {
-		ds2.init();
-	}
+        HttpSession s = mock(HttpSession.class);
+        when(request.getSession()).thenReturn(s);
+        when(request.getRemoteAddr()).thenReturn("35.220.250.107");
+        TestHelper.request = request;
 
-	@Test
-	public void testLogin() throws SQLException {
-		assertNotNull(loginController);
+        try (Connection connection = ds.getConnection()) {
+            JdbcConnection.setConnection(connection);
 
-		HttpSession s = mock(HttpSession.class);
-		when(request.getSession()).thenReturn(s);
-		when(request.getRemoteAddr()).thenReturn("35.220.250.107");
-		TestHelper.request = request;
-
-		try (Connection connection = ds.getConnection()) {
-			JdbcConnection.setConnection(connection);
-
-//			String result = loginController.login("sp42@qq.com", "a123123abc", 1, request);
+            boolean result = loginController.login("sp42@qq.com", "a123123abc");
 //			System.out.println(result);
 //			assertNotNull(result);
-		}
-	}
+        }
+    }
 
-	@Autowired
-	LoginService loginService;
+    @Autowired
+    LoginServiceImpl loginService;
 
-//	@Test
-	public void testPassword() {
-		String encodePassword = loginService.encodePassword("abc123");
-		assertEquals("5c5f72e86743a7e532ab783a3795c3a6e7853f31", encodePassword);
+    //	@Test
+    public void testPassword() {
+        String encodePassword = loginService.encodePassword("abc123");
+        assertEquals("5c5f72e86743a7e532ab783a3795c3a6e7853f31", encodePassword);
 
-		assertTrue(loginService.isPswMatch("5c5f72e86743a7e532ab783a3795c3a6e7853f31", "abc123"));
-	}
+        assertTrue(loginService.isPswMatch("5c5f72e86743a7e532ab783a3795c3a6e7853f31", "abc123"));
+    }
 }

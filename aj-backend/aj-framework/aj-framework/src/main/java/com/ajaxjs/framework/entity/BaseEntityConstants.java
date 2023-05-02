@@ -15,5 +15,26 @@ public interface BaseEntityConstants {
         }
     };
 
+    /**
+     * 正常
+     */
+    int STATUS_OK = 0;
+
+    /**
+     * 删除
+     */
+    int STATUS_DELETED = 1;
+
+    /**
+     * 草稿
+     */
+    int STATUS_DRAFT = -1;
+
+
+    /**
+     * 下架/下线/隐藏
+     */
+    int STATUS_OFFLINE = 2;
+
     public static final Date NULL_DATE = new Date(0);
 }

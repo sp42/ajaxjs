@@ -115,7 +115,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
         } else {
             /*
              * Spring Boot 如果 RestController 中返回 null，则不会走进自定义 HttpMessageConverter
-             * https://www.v2ex.com/t/452195 暂时无解，请不要返回 null
+             * https://www.v2ex.com/t/452195
              */
             ResponseResult resultWrapper = new ResponseResult();
 

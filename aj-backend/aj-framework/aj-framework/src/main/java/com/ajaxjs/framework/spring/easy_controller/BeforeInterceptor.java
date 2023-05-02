@@ -6,5 +6,5 @@ import java.lang.reflect.Method;
  * 控制器的前置拦截器
  */
 public interface BeforeInterceptor {
-    boolean before(Method beanMethod, Object[] args);
+    boolean before(Method beanMethod, Object[] args) throws Exception;
 }

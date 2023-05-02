@@ -1,23 +1,20 @@
 package com.ajaxjs.framework.spring.filter.dbconnection;
 
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Objects;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
-
-import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.data.jdbc_helper.JdbcConn;
+import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.sql.JdbcUtil;
+import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.ajaxjs.Version;
-import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.sql.JdbcUtil;
-import com.ajaxjs.util.logger.LogHelper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * 1、数据库连接、关闭连接；2、数据库事务
@@ -69,18 +66,8 @@ public class DataBaseConnection implements HandlerInterceptor {
     public static Connection initDb() {
         DataSource ds = DiContextUtil.getBean(DataSource.class);
         Objects.requireNonNull(ds, "未配置数据源");
-        Connection conn = null;
-
-        try {
-            conn = ds.getConnection();
-            JdbcConnection.setConnection(conn); // 设置连接到库，使其可用
-//            JdbcConnection.getDaoContext().setConnection(conn);
-
-            if (Version.isDebug)
-                LOGGER.info("数据库连接成功。详情：[{0}]", conn.getMetaData().getURL());
-        } catch (SQLException e) {
-            LOGGER.warning(e);
-        }
+        Connection conn = new JdbcConn().getConnection(ds);
+        JdbcConn.setConnection(conn); // 设置连接到库，使其可用
 
         return conn;
     }
@@ -99,7 +86,7 @@ public class DataBaseConnection implements HandlerInterceptor {
                     LOGGER.warning(e);
                 } finally {
                     if (JdbcUtil.IS_DB_CONNECTION_AUTO_CLOSE) // 保证一定关闭，哪怕有异常
-                        JdbcConnection.closeDb();
+                        JdbcConn.closeDb();
                 }
             }
 
@@ -108,7 +95,7 @@ public class DataBaseConnection implements HandlerInterceptor {
 
     private static void doTransaction(Exception ex) throws SQLException {
         LOGGER.info("正在处理数据库事务……");
-        Connection conn = JdbcConnection.getConnection();
+        Connection conn = JdbcConn.getConnection();
 
         if (conn.isClosed())
             throw new SQLException("数据库连接已经关闭");
