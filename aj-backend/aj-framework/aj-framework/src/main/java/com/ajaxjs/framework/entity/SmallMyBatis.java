@@ -5,7 +5,6 @@ import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,62 +25,28 @@ public class SmallMyBatis {
     /**
      * 加载 XML SQL
      */
-    public void loadXML() {
-//        String path = Resources.getResourcesFromClasspath("sql-mapper.xml");
-//        String xmlBody = FileHelper.openAsText(path);
-        String xmlBody = Resources.getResourceText("sql-mapper.xml");
-
-        if (xmlBody == null) {
-            LOGGER.warning("没有 SQL XML，功能中止");
-            return;
-        }
-
-        // 删除注释
+    public void loadXML(String... xmlFiles) {
         Pattern pattern = Pattern.compile("<!--.*?-->", Pattern.DOTALL);  // 使用 DOTALL 匹配多行注释
-        xmlBody = pattern.matcher(xmlBody).replaceAll("");
-//        System.out.println(xmlBody);
 
-        XmlHelper.parseXML(xmlBody, (node, nodeList) -> {
-            if ("sql".equals(node.getNodeName())) {
-                String id = XmlHelper.getNodeAttribute(node, "id");
+        for (String xmlFile : xmlFiles) {
+            String xmlBody = Resources.getResourceText(xmlFile);
 
-                if (sqls.containsKey(id))
-                    System.out.println("已有相同 id 的 sql，[id]：" + id);
+            if (xmlBody != null) {
+                // 删除注释
+                xmlBody = pattern.matcher(xmlBody).replaceAll("");
+                XmlHelper.parseXML(xmlBody, (node, nodeList) -> {
+                    if ("sql".equals(node.getNodeName())) {
+                        String id = XmlHelper.getNodeAttribute(node, "id");
 
-                String sql = XmlHelper.getNodeText(node);
-                sqls.put(id, sql);
+                        if (sqls.containsKey(id))
+                            LOGGER.warning("已有相同 id 的 sql，[id]：" + id);
+
+                        String sql = XmlHelper.getNodeText(node);
+                        sqls.put(id, sql);
+                    }
+                });
             }
-        });
-
-        loadXML2();
-    }
-
-    public void loadXML2() {
-//        String path = Resources.getResourcesFromClasspath("sql-mapper.xml");
-//        String xmlBody = FileHelper.openAsText(path);
-        String xmlBody = Resources.getResourceText("sql-mapper-zx.xml");
-
-        if (xmlBody == null) {
-            LOGGER.warning("没有 SQL XML，功能中止");
-            return;
         }
-
-        // 删除注释
-        Pattern pattern = Pattern.compile("<!--.*?-->", Pattern.DOTALL);  // 使用 DOTALL 匹配多行注释
-        xmlBody = pattern.matcher(xmlBody).replaceAll("");
-//        System.out.println(xmlBody);
-
-        XmlHelper.parseXML(xmlBody, (node, nodeList) -> {
-            if ("sql".equals(node.getNodeName())) {
-                String id = XmlHelper.getNodeAttribute(node, "id");
-
-                if (sqls.containsKey(id))
-                    System.out.println("已有相同 id 的 sql，[id]：" + id);
-
-                String sql = XmlHelper.getNodeText(node);
-                sqls.put(id, sql);
-            }
-        });
     }
 
     /**
@@ -138,10 +103,10 @@ public class SmallMyBatis {
             case "==":
                 if (value == null && "null".equals(tokens[2]))
                     return true;
-                return value.equals(tokens[2]);
+                return value.toString().equals(tokens[2]);
             case "!=":
             case "ne":
-                if (("".equals(value)  || (value == null)) && "null".equals(tokens[2]))
+                if (("".equals(value) || (value == null)) && "null".equals(tokens[2]))
                     return false;
                 return !value.equals(tokens[2]);
             case "gt":

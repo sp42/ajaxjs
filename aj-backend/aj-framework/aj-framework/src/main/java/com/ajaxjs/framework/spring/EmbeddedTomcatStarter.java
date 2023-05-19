@@ -199,8 +199,8 @@ public class EmbeddedTomcatStarter {
 		 * 这个对启动 tomcat 时间影响很大 又 很多 Servlet 3.0 新特性，不能禁掉，比如在 jar 里面放
 		 * jsp（部署时候就会这样，但开放阶段不用）。 故，用 isDebug 判断下
 		 */
-		if (Version.isDebug)
-			filter.setDefaultPluggabilityScan(false);
+//		if (Version.isDebug)
+//			filter.setDefaultPluggabilityScan(false);
 //      String oldTldSkip = filter.getTldSkip();
 //      System.out.println("-------" + oldTldSkip);
 //      String newTldSkip = oldTldSkip == null || oldTldSkip.trim().isEmpty() ? "pdq.jar" : oldTldSkip + ",pdq.jar";
