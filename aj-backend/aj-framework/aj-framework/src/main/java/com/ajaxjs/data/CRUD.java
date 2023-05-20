@@ -98,4 +98,15 @@ public abstract class CRUD {
     public static Long create(Object entity) {
         return create(getTableName(entity), entity);
     }
+
+    public static boolean update(String talebName, Object entity) {
+        JdbcWriter jdbcWriter = jdbcWriterFactory();
+        jdbcWriter.setTableName(talebName);
+
+        return jdbcWriter.update(entity) > 0;
+    }
+
+    public static boolean update(Object entity) {
+        return update(getTableName(entity), entity);
+    }
 }

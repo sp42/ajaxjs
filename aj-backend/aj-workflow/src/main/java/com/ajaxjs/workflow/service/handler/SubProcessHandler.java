@@ -16,80 +16,75 @@ import com.ajaxjs.workflow.model.po.ProcessPO;
 
 /**
  * 启动子流程的处理器
- * 
  */
 public class SubProcessHandler implements IHandler {
-	private SubProcessModel model;
+    private SubProcessModel model;
 
-	/**
-	 * 是否以 future 方式执行启动子流程任务
-	 */
-	private boolean isFutureRunning = false;
+    /**
+     * 是否以 future 方式执行启动子流程任务
+     */
+    private boolean isFutureRunning = false;
 
-	/**
-	 * 子流程执行的处理
-	 */
-	@Override
-	public void handle(Execution exec) {
-		// 根据子流程模型名称获取子流程定义对象
-		WorkflowEngine engine = exec.getEngine();
-		ProcessPO process = engine.processService.findByVersion(model.getProcessName(), model.getVersion());
-		Execution child = new Execution(exec, process, model.getName());
-		Order order = null;
+    /**
+     * 子流程执行的处理
+     */
+    @Override
+    public void handle(Execution exec) {
+        // 根据子流程模型名称获取子流程定义对象
+        WorkflowEngine engine = exec.getEngine();
+        ProcessPO process = engine.processService.findByVersion(model.getProcessName(), model.getVersion());
+        Execution child = new Execution(exec, process, model.getName());
+        Order order;
 
-		if (isFutureRunning) {
-			// 创建单个线程执行器来执行启动子流程的任务
-			ExecutorService es = Executors.newSingleThreadExecutor();
-			// 提交执行任务，并返回 future
-			Future<Order> future = es.submit(new ExecuteTask(exec, process, model.getName()));
+        if (isFutureRunning) {
+            // 创建单个线程执行器来执行启动子流程的任务
+            ExecutorService es = Executors.newSingleThreadExecutor();
+            // 提交执行任务，并返回 future
+            Future<Order> future = es.submit(new ExecuteTask(exec, process, model.getName()));
 
-			try {
-				es.shutdown();
-				order = future.get();
-			} catch (InterruptedException e) {
-				throw new WfException("创建子流程线程被强制终止执行", e.getCause());
-			} catch (ExecutionException e) {
-				throw new WfException("创建子流程线程执行异常.", e.getCause());
-			}
-		} else
-			order = engine.startInstanceByExecution(child);
+            try {
+                es.shutdown();
+                order = future.get();
+            } catch (InterruptedException e) {
+                throw new WfException("创建子流程线程被强制终止执行", e.getCause());
+            } catch (ExecutionException e) {
+                throw new WfException("创建子流程线程执行异常.", e.getCause());
+            }
+        } else
+            order = engine.startInstanceByExecution(child);
 
-		Objects.requireNonNull(order, "子流程创建失败");
-		exec.addTasks(engine.taskService.findByOrderId(order.getId()));
-	}
+        Objects.requireNonNull(order, "子流程创建失败");
+        exec.addTasks(engine.taskService.findByOrderId(order.getId()));
+    }
 
-	/**
-	 * Future 模式的任务执行。通过 call 返回任务结果集
-	 */
-	class ExecuteTask implements Callable<Order> {
-		private WorkflowEngine engine;
+    /**
+     * Future 模式的任务执行。通过 call 返回任务结果集
+     */
+    static class ExecuteTask implements Callable<Order> {
+        private WorkflowEngine engine;
 
-		private Execution child;
+        private Execution child;
 
-		/**
-		 * 构造函数
-		 * 
-		 * @param exec
-		 * @param process
-		 * @param parentNodeName
-		 */
-		public ExecuteTask(Execution exec, ProcessPO process, String parentNodeName) {
-			engine = exec.getEngine();
-			child = new Execution(exec, process, parentNodeName);
-		}
+        /**
+         * 构造函数
+         */
+        public ExecuteTask(Execution exec, ProcessPO process, String parentNodeName) {
+            engine = exec.getEngine();
+            child = new Execution(exec, process, parentNodeName);
+        }
 
-		@Override
-		public Order call() throws Exception {
-			return engine.startInstanceByExecution(child);
-		}
-	}
+        @Override
+        public Order call() {
+            return engine.startInstanceByExecution(child);
+        }
+    }
 
-	public SubProcessHandler(SubProcessModel model) {
-		this.model = model;
-	}
+    public SubProcessHandler(SubProcessModel model) {
+        this.model = model;
+    }
 
-	public SubProcessHandler(SubProcessModel model, boolean isFutureRunning) {
-		this.model = model;
-		this.isFutureRunning = isFutureRunning;
-	}
+    public SubProcessHandler(SubProcessModel model, boolean isFutureRunning) {
+        this.model = model;
+        this.isFutureRunning = isFutureRunning;
+    }
 }

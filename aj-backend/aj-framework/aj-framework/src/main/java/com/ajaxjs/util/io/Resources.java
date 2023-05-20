@@ -121,9 +121,7 @@ public class Resources {
      * @return 资源文件的内容
      */
     public static String getResourceText(String path) {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        try (InputStream in = classLoader.getResourceAsStream(path)) {
+        try (InputStream in = getResource(path)) {
             if (in == null) {
                 LOGGER.warning("[{0}] 下没有 [{1}] 资源文件", getResourcesFromClasspath(""), path);
                 return null;
@@ -134,6 +132,12 @@ public class Resources {
             LOGGER.warning(e);
             return null;
         }
+    }
+
+    public static InputStream getResource(String path) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        return classLoader.getResourceAsStream(path);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.entity.tree;
 
-import com.ajaxjs.framework.Identity;
+import com.ajaxjs.data.entity.Identity;
 
 /**
  * 一个树节点

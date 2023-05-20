@@ -24,10 +24,10 @@ public class SubprocessParser extends AbstractNodeParser {
 	@Override
 	protected void parseNode(NodeModel node, Element element) {
 		SubProcessModel model = (SubProcessModel) node;
-		model.setProcessName(element.getAttribute(ATTR_PROCESSNAME));
+		model.setProcessName(element.getAttribute(ATTR_PROCESS_NAME));
 		String version = element.getAttribute(ATTR_VERSION);
-
 		int ver;
+
 		try {
 			ver = Integer.parseInt(version);
 		} catch (NumberFormatException e) {

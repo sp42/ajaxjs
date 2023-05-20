@@ -20,11 +20,11 @@ public interface UserService {
      *
      * @param field 字段名，当前只能是 username/email/phone 中的任意一种
      * @param value 字段值，要校验的值
-     * @return 是否已经存在一样的值
+     * @return 是否已经存在一样的值，true 表示存在
      */
     @GetMapping("/checkRepeat")
     @ControllerMethod("检查用户某个值是否已经存在一样的值")
-    Boolean checkRepeat(@RequestParam String field, @RequestParam String value);
+    Boolean checkRepeat(@RequestParam String field, @RequestParam Object value);
 
     @PutMapping
     @ControllerMethod

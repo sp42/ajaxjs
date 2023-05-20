@@ -10,6 +10,7 @@
  */
 package com.ajaxjs.framework;
 
+import com.ajaxjs.data.entity.Identity;
 import lombok.Data;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ import java.util.Map;
  * @author sp42 frank@ajaxjs.com
  */
 @Data
-public abstract class BaseModel {
+public abstract class BaseModel implements Identity<Long> {
     private Long id;
 
     /**

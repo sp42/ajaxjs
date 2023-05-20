@@ -7,6 +7,7 @@ import javax.el.ExpressionFactory;
 
 //import org.apache.el.ExpressionFactoryImpl;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.ReflectUtil;
@@ -22,7 +23,9 @@ import de.odysseus.el.util.SimpleContext;
 /**
  * 决策定义 decision 元素
  */
+
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class DecisionModel extends NodeModel {
     public static final LogHelper LOGGER = LogHelper.getLog(DecisionModel.class);
 
@@ -39,10 +42,8 @@ public class DecisionModel extends NodeModel {
     private String handleClass;
 
     /**
-     * 决策处理类，对于复杂的分支条件，可通过 handle lambda 来处理。 实现 lambda 需要根据执行对象做处理，并返回后置流转的 name
-     *
-     * @param execution 执行对象
-     * @return String 后置流转的 name
+     * 决策处理类，对于复杂的分支条件，可通过 handleLambda 来处理。 实现 lambda 需要根据执行对象做处理，并返回后置流转的 name
+     * Function<execution 执行对象,String 后置流转的 name>
      */
     private Function<Execution, String> handleLambda;
 
@@ -59,7 +60,7 @@ public class DecisionModel extends NodeModel {
     /**
      * 调用表达式解析器，运算表达式，返回结果
      *
-     * @param <T>
+     * @param <T>  返回类型
      * @param T    返回类型
      * @param expr 表达式串
      * @param args 参数列表
@@ -78,8 +79,7 @@ public class DecisionModel extends NodeModel {
     @Override
     public void exec(Execution exec) {
         LOGGER.info("任务[{0}]运行抉择表达式的参数是[{1}]", exec.getOrder().getId(), exec.getArgs());
-
-        String next = null;
+        String next;
 
         if (StringUtils.hasText(expr))
             next = eval(String.class, expr, exec.getArgs());
@@ -91,7 +91,7 @@ public class DecisionModel extends NodeModel {
         }
 
         LOGGER.info("任务[{0}]运行抉择表达式[{1}]的结果是[{2}]", exec.getOrder().getId(), expr, next);
-        boolean isfound = false;
+        boolean isFound = false;
 
         for (TransitionModel tm : getOutputs()) {
             if (!StringUtils.hasText(next)) {
@@ -100,16 +100,16 @@ public class DecisionModel extends NodeModel {
                 if (StringUtils.hasText(expr) && eval(Boolean.class, expr, exec.getArgs())) {
                     tm.setEnabled(true);
                     tm.execute(exec);
-                    isfound = true;
+                    isFound = true;
                 }
             } else if (tm.getName().equals(next)) {
                 tm.setEnabled(true);
                 tm.execute(exec);
-                isfound = true;
+                isFound = true;
             }
         }
 
-        if (!isfound)
+        if (!isFound)
             throw new WfException(exec.getOrder().getId() + "->decision 节点无法确定下一步执行路线");
     }
 

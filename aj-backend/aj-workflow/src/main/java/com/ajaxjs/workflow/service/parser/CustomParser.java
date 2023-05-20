@@ -20,7 +20,7 @@ public class CustomParser extends AbstractNodeParser {
 	protected void parseNode(NodeModel node, Element element) {
 		CustomModel custom = (CustomModel) node;
 		custom.setClazz(element.getAttribute(ATTR_CLAZZ));
-		custom.setMethodName(element.getAttribute(ATTR_METHODNAME));
+		custom.setMethodName(element.getAttribute(ATTR_METHOD_NAME));
 		custom.setArgs(element.getAttribute(ATTR_ARGS));
 		custom.setVar(element.getAttribute(ATTR_VAR));
 	}

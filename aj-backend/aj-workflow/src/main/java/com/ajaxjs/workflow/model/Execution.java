@@ -65,7 +65,7 @@ public class Execution {
 //	}
 
     /**
-     * WorlflowEngine holder
+     * WorkflowEngine holder
      */
     private WorkflowEngine engine;
 
@@ -122,17 +122,16 @@ public class Execution {
     /**
      * 获取流程模型对象
      *
-     * @return
+     * @return 流程模型对象
      */
     public ProcessModel getModel() {
         return process.getModel();
     }
 
-
     /**
      * 添加任务集合
      *
-     * @param tasks
+     * @param tasks 任务集合
      */
     public void addTasks(List<Task> tasks) {
         this.tasks.addAll(tasks);
@@ -141,16 +140,16 @@ public class Execution {
     /**
      * 添加任务
      *
-     * @param task
+     * @param task 任务
      */
     public void addTask(Task task) {
-        this.tasks.add(task);
+        tasks.add(task);
     }
 
     /**
      * 判断是否已经成功合并
      *
-     * @return
+     * @return 是否已经成功合并
      */
     public boolean isMerged() {
         return isMerged;
@@ -159,7 +158,7 @@ public class Execution {
     /**
      * 设置是否为已合并
      *
-     * @param isMerged
+     * @param isMerged 是否为已合并
      */
     public void setMerged(boolean isMerged) {
         this.isMerged = isMerged;

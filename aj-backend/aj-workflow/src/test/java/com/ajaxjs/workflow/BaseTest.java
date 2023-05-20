@@ -1,11 +1,9 @@
 package com.ajaxjs.workflow;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.workflow.common.WfUtils;
+import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.workflow.service.BaseWfService;
 import com.ajaxjs.workflow.service.ProcessService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 基础测试类
@@ -31,7 +29,7 @@ public abstract class BaseTest extends BaseWfService {
 	 * @return
 	 */
 	public long init(String xmlPath) {
-		String processXml = StreamHelper.byteStream2string(WfUtils.getStreamFromClasspath(xmlPath));
+		String processXml = Resources.getResourceText(xmlPath);
 		return processService.deploy(processXml, 1000L);
 	}
 }

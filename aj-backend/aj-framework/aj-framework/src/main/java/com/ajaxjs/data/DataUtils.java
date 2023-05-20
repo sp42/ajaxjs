@@ -126,27 +126,35 @@ public class DataUtils {
             arr[i] = arr[i] + inSql;
         }
 
-        return String.join(" ", arr).trim();
+        String str = String.join(" ", arr).trim();
+
+        return insertNewline(str, 20);
     }
 
     /**
-     * 简单格式化 SQL，当前对 SELECT 语句有效
+     * 指定行数时插入换行符
      *
-     * @param sql SELECT 语句
-     * @return 美化后的 SQL
+     * @param input 字符串
+     * @param n     第几个单词就换行
+     * @return 字符串
      */
-    public static String formatSql(String sql) {
-        String separator = System.getProperty("line.separator");
-//        sql = '\t' + sql;
-        sql = sql.replaceAll("(?i)SELECT\\s+", "SELECT "); // 统一大写
-        sql = sql.replaceAll("\\s+(?i)FROM", separator + "\tFROM");
-        sql = sql.replaceAll("\\s+(?i)WHERE", separator + "WHERE");
-        sql = sql.replaceAll("\\s+(?i)GROUP BY", separator + "GROUP BY");
-        sql = sql.replaceAll("\\s+(?i)ORDER BY", separator + "ORDER BY");
-        sql = sql.replaceAll("\\s+(?i)LIMIT", separator + "\tLIMIT");
-        sql = sql.replaceAll("\\s+(?i)DESC", " DESC");
-        sql = sql.replaceAll("\\s+(?i)ASC", " ASC");
+    public static String insertNewline(String input, int n) {
+        StringBuilder sb = new StringBuilder();
+        String[] words = input.split(" ");
+        int lineCount = 0;
 
-        return sql;
+        for (String word : words) {
+            sb.append(word).append(" ");
+            lineCount++;
+
+            if (lineCount == n) {
+                sb.append("\n");
+                lineCount = 0;
+            }
+        }
+
+        return sb.toString().trim();
     }
+
+
 }

@@ -70,6 +70,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
     public Serializable insert(String sql, Object... params) {
         try (PreparedStatement ps = isAutoIns ? conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS) : conn.prepareStatement(sql)) {
             setParam2Ps(ps, params);
+            LOGGER.infoYellow("执行 SQL-->[" + DataUtils.printRealSql(sql, params) + "]");
             int effectRows = ps.executeUpdate();
 
             if (effectRows > 0) {// 插入成功
@@ -77,6 +78,9 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
                     try (ResultSet rs = ps.getGeneratedKeys()) {// 当保存之后会自动获得数据库返回的主键
                         if (rs.next()) {
                             Object newlyId = rs.getObject(1);
+
+                            if (newlyId instanceof BigInteger)
+                                newlyId = ((BigInteger) newlyId).longValue();
 
                             if (idType.equals(Long.class))
                                 return (Long) newlyId;
@@ -112,6 +116,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
     public int write(String sql, Object... params) {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             setParam2Ps(ps, params);
+            LOGGER.infoYellow("执行 SQL-->[" + (DataUtils.printRealSql(sql, params)) + "]");
 
             return ps.executeUpdate();
         } catch (SQLException e) {
@@ -191,12 +196,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             everyBeanField(entity, (field, value) -> {
                 sb.append(" `").append(field).append("`,");
                 valuesHolder.add(" ?");
-
-                // 如何设数据库 null 值
-                if (value.equals(NULL_DATE) || value.equals(NULL_INT) || value.equals(NULL_LONG) || value.equals(NULL_STRING))
-                    values.add(null);
-                else
-                    values.add(value);
+                values.add(beanValue2SqlValue(value));
             });
         }
 
@@ -210,6 +210,16 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         sp.values = arr;
 
         return sp;
+    }
+
+    // Bean 的值转换为符合 SQL 格式的
+    private static Object beanValue2SqlValue(Object value) {
+        if (value instanceof Enum) // 枚举类型，取其字符串保存
+            return value.toString();
+        else if (value.equals(NULL_DATE) || value.equals(NULL_INT) || value.equals(NULL_LONG) || value.equals(NULL_STRING)) // 如何设数据库 null 值
+            return null;
+        else
+            return value;
     }
 
     /**
@@ -234,12 +244,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         } else { // Java Bean
             everyBeanField(entity, (field, value) -> {
                 sb.append(" `").append(field).append("` = ?,");
-
-                // 如何设数据库 null 值
-                if (value.equals(NULL_DATE) || value.equals(NULL_INT) || value.equals(NULL_LONG) || value.equals(NULL_STRING))
-                    values.add(null);
-                else
-                    values.add(value);
+                values.add(beanValue2SqlValue(value));
             });
         }
 
@@ -289,9 +294,12 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) entity;
             map.put(idField, newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
-        } else {
+        } else { // bean
             try {
                 Method getId = entity.getClass().getMethod("getId");
+
+                if (newlyId == null)
+                    return null; // 创建失败
 
                 if (newlyId.equals(-1)) { // 插入成功 但没有自增
                     return (Serializable) getId.invoke(entity);

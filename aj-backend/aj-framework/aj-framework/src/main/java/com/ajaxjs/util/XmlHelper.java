@@ -175,4 +175,19 @@ public class XmlHelper {
 
         return null;
     }
+
+    /**
+     * 获取指定的 attribute 值
+     *
+     * @param el       节点
+     * @param attrName 属性名
+     * @return 属性值
+     */
+    public static String getAttribute(Node el, String attrName) {
+        NamedNodeMap attributes = el.getAttributes();
+        if (attributes != null && attributes.getLength() > 0)
+            return attributes.getNamedItem(attrName).getNodeValue();
+        else
+            return null;
+    }
 }

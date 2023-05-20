@@ -44,7 +44,7 @@ public abstract class AbstractNodeParser {
 	public void parse(Element element) {
 		model = newModel();
 		model.setName(element.getAttribute(ATTR_NAME));
-		model.setDisplayName(element.getAttribute(ATTR_DISPLAYNAME));
+		model.setDisplayName(element.getAttribute(ATTR_DISPLAY_NAME));
 		model.setLayout(element.getAttribute(ATTR_LAYOUT));
 		model.setPreInterceptors(element.getAttribute(ATTR_PREINTERCEPTORS));
 		model.setPostInterceptors(element.getAttribute(ATTR_POSTINTERCEPTORS));
@@ -55,7 +55,7 @@ public abstract class AbstractNodeParser {
 			TransitionModel transition = new TransitionModel();
 
 			transition.setName(te.getAttribute(ATTR_NAME));
-			transition.setDisplayName(te.getAttribute(ATTR_DISPLAYNAME));
+			transition.setDisplayName(te.getAttribute(ATTR_DISPLAY_NAME));
 			transition.setTo(te.getAttribute(ATTR_TO));
 			transition.setExpr(te.getAttribute(ATTR_EXPR));
 			transition.setG(te.getAttribute(ATTR_G));
@@ -102,11 +102,11 @@ public abstract class AbstractNodeParser {
 	 * 节点属性名称
 	 */
 	public static final String ATTR_NAME = "name";
-	public static final String ATTR_DISPLAYNAME = "displayName";
-	public static final String ATTR_INSTANCEURL = "instanceUrl";
-	public static final String ATTR_INSTANCENOCLASS = "instanceNoClass";
+	public static final String ATTR_DISPLAY_NAME = "displayName";
+	public static final String ATTR_INSTANCE_URL = "instanceUrl";
+	public static final String ATTR_INSTANCE_NO_CLASS = "instanceNoClass";
 	public static final String ATTR_EXPR = "expr";
-	public static final String ATTR_HANDLECLASS = "handleClass";
+	public static final String ATTR_HANDLE_CLASS = "handleClass";
 	public static final String ATTR_FORM = "form";
 	public static final String ATTR_FIELD = "field";
 	public static final String ATTR_VALUE = "value";
@@ -114,18 +114,18 @@ public abstract class AbstractNodeParser {
 	public static final String ATTR_TYPE = "type";
 	public static final String ATTR_ASSIGNEE = "assignee";
 	public static final String ATTR_ASSIGNEE_HANDLER = "assignmentHandler";
-	public static final String ATTR_PERFORMTYPE = "performType";
-	public static final String ATTR_TASKTYPE = "taskType";
+	public static final String ATTR_PERFORM_TYPE = "performType";
+	public static final String ATTR_TASK_TYPE = "taskType";
 	public static final String ATTR_TO = "to";
-	public static final String ATTR_PROCESSNAME = "processName";
+	public static final String ATTR_PROCESS_NAME = "processName";
 	public static final String ATTR_VERSION = "version";
-	public static final String ATTR_EXPIRETIME = "expireTime";
-	public static final String ATTR_AUTOEXECUTE = "autoExecute";
+	public static final String ATTR_EXPIRE_TIME = "expireTime";
+	public static final String ATTR_AUTO_EXECUTE = "autoExecute";
 	public static final String ATTR_CALLBACK = "callback";
-	public static final String ATTR_REMINDERTIME = "reminderTime";
-	public static final String ATTR_REMINDERREPEAT = "reminderRepeat";
+	public static final String ATTR_REMINDER_TIME = "reminderTime";
+	public static final String ATTR_REMINDER_REPEAT = "reminderRepeat";
 	public static final String ATTR_CLAZZ = "clazz";
-	public static final String ATTR_METHODNAME = "methodName";
+	public static final String ATTR_METHOD_NAME = "methodName";
 	public static final String ATTR_ARGS = "args";
 	public static final String ATTR_VAR = "var";
 	public static final String ATTR_LAYOUT = "layout";

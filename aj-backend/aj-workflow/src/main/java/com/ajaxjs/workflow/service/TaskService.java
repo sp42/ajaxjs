@@ -410,7 +410,7 @@ public class TaskService extends BaseWfService {
 		task.setOrderId(exec.getOrder().getId());// 关联流程实例 order
 		task.setName(taskModel.getName());
 		task.setDisplayName(taskModel.getDisplayName());
-		task.setTaskType(taskModel.isMajor() ? TaskType.MAJOR : TaskType.AIDANT);
+		task.setTaskType(taskModel.isMajor() ? TaskType.MAJOR : TaskType.AIDAN);
 		task.setModel(taskModel);
 		task.setExpireDate(taskModel.getExpireTime());
 
@@ -692,7 +692,7 @@ public class TaskService extends BaseWfService {
 	 * @return
 	 */
 	public List<Task> transferAidant(Long taskId, Long operator, Long... actors) {
-		List<Task> tasks = copyTask(taskId, TaskType.AIDANT, actors);
+		List<Task> tasks = copyTask(taskId, TaskType.AIDAN, actors);
 		complete(taskId, operator, null);
 
 		return tasks;

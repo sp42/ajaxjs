@@ -147,16 +147,13 @@ public class WorkItem implements Serializable {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("WorkItem(processId=").append(this.processId);
-        sb.append(",orderId=").append(this.orderId);
-        sb.append(",taskId=").append(this.taskId);
-        sb.append(",processName").append(this.processName);
-        sb.append(",taskType=").append(this.taskType);
-        sb.append(",taskName").append(this.taskName);
-        sb.append(",performType=").append(this.performType).append(")");
-
-        return sb.toString();
+        return "WorkItem(processId=" + this.processId +
+                ",orderId=" + this.orderId +
+                ",taskId=" + this.taskId +
+                ",processName" + this.processName +
+                ",taskType=" + this.taskType +
+                ",taskName" + this.taskName +
+                ",performType=" + this.performType + ")";
     }
 
 }

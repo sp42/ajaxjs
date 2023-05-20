@@ -10,11 +10,13 @@ import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.common.WfUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 任务实体类
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Task extends BasePersistantObject {
     /**
      *
@@ -121,15 +123,14 @@ public class Task extends BasePersistantObject {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Task(id=").append(getId());
-        sb.append(",orderId=").append(orderId);
-        sb.append(",taskName=").append(getName());
-        sb.append(",displayName").append(displayName);
-        sb.append(",taskType=").append(taskType);
-        sb.append(",createDate=").append(getCreateDate());
-        sb.append(",performType=").append(performType).append(")");
+        String sb = "Task(id=" + getId() +
+                ",orderId=" + orderId +
+                ",taskName=" + getName() +
+                ",displayName" + displayName +
+                ",taskType=" + taskType +
+                ",createDate=" + getCreateDate() +
+                ",performType=" + performType + ")";
 
-        return sb.toString();
+        return sb;
     }
 }

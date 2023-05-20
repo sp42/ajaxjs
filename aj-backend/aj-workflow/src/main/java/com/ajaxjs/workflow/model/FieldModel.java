@@ -1,6 +1,7 @@
 package com.ajaxjs.workflow.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
  * 字段模型类
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class FieldModel extends BaseWfModel {
     private static final long serialVersionUID = -3439646328045814844L;
 

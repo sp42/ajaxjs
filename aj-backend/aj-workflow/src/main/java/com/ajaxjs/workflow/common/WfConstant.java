@@ -7,12 +7,12 @@ public interface WfConstant {
 	/**
 	 * 状态；活动状态
 	 */
-	public static final Integer STATE_ACTIVE = 1;
+	static final Integer STATE_ACTIVE = 1;
 
 	/**
 	 * 状态：结束状态
 	 */
-	public static final Integer STATE_FINISH = 0;
+	static final Integer STATE_FINISH = 0;
 
 	/**
 	 * 状态：终止状态
@@ -31,12 +31,12 @@ public interface WfConstant {
 		/**
 		 * 协办任务
 		 */
-		AIDANT,
+		AIDAN,
 
 		/**
 		 * 仅作为记录的
 		 */
-		RECORD;
+		RECORD
 	}
 
 	/**
@@ -51,6 +51,6 @@ public interface WfConstant {
 		/**
 		 * 会签任务，所有参与者都完成，才可执行下一步
 		 */
-		ALL;
+		ALL
 	}
 }
