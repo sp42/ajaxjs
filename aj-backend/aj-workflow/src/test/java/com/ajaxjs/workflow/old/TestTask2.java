@@ -19,7 +19,7 @@ public class TestTask2 extends BaseTest {
 	public void testAssignmentHandler() {
 		init("test/task/assignmenthandler/process.snaker");
 		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, null);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 //			engine.executeTask(task.getId(), "admin");
@@ -32,7 +32,7 @@ public class TestTask2 extends BaseTest {
 	public void testAidant() {
 		init("test/task/aidant/process.snaker");
 		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, null);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 //			engine.taskService.createNewTask(task.getId(), 1, 1000L);
@@ -46,7 +46,7 @@ public class TestTask2 extends BaseTest {
 		Args args = new Args();
 		args.put("task1.operator", new String[] { "2" });
 		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, args);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 //			engine.executeTask(task.getId(), SnakerEngine.ADMIN, args);
@@ -80,7 +80,7 @@ public class TestTask2 extends BaseTest {
 		args.put("task1.operator", new String[] { "role1" });
 		Order order = engine.startInstanceByName("group", 0, 2L, args);
 		System.out.println("order=" + order);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			// 操作人改为test时，角色对应test，会无权处理

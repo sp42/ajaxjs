@@ -54,7 +54,7 @@ public class SubProcessHandler implements IHandler {
             order = engine.startInstanceByExecution(child);
 
         Objects.requireNonNull(order, "子流程创建失败");
-        exec.addTasks(engine.taskService.findByOrderId(order.getId()));
+        exec.addTasks(engine.taskService.findTasksByOrderId(order.getId()));
     }
 
     /**

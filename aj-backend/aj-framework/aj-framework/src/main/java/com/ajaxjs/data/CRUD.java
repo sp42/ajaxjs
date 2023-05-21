@@ -6,9 +6,10 @@ import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -109,4 +110,27 @@ public abstract class CRUD {
     public static boolean update(Object entity) {
         return update(getTableName(entity), entity);
     }
+
+    public static boolean delete(Object entity, Serializable id) {
+        return delete(getTableName(entity), id);
+    }
+
+    public static boolean delete(String talebName, Serializable id) {
+        JdbcWriter jdbcWriter = jdbcWriterFactory();
+        jdbcWriter.setTableName(talebName);
+
+        return jdbcWriter.delete(id);
+    }
+
+    public static boolean delete(Object entity) {
+        Object id = ReflectUtil.executeMethod(entity, "getId");
+
+        if (id != null)
+            return delete(entity, (Serializable) id);
+        else {
+            LOGGER.warning("没有 getId()");
+            return false;
+        }
+    }
+
 }

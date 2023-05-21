@@ -19,7 +19,7 @@ public class TestSubProcess extends BaseTest {
 		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 		Order order = engine.startInstanceByName("subprocess1", 0, 2L, args);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			System.out.println("************************begin:::::" + task);
@@ -42,7 +42,7 @@ public class TestSubProcess extends BaseTest {
 		Args args = new Args();
 		args.put("task1.operator", new String[] { "1" });
 		Order order = engine.startInstanceByName("subprocess2", 0, 2L, args);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		if (tasks != null)
 			for (Task task : tasks) {

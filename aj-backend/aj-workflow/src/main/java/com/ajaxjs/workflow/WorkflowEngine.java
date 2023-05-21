@@ -1,21 +1,10 @@
 package com.ajaxjs.workflow;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
-
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;
-import com.ajaxjs.workflow.common.WfDao;
+import com.ajaxjs.workflow.common.WfData;
 import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.ProcessModel;
@@ -30,6 +19,12 @@ import com.ajaxjs.workflow.service.OrderService;
 import com.ajaxjs.workflow.service.ProcessService;
 import com.ajaxjs.workflow.service.SurrogateService;
 import com.ajaxjs.workflow.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.*;
 
 /**
  * 基本的流程引擎实现类
@@ -71,13 +66,9 @@ public class WorkflowEngine {
 
     /**
      * 为什么要用数组保存起来，却不使用？
-     *
-     * @param order
-     * @param operator 操作人 id
-     * @param args     参数列表
      */
     private void execTask(Order order, Long operator, Args args) {
-        List<Task> tasks = taskService.findByOrderId(order.getId());
+        List<Task> tasks = WfData.findTasksByOrderId(order.getId());
         List<Task> newTasks = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(tasks)) {
@@ -142,7 +133,7 @@ public class WorkflowEngine {
         String idOrName = process.getName();
         Objects.requireNonNull(process, "指定的流程定义[id/name=" + idOrName + "]不存在");
 
-        if (process.getStat() != null && process.getStat() == WfConstant.STATE_FINISH)
+        if (process.getStat() != null && process.getStat().equals(WfConstant.STATE_FINISH))
             throw new IllegalArgumentException("指定的流程定义[id/name=" + idOrName + ",version=" + process.getVersion() + "]为非活动状态");
 
         Execution exec = createExecute(process, operator, args, null, null);
@@ -155,9 +146,6 @@ public class WorkflowEngine {
 
     /**
      * 运行 start 节点
-     *
-     * @param process
-     * @param exec
      */
     private static void runStart(ProcessPO process, Execution exec) {
         StartModel start = process.getModel().getStart();
@@ -193,7 +181,7 @@ public class WorkflowEngine {
      * @param taskId   任务 id
      * @param operator 操作人
      * @param args     参数列表
-     * @return
+     * @return 任务列表
      */
     public List<Task> executeTask(Long taskId, Long operator, Args args) {
         LOGGER.info("开始执行对象，先初始化相关的参数");
@@ -220,13 +208,13 @@ public class WorkflowEngine {
 
     /**
      * 根据任务主键 id，操作人 id，参数列表执行任务，并且根据 nodeName 跳转到任意节点 1、nodeName 为 null 时，则驳回至上一步处理
-     * 2、nodeName不为null时，则任意跳转，即动态创建转移
+     * 2、nodeName 不为 null 时，则任意跳转，即动态创建转移
      *
      * @param taskId   任务 id
      * @param operator 操作人
      * @param args     参数列表
-     * @param nodeName
-     * @return
+     * @param nodeName 节点名称
+     * @return 任务列表
      */
     public List<Task> executeAndJumpTask(Long taskId, Long operator, Args args, String nodeName) {
         Execution execution = executeTaskCore(taskId, operator, args);
@@ -266,7 +254,7 @@ public class WorkflowEngine {
         args = Args.getEmpty(args);
 
         Task task = taskService.complete(taskId, operator, args);
-        Order order = WfDao.OrderDAO.findById(task.getOrderId());
+        Order order = WfData.findOrder(task.getOrderId());
         Objects.requireNonNull(order, "指定的流程实例[id=" + task.getOrderId() + "]已完成或不存在");
 
         // 记录最后更新人
@@ -311,7 +299,7 @@ public class WorkflowEngine {
      * @return 任务列表
      */
     public List<Task> createFreeTask(Long orderId, Long operator, Args args, TaskModel model) {
-        Order order = WfDao.OrderDAO.findById(orderId);
+        Order order = WfData.findOrder(orderId);
         Objects.requireNonNull(order, "指定的流程实例[id=" + orderId + "]已完成或不存在");
         order.setUpdater(operator);
         // order.setLastUpdateTime(DateHelper.getTime());

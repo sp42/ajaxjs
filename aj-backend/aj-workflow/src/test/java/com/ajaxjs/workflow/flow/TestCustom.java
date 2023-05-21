@@ -14,7 +14,7 @@ public class TestCustom extends BaseTest {
 	public void testCustomHandler() {
 //		WorlflowEngine engine = (WorlflowEngine) init("test/custom/c1.xml");
 		Order order = engine.startInstanceByName("custom1", 0, null, null);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		if (tasks != null)
 			for (Task task : tasks) {
@@ -29,7 +29,7 @@ public class TestCustom extends BaseTest {
 		args.put("msg", "custom test");
 
 		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, null, args);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 		
 		if (tasks != null)
 			for (Task task : tasks) {

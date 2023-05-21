@@ -3,7 +3,8 @@ package com.ajaxjs.workflow.model.po;
 import java.util.Date;
 import java.util.Map;
 
-import com.ajaxjs.sql.annotation.IgnoreDB;
+import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
+import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfConstant.PerformType;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;
@@ -17,6 +18,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TableName("wf_task")
 public class Task extends BasePersistantObject {
     /**
      *
@@ -94,8 +96,6 @@ public class Task extends BasePersistantObject {
 
     /**
      * TODO
-     *
-     * @return
      */
     @IgnoreDB
     public Long[] getActorIds() {
@@ -123,14 +123,12 @@ public class Task extends BasePersistantObject {
 
     @Override
     public String toString() {
-        String sb = "Task(id=" + getId() +
+        return "Task(id=" + getId() +
                 ",orderId=" + orderId +
                 ",taskName=" + getName() +
                 ",displayName" + displayName +
                 ",taskType=" + taskType +
                 ",createDate=" + getCreateDate() +
                 ",performType=" + performType + ")";
-
-        return sb;
     }
 }

@@ -36,7 +36,7 @@ public class TestMisc extends BaseTest {
 		args.put("task1.operator", new String[] { "1" });
 		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, args);
 
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			engine.executeTask(task.getId(), 1L, null);

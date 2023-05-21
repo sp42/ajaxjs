@@ -23,7 +23,7 @@ public class TestTask extends BaseTest {
 
 		Order order = engine.startInstanceByName("simple", 0, 87L, args);
 
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 		assertNotNull(tasks);
 
 		for (Task task : tasks)
@@ -40,7 +40,7 @@ public class TestTask extends BaseTest {
 		args.put("task1.operator", new String[] { "1" });
 
 		Order order = engine.startInstanceById(155L, 2L, args);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 		assertNotNull(tasks);
 
 		for (Task task : tasks) {
@@ -55,7 +55,7 @@ public class TestTask extends BaseTest {
 
 		Order order = engine.startInstanceByName("transfer", 0, 1000L, null);
 
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 //			engine.taskService.createNewTask(task.getId(), 0, 1000L);
@@ -84,7 +84,7 @@ public class TestTask extends BaseTest {
 		args.put("task1.operator", new String[] { "1" });
 
 		Order order = engine.startInstanceByName("simple", null, 2L, args);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks)
 			engine.executeTask(task.getId(), 2L, args);
@@ -120,7 +120,7 @@ public class TestTask extends BaseTest {
 		args.put("task1.operator", new String[] { "1" });
 
 		Order order = engine.startInstanceByName("simple", null, 2L, args);
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			TaskModel model = engine.taskService.getTaskModel(task.getId());

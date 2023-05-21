@@ -34,7 +34,7 @@ public class TestConcurrency extends BaseTest {
 
 		Order order = engine.startInstanceByName("forkjoin", 0, 2L, args);
 
-		List<Task> tasks = engine.taskService.findByOrderId(order.getId());
+		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			engine.executeTask(task.getId(), 1L, null);

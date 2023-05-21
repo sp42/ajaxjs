@@ -2,6 +2,7 @@ package com.ajaxjs.workflow.model.po;
 
 import java.util.Date;
 
+import com.ajaxjs.framework.entity.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
@@ -12,6 +13,7 @@ import org.springframework.beans.BeanUtils;
  * history 减少了 version，增加了 endDate 字段
  */
 @Data
+@TableName("wf_order_history")
 @EqualsAndHashCode(callSuper = true)
 public class OrderHistory extends Order {
     /**
