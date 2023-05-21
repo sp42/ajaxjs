@@ -16,6 +16,7 @@ package com.ajaxjs.workflow.old;
 
 import java.util.List;
 
+import com.ajaxjs.workflow.common.WfData;
 import org.junit.Test;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -36,7 +37,7 @@ public class TestMisc extends BaseTest {
 		args.put("task1.operator", new String[] { "1" });
 		Order order = engine.startInstanceById(engine.processService.lastDeployProcessId, 2L, args);
 
-		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
+		List<Task> tasks = WfData.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			engine.executeTask(task.getId(), 1L, null);

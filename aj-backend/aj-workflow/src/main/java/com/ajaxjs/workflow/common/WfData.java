@@ -2,10 +2,9 @@ package com.ajaxjs.workflow.common;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.workflow.model.po.Order;
-import com.ajaxjs.workflow.model.po.OrderHistory;
-import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.po.TaskHistory;
+import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.workflow.model.po.*;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +13,12 @@ import java.util.Objects;
  * DAO
  */
 public interface WfData {
+    LogHelper LOGGER = LogHelper.getLog(WfData.class);
+
+    static List<ProcessPO> findProcess() {
+        return CRUD.list(ProcessPO.class, "SELECT * FROM wf_process");
+    }
+
     /**
      * 根据 id 获取任务
      *
@@ -25,6 +30,40 @@ public interface WfData {
         Objects.requireNonNull(task, "指定的任务[id=" + id + "]不存在");
 
         return task;
+    }
+
+    static List<Task> findByOrderIdAndExcludedIds(Long id, Long childOrderId, String[] activeNodes) {
+        String sql = "SELECT * FROM wf_task WHERE order_id = ?";
+
+        if (childOrderId != null && childOrderId != 0)
+            sql += "id NOT IN ( " + childOrderId + " )";
+
+        if (!ObjectUtils.isEmpty(activeNodes)) {
+            int i = 0;
+            for (String str : activeNodes)
+                activeNodes[i++] = "'" + str + "'";
+            sql += "AND name IN (" + String.join(",", activeNodes) + ")";
+        }
+
+        return CRUD.list(Task.class, sql, id);
+    }
+
+    static List<Task> findNextActiveTasks(Long id, String taskName, Long parentTaskId) {
+        String sql = "SELECT * FROM wf_task WHERE parent_task_id IN "
+                + "( SELECT ht.id FROM wf_task_history ht WHERE ht.order_id = ? AND ht.name = ? AND ht.parent_task_id = ? )";
+
+        return CRUD.list(Task.class, sql, id, taskName, parentTaskId);
+    }
+
+    static List<TaskActor> findTaskActorsByTaskId(Long taskId) {
+        return CRUD.list(TaskActor.class, "SELECT * FROM wf_task_actor WHERE task_id = ?", taskId);
+    }
+
+    static void createTaskActor(Long taskId, Long actorId) {
+        String sql = "INSERT INTO wf_task_actor (task_id, actor_id) VALUES (?, ?)";
+
+        if (CRUD.jdbcWriterFactory().insert(sql, taskId, actorId) == null)
+            LOGGER.warning("插入失败");
     }
 
     /**

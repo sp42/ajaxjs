@@ -3,6 +3,7 @@ package com.ajaxjs.workflow.service;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.TestConfig;
+import com.ajaxjs.workflow.common.WfData;
 import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
@@ -23,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 public class TestProcess extends BaseTest {
     //	@Test
     public void testCRUD() {
-        List<ProcessPO> list = ProcessDAO.findList();
+        List<ProcessPO> list = WfData.findProcess();
 
         assertNotNull(list.get(0));
 

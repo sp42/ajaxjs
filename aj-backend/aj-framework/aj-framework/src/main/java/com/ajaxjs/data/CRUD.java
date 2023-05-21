@@ -19,14 +19,14 @@ import java.util.Map;
 public abstract class CRUD {
     private static final LogHelper LOGGER = LogHelper.getLog(CRUD.class);
 
-    private static JdbcReader jdbcReaderFactory() {
+    public static JdbcReader jdbcReaderFactory() {
         JdbcReader reader = new JdbcReader();
         reader.setConn(JdbcConn.getConnection());
 
         return reader;
     }
 
-    private static JdbcWriter jdbcWriterFactory() {
+    public static JdbcWriter jdbcWriterFactory() {
         //  JdbcWriter 有较多前期的全局配置，故一般在注入阶段配置好
         JdbcWriter writer = DiContextUtil.getBean(JdbcWriter.class);
         assert writer != null;

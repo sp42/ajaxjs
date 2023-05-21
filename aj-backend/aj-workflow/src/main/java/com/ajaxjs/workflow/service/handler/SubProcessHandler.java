@@ -1,29 +1,38 @@
 package com.ajaxjs.workflow.service.handler;
 
-import java.util.Objects;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import com.ajaxjs.workflow.WorkflowEngine;
+import com.ajaxjs.workflow.common.WfData;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.node.work.SubProcessModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 /**
  * 启动子流程的处理器
  */
 public class SubProcessHandler implements IHandler {
-    private SubProcessModel model;
+    private final SubProcessModel model;
 
     /**
      * 是否以 future 方式执行启动子流程任务
      */
     private boolean isFutureRunning = false;
+
+    public SubProcessHandler(SubProcessModel model) {
+        this.model = model;
+    }
+
+    public SubProcessHandler(SubProcessModel model, boolean isFutureRunning) {
+        this.model = model;
+        this.isFutureRunning = isFutureRunning;
+    }
 
     /**
      * 子流程执行的处理
@@ -54,37 +63,6 @@ public class SubProcessHandler implements IHandler {
             order = engine.startInstanceByExecution(child);
 
         Objects.requireNonNull(order, "子流程创建失败");
-        exec.addTasks(engine.taskService.findTasksByOrderId(order.getId()));
-    }
-
-    /**
-     * Future 模式的任务执行。通过 call 返回任务结果集
-     */
-    static class ExecuteTask implements Callable<Order> {
-        private WorkflowEngine engine;
-
-        private Execution child;
-
-        /**
-         * 构造函数
-         */
-        public ExecuteTask(Execution exec, ProcessPO process, String parentNodeName) {
-            engine = exec.getEngine();
-            child = new Execution(exec, process, parentNodeName);
-        }
-
-        @Override
-        public Order call() {
-            return engine.startInstanceByExecution(child);
-        }
-    }
-
-    public SubProcessHandler(SubProcessModel model) {
-        this.model = model;
-    }
-
-    public SubProcessHandler(SubProcessModel model, boolean isFutureRunning) {
-        this.model = model;
-        this.isFutureRunning = isFutureRunning;
+        exec.addTasks(WfData.findTasksByOrderId(order.getId()));
     }
 }

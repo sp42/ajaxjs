@@ -38,7 +38,7 @@ public abstract class AbstractMergeHandler implements IHandler {
         TaskService taskService = exec.getEngine().taskService;
 
         if (isSubProcessMerged && model.containsNodeNames(TaskModel.class, activeNodes)) {
-            List<Task> tasks = taskService.findByOrderIdAndExcludedIds(orderId, exec.getTask().getId(), activeNodes);
+            List<Task> tasks = WfData.findByOrderIdAndExcludedIds(orderId, exec.getTask().getId(), activeNodes);
 
             if (CollectionUtils.isEmpty(tasks)) // 如果所有 task 都已完成，则表示可合并
                 isTaskMerged = true;

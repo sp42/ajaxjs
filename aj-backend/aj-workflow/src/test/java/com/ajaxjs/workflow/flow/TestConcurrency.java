@@ -2,6 +2,7 @@ package com.ajaxjs.workflow.flow;
 
 import java.util.List;
 
+import com.ajaxjs.workflow.common.WfData;
 import org.junit.Test;
 
 import com.ajaxjs.workflow.BaseTest;
@@ -34,7 +35,7 @@ public class TestConcurrency extends BaseTest {
 
 		Order order = engine.startInstanceByName("forkjoin", 0, 2L, args);
 
-		List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());
+		List<Task> tasks = WfData.findTasksByOrderId(order.getId());
 
 		for (Task task : tasks) {
 			engine.executeTask(task.getId(), 1L, null);

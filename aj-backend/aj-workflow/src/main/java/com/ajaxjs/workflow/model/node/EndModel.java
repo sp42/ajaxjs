@@ -32,7 +32,7 @@ public class EndModel extends NodeModel {
 
             WorkflowEngine engine = exec1.getEngine();
             Order order = exec1.getOrder();
-            List<Task> tasks = engine.taskService.findTasksByOrderId(order.getId());// 查找当前活动的任务
+            List<Task> tasks = WfData.findTasksByOrderId(order.getId());// 查找当前活动的任务
 
             if (!ObjectUtils.isEmpty(tasks))
                 for (Task task : tasks) {
@@ -47,7 +47,7 @@ public class EndModel extends NodeModel {
 
             // 如果存在父流程，则重新构造 Execution 执行对象，交给父流程的 SubProcessModel 模型 execute
             if (order.getParentId() != null /* || order.getParentId() != 0 */) {
-                Order parentOrder = WfData.OrderDAO.info(order.getParentId());
+                Order parentOrder = WfData.findOrder(order.getParentId());
 
                 if (parentOrder == null)
                     return;

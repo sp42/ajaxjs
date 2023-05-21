@@ -94,7 +94,7 @@ public class TaskService extends BaseWfService {
 
         if (history.getActorIds() == null) {
             LOGGER.info("查询 任务参与者，保存到 TaskHistory");
-            List<TaskActor> actors = TaskDAO.findTaskActorsByTaskId(task.getId());
+            List<TaskActor> actors = WfData.findTaskActorsByTaskId(task.getId());
             Long[] actorIds = new Long[actors.size()];
 
             for (int i = 0; i < actors.size(); i++)
@@ -104,7 +104,7 @@ public class TaskService extends BaseWfService {
         }
 
         WfData.createTaskHistory(history);
-        TaskDAO.delete(task);
+        CRUD.delete(task);
 
 //		orderService.getCompletion().accept(history, null);
 
@@ -150,13 +150,13 @@ public class TaskService extends BaseWfService {
 
         // getNextActiveTasks
         List<Task> tasks = history.isPerformAny() ? WfData.findTasksByParentTaskId(history.getId())
-                : TaskDAO.getNextActiveTasks(history.getOrderId(), history.getName(), history.getParentId());
+                : WfData.findNextActiveTasks(history.getOrderId(), history.getName(), history.getParentId());
 
         if (ObjectUtils.isEmpty(tasks))
             throw new WfException("后续活动任务已完成或不存在，无法撤回.");
 
         for (Task task : tasks)
-            TaskDAO.delete(task);
+            CRUD.delete(task);
 
         Task task = history.undoTask();
         saveTask(task);
@@ -257,14 +257,14 @@ public class TaskService extends BaseWfService {
      */
     private boolean isAllowed(Task task, Long operator) {
         if (operator != null && operator != 0) {
-//			if (SnakerEngine.ADMIN.equalsIgnoreCase(operator) || SnakerEngine.AUTO.equalsIgnoreCase(operator))
+//			if (SnakeEngine.ADMIN.equalsIgnoreCase(operator) || SnakeEngine.AUTO.equalsIgnoreCase(operator))
 //				return true;
 
             if (task.getOperator() != null && task.getOperator() != 0)
                 return operator.equals(task.getOperator());
         }
 
-        List<TaskActor> actors = TaskDAO.findTaskActorsByTaskId(task.getId());
+        List<TaskActor> actors = WfData.findTaskActorsByTaskId(task.getId());
 
         if (ObjectUtils.isEmpty(actors))
             return true;
@@ -291,7 +291,7 @@ public class TaskService extends BaseWfService {
 
         for (TaskActor actor : actors) {
             for (Long assignee : assignees) {
-                if (actor.getActorId() == assignee) {
+                if (Objects.equals(actor.getActorId(), assignee)) {
                     isAllowed = true;
                     break;
                 }
@@ -300,24 +300,6 @@ public class TaskService extends BaseWfService {
 
         return isAllowed;
     };
-
-    public List<Task> findByOrderIdAndExcludedIds(Long id, Long childOrderId, String[] activeNodes) {
-//		Function<String, String> fn = by("orderId", id);
-//
-//		if (childOrderId != null && childOrderId != 0)
-//			fn.andThen(setWhere("id NOT IN(" + childOrderId + ")"));
-//
-//		if (!ObjectUtils.isEmpty(activeNodes)) {
-//			int i = 0;
-//
-//			for (String str : activeNodes)
-//				activeNodes[i++] = "'" + str + "'";
-//
-//			fn.andThen(setWhere("name IN(" + String.join(",", activeNodes) + ")"));
-//		}
-
-        return TaskDAO.findList();
-    }
 
     public BiFunction<Long, List<TaskActor>, Boolean> getTaskAccessStrategy() {
         return taskAccessStrategy;
@@ -332,7 +314,7 @@ public class TaskService extends BaseWfService {
      */
     private static Task saveTask(Task task, Long... actors) {
         task.setPerformType(PerformType.ANY);
-        Long newlyId = (Long) CRUD.create(task);
+        Long newlyId = CRUD.create(task);
         assignTask(newlyId, actors);
         task.setActorIds(actors);
 
@@ -428,7 +410,7 @@ public class TaskService extends BaseWfService {
 //			taskActor.setTaskId(taskId);
 //			taskActor.setActorId(actorId);
 
-            TaskDAO.createTaskActor(taskId, actorId);
+            WfData.createTaskActor(taskId, actorId);
         }
     }
 
@@ -671,8 +653,8 @@ public class TaskService extends BaseWfService {
     }
 
     /**
-     * engine.process().deploy(WorkflowUtils.getStreamFromClasspath("flows/leave.snaker"));
-     * engine.process().deploy(WorkflowUtils.getStreamFromClasspath("flows/borrow.snaker"));
+     * engine.process().deploy(WorkflowUtils.getStreamFromClasspath("flows/leave.snake"));
+     * engine.process().deploy(WorkflowUtils.getStreamFromClasspath("flows/borrow.snake"));
      *
      * @param orderId  流程 id
      * @param taskName 任务名称
