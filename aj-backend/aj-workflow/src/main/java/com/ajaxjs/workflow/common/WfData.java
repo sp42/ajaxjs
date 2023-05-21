@@ -19,6 +19,23 @@ public interface WfData {
         return CRUD.list(ProcessPO.class, "SELECT * FROM wf_process");
     }
 
+    static ProcessPO findProcess(Long id) {
+        return CRUD.info(ProcessPO.class, "SELECT * FROM wf_process WHERE id = ?", id);
+    }
+
+    static List<ProcessPO> findProcess(String name, Integer version) {
+        String sql = "SELECT * FROM wf_process WHERE name = ?";
+
+        if (version != null)
+            sql += " AND version = " + version;
+
+        return CRUD.list(ProcessPO.class, sql, name);
+    }
+
+    static Integer getLatestProcessVersion(String name) {
+        return CRUD.jdbcReaderFactory().queryOne("SELECT max(version) FROM wf_process WHERE name = ?", Integer.class, name);
+    }
+
     /**
      * 根据 id 获取任务
      *
