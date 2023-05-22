@@ -31,7 +31,7 @@ public interface WfConstant {
 		/**
 		 * 协办任务
 		 */
-		AIDAN,
+		AIDANT,
 
 		/**
 		 * 仅作为记录的

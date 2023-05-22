@@ -78,9 +78,7 @@ public interface WfData {
 
     static void createTaskActor(Long taskId, Long actorId) {
         String sql = "INSERT INTO wf_task_actor (task_id, actor_id) VALUES (?, ?)";
-
-        if (CRUD.jdbcWriterFactory().insert(sql, taskId, actorId) == null)
-            LOGGER.warning("插入失败");
+        CRUD.jdbcWriterFactory().insert(sql, taskId, actorId);
     }
 
     /**
@@ -140,5 +138,10 @@ public interface WfData {
         return CRUD.info(OrderHistory.class, "SELECT * FROM wf_order_history WHERE id = ?", id);
     }
 
-
+//	interface OrderHistoryDao extends IDataService<OrderHistory> {
+//		@Select("SELECT * FROM ${tableName} WHERE orderId = ?")
+//		public OrderHistory findByOrderId(Long orderId);
+//	}
+//
+//	public static final OrderHistoryDao OrderHistoryDAO = new Caller("cms", "wf_order_history").bind(OrderHistoryDao.class, OrderHistory.class);
 }

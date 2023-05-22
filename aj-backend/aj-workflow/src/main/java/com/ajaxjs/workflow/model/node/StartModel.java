@@ -21,7 +21,7 @@ public class StartModel extends NodeModel {
 	}
 
 	@Override
-	protected void exec(Execution execution) {
-		runOutTransition(execution);
+	protected void exec(Execution exec) {
+		runOutTransition(exec);
 	}
 }

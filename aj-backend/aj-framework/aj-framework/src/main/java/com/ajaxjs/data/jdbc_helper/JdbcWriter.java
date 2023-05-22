@@ -1,7 +1,7 @@
 package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.data.DataUtils;
-import com.ajaxjs.sql.IgnoreDB;
+import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import lombok.Data;

@@ -20,7 +20,7 @@ import java.util.List;
  * 流程处理
  */
 @Service
-public class ProcessService extends BaseWfService implements CacheManagerAware {
+public class ProcessService implements CacheManagerAware, WfConstant {
     private static final String SEPARATOR = ".";
 
     public ProcessPO findById(Long id) {

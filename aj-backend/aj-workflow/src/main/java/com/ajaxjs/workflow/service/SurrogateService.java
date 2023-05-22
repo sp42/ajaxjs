@@ -1,6 +1,7 @@
 package com.ajaxjs.workflow.service;
 
 import com.ajaxjs.data.CRUD;
+import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.model.po.Surrogate;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
  * 委托业务
  */
 @Component
-public class SurrogateService extends BaseWfService {
+public class SurrogateService implements WfConstant {
     /**
      * 根据授权人、流程名称获取最终代理人 如存在user1->user2->user3，那么最终返回user3
      *

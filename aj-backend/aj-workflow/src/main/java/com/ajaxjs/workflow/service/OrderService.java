@@ -1,29 +1,22 @@
 package com.ajaxjs.workflow.service;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-
 import com.ajaxjs.data.CRUD;
+import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.common.WfData;
+import com.ajaxjs.workflow.common.WfUtils;
+import com.ajaxjs.workflow.model.ProcessModel;
+import com.ajaxjs.workflow.model.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
-import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.workflow.common.WfConstant;
-import com.ajaxjs.workflow.common.WfUtils;
-import com.ajaxjs.workflow.model.ProcessModel;
-import com.ajaxjs.workflow.model.po.OrderCc;
-import com.ajaxjs.workflow.model.po.OrderHistory;
-import com.ajaxjs.workflow.model.po.Order;
-import com.ajaxjs.workflow.model.po.ProcessPO;
-import com.ajaxjs.workflow.model.po.TaskHistory;
-import com.ajaxjs.workflow.model.po.Task;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * 流程实例
@@ -31,7 +24,7 @@ import com.ajaxjs.workflow.model.po.Task;
  * @author Frank Cheung
  */
 @Component
-public class OrderService extends BaseWfService {
+public class OrderService implements WfConstant {
     public static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
 
     @Autowired(required = false)

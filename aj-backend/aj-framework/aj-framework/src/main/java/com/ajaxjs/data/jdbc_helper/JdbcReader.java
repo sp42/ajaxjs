@@ -33,14 +33,14 @@ public class JdbcReader extends JdbcConn {
      * @return 查询结果，如果为 null 表示没有数据
      */
     public <T> T executeQuery(ResultSetProcessor<T> processor, String sql, Object... params) {
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = getConn().prepareStatement(sql)) {
             LOGGER.infoYellow("执行 SQL-->[" + DataUtils.printRealSql(sql, params) + "]");
             setParam2Ps(ps, params);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next())
+                if (rs.next()) {
                     return processor.process(rs);
-                else {
+                } else {
                     LOGGER.info("查询 SQL：{0} 没有符合的记录！", sql);
                     return null;
                 }
@@ -96,12 +96,13 @@ public class JdbcReader extends JdbcConn {
     static <T> List<T> forEachRs(ResultSet rs, ResultSetProcessor<T> processor) throws SQLException {
         List<T> list = new ArrayList<>();
 
-        while (rs.next()) {
+        do {
             T d = processor.process(rs);
             list.add(d);
-        }
+        } while (rs.next());
 
-        return list.size() > 0 ? list : null; // 找不到记录返回 null，不返回空的 list
+//        return list.size() > 0 ? list : null; // 找不到记录返回 null，不返回空的 list
+        return list; // 找不到记录返回 null，不返回空的 list
     }
 
     /**

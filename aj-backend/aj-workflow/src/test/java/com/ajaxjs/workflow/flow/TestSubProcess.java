@@ -37,7 +37,7 @@ public class TestSubProcess extends BaseTest {
      */
     @Test
     public void testSubProcess2() {
-//		WorlflowEngine engine = (WorlflowEngine) init("test/subprocess/subprocess2.xml");
+//		WorkflowEngine engine = (WorkflowEngine) init("test/subprocess/subprocess2.xml");
         Args args = new Args();
         args.put("task1.operator", new String[]{"1"});
         Order order = engine.startInstanceByName("subprocess2", 0, 2L, args);

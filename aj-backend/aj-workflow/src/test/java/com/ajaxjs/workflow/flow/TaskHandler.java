@@ -5,7 +5,7 @@ import com.ajaxjs.workflow.service.handler.DecisionHandler;
 
 public class TaskHandler implements DecisionHandler {
 	@Override
-	public String decide(Execution execution) {
-		return (String) execution.getArgs().get("content");
+	public String decide(Execution exec) {
+		return (String) exec.getArgs().get("content");
 	}
 }

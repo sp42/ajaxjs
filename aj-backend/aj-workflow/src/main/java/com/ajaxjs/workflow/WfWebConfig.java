@@ -2,10 +2,13 @@ package com.ajaxjs.workflow;
 
 import javax.sql.DataSource;
 
+import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.sql.JdbcConnection;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 
@@ -17,8 +20,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WfWebConfig implements WebMvcConfigurer {
     /**
      * 跨域
-     *
-     * @return
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -42,5 +43,15 @@ public class WfWebConfig implements WebMvcConfigurer {
     @Bean
     CacheManager MemoryCacheManager() {
         return new MemoryCacheManager();
+    }
+
+    @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public JdbcWriter jdbcWriter() {
+        JdbcWriter jdbcWriter = new JdbcWriter();
+        jdbcWriter.setIdField("id");
+        jdbcWriter.setIsAutoIns(true);
+
+        return jdbcWriter;
     }
 }

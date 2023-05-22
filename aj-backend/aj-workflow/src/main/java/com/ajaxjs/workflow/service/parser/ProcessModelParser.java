@@ -9,6 +9,7 @@ import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.model.node.NodeModel;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.util.Objects;
 
@@ -23,37 +24,37 @@ public class ProcessModelParser {
      */
     public static ProcessModel parse(String processXml) {
         ProcessModel process = new ProcessModel();
+        Element element = XmlHelper.getRoot(processXml);
+        assert element != null;
+        process.setName(element.getAttribute(AbstractNodeParser.ATTR_NAME));
+        process.setDisplayName(element.getAttribute(AbstractNodeParser.ATTR_DISPLAY_NAME));
+        process.setExpireDate(DateUtil.object2Date(element.getAttribute(AbstractNodeParser.ATTR_EXPIRE_TIME)));
+        process.setInstanceUrl(element.getAttribute(AbstractNodeParser.ATTR_INSTANCE_URL));
+        process.setInstanceNoClass(element.getAttribute(AbstractNodeParser.ATTR_INSTANCE_NO_CLASS));
 
-        XmlHelper.parseXML(processXml, (el, nodeList) -> {
-            process.setName(XmlHelper.getAttribute(el, AbstractNodeParser.ATTR_NAME));
-            process.setDisplayName(XmlHelper.getAttribute(el, AbstractNodeParser.ATTR_DISPLAY_NAME));
-            process.setExpireDate(DateUtil.object2Date(XmlHelper.getAttribute(el, AbstractNodeParser.ATTR_EXPIRE_TIME)));
-            process.setInstanceUrl(XmlHelper.getAttribute(el, AbstractNodeParser.ATTR_INSTANCE_URL));
-            process.setInstanceNoClass(XmlHelper.getAttribute(el, AbstractNodeParser.ATTR_INSTANCE_NO_CLASS));
+        NodeList nodeList = element.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
 
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node node = nodeList.item(i);
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    NodeModel model = parseModel(node);
-                    process.getNodes().add(model);
-                }
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                NodeModel model = parseModel(node);
+                process.getNodes().add(model);
             }
+        }
 
-            // 循环节点模型，构造变迁输入、输出的 source、target
-            for (NodeModel node : process.getNodes()) {
-                for (TransitionModel transition : node.getOutputs()) {
-                    String to = transition.getTo();
+        // 循环节点模型，构造变迁输入、输出的 source、target
+        for (NodeModel node : process.getNodes()) {
+            for (TransitionModel transition : node.getOutputs()) {
+                String to = transition.getTo();
 
-                    for (NodeModel node2 : process.getNodes()) {
-                        if (to.equalsIgnoreCase(node2.getName())) {
-                            node2.getInputs().add(transition);
-                            transition.setTarget(node2);
-                        }
+                for (NodeModel node2 : process.getNodes()) {
+                    if (to.equalsIgnoreCase(node2.getName())) {
+                        node2.getInputs().add(transition);
+                        transition.setTarget(node2);
                     }
                 }
             }
-        });
+        }
 
         return process;
     }

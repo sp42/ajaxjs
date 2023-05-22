@@ -28,8 +28,10 @@ public class JdbcConn {
     }
 
     public Connection getConn() {
-        return conn;
+        if (conn == null)
+            LOGGER.warning("未准备好数据库连接");
 
+        return conn;
     }
 
     /**

@@ -107,6 +107,17 @@ public class XmlHelper {
         }
     }
 
+    public static Element getRoot(String xml) {
+        try (InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))) {
+            Element el = Objects.requireNonNull(initBuilder()).parse(in).getDocumentElement();
+            return el;
+        } catch (SAXException | IOException e) {
+            LOGGER.warning(e);
+        }
+
+        return null;
+    }
+
     /**
      * 将节点所有属性都转换为 map
      *
@@ -185,9 +196,17 @@ public class XmlHelper {
      */
     public static String getAttribute(Node el, String attrName) {
         NamedNodeMap attributes = el.getAttributes();
-        if (attributes != null && attributes.getLength() > 0)
-            return attributes.getNamedItem(attrName).getNodeValue();
-        else
+
+        if (attributes != null && attributes.getLength() > 0) {
+            Node namedItem = attributes.getNamedItem(attrName);
+
+            if (namedItem != null)
+                return namedItem.getNodeValue();
+            else {
+//                LOGGER.warning("找不到属性 " + attrName);
+                return null;
+            }
+        } else
             return null;
     }
 }

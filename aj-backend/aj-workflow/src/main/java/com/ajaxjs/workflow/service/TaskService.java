@@ -42,7 +42,7 @@ import com.ajaxjs.workflow.model.po.TaskHistory;
  * @author sp42 frank@ajaxjs.com
  */
 @Component
-public class TaskService extends BaseWfService {
+public class TaskService implements WfConstant {
     public static final LogHelper LOGGER = LogHelper.getLog(TaskService.class);
 
     @Autowired
@@ -337,7 +337,7 @@ public class TaskService extends BaseWfService {
         task.setOrderId(exec.getOrder().getId());// 关联流程实例 order
         task.setName(taskModel.getName());
         task.setDisplayName(taskModel.getDisplayName());
-        task.setTaskType(taskModel.isMajor() ? TaskType.MAJOR : TaskType.AIDAN);
+        task.setTaskType(taskModel.isMajor() ? TaskType.MAJOR : TaskType.AIDANT);
         task.setModel(taskModel);
         task.setExpireDate(taskModel.getExpireTime());
 
@@ -620,8 +620,8 @@ public class TaskService extends BaseWfService {
      * @param actors   参与者
      * @return 任务列表
      */
-    public List<Task> transferAidan(Long taskId, Long operator, Long... actors) {
-        List<Task> tasks = copyTask(taskId, TaskType.AIDAN, actors);
+    public List<Task> transferAidant(Long taskId, Long operator, Long... actors) {
+        List<Task> tasks = copyTask(taskId, TaskType.AIDANT, actors);
         complete(taskId, operator, null);
 
         return tasks;

@@ -90,4 +90,9 @@ public class TransitionModel extends BaseWfModel {
         else
             target.execute(exec);// 如果目标节点模型为其它控制类型，则继续由目标节点执行
     }
+
+    @Override
+    public String toString() {
+        return "Tr";
+    }
 }
