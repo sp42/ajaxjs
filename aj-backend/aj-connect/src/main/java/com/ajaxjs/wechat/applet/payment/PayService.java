@@ -6,13 +6,13 @@ import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
-import com.toway.newfleet.business.wx.applet_pay.common.PemUtil;
-import com.toway.newfleet.business.wx.applet_pay.common.RsaCryptoUtil;
-import com.toway.newfleet.business.wx.applet_pay.merchant.MerchantConfig;
-import com.toway.newfleet.business.wx.applet_pay.model.LoginSession;
-import com.toway.newfleet.business.wx.applet_pay.model.payment.PayResult;
-import com.toway.newfleet.business.wx.applet_pay.model.payment.PreOrder;
-import com.toway.newfleet.business.wx.applet_pay.model.payment.RequestPayment;
+import com.ajaxjs.wechat.applet.model.LoginSession;
+import com.ajaxjs.wechat.applet.payment.payment.PayResult;
+import com.ajaxjs.wechat.applet.payment.payment.PreOrder;
+import com.ajaxjs.wechat.applet.payment.payment.RequestPayment;
+import com.ajaxjs.wechat.common.PemUtil;
+import com.ajaxjs.wechat.common.RsaCryptoUtil;
+import com.ajaxjs.wechat.merchant.MerchantConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -71,7 +71,7 @@ public class PayService extends CommonService {
         params.put("settle_info", ListUtils.hashMap("profit_sharing", true));
 
         String url = "/v3/pay/transactions/jsapi";
-        Map<String, Object> map = AppletPayUtils.post(mchCfg, url, params, Map.class);
+        Map<String, Object> map = AppletPayUtils.postMap(mchCfg, url, params);
 
         if ((Boolean) map.get("isOk") && map.get("code") == null) {
             return map.get("prepay_id").toString();
@@ -113,7 +113,7 @@ public class PayService extends CommonService {
     public void closeOrder(String outTradeNo) {
         String url = "/v3/pay/transactions/out-trade-no/" + outTradeNo + "/close";
         Map<String, String> params = ListUtils.hashMap("mchid", mchCfg.getMchId());
-        AppletPayUtils.post(mchCfg, url, params, null);// 该接口是无数据返回的
+        AppletPayUtils.postMap(mchCfg, url, params);// 该接口是无数据返回的
     }
 
     private final static String SUCCESS = "TRANSACTION.SUCCESS";

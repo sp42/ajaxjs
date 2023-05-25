@@ -1,6 +1,5 @@
 package com.ajaxjs.wechat.applet.payment;
 
-import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.HttpEnum;
 import com.ajaxjs.net.http.Post;
@@ -39,8 +38,8 @@ public class AppletPayUtils {
         conn.addRequestProperty("Accept", "application/json");
         conn.addRequestProperty("Content-Type", "application/json");
 
-        ProfitSharingServiceImpl s = DiContextUtil.getBean(ProfitSharingServiceImpl.class);// 写死
-        conn.addRequestProperty("Wechatpay-Serial", s.platformCertSerialNo);
+//        ProfitSharingServiceImpl s = DiContextUtil.getBean(ProfitSharingServiceImpl.class);// 写死
+//        conn.addRequestProperty("Wechatpay-Serial", s.platformCertSerialNo);
     }
 
     /**
@@ -82,20 +81,24 @@ public class AppletPayUtils {
         return (int) (price * 100);
     }
 
-    public static <T> T post(MerchantConfig mchCfg, String url, Object params, Class<T> resultClz) {
+    public static Map<String, Object> postMap(MerchantConfig mchCfg, String url, Object params) {
         String rawJson = JsonHelper.toJson(params);
         HttpRequestWrapper rw = new HttpRequestWrapper(HttpEnum.POST, url, rawJson);
 
         System.out.println(":::请求参数：" + rawJson);
         Map<String, Object> result = Post.api(API_DOMAIN + url, rawJson, getSetHeadFn(mchCfg, rw));
 
-        if (resultClz == null)
-            return null;
-
         if (result.containsKey("code ") && result.containsKey("message"))
             result.put("isOk", false);// 表示失败
         else
             result.put("isOk", true);
+
+        return result;
+
+    }
+
+    public static <T> T post(MerchantConfig mchCfg, String url, Object params, Class<T> resultClz) {
+        Map<String, Object> result = postMap(mchCfg, url, params);
 
         if (resultClz == Map.class)
             return (T) result;

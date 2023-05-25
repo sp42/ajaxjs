@@ -4,8 +4,8 @@ import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
-import com.toway.newfleet.business.wx.applet_pay.merchant.MerchantConfig;
-import com.toway.newfleet.business.wx.applet_pay.model.profit_sharing.*;
+import com.ajaxjs.wechat.applet.payment.profit_sharing.*;
+import com.ajaxjs.wechat.merchant.MerchantConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

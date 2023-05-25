@@ -45,7 +45,7 @@ public class RefundService extends CommonService {
         params.put("amount", ListUtils.hashMap("refund", refundMoney, "total", totalMoney, "currency", "CNY"));
 
         String url = "/v3/refund/domestic/refunds";
-        Map<String, Object> map = AppletPayUtils.post(mchCfg, url, params, Map.class);
+        Map<String, Object> map = AppletPayUtils.postMap(mchCfg, url, params);
         RefundResult bean = MapTool.map2Bean(map, RefundResult.class, false, false);
         RefundResultAmount amount = MapTool.map2Bean((Map<String, Object>) map.get("amount"), RefundResultAmount.class, false, false);
         bean.setAmount(amount);

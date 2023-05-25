@@ -1,6 +1,6 @@
 package com.ajaxjs.wechat.applet.payment.profit_sharing;
 
-import com.toway.newfleet.business.wx.applet_pay.model.ResponseMessage;
+import com.ajaxjs.wechat.applet.model.ResponseMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
