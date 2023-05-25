@@ -1,4 +1,4 @@
-package com.ajaxjs.wechat;
+package com.ajaxjs.wechat.applet;
 
 import lombok.Data;
 

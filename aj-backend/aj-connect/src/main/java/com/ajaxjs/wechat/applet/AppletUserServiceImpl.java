@@ -48,7 +48,7 @@
 ////        return BaseController.toJson(map, true, false);
 //    }
 //
-//    private final static String LOGIN_API = "https://api.weixin.qq.com/sns/jscode2session";
+
 //
 //    /**
 //     * 小程序登录
@@ -74,14 +74,6 @@
 //            session.setSession_id(rndStr);
 //
 //            UserMgr.SESSION.put(rndStr, session);
-//
-//        } else if (map.containsKey("errcode")) {
-//            LOGGER.warning("小程序登录失败！ Error [{0}:{1}]", map.get("errcode"), map.get("errmsg"));
-//            throw new SecurityException(String.format("小程序登录失败，Error [%s]", map.get("errmsg")));
-//        } else {
-//            LOGGER.warning("小程序登录失败，未知异常 [{0}]", map);
-//            throw new SecurityException("小程序登录失败，未知异常");
-//        }
 //
 //        return session;
 //    }
