@@ -1,17 +1,15 @@
 package com.ajaxjs.user.service;
 
-import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import com.ajaxjs.user.model.User;
 import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/user")
 public interface UserService {
     @GetMapping("/{id}")
-    @ControllerMethod
     User info(@PathVariable Long id);
 
     @PostMapping
-    @ControllerMethod
     Long create(@RequestBody User user);
 
     /**
@@ -22,11 +20,9 @@ public interface UserService {
      * @return 是否已经存在一样的值，true 表示存在
      */
     @GetMapping("/checkRepeat")
-    @ControllerMethod("检查用户某个值是否已经存在一样的值")
     Boolean checkRepeat(@RequestParam String field, @RequestParam Object value);
 
     @PutMapping
-    @ControllerMethod
     Boolean update(@RequestBody User user);
 
     @DeleteMapping("/{id}")

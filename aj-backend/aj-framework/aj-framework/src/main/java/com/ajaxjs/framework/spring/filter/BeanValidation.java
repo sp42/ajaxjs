@@ -1,6 +1,5 @@
 package com.ajaxjs.framework.spring.filter;
 
-import com.ajaxjs.framework.spring.easy_controller.BeforeInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -16,11 +15,10 @@ import java.util.Set;
 /**
  * Bean 校验拦截器
  */
-public class BeanValidation implements BeforeInterceptor {
+public class BeanValidation {
     @Autowired
     LocalValidatorFactoryBean v;
 
-    @Override
     public boolean before(Method beanMethod, Object[] args) {
         Parameter[] parameters = beanMethod.getParameters();
         int i = 0;

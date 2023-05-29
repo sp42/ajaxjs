@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ajaxjs.web.WebHelper;
-import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import com.ajaxjs.util.io.FileHelper;
 
 @Controller
@@ -26,7 +25,6 @@ public class EasyConfigController {
     }
 
     @PostMapping
-    @ControllerMethod("更新配置")
     public Boolean update(HttpServletRequest req) {
         config.save(WebHelper.getRawBody(req));
 

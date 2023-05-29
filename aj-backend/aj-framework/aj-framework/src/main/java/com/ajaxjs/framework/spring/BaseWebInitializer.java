@@ -1,21 +1,18 @@
 package com.ajaxjs.framework.spring;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration.Dynamic;
-
-import org.springframework.context.annotation.Bean;
+import com.ajaxjs.framework.spring.filter.CleanUpMySql;
+import com.ajaxjs.framework.spring.filter.FileUploadHelper;
+import com.ajaxjs.framework.spring.filter.UTF8CharsetFilter;
+import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import com.ajaxjs.framework.spring.easy_controller.ServiceBeanDefinitionRegistry;
-import com.ajaxjs.framework.spring.filter.CleanUpMySql;
-import com.ajaxjs.framework.spring.filter.FileUploadHelper;
-import com.ajaxjs.framework.spring.filter.UTF8CharsetFilter;
-import com.ajaxjs.util.logger.LogHelper;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration.Dynamic;
 
 /**
  * 配置 Spring MVC 实现该接口的类会在 Servlet 容器启动时自动加载并运行
@@ -89,8 +86,4 @@ public abstract class BaseWebInitializer implements WebApplicationInitializer {
 		FileUploadHelper.initUpload(ctx, registration);
 	}
 	
-	@Bean
-	ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-		return ServiceBeanDefinitionRegistry.init(getClass());
-	}
 }

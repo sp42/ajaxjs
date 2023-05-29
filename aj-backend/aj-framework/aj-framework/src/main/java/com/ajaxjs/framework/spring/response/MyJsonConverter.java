@@ -2,10 +2,6 @@ package com.ajaxjs.framework.spring.response;
 
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.spring.easy_controller.ControllerProxy;
-import com.ajaxjs.sql.JdbcUtil;
-import com.ajaxjs.util.ListUtils;
-import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.web.WebHelper;
@@ -21,7 +17,6 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -135,9 +130,8 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
                 resultWrapper.setData(json);
             }
 
-            String comment = ControllerProxy.ACTION_COMMNET.get();
-            if (StringUtils.hasText(comment))
-                resultWrapper.setMessage(comment);
+
+            resultWrapper.setMessage("操作成功");
 //		MediaType.APPLICATION_JSON_UTF8
             outputMessage.getHeaders().setContentType(CONTENT_TYPE);
 

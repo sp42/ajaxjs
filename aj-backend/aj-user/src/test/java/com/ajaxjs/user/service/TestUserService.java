@@ -17,7 +17,7 @@ public class TestUserService extends BaseTest {
     UserServiceImpl userService;
 
     @Autowired
-    UserController userController;
+    UserService userController;
 
     @Test
     public void testInfo() {
