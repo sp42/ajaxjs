@@ -5,17 +5,17 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.wechat.applet.model.Code2SessionResult;
 
 /**
- * 小程序登录
+ * 小程序常见业务
  */
-public class Login {
-    private static final LogHelper LOGGER = LogHelper.getLog(Login.class);
+public class AppletService {
+    private static final LogHelper LOGGER = LogHelper.getLog(AppletService.class);
 
     public final WeChatAppletConfig appletCfg;
 
     /**
      * @param appletCfg 包含 AppId 和密钥
      */
-    public Login(WeChatAppletConfig appletCfg) {
+    public AppletService(WeChatAppletConfig appletCfg) {
         this.appletCfg = appletCfg;
     }
 
@@ -41,5 +41,11 @@ public class Login {
             LOGGER.warning("小程序登录失败，未知异常 [{0}]", result);
 
         return result;
+    }
+
+    /**
+     * 获取小程序码
+     */
+    public class getWxCode {
     }
 }

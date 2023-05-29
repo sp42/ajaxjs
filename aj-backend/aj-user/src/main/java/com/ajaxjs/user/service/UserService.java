@@ -3,9 +3,8 @@ package com.ajaxjs.user.service;
 import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import com.ajaxjs.user.model.User;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
+@RestController
+@RequestMapping("/user")
 public interface UserService {
     @GetMapping("/{id}")
     @ControllerMethod

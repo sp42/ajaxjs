@@ -1,16 +1,10 @@
 package com.ajaxjs.base;
 
-import com.ajaxjs.framework.config.EasyConfig;
 import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
 import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
-import com.ajaxjs.framework.spring.easy_controller.ServiceBeanDefinitionRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import javax.servlet.ServletContext;
 
 @Configuration
 @EnableWebMvc
@@ -31,8 +25,5 @@ public class BaseApplication extends BaseWebMvcConfigure {
 //        return e;
 //    }
 
-    @Bean
-    ServiceBeanDefinitionRegistry ServiceBeanDefinitionRegistry() {
-        return ServiceBeanDefinitionRegistry.init(getClass());
-    }
+
 }

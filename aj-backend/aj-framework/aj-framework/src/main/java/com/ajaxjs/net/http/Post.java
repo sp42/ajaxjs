@@ -10,6 +10,13 @@
  */
 package com.ajaxjs.net.http;
 
+import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.StreamHelper;
+import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.regexp.RegExpUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,27 +26,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
-
 /**
  * POST 或 PUT 请求
  *
  * @author Frank Cheung
  */
-public class Post extends Base {
+public class Post extends Base implements HttpConstants {
     /**
      * POST 或 PUT 请求
      *
      * @param isPost 是否 POST 请求，反之为 PUT
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>     </pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -47,7 +46,7 @@ public class Post extends Base {
      */
 
     private static ResponseEntity p(boolean isPost, String url, Object params, Consumer<HttpURLConnection> fn) {
-        return any(isPost ? "POST" : "PUT", url, params, fn);
+        return any(isPost ? POST : PUT, url, params, fn);
     }
 
     public static ResponseEntity any(String method, String url, Object params, Consumer<HttpURLConnection> fn) {
@@ -59,7 +58,7 @@ public class Post extends Base {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) params;
 
-            if (map != null && map.size() > 0) {
+            if (map.size() > 0) {
                 String str = MapTool.join(map, v -> v == null ? null : StrUtil.urlEncode(v.toString()));
                 _params = str.getBytes(StandardCharsets.UTF_8);
             } else
@@ -93,9 +92,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -110,8 +107,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *               <pre>
-     *               byte[]、String、Map<String, Object></pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应消息体
@@ -125,10 +121,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -143,10 +136,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应消息体
@@ -160,10 +150,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -178,10 +165,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应消息体
@@ -197,8 +181,8 @@ public class Post extends Base {
      * @param params 请求参数，可以是
      *
      *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *                                                                                                                                                           byte[]、String、Map<String, Object>
+     *                                                                                                                                                                         </pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -212,11 +196,6 @@ public class Post extends Base {
 
     /**
      * POST JSON as RawBody
-     *
-     * @param url
-     * @param params
-     * @param fn
-     * @return
      */
     public static Map<String, Object> apiJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
         String json = JsonHelper.toJson(params);
@@ -227,11 +206,6 @@ public class Post extends Base {
 
     /**
      * PUT JSON as RawBody
-     *
-     * @param url
-     * @param params
-     * @param fn
-     * @return
      */
     public static Map<String, Object> putJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
         String json = JsonHelper.toJson(params);
@@ -245,10 +219,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应的 JSON，Map 格式
@@ -266,10 +237,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -286,10 +254,7 @@ public class Post extends Base {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                           byte[]、String、Map<String, Object>
-     *                                                         </pre>
+     *               <pre>byte[]、String、Map<String, Object></pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应的 XML，Map 格式
@@ -305,6 +270,7 @@ public class Post extends Base {
 
     // 换行符
     private static final String NEWLINE = "\r\n";
+
     private static final String BOUNDARY_PREFIX = "--";
     // 定义数据分隔线
     public static String BOUNDARY = "------------7d4a6d158c9";
@@ -356,6 +322,32 @@ public class Post extends Base {
      * @return 请求之后的响应的内容
      */
     public static ResponseEntity multiPOST(String url, Map<String, Object> data) {
-        return post(url, toFromData(data), conn -> conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY));
+        return post(url, toFromData(data), conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
+    }
+
+    /**
+     * 下载二进制文件
+     *
+     * @param url         请求目标地址
+     * @param fn          自定义 HTTP 头的时候可设置，可选的
+     * @param saveDir     保存的目录
+     * @param newFileName 是否有新的文件名，如无请传 null
+     * @return 下载文件的完整磁盘路径
+     */
+    public static String download(String url, Consumer<HttpURLConnection> fn, String saveDir, String newFileName) {
+        HttpURLConnection conn = initHttpConnection(url, POST);
+        conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
+        conn.setDoOutput(true);
+
+        if (fn != null)
+            fn.accept(conn);
+
+        String fileName = FileHelper.getFileNameFromUrl(url);
+        if (newFileName != null)
+            fileName = newFileName + RegExpUtils.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
+
+        ResponseEntity resp = connect(conn);
+
+        return ResponseHandler.download(resp, saveDir, fileName);
     }
 }

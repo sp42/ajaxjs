@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Objects;
 
 /**
  * 全局忽略 HTTPS 证书
@@ -104,7 +105,7 @@ public class SkipSSL {
      */
     public static void init() {
         if (!init) {
-            HttpsURLConnection.setDefaultSSLSocketFactory(getSocketFactory(null));
+            HttpsURLConnection.setDefaultSSLSocketFactory(Objects.requireNonNull(getSocketFactory(null)));
             HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                 @Override
                 public boolean verify(String urlHostName, SSLSession session) {

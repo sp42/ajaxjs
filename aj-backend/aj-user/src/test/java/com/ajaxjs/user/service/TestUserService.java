@@ -3,7 +3,6 @@ package com.ajaxjs.user.service;
 import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.user.BaseTest;
 import com.ajaxjs.user.common.UserConstants;
-import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

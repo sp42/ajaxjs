@@ -105,9 +105,8 @@ public abstract class ResponseHandler {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else {
+            } else
                 map = JsonHelper.parseMap(resp.getResponseText());
-            }
 
             list = new ArrayList<>();
             list.add(map);
@@ -135,9 +134,8 @@ public abstract class ResponseHandler {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else {
+            } else
                 map = JsonHelper.parseMap(resp.getResponseText());
-            }
         }
 
         return map;
@@ -162,30 +160,19 @@ public abstract class ResponseHandler {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else {
+            } else
                 map = MapTool.xmlToMap(resp.getResponseText());
-            }
         }
 
         return map;
     }
 
-    /**
-     * @param <T>
-     * @param resp
-     * @param clz
-     * @return
-     */
     public static <T> T toBean(ResponseEntity resp, Class<T> clz) {
         return MapTool.map2Bean(toJson(resp), clz);
     }
 
     /**
      * 有些网站强制加入 Content-Encoding:gzip，而不管之前的是否有 GZip 的请求
-     *
-     * @param conn
-     * @param in
-     * @return
      */
     public static InputStream gzip(HttpURLConnection conn, InputStream in) {
         if ("gzip".equals(conn.getHeaderField("Content-Encoding"))) {
