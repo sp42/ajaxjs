@@ -1,13 +1,17 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
+import org.springframework.context.expression.MapAccessor;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.spel.standard.SpelExpression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,6 +94,45 @@ public class SmallMyBatis {
         }
 
         return sb.toString();
+    }
+
+    static private SpelExpressionParser parser = new SpelExpressionParser();
+
+    static class BooleanExpressionParser extends SpelExpressionParser {
+        private final StandardEvaluationContext context = new StandardEvaluationContext();
+
+        public BooleanExpressionParser() {
+            super();
+            context.setPropertyAccessors(Collections.singletonList(new MapAccessor()));
+//            context.setVariables(paramMap);
+        }
+
+        public boolean get(String expression, Map<String, Object> paramMap) {
+            SpelExpression expr = (SpelExpression) parseExpression(expression);
+            expr.setEvaluationContext(context);
+
+            return Boolean.TRUE.equals(expr.getValue(paramMap, boolean.class));
+        }
+    }
+
+    static private BooleanExpressionParser p2 =new BooleanExpressionParser();
+    public static boolean evaluateBoolean(String expression, Map<String, Object> paramMap) {
+        StandardEvaluationContext context = new StandardEvaluationContext();
+//        context.setVariables(paramMap);
+        context.setPropertyAccessors(Collections.singletonList(new MapAccessor()));
+
+        SpelExpression expr = (SpelExpression) parser.parseExpression(expression);
+        expr.setEvaluationContext(context);
+
+        return Boolean.TRUE.equals(expr.getValue(paramMap, boolean.class));
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> params = ListUtils.hashMap("a", "z1");
+        boolean b = evaluateBoolean("a != null and a != 'z1'", params);
+        System.out.println(b);
+        b = p2.get("a != null and a != 'z'", params);
+        System.out.println(b);
     }
 
     private static boolean evalIfBlock(String ifBlock, Map<String, Object> params) {

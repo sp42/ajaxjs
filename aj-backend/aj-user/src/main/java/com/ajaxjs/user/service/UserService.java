@@ -1,30 +1,56 @@
 package com.ajaxjs.user.service;
 
+import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.entity.CrudUtils;
+import com.ajaxjs.framework.entity.BaseEntityConstants;
+import com.ajaxjs.sass.SaasUtils;
+import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/user")
-public interface UserService {
-    @GetMapping("/{id}")
-    User info(@PathVariable Long id);
+import javax.validation.Valid;
 
-    @PostMapping
-    Long create(@RequestBody User user);
+@Service
+public class UserService implements UserController {
+    @Override
+    public User info(Long id) {
+        String sql = "SELECT * FROM user WHERE stat != 1 AND id = ?";
+        sql = SaasUtils.addTenantIdQuery(sql);
 
-    /**
-     * 检查用户某个值是否已经存在一样的值
-     *
-     * @param field 字段名，当前只能是 username/email/phone 中的任意一种
-     * @param value 字段值，要校验的值
-     * @return 是否已经存在一样的值，true 表示存在
-     */
-    @GetMapping("/checkRepeat")
-    Boolean checkRepeat(@RequestParam String field, @RequestParam Object value);
+        return CRUD.info(User.class, sql, id);
+    }
 
-    @PutMapping
-    Boolean update(@RequestBody User user);
+    @Override
+    public Long create(@Valid User user) {
+        if (checkRepeat("username", user.getUsername()))
+            throw new IllegalArgumentException("用户的登录名" + user.getUsername() + "重复");
 
-    @DeleteMapping("/{id}")
-    Boolean delete(@PathVariable Long id);
+        return CRUD.create(user);
+    }
+
+    @Override
+    public Boolean checkRepeat(String field, Object value) {
+        String sql = "SELECT * FROM user WHERE stat != 1 AND " + field + " = ?";
+        sql = SaasUtils.addTenantIdQuery(sql);
+        sql += "LIMIT 1";
+
+        return CRUD.info(sql, value) != null;
+    }
+
+    @Override
+    public Boolean update(User user) {
+        CrudUtils.checkId(user);
+
+        return CRUD.update(user);
+    }
+
+    @Override
+    public Boolean delete(Long id) {
+        // 逻辑删除
+        User user = new User();
+        user.setId(id);
+        user.setStat(BaseEntityConstants.STATUS_DELETED);
+
+        return update(user);
+    }
 }

@@ -3,6 +3,7 @@ package com.ajaxjs.user.service;
 import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.user.BaseTest;
 import com.ajaxjs.user.common.UserConstants;
+import com.ajaxjs.user.controller.UserController;
 import com.ajaxjs.user.model.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ import static org.junit.Assert.assertTrue;
 
 public class TestUserService extends BaseTest {
     @Autowired
-    UserServiceImpl userService;
+    UserService userService;
 
     @Autowired
-    UserService userController;
+    UserController userController;
 
     @Test
     public void testInfo() {
