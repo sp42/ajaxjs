@@ -186,8 +186,16 @@ public class JdbcReader extends JdbcConn {
     @SuppressWarnings({"unchecked"})
     public static <T> ResultSetProcessor<T> getResultBean(Class<T> beanClz) {
         return rs -> {
-            T bean = ReflectUtil.newInstance(beanClz);
             ResultSetMetaData metaData = rs.getMetaData();
+
+            if (beanClz == Integer.class || beanClz == Long.class || beanClz == String.class) {
+                for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
+                    Object v = rs.getObject(i);
+                    return (T) v;
+                }
+            }
+
+            T bean = ReflectUtil.newInstance(beanClz);
 
 //            if (beanClz.toString().contains("OrderProfitsharingReceivers")) {
 //                System.out.println();

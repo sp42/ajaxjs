@@ -1,12 +1,11 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.sql.JdbcConnection;
-import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.MapTool;
 import lombok.Data;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Function;
@@ -16,9 +15,7 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.select.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Connection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * SQL 增强器
@@ -170,16 +167,17 @@ public class PageEnhancer {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> PageResult<T> page(Class<T> beanCls) {
         PageResult<T> result = new PageResult<>();
-        Connection connection = JdbcConnection.getConnection();
-        Long total = JdbcHelper.queryOne(connection, countTotal, Long.class);
+        JdbcReader jdbcReader = CRUD.jdbcReaderFactory();
+        Long total = jdbcReader.queryOne(countTotal, Long.class);
 
         if (total != null && total > 0) {
             List<T> list;
 
-            if (beanCls == null) list = (List<T>) JdbcHelper.queryAsMapList(connection, pageSql);
-            else list = JdbcHelper.queryAsBeanList(beanCls, connection, pageSql);
+            if (beanCls == null) list = (List<T>) jdbcReader.queryAsMapList(pageSql);
+            else list = jdbcReader.queryAsBeanList(beanCls, pageSql);
 
             if (list != null) {
                 result.setTotalCount(total.intValue());

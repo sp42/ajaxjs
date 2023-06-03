@@ -1,11 +1,13 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -111,14 +113,19 @@ public class SmallMyBatis {
             SpelExpression expr = (SpelExpression) parseExpression(expression);
             expr.setEvaluationContext(context);
 
-            return Boolean.TRUE.equals(expr.getValue(paramMap, boolean.class));
+            try {
+                return Boolean.TRUE.equals(expr.getValue(paramMap, boolean.class));
+            } catch (SpelEvaluationException e) {// 为防止 null 值
+                return false;
+            }
         }
     }
 
-    static private BooleanExpressionParser p2 =new BooleanExpressionParser();
+    static private BooleanExpressionParser p2 = new BooleanExpressionParser();
+
     public static boolean evaluateBoolean(String expression, Map<String, Object> paramMap) {
         StandardEvaluationContext context = new StandardEvaluationContext();
-//        context.setVariables(paramMap);
+        context.setVariables(paramMap);
         context.setPropertyAccessors(Collections.singletonList(new MapAccessor()));
 
         SpelExpression expr = (SpelExpression) parser.parseExpression(expression);
@@ -131,42 +138,44 @@ public class SmallMyBatis {
         Map<String, Object> params = ListUtils.hashMap("a", "z1");
         boolean b = evaluateBoolean("a != null and a != 'z1'", params);
         System.out.println(b);
-        b = p2.get("a != null and a != 'z'", params);
+        b = p2.get("z?.toUpperCase()?.equals('Z1')", params);
         System.out.println(b);
     }
 
     private static boolean evalIfBlock(String ifBlock, Map<String, Object> params) {
         String test = ifBlock.substring(ifBlock.indexOf("test=") + 6, ifBlock.lastIndexOf("\""));
-        String[] tokens = test.split("\\s+");
-        String condition = tokens[1], property = tokens[0];
-        Object value = params.get(property);
 
-        switch (condition) {
-            case "eq":
-            case "==":
-                if (value == null && "null".equals(tokens[2]))
-                    return true;
-                return value.toString().equals(tokens[2]);
-            case "!=":
-            case "ne":
-                if (("".equals(value) || (value == null)) && "null".equals(tokens[2]))
-                    return false;
-                return !value.equals(tokens[2]);
-            case "gt":
-                return ((Comparable) value).compareTo(tokens[2]) > 0;
-            case "ge":
-                return ((Comparable) value).compareTo(tokens[2]) >= 0;
-            case "lt":
-                return ((Comparable) value).compareTo(tokens[2]) < 0;
-            case "le":
-                return ((Comparable) value).compareTo(tokens[2]) <= 0;
-            case "notNull":
-                return value != null;
-            case "isNull":
-                return value == null;
-            default:
-                throw new UnsupportedOperationException("Unsupported condition: " + condition);
-        }
+        return p2.get(test, params);
+//        String[] tokens = test.split("\\s+");
+//        String condition = tokens[1], property = tokens[0];
+//        Object value = params.get(property);
+//
+//        switch (condition) {
+//            case "eq":
+//            case "==":
+//                if (value == null && "null".equals(tokens[2]))
+//                    return true;
+//                return value.toString().equals(tokens[2]);
+//            case "!=":
+//            case "ne":
+//                if (("".equals(value) || (value == null)) && "null".equals(tokens[2]))
+//                    return false;
+//                return !value.equals(tokens[2]);
+//            case "gt":
+//                return ((Comparable) value).compareTo(tokens[2]) > 0;
+//            case "ge":
+//                return ((Comparable) value).compareTo(tokens[2]) >= 0;
+//            case "lt":
+//                return ((Comparable) value).compareTo(tokens[2]) < 0;
+//            case "le":
+//                return ((Comparable) value).compareTo(tokens[2]) <= 0;
+//            case "notNull":
+//                return value != null;
+//            case "isNull":
+//                return value == null;
+//            default:
+//                throw new UnsupportedOperationException("Unsupported condition: " + condition);
+//        }
     }
 
     private String parseForEach(String sql, Map<String, Object> params) {
@@ -235,5 +244,22 @@ public class SmallMyBatis {
 
         matcher.appendTail(sb);
         return sb.toString();
+    }
+
+    public static String handleSql(Map<String, Object> paramsMap, String sqlId) {
+        String sql = Objects.requireNonNull(DiContextUtil.getBean(SmallMyBatis.class)).getSqlById(sqlId);
+
+        return handleSql(sql, paramsMap);
+    }
+
+    public static String handleSql(String sql, Map<String, Object> paramsMap) {
+        if (paramsMap == null)
+            paramsMap = new HashMap<>();
+
+        sql = generateIfBlock(sql, paramsMap);
+        sql = getValuedSQL(sql, paramsMap);
+        sql = sql.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
+
+        return sql;
     }
 }

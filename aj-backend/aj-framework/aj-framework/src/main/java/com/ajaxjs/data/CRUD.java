@@ -3,11 +3,15 @@ package com.ajaxjs.data;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.entity.PageEnhancer;
+import com.ajaxjs.framework.entity.SmallMyBatis;
 import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,9 +63,23 @@ public abstract class CRUD {
         return ListUtils.getList(mapList);
     }
 
-//    public static PageResult<Map<String, Object>> page(String sql, Object... params) {
-//        return jdbcReaderFactory().queryAsMapList(sql, params);
-//    }
+    public static <T> PageResult<T> page(Class<T> beanClz, String sql, Map<String, Object> paramsMap) {
+        sql = SmallMyBatis.handleSql(sql, paramsMap);
+
+        return PageEnhancer.page(sql, beanClz);
+    }
+
+    public static <T> PageResult<T> page(String sqlId, Class<T> beanClz, Map<String, Object> paramsMap) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return PageEnhancer.page(sql, beanClz);
+    }
+
+    public static <T> T info(String sqlId, Class<T> beanClz, Map<String, Object> paramsMap, Object... params) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return jdbcReaderFactory().queryAsBean(beanClz, sql, params);
+    }
 
     public static <T> T info(Class<T> beanClz, String sql, Object... params) {
         return jdbcReaderFactory().queryAsBean(beanClz, sql, params);
@@ -81,6 +99,18 @@ public abstract class CRUD {
         return ListUtils.getList(list);
     }
 
+    public static <T> List<T> list(String sqlId, Class<T> beanClz, Map<String, Object> paramsMap, Object... params) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return list(beanClz, sql, params);
+    }
+
+    /**
+     * 获取实体类上的表名（注解）
+     *
+     * @param entity 实体类
+     * @return 表名
+     */
     static String getTableName(Object entity) {
         TableName tableNameA = entity.getClass().getAnnotation(TableName.class);
         if (tableNameA == null)
@@ -100,15 +130,26 @@ public abstract class CRUD {
         return create(getTableName(entity), entity);
     }
 
-    public static boolean update(String talebName, Object entity) {
+    public static boolean update(String talebName, Object entity, String idField) {
         JdbcWriter jdbcWriter = jdbcWriterFactory();
         jdbcWriter.setTableName(talebName);
+
+        if (StringUtils.hasText(idField))
+            jdbcWriter.setIdField(idField);
 
         return jdbcWriter.update(entity) > 0;
     }
 
+    public static boolean update(String talebName, Object entity) {
+        return update(talebName, entity, null);
+    }
+
     public static boolean update(Object entity) {
         return update(getTableName(entity), entity);
+    }
+
+    public static boolean updateWithIdField(Object entity, String idField) {
+        return update(getTableName(entity), entity, idField);
     }
 
     public static boolean delete(Object entity, Serializable id) {

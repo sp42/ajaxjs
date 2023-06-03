@@ -71,12 +71,32 @@ public class JsonHelper {
     /**
      * 解析 JSON 字符串为 List
      *
-     * @param str 字符串
+     * @param str JSON 字符串
      * @return List
      */
     @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> parseList(String str) {
         return (List<Map<String, Object>>) parse(str);
+    }
+
+    /**
+     * 解析 JSON 字符串为 List（Bean）
+     *
+     * @param json JSON 字符串
+     * @param clz  Bean 类
+     * @param <T>  Bean 类
+     * @return List
+     */
+    public static <T> List<T> parseBeanList(String json, Class<T> clz) {
+        List<T> list = new ArrayList<>();
+        List<Map<String, Object>> maps = parseList(json);
+
+        for (Map<String, Object> map : maps) {
+            T bean = MapTool.map2Bean(map, clz);
+            list.add(bean);
+        }
+
+        return list;
     }
 
     /**

@@ -130,9 +130,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
                 resultWrapper.setData(json);
             }
 
-
             resultWrapper.setMessage("操作成功");
-//		MediaType.APPLICATION_JSON_UTF8
             outputMessage.getHeaders().setContentType(CONTENT_TYPE);
 
             try (OutputStream out = outputMessage.getBody()) {
