@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.entity;
+package com.ajaxjs.data;
 
 import java.util.HashMap;
 import java.util.List;

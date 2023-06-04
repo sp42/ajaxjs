@@ -1,17 +1,16 @@
-package com.ajaxjs.framework.entity;
+package com.ajaxjs.data;
 
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.context.expression.MapAccessor;
-import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.StringUtils;
+
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -32,7 +31,7 @@ public class SmallMyBatis {
      * 加载 XML SQL
      */
     public void loadXML(String... xmlFiles) {
-        Pattern pattern = Pattern.compile("<!--.*?-->", Pattern.DOTALL);  // 使用 DOTALL 匹配多行注释
+        Pattern pattern = Pattern.compile("<!--.*?-->", Pattern.DOTALL);  // 使用 DOT ALL 匹配多行注释
 
         for (String xmlFile : xmlFiles) {
             String xmlBody = Resources.getResourceText(xmlFile);
@@ -98,8 +97,6 @@ public class SmallMyBatis {
         return sb.toString();
     }
 
-    static private SpelExpressionParser parser = new SpelExpressionParser();
-
     static class BooleanExpressionParser extends SpelExpressionParser {
         private final StandardEvaluationContext context = new StandardEvaluationContext();
 
@@ -121,61 +118,12 @@ public class SmallMyBatis {
         }
     }
 
-    static private BooleanExpressionParser p2 = new BooleanExpressionParser();
-
-    public static boolean evaluateBoolean(String expression, Map<String, Object> paramMap) {
-        StandardEvaluationContext context = new StandardEvaluationContext();
-        context.setVariables(paramMap);
-        context.setPropertyAccessors(Collections.singletonList(new MapAccessor()));
-
-        SpelExpression expr = (SpelExpression) parser.parseExpression(expression);
-        expr.setEvaluationContext(context);
-
-        return Boolean.TRUE.equals(expr.getValue(paramMap, boolean.class));
-    }
-
-    public static void main(String[] args) {
-        Map<String, Object> params = ListUtils.hashMap("a", "z1");
-        boolean b = evaluateBoolean("a != null and a != 'z1'", params);
-        System.out.println(b);
-        b = p2.get("z?.toUpperCase()?.equals('Z1')", params);
-        System.out.println(b);
-    }
+    static private final BooleanExpressionParser EXP_PARSER = new BooleanExpressionParser();
 
     private static boolean evalIfBlock(String ifBlock, Map<String, Object> params) {
         String test = ifBlock.substring(ifBlock.indexOf("test=") + 6, ifBlock.lastIndexOf("\""));
 
-        return p2.get(test, params);
-//        String[] tokens = test.split("\\s+");
-//        String condition = tokens[1], property = tokens[0];
-//        Object value = params.get(property);
-//
-//        switch (condition) {
-//            case "eq":
-//            case "==":
-//                if (value == null && "null".equals(tokens[2]))
-//                    return true;
-//                return value.toString().equals(tokens[2]);
-//            case "!=":
-//            case "ne":
-//                if (("".equals(value) || (value == null)) && "null".equals(tokens[2]))
-//                    return false;
-//                return !value.equals(tokens[2]);
-//            case "gt":
-//                return ((Comparable) value).compareTo(tokens[2]) > 0;
-//            case "ge":
-//                return ((Comparable) value).compareTo(tokens[2]) >= 0;
-//            case "lt":
-//                return ((Comparable) value).compareTo(tokens[2]) < 0;
-//            case "le":
-//                return ((Comparable) value).compareTo(tokens[2]) <= 0;
-//            case "notNull":
-//                return value != null;
-//            case "isNull":
-//                return value == null;
-//            default:
-//                throw new UnsupportedOperationException("Unsupported condition: " + condition);
-//        }
+        return EXP_PARSER.get(test, params);
     }
 
     private String parseForEach(String sql, Map<String, Object> params) {

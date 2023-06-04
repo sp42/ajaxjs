@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.entity;
 
-import com.ajaxjs.framework.entity.PageEnhancer;
+import com.ajaxjs.data.PageEnhancer;
 import org.junit.Test;
 
 public class TestSqlEnhancer {

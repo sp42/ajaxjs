@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.entity;
 
-import com.ajaxjs.framework.entity.SmallMyBatis;
+import com.ajaxjs.data.SmallMyBatis;
 import org.junit.Test;
 
 import java.util.HashMap;

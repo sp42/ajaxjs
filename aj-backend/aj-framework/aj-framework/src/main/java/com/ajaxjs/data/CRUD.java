@@ -4,8 +4,6 @@ import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.entity.PageEnhancer;
-import com.ajaxjs.framework.entity.SmallMyBatis;
 import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;

@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 数据工具类
+ */
 public class DataUtils {
     /**
      * 将以下划线分隔的数据库字段转换为驼峰风格的字符串

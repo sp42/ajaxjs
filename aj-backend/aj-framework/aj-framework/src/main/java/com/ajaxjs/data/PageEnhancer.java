@@ -1,6 +1,5 @@
-package com.ajaxjs.framework.entity;
+package com.ajaxjs.data;
 
-import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
