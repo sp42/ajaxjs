@@ -49,7 +49,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
     /**
      * 是否自增 id
      */
-    private Boolean isAutoIns;
+    private Boolean isAutoIns = false;
 
     /**
      * 数据库表名
@@ -101,6 +101,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             }
         } catch (SQLException e) {
             LOGGER.warning(e);
+            throw new RuntimeException(e.getMessage());
         }
 
         return null;
@@ -121,9 +122,8 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             return ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.warning(e);
+            throw new RuntimeException(e.getMessage());
         }
-
-        return 0;
     }
 
     /**
@@ -296,7 +296,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             map.put(idField, newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
         } else { // bean
             try {
-                Method getId = entity.getClass().getMethod("getId");
+                Method getId = entity.getClass().getMethod(DataUtils.changeColumnToFieldName("get_" + idField));
 
                 if (newlyId == null)
                     return null; // 创建失败
@@ -306,14 +306,15 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
                 }
 
                 Class<?> idClz = getId.getReturnType();// 根据 getter 推断 id 类型
+                String setIdMethod = DataUtils.changeColumnToFieldName("set_" + idField);
 
                 if (Long.class == idClz && newlyId instanceof Integer) {
                     newlyId = (long) (int) newlyId;
-                    ReflectUtil.executeMethod(entity, "setId", newlyId);
+                    ReflectUtil.executeMethod(entity, setIdMethod, newlyId);
                 } else if (Long.class == idClz && newlyId instanceof BigInteger) {
                     newlyId = ((BigInteger) newlyId).longValue();
-                    ReflectUtil.executeMethod(entity, "setId", newlyId);
-                } else ReflectUtil.executeMethod(entity, "setId", newlyId); // 直接保存
+                    ReflectUtil.executeMethod(entity, setIdMethod, newlyId);
+                } else ReflectUtil.executeMethod(entity, setIdMethod, newlyId); // 直接保存
             } catch (Throwable e) {
                 LOGGER.warning(e);
             }

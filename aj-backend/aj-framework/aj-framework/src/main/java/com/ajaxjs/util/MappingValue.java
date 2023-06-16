@@ -18,10 +18,7 @@ package com.ajaxjs.util;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import org.springframework.util.StringUtils;
@@ -230,6 +227,14 @@ public class MappingValue {
 
             if (value instanceof String)
                 value = Float.parseFloat((String) value);
+        } else if (target == List.class) {
+            if (value instanceof String) {
+                String[] arr = ((String) value).split(",");
+                List<String> list = new ArrayList<>();
+                Collections.addAll(list, arr);
+
+                return list;
+            }
         } else if (target == double.class || target == Double.class) {
 //			if (value instanceof Float) {
 //				value = ((Float) value).doubleValue();

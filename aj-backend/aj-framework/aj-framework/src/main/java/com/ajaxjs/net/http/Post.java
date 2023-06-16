@@ -16,7 +16,9 @@ import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.util.regexp.RegExpUtils;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -138,8 +140,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *               <pre>byte[]、String、Map<String, Object>
      *               <p>
-     *               类型，实际表示了表单数据 KeyValue 的请求数据
-     * @return 响应消息体
+     *                                                                                                                                                                                                                                               类型，实际表示了表单数据 KeyValue 的请求数据
+     *                                                                                                                                                                                                                                 @return 响应消息体
      */
     public static ResponseEntity put(String url, Object params) {
         return put(url, params, null);
@@ -181,8 +183,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *
      *               <pre>
-     *                                                                                                                                                           byte[]、String、Map<String, Object>
-     *                                                                                                                                                                         </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                           byte[]、String、Map<String, Object>
+     *                                                                                                                                                                                                                                                                                                                                                                                                         </pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -200,6 +202,7 @@ public class Post extends Base implements HttpConstants {
     public static Map<String, Object> apiJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
         String json = JsonHelper.toJson(params);
         json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
+        System.out.println("JSON>>>" + json);
 
         return api(url, json, fn);
     }
@@ -325,6 +328,20 @@ public class Post extends Base implements HttpConstants {
         return post(url, toFromData(data), conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
     }
 
+    public static Map<String, Object> postFile(String url, String fieldName, String fileName, byte[] file) {
+        String field = String.format(FIELD, fieldName, fileName, "application/octet-stream");
+        byte[] bytes = StreamHelper.concat(field.getBytes(), file);
+        bytes = StreamHelper.concat(bytes, END_DATA);
+
+        ResponseEntity resp = post(url, bytes, conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
+        String json = resp.toString();
+
+        if (StringUtils.hasText(json))
+            return JsonHelper.parseMap(json);
+        else
+            return null;
+    }
+
     /**
      * 下载二进制文件
      *
@@ -349,5 +366,30 @@ public class Post extends Base implements HttpConstants {
         ResponseEntity resp = connect(conn);
 
         return ResponseHandler.download(resp, saveDir, fileName);
+    }
+
+    /**
+     * 显示图片流到浏览器
+     *
+     * @param url      地址
+     * @param fn       处理怎么请求
+     * @param response 响应对象
+     */
+    public static void showPic(String url, Consumer<HttpURLConnection> fn, HttpServletResponse response) {
+        HttpURLConnection conn = initHttpConnection(url, POST);
+        conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
+        conn.setDoOutput(true);
+
+        if (fn != null)
+            fn.accept(conn);
+
+        ResponseEntity resp = connect(conn);
+        response.setContentType("image/jpeg");
+
+        try (OutputStream out = response.getOutputStream()) {
+            StreamHelper.write(resp.getIn(), out, true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

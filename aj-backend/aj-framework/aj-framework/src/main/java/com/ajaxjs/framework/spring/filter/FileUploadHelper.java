@@ -32,9 +32,13 @@ public class FileUploadHelper {
      */
     public static void initUpload(ServletContext cxt, ServletRegistration.Dynamic registration) {
         String tempDir = WebHelper.mappath(cxt, "upload_temp");
+        System.out.println(System.getProperty("user.dir"));
 
-        if (tempDir == null)
-            tempDir = EmbeddedTomcatStarter.getDevelopJspFolder() + FileHelper.SEPARATOR + "upload_temp";
+        if (tempDir == null) {
+//            tempDir = EmbeddedTomcatStarter.getDevelopJspFolder() + FileHelper.SEPARATOR + "upload_temp";
+            tempDir = "c:\\temp\\" + FileHelper.SEPARATOR + "upload_temp";
+            tempDir = System.getProperty("user.dir") + FileHelper.SEPARATOR + "upload_temp";
+        }
 
         // 如果不存在则创建
         FileHelper.mkDir(tempDir);

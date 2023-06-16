@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>aj-connect</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <description>不用 SDK 与第三方服务对接</description>
     <packaging>jar</packaging>
 

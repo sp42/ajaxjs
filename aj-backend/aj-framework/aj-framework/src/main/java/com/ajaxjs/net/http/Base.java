@@ -28,14 +28,14 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public abstract class Base {
     private static final LogHelper LOGGER = LogHelper.getLog(Base.class);
-    
+
     /**
      * 链接超时时间
      */
-    private static final int CONNECT_TIMEOUT = 1000;
-    
+    private static final int CONNECT_TIMEOUT = 10000;
+
     /**
-     *  read 超时时间
+     * read 超时时间
      */
     private static final int READ_TIMEOUT = 15000;
 
@@ -47,6 +47,7 @@ public abstract class Base {
      * @return 请求连接对象
      */
     public static HttpURLConnection initHttpConnection(String url, String method) {
+        LOGGER.info("准备连接： " + method + " " + url);
         URL httpUrl = null;
 
         try {
@@ -66,9 +67,9 @@ public abstract class Base {
 
         try {
             if (conn != null) {
-            	conn.setRequestMethod(method);
-            	conn.setConnectTimeout(CONNECT_TIMEOUT);// 设置链接超时时间和 read 超时时间
-            	conn.setReadTimeout(READ_TIMEOUT);
+                conn.setRequestMethod(method);
+                conn.setConnectTimeout(CONNECT_TIMEOUT);// 设置链接超时时间和 read 超时时间
+                conn.setReadTimeout(READ_TIMEOUT);
             }
         } catch (ProtocolException e) {
             LOGGER.warning(e, "不能设置 HTTP 方法 " + method);

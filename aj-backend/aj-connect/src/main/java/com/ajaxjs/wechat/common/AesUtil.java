@@ -70,9 +70,9 @@ public class AesUtil {
      * @param iv
      * @param ciphertext 密文
      * @param sessionKey
-     * @return
+     * @return 解密后的文本
      */
-    public static String decryptToString2(String iv, String ciphertext, String sessionKey) {
+    public static String decryptPhone(String iv, String ciphertext, String sessionKey) {
         Base64.Decoder decoder = Base64.getDecoder();
         byte[] sessionKeyBytes = decoder.decode(sessionKey);
         byte[] ivBytes = decoder.decode(iv);

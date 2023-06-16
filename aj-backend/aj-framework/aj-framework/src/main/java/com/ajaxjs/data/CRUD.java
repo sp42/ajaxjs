@@ -117,15 +117,22 @@ public abstract class CRUD {
         return tableNameA.value();
     }
 
-    public static Long create(String talebName, Object entity) {
+    public static Long create(String talebName, Object entity, String idField) {
         JdbcWriter jdbcWriter = jdbcWriterFactory();
         jdbcWriter.setTableName(talebName);
+
+        if (StringUtils.hasText(idField))
+            jdbcWriter.setIdField(idField);
 
         return (Long) jdbcWriter.create(entity);
     }
 
     public static Long create(Object entity) {
-        return create(getTableName(entity), entity);
+        return create(getTableName(entity), entity, null);
+    }
+
+    public static Long createWithIdField(Object entity, String idField) {
+        return create(getTableName(entity), entity, idField);
     }
 
     public static boolean update(String talebName, Object entity, String idField) {

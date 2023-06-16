@@ -47,9 +47,8 @@ public class JdbcReader extends JdbcConn {
             }
         } catch (SQLException e) {
             LOGGER.warning(e);
+            throw new RuntimeException(e.getMessage());
         }
-
-        return null;
     }
 
     /**
