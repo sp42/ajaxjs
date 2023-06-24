@@ -134,8 +134,7 @@ public class StrUtil {
      * @return 已解码的字符串
      */
     public static String base64Decode(String str) {
-        byte[] b = Base64Utils.decodeFromString(str);
-        return b == null ? null : BytesUtil.byte2String(b);
+        return BytesUtil.byte2String(Base64Utils.decodeFromString(str));
     }
 
     /**
