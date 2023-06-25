@@ -1,4 +1,4 @@
-package com.ajaxjs.user.model;
+package com.ajaxjs.user.model.login;
 
 import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;

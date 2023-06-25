@@ -1,7 +1,7 @@
 package com.ajaxjs.user.service;
 
 import com.ajaxjs.user.BaseTest;
-import com.ajaxjs.user.model.AppLogin;
+import com.ajaxjs.user.model.login.AppLogin;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
