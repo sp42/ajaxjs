@@ -32,7 +32,7 @@ public class TestPost {
         String url = "http://192.168.1.3:8089/carRental/common_service/upload";
         byte[] b = FileHelper.openAsByte(new File("C:\\temp\\74d8e0a8e8827241fcc6531612eaf6d5.svg"));
 
-        Map<String, Object> map = Post.postFile(url, "file", "any.txt", b);
+        Map<String, Object> map = Post.postFile(url, "file", "any.txt", b, null);
 
         System.out.println(map.get("data").toString());
     }

@@ -33,7 +33,7 @@ public class ShowControllerInterceptor implements HandlerInterceptor {
                     s.append(key).append("=").append(Arrays.toString(parameterMap.get(key))).append("\n");
                 }
 
-                LOGGER.info("请求 QueryString：" + s);
+                LOGGER.info(request.getMethod() + "请求参数：" + s);
             }
         }
 

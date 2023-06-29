@@ -68,11 +68,11 @@ public class AppletService {
      * @param width          二维码的宽度，单位 px，最小 280px，最大 1280px
      * @param fileName       文件名
      */
-    public void qrCode(boolean isTrialVersion, Map<String, Object> scene, String page, int width, String fileName) {
+    public void qrCode(boolean isTrialVersion, String scene, String page, int width, String fileName) {
         String url = CREATE_QRCODE_API + appletCfg.getAccessToken();
         // env_version 正式版为 "release"，体验版为 "trial"，开发版为 "develop"。默认是正式版。
         // 配置参数
-        String requestJson = String.format(QRCODE_ARGS, mapToQueryString(scene), page, width, false, isTrialVersion ? "trial" : "release");
+        String requestJson = String.format(QRCODE_ARGS, scene, page, width, false, isTrialVersion ? "trial" : "release");
         System.out.println(requestJson);
 
         // 请求

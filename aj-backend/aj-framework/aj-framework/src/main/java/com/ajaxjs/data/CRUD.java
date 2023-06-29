@@ -12,6 +12,7 @@ import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,10 @@ public abstract class CRUD {
         writer.setConn(JdbcConn.getConnection());
 
         return writer;
+    }
+
+    public static <T> T queryOne(Class<T> clz, String sql, Object... params) {
+        return jdbcReaderFactory().queryOne(sql, clz, params);
     }
 
     /**

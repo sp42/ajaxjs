@@ -140,8 +140,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *               <pre>byte[]、String、Map<String, Object>
      *               <p>
-     *                                                                                                                                                                                                                                               类型，实际表示了表单数据 KeyValue 的请求数据
-     *                                                                                                                                                                                                                                 @return 响应消息体
+     *                                                                                                                                                                                                                                                             类型，实际表示了表单数据 KeyValue 的请求数据
+     *                                                                                                                                                                                                                                               @return 响应消息体
      */
     public static ResponseEntity put(String url, Object params) {
         return put(url, params, null);
@@ -183,8 +183,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *
      *               <pre>
-     *                                                                                                                                                                                                                                                                                                                                                                                           byte[]、String、Map<String, Object>
-     *                                                                                                                                                                                                                                                                                                                                                                                                         </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                         byte[]、String、Map<String, Object>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                       </pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -328,12 +328,17 @@ public class Post extends Base implements HttpConstants {
         return post(url, toFromData(data), conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
     }
 
-    public static Map<String, Object> postFile(String url, String fieldName, String fileName, byte[] file) {
+    public static Map<String, Object> postFile(String url, String fieldName, String fileName, byte[] file, Consumer<HttpURLConnection> fn) {
         String field = String.format(FIELD, fieldName, fileName, "application/octet-stream");
         byte[] bytes = StreamHelper.concat(field.getBytes(), file);
         bytes = StreamHelper.concat(bytes, END_DATA);
 
-        ResponseEntity resp = post(url, bytes, conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
+        if (fn != null)
+            fn = fn.andThen(conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
+        else
+            fn = conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY);
+
+        ResponseEntity resp = post(url, bytes, fn);
         String json = resp.toString();
 
         if (StringUtils.hasText(json))
