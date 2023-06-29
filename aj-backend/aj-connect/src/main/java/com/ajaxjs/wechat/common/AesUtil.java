@@ -67,9 +67,9 @@ public class AesUtil {
     /**
      * 解密小程序提供的加密数据，返回包含手机号码等信息的 JSON 对象
      *
-     * @param iv
-     * @param ciphertext 密文
-     * @param sessionKey
+     * @param iv         前端给的
+     * @param ciphertext 前端给的，密文
+     * @param sessionKey 后端申请返回
      * @return 解密后的文本
      */
     public static String decryptPhone(String iv, String ciphertext, String sessionKey) {
