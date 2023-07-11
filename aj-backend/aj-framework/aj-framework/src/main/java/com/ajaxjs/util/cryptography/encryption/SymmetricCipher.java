@@ -38,7 +38,6 @@ import com.ajaxjs.util.logger.LogHelper;
  * 对称算法 SymmetricCipher
  *
  * @author sp42 frank@ajaxjs.com
- *
  */
 public class SymmetricCipher {
     private static final LogHelper LOGGER = LogHelper.getLog(SymmetricCipher.class);
@@ -130,10 +129,10 @@ public class SymmetricCipher {
      */
     private static byte[] initTripleDES(boolean isEnc, byte[] key, byte[] data) {
         // 根据给定的字节数组和算法构造一个密钥
-        SecretKey deskey = new SecretKeySpec(key, TripleDES_ALGORITHM);
+        SecretKey _key = new SecretKeySpec(key, TripleDES_ALGORITHM);
         int mode = isEnc ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE;
 
-        return SymmetricCipherInfo.doCipher(TripleDES_ALGORITHM, mode, deskey, null, data);
+        return SymmetricCipherInfo.doCipher(TripleDES_ALGORITHM, mode, _key, null, data);
     }
 
     /**

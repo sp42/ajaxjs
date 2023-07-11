@@ -34,6 +34,7 @@ import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 /**
  * 字符串的编码、解密 支持 MD5、SHA-1 和 SHA-2（SHA256）摘要算法
@@ -145,12 +146,6 @@ public class Digest {
 		return BytesUtil.bytesToHexStr(bytes);
 	}
 
-	/**
-	 * @param algorithm
-	 * @param key
-	 * @param data
-	 * @return
-	 */
 	public static byte[] getMac(String algorithm, String key, String data) {
 		try {
 			Mac mac = Mac.getInstance(algorithm);
@@ -163,22 +158,12 @@ public class Digest {
 		}
 	}
 
-	/**
-	 * @param algorithm
-	 * @param data
-	 * @param key
-	 * @return
-	 */
 	public static String getMacAsStr(String algorithm, String key, String data) {
-		return Base64Utils.encodeToString(getMac(algorithm, key, data));
+		return Base64Utils.encodeToString(Objects.requireNonNull(getMac(algorithm, key, data)));
 	}
 
 	/**
 	 * 签名采用 HmacSHA1 算法 + Base64，编码采用 UTF-8
-	 *
-	 * @param key
-	 * @param data
-	 * @return
 	 */
 	public static String doHmacSHA1(String key, String data) {
 		return getMacAsStr("HmacSHA1", key, data);

@@ -13,7 +13,6 @@
 package com.ajaxjs.utils.io;
 
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.FileIoHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
@@ -21,9 +20,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.function.Function;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import java.util.zip.*;
 
 /**
  * ZIP 压缩/解压缩
@@ -189,7 +186,7 @@ public class ZipHelper {
                     // 核心，和复制粘贴效果一样，并没有压缩，但速度很快
                     entry.setMethod(ZipEntry.STORED);
                     entry.setSize(fc.length());
-                    entry.setCrc(FileIoHelper.getFileCRCCode(fc));
+                    entry.setCrc(getFileCRCCode(fc));
                     zipOut.putNextEntry(entry);
 
                     int len;
@@ -205,5 +202,27 @@ public class ZipHelper {
         } catch (IOException e) {
             LOGGER.warning(e);
         }
+    }
+
+
+    /**
+     * 获取 CRC32
+     * CheckedInputStream一种输入流，它还维护正在读取的数据的校验和。然后可以使用校验和来验证输入数据的完整性。
+     *
+     * @param file
+     * @return
+     */
+    public static long getFileCRCCode(File file) {
+        CRC32 crc32 = new CRC32();
+
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(Files.newInputStream(file.toPath()));
+             CheckedInputStream checkedinputstream = new CheckedInputStream(bufferedInputStream, crc32)) {
+            while (checkedinputstream.read() != -1) {
+            }
+        } catch (IOException e) {
+            LOGGER.warning(e);
+        }
+
+        return crc32.getValue();
     }
 }

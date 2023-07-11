@@ -16,8 +16,6 @@ package com.ajaxjs.jsonparser;
 
 /**
  * JSON 解析器专用异常类
- *
- * @author sp42 frank@ajaxjs.com
  */
 public class JsonParseException extends RuntimeException {
     private static final long serialVersionUID = 1L;

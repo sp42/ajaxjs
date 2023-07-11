@@ -14,106 +14,104 @@ import java.lang.reflect.Method;
 
 /**
  * 状态
- * 
- * @author sp42 frank@ajaxjs.com
  */
 public class State {
-	/**
-	 * 创建一个状态对象
-	 * 
-	 * @param index 		状态 id
-	 * @param description	状态描述
-	 */
-	public State(int index, String description) {
-		this.id = index;
-		this.description = description;
-	}
+    /**
+     * 创建一个状态对象
+     *
+     * @param index       状态 id
+     * @param description 状态描述
+     */
+    public State(int index, String description) {
+        this.id = index;
+        this.description = description;
+    }
 
-	/**
-	 * 创建一个状态对象
-	 * 
-	 * @param index			 状态 id
-	 * @param description 	状态描述
-	 * @param handler 		状态转换用的处理器
-	 */
-	public State(int index, String description, Method handler) {
-		this(index, description);
-		this.setHandler(handler);
-	}
+    /**
+     * 创建一个状态对象
+     *
+     * @param index       状态 id
+     * @param description 状态描述
+     * @param handler     状态转换用的处理器
+     */
+    public State(int index, String description, Method handler) {
+        this(index, description);
+        this.setHandler(handler);
+    }
 
-	/**
-	 * 索引
-	 */
-	private int id;
+    /**
+     * 索引
+     */
+    private int id;
 
-	/**
-	 * 状态转换操作
-	 */
-	private Method handler;
+    /**
+     * 状态转换操作
+     */
+    private Method handler;
 
-	/**
-	 * 描述
-	 */
-	private String description;
+    /**
+     * 描述
+     */
+    private String description;
 
-	/**
-	 * 下一步期望的描述
-	 */
-	private String expectDescription;
+    /**
+     * 下一步期望的描述
+     */
+    private String expectDescription;
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	/**
-	 * @return the expectDescription
-	 */
-	public String getExpectDescription() {
-		return expectDescription;
-	}
+    /**
+     * @return the expectDescription
+     */
+    public String getExpectDescription() {
+        return expectDescription;
+    }
 
-	/**
-	 * @param expectDescription the expectDescription to set
-	 */
-	public void setExpectDescription(String expectDescription) {
-		this.expectDescription = expectDescription;
-	}
+    /**
+     * @param expectDescription the expectDescription to set
+     */
+    public void setExpectDescription(String expectDescription) {
+        this.expectDescription = expectDescription;
+    }
 
-	/**
-	 * @return the id
-	 */
-	public int getId() {
-		return id;
-	}
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	/**
-	 * @return the handler
-	 */
-	public Method getHandler() {
-		return handler;
-	}
+    /**
+     * @return the handler
+     */
+    public Method getHandler() {
+        return handler;
+    }
 
-	/**
-	 * @param handler the handler to set
-	 */
-	public void setHandler(Method handler) {
-		this.handler = handler;
-	}
+    /**
+     * @param handler the handler to set
+     */
+    public void setHandler(Method handler) {
+        this.handler = handler;
+    }
 }

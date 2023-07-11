@@ -63,7 +63,6 @@ public class FileHelper extends StreamHelper {
      *
      * @param target 源文件
      * @param dest   目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
-     * @throws IOException
      */
     public static void move(String target, String dest) throws IOException {
         Files.copy(Paths.get(target), Paths.get(dest));

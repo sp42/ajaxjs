@@ -71,7 +71,7 @@ public class Resources {
      * 获取 Classpath 根目录下的资源文件
      *
      * @param resource 文件名称，输入空字符串这返回 Classpath 根目录。可以支持包目录，例如
-     *                 com\\ajaxjs\\newfile.txt
+     *                 com\\ajaxjs\\new-file.txt
      * @return 所在工程路径+资源路径，找不到文件则返回 null
      */
     public static String getResourcesFromClasspath(String resource) {
@@ -90,9 +90,10 @@ public class Resources {
             return null;
 
         String path;
-        if (isDecode) {
+
+        if (isDecode)
             path = StringUtils.uriDecode(new File(url.getPath()).toString(), StandardCharsets.UTF_8);
-        } else {
+        else {
             path = url.getPath();
             path = path.startsWith("/") ? path.substring(1) : path;
         }
@@ -167,15 +168,10 @@ public class Resources {
 
             assert files != null;
             for (File file : files) {
-                if (file.isFile()) {
+                if (file.isFile())
                     System.out.println(file.getName());
-                }
             }
         }
-
     }
 
-    public static void main(String[] args) {
-        listResourceFile();
-    }
 }

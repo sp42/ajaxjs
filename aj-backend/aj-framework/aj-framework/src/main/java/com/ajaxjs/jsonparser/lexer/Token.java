@@ -110,7 +110,7 @@ public class Token {
 //			throw new JsonParseException("获取 Java 值失败！");
 //	}
 
-    private static String strTpl = "[ %s | %s : %s]";
+    private static final String strTpl = "[ %s | %s : %s]";
 
     @Override
     public String toString() {

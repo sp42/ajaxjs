@@ -12,16 +12,14 @@ package com.ajaxjs.jsonparser.lexer;
 
 /**
  * 数字 Token
- * 
- * @author sp42 frank@ajaxjs.com
  */
 public class NumberToken extends Token {
-	/**
-	 * 创建数字 Token
-	 * 
-	 * @param value 这是 JSON 字符串上的那个原始值。
-	 */
-	public NumberToken(String value) {
-		super(1, "NUM", "数字", null, value);
-	}
+    /**
+     * 创建数字 Token
+     *
+     * @param value 这是 JSON 字符串上的那个原始值。
+     */
+    public NumberToken(String value) {
+        super(1, "NUM", "数字", null, value);
+    }
 }
