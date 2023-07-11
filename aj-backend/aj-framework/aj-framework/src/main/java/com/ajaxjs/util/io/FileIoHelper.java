@@ -16,13 +16,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.zip.CRC32;
-import java.util.zip.CheckedInputStream;
 
 /**
  * <a href="https://blog.csdn.net/YangLiehui/article/details/98599253">...</a>
@@ -31,10 +27,6 @@ import java.util.zip.CheckedInputStream;
 public class FileIoHelper {
     private static final LogHelper LOGGER = LogHelper.getLog(FileIoHelper.class);
 
-    /**
-     * @param res
-     * @return
-     */
     public static String openContent(Resource res) {
         EncodedResource encRes = new EncodedResource(res, "UTF-8");
 

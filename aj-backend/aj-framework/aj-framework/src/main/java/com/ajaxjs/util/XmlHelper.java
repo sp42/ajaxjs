@@ -109,8 +109,7 @@ public class XmlHelper {
 
     public static Element getRoot(String xml) {
         try (InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))) {
-            Element el = Objects.requireNonNull(initBuilder()).parse(in).getDocumentElement();
-            return el;
+            return Objects.requireNonNull(initBuilder()).parse(in).getDocumentElement();
         } catch (SAXException | IOException e) {
             LOGGER.warning(e);
         }

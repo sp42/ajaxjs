@@ -97,12 +97,12 @@ public class LogHelper {
     /**
      * 所在的类名
      */
-    private String className;
+    private final String className;
 
     /**
      * 包装这个 logger
      */
-    private Logger logger;
+    private final Logger logger;
 
     /**
      * 过滤器，是否要日志服务

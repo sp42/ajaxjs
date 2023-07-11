@@ -3,10 +3,6 @@ package com.ajaxjs.util.binrary;
 import java.nio.charset.StandardCharsets;
 
 public class BytesUtil {
-    /**
-     * @param str
-     * @return
-     */
     public static byte[] getUTF8_Bytes(String str) {
         return str.getBytes(StandardCharsets.UTF_8);
     }

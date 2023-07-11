@@ -109,7 +109,7 @@ public class FileHelper extends StreamHelper {
 
         try {
             if (Files.isDirectory(path))
-                throw new IOException("参数 fullpath：" + filePath + " 不能是目录，请指定文件");
+                throw new IOException("参数 full path：" + filePath + " 不能是目录，请指定文件");
         } catch (IOException e) {
             LOGGER.warning(e);
             return null;
@@ -128,7 +128,7 @@ public class FileHelper extends StreamHelper {
 //			LOGGER.warning(e);
 //		}
 
-        try (Stream<String> lines = Files.lines(path, encode);) { // 要关闭文件，否则文件被锁定
+        try (Stream<String> lines = Files.lines(path, encode)) { // 要关闭文件，否则文件被锁定
             lines.forEach(sb::append);
 
             return sb.toString();
@@ -175,7 +175,7 @@ public class FileHelper extends StreamHelper {
     public static void save(File file, byte[] data, boolean isOverwrite) {
         LOGGER.info("正在保存文件" + file);
 
-        if (data == null || data.length < 0) {
+        if (data == null) {
             LOGGER.warning("要保存的文件内容为空");
             return;
         }
@@ -264,7 +264,7 @@ public class FileHelper extends StreamHelper {
      * @param filePath 完整路径，最后一个元素为文件名
      */
     public static void mkDirByFileName(String filePath) {
-        String[] arr = filePath.split("\\/|\\\\");
+        String[] arr = filePath.split("[/\\\\]");
         arr[arr.length - 1] = "";// 取消文件名，让最后一个元素为空字符串
         String folder = String.join(SEPARATOR, arr);
 
@@ -329,7 +329,7 @@ public class FileHelper extends StreamHelper {
     /**
      * 遍历一个文件夹
      *
-     * @param folder
+     * @param folder 文件夹
      */
     public static void loop(String folder) {
         Path dir = Paths.get(folder);
@@ -362,7 +362,7 @@ public class FileHelper extends StreamHelper {
      * @return 文件名
      */
     public static String getFileName(String str) {
-        String[] arr = str.split("\\/|\\\\");// 取消文件名，让最后一个元素为空字符串
+        String[] arr = str.split("[/\\\\]");// 取消文件名，让最后一个元素为空字符串
 
         return arr[arr.length - 1];
     }

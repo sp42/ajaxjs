@@ -106,12 +106,7 @@ public class SkipSSL {
     public static void init() {
         if (!init) {
             HttpsURLConnection.setDefaultSSLSocketFactory(Objects.requireNonNull(getSocketFactory(null)));
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                @Override
-                public boolean verify(String urlHostName, SSLSession session) {
-                    return true;
-                }
-            });
+            HttpsURLConnection.setDefaultHostnameVerifier((urlHostName, session) -> true);
 
             init = true;
         }

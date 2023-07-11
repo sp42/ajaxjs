@@ -102,7 +102,7 @@ public class FileHandler extends Handler {
         private final boolean isSecurityEnabled;
         private final ThreadGroup group;
         private final AtomicInteger threadNumber = new AtomicInteger(1);
-        private final String namePrefix = "FileHandlerLogFilesCleaner-";
+        private final static String namePrefix = "FileHandlerLogFilesCleaner-";
 
         {
             SecurityManager s = System.getSecurityManager();

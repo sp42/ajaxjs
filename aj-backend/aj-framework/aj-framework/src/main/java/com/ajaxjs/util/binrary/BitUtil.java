@@ -21,9 +21,6 @@ public class BitUtil {
 
 	/**
 	 * 快速判断一个数是否是2的幂次方
-	 * 
-	 * @param value
-	 * @return
 	 */
 	static boolean isLog2(int value) {
 		if ((value & (value - 1)) == 0)
@@ -47,7 +44,7 @@ public class BitUtil {
 		return (p.getPermission() & all) == p.getPermission();
 	}
 
-	class Test {
+	static class Test {
 		Permission read = new Permission(1);
 		Permission create = new Permission(2);
 		Permission update = new Permission(4);

@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
 import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.web.WebHelper;
@@ -31,7 +30,7 @@ public class FileUploadHelper {
      * @param registration
      */
     public static void initUpload(ServletContext cxt, ServletRegistration.Dynamic registration) {
-        String tempDir = WebHelper.mappath(cxt, "upload_temp");
+        String tempDir = WebHelper.mapPath(cxt, "upload_temp");
         System.out.println(System.getProperty("user.dir"));
 
         if (tempDir == null) {
@@ -68,7 +67,7 @@ public class FileUploadHelper {
      * @return
      */
     public static String uploadInWeb(MultipartFile file, String uploadDir, boolean isNewAutoName) {
-        String _uploadDir = WebHelper.mappath(DiContextUtil.getRequest(), uploadDir);
+        String _uploadDir = WebHelper.mapPath(DiContextUtil.getRequest(), uploadDir);
         return upload(file, _uploadDir, isNewAutoName);
     }
 

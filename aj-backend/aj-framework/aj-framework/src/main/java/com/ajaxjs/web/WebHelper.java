@@ -89,7 +89,7 @@ public class WebHelper {
      * @param relativePath 相对地址
      * @return 绝对地址
      */
-    public static String mappath(ServletContext cxt, String relativePath) {
+    public static String mapPath(ServletContext cxt, String relativePath) {
         if (Version.isDebug && TestHelper.isRunningTest())
             return "c:\\temp\\" + relativePath;
 
@@ -104,12 +104,12 @@ public class WebHelper {
     /**
      * 输入一个相对地址，补充成为绝对地址 相对地址转换为绝对地址，并转换斜杠
      *
-     * @param req          相对地址，例如 /images
-     * @param relativePath
+     * @param req          请求对象
+     * @param relativePath 相对地址，例如 /images
      * @return 绝对地址，真实的磁盘路径
      */
-    public static String mappath(HttpServletRequest req, String relativePath) {
-        return mappath(req == null ? null : req.getServletContext(), relativePath);
+    public static String mapPath(HttpServletRequest req, String relativePath) {
+        return mapPath(req == null ? null : req.getServletContext(), relativePath);
     }
 
     /**
@@ -192,7 +192,6 @@ public class WebHelper {
      * parameterMap() 获取（这在过去的是不行的） 于是考虑这个两种兼容的方式
      *
      * @param req 请求对象
-     * @return
      */
     public static Map<String, Object> getParameterMap(HttpServletRequest req) {
         Map<String, Object> map;
@@ -229,11 +228,7 @@ public class WebHelper {
     }
 
     /**
-     * 如果不是表单 POST，那么就是 JsonRawBdoy
-     *
-     * @param req         请求对象
-     * @param formPostMap
-     * @return
+     * 如果不是表单 POST，那么就是 JsonRawBody
      */
     public static Map<String, Object> getParamMap(HttpServletRequest req, Map<String, Object> formPostMap) {
         Map<String, Object> map;
@@ -268,11 +263,6 @@ public class WebHelper {
 
     /**
      * 支持自动获取请求参数并封装到 Bean 内
-     *
-     * @param req 请求对象
-     * @param clz
-     * @param <T>
-     * @return
      */
     public static <T> T getParameterBean(HttpServletRequest req, Class<T> clz) {
         /*

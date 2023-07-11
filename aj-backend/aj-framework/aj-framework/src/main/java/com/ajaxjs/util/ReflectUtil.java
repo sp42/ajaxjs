@@ -278,16 +278,16 @@ public class ReflectUtil {
         Method methodObj;
 
         for (Class<?> clazz = arg.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
-            Type[] intfs = clazz.getGenericInterfaces();
+            Type[] interfaces = clazz.getGenericInterfaces();
 
-            if (intfs.length != 0) { // 有接口！
+            if (interfaces.length != 0) { // 有接口！
                 try {
-                    for (Type intf : intfs) {
+                    for (Type _interface : interfaces) {
                         // 旧方法，现在不行，不知道之前怎么可以的 methodObj = hostClazz.getDeclaredMethod(method,
-                        // (Class<?>)intf);
+                        // (Class<?>)_interface);
                         // methodObj = cls.getMethod(methodName,
-                        // ReflectNewInstance.getClassByInterface(intf));
-                        methodObj = getSuperClassDeclaredMethod(clz, method, getClassByInterface(intf));
+                        // ReflectNewInstance.getClassByInterface(_interface));
+                        methodObj = getSuperClassDeclaredMethod(clz, method, getClassByInterface(_interface));
 
                         if (methodObj != null)
                             return methodObj;
@@ -645,6 +645,7 @@ public class ReflectUtil {
 
     public static Class<?> getActualClass(Class<?> clz) {
         Type[] actualType = getActualType(clz);
+
         return type2class(actualType[0]);
     }
 

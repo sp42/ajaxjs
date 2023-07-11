@@ -29,8 +29,6 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 流操作助手类
- *
- * @author sp42 frank@ajaxjs.com
  */
 public class StreamHelper {
     private static final LogHelper LOGGER = LogHelper.getLog(StreamHelper.class);
