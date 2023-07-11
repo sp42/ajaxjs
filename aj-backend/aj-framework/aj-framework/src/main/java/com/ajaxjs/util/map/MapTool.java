@@ -185,11 +185,6 @@ public class MapTool {
 
     /**
      * Map 深复制操作
-     *
-     * @param map
-     * @param <T>
-     * @param <K>
-     * @return
      */
     public static <T, K> Map<T, K> deepCopy(Map<T, K> map) {
         Map<T, K> newMap = new HashMap<>();
@@ -512,10 +507,7 @@ public class MapTool {
     }
 
     /**
-     * 简单的 bean（没 getter/setter 的）转换为 Map。JSP 的 El 表达式会使用到。
-     *
-     * @param bean
-     * @return
+     * 简单的 bean（没 getter/setter 的）转换为 Map。JSP 的 El 表达式会使用到
      */
     public static Map<String, Object> simpleBean2Map(Object bean) {
         Map<String, Object> map = new HashMap<>();

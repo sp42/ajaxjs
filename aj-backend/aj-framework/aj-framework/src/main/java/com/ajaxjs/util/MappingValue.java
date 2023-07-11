@@ -26,7 +26,6 @@ import org.springframework.util.StringUtils;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.sql.util.geo.LocationPoint;
 import com.ajaxjs.sql.util.geo.MySqlGeoUtils;
-import com.ajaxjs.util.date.DateUtil;
 import com.ajaxjs.util.map.JsonHelper;
 
 /**

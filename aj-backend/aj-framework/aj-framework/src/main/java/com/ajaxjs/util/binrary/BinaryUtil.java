@@ -43,10 +43,9 @@ public class BinaryUtil {
 		char[] array = binary.toCharArray();
 
 		// 对传入的二进制字符串检测
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] != '0' && array[i] != '1')
+		for (char c : array) {
+			if (c != '0' && c != '1')
 				throw new IllegalArgumentException("二进制只能有0或1！");
-
 		}
 		// 再次检测字符串，避免‘00010101’，转成‘10101’
 		int index = binary.indexOf("1") > 0 ? binary.indexOf("1") : 0;

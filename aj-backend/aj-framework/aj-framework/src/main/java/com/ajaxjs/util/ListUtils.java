@@ -87,8 +87,8 @@ public class ListUtils {
         }
 
         T[] result = newArray(arrays.getClass().getComponentType().getComponentType(), length);
-
         length = 0;
+
         for (T[] array : arrays) {
             if (null != array) {
                 System.arraycopy(array, 0, result, length, array.length);

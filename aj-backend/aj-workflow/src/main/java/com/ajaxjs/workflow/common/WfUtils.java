@@ -1,6 +1,6 @@
 package com.ajaxjs.workflow.common;
 
-import com.ajaxjs.util.date.DateUtil;
+import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.workflow.model.ProcessModel;
 
 import java.lang.reflect.Array;

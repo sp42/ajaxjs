@@ -117,11 +117,9 @@ public class RegExpUtils {
             StringBuffer sb = new StringBuffer();
             int index = 0;
 
-            while (true) {
+            do {
                 m.appendReplacement(sb, replacement.replace(m.group(0), index++, m));
-                if (!m.find())
-                    break;
-            }
+            } while (m.find());
 
             m.appendTail(sb);
 

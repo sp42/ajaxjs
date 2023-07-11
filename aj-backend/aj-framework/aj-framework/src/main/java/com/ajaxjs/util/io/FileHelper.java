@@ -15,31 +15,23 @@
  */
 package com.ajaxjs.util.io;
 
+import com.ajaxjs.Version;
+import com.ajaxjs.util.DateUtil;
+import com.ajaxjs.util.logger.LogHelper;
+import org.springframework.util.StreamUtils;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.util.StreamUtils;
-
-import com.ajaxjs.Version;
-import com.ajaxjs.util.date.DateUtil;
-import com.ajaxjs.util.logger.LogHelper;
-
 /**
  * 文件操作工具类
- *
  * <a href="https://www.cnblogs.com/digdeep/p/4478734.html">...</a>
  *
  * @author sp42 frank@ajaxjs.com
@@ -58,7 +50,6 @@ public class FileHelper extends StreamHelper {
      * @param target    源文件
      * @param dest      目的文件/目录，如果最后一个为目录，则不改名，如果最后一个为文件名，则改名
      * @param isReplace 是否替换已存在的文件，true = 覆盖
-     * @throws IOException
      */
     public static void copy(String target, String dest, boolean isReplace) throws IOException {
         if (isReplace)
@@ -87,6 +78,7 @@ public class FileHelper extends StreamHelper {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
 
+            assert files != null;
             for (File f : files)
                 delete(f);
         }
@@ -138,7 +130,7 @@ public class FileHelper extends StreamHelper {
 //		}
 
         try (Stream<String> lines = Files.lines(path, encode);) { // 要关闭文件，否则文件被锁定
-            lines.forEach(str -> sb.append(str));
+            lines.forEach(sb::append);
 
             return sb.toString();
         } catch (IOException e) {
@@ -166,7 +158,7 @@ public class FileHelper extends StreamHelper {
      */
     public static byte[] openAsByte(File file) {
         try {
-            return StreamUtils.copyToByteArray(new FileInputStream(file));
+            return StreamUtils.copyToByteArray(Files.newInputStream(file.toPath()));
         } catch (IOException e) {
             LOGGER.warning(e);
 
@@ -214,7 +206,7 @@ public class FileHelper extends StreamHelper {
      * @param len  长度
      */
     public static void save(File file, byte[] data, int off, int len) {
-        try (OutputStream out = new FileOutputStream(file)) {
+        try (OutputStream out = Files.newOutputStream(file.toPath())) {
             bytes2output(out, data, false, off, len);
         } catch (IOException e) {
             LOGGER.warning(e);
@@ -358,8 +350,8 @@ public class FileHelper extends StreamHelper {
      * @return 如 /2008/10/15/ 格式的字符串
      */
     public static String getDirNameByDate() {
-        String datatime = DateUtil.now("yyyy-MM-dd"), year = datatime.substring(0, 4), mouth = datatime.substring(5, 7),
-                day = datatime.substring(8, 10);
+        String datetime = DateUtil.now("yyyy-MM-dd"), year = datetime.substring(0, 4), mouth = datetime.substring(5, 7),
+                day = datetime.substring(8, 10);
 
         return SEPARATOR + year + SEPARATOR + mouth + SEPARATOR + day + SEPARATOR;
     }
@@ -398,9 +390,6 @@ public class FileHelper extends StreamHelper {
 
     /**
      * 列出某个目录下的所有文件，不包括文件夹，不递归子目录
-     *
-     * @param directory
-     * @return
      */
     public static List<File> listFile(String directory) {
         Path path = Paths.get(directory);

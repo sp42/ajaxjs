@@ -25,7 +25,7 @@ public class ListMapConfig {
      * @author sp42 frank@ajaxjs.com
      */
     @FunctionalInterface
-    static interface MapHandler {
+    interface MapHandler {
         /**
          * 执行回调函数
          *
@@ -43,7 +43,7 @@ public class ListMapConfig {
      * @author sp42 frank@ajaxjs.com
      */
     @FunctionalInterface
-    static interface MapEntryHandler {
+    interface MapEntryHandler {
         /**
          * 执行回调函数
          *

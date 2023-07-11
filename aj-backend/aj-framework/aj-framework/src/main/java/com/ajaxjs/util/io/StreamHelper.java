@@ -171,7 +171,6 @@ public class StreamHelper {
         } catch (IOException e) {
             LOGGER.warning(e);
         }
-
     }
 
     /**

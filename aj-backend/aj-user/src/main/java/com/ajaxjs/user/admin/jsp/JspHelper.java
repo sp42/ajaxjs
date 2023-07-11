@@ -5,7 +5,7 @@ import com.ajaxjs.framework.entity.BaseEntityConstants;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.sql.JdbcUtil;
-import com.ajaxjs.util.date.DateUtil;
+import com.ajaxjs.util.DateUtil;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;

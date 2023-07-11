@@ -19,12 +19,12 @@ public class DecimalUtils {
      * @author 大脑补丁 on 2020-03-30 14:52
      */
     public static BigDecimal add(BigDecimal x, BigDecimal y) {
-        if (x == null) {
+        if (x == null)
             return y;
-        }
-        if (y == null) {
+
+        if (y == null)
             return x;
-        }
+
         return x.add(y);
     }
 
@@ -41,6 +41,7 @@ public class DecimalUtils {
     public static BigDecimal add(BigDecimal a, BigDecimal b, BigDecimal c, BigDecimal d) {
         BigDecimal ab = add(a, b);
         BigDecimal cd = add(c, d);
+
         return add(ab, cd);
     }
 
@@ -52,12 +53,12 @@ public class DecimalUtils {
      * @return result 和 （可为 null）
      */
     public static BigDecimal accumulate(BigDecimal x, BigDecimal result) {
-        if (x == null) {
+        if (x == null)
             return result;
-        }
-        if (result == null) {
+
+        if (result == null)
             result = new BigDecimal("0");
-        }
+
         return result.add(x);
     }
 
@@ -69,9 +70,9 @@ public class DecimalUtils {
      * @return BigDecimal 差 （可为 null）
      */
     public static BigDecimal subtract(BigDecimal x, BigDecimal y) {
-        if (x == null || y == null) {
+        if (x == null || y == null)
             return null;
-        }
+
         return x.subtract(y);
     }
 

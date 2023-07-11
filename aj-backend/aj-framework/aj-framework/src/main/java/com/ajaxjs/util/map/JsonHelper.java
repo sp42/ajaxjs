@@ -20,7 +20,7 @@ import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.jsonparser.JsonParseException;
 import com.ajaxjs.jsonparser.syntax.FMS;
 import com.ajaxjs.util.MappingValue;
-import com.ajaxjs.util.date.DateUtil;
+import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 

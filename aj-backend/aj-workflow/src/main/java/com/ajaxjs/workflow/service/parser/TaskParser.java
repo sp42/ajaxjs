@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.ajaxjs.util.date.DateUtil;
+import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.workflow.model.FieldModel;
 import com.ajaxjs.workflow.model.node.NodeModel;
 import com.ajaxjs.workflow.model.node.work.TaskModel;
