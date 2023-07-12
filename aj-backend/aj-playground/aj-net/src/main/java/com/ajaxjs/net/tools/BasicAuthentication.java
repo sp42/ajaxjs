@@ -1,8 +1,7 @@
 package com.ajaxjs.net.tools;
 
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -84,15 +83,15 @@ public class BasicAuthentication implements Filter {
 	 * @return true = 认证成功/false = 需要认证
 	 */
 	private static boolean checkAuth(String authorization, String userName, String password) {
-		if (!StringUtils.hasText(authorization))
+		if (!StringUtil.hasText(authorization))
 			return false;
 
 		String[] basicArray = authorization.split("\\s+");
 		if (isBadArray(basicArray))
 			return false;
 
-		String idpass = StrUtil.base64Decode(basicArray[1]);
-		if (!StringUtils.hasText(idpass))
+		String idpass = StringUtil.base64Decode(basicArray[1]);
+		if (!StringUtil.hasText(idpass))
 			return false;
 
 		String[] idpassArray = idpass.split(":");

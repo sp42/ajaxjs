@@ -10,13 +10,7 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
-import com.ajaxjs.util.regexp.RegExpUtils;
-import org.springframework.util.StringUtils;
+import com.ajaxjs.util.StringUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -61,7 +55,7 @@ public class Post extends Base implements HttpConstants {
             Map<String, Object> map = (Map<String, Object>) params;
 
             if (map.size() > 0) {
-                String str = MapTool.join(map, v -> v == null ? null : StrUtil.urlEncode(v.toString()));
+                String str = MapTool.join(map, v -> v == null ? null : StringUtil.urlEncode(v.toString()));
                 _params = str.getBytes(StandardCharsets.UTF_8);
             } else
                 _params = null;
@@ -301,7 +295,7 @@ public class Post extends Base implements HttpConstants {
                 File file = (File) v;
                 String field = String.format(FIELD, key, file.getName(), "application/octet-stream");
 
-                _bytes = StreamHelper.concat(field.getBytes(), Objects.requireNonNull(FileHelper.openAsByte(file)));
+                _bytes = StringUtil.concat(field.getBytes(), Objects.requireNonNull(FileHelper.openAsByte(file)));
             } else { // 普通字段
                 String field = String.format(DIV_FIELD, BOUNDARY, key, v.toString());
                 _bytes = field.getBytes();
@@ -310,11 +304,11 @@ public class Post extends Base implements HttpConstants {
             if (bytes == null) // 第一次时候为空
                 bytes = _bytes;
             else
-                bytes = StreamHelper.concat(bytes, _bytes);
+                bytes = StringUtil.concat(bytes, _bytes);
         }
 
         assert bytes != null;
-        return StreamHelper.concat(bytes, END_DATA);
+        return StringUtil.concat(bytes, END_DATA);
     }
 
     /**
@@ -330,8 +324,8 @@ public class Post extends Base implements HttpConstants {
 
     public static Map<String, Object> postFile(String url, String fieldName, String fileName, byte[] file, Consumer<HttpURLConnection> fn) {
         String field = String.format(FIELD, fieldName, fileName, "application/octet-stream");
-        byte[] bytes = StreamHelper.concat(field.getBytes(), file);
-        bytes = StreamHelper.concat(bytes, END_DATA);
+        byte[] bytes = StringUtil.concat(field.getBytes(), file);
+        bytes = StringUtil.concat(bytes, END_DATA);
 
         if (fn != null)
             fn = fn.andThen(conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
@@ -341,7 +335,7 @@ public class Post extends Base implements HttpConstants {
         ResponseEntity resp = post(url, bytes, fn);
         String json = resp.toString();
 
-        if (StringUtils.hasText(json))
+        if (StringUtil.hasText(json))
             return JsonHelper.parseMap(json);
         else
             return null;
@@ -366,7 +360,7 @@ public class Post extends Base implements HttpConstants {
 
         String fileName = FileHelper.getFileNameFromUrl(url);
         if (newFileName != null)
-            fileName = newFileName + RegExpUtils.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
+            fileName = newFileName + StringUtil.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
 
         ResponseEntity resp = connect(conn);
 
@@ -392,7 +386,7 @@ public class Post extends Base implements HttpConstants {
         response.setContentType("image/jpeg");
 
         try (OutputStream out = response.getOutputStream()) {
-            StreamHelper.write(resp.getIn(), out, true);
+            StringUtil.write(resp.getIn(), out, true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

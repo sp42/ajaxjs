@@ -1,9 +1,7 @@
 package com.ajaxjs.net.tools;
 
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.io.StreamHelper;
+import com.ajaxjs.util.StringUtil;
 import lombok.Data;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -68,40 +66,41 @@ public class DigestAuthentication implements Filter {
         String authHeader = req.getHeader("Authorization");
 
         try {
-            if (StringUtils.hasText(authHeader)) {
+            if (StringUtil.hasText(authHeader)) {
                 if (authHeader.startsWith("Digest")) {
                     // parse the values of the Authentication header into a hashmap
                     Map<String, String> headerValues = parseHeader(authHeader);
                     String method = req.getMethod();
-                    String ha1 = StrUtil.md5(userName + ":" + realm + ":" + password);
+                    String ha1 = StringUtil.md5(userName + ":" + realm + ":" + password);
                     String ha2;
                     String qop = headerValues.get("qop");
                     String reqURI = headerValues.get("uri");
 
-                    if (StringUtils.hasText(qop) && qop.equals("auth-int")) {
+                    if (StringUtil.hasText(qop) && qop.equals("auth-int")) {
                         String requestBody = "";
                         try (InputStream in = req.getInputStream()) {
-                            StreamHelper.byteStream2string(in);
+                            StringUtil.byteStream2string(in);
                         }
 
-                        String entityBodyMd5 = StrUtil.md5(requestBody);
-                        ha2 = StrUtil.md5(method + ":" + reqURI + ":" + entityBodyMd5);
+                        String entityBodyMd5 = StringUtil.md5(requestBody);
+                        ha2 = StringUtil.md5(method + ":" + reqURI + ":" + entityBodyMd5);
                     } else
-                        ha2 = StrUtil.md5(method + ":" + reqURI);
+                        ha2 = StringUtil.md5(method + ":" + reqURI);
 
                     String serverResponse;
 
-                    if (StringUtils.hasText(qop)) {
+                    if (StringUtil.hasText(qop)) {
 //						String domain = headerValues.get("realm");
                         String nonceCount = headerValues.get("nc");
                         String clientNonce = headerValues.get("cnonce");
 
-                        serverResponse = StrUtil.md5(ha1 + ":" + nonce + ":" + nonceCount + ":" + clientNonce + ":" + qop + ":" + ha2);
+                        serverResponse = StringUtil.md5(ha1 + ":" + nonce + ":" + nonceCount + ":" + clientNonce + ":" + qop + ":" + ha2);
                     } else
-                        serverResponse = StrUtil.md5(ha1 + ":" + nonce + ":" + ha2);
+                        serverResponse = StringUtil.md5(ha1 + ":" + nonce + ":" + ha2);
 
                     String clientResponse = headerValues.get("response");
 
+                    assert serverResponse != null;
                     if (!serverResponse.equals(clientResponse)) {
                         show401(resp);
                         return;
@@ -157,11 +156,11 @@ public class DigestAuthentication implements Filter {
         String header = "";
 
         header += "Digest realm=\"" + realm + "\",";
-        if (StringUtils.hasText(authMethod))
+        if (StringUtil.hasText(authMethod))
             header += "qop=" + authMethod + ",";
 
         header += "nonce=\"" + nonce + "\",";
-        header += "opaque=\"" + StrUtil.md5(realm + nonce) + "\""; // 域名跟 nonce 的 md5 = Opaque
+        header += "opaque=\"" + StringUtil.md5(realm + nonce) + "\""; // 域名跟 nonce 的 md5 = Opaque
 
         return header;
     }
@@ -174,6 +173,6 @@ public class DigestAuthentication implements Filter {
     public static String calculateNonce() {
         String now = new SimpleDateFormat("yyyy:MM:dd:hh:mm:ss").format(new Date());
 
-        return StrUtil.md5(now + new Random(100000).nextInt());
+        return StringUtil.md5(now + new Random(100000).nextInt());
     }
 }

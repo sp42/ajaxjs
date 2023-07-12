@@ -10,7 +10,7 @@
  */
 package com.ajaxjs.net.websocket;
 
-import com.ajaxjs.util.ThreadUtil;
+
 import com.ajaxjs.util.logger.LogHelper;
 
 import javax.websocket.*;
@@ -148,7 +148,7 @@ public class WebSocketClient {
                         LOGGER.warning(e);
                     }
 
-                ThreadUtil.sleep(5, TimeUnit.SECONDS);
+                sleep(5, TimeUnit.SECONDS);
             }
 
             LOGGER.warning("[]Ping循环关闭");
@@ -159,7 +159,7 @@ public class WebSocketClient {
      * 重新连接
      */
     private void needReconnect() {
-        ThreadUtil.sleep(3);
+        sleep(3);
         int cul = reConnectTimes.incrementAndGet();
 
         if (cul > 3) {
@@ -211,5 +211,24 @@ public class WebSocketClient {
 
     public void setOnMessage(BiConsumer<Session, String> onMessage) {
         this.onMessage = onMessage;
+    }
+
+    /**
+     * 挂起当前线程
+     *
+     * @param timeout  挂起的时长
+     * @param timeUnit 时长单位
+     * @return 被中断返回 false，否则 true
+     */
+    public static void sleep(Number timeout, TimeUnit timeUnit) {
+        try {
+            timeUnit.sleep(timeout.longValue());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sleep(Number timeout) {
+        sleep(timeout, TimeUnit.SECONDS);
     }
 }

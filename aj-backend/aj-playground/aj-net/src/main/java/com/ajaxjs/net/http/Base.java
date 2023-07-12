@@ -10,7 +10,7 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.io.StreamHelper;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
 
 import java.io.IOException;
@@ -110,7 +110,7 @@ public abstract class Base {
 
                 String result = null;
                 if (in != null) {
-                    result = StreamHelper.byteStream2string(in);
+                    result = StringUtil.byteStream2string(in);
                     resp.setResponseText(result);
                 }
 

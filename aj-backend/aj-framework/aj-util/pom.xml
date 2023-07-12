@@ -13,9 +13,9 @@
         <version>1.11</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-    <properties>
+<!--    <properties>
         <maven.javadoc.skip>true</maven.javadoc.skip>
-    </properties>
+    </properties>-->
 
     <dependencies>
         <dependency>

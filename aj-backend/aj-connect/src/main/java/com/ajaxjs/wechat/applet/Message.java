@@ -40,7 +40,7 @@ public class Message {
         if (mpMsg != null)
             params.put("mp_template_msg", mpMsg);
         if (webAppMsg != null)
-            params.put("mp_template_msg", webAppMsg);
+            params.put("weapp_template_msg", webAppMsg);
 
         Map<String, Object> result = postJson(UNIFORM_SEND_API + appletCfg.getAccessToken(), JsonHelper.toJson(params));
 

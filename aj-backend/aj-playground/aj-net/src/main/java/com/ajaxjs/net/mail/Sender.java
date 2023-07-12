@@ -10,9 +10,8 @@
  */
 package com.ajaxjs.net.mail;
 
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.regexp.RegExpUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -45,7 +44,7 @@ public class Sender extends Socket {
 
 	private static final int OK_250_CODE = 250;// 成功标识
 
-	private Mail bean; // 邮件信息
+	private final Mail bean; // 邮件信息
 
 	private BufferedReader in; // 接受指令用的缓冲区
 
@@ -169,6 +168,7 @@ public class Sender extends Socket {
 		try {
 			os.writeBytes(msg + LINEFEET);
 			os.flush();
+
 			return in.readLine(); // 读取服务器端响应信息
 		} catch (IOException e) {
 			LOGGER.warning(e);
@@ -183,7 +183,7 @@ public class Sender extends Socket {
 	 * @return 已编码的字符串
 	 */
 	public static String toBase64(String str) {
-		return StrUtil.base64Encode(str);
+		return StringUtil.base64Encode(str);
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class Sender extends Socket {
 	 * @return 是否与之匹配
 	 */
 	private static boolean isOkCode(String str, int code) {
-		int _code = Integer.parseInt(RegExpUtils.regMatch("^\\d+", str));
+		int _code = Integer.parseInt(StringUtil.regMatch("^\\d+", str));
 
 		return _code == code;
 	}

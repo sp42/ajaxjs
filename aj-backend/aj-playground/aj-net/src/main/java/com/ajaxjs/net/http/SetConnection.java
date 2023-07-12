@@ -10,8 +10,6 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.map.MapTool;
-
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.function.BiConsumer;

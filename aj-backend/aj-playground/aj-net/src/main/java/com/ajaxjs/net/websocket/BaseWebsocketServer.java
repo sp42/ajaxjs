@@ -11,7 +11,6 @@
 package com.ajaxjs.net.websocket;
 
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
 
 import javax.websocket.CloseReason;
 import javax.websocket.OnClose;

@@ -24,12 +24,12 @@ public class BatchDownload {
 	/**
 	 * 闭锁。另外可参考栅栏 CyclicBarrier
 	 */
-	private CountDownLatch latch;
+	private final CountDownLatch latch;
 
 	/**
 	 * 下载列表
 	 */
-	private String[] arr;
+	private final String[] arr;
 
 	/**
 	 * 保存目录

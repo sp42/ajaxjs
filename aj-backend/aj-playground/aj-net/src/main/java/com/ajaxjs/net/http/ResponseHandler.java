@@ -10,11 +10,9 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.StreamHelper;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +42,7 @@ public abstract class ResponseHandler {
      */
     public static ResponseEntity stream2Str(ResponseEntity resp) {
         if (resp.getIn() != null) {
-            String result = StreamHelper.byteStream2string(resp.getIn());
+            String result = StringUtil.byteStream2string(resp.getIn());
             resp.setResponseText(result.trim());
 
             int maxLength = 500;
@@ -67,7 +65,7 @@ public abstract class ResponseHandler {
         File file = FileHelper.createFile(saveDir, fileName);
 
         try (OutputStream out = Files.newOutputStream(file.toPath())) {
-            StreamHelper.write(resp.getIn(), out, true);
+            StringUtil.write(resp.getIn(), out, true);
             LOGGER.info("文件 [{0}]写入成功", file.toString());
 
             return file.toString();
