@@ -10,9 +10,9 @@
  */
 package com.ajaxjs.net.http;
 
+import com.ajaxjs.util.JsonTools;
 import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +62,7 @@ public abstract class ResponseHandler {
      * @return 下载文件的完整磁盘路径
      */
     public static String download(ResponseEntity resp, String saveDir, String fileName) {
-        File file = FileHelper.createFile(saveDir, fileName);
+        File file = StringUtil.createFile(saveDir, fileName);
 
         try (OutputStream out = Files.newOutputStream(file.toPath())) {
             StringUtil.write(resp.getIn(), out, true);
@@ -93,7 +93,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                list = JsonHelper.parseList(resp.toString());
+                list = JsonTools.jsonToListOfMap(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 JSON 时候发生异常");
             }
@@ -104,7 +104,7 @@ public abstract class ResponseHandler {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
             } else
-                map = JsonHelper.parseMap(resp.getResponseText());
+                map = JsonTools.json2map(resp.getResponseText());
 
             list = new ArrayList<>();
             list.add(map);
@@ -124,7 +124,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                map = JsonHelper.parseMap(resp.toString());
+                map = JsonTools.json2map(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 JSON 时候发生异常");
             }
@@ -133,7 +133,7 @@ public abstract class ResponseHandler {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
             } else
-                map = JsonHelper.parseMap(resp.getResponseText());
+                map = JsonTools.json2map(resp.getResponseText());
         }
 
         return map;
@@ -150,7 +150,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                map = MapTool.xmlToMap(resp.toString());
+//                map = MapTool.xmlToMap(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 XML 时候发生异常");
             }
@@ -158,15 +158,16 @@ public abstract class ResponseHandler {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else
-                map = MapTool.xmlToMap(resp.getResponseText());
+            }
+//            else
+//                map = MapTool.xmlToMap(resp.getResponseText());
         }
 
         return map;
     }
 
     public static <T> T toBean(ResponseEntity resp, Class<T> clz) {
-        return MapTool.map2Bean(toJson(resp), clz);
+        return JsonTools.map2bean(toJson(resp), clz);
     }
 
     /**

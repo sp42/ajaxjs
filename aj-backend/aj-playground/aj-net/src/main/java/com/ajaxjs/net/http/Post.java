@@ -10,6 +10,7 @@
  */
 package com.ajaxjs.net.http;
 
+import com.ajaxjs.util.JsonTools;
 import com.ajaxjs.util.StringUtil;
 
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +56,7 @@ public class Post extends Base implements HttpConstants {
             Map<String, Object> map = (Map<String, Object>) params;
 
             if (map.size() > 0) {
-                String str = MapTool.join(map, v -> v == null ? null : StringUtil.urlEncode(v.toString()));
+                String str = StringUtil.join(map, v -> v == null ? null : StringUtil.urlEncode(v.toString()));
                 _params = str.getBytes(StandardCharsets.UTF_8);
             } else
                 _params = null;
@@ -134,8 +135,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *               <pre>byte[]、String、Map<String, Object>
      *               <p>
-     *                                                                                                                                                                                                                                                             类型，实际表示了表单数据 KeyValue 的请求数据
-     *                                                                                                                                                                                                                                               @return 响应消息体
+     *                                                                                                                                                                                                                                                                                         类型，实际表示了表单数据 KeyValue 的请求数据
+     *                                                                                                                                                                                                                                                                           @return 响应消息体
      */
     public static ResponseEntity put(String url, Object params) {
         return put(url, params, null);
@@ -177,8 +178,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *
      *               <pre>
-     *                                                                                                                                                                                                                                                                                                                                                                                                         byte[]、String、Map<String, Object>
-     *                                                                                                                                                                                                                                                                                                                                                                                                                       </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                     byte[]、String、Map<String, Object>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                                   </pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -194,7 +195,7 @@ public class Post extends Base implements HttpConstants {
      * POST JSON as RawBody
      */
     public static Map<String, Object> apiJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
-        String json = JsonHelper.toJson(params);
+        String json = JsonTools.beanToJson(params);
         json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
         System.out.println("JSON>>>" + json);
 
@@ -205,7 +206,7 @@ public class Post extends Base implements HttpConstants {
      * PUT JSON as RawBody
      */
     public static Map<String, Object> putJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
-        String json = JsonHelper.toJson(params);
+        String json = JsonTools.beanToJson(params);
         json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
 
         return putApi(url, json, fn);
@@ -295,7 +296,7 @@ public class Post extends Base implements HttpConstants {
                 File file = (File) v;
                 String field = String.format(FIELD, key, file.getName(), "application/octet-stream");
 
-                _bytes = StringUtil.concat(field.getBytes(), Objects.requireNonNull(FileHelper.openAsByte(file)));
+                _bytes = StringUtil.concat(field.getBytes(), Objects.requireNonNull(StringUtil.openAsByte(file)));
             } else { // 普通字段
                 String field = String.format(DIV_FIELD, BOUNDARY, key, v.toString());
                 _bytes = field.getBytes();
@@ -336,7 +337,7 @@ public class Post extends Base implements HttpConstants {
         String json = resp.toString();
 
         if (StringUtil.hasText(json))
-            return JsonHelper.parseMap(json);
+            return JsonTools.json2map(json);
         else
             return null;
     }
@@ -358,7 +359,7 @@ public class Post extends Base implements HttpConstants {
         if (fn != null)
             fn.accept(conn);
 
-        String fileName = FileHelper.getFileNameFromUrl(url);
+        String fileName = StringUtil.getFileNameFromUrl(url);
         if (newFileName != null)
             fileName = newFileName + StringUtil.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
 

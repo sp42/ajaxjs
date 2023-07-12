@@ -1,13 +1,17 @@
 package com.ajaxjs.util;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -222,4 +226,137 @@ public class StringUtil {
 
         return c;
     }
+
+    /**
+     * 输入 /foo/bar/foo.jpg 返回 foo.jpg
+     *
+     * @param str 输入的字符串
+     * @return 文件名
+     */
+    public static String getFileName(String str) {
+        String[] arr = str.split("[/\\\\]");// 取消文件名，让最后一个元素为空字符串
+
+        return arr[arr.length - 1];
+    }
+
+    /**
+     * 获取 URL 上的文件名，排除 ? 参数部分
+     *
+     * @param url URL
+     * @return 文件名
+     */
+    public static String getFileNameFromUrl(String url) {
+        return getFileName(url).split("\\?")[0];
+    }
+
+    /**
+     * URL 编码
+     *
+     * @param str 输入的字符串
+     * @return URL 编码后的字符串
+     */
+    public static String urlEncode(String str) {
+        try {
+            return URLEncoder.encode(str, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获得指定文件的 byte 数组
+     *
+     * @param file 文件对象
+     * @return 文件字节数组
+     */
+    public static byte[] openAsByte(File file) {
+        try {
+            return copyToByteArray(Files.newInputStream(file.toPath()));
+        } catch (IOException e) {
+
+            return null;
+        }
+    }
+
+    public static byte[] copyToByteArray(InputStream in) throws IOException {
+        if (in == null)
+            return new byte[0];
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream(BUFFER_SIZE);
+        copy(in, out);
+        return out.toByteArray();
+    }
+
+    public static int copy(InputStream in, OutputStream out) throws IOException {
+        int byteCount = 0;
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int bytesRead;
+        while ((bytesRead = in.read(buffer)) != -1) {
+            out.write(buffer, 0, bytesRead);
+            byteCount += bytesRead;
+        }
+
+        out.flush();
+
+        return byteCount;
+    }
+
+    public static final String SEPARATOR = File.separator;
+
+    /**
+     * 新建一个空文件
+     *
+     * @param folder   如果路径不存在则自动创建
+     * @param fileName 保存的文件名
+     * @return 新建文件的 File 对象
+     */
+    public static File createFile(String folder, String fileName) {
+        mkDir(folder);
+        return new File(folder + SEPARATOR + fileName);
+    }
+
+    /**
+     * 创建目录
+     *
+     * @param folder 目录字符串
+     */
+    public static void mkDir(String folder) {
+        File _folder = new File(folder);
+        if (!_folder.exists())// 先检查目录是否存在，若不存在建立
+            _folder.mkdirs();
+
+        _folder.mkdir();
+    }
+
+    /**
+     * Map 转换为 String
+     *
+     * @param map Map 结构，Key 必须为 String 类型
+     * @param div 分隔符
+     * @param fn  对 Value 的处理函数，返回类型 T
+     * @return Map 序列化字符串
+     */
+    public static <T> String join(Map<String, T> map, String div, Function<T, String> fn) {
+        String[] pairs = new String[map.size()];
+
+        int i = 0;
+
+        for (String key : map.keySet())
+            pairs[i++] = key + "=" + fn.apply(map.get(key));
+
+        return String.join(div, pairs);
+    }
+
+    public static <T> String join(Map<String, T> map, Function<T, String> fn) {
+        return join(map, "&", fn);
+    }
+
+    public static <T> String join(Map<String, T> map, String div) {
+        return join(map, div, v -> v == null ? null : v.toString());
+    }
+
+    public static <T> String join(Map<String, T> map) {
+        return join(map, "&");
+    }
+
 }

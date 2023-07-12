@@ -10,6 +10,7 @@
  */
 package com.ajaxjs.net.websocket;
 
+import com.ajaxjs.util.JsonTools;
 import com.ajaxjs.util.logger.LogHelper;
 
 import javax.websocket.CloseReason;
@@ -36,7 +37,7 @@ public abstract class BaseWebsocketServer {
      * @param obj Java Bean
      */
     public void sendMessageJson(Object obj) {
-        sendMessage(JsonHelper.toJson(obj));
+        sendMessage(JsonTools.beanToJson(obj));
     }
 
     /**

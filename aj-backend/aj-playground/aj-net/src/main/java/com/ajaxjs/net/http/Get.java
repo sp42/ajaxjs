@@ -10,11 +10,9 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.StreamHelper;
+import com.ajaxjs.util.JsonTools;
+import com.ajaxjs.util.StringUtil;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.MapTool;
-import com.ajaxjs.util.regexp.RegExpUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -39,7 +37,7 @@ public class Get extends Base {
      */
     public static String simpleGET(String url) {
         try {
-            return StreamHelper.byteStream2string(new URL(url).openStream());
+            return StringUtil.byteStream2string(new URL(url).openStream());
         } catch (IOException e) {
             LOGGER.warning(e);
             return null;
@@ -81,7 +79,7 @@ public class Get extends Base {
     }
 
     public static <T> T api2bean(String url, Class<T> beanClz) {
-        return MapTool.map2Bean(api(url), beanClz);
+        return JsonTools.map2bean(api(url), beanClz);
     }
 
     /**
@@ -158,9 +156,9 @@ public class Get extends Base {
         if (fn != null)
             fn.accept(conn);
 
-        String fileName = FileHelper.getFileNameFromUrl(url);
+        String fileName = StringUtil.getFileNameFromUrl(url);
         if (newFileName != null)
-            fileName = newFileName + RegExpUtils.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
+            fileName = newFileName + StringUtil.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
 
         ResponseEntity resp = connect(conn);
 

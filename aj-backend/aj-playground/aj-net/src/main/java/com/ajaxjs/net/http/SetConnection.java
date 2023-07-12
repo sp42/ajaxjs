@@ -10,6 +10,8 @@
  */
 package com.ajaxjs.net.http;
 
+import com.ajaxjs.util.StringUtil;
+
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -24,7 +26,7 @@ public abstract class SetConnection {
     /**
      * 设置 cookies
      */
-    public final static BiConsumer<HttpURLConnection, Map<String, String>> SET_COOKIES = (conn, map) -> conn.addRequestProperty("Cookie", MapTool.join(map, ";"));
+    public final static BiConsumer<HttpURLConnection, Map<String, String>> SET_COOKIES = (conn, map) -> conn.addRequestProperty("Cookie", StringUtil.join(map, ";"));
 
     /**
      * 请求来源
