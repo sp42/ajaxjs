@@ -14,9 +14,8 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 初始化，检测是否可以运行
- *
- * @author sp42 frank@ajaxjs.com
  */
+@Deprecated
 public class Version {
     private static final LogHelper LOGGER = LogHelper.getLog(Version.class);
 

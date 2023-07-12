@@ -1,7 +1,6 @@
 package com.ajaxjs.wechat.applet;
 
-import com.ajaxjs.util.ListUtils;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.wechat.applet.model.TemplateMsgMp;
 import com.ajaxjs.wechat.applet.model.TemplateMsgWebApp;
 import org.junit.Test;
@@ -32,11 +31,11 @@ public class TestMessage {
         msg.setUrl("http://foo");
 
         Map<String, Object> params = new HashMap<>();
-        params.put("first", ListUtils.hashMap("value", "您有一条订单产生预警消息，请尽快安排处理。"));
-        params.put("keyword1", ListUtils.hashMap("value", "无"));
-        params.put("keyword2", ListUtils.hashMap("value", "date"));
-        params.put("keyword3", ListUtils.hashMap("value", "warningType"));
-        params.put("remark", ListUtils.hashMap("value", "详细请至“车辆租赁”运营后台序查看并处理。"));
+        params.put("first", ObjectHelper.hashMap("value", "您有一条订单产生预警消息，请尽快安排处理。"));
+        params.put("keyword1", ObjectHelper.hashMap("value", "无"));
+        params.put("keyword2", ObjectHelper.hashMap("value", "date"));
+        params.put("keyword3", ObjectHelper.hashMap("value", "warningType"));
+        params.put("remark", ObjectHelper.hashMap("value", "详细请至“车辆租赁”运营后台序查看并处理。"));
         msg.setData(params);
 
 

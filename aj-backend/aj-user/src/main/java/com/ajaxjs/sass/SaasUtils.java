@@ -1,6 +1,6 @@
 package com.ajaxjs.sass;
 
-import com.ajaxjs.framework.TestHelper;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import org.springframework.util.StringUtils;
 

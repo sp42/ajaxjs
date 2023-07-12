@@ -1,24 +1,20 @@
 package com.ajaxjs.workflow.model.node;
 
-import java.util.Map;
-import java.util.function.Function;
-
-import javax.el.ExpressionFactory;
-
-//import org.apache.el.ExpressionFactoryImpl;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.util.StringUtils;
-
-import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.service.handler.DecisionHandler;
-
 import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.util.StringUtils;
+
+import javax.el.ExpressionFactory;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 决策定义 decision 元素
@@ -117,7 +113,7 @@ public class DecisionModel extends NodeModel {
         this.handleClass = handleClass;
 
         if (StringUtils.hasText(handleClass))
-            decide = (DecisionHandler) ReflectUtil.newInstance(handleClass);
+            decide = (DecisionHandler) NewInstance.newInstance(handleClass);
     }
 
 }

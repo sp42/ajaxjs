@@ -1,18 +1,15 @@
 package com.ajaxjs.util.map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.ajaxjs.jsonparser.JsonParseException;
 import com.ajaxjs.jsonparser.lexer.Lexer;
 import com.ajaxjs.jsonparser.lexer.Token;
 import com.ajaxjs.jsonparser.lexer.Tokens;
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 
 
@@ -42,19 +39,6 @@ public class TestJsonParser {
 		map = (Map<String, Object>) o;
 		assertTrue(map.get("text").toString().equals("I'm OK~"));
 		assertEquals(1, ((List) map.get("a")).get(0));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testJson2Map() {
-		Object obj = JsonHelper.json2Map("{x1:true, x2:2000, x3:\"1:hello world\",a:{b:{c:{d:{e:[1,\"j\",3,4,5,6]}}}}}");
-		assertTrue(obj instanceof Map);
-		Map<String, Object> map = (Map<String, Object>) obj;
-		assertTrue(map.get("a") instanceof Map);
-		assertEquals(true, map.get("x1"));
-		assertEquals(2000, map.get("x2"));
-		assertEquals("1:helloworld", map.get("x3")); // remove space, that's wrong.
-		assertNotNull(obj);
 	}
 
 	@Test

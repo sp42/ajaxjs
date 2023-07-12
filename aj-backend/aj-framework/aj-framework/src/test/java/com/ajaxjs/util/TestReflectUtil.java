@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import com.ajaxjs.util.reflect.Clazz;
 import org.junit.Test;
 
 import com.ajaxjs.util.regexp.RegExpUtils;
@@ -51,7 +52,7 @@ public class TestReflectUtil {
 		assertNotNull(newInstance("com.ajaxjs.util.TestReflectUtil"));
 		assertNotNull(getClassByName("com.ajaxjs.util.TestReflectUtil"));
 		
-		Class<?>[] cs = ReflectUtil.getDeclaredInterface(ArrayList.class);
+		Class<?>[] cs = Clazz.getDeclaredInterface(ArrayList.class);
 		assertNotNull(cs.length);
 	}
 	

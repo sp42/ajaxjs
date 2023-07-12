@@ -15,8 +15,9 @@ import com.ajaxjs.net.http.Post;
 import com.ajaxjs.net.http.ResponseEntity;
 import com.ajaxjs.net.http.SetConnection;
 import com.ajaxjs.util.ListUtils;
-import com.ajaxjs.util.cryptography.Digest;
+import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.DateUtil;
+import com.ajaxjs.util.ObjectHelper;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
@@ -73,7 +74,7 @@ public class OssUpload implements IFileUpload {
         String date = DateUtil.getGMTDate();
         String signature = Digest.doHmacSHA1(secretAccessKey, buildGetSignData(date, signResourcePath));
 
-        Map<String, String> head = ListUtils.hashMap("Date", date, "Authorization", "OSS " + accessKeyId + ":" + signature);
+        Map<String, String> head = ObjectHelper.hashMap("Date", date, "Authorization", "OSS " + accessKeyId + ":" + signature);
         String url = "http://" + ossBucket + "." + endpoint;
 
         return Get.get(url + key, SetConnection.map2header(head)).toString();

@@ -1,6 +1,7 @@
 package com.ajaxjs.wechat.applet.payment;
 
 import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
@@ -42,7 +43,7 @@ public class RefundService extends CommonService {
         params.put("notify_url", refundNotifyUrl);
         params.put("out_refund_no", outRefundNo);
         params.put("reason", reason);
-        params.put("amount", ListUtils.hashMap("refund", refundMoney, "total", totalMoney, "currency", "CNY"));
+        params.put("amount", ObjectHelper.hashMap("refund", refundMoney, "total", totalMoney, "currency", "CNY"));
 
         String url = "/v3/refund/domestic/refunds";
         Map<String, Object> map = AppletPayUtils.postMap(mchCfg, url, params);

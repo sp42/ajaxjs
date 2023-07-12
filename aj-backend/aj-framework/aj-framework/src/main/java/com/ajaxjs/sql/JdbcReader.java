@@ -12,28 +12,21 @@
  */
 package com.ajaxjs.sql;
 
+import com.ajaxjs.sql.Lambda.HasZeroResult;
+import com.ajaxjs.sql.Lambda.ResultSetProcessor;
+import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.Methods;
+import com.ajaxjs.util.reflect.NewInstance;
+
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.*;
+import java.util.*;
 import java.util.function.Consumer;
-
-import com.ajaxjs.sql.Lambda.HasZeroResult;
-import com.ajaxjs.sql.Lambda.ResultSetProcessor;
-import com.ajaxjs.util.MappingValue;
-import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 完成 SQL 到 Java 的转换
@@ -175,7 +168,7 @@ public class JdbcReader {
     @SuppressWarnings({"unchecked"})
     public static <T> ResultSetProcessor<T> getResultBean(Class<T> beanClz) {
         return rs -> {
-            T bean = ReflectUtil.newInstance(beanClz);
+            T bean = NewInstance.newInstance(beanClz);
             ResultSetMetaData metaData = rs.getMetaData();
 
 //            if (beanClz.toString().contains("OrderProfitsharingReceivers")) {
@@ -201,7 +194,7 @@ public class JdbcReader {
 //						value = dbValue2Enum(propertyType, _value);
 //					else {
                     try {
-                        value = MappingValue.objectCast(_value, propertyType);
+                        value = ObjectHelper.objectCast(_value, propertyType);
                     } catch (NumberFormatException e) {
                         String input = (value == null ? " 空值 " : value.getClass().toString()), expect = property.getPropertyType().toString();
                         LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, input, expect);
@@ -209,7 +202,7 @@ public class JdbcReader {
                     }
 //					}
 
-                    ReflectUtil.executeMethod(bean, method, value);
+                    Methods.executeMethod(bean, method, value);
                 } catch (IntrospectionException | IllegalArgumentException e) {
 //                    LOGGER.warning(e);
 
@@ -221,13 +214,13 @@ public class JdbcReader {
                         try {
                             if ((_value != null) && beanClz.getField("extractData") != null) {
                                 assert bean != null;
-                                Object obj = ReflectUtil.executeMethod(bean, "getExtractData");
+                                Object obj = Methods.executeMethod(bean, "getExtractData");
 
 //								LOGGER.info(":::::::::key::"+ key +":::v:::" + _value);
                                 if (obj == null) {
                                     Map<String, Object> extractData = new HashMap<>();
-                                    ReflectUtil.executeMethod(bean, "setExtractData", extractData);
-                                    obj = ReflectUtil.executeMethod(bean, "getExtractData");
+                                    Methods.executeMethod(bean, "setExtractData", extractData);
+                                    obj = Methods.executeMethod(bean, "getExtractData");
                                 }
 
                                 Map<String, Object> map = (Map<String, Object>) obj;

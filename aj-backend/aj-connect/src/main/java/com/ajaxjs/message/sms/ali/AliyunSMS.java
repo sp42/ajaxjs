@@ -12,7 +12,7 @@ package com.ajaxjs.message.sms.ali;
 
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.cryptography.Digest;
+import com.ajaxjs.util.Digest;
 import org.springframework.util.AlternativeJdkIdGenerator;
 
 import java.text.SimpleDateFormat;

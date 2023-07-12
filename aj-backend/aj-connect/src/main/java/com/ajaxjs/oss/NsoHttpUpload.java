@@ -11,7 +11,7 @@ import com.ajaxjs.net.http.Delete;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.net.http.Post;
 import com.ajaxjs.net.http.ResponseEntity;
-import com.ajaxjs.util.cryptography.Digest;
+import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;

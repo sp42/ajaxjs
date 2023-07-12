@@ -15,6 +15,23 @@
  */
 package com.ajaxjs.util.map;
 
+import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.sql.IgnoreDB;
+import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.XmlHelper;
+import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.NewInstance;
+import com.ajaxjs.util.reflect.Types;
+import org.springframework.util.ObjectUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -23,37 +40,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.springframework.util.ObjectUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.sql.IgnoreDB;
-import com.ajaxjs.util.MappingValue;
-import com.ajaxjs.util.ReflectUtil;
-import com.ajaxjs.util.XmlHelper;
-import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * Map 转换工具
@@ -180,7 +171,7 @@ public class MapTool {
     }
 
     public static Map<String, Object> as(Map<String, String[]> map) {
-        return as(map, arr -> MappingValue.toJavaValue(arr[0]));
+        return as(map, arr -> ObjectHelper.toJavaValue(arr[0]));
     }
 
     /**
@@ -245,7 +236,7 @@ public class MapTool {
      */
     @SuppressWarnings("unchecked")
     public static <T> T map2Bean(Map<String, ?> map, Class<T> clz, boolean isTransform, boolean isChild) {
-        T bean = ReflectUtil.newInstance(clz);
+        T bean = NewInstance.newInstance(clz);
 
         assert bean != null;
         eachField(bean, (String key, Object v, PropertyDescriptor property) -> {
@@ -275,9 +266,9 @@ public class MapTool {
 //                        if (value.toString().startsWith("{\"zjxt_height\""))
 //                            LOGGER.info(value);
                         if (t == List.class) { // List 容器类，要处理里面的泛型
-                            Type[] genericReturnType = ReflectUtil.getGenericReturnType(property.getReadMethod());
+                            Type[] genericReturnType = Types.getGenericReturnType(property.getReadMethod());
                             Type beanT = genericReturnType[0];
-                            Class<?> realT = ReflectUtil.type2class(beanT);
+                            Class<?> realT = Types.type2class(beanT);
 
                             List<Map<String, Object>> oldValue;
 
@@ -297,7 +288,7 @@ public class MapTool {
                             value = newList;
                         } else {
                             if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
-                                value = MappingValue.objectCast(value, t);
+                                value = ObjectHelper.objectCast(value, t);
                         }
 
                         try {
@@ -359,7 +350,7 @@ public class MapTool {
 
                     // TODO list
                     if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
-                        value = MappingValue.objectCast(value, t);
+                        value = ObjectHelper.objectCast(value, t);
 
                     try {
                         field.set(bean, value);

@@ -1,6 +1,6 @@
 package com.ajaxjs.wechat.applet.payment;
 
-import com.ajaxjs.util.binrary.BytesUtil;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.wechat.common.AesUtil;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
@@ -31,9 +31,9 @@ public abstract class CommonService {
         String ciphertext = resource.get("ciphertext").toString();
         LOGGER.info(ciphertext);
 
-        byte[] apiV3KeyByte = BytesUtil.getUTF8_Bytes(getMchCfg().getApiV3Key());
-        byte[] associatedData = BytesUtil.getUTF8_Bytes(resource.get("associated_data").toString());
-        byte[] nonce = BytesUtil.getUTF8_Bytes(resource.get("nonce").toString());
+        byte[] apiV3KeyByte = StrUtil.getUTF8_Bytes(getMchCfg().getApiV3Key());
+        byte[] associatedData = StrUtil.getUTF8_Bytes(resource.get("associated_data").toString());
+        byte[] nonce = StrUtil.getUTF8_Bytes(resource.get("nonce").toString());
 
         // 解密
         AesUtil aesUtil = new AesUtil(apiV3KeyByte);

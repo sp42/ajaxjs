@@ -3,9 +3,10 @@ package com.ajaxjs.data.jdbc_helper;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.ResultSetProcessor;
 import com.ajaxjs.sql.JdbcUtil;
-import com.ajaxjs.util.MappingValue;
-import com.ajaxjs.util.ReflectUtil;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.Methods;
+import com.ajaxjs.util.reflect.NewInstance;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -194,7 +195,7 @@ public class JdbcReader extends JdbcConn {
                 }
             }
 
-            T bean = ReflectUtil.newInstance(beanClz);
+            T bean = NewInstance.newInstance(beanClz);
 
 //            if (beanClz.toString().contains("OrderProfitsharingReceivers")) {
 //                System.out.println();
@@ -219,7 +220,7 @@ public class JdbcReader extends JdbcConn {
 //						value = dbValue2Enum(propertyType, _value);
 //					else {
                     try {
-                        value = MappingValue.objectCast(_value, propertyType);
+                        value = ObjectHelper.objectCast(_value, propertyType);
                     } catch (NumberFormatException e) {
                         String input = (value == null ? " 空值 " : value.getClass().toString()), expect = property.getPropertyType().toString();
                         LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, input, expect);
@@ -227,7 +228,7 @@ public class JdbcReader extends JdbcConn {
                     }
 //					}
 
-                    ReflectUtil.executeMethod(bean, method, value);
+                    Methods.executeMethod(bean, method, value);
                 } catch (IntrospectionException | IllegalArgumentException e) {
 //                    LOGGER.warning(e);
 
@@ -239,13 +240,13 @@ public class JdbcReader extends JdbcConn {
                         try {
                             if ((_value != null) && beanClz.getField("extractData") != null) {
                                 assert bean != null;
-                                Object obj = ReflectUtil.executeMethod(bean, "getExtractData");
+                                Object obj = Methods.executeMethod(bean, "getExtractData");
 
 //								LOGGER.info(":::::::::key::"+ key +":::v:::" + _value);
                                 if (obj == null) {
                                     Map<String, Object> extractData = new HashMap<>();
-                                    ReflectUtil.executeMethod(bean, "setExtractData", extractData);
-                                    obj = ReflectUtil.executeMethod(bean, "getExtractData");
+                                    Methods.executeMethod(bean, "setExtractData", extractData);
+                                    obj = Methods.executeMethod(bean, "getExtractData");
                                 }
 
                                 Map<String, Object> map = (Map<String, Object>) obj;

@@ -34,9 +34,10 @@ import java.util.function.Function;
 
 import javax.sql.DataSource;
 
-import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.Methods;
 
 /**
  * SQL 写入到数据库
@@ -484,12 +485,12 @@ public class JdbcHelper extends JdbcReader {
      * @return
      */
     private static Object valueHandler(Object bean, BeanMethod info) {
-        Object value = ReflectUtil.executeMethod(bean, info.getGetter());
+        Object value = Methods.executeMethod(bean, info.getGetter());
         Class<?> t = info.getType();
 
         if (value != null && t != value.getClass()) { // 类型相同，直接传入；类型不相同，开始转换
             LOGGER.info(t);
-            return MappingValue.objectCast(value, t);
+            return ObjectHelper.objectCast(value, t);
         } else if (t != null && t.isEnum() && value != null) {
             return value.toString();
         } else return value;
@@ -577,11 +578,11 @@ public class JdbcHelper extends JdbcReader {
 
             if (Long.class == idClz && newlyId instanceof Integer) {
                 newlyId = (long) (int) newlyId;
-                ReflectUtil.executeMethod(bean, "setId", newlyId);
+                Methods.executeMethod(bean, "setId", newlyId);
             } else if (Long.class == idClz && newlyId instanceof BigInteger) {
                 newlyId = ((BigInteger) newlyId).longValue();
-                ReflectUtil.executeMethod(bean, "setId", newlyId);
-            } else ReflectUtil.executeMethod(bean, "setId", newlyId); // 直接保存
+                Methods.executeMethod(bean, "setId", newlyId);
+            } else Methods.executeMethod(bean, "setId", newlyId); // 直接保存
         } catch (Throwable e) {
             LOGGER.warning(e);
         }
@@ -615,7 +616,7 @@ public class JdbcHelper extends JdbcReader {
      */
     public static int updateBean(Connection conn, Object bean, String tableName) {
         try {
-            LOGGER.info("更新记录 id:{0}, name:{1}！", ReflectUtil.executeMethod(bean, "getId"), ReflectUtil.executeMethod(bean, "getName"));
+            LOGGER.info("更新记录 id:{0}, name:{1}！", Methods.executeMethod(bean, "getId"), Methods.executeMethod(bean, "getName"));
         } catch (Throwable ignored) {
         }
 
@@ -631,7 +632,7 @@ public class JdbcHelper extends JdbcReader {
         sb.append(String.join(", ", fields));
         sb.append(" WHERE id = ?");
 
-        values.add(ReflectUtil.executeMethod(bean, "getId"));
+        values.add(Methods.executeMethod(bean, "getId"));
 
         return update(conn, sb.toString(), values.toArray());
     }
@@ -648,7 +649,7 @@ public class JdbcHelper extends JdbcReader {
         if (bean instanceof Map) {
             @SuppressWarnings("unchecked") Map<String, Object> map = (Map<String, Object>) bean;
             return deleteById(conn, tableName, (Serializable) map.get("id"));
-        } else return deleteById(conn, tableName, (Serializable) ReflectUtil.executeMethod(bean, "getId"));
+        } else return deleteById(conn, tableName, (Serializable) Methods.executeMethod(bean, "getId"));
     }
 
     /**

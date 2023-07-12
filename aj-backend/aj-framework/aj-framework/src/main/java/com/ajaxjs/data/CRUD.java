@@ -7,12 +7,11 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
-import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.Methods;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -174,7 +173,7 @@ public abstract class CRUD {
     }
 
     public static boolean delete(Object entity) {
-        Object id = ReflectUtil.executeMethod(entity, "getId");
+        Object id = Methods.executeMethod(entity, "getId");
 
         if (id != null)
             return delete(entity, (Serializable) id);

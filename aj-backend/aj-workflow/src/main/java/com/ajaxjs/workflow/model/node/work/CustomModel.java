@@ -1,8 +1,9 @@
 package com.ajaxjs.workflow.model.node.work;
 
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.reflect.Methods;
+import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.common.WfException;
@@ -54,7 +55,7 @@ public class CustomModel extends WorkModel {
     @Override
     public void exec(Execution exec) {
         if (invokeObject == null)
-            invokeObject = ReflectUtil.newInstance(clazz);
+            invokeObject = NewInstance.newInstance(clazz);
 
         if (invokeObject == null)
             throw new WfException("自定义模型[class=" + clazz + "]实例化对象失败");
@@ -69,7 +70,7 @@ public class CustomModel extends WorkModel {
                 throw new WfException("自定义模型[class=" + clazz + "]无法找到方法名称:" + methodName);
 
             Object[] objects = getArgs(exec.getArgs(), args);
-            Object returnValue = ReflectUtil.executeMethod(invokeObject, method, objects);
+            Object returnValue = Methods.executeMethod(invokeObject, method, objects);
 
             if (StringUtils.hasText(var))
                 exec.getArgs().put(var, returnValue);

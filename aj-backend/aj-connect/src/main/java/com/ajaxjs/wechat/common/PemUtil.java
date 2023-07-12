@@ -1,6 +1,6 @@
 package com.ajaxjs.wechat.common;
 
-import com.ajaxjs.util.binrary.BytesUtil;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.Resources;
 import org.springframework.util.CollectionUtils;
 
@@ -94,7 +94,7 @@ public class PemUtil {
      */
     @SuppressWarnings("unchecked")
     public static Map<BigInteger, X509Certificate> deserializeToCerts(String apiV3Key, Map<String, Object> pMap) throws GeneralSecurityException {
-        byte[] apiV3KeyByte = BytesUtil.getUTF8_Bytes(apiV3Key);
+        byte[] apiV3KeyByte = StrUtil.getUTF8_Bytes(apiV3Key);
 
         AesUtil aesUtil = new AesUtil(apiV3KeyByte);
         List<Map<String, Object>> list = (List<Map<String, Object>>) pMap.get("data");
@@ -105,7 +105,7 @@ public class PemUtil {
                 Map<String, Object> certificate = (Map<String, Object>) map.get("encrypt_certificate");
 
                 // 解密
-                String cert = aesUtil.decryptToString(BytesUtil.getUTF8_Bytes(remove(certificate.get("associated_data"))), BytesUtil.getUTF8_Bytes(remove(certificate.get("nonce"))),
+                String cert = aesUtil.decryptToString(StrUtil.getUTF8_Bytes(remove(certificate.get("associated_data"))), StrUtil.getUTF8_Bytes(remove(certificate.get("nonce"))),
                         remove(certificate.get("ciphertext")));
 
                 CertificateFactory cf = CertificateFactory.getInstance("X509");

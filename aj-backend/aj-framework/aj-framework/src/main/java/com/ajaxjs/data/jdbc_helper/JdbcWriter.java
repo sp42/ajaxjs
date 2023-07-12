@@ -2,8 +2,8 @@ package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
-import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
@@ -310,11 +310,11 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
 
                 if (Long.class == idClz && newlyId instanceof Integer) {
                     newlyId = (long) (int) newlyId;
-                    ReflectUtil.executeMethod(entity, setIdMethod, newlyId);
+                    Methods.executeMethod(entity, setIdMethod, newlyId);
                 } else if (Long.class == idClz && newlyId instanceof BigInteger) {
                     newlyId = ((BigInteger) newlyId).longValue();
-                    ReflectUtil.executeMethod(entity, setIdMethod, newlyId);
-                } else ReflectUtil.executeMethod(entity, setIdMethod, newlyId); // 直接保存
+                    Methods.executeMethod(entity, setIdMethod, newlyId);
+                } else Methods.executeMethod(entity, setIdMethod, newlyId); // 直接保存
             } catch (Throwable e) {
                 LOGGER.warning(e);
             }
@@ -338,7 +338,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             sp = entity2UpdateSql(tableName, map, idField, map.get(idField));
         } else {
             String getId = DataUtils.changeColumnToFieldName("get_" + idField);
-            Object id = ReflectUtil.executeMethod(entity, getId);
+            Object id = Methods.executeMethod(entity, getId);
             sp = entity2UpdateSql(tableName, entity, idField, id);
         }
 

@@ -1,6 +1,6 @@
 package com.ajaxjs.user.service;
 
-import com.ajaxjs.framework.TestHelper;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.user.BaseTest;
 import com.ajaxjs.user.common.UserConstants;
 import com.ajaxjs.user.controller.UserController;

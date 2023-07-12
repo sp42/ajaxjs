@@ -61,7 +61,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
             return new ModelAndView();
         } else {
-            msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covernt(msg));
+            msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covert(msg));
             resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
 
             ResponseResult resultWrapper = new ResponseResult();

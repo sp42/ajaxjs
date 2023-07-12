@@ -1,6 +1,6 @@
 package com.ajaxjs.wechat.common;
 
-import com.ajaxjs.util.binrary.BytesUtil;
+import com.ajaxjs.util.StrUtil;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -56,7 +56,7 @@ public class AesUtil {
             cipher.init(Cipher.DECRYPT_MODE, key, spec);
             cipher.updateAAD(associatedData);
 
-            return BytesUtil.byte2String(cipher.doFinal(Base64.getDecoder().decode(ciphertext)));
+            return StrUtil.byte2String(cipher.doFinal(Base64.getDecoder().decode(ciphertext)));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new IllegalStateException(e);
         } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
@@ -84,7 +84,7 @@ public class AesUtil {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, key, spec);
 
-            return BytesUtil.byte2String(cipher.doFinal(decoder.decode(ciphertext)));
+            return StrUtil.byte2String(cipher.doFinal(decoder.decode(ciphertext)));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             throw new IllegalStateException(e);
         } catch (InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException |

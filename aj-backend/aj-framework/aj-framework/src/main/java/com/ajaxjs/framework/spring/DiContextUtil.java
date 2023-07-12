@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.net.http.ResponseHandler;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -23,7 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.framework.TestHelper;
+import com.ajaxjs.util.TestHelper;
 
 /**
  * 方便静态方法、JSP 调用注入的组件*

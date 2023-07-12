@@ -1,20 +1,19 @@
 package com.ajaxjs.workflow.model.node;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.util.StringUtils;
-
-import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.BaseWfModel;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * 节点元素（存在输入输出的变迁）
@@ -154,7 +153,7 @@ public abstract class NodeModel extends BaseWfModel {
         String[] arr = interceptors.split(",");
 
         for (String interceptor : arr) {
-            WorkflowInterceptor instance = ReflectUtil.newInstance(WorkflowInterceptor.class, interceptor);
+            WorkflowInterceptor instance = NewInstance.newInstance(WorkflowInterceptor.class, interceptor);
 
             if (instance != null)
                 fn.accept(instance);

@@ -4,6 +4,7 @@ import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.DateUtil;
+import com.ajaxjs.util.reflect.Methods;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.model.node.NodeModel;
@@ -70,7 +71,7 @@ public class ProcessModelParser {
         str = str.substring(0, 1).toUpperCase() + str.substring(1);
 
         String packageName = AbstractNodeParser.class.getPackage().getName() + ".";
-        Class<?> clz = ReflectUtil.getClassByName(packageName + str);
+        Class<?> clz = Methods.getClassByName(packageName + str);
         Object p = DiContextUtil.getBean(clz);
         Objects.requireNonNull(p, "不存在这类型的解释器 " + str);
 

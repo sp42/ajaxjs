@@ -14,7 +14,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.TestCaseUserBean;
 
 public class TestMapTool {
@@ -34,8 +34,8 @@ public class TestMapTool {
 
 	@Test
 	public void testToMap() {
-		assertEquals(1, MapTool.toMap(new String[] { "a", "b", "d" }, new String[] { "1", "c", "2" }, MappingValue::toJavaValue).get("a"));
-		assertEquals(1, MapTool.toMap(new String[] { "a=1", "b=2", "d=c" }, MappingValue::toJavaValue).get("a"));
+		assertEquals(1, MapTool.toMap(new String[] { "a", "b", "d" }, new String[] { "1", "c", "2" }, ObjectHelper::toJavaValue).get("a"));
+		assertEquals(1, MapTool.toMap(new String[] { "a=1", "b=2", "d=c" }, ObjectHelper::toJavaValue).get("a"));
 		assertEquals("你好", MapTool.toMap(new String[] { "a=%e4%bd%a0%e5%a5%bd", "b=2", "d=c" }, v -> StringUtils.uriDecode(v, StandardCharsets.UTF_8)).get("a"));
 	}
 
@@ -60,7 +60,7 @@ public class TestMapTool {
 				put("bar", "500");
 				put("zx", "hi");
 			}
-		}, v -> MappingValue.toJavaValue(v.toString())).get("bar"));
+		}, v -> ObjectHelper.toJavaValue(v.toString())).get("bar"));
 	}
 
 	public static Map<String, Object> userWithoutChild = new HashMap<String, Object>() {

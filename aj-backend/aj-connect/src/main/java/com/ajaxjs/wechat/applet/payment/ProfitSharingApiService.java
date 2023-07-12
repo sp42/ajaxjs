@@ -1,6 +1,7 @@
 package com.ajaxjs.wechat.applet.payment;
 
 import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
@@ -135,7 +136,7 @@ public class ProfitSharingApiService extends CommonService {
     public RequestOrderResult unfreeze(String transactionId, String outOrderNo, String description) {
         String url = "/v3/profitsharing/orders";
 
-        Map<String, String> params = ListUtils.hashMap("transaction_id", transactionId, "out_order_no", outOrderNo, "description", description);
+        Map<String, String> params = ObjectHelper.hashMap("transaction_id", transactionId, "out_order_no", outOrderNo, "description", description);
 
         return AppletPayUtils.post(mchCfg, url, params, RequestOrderResult.class);
     }
@@ -186,7 +187,7 @@ public class ProfitSharingApiService extends CommonService {
      */
     public ReceiverResult deleteReceivers(String appid, String type, String account) {
         String url = "/v3/profitsharing/receivers/delete";
-        Map<String, String> params = ListUtils.hashMap("appid", appid, "type", type, "account", account);
+        Map<String, String> params = ObjectHelper.hashMap("appid", appid, "type", type, "account", account);
 
         return AppletPayUtils.post(mchCfg, url, params, ReceiverResult.class);
     }

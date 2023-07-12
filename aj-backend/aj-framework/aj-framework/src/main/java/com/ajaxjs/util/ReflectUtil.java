@@ -19,9 +19,8 @@ import java.util.*;
 
 /**
  * 反射工具包
- *
- * @author sp42 frank@ajaxjs.com
  */
+@Deprecated
 public class ReflectUtil {
     private static final LogHelper LOGGER = LogHelper.getLog(ReflectUtil.class);
 

@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@Deprecated
 public class SetTimeout extends Timer {
     private static final LogHelper LOGGER = LogHelper.getLog(SetTimeout.class);
 

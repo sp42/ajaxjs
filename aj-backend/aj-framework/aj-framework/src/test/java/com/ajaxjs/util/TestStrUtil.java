@@ -9,16 +9,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.binrary.BytesUtil;
-
 public class TestStrUtil {
 	static String str = "中国";
 
 	@Test
 	public void testByte2String() {
-		assertEquals("abc", BytesUtil.byte2String(new byte[] { 97, 98, 99 }));
-		assertEquals("abc", BytesUtil.byte2String("abc"));
-		assertEquals("中国", BytesUtil.byte2String(str));
+		assertEquals("abc", byte2String(new byte[] { 97, 98, 99 }));
+		assertEquals("abc", byte2String("abc"));
+		assertEquals("中国", byte2String(str));
 	}
 
 	@Test

@@ -213,11 +213,11 @@ public class StreamHelper {
     }
 
     /**
-     * 在字节数组里查找某个字节数组，找到返回&lt;=0，未找到返回-1
+     * 在字节数组里查找某个字节数组，找到返回 &lt;=0，未找到返回 -1
      *
      * @param data   被搜索的内容
      * @param search 要搜索内容
-     * @return 目标位置，找不到返回-1
+     * @return 目标位置，找不到返回 -1
      */
     public static int byteIndexOf(byte[] data, byte[] search) {
         return byteIndexOf(data, search, 0);
@@ -236,5 +236,26 @@ public class StreamHelper {
         System.arraycopy(b, 0, c, a.length, b.length);
 
         return c;
+    }
+
+    private static final byte[] HEX_ARRAY = "0123456789ABCDEF".getBytes(StandardCharsets.US_ASCII);
+
+    /**
+     * byte[] 转化为 16 进制字符串输出
+     *
+     * @param bytes 字节数组
+     * @return 16 进制字符串
+     */
+    public static String bytesToHexStr(byte[] bytes) {
+        byte[] hexChars = new byte[bytes.length * 2];
+
+        for (int j = 0; j < bytes.length; j++) {
+            int v = bytes[j] & 0xFF;
+
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+
+        return new String(hexChars, StandardCharsets.UTF_8);
     }
 }

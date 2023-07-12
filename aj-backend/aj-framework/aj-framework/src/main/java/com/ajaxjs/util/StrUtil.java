@@ -35,8 +35,6 @@ import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 
-import com.ajaxjs.util.binrary.BytesUtil;
-
 /**
  * 普通未分类的工具类
  *
@@ -50,7 +48,7 @@ public class StrUtil {
      * @return 中文
      */
     public static String urlChinese(String str) {
-        return BytesUtil.byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
+        return byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     /**
@@ -123,7 +121,7 @@ public class StrUtil {
      * @return 已编码的字符串
      */
     public static String base64Encode(String str) {
-        return Base64Utils.encodeToString(BytesUtil.getUTF8_Bytes(str));
+        return Base64Utils.encodeToString(getUTF8_Bytes(str));
     }
 
     /**
@@ -134,7 +132,7 @@ public class StrUtil {
      * @return 已解码的字符串
      */
     public static String base64Decode(String str) {
-        return BytesUtil.byte2String(Base64Utils.decodeFromString(str));
+        return byte2String(Base64Utils.decodeFromString(str));
     }
 
     /**
@@ -467,5 +465,29 @@ public class StrUtil {
      */
     public static String uuid() {
         return uuid(true);
+    }
+
+    public static byte[] getUTF8_Bytes(String str) {
+        return str.getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 字节转编码为 字符串（ UTF-8 编码）
+     *
+     * @param bytes 输入的字节数组
+     * @return 字符串
+     */
+    public static String byte2String(byte[] bytes) {
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 字符串转为 UTF-8 编码的字符串
+     *
+     * @param str 输入的字符串
+     * @return UTF-8 字符串
+     */
+    public static String byte2String(String str) {
+        return byte2String(str.getBytes());
     }
 }

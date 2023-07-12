@@ -1,18 +1,16 @@
 package com.ajaxjs.util;
 
+import com.ajaxjs.util.logger.LogHelper;
+import org.springframework.util.CollectionUtils;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import org.springframework.util.CollectionUtils;
-
-import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * 集合工具类
@@ -128,60 +126,6 @@ public class ListUtils {
     }
 
     /**
-     * 创建一个新的 HashMap
-     *
-     * @param k1 键1
-     * @param v1 值1
-     * @return 新创建的HashMap
-     */
-    public static <K, V> Map<K, V> hashMap(K k1, V v1) {
-        Map<K, V> map = new HashMap<>();
-
-        map.put(k1, v1);
-
-        return map;
-    }
-
-    /**
-     * 创建一个新的 HashMap
-     *
-     * @param k1 键1
-     * @param v1 值1
-     * @param k2 键2
-     * @param v2 值2
-     * @return 新创建的HashMap
-     */
-    public static <K, V> Map<K, V> hashMap(K k1, V v1, K k2, V v2) {
-        Map<K, V> map = new HashMap<>();
-
-        map.put(k1, v1);
-        map.put(k2, v2);
-
-        return map;
-    }
-
-    /**
-     * 创建一个新的 HashMap
-     *
-     * @param k1 键1
-     * @param v1 值1
-     * @param k2 键2
-     * @param v2 值2
-     * @param k3 键3
-     * @param v3 值3
-     * @return 新创建的 HashMap
-     */
-    public static <K, V> Map<K, V> hashMap(K k1, V v1, K k2, V v2, K k3, V v3) {
-        Map<K, V> map = new HashMap<>();
-
-        map.put(k1, v1);
-        map.put(k2, v2);
-        map.put(k3, v3);
-
-        return map;
-    }
-
-    /**
      * 在给定列表中查找第一个满足条件的元素
      *
      * @param <T>    范型，列表中元素的类别
@@ -203,5 +147,49 @@ public class ListUtils {
      */
     public static <T> List<T> findSome(List<T> list, Predicate<T> filter) {
         return list.stream().filter(filter).collect(Collectors.toList());
+    }
+
+    /**
+     * Integer[] 不能直接转 int[]，故设置一个函数专门处理之
+     *
+     * @param list 整形列表
+     * @return 整形数组
+     */
+    public static int[] intList2Arr(List<Integer> list) {
+        return newIntArray(list.size(), list::get);
+    }
+
+    /**
+     * 当它们每一个都是数字的字符串形式，转换为整形的数组
+     *
+     * <pre>
+     * {@code
+     *   "1,2,3, ..." -- [1, 2, ...]
+     * }
+     * </pre>
+     *
+     * @param value 输入字符串
+     * @return 整形数组
+     */
+    public static int[] stringArr2intArr(String value) {
+        String[] strArr = value.split(",");
+
+        return newIntArray(strArr.length, index -> Integer.parseInt(strArr[index].trim()));
+    }
+
+    /**
+     * 创建一个 int 数列，对其执行一些逻辑
+     *
+     * @param length 数列最大值
+     * @param fn     执行的逻辑
+     * @return 数组
+     */
+    private static int[] newIntArray(int length, Function<Integer, Integer> fn) {
+        int[] arr = new int[length];
+
+        for (int i = 0; i < length; i++)
+            arr[i] = fn.apply(i);
+
+        return arr;
     }
 }

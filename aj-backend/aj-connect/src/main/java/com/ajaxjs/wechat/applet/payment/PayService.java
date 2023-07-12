@@ -2,6 +2,7 @@ package com.ajaxjs.wechat.applet.payment;
 
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -68,7 +69,7 @@ public class PayService extends CommonService {
         Map<String, Object> params = MapTool.bean2Map(p);
         params.put("amount", amount);
         params.put("payer", payer);
-        params.put("settle_info", ListUtils.hashMap("profit_sharing", true));
+        params.put("settle_info", ObjectHelper.hashMap("profit_sharing", true));
 
         String url = "/v3/pay/transactions/jsapi";
         Map<String, Object> map = AppletPayUtils.postMap(mchCfg, url, params);
@@ -112,7 +113,7 @@ public class PayService extends CommonService {
      */
     public void closeOrder(String outTradeNo) {
         String url = "/v3/pay/transactions/out-trade-no/" + outTradeNo + "/close";
-        Map<String, String> params = ListUtils.hashMap("mchid", mchCfg.getMchId());
+        Map<String, String> params = ObjectHelper.hashMap("mchid", mchCfg.getMchId());
         AppletPayUtils.postMap(mchCfg, url, params);// 该接口是无数据返回的
     }
 

@@ -1,8 +1,8 @@
 package com.ajaxjs.web;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.TestHelper;
-import com.ajaxjs.util.MappingValue;
+import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
@@ -254,7 +254,7 @@ public class WebHelper {
         try (InputStream in = req.getInputStream()) {
             String params = StreamHelper.byteStream2string(in);
 
-            return MapTool.toMap(params.split("&"), v -> MappingValue.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
+            return MapTool.toMap(params.split("&"), v -> ObjectHelper.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -306,7 +306,7 @@ public class WebHelper {
             String v = keyValuePair[1];
             v = uriDecode(v);
 
-            map.put(keyValuePair[0], keyValuePair.length == 1 ? "" : MappingValue.toJavaValue(v));
+            map.put(keyValuePair[0], keyValuePair.length == 1 ? "" : ObjectHelper.toJavaValue(v));
         }
 
         return map;

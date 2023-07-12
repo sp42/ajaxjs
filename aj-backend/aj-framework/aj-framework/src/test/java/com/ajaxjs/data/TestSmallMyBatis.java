@@ -1,6 +1,7 @@
 package com.ajaxjs.data;
 
 import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.ObjectHelper;
 import org.junit.Test;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.spel.standard.SpelExpression;
@@ -60,7 +61,7 @@ public class TestSmallMyBatis {
     }
     @Test
     public void test(){
-        Map<String, Object> params = ListUtils.hashMap("a", "z1");
+        Map<String, Object> params = ObjectHelper.hashMap("a", "z1");
         boolean b = evaluateBoolean("a != null and a != 'z1'", params);
         System.out.println(b);
     }

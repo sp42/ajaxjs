@@ -13,7 +13,7 @@ package com.ajaxjs.wechat;
 import com.ajaxjs.framework.ClientAccessFullInfo;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.cryptography.Digest;
+import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
