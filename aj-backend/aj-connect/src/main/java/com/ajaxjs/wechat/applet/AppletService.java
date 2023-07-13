@@ -32,6 +32,11 @@ public class AppletService {
 
     private final static String LOGIN_API = "https://api.weixin.qq.com/sns/jscode2session?grant_type=authorization_code&appid=%s&secret=%s&js_code=%s";
 
+    private Code2SessionResult login(String code) {
+        String url = String.format(LOGIN_API, appletCfg.getAccessKeyId(), appletCfg.getAccessSecret(), code);
+        return Get.api2bean(url, Code2SessionResult.class);
+    }
+
     /**
      * 小程序登录
      *
@@ -40,14 +45,15 @@ public class AppletService {
      */
     public Code2SessionResult code2Session(String code) {
         LOGGER.info("小程序登录");
-
-        String url = String.format(LOGIN_API, appletCfg.getAccessKeyId(), appletCfg.getAccessSecret(), code);
-        Code2SessionResult result = Get.api2bean(url, Code2SessionResult.class);
+        Code2SessionResult result = login(code);
 
         if (result.getOpenid() != null) {
             LOGGER.warning("小程序登录成功！ OpenId [{0}]", result.getOpenid());
         } else if (result.getErrcode() != null) {
             LOGGER.warning("小程序登录失败！ Error [{0}:{1}]", result.getErrcode(), result.getErrmsg());
+
+            LOGGER.info("重新小程序登录");
+            result = login(code);
         } else
             LOGGER.warning("小程序登录失败，未知异常 [{0}]", result);
 
