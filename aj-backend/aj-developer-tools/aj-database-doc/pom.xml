@@ -18,13 +18,33 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-framework</artifactId>
-            <version>1.0.8</version>
+            <version>1.0.9</version>
         </dependency>
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-static-resources</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- Tomcat JNDI 数据源 -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>8.5.69</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>8.5.84</version>
+        </dependency>
+
+        <!-- tomcat 对 jsp 支持 -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>8.5.84</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,6 +1,7 @@
 package com.ajaxjs.database_meta.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 列详情
@@ -8,6 +9,7 @@ import lombok.Data;
  * @author Frank Cheung sp42@qq.com
  */
 @Data
+@Accessors(chain = true)
 public class TableColumns {
     private String field;
     private String type;

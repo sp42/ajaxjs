@@ -73,25 +73,20 @@ public class MetaQuery extends BaseMetaQuery {
      * @return 数据库的大小
      */
     public Map<String, String> getDbSize(String database) {
-        String sql = "SELECT table_schema, concat(truncate(sum(max_data_length)/1024/1024,2),'mb') AS max_data_size, "
-                + "sum( data_length + index_length ) / 1024 / 1024 AS total_mb,sum( data_length ) / 1024 / 1024 AS data_mb, "
-                + "concat(truncate(sum(data_free)/1024/1024,2),'mb') as data_free, sum( index_length ) / 1024 / 1024 AS index_mb, "
-                + "count( * ) AS TABLES,curdate() AS today FROM information_schema.TABLES where table_schema = '" + database
-                + "' GROUP BY table_schema ORDER BY 2 DESC ;";
+        String sql = "SELECT table_schema, CONCAT(TRUNCATE(SUM(max_data_length)/1024/1024,2),'mb') AS max_data_size, " +
+                "SUM( data_length + index_length ) / 1024 / 1024 AS total_mb, SUM( data_length ) / 1024 / 1024 AS data_mb," +
+                "CONCAT(TRUNCATE(SUM(data_free)/1024/1024,2),'mb') AS data_free, SUM( index_length ) / 1024 / 1024 AS index_mb," +
+                "COUNT(*) AS TABLES, CURDATE() AS today FROM information_schema.TABLES WHERE table_schema = '" + database +
+                "' GROUP BY table_schema ORDER BY 2 DESC";
 
         return getMapResult(sql, (rs, map) -> {
-            String name, value;
-
             try {
                 ResultSetMetaData meta = rs.getMetaData();
-                int count = meta.getColumnCount();
-
-                for (int i = 1; i <= count; i++) {
+                for (int i = 1; i <= meta.getColumnCount(); i++) {
                     if (i == 1)
                         rs.next();
 
-                    name = meta.getColumnName(i);
-                    value = rs.getString(name);
+                    String name = meta.getColumnName(i), value = rs.getString(name);
                     map.put(name, value);
                 }
             } catch (SQLException e) {
@@ -124,74 +119,55 @@ public class MetaQuery extends BaseMetaQuery {
      * @param tables   表名集合
      * @return 表的详情信息
      */
-    public Map<String, TableDesc> getTableDesc(String database, String[] tables) {
-        String sqlIn = "";
+    public Map<String, TableDesc> getTableDesc(String database, List<String> tables) {
+        StringBuilder sqlIn = new StringBuilder();
 
         for (String table : tables)
-            sqlIn = sqlIn + "'" + table + "',";
+            sqlIn.append("'").append(table).append("',");
 
-        sqlIn = sqlIn.substring(0, sqlIn.lastIndexOf(","));
+        sqlIn = new StringBuilder(sqlIn.substring(0, sqlIn.lastIndexOf(",")));
         String sql = "SHOW TABLE STATUS FROM " + database + " WHERE name IN (" + sqlIn + ")";
         Map<String, TableDesc> map = new HashMap<>();
 
         try (Statement st = conn.createStatement(); ResultSet result = st.executeQuery(sql)) {
             while (result.next()) {
-                String name = result.getString("Name");
-                String engine = result.getString("Engine");
-                String version = result.getString("Version");
-                String row_format = result.getString("Row_format");
-                String rows = result.getString("Rows");
-                String avg_row_length = result.getString("Avg_row_length");
-                String data_length = result.getString("Data_length");
-                String max_data_length = result.getString("Max_data_length");
-                String index_length = result.getString("Index_length");
-                String data_free = result.getString("Data_free");
-                String auto_increment = result.getString("Auto_increment");
 //				String create_time = result.getString("Create_time");
 //				String update_time = result.getString("Update_time");
 //				String check_time = result.getString("Check_time");
-                String collation = result.getString("Collation");
-                String checksum = result.getString("Checksum");
-                String create_options = result.getString("Create_options");
-                String comment = result.getString("Comment");
 
                 TableDesc tableDesc = new TableDesc();
-                tableDesc.setName(name);
-                tableDesc.setEngine(engine);
-                tableDesc.setVersion(version);
-                tableDesc.setRowFormat(row_format);
-                tableDesc.setRows(rows);
-                tableDesc.setAvgRowLength(avg_row_length);
-                tableDesc.setDataLength(data_length);
-                tableDesc.setMaxDataLength(max_data_length);
-                tableDesc.setIndexLength(index_length);
-                tableDesc.setDataFree(data_free);
-                tableDesc.setAutoIncrement(auto_increment);
-                tableDesc.setCollation(collation);
-                tableDesc.setChecksum(checksum);
-                tableDesc.setCreateOptions(create_options);
-                tableDesc.setComment(comment);
-                map.put(name, tableDesc);
+                tableDesc.setName(result.getString("Name"));
+                tableDesc.setEngine(result.getString("Engine"));
+                tableDesc.setVersion(result.getString("Version"));
+                tableDesc.setRowFormat(result.getString("Row_format"));
+                tableDesc.setRows(result.getString("Rows"));
+                tableDesc.setAvgRowLength(result.getString("Avg_row_length"));
+                tableDesc.setDataLength(result.getString("Data_length"));
+                tableDesc.setMaxDataLength(result.getString("Max_data_length"));
+                tableDesc.setIndexLength(result.getString("Index_length"));
+                tableDesc.setDataFree(result.getString("Data_free"));
+                tableDesc.setAutoIncrement(result.getString("Auto_increment"));
+                tableDesc.setCollation(result.getString("Collation"));
+                tableDesc.setChecksum(result.getString("Checksum"));
+                tableDesc.setCreateOptions(result.getString("Create_options"));
+                tableDesc.setComment(result.getString("Comment"));
+
+                map.put(tableDesc.getName(), tableDesc);
             }
 
-            String sql2 = "select table_name, (data_length/1024/1024) AS data_mb, (index_length/1024/1024) AS index_mb,"
-                    + " ((data_length+index_length)/1024/1024) AS all_mb, table_rows from information_schema.tables " + "WHERE table_schema = '"
-                    + database + "'";
+            String sql2 = "SELECT table_name, (data_length/1024/1024) AS data_mb, (index_length/1024/1024) AS index_mb,"
+                    + " ((data_length+index_length)/1024/1024) AS all_mb, table_rows from information_schema.tables " +
+                    "WHERE table_schema = '" + database + "'";
 
             try (ResultSet rs2 = st.executeQuery(sql2)) {
                 while (rs2.next()) {
-                    String table_name = rs2.getString("TABLE_NAME");
-                    String data_mb = rs2.getString("data_mb");
-                    String index_mb = rs2.getString("index_mb");
-                    String all_mb = rs2.getString("all_mb");
-                    String table_rows = rs2.getString("TABLE_ROWS");
+                    TableDesc tableDesc = map.get(rs2.getString("TABLE_NAME"));
 
-                    TableDesc tableDesc = map.get(table_name);
                     if (tableDesc != null) {
-                        tableDesc.setDataMb(data_mb);
-                        tableDesc.setIndexMb(index_mb);
-                        tableDesc.setAllMb(all_mb);
-                        tableDesc.setCount(table_rows);
+                        tableDesc.setDataMb(rs2.getString("data_mb"));
+                        tableDesc.setIndexMb(rs2.getString("index_mb"));
+                        tableDesc.setAllMb(rs2.getString("all_mb"));
+                        tableDesc.setCount(rs2.getString("TABLE_ROWS"));
                     }
                 }
             }
@@ -206,40 +182,28 @@ public class MetaQuery extends BaseMetaQuery {
     /**
      * 获取表的详情信息
      *
-     * @param connect   数据库连接对象
      * @param database  数据库名
      * @param tableName 表名
      * @return 表的详情信息
      */
-    public List<TableColumns> getTableColumns(Connection connect, String database, String tableName) {
+    public List<TableColumns> getTableColumns(String database, String tableName) {
         String sql = "SHOW FULL COLUMNS FROM " + database + "." + tableName;
 
         return getResult(sql, rs -> {
+            TableColumns columns = new TableColumns();
+
             try {
-                if (rs.next()) {
-                    String field = rs.getString("Field");
-                    String type = rs.getString("Type");
-                    String collation = rs.getString("Collation");
-                    String nullValue = rs.getString("Null");
-                    String key = rs.getString("Key");
-                    String defaultValue = rs.getString("Default");
-                    String extra = rs.getString("Extra");
-                    String privileges = rs.getString("Privileges");
-                    String comment = rs.getString("Comment");
+                columns.setField(rs.getString("Field"));
+                columns.setType(rs.getString("Type"));
+                columns.setCollation(rs.getString("Collation"));
+                columns.setNu(rs.getString("Null"));
+                columns.setKey(rs.getString("Key"));
+                columns.setDefau(rs.getString("Default"));
+                columns.setExtra(rs.getString("Extra"));
+                columns.setPrivileges(rs.getString("Privileges"));
+                columns.setComment(rs.getString("Comment"));
 
-                    TableColumns columns = new TableColumns();
-                    columns.setField(field);
-                    columns.setType(type);
-                    columns.setCollation(collation);
-                    columns.setNu(nullValue);
-                    columns.setKey(key);
-                    columns.setDefau(defaultValue);
-                    columns.setExtra(extra);
-                    columns.setPrivileges(privileges);
-                    columns.setComment(comment);
-
-                    return columns;
-                }
+                return columns;
             } catch (SQLException e) {
                 LOGGER.warning(e);
             }
@@ -257,42 +221,24 @@ public class MetaQuery extends BaseMetaQuery {
     public List<TableIndex> getTableIndex(String sql) {
         return getResult(sql, rs -> {
             try {
-                String table = rs.getString("Table");
-                if (rs.next()) {
-                    String nonUnique = rs.getString("Non_unique");
-                    String keyName = rs.getString("Key_name");
-                    String seqInIndex = rs.getString("Seq_in_index");
-                    String columnName = rs.getString("Column_name");
-                    String collation = rs.getString("Collation");
-                    String cardinality = rs.getString("Cardinality");
-                    String subPart = rs.getString("Sub_part");
-                    String packed = rs.getString("Packed");
-                    String nullValue = rs.getString("Null");
-                    String indexType = rs.getString("Index_type");
-                    String comment = rs.getString("Comment");
-                    String indexComment = rs.getString("Index_comment");
-                    String visible = rs.getString("Visible");
-                    String expression = rs.getString("Expression");
+                TableIndex index = new TableIndex();
+                index.setTable(rs.getString("Table"));
+                index.setNonUnique(rs.getString("Non_unique"));
+                index.setKeyName(rs.getString("Key_name"));
+                index.setSeqInIndex(rs.getString("Seq_in_index"));
+                index.setColumnName(rs.getString("Column_name"));
+                index.setCollation(rs.getString("Collation"));
+                index.setCardinality(rs.getString("Cardinality"));
+                index.setSubPart(rs.getString("Sub_part"));
+                index.setPacked(rs.getString("Packed"));
+                index.setNullValue(rs.getString("Null"));
+                index.setComment(rs.getString("Comment"));
+                index.setIndexType(rs.getString("Index_type"));
+                index.setIndexComment(rs.getString("Index_comment"));
+                index.setVisible(rs.getString("Visible"));
+                index.setExpression(rs.getString("Expression"));
 
-                    TableIndex index = new TableIndex();
-                    index.setTable(table);
-                    index.setNonUnique(nonUnique);
-                    index.setKeyName(keyName);
-                    index.setSeqInIndex(seqInIndex);
-                    index.setColumnName(columnName);
-                    index.setCollation(collation);
-                    index.setCardinality(cardinality);
-                    index.setSubPart(subPart);
-                    index.setPacked(packed);
-                    index.setNullValue(nullValue);
-                    index.setComment(comment);
-                    index.setIndexType(indexType);
-                    index.setIndexComment(indexComment);
-                    index.setVisible(visible);
-                    index.setExpression(expression);
-
-                    return index;
-                }
+                return index;
             } catch (SQLException e) {
                 LOGGER.warning(e);
             }

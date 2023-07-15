@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>表列表简要</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="constant.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="database-detail.css"/>
+</head>
+<body>
+
+<div id="mybody">
+    <div id="content">
+        <div class="content-item  tableDescsMain">
+            <p style="background: #9A0C19;width:100%;">表信息</p>
+            <table class="altrowstable">
+                <tr>
+                    <td>表名</td>
+                    <td>引擎</td>
+                    <td>rows</td>
+                    <td>autoIncrement</td>
+                    <td>collation</td>
+                    <td>dataMb</td>
+                    <td>indexMb</td>
+                    <td>allMb</td>
+                    <td>数据量</td>
+                    <td>操作</td>
+                </tr>
+            </table>
+        </div>
+        <div class="content-item  tableDescsOther">
+            <p style="background: #9A0C19;width:100%;">表其他信息</p>
+            <table class="altrowstable">
+                <tr>
+                    <td>表名</td>
+                    <td>rowFormat</td>
+                    <td>avgRowLength</td>
+                    <td>dataLength</td>
+                    <td>indexLength</td>
+                    <td>dataFree</td>
+                    <td>createTime</td>
+                    <td>updateTime</td>
+                    <td>checkTime</td>
+                    <td>checksum</td>
+                    <td>createOptions</td>
+                    <td>comment</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+    showTables();
+});
+
+/**
+ * 显示菜单
+ */
+function showTables() {
+    $.ajax({
+        url: AppUrl + '/db_meta/table_list',//跨域请求的URL
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json;charset=UTF-8",
+        success: function (data) {
+            console.log(data)
+
+            $.each(data, function (name, item) {
+                if (name == "data") {
+                    console.log("item:" + item)
+                    showTableDescsMain(item);
+                    showTableDescsOther(item);
+                    altRows();
+                }
+            });
+
+        },
+        error: function (reason) {
+            console.log(reason)
+        }
+    });
+
+}
+
+function showTableDescsOther(objectValues) {
+    var itemData = "";
+    $.each(objectValues, function (bjectName, objectValues) {
+        itemData += "<tr>";
+        itemData += "<td>" + objectValues.name + "</td>";
+        itemData += "<td>" + objectValues.rowFormat + "</td>";
+        itemData += "<td>" + objectValues.avgRowLength + "</td>";
+        itemData += "<td>" + objectValues.dataLength + "</td>";
+        itemData += "<td>" + objectValues.indexLength + "</td>";
+        itemData += "<td>" + objectValues.dataFree + "</td>";
+        itemData += "<td>" + objectValues.createTime + "</td>";
+        itemData += "<td>" + objectValues.updateTime + "</td>";
+        itemData += "<td>" + objectValues.checkTime + "</td>";
+        itemData += "<td>" + objectValues.checksum + "</td>";
+        itemData += "<td>" + objectValues.createOptions + "</td>";
+        itemData += "<td>" + objectValues.comment + "</td>";
+        itemData += "</tr>";
+    });
+    $(".tableDescsOther table").append(itemData);
+}
+
+/**
+ * 表重要信息展示
+ * @param objectValues
+ */
+function showTableDescsMain(objectValues) {
+    var itemData = "";
+    $.each(objectValues, function (bjectName, objectValues) {
+        itemData += "<tr>";
+        itemData += "<td>" + objectValues.name + "</td>";
+        itemData += "<td>" + objectValues.engine + "</td>";
+        itemData += "<td>" + objectValues.rows + "</td>";
+        itemData += "<td>" + objectValues.autoIncrement + "</td>";
+        itemData += "<td>" + objectValues.collation + "</td>";
+        itemData += "<td>" + objectValues.dataMb + "</td>";
+        itemData += "<td>" + objectValues.indexMb + "</td>";
+        itemData += "<td>" + objectValues.allMb + "</td>";
+        itemData += "<td>" + objectValues.count + "</td>";
+        itemData += "<td>";
+        itemData += "&nbsp;&nbsp;&nbsp;<a href='./tables-detail.html?id="+"&name="+objectValues.name+ "'>查看</a>";
+        itemData += "</td>";
+        itemData += "</tr>";
+    });
+    $(".tableDescsMain table").append(itemData);
+}
+
+</script>
+</body>
+</html>
+
+

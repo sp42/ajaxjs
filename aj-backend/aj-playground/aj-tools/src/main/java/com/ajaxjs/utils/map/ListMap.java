@@ -27,7 +27,7 @@ public class ListMap {
      * @param config 关于回调函数的配置
      */
     public static void traveler(Map<String, Object> map, ListMapConfig config) {
-        traveler(map, new Context(), null, 0, config);
+        traveler(map, new ListMapConfig.Context(), null, 0, config);
     }
 
     /**
@@ -40,7 +40,7 @@ public class ListMap {
      * @param config   关于回调函数的配置
      */
     @SuppressWarnings("unchecked")
-    public static void traveler(Map<String, Object> map, Context firstCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
+    public static void traveler(Map<String, Object> map, ListMapConfig.Context firstCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
         if (config != null && config.mapHandler != null && !config.mapHandler.execute(map, superMap, level))
             return;
 
@@ -82,7 +82,7 @@ public class ListMap {
      * @param config 关于回调函数的配置
      */
     public static void traveler(List<Map<String, Object>> list, ListMapConfig config) {
-        traveler(list, new Context(), null, 0, config);
+        traveler(list, new ListMapConfig.Context(), null, 0, config);
     }
 
     /**
@@ -94,7 +94,7 @@ public class ListMap {
      * @param level    深度
      * @param config   关于回调函数的配置
      */
-    public static void traveler(List<Map<String, Object>> list, Context firstCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
+    public static void traveler(List<Map<String, Object>> list, ListMapConfig.Context firstCtx, Map<String, Object> superMap, int level, ListMapConfig config) {
         for (Map<String, Object> map : list) {
             if (map == null)
                 continue;

@@ -1,8 +1,13 @@
 package com.ajaxjs.database_meta.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
+/**
+ * 表索引信息
+ */
 @Data
+@Accessors(chain = true)
 public class TableIndex {
     private String table;
     private String nonUnique;

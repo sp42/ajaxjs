@@ -2,6 +2,7 @@ package com.ajaxjs.database_meta.model;
 
 import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 表的详情信息
@@ -9,6 +10,7 @@ import lombok.Data;
  * @author Frank Cheung sp42@qq.com
  */
 @Data
+@Accessors(chain = true)
 public class TableDesc implements IBaseModel {
     private String name;
     private String engine;

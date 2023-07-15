@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>表详情</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="constant.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="database-detail.css"/>
+</head>
+<body>
+<div id="mybody">
+    <div id="content">
+        <div class="content-item  create-table">
+            <p style="background: #9A0C19;width:100%;">建表语句</p>
+            <div id="show-code">
+                <table class="altrowstable">
+                    <tr>
+                        <td>表名</td>
+                        <td>建表语句</td>
+                    </tr>
+                    <tr>
+                        <td id="tableName"></td>
+                        <td><pre id="tableCreate"></pre></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="content-item">
+            <p style="background: #9A0C19;width:100%;">字段</p>
+            <div id="table-clumn">
+                <table class="altrowstable">
+                    <tr>
+                        <td>Field</td>
+                        <td>Type</td>
+                        <td>Collation</td>
+                        <td>Null</td>
+                        <td>Key</td>
+                        <td>Default</td>
+                        <td>Extra</td>
+                        <td>Privileges</td>
+                        <td>Comment</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="content-item">
+            <p style="background: #9A0C19;width:100%;">索引信息</p>
+            <div>
+                <table class="altrowstable" id="table-index">
+                    <tr>
+                        <td>Table</td>
+                        <td>Non_unique</td>
+                        <td>Key_name</td>
+                        <td>Seq_in_index</td>
+                        <td>Column_name</td>
+                        <td>Collation</td>
+                        <td>Cardinality</td>
+                        <td>Sub_part</td>
+                        <td>Packed</td>
+                        <td>Null</td>
+                        <td>Index_type</td>
+                        <td>Comment</td>
+                        <td>Index_comment</td>
+                        <td>Visible</td>
+                        <td>Expression</td>
+                    </tr>
+                </table>
+            </div>
+            <span>名称解释</span>
+            <div>
+                <table class="altrowstable">
+                    <tr>
+                        <td>Non_unique 如果索引不能包括重复词，则为0。如果可以，则为1。</td>
+                        <td>Key_name 索引的名称。</td>
+                    </tr>
+                    <td>Seq_in_index 索引中的列序列号，从1开始。</td>
+                    <td>Column_name 列名称。</td>
+                    <tr>
+                        <td>Collation 列以什么方式存储在索引中。在MySQL中，有值‘A’（升序）或NULL（无分类）。</td>
+                        <td>Cardinality 索引中唯一值的数目的估计值。通过运行ANALYZE TABLE或myisamchk -a可以更新。</br>
+                            基数根据被存储为整数的统计数据来计数，所以即使对于小型表，该值也没有必要是精确的。基数越大，当进行联合时，MySQL使用该索引的机
+                            会就越大。
+                        </td>
+                    </tr>
+                    <td>Sub_part 如果列只是被部分地编入索引，则为被编入索引的字符的数目。如果整列被编入索引，则为NULL。</td>
+                    <td>Packed 指示关键字如何被压缩。如果没有被压缩，则为NULL。</td>
+                    <tr>
+                        <td>Null 如果列含有NULL，则含有YES。如果没有，则该列含有NO。</td>
+                        <td>Index_type 用过的索引方法（BTREE, FULLTEXT, HASH, RTREE）</td>
+                    </tr>
+                    <td>Comment</td>
+                    <td>Index_comment</td>
+                    <tr>
+                        <td>Visible</td>
+                        <td>Expression</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * 表名称
+ * @type {null}
+ */
+var tableName = null;
+
+$(document).ready(function () {
+    tableName = getUrlParam("name");
+    showTableDetail();
+});
+
+/**
+ * 显示建表语句
+ */
+function showTableDetail() {
+    $.ajax({
+        url: AppUrl + '/db_meta/table_info/'+tableName,//跨域请求的URL
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json;charset=UTF-8",
+        success: function (data) {
+            $.each(data, function (name, item) {
+                if (name == "data") {
+                    console.log("name:" + name)
+                    $.each(item, function (bjectName, objectValues) {
+                        console.log("bjectName:" + bjectName)
+                        if (bjectName == "createTable") {
+                            showCreateTable(objectValues);
+                        }
+                        if (bjectName == "tableColumns") {
+                            showTableColumns(objectValues);
+                        }
+                        if (bjectName == "tableIndex") {
+                            showTableIndex(objectValues);
+                        }
+                        altRows();
+                    });
+                }
+            });
+        },
+        error: function (reason) {
+            console.log(reason)
+        }
+    })
+}
+
+/**
+ * 显示表索引信息
+ */
+function showTableIndex(objectValues) {
+    var itemData = "";
+    $.each(objectValues, function (bjectName, objectValues) {
+        itemData += "<tr>";
+        itemData += "<td>" + objectValues.table + "</td>";
+        itemData += "<td>" + objectValues.nonUnique + "</td>";
+        itemData += "<td>" + objectValues.keyName + "</td>";
+        itemData += "<td>" + objectValues.seqInIndex + "</td>";
+        itemData += "<td>" + objectValues.columnName + "</td>";
+        itemData += "<td>" + objectValues.collation + "</td>";
+        itemData += "<td>" + objectValues.cardinality + "</td>";
+        itemData += "<td>" + objectValues.subPart + "</td>";
+        itemData += "<td>" + objectValues.packed + "</td>";
+        itemData += "<td>" + objectValues.nullValue + "</td>";
+        itemData += "<td>" + objectValues.indexType + "</td>";
+        itemData += "<td>" + objectValues.comment + "</td>";
+        itemData += "<td>" + objectValues.indexComment + "</td>";
+        itemData += "<td>" + objectValues.visible + "</td>";
+        itemData += "<td>" + objectValues.expression + "</td>";
+        itemData += "</tr>";
+
+    });
+    $("#table-index").append(itemData);
+}
+
+/**
+ * 显示表列的详情信息
+ */
+function showTableColumns(objectValues) {
+    var itemData = "";
+    $.each(objectValues, function (bjectName, objectValues) {
+        itemData += "<tr>";
+        itemData += "<td>" + objectValues.field + "</td>";
+        itemData += "<td>" + objectValues.type + "</td>";
+        itemData += "<td>" + objectValues.collation + "</td>";
+        itemData += "<td>" + objectValues.nu + "</td>";
+        itemData += "<td>" + objectValues.key + "</td>";
+        itemData += "<td>" + objectValues.defau + "</td>";
+        itemData += "<td>" + objectValues.extra + "</td>";
+        itemData += "<td>" + objectValues.privileges + "</td>";
+        itemData += "<td>" + objectValues.comment + "</td>";
+        itemData += "</tr>";
+
+    });
+    $("#table-clumn table").append(itemData);
+}
+
+/**
+ * 显示创建表详情
+ * @param objectValues
+ */
+function showCreateTable(objectValues) {
+    $.each(objectValues, function (bjectName, objectValues) {
+        console.log(bjectName,objectValues)
+        $("#tableName").append(bjectName);
+
+        // 加入代码符号
+        objectValues = "```\r\n"+objectValues+"\r\n```\r\n";
+<!--        var markdownCode = marked(objectValues, {breaks: true});-->
+        $("#tableCreate").html(objectValues);
+        // 重新渲染页面
+<!--        reHeightCode();-->
+
+    });
+}
+
+
+</script>
+</body>
+</html>
+
+

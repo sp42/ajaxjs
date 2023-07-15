@@ -55,16 +55,7 @@ public class TableQuery extends BaseMetaQuery {
      * @return 表注释
      */
     public String getTableComment(String tableName) {
-        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName)) {
-            if (rs != null && rs.next()) {
-                String createDDL = rs.getString(2);
-                return DataBaseMetaHelper.parse(createDDL);
-            }
-        } catch (SQLException e) {
-            LOGGER.warning(e);
-        }
-
-        return null;
+        return DataBaseMetaHelper.getTableComment(conn, tableName);
     }
 
     /**
