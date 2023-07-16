@@ -23,4 +23,6 @@ public class WeChatAppletConfig {
      * 访问令牌
      */
     private String accessToken;
+
+    private GetToken tokenMgr;
 }
