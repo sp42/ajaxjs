@@ -36,7 +36,7 @@ public class Sql implements java.io.Serializable {
 	private int paramCount = 0;// total parameters, if any. Parameter will start from &p_1 to &p_{paramCount}
 	// private java.util.List<String> paramNames = new
 	// java.util.ArrayList<String>();//comments or names for the parameters
-	private java.util.List<SqlParameter> parameters = new java.util.ArrayList<SqlParameter>();// comments or names for the parameters
+	private final java.util.List<SqlParameter> parameters = new java.util.ArrayList<SqlParameter>();// comments or names for the parameters
 	private String queryProcessor;// customized executor
 
 	// When requested metrics are contained in rows, flat function will transpose it
@@ -117,11 +117,12 @@ public class Sql implements java.io.Serializable {
 			return this.getSqlText();
 
 		for (VSql s : this.vsqls) {
-			if (s.getMinVersion() != null && version.compareTo(s.getMinVersion()) < 0) {
+			if (s.getMinVersion() != null && version.compareTo(s.getMinVersion()) < 0)
 				continue;
-			}
+
 			if (s.getMaxVersion() != null && version.compareTo(s.getMaxVersion()) > 0)
 				continue;
+
 			return s.getText();
 		}
 		return this.getSqlText();
@@ -145,9 +146,6 @@ public class Sql implements java.io.Serializable {
 
 	/**
 	 * based on array index, not placeholder index
-	 * 
-	 * @param i
-	 * @return
 	 */
 	public SqlParameter getSqlParameter(int index) {
 		if (this.parameters.size() > index)
@@ -166,6 +164,7 @@ public class Sql implements java.io.Serializable {
 			if (name.equalsIgnoreCase(this.parameters.get(i).getName()))
 				return i + 1;
 		}
+
 		return -1;
 	}
 

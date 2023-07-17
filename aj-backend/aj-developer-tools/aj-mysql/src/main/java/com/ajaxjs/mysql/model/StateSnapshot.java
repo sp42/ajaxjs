@@ -88,11 +88,9 @@ public class StateSnapshot {
 	 * Extract data from snmp scan
 	 */
 	public void recordSnmpStats(Map<String, String> snmpMap) {
-		if (snmpMap == null)
-			return;
 		setSyscputime(CommonUtils.getMapValueLong(snmpMap, "ssCpuRawSystem", -1L));
 		setUsercputime(CommonUtils.getMapValueLong(snmpMap, "ssCpuRawUser", -1L));
-		this.setSoftirqtime(CommonUtils.getMapValueLong(snmpMap, "ssCpuRawSoftIRQ", -1L));
+		setSoftirqtime(CommonUtils.getMapValueLong(snmpMap, "ssCpuRawSoftIRQ", -1L));
 		setAvailableMem(CommonUtils.getMapValueLong(snmpMap, "memAvailReal", -1L) + CommonUtils.getMapValueLong(snmpMap, "memCached", -1L));
 		setIotime(CommonUtils.getMapValueLong(snmpMap, "ssCpuRawWait", -1L));
 		setLoadAverage(CommonUtils.getMapValueFloat(snmpMap, "laLoad5m", -1.0f));
@@ -100,17 +98,16 @@ public class StateSnapshot {
 				+ CommonUtils.getMapValueLong(snmpMap, "ssCpuRawWait", -1L) + CommonUtils.getMapValueLong(snmpMap, "ssCpuRawIdle", -1L)
 				+ CommonUtils.getMapValueLong(snmpMap, "ssCpuRawNice", -1L) + CommonUtils.getMapValueLong(snmpMap, "ssCpuRawSoftIRQ", -1L));
 
-		if (this.getTotalcputime() < 0L)
-			this.setTotalcputime(-1L);
-		this.setSwapout(CommonUtils.getMapValueLong(snmpMap, "ssRawSwapOut", -1L));
+		if (getTotalcputime() < 0L)
+			setTotalcputime(-1L);
+
+		setSwapout(CommonUtils.getMapValueLong(snmpMap, "ssRawSwapOut", -1L));
 	}
 
 	/**
 	 * Extract data from global status
 	 */
 	public void recordSnapFromMySQLStatus(Map<String, String> kvPairs) {
-		if (kvPairs == null)
-			return;
 		setSlowQueryCount(CommonUtils.getMapValueLong(kvPairs, "SLOW_QUERIES", 0L));
 		setConnections(CommonUtils.getMapValueLong(kvPairs, "CONNECTIONS", 0L));
 		setQueries(CommonUtils.getMapValueLong(kvPairs, "QUERIES", 0L));

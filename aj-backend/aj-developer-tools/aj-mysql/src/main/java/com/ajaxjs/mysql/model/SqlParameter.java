@@ -19,9 +19,6 @@ public class SqlParameter {
 	private String name;// actual parameter meaningful name
 	private String dataType = TYPE_NONBREAKABLE_STRING;// value type, one of above defined value
 
-	public SqlParameter() {
-	}
-
 	public SqlParameter(String name, String dataType) {
 		this.name = name;
 		if (dataType != null)
