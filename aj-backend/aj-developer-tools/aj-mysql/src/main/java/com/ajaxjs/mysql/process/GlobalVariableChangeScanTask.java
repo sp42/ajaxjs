@@ -60,7 +60,7 @@ public class GlobalVariableChangeScanTask implements Runnable {
 		File root = new File(new File(this.context.getFileReposirtoryPath()), STORAGE_DIR);
 
 		// get all dbids
-		List<DBInstanceInfo> dbs = new ArrayList<DBInstanceInfo>();
+		List<DBInstanceInfo> dbs = new ArrayList<>();
 		for (Map.Entry<String, DBGroupInfo> e : context.getDbInfoManager().getClusters().entrySet()) {
 			DBGroupInfo g = e.getValue();
 			for (DBInstanceInfo i : g.getInstances()) {

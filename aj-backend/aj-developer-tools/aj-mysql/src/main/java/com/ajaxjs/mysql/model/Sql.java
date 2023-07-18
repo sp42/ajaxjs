@@ -35,21 +35,21 @@ public class Sql implements java.io.Serializable {
 							// Always for MySQL
 	private int paramCount = 0;// total parameters, if any. Parameter will start from &p_1 to &p_{paramCount}
 	// private java.util.List<String> paramNames = new
-	// java.util.ArrayList<String>();//comments or names for the parameters
-	private final java.util.List<SqlParameter> parameters = new java.util.ArrayList<SqlParameter>();// comments or names for the parameters
+	// java.util.ArrayList<>();//comments or names for the parameters
+	private final java.util.List<SqlParameter> parameters = new java.util.ArrayList<>();// comments or names for the parameters
 	private String queryProcessor;// customized executor
 
 	// When requested metrics are contained in rows, flat function will transpose it
 	// to rows.
-	private java.util.List<String> keyList = new java.util.ArrayList<String>();// used for flat rows to columns
-	private java.util.List<String> valueList = new java.util.ArrayList<String>();// used for flat rows to columns
+	private java.util.List<String> keyList = new java.util.ArrayList<>();// used for flat rows to columns
+	private java.util.List<String> valueList = new java.util.ArrayList<>();// used for flat rows to columns
 	private String flatKey;// allow to flat a single key
-	private java.util.List<String> flatValueList = new java.util.ArrayList<String>();// create new columns with those value
-	private Map<String, String> flatValueAbbrMap = new java.util.LinkedHashMap<String, String>();// create new columns with those value
-	private java.util.LinkedHashMap<String, String> metrics = new java.util.LinkedHashMap<String, String>();
+	private java.util.List<String> flatValueList = new java.util.ArrayList<>();// create new columns with those value
+	private Map<String, String> flatValueAbbrMap = new java.util.LinkedHashMap<>();// create new columns with those value
+	private java.util.LinkedHashMap<String, String> metrics = new java.util.LinkedHashMap<>();
 
 	// SQL specific to a version
-	private java.util.ArrayList<VSql> vsqls = new java.util.ArrayList<VSql>();
+	private java.util.ArrayList<VSql> vsqls = new java.util.ArrayList<>();
 
 	/**
 	 * SQL with restriction on version

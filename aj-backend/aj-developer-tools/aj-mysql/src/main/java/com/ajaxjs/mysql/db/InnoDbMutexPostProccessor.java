@@ -32,7 +32,7 @@ public class InnoDbMutexPostProccessor implements PostQueryResultProcessor {
 
 	@Override
 	public ResultList process(ResultList rs) {
-		TreeMap<String, MutexName> mutexMetrics = new TreeMap<String, MutexName>();
+		TreeMap<String, MutexName> mutexMetrics = new TreeMap<>();
 		if (rs != null && rs.getRows().size() > 0) {
 			int typeIdx = 0;
 			int nameIdx = 1;

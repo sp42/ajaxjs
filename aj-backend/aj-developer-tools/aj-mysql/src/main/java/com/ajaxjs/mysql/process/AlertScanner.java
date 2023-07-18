@@ -55,7 +55,7 @@ public class AlertScanner {
 	public void scan() {
 		Set<String> clusternames = frameworkContext.getDbInfoManager().getMyDatabases(appUser.getName(), false).getMyDbList();
 		logger.info("Start scan alerts");
-		LinkedBlockingQueue<DBInstanceInfo> dbqueue = new LinkedBlockingQueue<DBInstanceInfo>();
+		LinkedBlockingQueue<DBInstanceInfo> dbqueue = new LinkedBlockingQueue<>();
 
 		for (String cl : clusternames) {
 			DBCredential cred = DBUtils.findDBCredential(frameworkContext, cl, appUser);

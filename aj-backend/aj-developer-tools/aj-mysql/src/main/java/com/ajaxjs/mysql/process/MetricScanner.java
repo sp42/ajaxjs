@@ -81,7 +81,7 @@ public class MetricScanner {
 	private void checkAndSetupMetricsBuffer(DBInstanceInfo dbinfo) {
 		// will setup UDM buffer when need
 		if (!buffer.containsKey(dbinfo.getDbGroupName() + ":" + dbinfo.getHostName())) {
-			Map<String, MetricsBuffer> ms = new HashMap<String, MetricsBuffer>();
+			Map<String, MetricsBuffer> ms = new HashMap<>();
 			buffer.put(dbinfo.getDbGroupName() + ":" + dbinfo.getHostName(), ms);
 		}
 		String[] mgNames = this.frameworkContext.getMetricsDef().getGroupNames();
@@ -127,7 +127,7 @@ public class MetricScanner {
 			logger.severe("Data buffer was not found. Scan cannot continue.");
 			return;
 		}
-		LinkedBlockingQueue<DBInstanceInfo> dbqueue = new LinkedBlockingQueue<DBInstanceInfo>();
+		LinkedBlockingQueue<DBInstanceInfo> dbqueue = new LinkedBlockingQueue<>();
 		for (String cl : clusternames) {
 			DBCredential cred = DBUtils.findDBCredential(frameworkContext, cl, appUser);
 			if (cred == null) {

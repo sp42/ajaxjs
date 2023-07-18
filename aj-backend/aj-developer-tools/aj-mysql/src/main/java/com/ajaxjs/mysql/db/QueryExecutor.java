@@ -187,7 +187,7 @@ public class QueryExecutor {
 			// long endTimestamp = System.currentTimeMillis();
 			// return buf.recordOneRowBymetricsName2(rs, startTimestamp, (int)(endTimestamp
 			// - startTimestamp));
-			Map<String, String> metrics = new HashMap<String, String>();
+			Map<String, String> metrics = new HashMap<>();
 			while (rs != null && rs.next()) {
 				metrics.put(rs.getString(buf.getMetrics().getMetricNameColumn()).toLowerCase(), rs.getString(buf.getMetrics().getMetricValueColumn()));
 			}
@@ -268,7 +268,7 @@ public class QueryExecutor {
 				conn.setCurrentStatement(stmt);
 				rs = stmt.executeQuery(actualSql);
 			}
-			Map<String, String> metrics = new HashMap<String, String>();
+			Map<String, String> metrics = new HashMap<>();
 			if (keyColumn != null && !keyColumn.isEmpty() && valueColumn != null && !valueColumn.isEmpty()) {
 				while (rs != null && rs.next()) {
 					String key = rs.getString(keyColumn.toLowerCase());
@@ -371,7 +371,7 @@ public class QueryExecutor {
 				colCnt = rs.getMetaData().getColumnCount();
 			while (rs != null && rs.next()) {
 				String key = rs.getString(keyColumn);
-				Map<String, String> metricsperKey = new HashMap<String, String>(colCnt);
+				Map<String, String> metricsperKey = new HashMap<>(colCnt);
 				for (int i = 1; i <= colCnt; i++)
 					metricsperKey.put(rs.getMetaData().getColumnName(i), rs.getString(i));
 				metrics.put(key, metricsperKey);
@@ -398,7 +398,7 @@ public class QueryExecutor {
 	public HashMap<String, String> showSlaveStatusMetrics(DBConnectionWrapper conn) {
 		Statement stmt = null;
 		ResultSet rs = null;
-		HashMap<String, String> resMap = new HashMap<String, String>(3);
+		HashMap<String, String> resMap = new HashMap<>(3);
 		boolean isSlave = false;
 		int secondsBehindMaster = 0;
 		int slaveIoRunning = 1;

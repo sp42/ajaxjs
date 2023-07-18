@@ -272,7 +272,7 @@ public class UserDBConnections {
 	public void closeExpired(long timeMillis) {
 		if (timeMillis <= 0)
 			timeMillis = this.connectionIdleTimeout;
-		List<DBConnectionWrapper> idleList = new ArrayList<DBConnectionWrapper>();
+		List<DBConnectionWrapper> idleList = new ArrayList<>();
 		synchronized (this.connections) {
 			for (int i = this.connections.size() - 1; i >= 0; i--) {
 				DBConnectionWrapper conn = this.connections.get(i);
@@ -292,7 +292,7 @@ public class UserDBConnections {
 	public void closeIdle(String clusterName, String hostName) {
 		logger.fine("Close idle connections (" + clusterName + "," + hostName + ")");
 		this.valid = false;
-		List<DBConnectionWrapper> idleConnections = new ArrayList<DBConnectionWrapper>();
+		List<DBConnectionWrapper> idleConnections = new ArrayList<>();
 		// remove from reuse
 		synchronized (this) {
 			for (int i = this.connections.size() - 1; i >= 0; i--) {
@@ -323,7 +323,7 @@ public class UserDBConnections {
 	}
 
 	synchronized public TreeMap<String, Integer> retrieveConnectionMap() {
-		TreeMap<String, Integer> connMap = new TreeMap<String, Integer>();
+		TreeMap<String, Integer> connMap = new TreeMap<>();
 		for (int i = this.connections.size() - 1; i >= 0; i--) {
 			DBConnectionWrapper conn = this.connections.get(i);
 			String dbname = conn.getDb().getDbGroupName();

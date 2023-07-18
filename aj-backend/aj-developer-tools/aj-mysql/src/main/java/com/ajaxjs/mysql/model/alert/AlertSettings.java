@@ -68,8 +68,8 @@ public class AlertSettings {
 	}
 
 	static class GroupSettings {
-		private HashMap<String, Float> groupThresholds = new HashMap<String, Float>();
-		private HashMap<String, HostSettings> hostSettings = new HashMap<String, HostSettings>();
+		private HashMap<String, Float> groupThresholds = new HashMap<>();
+		private HashMap<String, HostSettings> hostSettings = new HashMap<>();
 		private String notificationEmails; // emails to alert if something happens
 
 		public HostSettings getHostSettings(String dbhost) {
@@ -110,9 +110,9 @@ public class AlertSettings {
 		}
 	}
 
-	private HashMap<String, GroupSettings> groupSettings = new HashMap<String, GroupSettings>();
+	private HashMap<String, GroupSettings> groupSettings = new HashMap<>();
 	private MyPerfContext context;
-	private List<AlertDefinition> alertDefinitions = new ArrayList<AlertDefinition>();
+	private List<AlertDefinition> alertDefinitions = new ArrayList<>();
 
 	public AlertSettings() {
 	}

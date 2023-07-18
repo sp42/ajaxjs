@@ -105,7 +105,7 @@ public class MetricScannerRunner implements Runnable {
 	}
 
 	private Map<String, Float> getAlertThreshold(DBInstanceInfo dbinfo) {
-		HashMap<String, Float> thresholds = new HashMap<String, Float>(AlertSettings.COMMON_ALERTS.length);
+		HashMap<String, Float> thresholds = new HashMap<>(AlertSettings.COMMON_ALERTS.length);
 		for (String alertType : AlertSettings.COMMON_ALERTS)
 			thresholds.put(alertType, this.frameworkContext.getAlertSettings().getAlertThreshold(dbinfo.getDbGroupName(), dbinfo.getHostName(), alertType));
 		return thresholds;
@@ -178,7 +178,7 @@ public class MetricScannerRunner implements Runnable {
 				Map<String, List<SNMPClient.SNMPTriple>> diskStats = snmpClient.getMultiDiskData();
 				long ts2 = System.currentTimeMillis();
 				for (Map.Entry<String, List<SNMPClient.SNMPTriple>> entry : diskStats.entrySet()) {
-					Map<String, String> snmpRes = new HashMap<String, String>();
+					Map<String, String> snmpRes = new HashMap<>();
 					for (SNMPClient.SNMPTriple e : entry.getValue()) {
 						if (entry.getKey().equals(e.value))
 							continue;
@@ -222,7 +222,7 @@ public class MetricScannerRunner implements Runnable {
 					if ("Cached memory".equals(key) || "Memory buffers".equals(key) || "Physical memory".equals(key) || "/dev/shm".equals(key)
 							|| "Swap space".equals(key) || "Virtual memory".endsWith(key))
 						continue;
-					Map<String, String> snmpRes = new HashMap<String, String>();
+					Map<String, String> snmpRes = new HashMap<>();
 					long diskUsed = 0L;
 					long diskSize = 0L;
 					for (SNMPClient.SNMPTriple e : entry.getValue()) {
@@ -274,7 +274,7 @@ public class MetricScannerRunner implements Runnable {
 					for (Map.Entry<String, List<SNMPClient.SNMPTriple>> entry : diskStats.entrySet()) {
 						if (entry.getValue().size() == 0)
 							continue;
-						Map<String, String> snmpRes = new HashMap<String, String>();
+						Map<String, String> snmpRes = new HashMap<>();
 						for (SNMPClient.SNMPTriple e : entry.getValue()) {
 							if (entry.getKey().equals(e.value))
 								continue;
@@ -393,7 +393,7 @@ public class MetricScannerRunner implements Runnable {
 			rs = mp.process(rs);
 
 			long ts2 = System.currentTimeMillis();
-			HashMap<String, String> resMap = new HashMap<String, String>(rs.getRows().size());
+			HashMap<String, String> resMap = new HashMap<>(rs.getRows().size());
 			for (ResultRow row : rs.getRows()) {
 				if (row.getColumns() == null || row.getColumns().size() < 2)
 					continue;// skip null

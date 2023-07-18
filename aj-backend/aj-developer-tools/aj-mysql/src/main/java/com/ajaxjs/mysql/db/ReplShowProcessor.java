@@ -42,7 +42,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 		String port;
 		boolean probed;
 
-		List<ReplServer> repls = new ArrayList<ReplServer>();
+		List<ReplServer> repls = new ArrayList<>();
 
 		ReplServer(String host, String port) {
 			this.host = host;
@@ -62,7 +62,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 
 		// slef and children
 		Map<String, ReplServer> getAllServers() {
-			Map<String, ReplServer> childs = new LinkedHashMap<String, ReplServer>();
+			Map<String, ReplServer> childs = new LinkedHashMap<>();
 			childs.put(this.toString(), this); // add self first
 			listAllChildren(childs);
 			return childs;
@@ -137,7 +137,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 	}
 
 	// For all servers in a topology, it will share the same ReplTopologyCacheEntry
-	private Map<String, ReplTopologyCacheEntry> topologyCache = new HashMap<String, ReplTopologyCacheEntry>();
+	private Map<String, ReplTopologyCacheEntry> topologyCache = new HashMap<>();
 
 	@Override
 	public void queryMultiple(MyPerfContext context, DBInstanceInfo dbinfo, String appUser, DBConnectionWrapper connWrapper, QueryParameters qps,
@@ -149,7 +149,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 	@Override
 	public ResultList querySingle(MyPerfContext context, DBInstanceInfo dbinfo, String appUser, DBConnectionWrapper connWrapper, QueryParameters qps)
 			throws SQLException {
-		Map<String, ReplStatus> statusResults = new java.util.LinkedHashMap<String, ReplStatus>();
+		Map<String, ReplStatus> statusResults = new java.util.LinkedHashMap<>();
 		DBCredential cred = context.getMetaDb().retrieveDBCredential(appUser, dbinfo.getDbGroupName());
 		ReplServer replServer = new ReplServer(dbinfo.getHostName(), dbinfo.getPort());
 
@@ -211,7 +211,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 		desc.addColumn("MASTER EXECUTED GTID", false, idx++);
 		desc.addColumn("EXECUTED GTID", false, idx++);
 
-		Set<String> probed = new HashSet<String>();
+		Set<String> probed = new HashSet<>();
 		outputTree(rootServer, statusResults, probed, 0, rList);
 
 		// for (Map.Entry<String, ReplStatus> e: statusResults.entrySet())
@@ -288,7 +288,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 		ResultSet rs = null;
 		// store new hosts
 		ReplStatus repl = replStatusMap.get(replServer.toString());
-		Map<String, String> hosts = new java.util.LinkedHashMap<String, String>();
+		Map<String, String> hosts = new java.util.LinkedHashMap<>();
 		boolean toprobe = depth < context.getMyperfConfig().getReplTopologyMaxDepth() && !replServer.probed;
 		try {
 			DBInstanceInfo dbinfo2 = new DBInstanceInfo();
@@ -399,7 +399,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 
 	private ReplServer findReplRoot(Map<String, ReplStatus> replStatusMap) {
 		ReplServer root = null;
-		Map<String, ReplServer> probed = new HashMap<String, ReplServer>();
+		Map<String, ReplServer> probed = new HashMap<>();
 		// only need first probe one
 		for (Map.Entry<String, ReplStatus> e : replStatusMap.entrySet()) {
 			ReplStatus rpl = e.getValue();
@@ -426,7 +426,7 @@ public class ReplShowProcessor implements CustomQueryProcessor {
 
 	// probe the map to build a tree like structure, and return the root
 	private ReplServer buildReplTree(Map<String, ReplStatus> replStatusMap) {
-		Map<String, ReplServer> tree = new HashMap<String, ReplServer>();
+		Map<String, ReplServer> tree = new HashMap<>();
 		for (Map.Entry<String, ReplStatus> e : replStatusMap.entrySet()) {
 			String self = e.getKey();
 			ReplStatus repl = e.getValue();

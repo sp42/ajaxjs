@@ -257,8 +257,8 @@ public class MyProfiler implements java.io.Serializable {
 	public ResultList runStats() throws SQLException {
 		Statement stmt = null;
 		ResultSet rs = null;
-		HashMap<String, BigDecimal> startStat = new HashMap<String, BigDecimal>();
-		HashMap<String, BigDecimal> endStat = new HashMap<String, BigDecimal>();
+		HashMap<String, BigDecimal> startStat = new HashMap<>();
+		HashMap<String, BigDecimal> endStat = new HashMap<>();
 
 		try {
 			stmt = connection.createStatement();
@@ -304,7 +304,7 @@ public class MyProfiler implements java.io.Serializable {
 			}
 			DBUtils.close(rs);
 
-			TreeMap<String, BigDecimal> res = new TreeMap<String, BigDecimal>();
+			TreeMap<String, BigDecimal> res = new TreeMap<>();
 			for (Map.Entry<String, BigDecimal> e : endStat.entrySet()) {
 				String key = e.getKey();
 				if (key.toLowerCase().startsWith("innodb") || key.toLowerCase().startsWith("uptime"))
@@ -334,7 +334,7 @@ public class MyProfiler implements java.io.Serializable {
 			for (Map.Entry<String, BigDecimal> e : res.entrySet()) {
 				ResultRow row = new ResultRow();
 				row.setColumnDescriptor(desc);
-				List<String> vals = new ArrayList<String>(2);
+				List<String> vals = new ArrayList<>(2);
 				vals.add(e.getKey());
 				vals.add(e.getValue().toPlainString());
 				row.setColumns(vals);

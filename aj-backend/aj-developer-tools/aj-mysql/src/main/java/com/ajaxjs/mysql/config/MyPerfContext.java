@@ -250,7 +250,7 @@ public class MyPerfContext implements java.io.Serializable, InitializingBean, Di
 	public void refreshMetricsList() {
 		synchronized (metricsListRefreshLock) {
 			if (metricsList == null)
-				metricsList = new ArrayList<String>();
+				metricsList = new ArrayList<>();
 			else
 				metricsList.clear();
 			// user defined:

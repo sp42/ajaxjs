@@ -12,7 +12,7 @@ import com.ajaxjs.mysql.common.MetaDB;
 
 public class AppUserManager implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Map<String, AppUser> userMap = new java.util.HashMap<String, AppUser>();
+	private Map<String, AppUser> userMap = new java.util.HashMap<>();
 	private MetaDB metaDb; // to access meta db for persistent actions
 
 	public AppUserManager() {

@@ -30,8 +30,8 @@ public class DBInfoManager implements java.io.Serializable {
 	private MetaDB projectDb;// note we store user cred here
 	private MetricsDbBase metricsDb;// db def
 
-	private Map<String, DBGroupInfo> groups = new java.util.TreeMap<String, DBGroupInfo>();
-	private Map<String, MyDatabases> mydbs = new HashMap<String, MyDatabases>();
+	private Map<String, DBGroupInfo> groups = new java.util.TreeMap<>();
+	private Map<String, MyDatabases> mydbs = new HashMap<>();
 	private HashMap<String, java.util.Date> lastScanTime = new HashMap<String, java.util.Date>();
 
 	synchronized public Map<String, DBGroupInfo> getClusters() {
@@ -91,7 +91,7 @@ public class DBInfoManager implements java.io.Serializable {
 	}
 
 	synchronized public List<String> listGroupNames() {
-		ArrayList<String> clist = new ArrayList<String>(this.groups.size());
+		ArrayList<String> clist = new ArrayList<>(this.groups.size());
 		for (DBGroupInfo c : this.groups.values()) {
 			clist.add(c.getGroupName());
 		}
@@ -166,7 +166,7 @@ public class DBInfoManager implements java.io.Serializable {
 	 */
 	public List<String> listDbsByUserInfo(String user, boolean restricted) {
 		Set<String> mydb = this.getMyDatabases(user, restricted).getMyDbList();
-		List<String> alldb = new ArrayList<String>(this.groups.size());
+		List<String> alldb = new ArrayList<>(this.groups.size());
 
 		synchronized (this) {
 			for (String db : mydb) {
@@ -223,7 +223,7 @@ public class DBInfoManager implements java.io.Serializable {
 	public List<DBInstanceInfo> SearchDbInfo(String keyword) {
 		if (this.metricsDb != null)
 			return this.metricsDb.SearchDbInfo(keyword);
-		return new ArrayList<DBInstanceInfo>();
+		return new ArrayList<>();
 
 	}
 

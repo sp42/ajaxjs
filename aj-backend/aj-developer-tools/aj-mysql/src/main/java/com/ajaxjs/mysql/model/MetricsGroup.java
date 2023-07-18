@@ -27,7 +27,7 @@ public class MetricsGroup {
     private List<Metric> metrics;
     private Map<String, Metric> metricsNameMap;
 
-    private List<MetricsGroup> subGroups = new ArrayList<MetricsGroup>();
+    private List<MetricsGroup> subGroups = new ArrayList<>();
 
     private boolean multipleMetricsPerRow = true;//if db returns one row with all required metrics
     private String keyColumn; //some metrics can be per user based (user stats), per disk based, or per network interface based, etc.

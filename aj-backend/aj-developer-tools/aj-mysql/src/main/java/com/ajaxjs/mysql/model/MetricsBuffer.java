@@ -37,7 +37,7 @@ public class MetricsBuffer {
 
     public java.nio.ByteBuffer recordOneRowBymetricsName2(java.sql.ResultSet rs, int snap_id, long timestamp, int sql_time)
             throws java.sql.SQLException {
-        HashMap<String, String> hs = new HashMap<String, String>();
+        HashMap<String, String> hs = new HashMap<>();
         while (rs != null && rs.next()) {
             hs.put(rs.getString(metrics.getMetricNameColumn()).toUpperCase(), rs.getString(metrics.getMetricValueColumn()));
         }

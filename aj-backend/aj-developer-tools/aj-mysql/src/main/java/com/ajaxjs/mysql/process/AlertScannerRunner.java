@@ -77,7 +77,7 @@ public class AlertScannerRunner implements Runnable {
 	}
 
 	private Map<String, Float> getAlertThreshold(DBInstanceInfo dbinfo) {
-		HashMap<String, Float> thresholds = new HashMap<String, Float>(AlertSettings.COMMON_ALERTS.length);
+		HashMap<String, Float> thresholds = new HashMap<>(AlertSettings.COMMON_ALERTS.length);
 		for (String alertType : AlertSettings.COMMON_ALERTS)
 			thresholds.put(alertType, this.frameworkContext.getAlertSettings().getAlertThreshold(dbinfo.getDbGroupName(), dbinfo.getHostName(), alertType));
 		return thresholds;
@@ -162,7 +162,7 @@ public class AlertScannerRunner implements Runnable {
 			return;
 		}
 		String sqlText = def.getSqlText();
-		Map<String, String> params = new HashMap<String, String>();
+		Map<String, String> params = new HashMap<>();
 
 		if (!AlertDefinition.SOURCE_SQL.equals(def.getSource()) || sqlText == null || sqlText.isEmpty())
 			return;// either not our job, or bad definition

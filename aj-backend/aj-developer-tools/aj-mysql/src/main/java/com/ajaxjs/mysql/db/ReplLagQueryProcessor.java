@@ -51,7 +51,7 @@ public class ReplLagQueryProcessor implements CustomQueryProcessor {
 		String master = null;
 		String port = null;
 		if (rList != null) {
-			java.util.LinkedHashMap<String, String> kvPairs = new java.util.LinkedHashMap<String, String>(rList.getRows().size());
+			java.util.LinkedHashMap<String, String> kvPairs = new java.util.LinkedHashMap<>(rList.getRows().size());
 			for (ResultRow row : rList.getRows()) {
 				if (row.getColumns() == null || row.getColumns().size() < 2)
 					continue;

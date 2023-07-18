@@ -39,12 +39,12 @@ public class UDMManager {
 	private static Logger logger = Logger.getLogger(UDMManager.class.getName());
 
 	// UDM definition. key is the name
-	private Map<String, UserDefinedMetrics> udms = java.util.Collections.synchronizedSortedMap(new java.util.TreeMap<String, UserDefinedMetrics>());
+	private Map<String, UserDefinedMetrics> udms = java.util.Collections.synchronizedSortedMap(new java.util.TreeMap<>());
 	private Object udmUpdateLock = new Object();
 	private MetricsSubscribers metricsSubscriptions = new MetricsSubscribers();
 
 	// User defined alerts
-	private Map<String, AlertDefinition> alerts = java.util.Collections.synchronizedSortedMap(new java.util.TreeMap<String, AlertDefinition>());
+	private Map<String, AlertDefinition> alerts = java.util.Collections.synchronizedSortedMap(new java.util.TreeMap<>());
 	private Object alertDefUpdateLock = new Object();
 	private AlertSubscribers alertSubscriptions = new AlertSubscribers();
 
@@ -93,11 +93,11 @@ public class UDMManager {
 		if (subList == null || subList.size() == 0)
 			return null;
 
-		Set<String> mlist = new HashSet<String>();
+		Set<String> mlist = new HashSet<>();
 		for (String s : builtinMapping.get(metricsGroup))
 			mlist.add(s);
 
-		List<String> outList = new ArrayList<String>(mlist.size());
+		List<String> outList = new ArrayList<>(mlist.size());
 		for (String s : subList) {
 			if (mlist.contains(s))
 				outList.add(s);
@@ -217,7 +217,7 @@ public class UDMManager {
 					String src = udm.getSource();
 					if (!"SQL".equalsIgnoreCase(src)) {
 						if (!this.builtinMapping.containsKey(src))
-							this.builtinMapping.put(src, new ArrayList<String>());
+							this.builtinMapping.put(src, new ArrayList<>());
 						this.builtinMapping.get(src).add(udm.getName());
 					}
 				}
@@ -338,7 +338,7 @@ public class UDMManager {
 			String src = udm.getSource();
 			if (!"SQL".equalsIgnoreCase(src)) {
 				if (!this.builtinMapping.containsKey(src))
-					this.builtinMapping.put(src, new ArrayList<String>());
+					this.builtinMapping.put(src, new ArrayList<>());
 				this.builtinMapping.get(src).add(udm.getName());
 			}
 		}

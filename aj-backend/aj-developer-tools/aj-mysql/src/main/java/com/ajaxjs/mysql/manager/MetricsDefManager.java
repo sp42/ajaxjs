@@ -35,7 +35,7 @@ public class MetricsDefManager implements java.io.Serializable
 	private static String BUILTIN_METRICS_FILE_NAME = "metrics.xml";
 	
 	 // Metrics definition. the key is the group name
-	private java.util.Map<String, MetricsGroup> metricsGroups = new java.util.LinkedHashMap<String, MetricsGroup>();
+	private java.util.Map<String, MetricsGroup> metricsGroups = new java.util.LinkedHashMap<>();
 
 	//user defined metrics
 	private UDMManager udmManager = new UDMManager();
@@ -95,10 +95,10 @@ public class MetricsDefManager implements java.io.Serializable
 	    }
 	    if (mg == null)return null;
 	    	
-		HashMap<String, Metric> mmap = new HashMap<String, Metric>(mg.getMetrics().size());
+		HashMap<String, Metric> mmap = new HashMap<>(mg.getMetrics().size());
 		for(Metric m: mg.getMetrics())
 			mmap.put(m.getName(), m);
-		List<Metric> mList = new java.util.ArrayList<Metric>(ms.length);
+		List<Metric> mList = new java.util.ArrayList<>(ms.length);
 		for(String mname: ms)
 		{
 			if(mmap.containsKey(mname))
@@ -146,7 +146,7 @@ public class MetricsDefManager implements java.io.Serializable
 	//make it generic so that later we can extend to load external definitions
 	private List<MetricsGroup> load(InputStream in)
 	{
-		List<MetricsGroup> groups = new java.util.ArrayList<MetricsGroup>();
+		List<MetricsGroup> groups = new java.util.ArrayList<>();
 		if (in == null)return groups;
 		
 	    XMLStreamReader reader = null;
@@ -246,7 +246,7 @@ public class MetricsDefManager implements java.io.Serializable
 	{
 		//assume current tag is metric
 		int attrCount2 = reader.getAttributeCount();
-		HashMap<String, String> pairs = new HashMap<String, String>(11);
+		HashMap<String, String> pairs = new HashMap<>(11);
 		for(int i=0;i<attrCount2;i++)
 		{
 	      String attrName = reader.getAttributeLocalName(i);
@@ -299,7 +299,7 @@ public class MetricsDefManager implements java.io.Serializable
 	private MetricsGroup parseMetricsGroupAttribute(XMLStreamReader reader)
 	{
 		int attrCount2 = reader.getAttributeCount();
-		HashMap<String, String> pairs = new HashMap<String, String>(11);
+		HashMap<String, String> pairs = new HashMap<>(11);
 		for(int i=0;i<attrCount2;i++)
 		{
 	      String attrName = reader.getAttributeLocalName(i);

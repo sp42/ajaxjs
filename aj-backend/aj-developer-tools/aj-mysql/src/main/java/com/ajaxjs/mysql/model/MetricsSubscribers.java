@@ -36,8 +36,8 @@ public class MetricsSubscribers {
 		private Map<String, Subscription> subscriptionsMap; // internal index
 
 		public HostSubscriptions() {
-			subscriptions = new ArrayList<Subscription>();
-			subscriptionsMap = new HashMap<String, Subscription>();
+			subscriptions = new ArrayList<>();
+			subscriptionsMap = new HashMap<>();
 		}
 
 		public void addSubscription(Subscription sub) {
@@ -71,7 +71,7 @@ public class MetricsSubscribers {
 		}
 
 		public List<Subscription> getSubscribedUDMs() {
-			List<Subscription> subs = new ArrayList<Subscription>();
+			List<Subscription> subs = new ArrayList<>();
 			for (Subscription sub : this.subscriptions) {
 				if ("UDM".equals(sub.mGroup))
 					subs.add(sub);
@@ -86,9 +86,9 @@ public class MetricsSubscribers {
 		private Map<String, Subscription> subscriptionsMap; // internal index
 
 		public GroupSubscriptions() {
-			subscriptions = new ArrayList<Subscription>();
-			hostsSubscriptions = new HashMap<String, HostSubscriptions>();
-			subscriptionsMap = new HashMap<String, Subscription>();
+			subscriptions = new ArrayList<>();
+			hostsSubscriptions = new HashMap<>();
+			subscriptionsMap = new HashMap<>();
 		}
 
 		public void addSubscription(Subscription sub) {
@@ -137,9 +137,9 @@ public class MetricsSubscribers {
 		}
 
 		public List<String> getSubscribedUDMs(String host) {
-			List<String> subs = new ArrayList<String>();
+			List<String> subs = new ArrayList<>();
 			// for now, it is either at host level, or group level
-			Set<String> udmSet = new HashSet<String>();
+			Set<String> udmSet = new HashSet<>();
 			for (Subscription sub : this.subscriptions) {
 				if ("UDM".equals(sub.mGroup))
 					udmSet.add(sub.mSubGroup);

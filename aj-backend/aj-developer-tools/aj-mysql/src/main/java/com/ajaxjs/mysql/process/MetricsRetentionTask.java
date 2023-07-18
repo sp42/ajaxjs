@@ -59,7 +59,7 @@ public class MetricsRetentionTask implements Runnable {
 			return;
 		}
 		// get all dbids
-		List<Integer> ids = new ArrayList<Integer>();
+		List<Integer> ids = new ArrayList<>();
 		if (this.dbidToPurge == null) {
 			for (Map.Entry<String, DBGroupInfo> e : context.getDbInfoManager().getClusters().entrySet()) {
 				DBGroupInfo g = e.getValue();
@@ -79,7 +79,7 @@ public class MetricsRetentionTask implements Runnable {
 		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		long endDate = Long.parseLong(sdf.format(dt));
-		List<MetricsGroup> mgs = new ArrayList<MetricsGroup>();
+		List<MetricsGroup> mgs = new ArrayList<>();
 
 		String[] groupNames = this.context.getMetricsDef().getGroupNames();
 		for (String grpName : groupNames) {

@@ -83,7 +83,7 @@ public class UserReportManager {
 	}
 
 	synchronized public List<UserReport> list() {
-		List<UserReport> repList = new java.util.ArrayList<UserReport>();
+		List<UserReport> repList = new java.util.ArrayList<>();
 		File idxFile = new File(userroot, idxfile);
 		if (idxFile.exists()) {
 			BufferedReader br = null;
@@ -135,7 +135,7 @@ public class UserReportManager {
 		for (int i = repList.size() - 1; i >= 0; i--) {
 			UserReport urp = repList.get(i);
 			ResultRow row = new ResultRow();
-			List<String> cols = new java.util.ArrayList<String>(8);
+			List<String> cols = new java.util.ArrayList<>(8);
 			row.setColumnDescriptor(desc);
 			row.setColumns(cols);
 			cols.add(String.valueOf(urp.getId()));

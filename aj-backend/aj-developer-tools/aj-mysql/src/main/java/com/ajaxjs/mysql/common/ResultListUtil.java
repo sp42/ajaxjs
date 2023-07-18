@@ -50,7 +50,7 @@ public class ResultListUtil {
 		ResultSetMetaData meta = rs.getMetaData();
 		int colCnt = meta.getColumnCount();
 		ColumnDescriptor desc = new ColumnDescriptor();
-		desc.setColumns(new java.util.ArrayList<ColumnInfo>(colCnt));
+		desc.setColumns(new java.util.ArrayList<>(colCnt));
 		for (int i = 1; i <= colCnt; i++) {
 			// for now, we only record name
 			ColumnInfo col = new ColumnInfo(meta.getColumnName(i));
@@ -68,7 +68,7 @@ public class ResultListUtil {
 			// logger.info(new java.util.Date()+": process "+rowCnt+" rows");
 			ResultRow row = new ResultRow();
 			row.setColumnDescriptor(desc);
-			java.util.ArrayList<String> cols2 = new java.util.ArrayList<String>(colCnt);
+			java.util.ArrayList<String> cols2 = new java.util.ArrayList<>(colCnt);
 			row.setColumns(cols2);
 			for (int i = 1; i <= colCnt; i++) {
 				String val = rs.getString(i);
@@ -111,13 +111,13 @@ public class ResultListUtil {
 		ResultSetMetaData meta = rs.getMetaData();
 		int colCnt = meta.getColumnCount();
 		ColumnDescriptor desc = new ColumnDescriptor();
-		desc.setColumns(new java.util.ArrayList<ColumnInfo>(colCnt));
+		desc.setColumns(new java.util.ArrayList<>(colCnt));
 
-		Map<String, Integer> typeMap = new HashMap<String, Integer>();
+		Map<String, Integer> typeMap = new HashMap<>();
 		for (int i = 1; i <= colCnt; i++) {
 			typeMap.put(meta.getColumnName(i), meta.getColumnType(i));
 		}
-		Map<String, Integer> flatkeyIdx = new HashMap<String, Integer>();
+		Map<String, Integer> flatkeyIdx = new HashMap<>();
 		for (int i = 0; i < sql.getFlatValueList().size(); i++) {
 			// logger.info("Add "+sql.getFlatValueList().get(i));
 			flatkeyIdx.put(sql.getFlatValueList().get(i), i);
@@ -162,7 +162,7 @@ public class ResultListUtil {
 			{
 				row = new ResultRow();
 				row.setColumnDescriptor(desc);
-				row.setColumns(new java.util.ArrayList<String>(cols.size()));
+				row.setColumns(new java.util.ArrayList<>(cols.size()));
 				// initialize it
 				for (int i = 0; i < cols.size(); i++)
 					row.getColumns().add("");
@@ -253,7 +253,7 @@ public class ResultListUtil {
 		col1.setPosition(1);
 		ColumnInfo col2 = new ColumnInfo("TEST2");
 		col2.setPosition(2);
-		java.util.ArrayList<ColumnInfo> colInfoList = new java.util.ArrayList<ColumnInfo>(2);
+		java.util.ArrayList<ColumnInfo> colInfoList = new java.util.ArrayList<>(2);
 		colInfoList.add(col1);
 		colInfoList.add(col2);
 		ColumnDescriptor desc = new ColumnDescriptor();
@@ -261,12 +261,12 @@ public class ResultListUtil {
 		resList.setColumnDescriptor(desc);
 		ResultRow row1 = new ResultRow();
 		row1.setColumnDescriptor(desc);
-		java.util.ArrayList<String> cols = new java.util.ArrayList<String>();
+		java.util.ArrayList<String> cols = new java.util.ArrayList<>();
 		cols.add("GOOD");
 		cols.add("BAD");
 		row1.setColumns(cols);
 		ResultRow row2 = new ResultRow();
-		cols = new java.util.ArrayList<String>();
+		cols = new java.util.ArrayList<>();
 		cols.add("LONG");
 		cols.add("SHORT");
 		row2.setColumns(cols);
@@ -431,7 +431,7 @@ public class ResultListUtil {
 
 		int idx = rlist.getColumnIndex(keyColumn);
 		int rows = rlist.getRows().size();
-		Map<String, Integer> keys = new TreeMap<String, Integer>();
+		Map<String, Integer> keys = new TreeMap<>();
 		for (int i = 0; i < rows; i++)
 			keys.put(rlist.getRows().get(i).getColumns().get(idx), 1);
 
@@ -459,7 +459,7 @@ public class ResultListUtil {
 																										// key values
 			return toJSONString(rs, qps, status, message);
 
-		Map<String, String> keyMap = new HashMap<String, String>(keys.length);
+		Map<String, String> keyMap = new HashMap<>(keys.length);
 		for (int i = 0; i < keys.length; i++)
 			keyMap.put(keys[i], "k" + i);
 
@@ -533,7 +533,7 @@ public class ResultListUtil {
 				grpKeyIdx[i] = rs.getColumnIndex(groupByColumns[i]);// don't expect invalid
 			}
 			sb.append("\"results\":[");
-			Map<String, String> valueMap = new TreeMap<String, String>();// to store values temporarily
+			Map<String, String> valueMap = new TreeMap<>();// to store values temporarily
 			for (ResultRow row : rs.getRows()) {
 				for (int i = 0; i < groupByColumns.length; i++) {
 					newGrpKey[i] = row.getColumns().get(grpKeyIdx[i]);
@@ -626,7 +626,7 @@ public class ResultListUtil {
 	 * @return
 	 */
 	public static String toJSONStringSubset(ResultList rs, QueryParameters qps, int status, String message, String[] subset) {
-		HashSet<String> ms = new HashSet<String>();
+		HashSet<String> ms = new HashSet<>();
 		if (subset != null)
 			for (int i = 0; i < subset.length; i++)
 				ms.add(subset[i]);
@@ -1021,7 +1021,7 @@ public class ResultListUtil {
 	private static List<BindVariable> parseBinds(String binds, XMLInputFactory inputFactory) {
 		if (binds == null)
 			return null;
-		List<BindVariable> vars = new java.util.ArrayList<BindVariable>();
+		List<BindVariable> vars = new java.util.ArrayList<>();
 		// <binds><bind name=":1" pos="1" dty="1" dtystr="VARCHAR2(2000)" maxlen="2000"
 		// csid="873" len="15">Billing Contact</bind></binds>
 
@@ -1102,7 +1102,7 @@ public class ResultListUtil {
 				if (binds == null || binds.size() == 0) {
 					ResultRow newRow = new ResultRow();
 					newRow.setColumnDescriptor(desc);
-					List<String> cols = new java.util.ArrayList<String>(row.getColumns().size() + 5);
+					List<String> cols = new java.util.ArrayList<>(row.getColumns().size() + 5);
 					for (int i = 0; i < row.getColumns().size(); i++) {
 						if (i == idx)
 							continue;
@@ -1120,7 +1120,7 @@ public class ResultListUtil {
 					for (BindVariable var : binds) {
 						ResultRow newRow = new ResultRow();
 						newRow.setColumnDescriptor(desc);
-						List<String> cols = new java.util.ArrayList<String>(row.getColumns().size() + 5);
+						List<String> cols = new java.util.ArrayList<>(row.getColumns().size() + 5);
 						for (int i = 0; i < row.getColumns().size(); i++) {
 							if (i == idx)
 								continue;

@@ -34,29 +34,29 @@ public class ResultListMerger {
 		// 1. Add all keys first
 		int pos = 0;
 		List<String> keyList = sqlA.getKeyList();
-		List<Integer> keyAIdx = new java.util.ArrayList<Integer>(keyList.size());
-		List<Integer> keyBIdx = new java.util.ArrayList<Integer>(keyList.size());
-		List<String> compKeyList = new java.util.ArrayList<String>(keyList.size() + 1);
+		List<Integer> keyAIdx = new java.util.ArrayList<>(keyList.size());
+		List<Integer> keyBIdx = new java.util.ArrayList<>(keyList.size());
+		List<String> compKeyList = new java.util.ArrayList<>(keyList.size() + 1);
 
-		for (int i = 0; i < keyList.size(); i++) {
-			ColumnInfo col = descA.getColumn(keyList.get(i)).copy();
+		for (String s : keyList) {
+			ColumnInfo col = descA.getColumn(s).copy();
 			desc.addColumn(col.getName(), col.isNumberType(), pos++);
 			keyAIdx.add(descA.getColumnIndex(col.getName()));
 			keyBIdx.add(descB.getColumnIndex(col.getName()));
 			cmpSortDesc.addColumn(col.getName(), col.isNumberType(), cmpSortDesc.getColumns().size());
 			// cmpDesc.addColumn(col.getName(), col.isNumberType(),
 			// cmpDesc.getColumns().size());
-			compKeyList.add(keyList.get(i));
+			compKeyList.add(s);
 		}
 		compKeyList.add("#COMP");
 		cmpSortDesc.addColumn("#COMP", false, cmpSortDesc.getColumns().size());
 		// 2. add all value
 		List<String> valList = sqlA.getValueList();
-		List<Integer> valAIdx = new java.util.ArrayList<Integer>(valList.size());
-		List<Integer> valBIdx = new java.util.ArrayList<Integer>(valList.size());
+		List<Integer> valAIdx = new java.util.ArrayList<>(valList.size());
+		List<Integer> valBIdx = new java.util.ArrayList<>(valList.size());
 
-		for (int i = 0; i < valList.size(); i++) {
-			ColumnInfo col = descA.getColumn(valList.get(i)).copy();
+		for (String s : valList) {
+			ColumnInfo col = descA.getColumn(s).copy();
 			ColumnInfo colA = col.copy();
 			colA.setName(col.getName() + "_A");
 			colA.setPosition(pos++);
@@ -72,11 +72,11 @@ public class ResultListMerger {
 			// cmpDesc.getColumns().size());
 		}
 
-		List<ResultRow> listRows = new java.util.ArrayList<ResultRow>(listA.getRows().size() + listB.getRows().size());
+		List<ResultRow> listRows = new java.util.ArrayList<>(listA.getRows().size() + listB.getRows().size());
 
 		for (ResultRow row : listA.getRows()) {
 			ResultRow newRow = new ResultRow();
-			List<String> cols = new java.util.ArrayList<String>(row.getColumns().size() + 1);
+			List<String> cols = new java.util.ArrayList<>(row.getColumns().size() + 1);
 			// add key first
 			for (int idx : keyAIdx) {
 				if (idx >= 0)
@@ -99,7 +99,7 @@ public class ResultListMerger {
 
 		for (ResultRow row : listB.getRows()) {
 			ResultRow newRow = new ResultRow();
-			List<String> cols = new java.util.ArrayList<String>(row.getColumns().size() + 1);
+			List<String> cols = new java.util.ArrayList<>(row.getColumns().size() + 1);
 			// add key first
 			for (int idx : keyBIdx) {
 				if (idx >= 0)
@@ -143,7 +143,7 @@ public class ResultListMerger {
 			{
 				ResultRow row = new ResultRow();
 				row.setColumnDescriptor(desc);
-				List<String> cols = new java.util.ArrayList<String>(curRow.getColumns().size() - 1);
+				List<String> cols = new java.util.ArrayList<>(curRow.getColumns().size() - 1);
 				for (int i = 0; i < curRow.getColumns().size(); i++) {
 					if (i == keySize)
 						continue;
@@ -168,7 +168,7 @@ public class ResultListMerger {
 				if (!diffOnly || valComp.compare(curRow, nextRow) != 0) {
 					ResultRow row = new ResultRow();
 					row.setColumnDescriptor(desc);
-					List<String> cols = new java.util.ArrayList<String>(curRow.getColumns().size() - 1);
+					List<String> cols = new java.util.ArrayList<>(curRow.getColumns().size() - 1);
 					for (int i = 0; i < curRow.getColumns().size(); i++) {
 						if (i == keySize)
 							continue;

@@ -81,8 +81,8 @@ public class AlertReportRunner implements Runnable {
         ResultSet rs = null;
         Statement stmt = null;
         long reportTimestamp = System.currentTimeMillis();
-        List<ProcessListEntry> prList = new ArrayList<ProcessListEntry>();
-        java.util.LinkedHashMap<String, String> repMap = new java.util.LinkedHashMap<String, String>();
+        List<ProcessListEntry> prList = new ArrayList<>();
+        java.util.LinkedHashMap<String, String> repMap = new java.util.LinkedHashMap<>();
         String innodbStatus = null;
         ResultList rList = null;
         ResultList trxList = null;

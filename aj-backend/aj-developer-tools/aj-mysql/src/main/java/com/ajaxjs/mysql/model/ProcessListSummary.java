@@ -25,11 +25,11 @@ public class ProcessListSummary implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ProcessListSummary.class.getName());
 
-	private Map<String, Integer> userSummary = new HashMap<String, Integer>();// group by user
-	private Map<String, Integer> hostSummary = new HashMap<String, Integer>();// group by host
-	private Map<String, Integer> commandSummary = new HashMap<String, Integer>();// group by command, including idle
-	private Map<String, Integer> commandHostSummary = new HashMap<String, Integer>();// group by command and host, including idle
-	private Map<String, Integer> stateSummary = new HashMap<String, Integer>();// active state
+	private Map<String, Integer> userSummary = new HashMap<>();// group by user
+	private Map<String, Integer> hostSummary = new HashMap<>();// group by host
+	private Map<String, Integer> commandSummary = new HashMap<>();// group by command, including idle
+	private Map<String, Integer> commandHostSummary = new HashMap<>();// group by command and host, including idle
+	private Map<String, Integer> stateSummary = new HashMap<>();// active state
 
 	private List<ProcessListEntry> processList;
 
@@ -290,7 +290,7 @@ public class ProcessListSummary implements java.io.Serializable {
 
 		pw.println();
 		pw.println("------ User Summary ------");
-		List<KeyValIntPair> tmpList = new ArrayList<KeyValIntPair>(this.userSummary.size());
+		List<KeyValIntPair> tmpList = new ArrayList<>(this.userSummary.size());
 		for (Map.Entry<String, Integer> e : this.userSummary.entrySet()) {
 			tmpList.add(new KeyValIntPair(e.getKey(), e.getValue()));
 		}
@@ -304,7 +304,7 @@ public class ProcessListSummary implements java.io.Serializable {
 		int count = 0;
 		pw.println();
 		pw.println("------ Host Summary ------");
-		tmpList = new ArrayList<KeyValIntPair>(this.hostSummary.size());
+		tmpList = new ArrayList<>(this.hostSummary.size());
 		for (Map.Entry<String, Integer> e : this.hostSummary.entrySet()) {
 			tmpList.add(new KeyValIntPair(e.getKey(), e.getValue()));
 			count++;
@@ -318,7 +318,7 @@ public class ProcessListSummary implements java.io.Serializable {
 
 		pw.println();
 		pw.println("------ Command Summary ------");
-		tmpList = new ArrayList<KeyValIntPair>(this.commandSummary.size());
+		tmpList = new ArrayList<>(this.commandSummary.size());
 		for (Map.Entry<String, Integer> e : this.commandSummary.entrySet()) {
 			tmpList.add(new KeyValIntPair(e.getKey(), e.getValue()));
 		}
@@ -329,7 +329,7 @@ public class ProcessListSummary implements java.io.Serializable {
 
 		pw.println();
 		pw.println("------ State Summary ------");
-		tmpList = new ArrayList<KeyValIntPair>(this.stateSummary.size());
+		tmpList = new ArrayList<>(this.stateSummary.size());
 		for (Map.Entry<String, Integer> e : this.stateSummary.entrySet()) {
 			tmpList.add(new KeyValIntPair(e.getKey(), e.getValue()));
 		}
@@ -341,7 +341,7 @@ public class ProcessListSummary implements java.io.Serializable {
 		pw.println();
 		pw.println("------ Query Summary With LIMIT Stripped------");
 
-		ArrayList<ProcessListEntryAggregate> tmpList2 = new ArrayList<ProcessListEntryAggregate>(this.queriesWithLimitStripped.size());
+		ArrayList<ProcessListEntryAggregate> tmpList2 = new ArrayList<>(this.queriesWithLimitStripped.size());
 		for (Map.Entry<String, ProcessListEntryAggregate> e : this.queriesWithLimitStripped.entrySet()) {
 			tmpList2.add(e.getValue());
 		}
@@ -374,7 +374,7 @@ public class ProcessListSummary implements java.io.Serializable {
 
 		pw.println();
 		pw.println("------ Normalized Queries------");
-		tmpList2 = new ArrayList<ProcessListEntryAggregate>(this.normalizedQueries.size());
+		tmpList2 = new ArrayList<>(this.normalizedQueries.size());
 		for (Map.Entry<String, ProcessListEntryAggregate> e : this.normalizedQueries.entrySet()) {
 			tmpList2.add(e.getValue());
 		}
