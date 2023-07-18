@@ -5,6 +5,7 @@ import com.ajaxjs.util.SetTimeout;
 import com.ajaxjs.util.logger.LogHelper;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 获取小程序 AccessToken
@@ -24,6 +25,19 @@ public class GetToken {
     }
 
     /**
+     * 当获取到 AccessToken 的时候触发，例如放进 Redis
+     */
+    private Consumer<String> onTokenGet;
+
+    public Consumer<String> getOnTokenGet() {
+        return onTokenGet;
+    }
+
+    public void setOnTokenGet(Consumer<String> onTokenGet) {
+        this.onTokenGet = onTokenGet;
+    }
+
+    /**
      * 获取 Client AccessToken
      */
     public void getAccessToken() {
@@ -33,8 +47,18 @@ public class GetToken {
         Map<String, Object> map = Get.api(TOKEN_API + params);
 
         if (map.containsKey("access_token")) {
-            appletCfg.setAccessToken(map.get("access_token").toString());
+            String accessToken = map.get("access_token").toString();
+            appletCfg.setAccessToken(accessToken);
             LOGGER.warning("获取令牌成功！ AccessToken [{0}]", appletCfg.getAccessToken());
+
+
+            if (onTokenGet != null) {
+                try {
+                    onTokenGet.accept(accessToken);
+                } catch (Throwable e) {
+                    LOGGER.warning(e);
+                }
+            }
         } else if (map.containsKey("errcode"))
             LOGGER.warning("获取令牌失败！ Error [{0}:{1}]", map.get("errcode"), map.get("errmsg"));
         else
