@@ -5,13 +5,17 @@ import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.context.expression.MapAccessor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,8 +54,31 @@ public class SmallMyBatis {
                         sqls.put(id, sql);
                     }
                 });
-            }
+            } else
+                LOGGER.warning("找不到 {0}-XML 资源", xmlFile);
         }
+    }
+
+    /**
+     * 根据目录加载多个 XML
+     *
+     * @param sqlLocations 目录
+     */
+    public void loadBySqlLocations(String sqlLocations) { // 如 classpath*:sql/**/*.xml
+        Resource[] resources = null;
+
+        try {
+            resources = new PathMatchingResourcePatternResolver().getResources(sqlLocations);// 扫描目录生成文件
+        } catch (IOException e) {
+            LOGGER.warning("文件路径没有 xml", e);
+        }
+
+        if (ObjectUtils.isEmpty(resources))
+            throw new RuntimeException("文件路径没有 xml");
+
+        // 写死 sql 目录下。Resource 不能返回相对目录
+        String[] xmlArray = Arrays.stream(resources).map(n -> "sql/" + n.getFilename()).toArray(String[]::new);
+        loadXML(xmlArray);
     }
 
     /**

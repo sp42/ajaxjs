@@ -51,7 +51,6 @@ public class GetToken {
             appletCfg.setAccessToken(accessToken);
             LOGGER.warning("获取令牌成功！ AccessToken [{0}]", appletCfg.getAccessToken());
 
-
             if (onTokenGet != null) {
                 try {
                     onTokenGet.accept(accessToken);

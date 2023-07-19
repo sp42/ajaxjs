@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
  * 同时，已经被安排单尚未执行的TimerTask也不会再执行了，新的任务也不能被调度。故如果TimerTask抛出未检查的异常，Timer
  * 将会产生无法预料的行为。
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Deprecated
 public class SetTimeout extends Timer {
     private static final LogHelper LOGGER = LogHelper.getLog(SetTimeout.class);
@@ -56,6 +56,10 @@ public class SetTimeout extends Timer {
      * 超时的秒数
      */
     private int timeout = 60;
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
 
     /**
      * 轮询间隔的秒数

@@ -13,8 +13,7 @@ public class TestMessage {
 
     {
         WeChatAppletConfig cfg = new WeChatAppletConfig();
-        cfg.setAccessKeyId("wx755cba2f58e01fff");
-        cfg.setAccessSecret("cb1bdc966083037e1e3174837bda8b91");
+
 
         GetToken getToken = new GetToken(cfg);
         getToken.init();

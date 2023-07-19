@@ -161,6 +161,16 @@ public abstract class CRUD {
         return update(getTableName(entity), entity, idField);
     }
 
+    public static boolean updateWithWhere(Object entity, String where) {
+        String talebName = getTableName(entity);
+
+        JdbcWriter jdbcWriter = jdbcWriterFactory();
+        jdbcWriter.setTableName(talebName);
+        jdbcWriter.setWhere(where);
+
+        return jdbcWriter.updateWhere(entity, where) > 0;
+    }
+
     public static boolean delete(Object entity, Serializable id) {
         return delete(getTableName(entity), id);
     }
@@ -182,5 +192,4 @@ public abstract class CRUD {
             return false;
         }
     }
-
 }

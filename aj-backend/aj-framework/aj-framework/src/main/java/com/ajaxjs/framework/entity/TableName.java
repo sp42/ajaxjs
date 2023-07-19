@@ -9,4 +9,9 @@ public @interface TableName {
      * 表名
      */
     String value();
+
+    /**
+     * 创建实体后是否返回新建的 id
+     */
+    boolean isReturnNewlyId() default false;
 }

@@ -2,6 +2,7 @@ package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
+import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
@@ -39,6 +40,11 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
      * 应该填数据库的，不要 bean 的驼峰风格
      */
     private String idField = "id";
+
+    /**
+     * 自定义 WHERE 查询部分
+     */
+    private String where;
 
     /**
      * id 字段类型，可以雪花 id（Long）、自增（Integer）、UUID（String），这里默认 Long
@@ -238,11 +244,17 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
 
         if (entity instanceof Map) {
             everyMapField(entity, (field, value) -> {
+                if (field.equals(idField)) // 忽略 id
+                    return;
+
                 sb.append(" `").append(field).append("` = ?,");
                 values.add(value);
             });
         } else { // Java Bean
             everyBeanField(entity, (field, value) -> {
+                if (field.equals(idField)) // 忽略 id
+                    return;
+
                 sb.append(" `").append(field).append("` = ?,");
                 values.add(beanValue2SqlValue(value));
             });
@@ -266,21 +278,6 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
     }
 
     /**
-     * 将一个 Map 转换成更新语句的 SqlParams 对象，可允许任意的过滤条件，而不只是 WHERE id = 1
-     *
-     * @param tableName 数据库表名
-     * @param map       字段及其对应的值
-     * @param where     任意过滤的条件
-     * @return 更新语句的 SqlParams 对象
-     */
-    public static SqlParams entity2UpdateSql(String tableName, Map<String, Object> map, String where) {
-        SqlParams sp = entity2UpdateSql(tableName, map, null, null);
-        sp.sql += " WHERE " + where;
-
-        return sp;
-    }
-
-    /**
      * 新建记录
      *
      * @param entity 实体，可以是 Map or Java Bean
@@ -295,28 +292,32 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             Map<String, Object> map = (Map<String, Object>) entity;
             map.put(idField, newlyId); // id 一开始是没有的，保存之后才有，现在增加到实体
         } else { // bean
-            try {
-                Method getId = entity.getClass().getMethod(DataUtils.changeColumnToFieldName("get_" + idField));
+            TableName a = entity.getClass().getAnnotation(TableName.class);
 
-                if (newlyId == null)
-                    return null; // 创建失败
+            if (a != null && a.isReturnNewlyId()) {
+                try {
+                    Method getId = entity.getClass().getMethod(DataUtils.changeColumnToFieldName("get_" + idField));
 
-                if (newlyId.equals(-1)) { // 插入成功 但没有自增
-                    return (Serializable) getId.invoke(entity);
+                    if (newlyId == null)
+                        return null; // 创建失败
+
+                    if (newlyId.equals(-1)) { // 插入成功 但没有自增
+                        return (Serializable) getId.invoke(entity);
+                    }
+
+                    Class<?> idClz = getId.getReturnType();// 根据 getter 推断 id 类型
+                    String setIdMethod = DataUtils.changeColumnToFieldName("set_" + idField);
+
+                    if (Long.class == idClz && newlyId instanceof Integer) {
+                        newlyId = (long) (int) newlyId;
+                        Methods.executeMethod(entity, setIdMethod, newlyId);
+                    } else if (Long.class == idClz && newlyId instanceof BigInteger) {
+                        newlyId = ((BigInteger) newlyId).longValue();
+                        Methods.executeMethod(entity, setIdMethod, newlyId);
+                    } else Methods.executeMethod(entity, setIdMethod, newlyId); // 直接保存
+                } catch (Throwable e) {
+                    LOGGER.warning(e);
                 }
-
-                Class<?> idClz = getId.getReturnType();// 根据 getter 推断 id 类型
-                String setIdMethod = DataUtils.changeColumnToFieldName("set_" + idField);
-
-                if (Long.class == idClz && newlyId instanceof Integer) {
-                    newlyId = (long) (int) newlyId;
-                    Methods.executeMethod(entity, setIdMethod, newlyId);
-                } else if (Long.class == idClz && newlyId instanceof BigInteger) {
-                    newlyId = ((BigInteger) newlyId).longValue();
-                    Methods.executeMethod(entity, setIdMethod, newlyId);
-                } else Methods.executeMethod(entity, setIdMethod, newlyId); // 直接保存
-            } catch (Throwable e) {
-                LOGGER.warning(e);
             }
         }
 
@@ -341,6 +342,20 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             Object id = Methods.executeMethod(entity, getId);
             sp = entity2UpdateSql(tableName, entity, idField, id);
         }
+
+        return write(sp.sql, sp.values);
+    }
+
+    /**
+     * 修改实体
+     * 将一个 Map 转换成更新语句的 SqlParams 对象，可允许任意的过滤条件，而不只是 WHERE id = 1
+     *
+     * @param entity 实体，可以是 Map or Java Bean
+     * @return 成功修改的行数，一般为 1
+     */
+    public int updateWhere(Object entity, String where) {
+        SqlParams sp = entity2UpdateSql(tableName, entity, null, null);
+        sp.sql += " WHERE " + where;
 
         return write(sp.sql, sp.values);
     }
