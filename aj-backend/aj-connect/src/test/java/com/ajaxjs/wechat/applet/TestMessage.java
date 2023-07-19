@@ -14,7 +14,6 @@ public class TestMessage {
     {
         WeChatAppletConfig cfg = new WeChatAppletConfig();
 
-
         GetToken getToken = new GetToken(cfg);
         getToken.init();
 
