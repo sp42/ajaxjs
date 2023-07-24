@@ -2,8 +2,13 @@ package com.ajaxjs.framework.spring.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
@@ -18,6 +23,26 @@ import java.util.Set;
 public class BeanValidation {
     @Autowired
     LocalValidatorFactoryBean v;
+
+    public boolean check(Object bean) {
+        Set<ConstraintViolation<Object>> violations = v.getValidator().validate(bean);
+
+        if (!CollectionUtils.isEmpty(violations)) {
+            StringBuilder sb = new StringBuilder();
+
+            for (ConstraintViolation<Object> v : violations) {
+                sb.append("输入字段[").append(v.getPropertyPath()).append("]，当前值[").append(v.getInvalidValue()).append("]，校验失败原因[");
+                sb.append(v.getMessage()).append("];");
+            }
+
+            sb.append("请检查后再提交");
+
+            throw new IllegalArgumentException(sb.toString());
+        }
+
+        return true;
+    }
+
 
     public boolean before(Method beanMethod, Object[] args) {
         Parameter[] parameters = beanMethod.getParameters();

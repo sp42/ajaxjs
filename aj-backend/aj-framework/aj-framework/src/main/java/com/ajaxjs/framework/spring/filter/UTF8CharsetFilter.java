@@ -11,25 +11,24 @@ import javax.servlet.ServletResponse;
 
 /**
  * 避免乱码
- * 
- * @author Frank Cheung<sp42@qq.com>
  *
+ * @author Frank Cheung<sp42@qq.com>
  */
 public class UTF8CharsetFilter implements Filter {
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-	}
+    @Override
+    public void init(FilterConfig filterConfig) {
+    }
 
-	private static final String UTF8 = "UTF-8";
-	
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		request.setCharacterEncoding(UTF8);
-		response.setCharacterEncoding(UTF8);
-		chain.doFilter(request, response);
-	}
+    private static final String UTF8 = "UTF-8";
 
-	@Override
-	public void destroy() {
-	}
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        request.setCharacterEncoding(UTF8);
+        response.setCharacterEncoding(UTF8);
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void destroy() {
+    }
 }

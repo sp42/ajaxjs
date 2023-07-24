@@ -14,6 +14,7 @@ import java.lang.annotation.Target;
 
 /**
  * 标记为数据库事务
+ * 该注解写在 Service 方法上，而非 Controller
  * 
  * @author sp42 frank@ajaxjs.com
  *

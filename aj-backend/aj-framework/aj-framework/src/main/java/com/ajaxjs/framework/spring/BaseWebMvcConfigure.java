@@ -1,35 +1,23 @@
 package com.ajaxjs.framework.spring;
 
 import com.ajaxjs.framework.spring.filter.BeanValidation;
-import com.ajaxjs.framework.spring.filter.RestResponseEntityExceptionHandler;
-import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.ShowControllerInterceptor;
+import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.framework.spring.response.MyJsonConverter;
 import com.ajaxjs.framework.spring.response.MyResponseBodyAdvice;
-import org.apache.bval.jsr.ApacheValidationProvider;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.server.ServerHttpRequest;
-import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Properties;
 
 /**
  * Spring MVC 的配置

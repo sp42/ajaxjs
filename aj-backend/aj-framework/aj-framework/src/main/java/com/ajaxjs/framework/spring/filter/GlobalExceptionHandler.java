@@ -34,6 +34,8 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         return accept != null && "application/json".equals(accept);
     }
 
+    public static final String EXCEPTION_CXT_KEY = "EXCEPTION_CXT_KEY";
+
     @Override
     public ModelAndView resolveException(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) {
         LOGGER.warning(ex);
@@ -44,6 +46,8 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         if (msg == null)
             msg = _ex.toString();
 
+        req.setAttribute(EXCEPTION_CXT_KEY, _ex);
+
         resp.setCharacterEncoding("UTF-8"); // 避免乱码
         resp.setHeader("Cache-Control", "no-cache, must-revalidate");
 
@@ -52,7 +56,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         else
             resp.setStatus(HttpStatus.OK.value());
 
-        if (req.getAttribute("SHOW_HTML_ERR") != null && true == ((boolean) req.getAttribute("SHOW_HTML_ERR"))) {
+        if (req.getAttribute("SHOW_HTML_ERR") != null && ((boolean) req.getAttribute("SHOW_HTML_ERR"))) {
             try {
                 resp.getWriter().write(msg);
             } catch (IOException e) {

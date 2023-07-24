@@ -2,6 +2,7 @@ package com.ajaxjs.framework.spring.filter.dbconnection;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.lang.Nullable;
@@ -80,8 +81,13 @@ public class DataBaseConnection implements HandlerInterceptor {
 
             if (method != null && method.getAnnotation(IgnoreDataBaseConnect.class) == null) {// 有注解
                 try {
-                    if (method.getAnnotation(EnableTransaction.class) != null)
+                    if (method.getAnnotation(EnableTransaction.class) != null) {
+                        Object obj = req.getAttribute(GlobalExceptionHandler.EXCEPTION_CXT_KEY);
+                        if (ex == null && obj != null)
+                            ex = (Exception) obj;
+
                         doTransaction(ex);
+                    }
                 } catch (Throwable e) {
                     LOGGER.warning(e);
                 } finally {

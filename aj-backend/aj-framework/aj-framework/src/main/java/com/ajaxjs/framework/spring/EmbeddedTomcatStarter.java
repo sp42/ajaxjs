@@ -17,6 +17,7 @@ import org.apache.catalina.webresources.StandardRoot;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
 import org.apache.tomcat.util.scan.StandardJarScanFilter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.SpringServletContainerInitializer;
 
 import com.ajaxjs.Version;
@@ -44,8 +45,12 @@ public class EmbeddedTomcatStarter {
     public boolean isStatedSpring;
 
     public void init(int port, Class<?>... clz) {
+        init(port, null, clz);
+    }
+
+    public void init(int port, String contextPath, Class<?>... clz) {
         initTomcat();
-        initContext();
+        initContext(contextPath);
 //        initFilterByTomcat(UTF8CharsetFilter.class);
 
         context.addLifecycleListener((LifecycleEvent event) -> {
@@ -156,7 +161,7 @@ public class EmbeddedTomcatStarter {
     /**
      * 读取项目路径
      */
-    private void initContext() {
+    private void initContext(String contextPath) {
         String jspFolder = getDevelopJspFolder();
 
         if (jspFolder == null) {
@@ -166,7 +171,7 @@ public class EmbeddedTomcatStarter {
 
 //        System.out.println("jspFolder::::::" + Resources.getJarDir());
 //        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("/mycar/mycar-service-4.0/security-oauth2-uam/sync/jsp").getAbsolutePath());
-        context = (StandardContext) tomcat.addWebapp("", jspFolder);
+        context = (StandardContext) tomcat.addWebapp(StringUtils.hasText(contextPath) ? contextPath : "", jspFolder);
         context.setReloadable(false);// 禁止重新载入
 
         // seems not work
@@ -216,5 +221,16 @@ public class EmbeddedTomcatStarter {
      */
     public static void start(int port, Class<?>... clz) {
         new EmbeddedTomcatStarter().init(port, clz);
+    }
+
+    /**
+     * 启动 Web 程序
+     *
+     * @param port        端口
+     * @param contextPath 程序上下文目录
+     * @param clz         配置类列表
+     */
+    public static void start(int port, String contextPath, Class<?>... clz) {
+        new EmbeddedTomcatStarter().init(port, contextPath, clz);
     }
 }
