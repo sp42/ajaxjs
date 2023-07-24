@@ -23,49 +23,49 @@ public class HipchatIntegration {
 	private boolean enabled = false;
 
 	public void init(MyPerfContext ctx) {
-		this.enabled = false;
+		enabled = false;
 		try {
-			this.hostname = java.net.InetAddress.getLocalHost().getHostName();
+			hostname = java.net.InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		this.hipchatURL = ctx.getMyperfConfig().getHipchatUrl();
-		this.authToken = ctx.getMyperfConfig().getHipchatAuthToken();
+		hipchatURL = ctx.getMyperfConfig().getHipchatUrl();
+		authToken = ctx.getMyperfConfig().getHipchatAuthToken();
 
 		if (authToken != null && !authToken.isEmpty() && hipchatURL != null && !hipchatURL.isEmpty())
-			this.enabled = true;
+			enabled = true;
 
-		if (this.enabled) {
+		if (enabled) {
 			// do a test
-			this.enabled = this.sendMessage("MySQL Perf Analzyer Hipchat Integration Initiated on " + this.hostname);
-			if (this.enabled)
+			enabled = sendMessage("MySQL Perf Analzyer Hipchat Integration Initiated on " + hostname);
+			if (enabled)
 				System.out.println("Hipchat integration is enabed.");
 		}
 	}
 
 	public boolean isEnabled() {
-		return this.enabled;
+		return enabled;
 	}
 
 	/**
 	 * This should be invoked if isEnabled = true
 	 */
 	public boolean sendMessage(String msg) {
-		if (!this.enabled) {
+		if (!enabled) {
 //			logger.info("Hichat is not enabled, ignore.");
 			return false;
 		}
 
 		java.io.OutputStream out = null;
 		java.io.InputStream in = null;
-		String url = this.hipchatURL + "auth_token=" + this.authToken;
+		String url = hipchatURL + "auth_token=" + authToken;
 		try {
 
 			java.net.URL hipchatUrl = new java.net.URL(url);
 			HttpURLConnection conn = HttpURLConnection.class.cast(hipchatUrl.openConnection());
 			conn.setDoOutput(true);
 			conn.addRequestProperty("Content-Type", "application/json");
-			String jsonMsg = this.constructJsonMessage("Source: " + this.hostname + "\n" + msg);
+			String jsonMsg = constructJsonMessage("Source: " + hostname + "\n" + msg);
 			// logger.info("Sending message to hipchat (" + url + "): " + jsonMsg);
 			byte[] jsonByte = jsonMsg.getBytes();
 			conn.addRequestProperty("Content-Length", String.valueOf(jsonByte.length));
@@ -77,7 +77,7 @@ public class HipchatIntegration {
 			// logger.info("Recieve response code " + code);
 			if (code >= 200 && code < 400)
 				return true;
-//			logger.warning("Failed hipchat integration with URL: " + this.hipchatURL + ", code: " + code + ", data: " + jsonMsg);
+//			logger.warning("Failed hipchat integration with URL: " + hipchatURL + ", code: " + code + ", data: " + jsonMsg);
 		} catch (Throwable th) {
 //			logger.log(Level.WARNING, "Failed to send message: " + msg, th);
 			return false;
@@ -100,10 +100,8 @@ public class HipchatIntegration {
 	}
 
 	private String constructJsonMessage(String str) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{\"color\":\"green\",\"message\":\"");
-		sb.append(CommonUtils.escapeJson(str));
-		sb.append("\",\"notify\":false,\"message_format\":\"text\"}");
-		return sb.toString();
+		return "{\"color\":\"green\",\"message\":\"" +
+				CommonUtils.escapeJson(str) +
+				"\",\"notify\":false,\"message_format\":\"text\"}";
 	}
 }

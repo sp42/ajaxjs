@@ -15,17 +15,16 @@ import lombok.Data;
  * data in name=value pair The data will be persisted in blocks, starting with
  * time in square bracket, followed by a list of lines of name value pair. The
  * time is in yyyy-MM-dd HH:mm:ss (UTC) format.
- * 
- * @author xrao
  *
+ * @author xrao
  */
 @Data
 public class ConfigBlock {
-	private String time;
+    private String time;
 
-	private Map<String, String> variables = new TreeMap<>();
+    private Map<String, String> variables = new TreeMap<>();
 
-	public void addVariable(String name, String value) {
-		variables.put(name, value);
-	}
+    public void addVariable(String name, String value) {
+        variables.put(name, value);
+    }
 }

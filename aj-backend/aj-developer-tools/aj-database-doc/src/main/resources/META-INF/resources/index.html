@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>UTF-8 JSP Template</title>
+        <link rel="stylesheet" type="text/css" href="style/style.css" />
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.min.js"></script>
+    </head>
+    <body>
+        <menu>
+            <h3 style="margin-left:13px;color:#2f518c">MySQL Performance Browser</h3>
+            <br />
+            <ul>
+                <li>
+                    <a href="">首页</a>
+
+                </li>
+                <li>
+                    <a href="">首页</a>
+
+                </li>
+                <li>
+                    <a href="">首页</a>
+
+                </li>
+            </ul>
+        </menu>
+        <div class="container">
+            <div id="main">
+                <nav>
+                    <ul>
+                        <li class="selected"><a href="">线程 Threads</a> </li>
+                        <li><a href="">事件等待 Events Waits</a> </li>
+                        <li><a href="">Table IO</a> </li>
+                        <li><a href="">索引使用 Index Usage</a> </li>
+                        <li><a href="">表/索引访问 Table/Index Access</a> </li>
+                        <li><a href="">表/索引访问 Table/Index Access</a> </li>
+                    </ul>
+                </nav>
+
+
+                <iframe src="http://localhost:8301/objects_summary.jsp" frameborder="0" scrolling="yes" width="100%" id="test" onload="this.height=100"></iframe>
+
+
+            </div>
+        </div>
+
+    </body>
+</html>

@@ -65,6 +65,17 @@ public abstract class CRUD {
         return ListUtils.getList(mapList);
     }
 
+    /**
+     * 查询列表记录，以 List Map 格式返回
+     *
+     * @param sqlId SQL 语句
+     */
+    public static List<Map<String, Object>> listMap(String sqlId, Map<String, Object> paramsMap, Object... params) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return list(sql, params);
+    }
+
     public static <T> PageResult<T> page(Class<T> beanClz, String sql, Map<String, Object> paramsMap) {
         sql = SmallMyBatis.handleSql(sql, paramsMap);
 

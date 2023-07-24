@@ -7,7 +7,7 @@ package com.ajaxjs.mysql.model.alert;
 
 import java.util.Date;
 
-import com.ajaxjs.util.date.DateUtil;
+import com.ajaxjs.util.DateUtil;
 
 import lombok.Data;
 

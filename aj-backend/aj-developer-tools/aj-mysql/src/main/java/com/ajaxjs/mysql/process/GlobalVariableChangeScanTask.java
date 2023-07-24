@@ -29,9 +29,9 @@ import com.ajaxjs.mysql.model.DBGroupInfo;
 import com.ajaxjs.mysql.model.DBInstanceInfo;
 
 public class GlobalVariableChangeScanTask implements Runnable {
-	private static Logger logger = Logger.getLogger(GlobalVariableChangeScanTask.class.getName());
+	private static final Logger logger = Logger.getLogger(GlobalVariableChangeScanTask.class.getName());
 
-	private MyPerfContext context;
+	private final MyPerfContext context;
 	private static final String STORAGE_DIR = "autoscan";
 	private AppUser appUser;
 	private UserDBConnections conns;

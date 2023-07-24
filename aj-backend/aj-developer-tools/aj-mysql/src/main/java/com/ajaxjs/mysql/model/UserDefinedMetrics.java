@@ -21,272 +21,273 @@ import lombok.Data;
  */
 @Data
 public class UserDefinedMetrics {
-    private String name; // UDM name
-    private boolean auto; // auto collect
-    private String source; // how metrics are gathered, hook up to predefined, or customized sql
-    private String udmType; // column, row, key
-    private String nameCol; // for multi row type, column name for metric name
-    private String valueCol; // for multi row type, column name for metric value
-    private String keyCol; // forl muti row, multi metrics per row, column name to extract entity key
-    private String sql; // sql statement for customized sql
-    private boolean storeInCommonTable = false; // whether we want to store metrics in a common table
-    // The advantage is we can add new metrics into the same group
-    // The disadvantage is the storage overhead.
+	private String name; // UDM name
+	private boolean auto; // auto collect
+	private String source; // how metrics are gathered, hook up to predefined, or customized sql
+	private String udmType; // column, row, key
+	private String nameCol; // for multi row type, column name for metric name
+	private String valueCol; // for multi row type, column name for metric value
+	private String keyCol; // forl muti row, multi metrics per row, column name to extract entity key
+	private String sql; // sql statement for customized sql
+	private boolean storeInCommonTable = false; // whether we want to store metrics in a common table
+	// The advantage is we can add new metrics into the same group
+	// The disadvantage is the storage overhead.
 
-    private List<Metric> metrics = new ArrayList<>();
+	private List<Metric> metrics = new ArrayList<>();
 
-    private MetricsGroup metricsGroup = new MetricsGroup();// wrap the content into a MetricsGroup
+	private MetricsGroup metricsGroup = new MetricsGroup();// wrap the content into a MetricsGroup
 
-    public UserDefinedMetrics() {
-        metricsGroup.setUdmFlagged(true);
-    }
+	public UserDefinedMetrics() {
+		metricsGroup.setUdmFlagged(true);
+	}
 
-    public UserDefinedMetrics(String name) {
-        if (name != null) {
-            this.name = name.trim().toUpperCase();
-            this.metricsGroup.setGroupName(this.name);
-        }
+	public UserDefinedMetrics(String name) {
+		if (name != null) {
+			this.name = name.trim().toUpperCase();
+			this.metricsGroup.setGroupName(this.name);
+		}
 
-        metricsGroup.setUdmFlagged(true);
-    }
+		metricsGroup.setUdmFlagged(true);
+	}
 
-    public void setName(String name) {
-        if (name != null) {
-            this.name = name.trim().toUpperCase();
-            this.metricsGroup.setGroupName(this.name);
-        }
-    }
+	public void setName(String name) {
+		if (name != null) {
+			this.name = name.trim().toUpperCase();
+			this.metricsGroup.setGroupName(this.name);
+		}
+	}
 
-    public boolean isAuto() {
-        return auto;
-    }
+	public boolean isAuto() {
+		return auto;
+	}
 
-    public void setAuto(boolean auto) {
-        this.auto = auto;
-        this.metricsGroup.setAuto(this.auto);
-    }
+	public void setAuto(boolean auto) {
+		this.auto = auto;
+		this.metricsGroup.setAuto(this.auto);
+	}
 
-    public void setUdmType(String udmType) {
-        this.udmType = udmType;
-        if (!"row".equals(this.udmType))
-            this.metricsGroup.setMultipleMetricsPerRow(true);
-    }
+	public void setUdmType(String udmType) {
+		this.udmType = udmType;
+		if (!"row".equals(this.udmType))
+			this.metricsGroup.setMultipleMetricsPerRow(true);
+	}
 
-    public void setNameCol(String nameCol) {
-        this.nameCol = nameCol;
-        this.metricsGroup.setMetricNameColumn(this.nameCol);
-    }
+	public void setNameCol(String nameCol) {
+		this.nameCol = nameCol;
+		this.metricsGroup.setMetricNameColumn(this.nameCol);
+	}
 
-    public void setValueCol(String valueCol) {
-        this.valueCol = valueCol;
-        this.metricsGroup.setMetricValueColumn(this.valueCol);
-    }
+	public void setValueCol(String valueCol) {
+		this.valueCol = valueCol;
+		this.metricsGroup.setMetricValueColumn(this.valueCol);
+	}
 
-    /**
-     * This should be invoked after setUdmType
-     *
-     * @param keyCol
-     */
-    public void setKeyCol(String keyCol) {
-        this.keyCol = keyCol;
 
-        if ("key".equals(this.udmType))
-            this.metricsGroup.setKeyColumn(this.keyCol);
-    }
+	/**
+	 * This should be invoked after setUdmType
+	 *
+	 * @param keyCol
+	 */
+	public void setKeyCol(String keyCol) {
+		this.keyCol = keyCol;
 
-    public String getSql() {
-        return sql;
-    }
+		if ("key".equals(this.udmType))
+			this.metricsGroup.setKeyColumn(this.keyCol);
+	}
 
-    public void setSql(String sql) {
-        this.sql = sql;
-        if ("SQL".equals(this.source))
-            this.metricsGroup.setSqlText(this.sql);
-    }
+	public void setSql(String sql) {
+		this.sql = sql;
+		if ("SQL".equals(this.source))
+			this.metricsGroup.setSqlText(this.sql);
+	}
 
-    public void addMetric(Metric m) {
-        if (m != null) {
-            this.metrics.add(m);
-            this.metricsGroup.addMetrics(m.copy());
-        }
-    }
+	public void addMetric(Metric m) {
+		if (m != null) {
+			this.metrics.add(m);
+			this.metricsGroup.addMetrics(m.copy());
+		}
+	}
 
-    public void addMetric(String name, String sourceName, boolean inc, MetricDataType dataType) {
-        if (name != null && !name.isEmpty()) {
-            Metric m = new Metric(name.trim().toUpperCase(), sourceName, dataType, null, null, inc);
-            this.metrics.add(m);
-            this.metricsGroup.addMetrics(m.copy());
-        }
-    }
+	public void addMetric(String name, String sourceName, boolean inc, MetricDataType dataType) {
+		if (name != null && !name.isEmpty()) {
+			Metric m = new Metric(name.trim().toUpperCase(), sourceName, dataType, null, null, inc);
+			this.metrics.add(m);
+			this.metricsGroup.addMetrics(m.copy());
+		}
+	}
 
-    /**
-     * If invalid, exception will be thrown with error message
-     */
-    public void validate() {
-        StringBuilder sb = new StringBuilder();
-        boolean valid = true;
 
-        if (!Metric.isAlphaNumericUnderscoreNotNull(name, 20)) {
-            valid = false;
-            sb.append("udm name ").append(name).append(" is not valid. Please use alphanumeric and underscore with max length of 20. ");
-        }
 
-        if ("SQL".equalsIgnoreCase(source)) {
-            if (sql == null || sql.isEmpty()) {
-                sb.append("Please provide customized SQL. ");
-                valid = false;
-            } else {
-                sql = sql.trim();
-                if (!sql.toLowerCase().startsWith("select") || sql.indexOf(';') >= 0) {
-                    sb.append("The SQL statement must start with select and no semi column is allowed. ");
-                    valid = false;
-                }
-            }
-        }
-        if ("key".equalsIgnoreCase(this.udmType) && (keyCol == null || keyCol.isEmpty())) {
-            valid = false;
-            sb.append("For case of Multiple Rows, Multiple Metrics Per Row, With a Key Column, please provide a valid key column name. ");
-        }
-        if ("row".equalsIgnoreCase(this.udmType) && (nameCol == null || nameCol.isEmpty() || valueCol.isEmpty())) {
-            valid = false;
-            sb.append("For case of Multiple Rows, One Row One Metric, Key Value Pairs, please provide column names to extract metric names and values.");
-        }
+	/**
+	 * If invalid, exception will be thrown with error message
+	 */
+	public void validate() {
+		StringBuilder sb = new StringBuilder();
+		boolean valid = true;
 
-        for (Metric m : this.metrics) {
-            if (!Metric.isAlphaNumericUnderscoreNotNull(m.getName(), 32)) {
-                valid = false;
-                sb.append("udm metric name ").append(m.getName()).append(" is not valid. Please use alphanumeric and underscore with max length of 32. ");
-            }
-        }
+		if (!Metric.isAlphaNumericUnderscoreNotNull(name, 20)) {
+			valid = false;
+			sb.append("udm name ").append(name).append(" is not valid. Please use alphanumeric and underscore with max length of 20. ");
+		}
 
-        if (!valid)
-            throw new RuntimeException(sb.toString());
-    }
+		if ("SQL".equalsIgnoreCase(source)) {
+			if (sql == null || sql.isEmpty()) {
+				sb.append("Please provide customized SQL. ");
+				valid = false;
+			} else {
+				sql = sql.trim();
+				if (!sql.toLowerCase().startsWith("select") || sql.indexOf(';') >= 0) {
+					sb.append("The SQL statement must start with select and no semi column is allowed. ");
+					valid = false;
+				}
+			}
+		}
+		if ("key".equalsIgnoreCase(this.udmType) && (keyCol == null || keyCol.isEmpty())) {
+			valid = false;
+			sb.append("For case of Multiple Rows, Multiple Metrics Per Row, With a Key Column, please provide a valid key column name. ");
+		}
+		if ("row".equalsIgnoreCase(this.udmType) && (nameCol == null || nameCol.isEmpty() || valueCol.isEmpty())) {
+			valid = false;
+			sb.append("For case of Multiple Rows, One Row One Metric, Key Value Pairs, please provide column names to extract metric names and values.");
+		}
 
-    public String toJSON(boolean html) {
-        StringBuilder mtrStr = new StringBuilder();
-        mtrStr.append("{\r\n");
-        mtrStr.append("\"groupName\": \"").append(name.toUpperCase()).append("\",\r\n");
-        mtrStr.append("\"auto\": \"").append(auto ? "y" : "n").append("\",\r\n");
-        mtrStr.append("\"source\": \"").append(source).append("\",\r\n");
-        mtrStr.append("\"type\": \"").append(udmType).append("\",\r\n");
-        mtrStr.append("\"storeInCommonTable\": \"").append(this.storeInCommonTable ? "y" : "n").append("\",\r\n");
-        if (this.nameCol != null && !this.nameCol.isEmpty())
-            mtrStr.append("\"nameColumn\": \"").append(nameCol).append("\",\r\n");
-        if (this.valueCol != null && !this.valueCol.isEmpty())
-            mtrStr.append("\"valueColumn\": \"").append(valueCol).append("\",\r\n");
-        if (this.keyCol != null && !this.keyCol.isEmpty())
-            mtrStr.append("\"keyColumn\": \"").append(keyCol).append("\",\r\n");
-        if (this.sql != null && !this.sql.isEmpty())
-            mtrStr.append("\"sql\": \"").append(html ? escapeJsonHTML(sql) : escapeJson(sql)).append("\",\r\n");
-        mtrStr.append("\"metrics\":[");
-        int cnt = this.metrics.size();
-        for (int i = 0; i < cnt; i++) {
-            Metric m = metrics.get(i);
-            if (i > 0)
-                mtrStr.append(",\r\n");
-            mtrStr.append("{\"name\": \"").append(m.getName()).append("\",\"sourceName\":\"")
-                    .append(m.getSourceName() != null && !m.getSourceName().isEmpty() ? m.getSourceName() : m.getName()).append("\", \"inc\": \"")
-                    .append(m.isIncremental() ? "y" : "n").append("\", \"dataType\": \"").append(m.getDataType()).append("\"}");
-        }
-        mtrStr.append("]}");
-        return mtrStr.toString();
-    }
+		for (Metric m : this.metrics) {
+			if (!Metric.isAlphaNumericUnderscoreNotNull(m.getName(), 32)) {
+				valid = false;
+				sb.append("udm metric name ").append(m.getName()).append(" is not valid. Please use alphanumeric and underscore with max length of 32. ");
+			}
+		}
 
-    public static String escapeJsonHTML(String str) {
-        if (str == null)
-            return "";
-        StringBuilder sb = new StringBuilder(str.length());
-        char[] carray = str.toCharArray();
-        for (char c : carray) {
-            if (c == '\"')
-                sb.append("\\u0022");
-            else if (c == '\n')
-                sb.append("\\u000A");
-            else if (c == '\\')
-                sb.append("\\u005C");
-            else if (c == '\r')
-                sb.append("\\u000D");
-            else if (c == '\t')
-                sb.append("\\u0009");
-                // else if(c=='/')
-                // sb.append("\\u002F");
-            else if (c == '\0' || c < ' ')// edw2p has osuser set as two chars (24, 20)
-            {
-                // skip it
-            } else
-                sb.append(c);
-        }
-        return sb.toString();
+		if (!valid)
+			throw new RuntimeException(sb.toString());
+	}
 
-    }
+	public String toJSON(boolean html) {
+		StringBuilder mtrStr = new StringBuilder();
+		mtrStr.append("{\r\n");
+		mtrStr.append("\"groupName\": \"").append(name.toUpperCase()).append("\",\r\n");
+		mtrStr.append("\"auto\": \"").append(auto ? "y" : "n").append("\",\r\n");
+		mtrStr.append("\"source\": \"").append(source).append("\",\r\n");
+		mtrStr.append("\"type\": \"").append(udmType).append("\",\r\n");
+		mtrStr.append("\"storeInCommonTable\": \"").append(this.storeInCommonTable ? "y" : "n").append("\",\r\n");
+		if (this.nameCol != null && !this.nameCol.isEmpty())
+			mtrStr.append("\"nameColumn\": \"").append(nameCol).append("\",\r\n");
+		if (this.valueCol != null && !this.valueCol.isEmpty())
+			mtrStr.append("\"valueColumn\": \"").append(valueCol).append("\",\r\n");
+		if (this.keyCol != null && !this.keyCol.isEmpty())
+			mtrStr.append("\"keyColumn\": \"").append(keyCol).append("\",\r\n");
+		if (this.sql != null && !this.sql.isEmpty())
+			mtrStr.append("\"sql\": \"").append(html ? escapeJsonHTML(sql) : escapeJson(sql)).append("\",\r\n");
+		mtrStr.append("\"metrics\":[");
+		int cnt = this.metrics.size();
+		for (int i = 0; i < cnt; i++) {
+			Metric m = metrics.get(i);
+			if (i > 0)
+				mtrStr.append(",\r\n");
+			mtrStr.append("{\"name\": \"").append(m.getName()).append("\",\"sourceName\":\"")
+					.append(m.getSourceName() != null && !m.getSourceName().isEmpty() ? m.getSourceName() : m.getName()).append("\", \"inc\": \"")
+					.append(m.isIncremental() ? "y" : "n").append("\", \"dataType\": \"").append(m.getDataType()).append("\"}");
+		}
+		mtrStr.append("]}");
+		return mtrStr.toString();
+	}
 
-    public static String escapeJson(String str) {
-        if (str == null)
-            return "";
-        StringBuilder sb = new StringBuilder(str.length());
-        char[] carray = str.toCharArray();
+	public static String escapeJsonHTML(String str) {
+		if (str == null)
+			return "";
+		StringBuilder sb = new StringBuilder(str.length());
+		char[] carray = str.toCharArray();
+		for (char c : carray) {
+			if (c == '\"')
+				sb.append("\\u0022");
+			else if (c == '\n')
+				sb.append("\\u000A");
+			else if (c == '\\')
+				sb.append("\\u005C");
+			else if (c == '\r')
+				sb.append("\\u000D");
+			else if (c == '\t')
+				sb.append("\\u0009");
+			// else if(c=='/')
+			// sb.append("\\u002F");
+			else if (c == '\0' || c < ' ')// edw2p has osuser set as two chars (24, 20)
+			{
+				// skip it
+			} else
+				sb.append(c);
+		}
+		return sb.toString();
 
-        for (char c : carray) {
-            if (c == '\"')
-                sb.append("\\\"");
-            else if (c == '\n')
-                sb.append("\\n");
-            else if (c == '\r')
-                sb.append("\\r");
-            else if (c == '\t')
-                sb.append("\\t");
-                // else if(c=='/')
-                // sb.append("\\u002F");
-            else if (c == '\0' || c < ' ') {
-                // skip it
-            } else
-                sb.append(c);
-        }
+	}
 
-        return sb.toString();
-    }
+	public static String escapeJson(String str) {
+		if (str == null)
+			return "";
+		StringBuilder sb = new StringBuilder(str.length());
+		char[] carray = str.toCharArray();
 
-    public static UserDefinedMetrics createFromJson(java.io.InputStream in) {
-        JsonReader jsonReader = null;
-        UserDefinedMetrics udm = null;
+		for (char c : carray) {
+			if (c == '\"')
+				sb.append("\\\"");
+			else if (c == '\n')
+				sb.append("\\n");
+			else if (c == '\r')
+				sb.append("\\r");
+			else if (c == '\t')
+				sb.append("\\t");
+			// else if(c=='/')
+			// sb.append("\\u002F");
+			else if (c == '\0' || c < ' ') {
+				// skip it
+			} else
+				sb.append(c);
+		}
 
-        try {
-            jsonReader = javax.json.Json.createReader(in);
-            JsonObject jsonObject = jsonReader.readObject();
-            jsonReader.close();
-            udm = new UserDefinedMetrics(jsonObject.getString("groupName"));
-            udm.setAuto("y".equalsIgnoreCase(jsonObject.getString("auto", null)));
-            udm.setStoreInCommonTable("y".equalsIgnoreCase(jsonObject.getString("storeInCommonTable", null)));
-            udm.setSource(jsonObject.getString("source"));
-            udm.setUdmType(jsonObject.getString("type"));
-            udm.setNameCol(jsonObject.getString("nameColumn", null));
-            udm.setValueCol(jsonObject.getString("valueColumn", null));
-            udm.setKeyCol(jsonObject.getString("keyColumn", null));
-            udm.setSql(jsonObject.getString("sql", null));
+		return sb.toString();
+	}
 
-            JsonArray metrics = jsonObject.getJsonArray("metrics");
-            if (metrics != null) {
-                int mlen = metrics.size();
-                for (int i = 0; i < mlen; i++) {
-                    JsonObject mobj = metrics.getJsonObject(i);
-                    udm.addMetric(mobj.getString("name"), mobj.getString("sourceName"), "y".equalsIgnoreCase(mobj.getString("inc")),
-                            Metric.strToMetricDataType(mobj.getString("dataType")));
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+	public static UserDefinedMetrics createFromJson(java.io.InputStream in) {
+		JsonReader jsonReader = null;
+		UserDefinedMetrics udm = null;
 
-        return udm;
-    }
+		try {
+			jsonReader = javax.json.Json.createReader(in);
+			JsonObject jsonObject = jsonReader.readObject();
+			jsonReader.close();
+			udm = new UserDefinedMetrics(jsonObject.getString("groupName"));
+			udm.setAuto("y".equalsIgnoreCase(jsonObject.getString("auto", null)));
+			udm.setStoreInCommonTable("y".equalsIgnoreCase(jsonObject.getString("storeInCommonTable", null)));
+			udm.setSource(jsonObject.getString("source"));
+			udm.setUdmType(jsonObject.getString("type"));
+			udm.setNameCol(jsonObject.getString("nameColumn", null));
+			udm.setValueCol(jsonObject.getString("valueColumn", null));
+			udm.setKeyCol(jsonObject.getString("keyColumn", null));
+			udm.setSql(jsonObject.getString("sql", null));
 
-    public boolean isStoreInCommonTable() {
-        return storeInCommonTable;
-    }
+			JsonArray metrics = jsonObject.getJsonArray("metrics");
+			if (metrics != null) {
+				int mlen = metrics.size();
+				for (int i = 0; i < mlen; i++) {
+					JsonObject mobj = metrics.getJsonObject(i);
+					udm.addMetric(mobj.getString("name"), mobj.getString("sourceName"), "y".equalsIgnoreCase(mobj.getString("inc")),
+							Metric.strToMetricDataType(mobj.getString("dataType")));
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
-    public void setStoreInCommonTable(boolean storeInCommonTable) {
-        this.storeInCommonTable = storeInCommonTable;
-        this.metricsGroup.setStoreInCommonTable(storeInCommonTable);
-    }
+		return udm;
+	}
+
+	public boolean isStoreInCommonTable() {
+		return storeInCommonTable;
+	}
+
+	public void setStoreInCommonTable(boolean storeInCommonTable) {
+		this.storeInCommonTable = storeInCommonTable;
+		this.metricsGroup.setStoreInCommonTable(storeInCommonTable);
+	}
+
+
 }

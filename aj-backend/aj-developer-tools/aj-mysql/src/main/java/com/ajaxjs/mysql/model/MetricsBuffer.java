@@ -35,8 +35,7 @@ public class MetricsBuffer {
     }
 
 
-    public java.nio.ByteBuffer recordOneRowBymetricsName2(java.sql.ResultSet rs, int snap_id, long timestamp, int sql_time)
-            throws java.sql.SQLException {
+    public java.nio.ByteBuffer recordOneRowBymetricsName2(java.sql.ResultSet rs, int snap_id, long timestamp, int sql_time) throws java.sql.SQLException {
         HashMap<String, String> hs = new HashMap<>();
         while (rs != null && rs.next()) {
             hs.put(rs.getString(metrics.getMetricNameColumn()).toUpperCase(), rs.getString(metrics.getMetricValueColumn()));
@@ -56,20 +55,16 @@ public class MetricsBuffer {
         buf2.putInt(pos, sql_time);
         pos += 4;
         List<Metric> ms = metrics.getMetrics();
-        int len = ms.size();
-        for (int i = 0; i < len; i++) {
-            Metric m = ms.get(i);
+
+        for (Metric m : ms) {
             String val = null;
-            if (hs.containsKey(m.getSourceName().toUpperCase()))
-                val = hs.get(m.getSourceName().toUpperCase());
+            if (hs.containsKey(m.getSourceName().toUpperCase())) val = hs.get(m.getSourceName().toUpperCase());
             if (m.getDataType() == MetricDataType.BYTE) {
-                if (val != null)
-                    buf2.put(pos, Byte.parseByte(val));
+                if (val != null) buf2.put(pos, Byte.parseByte(val));
                 else buf2.put(pos, (byte) 0);
                 pos += 1;
             } else if (m.getDataType() == MetricDataType.SHORT) {
-                if (val != null)
-                    buf2.putShort(pos, Short.parseShort(val));
+                if (val != null) buf2.putShort(pos, Short.parseShort(val));
                 else buf2.putShort(pos, (short) 0);
                 pos += 2;
             } else if (m.getDataType() == MetricDataType.INT) {
@@ -83,18 +78,15 @@ public class MetricsBuffer {
                 } else buf2.putInt(pos, 0);
                 pos += 4;
             } else if (m.getDataType() == MetricDataType.LONG) {
-                if (val != null)
-                    buf2.putLong(pos, Long.parseLong(val));
+                if (val != null) buf2.putLong(pos, Long.parseLong(val));
                 else buf2.putLong(pos, 0);
                 pos += 8;
             } else if (m.getDataType() == MetricDataType.FLOAT) {
-                if (val != null)
-                    buf2.putFloat(pos, Float.parseFloat(val));
+                if (val != null) buf2.putFloat(pos, Float.parseFloat(val));
                 else buf2.putFloat(pos, 0);
                 pos += 4;
             } else if (m.getDataType() == MetricDataType.DOUBLE) {
-                if (val != null)
-                    buf2.putDouble(pos, Double.parseDouble(val));
+                if (val != null) buf2.putDouble(pos, Double.parseDouble(val));
                 else buf2.putDouble(pos, 0);
                 pos += 8;
             }
@@ -129,8 +121,7 @@ public class MetricsBuffer {
 
         for (Metric m : ms) {
             String val = null;
-            if (hs.containsKey(m.getSourceName().toUpperCase()))
-                val = hs.get(m.getSourceName().toUpperCase());
+            if (hs.containsKey(m.getSourceName().toUpperCase())) val = hs.get(m.getSourceName().toUpperCase());
             if (m.getDataType() == MetricDataType.BYTE) {
                 try {
                     buf2.put(pos, Byte.parseByte(val));
@@ -184,20 +175,13 @@ public class MetricsBuffer {
         StringBuilder sb = new StringBuilder(str.length());
         char[] carray = str.toCharArray();
 
-        for (int i = 0; i < carray.length; i++) {
-            char c = carray[i];
-            if (c == '\"')
-                sb.append("\\u0022");
-            else if (c == '\n')
-                sb.append("\\u000A");
-            else if (c == '\\')
-                sb.append("\\u005C");
-            else if (c == '\r')
-                sb.append("\\u000D");
-            else if (c == '\t')
-                sb.append("\\u0009");
-            else if (c == '/')
-                sb.append("\\u002F");
+        for (char c : carray) {
+            if (c == '\"') sb.append("\\u0022");
+            else if (c == '\n') sb.append("\\u000A");
+            else if (c == '\\') sb.append("\\u005C");
+            else if (c == '\r') sb.append("\\u000D");
+            else if (c == '\t') sb.append("\\u0009");
+            else if (c == '/') sb.append("\\u002F");
             else if (c == '\0' || c < ' ')//edw2p has osuser set as two chars (24, 20)
             {
                 //skip it
