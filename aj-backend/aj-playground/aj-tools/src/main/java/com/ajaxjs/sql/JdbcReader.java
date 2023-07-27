@@ -15,6 +15,7 @@ package com.ajaxjs.sql;
 import com.ajaxjs.sql.Lambda.HasZeroResult;
 import com.ajaxjs.sql.Lambda.ResultSetProcessor;
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.ReflectUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import com.ajaxjs.util.reflect.NewInstance;

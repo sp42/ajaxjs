@@ -1,7 +1,5 @@
 package com.ajaxjs.framework.spring.response;
 
-import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.util.ListUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -9,7 +7,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

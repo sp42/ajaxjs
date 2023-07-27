@@ -15,7 +15,6 @@
  */
 package com.ajaxjs.sql;
 
-import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;

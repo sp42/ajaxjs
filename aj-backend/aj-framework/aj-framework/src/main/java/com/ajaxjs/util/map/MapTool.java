@@ -15,8 +15,8 @@
  */
 package com.ajaxjs.util.map;
 
+import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.sql.IgnoreDB;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.logger.LogHelper;

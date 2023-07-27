@@ -1,7 +1,7 @@
 package com.ajaxjs.test;
 
+import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
-import com.ajaxjs.sql.JdbcConnection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +21,6 @@ public class AjFrameworkConfig extends BaseWebMvcConfigure {
 
 	@Bean(value = "dataSource", destroyMethod = "close")
 	DataSource getDs() {
-		return JdbcConnection.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
+		return JdbcConn.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
 	}
 }
