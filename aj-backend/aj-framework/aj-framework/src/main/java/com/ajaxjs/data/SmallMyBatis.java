@@ -153,7 +153,7 @@ public class SmallMyBatis {
         return EXP_PARSER.get(test, params);
     }
 
-    private String parseForEach(String sql, Map<String, Object> params) {
+    private static String parseForEach(String sql, Map<String, Object> params) {
         StringBuilder result = new StringBuilder(sql.length());
         int start = 0, end = sql.indexOf("<forEach>", start);
 
@@ -232,6 +232,7 @@ public class SmallMyBatis {
             paramsMap = new HashMap<>();
 
         sql = generateIfBlock(sql, paramsMap);
+        sql = parseForEach(sql, paramsMap);
         sql = getValuedSQL(sql, paramsMap);
         sql = sql.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
 
