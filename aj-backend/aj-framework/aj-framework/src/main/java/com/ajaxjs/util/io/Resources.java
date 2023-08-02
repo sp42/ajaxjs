@@ -159,16 +159,19 @@ public class Resources {
         return jarDir;
     }
 
+    /**
+     * 列出资源文件列表
+     */
     static void listResourceFile() {
         ClassLoader classLoader = Resources.class.getClassLoader();
         URL resourceUrl = classLoader.getResource("");
 
         if (resourceUrl != null) {
-            File[] files = new File(resourceUrl.getFile()).listFiles();
+            File[] files = new File(resourceUrl.getFile()).listFiles(); // 将URL转换为文件路径
 
             assert files != null;
             for (File file : files) {
-                if (file.isFile())
+                if (file.isFile()) // 是否为普通文件（非目录）
                     System.out.println(file.getName());
             }
         }

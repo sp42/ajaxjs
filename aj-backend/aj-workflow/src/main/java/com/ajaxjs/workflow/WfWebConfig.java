@@ -4,6 +4,8 @@ import javax.sql.DataSource;
 
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.sql.JdbcConnection;
+import com.ajaxjs.util.cache.MemoryCacheManager;
+import com.ajaxjs.util.cache.CacheManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +14,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 
-import com.ajaxjs.util.cache.CacheManager;
-import com.ajaxjs.util.cache.MemoryCacheManager;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration

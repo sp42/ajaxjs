@@ -19,7 +19,6 @@ import java.util.function.Function;
 /**
  * 决策定义 decision 元素
  */
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DecisionModel extends NodeModel {

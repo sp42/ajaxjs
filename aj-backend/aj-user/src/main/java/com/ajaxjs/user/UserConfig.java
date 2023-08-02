@@ -24,7 +24,6 @@ public class UserConfig implements WebMvcConfigurer {
 
     @Bean(value = "dataSource", destroyMethod = "close")
     DataSource getDs() {
-
         return JdbcConn.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
     }
 

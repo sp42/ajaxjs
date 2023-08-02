@@ -31,4 +31,14 @@ public class BaseWfModel implements Serializable, Cloneable {
     protected void fire(IHandler handler, Execution exec) {
         handler.handle(exec);
     }
+
+    @Override
+    public BaseWfModel clone() {
+        try {
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return (BaseWfModel) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

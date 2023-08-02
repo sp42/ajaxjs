@@ -20,13 +20,14 @@ import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StreamUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Scanner;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,10 +53,13 @@ public class FileHelper extends StreamHelper {
      * @param isReplace 是否替换已存在的文件，true = 覆盖
      */
     public static void copy(String target, String dest, boolean isReplace) throws IOException {
+        Path source = Paths.get(target);
+        Path _dest = Paths.get(dest);
+
         if (isReplace)
-            Files.copy(Paths.get(target), Paths.get(dest), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source, _dest, StandardCopyOption.REPLACE_EXISTING);
         else
-            Files.copy(Paths.get(target), Paths.get(dest));
+            Files.copy(source, _dest);
     }
 
     /**
@@ -188,7 +192,8 @@ public class FileHelper extends StreamHelper {
                 throw new IOException(file + " 不能是目录，请指定文件");
 
             if (!file.exists())
-                file.createNewFile();
+                if (file.createNewFile())
+                    LOGGER.info("不会走到这一步");
 
             Files.write(file.toPath(), data);
         } catch (IOException e) {
@@ -252,10 +257,13 @@ public class FileHelper extends StreamHelper {
      */
     public static void mkDir(String folder) {
         File _folder = new File(folder);
-        if (!_folder.exists())// 先检查目录是否存在，若不存在建立
-            _folder.mkdirs();
 
-        _folder.mkdir();
+        if (!_folder.exists())// 先检查目录是否存在，若不存在建立
+            if (!_folder.mkdirs()) // 可以创建多级目录，如果某个父级目录不存在，会一并创建
+                LOGGER.warning("创建目录 {0} 失败", folder);
+
+        if (!_folder.mkdir()) // 只能创建单级目录，且父目录必须存在
+            LOGGER.warning("创建目录 {0} 失败", folder);
     }
 
     /**
@@ -349,7 +357,8 @@ public class FileHelper extends StreamHelper {
      * @return 如 /2008/10/15/ 格式的字符串
      */
     public static String getDirNameByDate() {
-        String datetime = DateUtil.now("yyyy-MM-dd"), year = datetime.substring(0, 4), mouth = datetime.substring(5, 7),
+        String datetime = DateUtil.now(DateUtil.DATE_FORMAT_SHORTER),
+                year = datetime.substring(0, 4), mouth = datetime.substring(5, 7),
                 day = datetime.substring(8, 10);
 
         return SEPARATOR + year + SEPARATOR + mouth + SEPARATOR + day + SEPARATOR;
@@ -401,6 +410,68 @@ public class FileHelper extends StreamHelper {
         } catch (IOException e) {
             LOGGER.warning(e);
             return null;
+        }
+    }
+
+    /**
+     * 检测文件的 MIME 类型
+     * 该方法利用内部的 FileNameMap 来判断 MIME 类型
+     *
+     * @param file 件
+     * @return MIME 类型
+     */
+    public static String getContentTypeByExtName(File file) {
+        return URLConnection.guessContentTypeFromName(file.getName());
+    }
+
+    /**
+     * 检测文件的 MIME 类型
+     * 根据文件流中前几个字符判断。能够判断真实的文件类型，但是，这种方法的主要缺点是速度非常慢。
+     * <a href="https://juejin.cn/post/6950164327404044295">Java获取文件的Mime类型的几种方式总结</a>
+     *
+     * @param file 文件
+     * @return MIME 类型
+     */
+    public static String getContentType(File file) {
+        try {
+            return file.toURI().toURL().openConnection().getContentType();
+        } catch (IOException e) {
+            LOGGER.warning(e);
+            return null;
+        }
+    }
+
+    /**
+     * 检测文件的 MIME 类型
+     * 根据文件流中前几个字符判断。
+     *
+     * @param in 文件流
+     * @return MIME 类型
+     */
+    public static String getContentType(InputStream in) {
+        try {
+            return URLConnection.guessContentTypeFromStream(new BufferedInputStream(in));
+        } catch (IOException e) {
+            LOGGER.warning(e);
+            return null;
+        }
+    }
+
+    /**
+     * 读取大文件
+     * 通过文件流式传输，此解决方案将遍历文件中的所有行-允许处理每行-无需将其保留在内存中
+     */
+    public static void readLargeFileContent(String path, Consumer<String> fn) {
+        try (FileInputStream inputStream = new FileInputStream(path);
+             Scanner sc = new Scanner(inputStream, "UTF-8")) {
+            while (sc.hasNextLine())
+                fn.accept(sc.nextLine());
+
+            // note that Scanner suppresses exceptions
+            if (sc.ioException() != null)
+                throw sc.ioException();
+        } catch (IOException e) {
+            LOGGER.warning(e);
         }
     }
 }
