@@ -1,20 +1,18 @@
 package com.ajaxjs.workflow;
 
-import javax.sql.DataSource;
-
+import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
-import com.ajaxjs.sql.JdbcConnection;
-import com.ajaxjs.util.cache.MemoryCacheManager;
 import com.ajaxjs.util.cache.CacheManager;
+import com.ajaxjs.util.cache.MemoryCacheManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-
-
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class WfWebConfig implements WebMvcConfigurer {
@@ -37,7 +35,7 @@ public class WfWebConfig implements WebMvcConfigurer {
 
     @Bean(value = "dataSource", destroyMethod = "close")
     DataSource getDs() {
-        return JdbcConnection.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
+        return JdbcConn.setupJdbcPool("com.mysql.cj.jdbc.Driver", url, user, psw);
     }
 
     @Bean

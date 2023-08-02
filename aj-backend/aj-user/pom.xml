@@ -28,6 +28,12 @@
             <version>1.0.9</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>aj-web-tag</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- IDEA 下面没 Tomcat，FOR JAR 启动 -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>

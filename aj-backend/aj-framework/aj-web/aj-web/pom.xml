@@ -11,7 +11,7 @@
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
         <version>1.11</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../../pom.xml</relativePath>
     </parent>
 
      <dependencies>

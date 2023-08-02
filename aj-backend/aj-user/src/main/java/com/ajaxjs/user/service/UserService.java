@@ -1,7 +1,6 @@
 package com.ajaxjs.user.service;
 
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.data.entity.CrudUtils;
 import com.ajaxjs.framework.entity.BaseEntityConstants;
 import com.ajaxjs.sass.SaasUtils;
 import com.ajaxjs.user.controller.UserController;
@@ -39,8 +38,6 @@ public class UserService implements UserController {
 
     @Override
     public Boolean update(User user) {
-        CrudUtils.checkId(user);
-
         return CRUD.update(user);
     }
 
