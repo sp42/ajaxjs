@@ -24,6 +24,9 @@ import java.util.Map;
  */
 @Data
 public abstract class BaseModel implements Identity<Long> {
+    /**
+     * 主键
+     */
     private Long id;
 
     /**
@@ -37,14 +40,6 @@ public abstract class BaseModel implements Identity<Long> {
     private Integer stat;
 
 //	private Status stat;
-//
-//	public Status getStat() {
-//		return stat;
-//	}
-//
-//	public void setStat(Status stat) {
-//		this.stat = stat;
-//	}
 
     private String name;
 
@@ -64,7 +59,6 @@ public abstract class BaseModel implements Identity<Long> {
      * 扩展字段
      */
     public Map<String, Object> extractData;
-
 
     public void setExtractData(HashMap<String, Object> extractData /* 若为 Map 不能进行反射，即使强类型也不行 */) {
         this.extractData = extractData;

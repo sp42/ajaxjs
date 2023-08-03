@@ -262,8 +262,9 @@ public class FileHelper extends StreamHelper {
             if (!_folder.mkdirs()) // 可以创建多级目录，如果某个父级目录不存在，会一并创建
                 LOGGER.warning("创建目录 {0} 失败", folder);
 
-        if (!_folder.mkdir()) // 只能创建单级目录，且父目录必须存在
-            LOGGER.warning("创建目录 {0} 失败", folder);
+        if (!_folder.mkdir()) {// 只能创建单级目录，且父目录必须存在
+        }
+//            LOGGER.warning("创建目录 {0} 失败", folder);
     }
 
     /**
