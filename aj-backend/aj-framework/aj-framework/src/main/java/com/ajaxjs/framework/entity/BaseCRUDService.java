@@ -24,4 +24,12 @@ public abstract class BaseCRUDService implements BaseCRUDController {
 
         return namespaces.get(namespace).listMap();
     }
+
+    @Override
+    public Long create(String namespace, Map<String, Object> params){
+        if (!namespaces.containsKey(namespace))
+            throw new BusinessException("没有配置 BaseCRUD");
+
+        return namespaces.get(namespace).create(params);
+    }
 }

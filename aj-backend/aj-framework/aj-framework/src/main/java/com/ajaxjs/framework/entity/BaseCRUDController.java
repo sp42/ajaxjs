@@ -2,6 +2,8 @@ package com.ajaxjs.framework.entity;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +30,7 @@ public interface BaseCRUDController {
      */
     @GetMapping("/common/{namespace}/list")
     List<Map<String, Object>> list(@PathVariable String namespace);
+
+    @PostMapping("/common/{namespace}/create")
+    Long create(@PathVariable String namespace, @RequestParam Map<String, Object> params);
 }
