@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 通用实体快速的 CRUD
@@ -48,12 +49,25 @@ public class BaseCRUD<T, K extends Serializable> {
     }
 
     /**
+     * 获取单笔记录
+     */
+    public Map<String, Object> infoMap(K id) {
+        return CRUD.info("SELECT * FROM " + tableName + " WHERE " + idField + " = ?", id);
+    }
+
+    /**
      * 获取列表
      *
      * @return 列表
      */
     public List<T> list() {
         return list(null);
+    }
+
+    public List<Map<String, Object>> listMap() {
+        String sql = getListSql(null);
+
+        return CRUD.list(sql);
     }
 
     /**
