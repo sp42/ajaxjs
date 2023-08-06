@@ -1,8 +1,14 @@
 package com.ajaxjs.framework.spring;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.rmi.registry.LocateRegistry;
 import java.util.HashSet;
 
+import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
+import javax.management.remote.JMXServiceURL;
 import javax.servlet.Filter;
 
 import org.apache.catalina.LifecycleEvent;
@@ -44,6 +50,8 @@ public class EmbeddedTomcatStarter {
      */
     public boolean isStatedSpring;
 
+    public boolean isEnableJMX = true;
+
     public void init(int port, Class<?>... clz) {
         init(port, null, clz);
     }
@@ -59,6 +67,22 @@ public class EmbeddedTomcatStarter {
 
             BaseWebInitializer.coreStartup(context.getServletContext(), clz);
 //			anotherWayToStartStrping();
+
+            if (isEnableJMX) { // 将定义好的 MBean 注册到 MBeanServer
+                try {
+                    LocateRegistry.createRegistry(9011); //这个步骤很重要，注册一个端口，绑定url  后用于客户端通过 rmi 方式连接 JMXConnectorServer
+                    JMXConnectorServer cs = JMXConnectorServerFactory.newJMXConnectorServer(
+                            new JMXServiceURL("service:jmx:rmi://localhost/jndi/rmi://localhost:9011/jmxrmi"),
+                            null,
+                            ManagementFactory.getPlatformMBeanServer() // 获取当前 JVM 的 MBeanServer，ObjectName 是 MBean 的唯一标示，一个 MBeanServer 不能有重复。
+                            // 完整的格式「自定义命名空间:type=自定义类型,name=自定义名称」。当然你可以只声明 type ，不声明 name
+                    );
+                    cs.start();
+                    LOGGER.info("成功启动 JMXConnectorServer");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             isStatedSpring = true;
             springTime = System.currentTimeMillis() - startedTime;
@@ -191,6 +215,14 @@ public class EmbeddedTomcatStarter {
         connector.setThrowOnFailure(true);
 
         tomcat.getService().addConnector(connector);// 只能设置一个 service,直接拿默认的
+
+        if (isEnableJMX) {
+
+//            Connector jmxConnector = new Connector("org.apache.coyote.jmx.JmxProtocol");
+//            jmxConnector.setPort(8999); // Set the desired JMX port
+//            tomcat.getService().addConnector(jmxConnector);
+        }
+
         tomcat.setConnector(connector); // 设置执行器
     }
 
