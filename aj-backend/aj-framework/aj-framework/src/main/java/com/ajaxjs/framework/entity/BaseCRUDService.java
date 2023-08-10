@@ -26,10 +26,26 @@ public abstract class BaseCRUDService implements BaseCRUDController {
     }
 
     @Override
-    public Long create(String namespace, Map<String, Object> params){
+    public Long create(String namespace, Map<String, Object> params) {
         if (!namespaces.containsKey(namespace))
             throw new BusinessException("没有配置 BaseCRUD");
 
         return namespaces.get(namespace).create(params);
+    }
+
+    @Override
+    public Boolean update(String namespace, Map<String, Object> params) {
+        if (!namespaces.containsKey(namespace))
+            throw new BusinessException("没有配置 BaseCRUD");
+
+        return namespaces.get(namespace).update(params);
+    }
+
+    @Override
+    public Boolean delete(String namespace, Long id) {
+        if (!namespaces.containsKey(namespace))
+            throw new BusinessException("没有配置 BaseCRUD");
+
+        return namespaces.get(namespace).delete(id);
     }
 }

@@ -33,4 +33,10 @@ public interface BaseCRUDController {
 
     @PostMapping("/common/{namespace}/create")
     Long create(@PathVariable String namespace, @RequestParam Map<String, Object> params);
+
+    @PostMapping("/common/{namespace}/update")
+    Boolean update(@PathVariable String namespace, @RequestParam Map<String, Object> params);
+
+    @PostMapping("/common/{namespace}/delete/{id}")
+    Boolean delete(@PathVariable String namespace, @PathVariable Long id);
 }

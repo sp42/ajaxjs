@@ -1,12 +1,10 @@
 package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.sql.util.IdWorker;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
-import org.springframework.util.AlternativeJdkIdGenerator;
 
 import java.io.Serializable;
 import java.util.List;
@@ -137,5 +135,9 @@ public class BaseCRUD<T, K extends Serializable> {
             beforeCreate.accept(params);
 
         return (K) CRUD.create(tableName, params, idField);
+    }
+
+    public Boolean update(Map<String, Object> params) {
+        return CRUD.update(tableName, params, idField);
     }
 }

@@ -2,6 +2,9 @@ package com.ajaxjs.user;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.framework.entity.TableName;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +15,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.sql.DataSource;
 
 @Configuration
+@TableName("s")
+@Data
 public class UserConfig implements WebMvcConfigurer {
     @Value("${db.url}")
     private String url;
@@ -34,6 +39,7 @@ public class UserConfig implements WebMvcConfigurer {
         jdbcWriter.setIdField("id");
         jdbcWriter.setIsAutoIns(true);
 
+        IBaseModel
         return jdbcWriter;
     }
 }
