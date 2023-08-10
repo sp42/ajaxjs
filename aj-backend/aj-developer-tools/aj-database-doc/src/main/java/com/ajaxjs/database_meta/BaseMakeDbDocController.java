@@ -1,9 +1,9 @@
 package com.ajaxjs.database_meta;
 
+import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.database_meta.model.DataSourceInfo;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.response.ResponseResult;
-import com.ajaxjs.sql.JdbcConnection;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +32,7 @@ public abstract class BaseMakeDbDocController {
      */
     @PostMapping
     public Boolean genJsonFile(@RequestBody DataSourceInfo ds) throws SQLException {
-        try (Connection conn = JdbcConnection.getMySqlConnection(ds.getUrl(), ds.getUsername(), ds.getPassword())) {
+        try (Connection conn = JdbcConn.getMySqlConnection(ds.getUrl(), ds.getUsername(), ds.getPassword())) {
 //			DataBaseQuery.saveToDiskJson(conn, getJsonPath() + "json.js");
             DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, null);
 
@@ -58,7 +58,7 @@ public abstract class BaseMakeDbDocController {
 
         try {
             assert ds != null;
-            try (Connection conn = JdbcConnection.getConnection(ds)) {
+            try (Connection conn = JdbcConn.getConnection(ds)) {
                 assert conn != null;
                 DB_DOC_JSON = "DOC_DATA = " + DataBaseQuery.getDoc(conn, conn.getCatalog());
             }

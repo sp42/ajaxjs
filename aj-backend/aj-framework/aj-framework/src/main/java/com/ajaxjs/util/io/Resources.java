@@ -10,12 +10,11 @@
  */
 package com.ajaxjs.util.io;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
@@ -177,4 +176,23 @@ public class Resources {
         }
     }
 
+    /**
+     * 执行 OS  命令
+     *
+     * @param cmd 命令
+     * @param fn  回调函数
+     */
+    public static void executeCMD(String cmd, Consumer<BufferedReader> fn) {
+        Runtime runtime = Runtime.getRuntime();
+
+        try {
+            Process netStart = runtime.exec("net start");
+
+            try (InputStream in = netStart.getInputStream(); BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in))) {
+                fn.accept(bufferedReader);
+            }
+        } catch (IOException e) {
+            LOGGER.warning(e);
+        }
+    }
 }

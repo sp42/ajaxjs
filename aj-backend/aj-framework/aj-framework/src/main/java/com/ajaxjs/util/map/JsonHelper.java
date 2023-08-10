@@ -146,7 +146,7 @@ public class JsonHelper {
         } else if (obj instanceof String)
             return '\"' + jsonString_covert((String) obj) + '\"';
         else if (obj instanceof String[])
-            return jsonArr((String[]) obj, v -> "\"" + v + "\"");
+            return jsonArr((String[]) obj, v -> "\"" + jsonString_covert(v) + "\"");
         else if (obj.getClass() == Integer[].class)
             return jsonArr((Integer[]) obj, String::valueOf);
         else if (obj.getClass() == int[].class) {
