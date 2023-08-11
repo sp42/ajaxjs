@@ -39,7 +39,6 @@ public class UserConfig implements WebMvcConfigurer {
         jdbcWriter.setIdField("id");
         jdbcWriter.setIsAutoIns(true);
 
-        IBaseModel
         return jdbcWriter;
     }
 }

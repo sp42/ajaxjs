@@ -11,6 +11,15 @@ import java.util.List;
 public class Methods {
     private static final LogHelper LOGGER = LogHelper.getLog(Methods.class);
 
+    public static Method getDeclaredMethod(Class<?> clz, String methodName) {
+        try {
+            return clz.getDeclaredMethod(methodName);
+        } catch (NoSuchMethodException e) {
+            LOGGER.warning(e);
+            return null;
+        }
+    }
+
     /**
      * 根据类、方法的字符串和参数列表获取方法对象，支持重载的方法
      *
@@ -101,9 +110,9 @@ public class Methods {
                     LOGGER.warning(e);
                 }
             }
-//			else {
+            //			else {
             // 无实现的接口
-//			}
+            //			}
         }
 
         return null;
@@ -167,12 +176,12 @@ public class Methods {
     public static Class<?>[] getAllSuperClazz(Class<?> clz) {
         List<Class<?>> clzList = new ArrayList<>();
 
-//		while (clz != null) {
-//			clz = clazz.getSuperclass();
-//
-//			if (clz != null && clz != Object.class)
-//				clzList.add(clz);
-//		}
+        //		while (clz != null) {
+        //			clz = clazz.getSuperclass();
+        //
+        //			if (clz != null && clz != Object.class)
+        //				clzList.add(clz);
+        //		}
         for (; clz != Object.class; clz = clz.getSuperclass()) {
             if (clz == null)
                 break;
