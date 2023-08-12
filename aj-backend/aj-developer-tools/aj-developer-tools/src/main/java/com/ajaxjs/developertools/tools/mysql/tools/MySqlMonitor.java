@@ -1,4 +1,4 @@
-package com.ajaxjs.developertools.monitor.mysql;
+package com.ajaxjs.developertools.tools.mysql.tools;
 
 import java.io.IOException;
 import java.io.InputStream;

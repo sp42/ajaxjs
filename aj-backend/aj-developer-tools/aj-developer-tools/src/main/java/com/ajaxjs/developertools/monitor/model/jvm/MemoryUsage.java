@@ -4,17 +4,12 @@ import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
 
 /**
- * MetaSpace
+ * Unit: Byte
  */
 @Data
-public class MetaSpace implements IBaseModel {
-    private String unit = "Byte";
-
-    private long committed;
-
+public class MemoryUsage implements IBaseModel {
     private long init;
-
-    private long max;
-
     private long used;
+    private long committed;
+    private long max;
 }

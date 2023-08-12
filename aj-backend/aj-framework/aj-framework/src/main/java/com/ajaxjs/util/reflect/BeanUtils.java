@@ -83,4 +83,21 @@ public class BeanUtils {
 
         return map;
     }
+
+    /**
+     * 设置 Java Bean 的值
+     *
+     * @param bean      Bean 实体
+     * @param fieldName 字段名
+     * @param value     值
+     */
+    public static void setBeanValue(Object bean, String fieldName, Object value) {
+        try {
+            Field field = bean.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(bean, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+//            LOGGER.warning(e);
+        }
+    }
 }

@@ -1,13 +1,14 @@
 package com.ajaxjs.framework.spring.scheduled;
 
 import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.jdbc_helper.JdbcConn;
+import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.logger.LogHelper;
 import lombok.Data;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.config.*;
@@ -28,8 +29,6 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
     //-----------------Spring 内部处理-----------------------------
 
     private BeanFactory beanFactory;
-
-    private Environment environment;
 
     /**
      * ThreadPoolTaskExecutor是 Spring框架提供的一个线程池执行器，用于管理和执行异步任务
@@ -53,7 +52,6 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
 
     @Override
     public void afterPropertiesSet() {
-        environment = beanFactory.getBean(Environment.class);
         executor = beanFactory.getBean(ThreadPoolTaskExecutor.class);
         scheduledProcessor = beanFactory.getBean(ScheduledAnnotationBeanPostProcessor.class);
 
@@ -66,10 +64,9 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
         }
     }
 
-    //-----------------Spring 内部处理-----------------------------
+    //-----------------Spring 内部处理----------------------------
+    private static final String TASK_NAME = "JOB_TASK_";
 
-    private static final String APP_NAME = "spring.application.name";
-    private static final String TASK_NAME = "_JOB_TASK";
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0L);
 
     /**
@@ -88,39 +85,42 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
         if (CollectionUtils.isEmpty(scheduledTasks))
             return;
 
-        String appName = environment.getProperty(APP_NAME);
-
         for (ScheduledTask s : scheduledTasks) {
             Task task = s.getTask();
 
             if (task instanceof CronTask) {
                 CronTask cronTask = (CronTask) s.getTask();
                 ScheduledMethodRunnable scheduledMethodRunnable = (ScheduledMethodRunnable) cronTask.getRunnable();
+                DataBaseConnection.initDb();
+                String clzName = scheduledMethodRunnable.getMethod().getDeclaringClass().getName();// 类名
 
-                String sql = "SELECT id FROM schedule_job_info WHERE job_express = ? AND job_app_name = ?";
-                Integer id = CRUD.queryOne(Integer.class, sql, cronTask.getExpression(), appName);
+                try {
+                    String sql = "SELECT id FROM schedule_job WHERE class_name = ? AND express = ?";
+                    Integer id = CRUD.queryOne(Integer.class, sql, clzName, cronTask.getExpression());
 
-                if (id == null) { // 持久化
-                    JobInfo jobInfoVO = new JobInfo();
-                    jobInfoVO.setAppName(appName);
-                    jobInfoVO.setExpress(cronTask.getExpression());
-                    jobInfoVO.setClassName(scheduledMethodRunnable.getMethod().getDeclaringClass().getName());// 类名
-                    jobInfoVO.setName(jobInfoVO.getAppName().toUpperCase() + TASK_NAME + ATOMIC_LONG.getAndIncrement());
-                    jobInfoVO.setMethodName(scheduledMethodRunnable.getMethod().getName());
-                    LOGGER.info("持久化");
-                    // scheduledMapper.insertJob(jobInfoVO);
+                    if (id == null) { // 持久化
+                        JobInfo info = new JobInfo();
+                        info.setName(TASK_NAME + ATOMIC_LONG.getAndIncrement());
+                        info.setExpress(cronTask.getExpression());
+                        info.setClassName(clzName);
+                        info.setMethod(scheduledMethodRunnable.getMethod().getName());
+                        info.setStatus(JobInfo.ScheduledConstant.NORMAL_STATUS);
+
+                        CRUD.create(info);
+                    }
+
+                    String _sql = ScheduledController.SQL + " WHERE `status` IN (1, 2)";
+                    List<JobInfo> list = CRUD.list(JobInfo.class, _sql);
+
+                    if (!CollectionUtils.isEmpty(list)) {
+                        for (JobInfo job : list)
+                            cancel(job.getExpress(), job.getClassName(), job.getId(), false);
+                    }
+                } finally {
+                    JdbcConn.closeDb();
                 }
-
-                String _sql = ScheduledController.SQL + " FROM schedule_job_info WHERE `job_status` IN (1, 2)";
-                List<JobInfo> list = CRUD.list(JobInfo.class, _sql);
-
-                if (!CollectionUtils.isEmpty(list)) {
-                    for (JobInfo job : list)
-                        cancel(job.getExpress(), job.getClassName(), job.getId(), false);
-                }
-            } else if (task instanceof FixedRateTask) {
-                // 无法动态修改静态配置任务的状态、暂停/恢复任务，以及终止运行中任务
-            }
+            } else if (task instanceof FixedRateTask)
+                LOGGER.info(task + "无法动态修改静态配置任务的状态、暂停/恢复任务，以及终止运行中任务");
         }
     }
 

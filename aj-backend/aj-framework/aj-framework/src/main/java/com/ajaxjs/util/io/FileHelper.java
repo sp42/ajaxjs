@@ -121,17 +121,6 @@ public class FileHelper extends StreamHelper {
 
         StringBuilder sb = new StringBuilder();
 
-        // Files.newBufferedReader 读取文件
-//		try (BufferedReader reader = Files.newBufferedReader(path, encode);) {
-////			String str = null;
-////			while ((str = reader.readLine()) != null)
-////				sb.append(str);
-//			
-//			reader.lines().forEach(_str -> sb.append(_str));
-//		} catch (IOException e) {
-//			LOGGER.warning(e);
-//		}
-
         try (Stream<String> lines = Files.lines(path, encode)) { // 要关闭文件，否则文件被锁定
             lines.forEach(sb::append);
 

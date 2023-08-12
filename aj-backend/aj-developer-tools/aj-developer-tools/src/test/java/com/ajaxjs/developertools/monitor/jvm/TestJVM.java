@@ -18,6 +18,7 @@ public class TestJVM extends BaseTest {
 
     @Test
     public void testOverview() {
+        jvmMonitorController.attachLocalJvm(17168);
         Overview overview = dashboardService.overview();
         TestHelper.printJson(overview);
 
@@ -25,30 +26,26 @@ public class TestJVM extends BaseTest {
     }
 
     @Autowired
-    VmService vmService;
-    @Autowired
-    private JmxService jmxService;
+    JvmMonitorController jvmMonitorController;
 
     @Test
     public void testVM() {
-        List<Vm> localJvm = vmService.getLocalJvm();
-        TestHelper.printJson(localJvm);
-
+        List<Vm> localJvm = jvmMonitorController.getLocalJvmProcessList();
+//        TestHelper.printJson(localJvm);
         assertNotNull(localJvm);
-
-        vmService.attachJvm(11844);
+        jvmMonitorController.attachLocalJvm(17168);
         testOverview();
     }
 
     @Test
     public void testJmxService() {
-        List<Vm> localJvm = vmService.getLocalJvm();
+        List<Vm> localJvm = jvmMonitorController.getLocalJvmProcessList();
         TestHelper.printJson(localJvm);
 
         assertNotNull(localJvm);
 
-        vmService.attachJvm(11844);
-        List<Node> domains = jmxService.getDomains();
+        jvmMonitorController.attachLocalJvm(11844);
+        List<Node> domains = jvmMonitorController.getDomains();
         TestHelper.printJson(domains);
         assertNotNull(domains);
     }

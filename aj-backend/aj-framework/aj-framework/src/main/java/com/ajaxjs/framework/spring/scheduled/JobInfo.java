@@ -1,8 +1,12 @@
 package com.ajaxjs.framework.spring.scheduled;
 
+import com.ajaxjs.framework.entity.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
+@TableName("schedule_job")
 public class JobInfo {
     /**
      * 主键
@@ -32,12 +36,16 @@ public class JobInfo {
     /**
      * 任务分组
      */
-    private String methodName;
+    private String method;
 
     /**
      * 任务状态：0 进行中 1 任务取消 2 任务删除
      */
     private Integer status;
+
+    private Date createDate;
+
+    private Date updateDate;
 
     /**
      * 任务状态

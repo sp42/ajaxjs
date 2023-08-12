@@ -182,15 +182,12 @@ public class Resources {
      * @param cmd 命令
      * @param fn  回调函数
      */
-    public static void executeCMD(String cmd, Consumer<BufferedReader> fn) {
+    public static void executeCMD(String cmd, Consumer<String> fn) {
         Runtime runtime = Runtime.getRuntime();
 
         try {
             Process netStart = runtime.exec("net start");
-
-            try (InputStream in = netStart.getInputStream(); BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in))) {
-                fn.accept(bufferedReader);
-            }
+            StreamHelper.read(netStart.getInputStream(), fn);
         } catch (IOException e) {
             LOGGER.warning(e);
         }

@@ -1,10 +1,12 @@
 package com.ajaxjs.developertools.tools;
 
+import com.ajaxjs.util.io.StreamHelper;
+
 import java.io.*;
 import java.nio.file.Files;
 
 /**
- * License复制工具
+ * License 复制工具
  *
  * @author jianggujin <a href="https://blog.csdn.net/jianggujin/article/details/81483953">...</a>
  */
@@ -13,23 +15,17 @@ public class LicenseCopyUtils implements FileFilter {
      * 读取 License 文件
      */
     public String readLicenseHeader(InputStream in, String charset) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, charset))) {
-            StringBuilder builder = new StringBuilder("/**\r\n");
-            String line;
+        StringBuilder builder = new StringBuilder("/**\r\n");
 
-            while ((line = reader.readLine()) != null) {
-                builder.append(" * ");
-                builder.append(line);
-                builder.append("\r\n");
-            }
+        StreamHelper.read(in, line -> {
+            builder.append(" * ");
+            builder.append(line);
+            builder.append("\r\n");
+        });
 
-            builder.append(" */");
+        builder.append(" */");
 
-            return builder.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return builder.toString();
     }
 
     /**
@@ -51,7 +47,9 @@ public class LicenseCopyUtils implements FileFilter {
         if (root.isFile()) {
             System.out.println("开始读取并处理：" + root.getAbsolutePath());
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(root.toPath()), charset)); ByteArrayOutputStream stream = new ByteArrayOutputStream(); BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, charset))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(root.toPath()), charset));
+                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream, charset))) {
                 writer.write(headerBody);
                 writer.write("\r\n");
                 String line;

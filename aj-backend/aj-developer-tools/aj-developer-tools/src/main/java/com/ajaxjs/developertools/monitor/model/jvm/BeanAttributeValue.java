@@ -7,7 +7,7 @@ import lombok.Data;
  * BeanAttributeValue
  */
 @Data
-public class BeanAttributeValue  implements IBaseModel {
+public class BeanAttributeValue implements IBaseModel {
     private boolean isCompositeData;
 
     private Object data;

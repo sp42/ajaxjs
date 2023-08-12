@@ -1,8 +1,8 @@
 package com.ajaxjs.web;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
@@ -148,9 +148,9 @@ public class WebHelper {
      * @return Tomcat 端口
      */
     public static int getHttpPort() {
-        try {
-            MBeanServer server;
+        MBeanServer server;
 
+        try {
             if (MBeanServerFactory.findMBeanServer(null).size() > 0)
                 server = MBeanServerFactory.findMBeanServer(null).get(0);
             else
@@ -163,6 +163,7 @@ public class WebHelper {
 
             if (iterator.hasNext()) {
                 ObjectName name = iterator.next();
+
                 return Integer.parseInt(server.getAttribute(name, "port").toString());
             }
         } catch (Exception e) {

@@ -1,52 +1,50 @@
 package com.ajaxjs.developertools.monitor;
 
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.io.StreamHelper;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.Map;
 
 /**
  * @author <a href="https://blog.csdn.net/hj7jay/article/details/51979939">...</a>
  */
 public class LinuxSystemTool {
     /**
-     * 内存的信息 get memory by used info
-     *
-     * @return int[] result
-     * result.length==4;int[0]=MemTotal;int[1]=MemFree;int[2]=SwapTotal;int[3]=SwapFree;
+     * 内存的信息(kb)
      */
-    public static int[] getMemInfo() {
+    public static Map<String, Object> getMemInfo() {
         File file = new File("/proc/meminfo");
+        Map<String, Object> map = new HashMap<>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(file.toPath())))) {
-            int[] result = new int[4];
-            String str;
-            StringTokenizer token;
+        try {
+            StreamHelper.read(Files.newInputStream(file.toPath()), line -> {
+                StringTokenizer token = new StringTokenizer(line);
+                if (!token.hasMoreTokens()) return;
 
-            while ((str = br.readLine()) != null) {
-                token = new StringTokenizer(str);
-                if (!token.hasMoreTokens()) continue;
+                line = token.nextToken();
+                if (!token.hasMoreTokens()) return;
 
-                str = token.nextToken();
-                if (!token.hasMoreTokens()) continue;
-
-                if (str.equalsIgnoreCase("MemTotal:")) result[0] = Integer.parseInt(token.nextToken());
-                else if (str.equalsIgnoreCase("MemFree:")) result[1] = Integer.parseInt(token.nextToken());
-                else if (str.equalsIgnoreCase("SwapTotal:")) result[2] = Integer.parseInt(token.nextToken());
-                else if (str.equalsIgnoreCase("SwapFree:")) result[3] = Integer.parseInt(token.nextToken());
-            }
-
-            Arrays.toString(result);
-            return result;
+                if (line.equalsIgnoreCase("MemTotal:"))
+                    map.put("MemTotal", token.nextToken());
+                else if (line.equalsIgnoreCase("MemFree:"))
+                    map.put("MemFree", token.nextToken());
+                else if (line.equalsIgnoreCase("SwapTotal:"))
+                    map.put("SwapTotal", token.nextToken());
+                else if (line.equalsIgnoreCase("SwapFree:"))
+                    map.put("SwapFree", token.nextToken());
+            });
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
+
+        return map;
     }
 
     /**

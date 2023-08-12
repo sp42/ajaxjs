@@ -20,3 +20,4 @@ public class Node implements IBaseModel {
 
     private List<Node> children;
 }
+

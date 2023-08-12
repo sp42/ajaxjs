@@ -1,10 +1,9 @@
 package com.ajaxjs.developertools.monitor;
 
-import com.ajaxjs.developertools.monitor.model.tomcat.Session;
-import com.ajaxjs.developertools.monitor.model.tomcat.ThreadPool;
-import com.ajaxjs.developertools.monitor.model.tomcat.TomcatInfo;
+import com.ajaxjs.developertools.monitor.model.tomcat.*;
 import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
 import javax.management.*;
@@ -15,36 +14,44 @@ import java.lang.management.MemoryUsage;
 import java.util.*;
 
 /**
- *
+ * 获取 Tomcat 的 JMX 信息
  */
-public class TomcatJmx {
+public class TomcatJmx extends JmxHelper {
     private static final LogHelper LOGGER = LogHelper.getLog(TomcatJmx.class);
 
-    public static TomcatInfo getInfo(String jmxURL) {
+    public TomcatInfo getInfo(String jmxURL) {
         return getInfo(jmxURL, null);
     }
 
-    public static TomcatInfo getInfo(String jmxURL, Integer port) {
+    public TomcatInfo getInfo(String jmxURL, Integer port) {
         TomcatInfo info = new TomcatInfo();
 
-        try (JMXConnector connect = JmxUtils.connect(jmxURL)) {
+        try (JMXConnector connect = connect(jmxURL)) {
             assert connect != null;
             MBeanServerConnection msc = connect.getMBeanServerConnection();
-//            List<Node> tomcat = JmxUtils.getObjectNamesByDomain(msc, "Tomcat");
+            setMsc(msc);
 
-            info.session = getSession(msc);
-            info.threadPool = getThreadList(msc);
-//            system(msc);
-//            jvm(msc);
+            SystemInfo systemInfo = new SystemInfo();
+            ThreadPool threadPool = new ThreadPool();
+            info.jvmInfo = jvm();
+            info.systemInfo = systemInfo;
+            info.session = getSession();
+            info.threadPool = threadPool;
 
-            if (port == null)
-                port = getTomcatPort(msc);
+            if (port == null) port = getTomcatPort(msc);
 
-            ObjectName threadObjName = new ObjectName("Tomcat:name=\"http-nio-" + port + "\",type=ThreadPool");
-            System.out.println("currentThreadCount:" + msc.getAttribute(threadObjName, "currentThreadCount"));// tomcat的线程数对应的属性值
-        } catch (ReflectionException | MalformedObjectNameException | AttributeNotFoundException |
-                 InstanceNotFoundException | MBeanException | IOException e) {
-            e.printStackTrace();
+            everyAttribute(objectNameFactory("Tomcat:name=\"http-nio-" + port + "\",type=ThreadPool"), (key, value) -> BeanUtils.setBeanValue(threadPool, key, value));
+            everyAttribute(objectNameFactory("java.lang:type=Runtime"), (key, value) -> {
+                if ("StartTime".equals(key)) {
+                    Date startTime = new Date((Long) value);
+                    BeanUtils.setBeanValue(systemInfo, key, DateUtil.formatDate(startTime));
+                } else if ("Uptime".equals(key)) {
+                    Date startTime = new Date((Long) value);
+                    BeanUtils.setBeanValue(systemInfo, key, formatTimeSpan((Long) value));
+                } else BeanUtils.setBeanValue(systemInfo, key, value);
+            });
+        } catch (IOException e) {
+            LOGGER.warning(e);
         }
 
         return info;
@@ -55,7 +62,7 @@ public class TomcatJmx {
      */
     private static int getTomcatPort(MBeanServerConnection msc) {
         try {
-            Set<ObjectName> objectNames = msc.queryNames(new ObjectName("Tomcat:type=Connector,*"), null);
+            Set<ObjectName> objectNames = queryNames(msc, "Tomcat:type=Connector,*");
 
             if (CollectionUtils.isEmpty(objectNames))
                 throw new IllegalStateException("没有发现JVM中关联的MBeanServer : " + msc.getDefaultDomain() + " 中的对象名称.");
@@ -65,107 +72,68 @@ public class TomcatJmx {
 
                 if (protocol.equals("HTTP/1.1")) return (Integer) msc.getAttribute(objectName, "port");
             }
-        } catch (MalformedObjectNameException | MBeanException | AttributeNotFoundException | ReflectionException |
-                 InstanceNotFoundException | IOException e) {
-            e.printStackTrace();
+        } catch (MBeanException | AttributeNotFoundException | ReflectionException | InstanceNotFoundException |
+                 IOException e) {
+            LOGGER.warning(e);
         }
 
         return 0;
     }
 
-    private static void jvm(MBeanServerConnection msc) {
+    private List<Session> getSession() {
+        Set<ObjectName> objectNames = queryNames("Tomcat:type=Manager,*");
+        List<Session> list = new ArrayList<>(objectNames.size());
+
+        for (ObjectName obj : objectNames) {
+//            List<Node> tomcat = JmxUtils.getObjectNamesByDomain(msc, "Tomcat");
+//                System.out.println("应用名:" + obj.getKeyProperty("path"));
+//                System.out.println("currentThreadCount:" + msc.getAttribute(threadObjName, "currentThreadCount"));// tomcat的线程数对应的属性值
+
+            Session session = new Session();
+            everyAttribute(objectNameFactory(obj.getCanonicalName()), (key, value) -> BeanUtils.setBeanValue(session, key, value));
+            list.add(session);
+        }
+
+        return list;
+    }
+
+    private JvmInfo jvm() {
         try {
             // 堆使用率
-            ObjectName heapObjName = new ObjectName("java.lang:type=Memory");
-            MemoryUsage heapMemoryUsage = MemoryUsage.from((CompositeDataSupport) msc.getAttribute(heapObjName, "HeapMemoryUsage"));
-            long maxMemory = heapMemoryUsage.getMax();// 堆最大
-            long commitMemory = heapMemoryUsage.getCommitted();// 堆当前分配
-            long usedMemory = heapMemoryUsage.getUsed();
-            System.out.println("heap:" + (double) usedMemory * 100 / commitMemory + "%");// 堆使用率
+            ObjectName heapObjName = objectNameFactory("java.lang:type=Memory");
+            MemoryUsage heapMemoryUsage = MemoryUsage.from((CompositeDataSupport) getMsc().getAttribute(heapObjName, "HeapMemoryUsage"));
 
-            MemoryUsage nonheapMemoryUsage = MemoryUsage.from((CompositeDataSupport) msc.getAttribute(heapObjName, "NonHeapMemoryUsage"));
-            long nonCommitMemory = nonheapMemoryUsage.getCommitted();
-            long nonUsedMemory = heapMemoryUsage.getUsed();
-            System.out.println("nonHeap:" + (double) nonUsedMemory * 100 / nonCommitMemory + "%");
+            // 堆当前分配
+            long commitMemory = heapMemoryUsage.getCommitted(), usedMemory = heapMemoryUsage.getUsed();
+            JvmInfo jvmInfo = new JvmInfo();
+            jvmInfo.setMaxMemory(heapMemoryUsage.getMax());
+            jvmInfo.setHeap(((Long) (usedMemory * 100 / commitMemory)).intValue());
+
+            MemoryUsage nonheapMemoryUsage = MemoryUsage.from((CompositeDataSupport) getMsc().getAttribute(heapObjName, "NonHeapMemoryUsage"));
+            long nonCommitMemory = nonheapMemoryUsage.getCommitted(), nonUsedMemory = heapMemoryUsage.getUsed();
+            jvmInfo.setNonCommitMemory(nonCommitMemory);
+            jvmInfo.setNonUsedMemory(nonUsedMemory);
+            jvmInfo.setNonHeap(((Long) (nonUsedMemory * 100 / nonCommitMemory)).intValue());
 
 //            ObjectName permObjName = new ObjectName("java.lang:type=MemoryPool,name=Perm Gen");
-//            MemoryUsage permGenUsage = MemoryUsage.from((CompositeDataSupport) msc.getAttribute(permObjName, "Usage"));
-//            long committed = permGenUsage.getCommitted();// 持久堆大小
-//            long used = heapMemoryUsage.getUsed();//
-//            System.out.println("perm gen:" + (double) used * 100 / committed + "%");// 持久堆使用率
-        } catch (MalformedObjectNameException | MBeanException | AttributeNotFoundException |
-                 InstanceNotFoundException | ReflectionException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//            MemoryUsage permGenUsage = MemoryUsage.from((CompositeDataSupport) getMsc().getAttribute(permObjName, "Usage"));
+//            long committed = permGenUsage.getCommitted();
+//            long used = heapMemoryUsage.getUsed();
+//
+//            jvmInfo.setCommitted(committed);
+//            jvmInfo.setUsed(used);
+//            jvmInfo.setPermUse(((Long) (used * 100 / committed)).intValue());
 
-    private static void system(MBeanServerConnection msc) {
-        try {
-            ObjectName runtimeObjName = new ObjectName("java.lang:type=Runtime");
-            System.out.println("厂商:" + msc.getAttribute(runtimeObjName, "VmVendor"));
-            System.out.println("程序:" + msc.getAttribute(runtimeObjName, "VmName"));
-            System.out.println("版本:" + msc.getAttribute(runtimeObjName, "VmVersion"));
-            Date startTime = new Date((Long) msc.getAttribute(runtimeObjName, "StartTime"));
-            System.out.println("启动时间:" + DateUtil.formatDate(startTime));
-
-            Long timeSpan = (Long) msc.getAttribute(runtimeObjName, "Uptime");
-            System.out.println("连续工作时间:" + formatTimeSpan(timeSpan));
-        } catch (MalformedObjectNameException | MBeanException | AttributeNotFoundException |
-                 InstanceNotFoundException | ReflectionException | IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static List<Session> getSession(MBeanServerConnection msc) {
-        List<Session> list = new ArrayList<>();
-
-        try {
-            ObjectName managerObjName = new ObjectName("Catalina:type=Manager,*");
-            Set<ObjectName> s = msc.queryNames(managerObjName, null);
-
-            for (ObjectName obj : s) {
-                System.out.println("应用名:" + obj.getKeyProperty("path"));
-                ObjectName objName = new ObjectName(obj.getCanonicalName());
-                Session session = new Session();
-                session.maxActiveSessions = (int) msc.getAttribute(objName, "maxActiveSessions");
-                session.activeSessions = (int) msc.getAttribute(objName, "activeSessions");
-                session.sessionCounter = (int) msc.getAttribute(objName, "sessionCounter");
-
-                list.add(session);
-            }
-        } catch (MalformedObjectNameException | IOException | AttributeNotFoundException | InstanceNotFoundException |
-                 MBeanException | ReflectionException e) {
-            e.printStackTrace();
+            return jvmInfo;
+        } catch (ReflectionException | AttributeNotFoundException | InstanceNotFoundException | MBeanException |
+                 IOException e) {
+            LOGGER.warning(e);
         }
 
-        return list;
+        return null;
     }
 
-    private static List<ThreadPool> getThreadList(MBeanServerConnection msc) {
-        List<ThreadPool> list = new ArrayList<>();
-
-        try {
-            ObjectName threadPoolObjName = new ObjectName("Tomcat:type=ThreadPool,*");
-            Set<ObjectName> s2 = msc.queryNames(threadPoolObjName, null);
-
-            for (ObjectName obj : s2) {
-                System.out.println("端口名:" + obj.getKeyProperty("name"));
-                ObjectName objName = new ObjectName(obj.getCanonicalName());
-
-                ThreadPool pool = new ThreadPool();
-                pool.maxThreads = (int) msc.getAttribute(objName, "maxThreads");
-                pool.currentThreadCount = (int) msc.getAttribute(objName, "currentThreadCount");
-                pool.currentThreadsBusy = (int) msc.getAttribute(objName, "currentThreadsBusy");
-            }
-        } catch (MalformedObjectNameException | IOException | AttributeNotFoundException | InstanceNotFoundException |
-                 MBeanException | ReflectionException e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
-    static String formatTimeSpan(long span) {
+    private static String formatTimeSpan(long span) {
         long minSeconds = span % 1000;
 
         span = span / 1000;

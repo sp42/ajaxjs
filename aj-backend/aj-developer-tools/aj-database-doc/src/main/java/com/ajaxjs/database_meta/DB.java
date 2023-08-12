@@ -2,11 +2,9 @@ package com.ajaxjs.database_meta;
 
 import com.ajaxjs.database_meta.model.*;
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.io.StreamHelper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.*;
@@ -138,21 +136,14 @@ public class DB {
             else
                 p = r.exec("env"); // Unix
 
-            try (
-                InputStream in = p.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(in))
-            ) {
-                String line;
+            StreamHelper.read(p.getInputStream(), line -> {
+                String[] str = line.split("=");
 
-                while ((line = br.readLine()) != null) {
-                    String[] str = line.split("=");
-
-                    if (2 <= str.length)
-                        map.put(str[0], str[1]);
-                }
-            }
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+                if (2 <= str.length)
+                    map.put(str[0], str[1]);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return map;

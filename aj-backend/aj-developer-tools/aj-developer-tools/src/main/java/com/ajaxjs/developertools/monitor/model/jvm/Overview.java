@@ -3,7 +3,6 @@ package com.ajaxjs.developertools.monitor.model.jvm;
 import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
 
-import java.lang.management.MemoryUsage;
 import java.util.List;
 
 /**
@@ -19,7 +18,7 @@ public class Overview implements IBaseModel {
 
     private MemoryUsage nonHeapMemoryUsage;
 
-    private MetaSpace metaSpace;
+    private MemoryUsage metaSpace;
 
     private ThreadInfo threadInfo;
 

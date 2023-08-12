@@ -9,7 +9,7 @@ public class TestTomcat {
 
     @Test
     public void testConnectJMX() {
-        TomcatInfo info = TomcatJmx.getInfo(jmxURL);
+        TomcatInfo info = new TomcatJmx().getInfo(jmxURL);
         TestHelper.printJson(info);
     }
 }

@@ -1,21 +1,19 @@
 package com.ajaxjs.developertools.monitor.jvm;
 
-import com.ajaxjs.developertools.monitor.model.jvm.*;
+import com.ajaxjs.developertools.monitor.JmxHelper;
+import com.ajaxjs.developertools.monitor.model.jvm.MemoryUsage;
 import com.ajaxjs.developertools.monitor.model.jvm.ThreadInfo;
+import com.ajaxjs.developertools.monitor.model.jvm.*;
+import com.ajaxjs.util.reflect.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
 import java.lang.management.*;
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
- * MonitorDashboardService
- * 采集如下几个指标：
+ * MonitorDashboardService 采集如下几个指标：
  * 1. 内存占用
  * 2. CPU 使用率
  * 3. 线程数量
@@ -29,146 +27,95 @@ import java.util.*;
 @Service
 public class MonitorDashboardService {
     @Autowired
-    private JmxService jmxService;
+    private JvmMonitorController jmMonitorController;
 
     public Overview overview() {
-        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-        ObjectName systemBeanObjectName = operatingSystemMXBean.getObjectName();
-        BeanInfo systemBean = jmxService.getObjectNameProperties(systemBeanObjectName.getCanonicalName());
-        BeanInfo jvmBean = jmxService.getObjectNameProperties(runtimeMXBean.getObjectName().getCanonicalName());
-
         Overview overview = new Overview();
-        overview.setSystemInfo(buildSystemInfo(systemBean));
-        overview.setJvmInfo(buildJvmInfo(jvmBean));
-        buildMemoryInfo(overview);
+        overview.setSystemInfo(buildSystemInfo());
+        overview.setJvmInfo(buildJvmInfo());
         overview.setMetaSpace(buildMetaspace());
         overview.setThreadInfo(buildThreadInfo());
         overview.setClassLoadingInfo(buildClassInfo());
-
-        try {
-            overview.setGarbageCollectorInfo(buildGarbageCollectorInfo());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        overview.setGarbageCollectorInfo(buildGarbageCollectorInfo());
+        buildMemoryInfo(overview);
 
         return overview;
-
     }
 
     /**
      * 系统参数
      */
-    private SystemInfo buildSystemInfo(BeanInfo systemBean) {
-        List<BeanAttributeInfo> attributeInfoList = systemBean.getBeanAttributeInfos();
-        SystemInfo systemInfo = new SystemInfo();
+    private SystemInfo buildSystemInfo() {
+        SystemInfo info = new SystemInfo();
 
-        if (CollectionUtils.isEmpty(attributeInfoList))
-            System.out.println("SystemInfo attributeInfoList is EMPTY");
-        else
-            for (BeanAttributeInfo beanAttributeInfo : attributeInfoList) {
-                String name = beanAttributeInfo.getName();
-                String firstCharLowerCase = name.substring(0, 1).toLowerCase();
-                name = name.replaceFirst("[A-Z]", firstCharLowerCase);
+        for (BeanAttributeInfo beanInfo : getBeanAttributeInfoList(ManagementFactory.getOperatingSystemMXBean())) {
+            String name = parseName(beanInfo);
 
-                if ("objectName".equals(name))// 忽略这个 会报错
-                    continue;
+            if ("objectName".equals(name))// 忽略这个 会报错
+                continue;
 
-                setValue(systemInfo, name, beanAttributeInfo.getValue().getData());
-            }
+            BeanUtils.setBeanValue(info, name, getData(beanInfo));
+        }
 
-        return systemInfo;
+        return info;
     }
 
     /**
      * jvm 参数
      */
-    private JvmInfo buildJvmInfo(BeanInfo runtimeBean) {
-        List<BeanAttributeInfo> attributeInfoList = runtimeBean.getBeanAttributeInfos();
-        JvmInfo jvmInfo = new JvmInfo();
+    @SuppressWarnings("unchecked")
+    private JvmInfo buildJvmInfo() {
+        JvmInfo info = new JvmInfo();
 
-        if (CollectionUtils.isEmpty(attributeInfoList))
-            System.out.println("JvmInfo attributeInfoList is EMPTY");
-        else
-            for (BeanAttributeInfo beanAttributeInfo : attributeInfoList) {
-                String name = beanAttributeInfo.getName();
-                String firstCharLowerCase = name.substring(0, 1).toLowerCase();
-                name = name.replaceFirst("[A-Z]", firstCharLowerCase);
+        for (BeanAttributeInfo beanInfo : getBeanAttributeInfoList(ManagementFactory.getRuntimeMXBean())) {
+            String name = parseName(beanInfo);
 
-                if ("objectName".equals(name))// 忽略这个 会报错
-                    continue;
+            if ("objectName".equals(name))// 忽略这个 会报错
+                continue;
 
-                if (!name.equals("systemProperties"))
-                    setValue(jvmInfo, name, beanAttributeInfo.getValue().getData());
-                else {
-                    /*
-                     * systemProperties 格式特殊 需要单独处理
-                     */
-                    List<TreeMap<String, Object>> properties = (ArrayList) beanAttributeInfo.getValue().getData();
-                    jvmInfo.setSystemProperties(properties);
-                }
-            }
+            if (!name.equals("systemProperties"))
+                BeanUtils.setBeanValue(info, name, getData(beanInfo));
+            else
+                info.setSystemProperties((List<TreeMap<String, Object>>) getData(beanInfo)); // systemProperties 格式特殊 需要单独处理
+        }
 
-        return jvmInfo;
+        return info;
     }
-
-    private static final String HEAP_MEMORY = "HeapMemoryUsage";
-
-    private static final String NON_HEAP_MEMORY = "NonHeapMemoryUsage";
 
     /**
      * jvm 内存信息 堆和非堆
      */
     private void buildMemoryInfo(Overview overview) {
-        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
-        BeanInfo beanInfo = jmxService.getObjectNameProperties(memoryMXBean.getObjectName().getCanonicalName());
-        List<BeanAttributeInfo> beanAttributeInfoList = beanInfo.getBeanAttributeInfos();
-
-        if (CollectionUtils.isEmpty(beanAttributeInfoList))
-            System.out.println("BeanAttributeInfoList is EMPTY");
-        else
-            for (BeanAttributeInfo beanAttributeInfo : beanAttributeInfoList) {
-                if (beanAttributeInfo.getName().equals(HEAP_MEMORY))
-                    overview.setHeapMemoryUsage(buildMemoryUsage(beanAttributeInfo));
-                else if (beanAttributeInfo.getName().equals(NON_HEAP_MEMORY))
-                    overview.setNonHeapMemoryUsage(buildMemoryUsage(beanAttributeInfo));
-            }
+        for (BeanAttributeInfo beanInfo : getBeanAttributeInfoList(ManagementFactory.getMemoryMXBean())) {
+            if (beanInfo.getName().equals("HeapMemoryUsage"))
+                overview.setHeapMemoryUsage(buildMemoryUsage(beanInfo));
+            else if (beanInfo.getName().equals("NonHeapMemoryUsage"))
+                overview.setNonHeapMemoryUsage(buildMemoryUsage(beanInfo));
+        }
     }
 
-    private MemoryUsage buildMemoryUsage(BeanAttributeInfo beanAttributeInfo) {
-        @SuppressWarnings("unchecked")
-        SortedMap<String, Object> map = (TreeMap<String, Object>) beanAttributeInfo.getValue().getData();
-        long init = Long.parseLong(map.get("init").toString());
-        long used = Long.parseLong(map.get("used").toString());
-        long committed = Long.parseLong(map.get("committed").toString());
-        long max = Long.parseLong(map.get("max").toString());
+    private MemoryUsage buildMemoryUsage(BeanAttributeInfo beanInfo) {
+        MemoryUsage info = new MemoryUsage();
 
-        return new MemoryUsage(init, used, committed, max);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> map = (Map<String, Object>) getData(beanInfo);
+
+        BeanUtils.setBeanValue(info, "init", map.get("init"));
+        BeanUtils.setBeanValue(info, "used", map.get("used"));
+        BeanUtils.setBeanValue(info, "committed", map.get("committed"));
+        BeanUtils.setBeanValue(info, "max", map.get("max"));
+
+        return info;
     }
 
     /**
-     * Metaspace 元空间信息
+     * MetaSpace 元空间信息
      */
-    private MetaSpace buildMetaspace() {
-        MetaSpace metaSpace = new MetaSpace();
-        BeanInfo beanInfo = jmxService.getObjectNameProperties("java.lang:name=Metaspace,type=MemoryPool");
-        List<BeanAttributeInfo> beanAttributeInfoList = beanInfo.getBeanAttributeInfos();
-
-        if (CollectionUtils.isEmpty(beanAttributeInfoList))
-            System.out.println("MetaSpace AttributeInfoList is EMPTY");
-        else
-            for (BeanAttributeInfo attributeInfo : beanAttributeInfoList) {
-                if (attributeInfo.getName().equals("Usage")) {
-                    @SuppressWarnings("unchecked")
-                    TreeMap<String, Object> usageMap = (TreeMap<String, Object>) attributeInfo.getValue().getData();
-                    metaSpace.setCommitted((long) usageMap.get("committed"));
-                    metaSpace.setInit((long) usageMap.get("init"));
-                    metaSpace.setMax((long) usageMap.get("max"));
-                    metaSpace.setUsed((long) usageMap.get("used"));
-
-                    return metaSpace;
-                }
-            }
+    private MemoryUsage buildMetaspace() {
+        for (BeanAttributeInfo beanInfo : jmMonitorController.getPropertyList("java.lang:name=Metaspace,type=MemoryPool").getBeanAttributeInfos()) {
+            if (beanInfo.getName().equals("Usage"))
+                return buildMemoryUsage(beanInfo);
+        }
 
         return null;
     }
@@ -177,110 +124,104 @@ public class MonitorDashboardService {
      * 线程信息
      */
     private ThreadInfo buildThreadInfo() {
-        ThreadInfo threadInfo = new ThreadInfo();
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        BeanInfo beanInfo = jmxService.getObjectNameProperties(threadMXBean.getObjectName().getCanonicalName());
-        List<BeanAttributeInfo> beanAttributeInfoList = beanInfo.getBeanAttributeInfos();
+        ThreadInfo info = new ThreadInfo();
 
-        if (CollectionUtils.isEmpty(beanAttributeInfoList))
-            System.out.println("ThreadInfo AttributeInfoList is EMPTY");
-        else
-            for (BeanAttributeInfo beanAttributeInfo : beanAttributeInfoList) {
-                switch (beanAttributeInfo.getName()) {
-                    case "ThreadCount":
-                        threadInfo.setLiveThreadCount((int) beanAttributeInfo.getValue().getData());
-                        break;
-                    case "DaemonThreadCount":
-                        threadInfo.setDaemonThreadCount((int) beanAttributeInfo.getValue().getData());
-                        break;
-                    case "TotalStartedThreadCount":
-                        threadInfo.setTotalStartedThreadCount((long) beanAttributeInfo.getValue().getData());
-                        break;
-                    case "PeakThreadCount":
-                        threadInfo.setLivePeakThreadCount((int) beanAttributeInfo.getValue().getData());
-                        break;
-                }
+        for (BeanAttributeInfo beanInfo : getBeanAttributeInfoList(ManagementFactory.getThreadMXBean())) {
+            switch (beanInfo.getName()) {
+                case "ThreadCount":
+                    info.setLiveThreadCount(getData(beanInfo, int.class));
+                    break;
+                case "DaemonThreadCount":
+                    info.setDaemonThreadCount(getData(beanInfo, int.class));
+                    break;
+                case "TotalStartedThreadCount":
+                    info.setTotalStartedThreadCount(getData(beanInfo, long.class));
+                    break;
+                case "PeakThreadCount":
+                    info.setLivePeakThreadCount(getData(beanInfo, int.class));
+                    break;
             }
+        }
 
-        return threadInfo;
+        return info;
     }
 
     /**
      * class 信息
      */
     private ClassLoadingInfo buildClassInfo() {
-        ClassLoadingInfo classLoadingInfo = new ClassLoadingInfo();
-        ClassLoadingMXBean classLoadingMXBean = ManagementFactory.getClassLoadingMXBean();
-        BeanInfo beanInfo = jmxService.getObjectNameProperties(classLoadingMXBean.getObjectName().getCanonicalName());
-        List<BeanAttributeInfo> beanAttributeInfoList = beanInfo.getBeanAttributeInfos();
+        ClassLoadingInfo info = new ClassLoadingInfo();
 
-        if (CollectionUtils.isEmpty(beanAttributeInfoList))
-            System.out.println("ClassLoadingInfo AttributeInfoList is EMPTY");
-        else
-            for (BeanAttributeInfo beanAttributeInfo : beanAttributeInfoList) {
-                switch (beanAttributeInfo.getName()) {
-                    case "TotalLoadedClassCount":
-                        classLoadingInfo.setTotalLoadedClassCount((long) beanAttributeInfo.getValue().getData());
-                        break;
-                    case "LoadedClassCount":
-                        classLoadingInfo.setLoadedClassCount((int) beanAttributeInfo.getValue().getData());
-                        break;
-                    case "UnloadedClassCount":
-                        classLoadingInfo.setUnloadedClassCount((long) beanAttributeInfo.getValue().getData());
-                        break;
-                }
-            }
+        for (BeanAttributeInfo beanInfo : getBeanAttributeInfoList(ManagementFactory.getClassLoadingMXBean())) {
+            String name = beanInfo.getName();
 
-        return classLoadingInfo;
+            if (ignore(name))
+                continue;
+
+            BeanUtils.setBeanValue(info, toLowerCaseFirstChar(name), getData(beanInfo));
+        }
+
+        return info;
     }
 
     /**
      * 垃圾收集器信息
      */
-    private List<GarbageInfo> buildGarbageCollectorInfo() throws Exception {
+    private List<GarbageInfo> buildGarbageCollectorInfo() {
         List<GarbageInfo> garbageInfoList = new ArrayList<>();
-        JmxConnectorInstance commonConfig = JmxConnectorInstance.INSTANCE;
-        JMXConnector connector = commonConfig.getJmxConnector();
-        MBeanServerConnection msc = connector.getMBeanServerConnection();
-        ObjectName queryObjectName = new ObjectName("java.lang:name=*,type=GarbageCollector");
-        Set<ObjectName> objectNames = msc.queryNames(queryObjectName, null);
+        Set<ObjectName> objectNames = JmxHelper.queryNames(jmMonitorController.INSTANCE.getMsc(), "java.lang:name=*,type=GarbageCollector");
+        assert objectNames != null;
 
-        if (CollectionUtils.isEmpty(objectNames))
-            System.out.println("GarbageInfo objectNames is EMPTY");
-        else
-            for (ObjectName objectName : objectNames) {
-                BeanInfo beanInfo = jmxService.getObjectNameProperties(objectName.getCanonicalName());
-                List<BeanAttributeInfo> beanAttributeInfoList = beanInfo.getBeanAttributeInfos();
-                GarbageInfo garbageInfo = new GarbageInfo();
+        for (ObjectName objectName : objectNames) {
+            GarbageInfo info = new GarbageInfo();
 
-                for (BeanAttributeInfo beanAttributeInfo : beanAttributeInfoList) {
-                    switch (beanAttributeInfo.getName()) {
-                        case "Name":
-                            garbageInfo.setName(beanAttributeInfo.getValue().getData().toString());
-                            break;
-                        case "CollectionCount":
-                            garbageInfo.setCollectionCount((long) beanAttributeInfo.getValue().getData());
-                            break;
-                        case "MemoryPoolNames":
-                            String[] pools = (String[]) beanAttributeInfo.getValue().getData();
-                            garbageInfo.setMemoryPoolNames(pools);
-                            break;
-                    }
+            for (BeanAttributeInfo beanInfo : jmMonitorController.getPropertyList(objectName.getCanonicalName()).getBeanAttributeInfos()) {
+                switch (beanInfo.getName()) {
+                    case "Name":
+                        info.setName(getData(beanInfo, String.class));
+                        break;
+                    case "CollectionCount":
+                        info.setCollectionCount(getData(beanInfo, long.class));
+                        break;
+                    case "MemoryPoolNames":
+                        info.setMemoryPoolNames(getData(beanInfo, String[].class));
+                        break;
                 }
-
-                garbageInfoList.add(garbageInfo);
             }
+
+            garbageInfoList.add(info);
+        }
 
         return garbageInfoList;
     }
 
-    public static <T> void setValue(T t, String fieldName, Object value) {
-        try {
-            Field field = t.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(t, value);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    private List<BeanAttributeInfo> getBeanAttributeInfoList(PlatformManagedObject obj) {
+        BeanInfo beanInfo = jmMonitorController.getPropertyList(obj.getObjectName().getCanonicalName());
+
+        return beanInfo.getBeanAttributeInfos();
     }
+
+    private static boolean ignore(String str) {
+        return "Verbose".equals(str) || "ObjectName".equals(str);
+    }
+
+    private static String toLowerCaseFirstChar(String input) {
+        return Character.toLowerCase(input.charAt(0)) + input.substring(1);
+    }
+
+    private static Object getData(BeanAttributeInfo info) {
+        return info.getValue().getData();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T getData(BeanAttributeInfo info, Class<T> clz) {
+        return (T) getData(info);
+    }
+
+    private static String parseName(BeanAttributeInfo info) {
+        String name = info.getName(), firstCharLowerCase = name.substring(0, 1).toLowerCase();
+
+        return name.replaceFirst("[A-Z]", firstCharLowerCase);
+    }
+
 }
