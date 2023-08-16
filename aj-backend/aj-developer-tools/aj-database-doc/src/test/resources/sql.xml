@@ -15,7 +15,7 @@
     <sql id="long_running_processlist" comments="Display MySQL processlist for queries running for more than specified time">
         SELECT * FROM information_schema.processlist where command!='Sleep' AND command!='Binlog Dump' AND command!='Connect' AND command!='Daemon'
             AND command!='Binlog Dump GTID' AND user!='system user' AND user!='event_scheduler' where time &gt;&amp;p_1
-        
+
         <param name="time_sec"  dataType="numeric"/>
     </sql>
     <sql id="innodb_buffer_pool_status" expandRow="y" comments="Display MySQL inndodb buffer pool statistics">
@@ -220,7 +220,7 @@
             COUNT_READ, SUM_TIMER_READ/1000000000 TIMER_READ_MS, SUM_NUMBER_OF_BYTES_READ BYTES_READ,
             COUNT_WRITE, SUM_TIMER_WRITE/1000000000 TIMER_WRITE_MS, SUM_NUMBER_OF_BYTES_WRITE BYTES_WRITE ,
             COUNT_MISC, SUM_TIMER_MISC/1000000000 TIMER_MISC_MS
-            FROM performance_schema.file_summary_by_instance where count_read &gt; 0 or count_write &gt;0 or COUNT_MISC &gt; 0
+        FROM performance_schema.file_summary_by_instance WHERE count_read &gt; 0 OR count_write &gt; 0 OR COUNT_MISC &gt; 0
     </sql>
     <sql id="perf_threads" comments="Display MySQL thread AND processlist">
         SELECT t.thread_id, t.name, t.processlist_id, p.user processlist_user, p.host processlist_host, p.db processlist_db,
@@ -306,14 +306,13 @@
         <param name="count" dataType="numeric"/>
     </sql>
     <sql id="perf_events_waits_current" comments="Display MySQL current waits">
-        SELECT NAME, pps.processlist_id as "ID", pps.thread_id as "THREAD",
+<!--        SELECT NAME, pps.processlist_id as "ID", pps.thread_id as "THREAD",
             IF(pps.processlist_id=0, 'Internal Thread', CONCAT(ips.user, '@', ips.host)) as USER,
             DB, COMMAND, STATE, TIME, EVENT_NAME LAST_WAIT,
             IF(TIMER_WAIT IS NULL, 'Still Waiting', TIMER_WAIT/1000000000) as LAST_WAIT_MS
-            FROM performance_schema.events_waits_current
-            JOIN performance_schema.threads pps USING (thread_id)
-            LEFT JOIN information_schema.processlist ips on (pps.processlist_id=ips.id)
-        <vsql minVersion="5.6">
+        FROM performance_schema.events_waits_current JOIN performance_schema.threads pps USING (thread_id)
+        LEFT JOIN information_schema.processlist ips on (pps.processlist_id=ips.id)-->
+
             SELECT
                 pps.processlist_id as "ID",
                 pps.thread_id as "THREAD",
@@ -336,28 +335,24 @@
                 IF(esc.timer_wait IS NOT NULL, esc.timer_wait/1000000000, NULL) as LAST_STATEMENT_LATENCY,
                 IF(esc.lock_time IS NOT NULL, esc.lock_time/1000000000, NULL) as LOCK_LATENCY,
                 IF(pps.name='thread/sql/one_connection', CONCAT(pps.processlist_user, '@', pps.processlist_host),
-                REPLACE(pps.name, 'thread/','')) as USER,
-                esc.sql_text SQL_TEXT
-            FROM
-            performance_schema.threads AS pps
+                REPLACE(pps.name, 'thread/','')) as USER, esc.sql_text SQL_TEXT
+            FROM performance_schema.threads AS pps
             LEFT JOIN performance_schema.events_waits_current AS ewc USING(thread_id)
             LEFT JOIN performance_schema.events_statements_current AS esc USING(thread_id)
-            ORDER BY
-            pps.processlist_time DESC, LAST_WAIT_MS DESC
-        </vsql>
+            ORDER BY pps.processlist_time DESC, LAST_WAIT_MS DESC
     </sql>
     <sql id="perf_events_waits_summary" comments="Display MySQL events waits summary by name">
-        SELECT e.event_name, e.count_star, e.sum_timer_wait/1000000000 WAIT_MS FROM performance_schema.events_waits_summary_global_by_event_name e 
+        SELECT e.event_name, e.count_star, e.sum_timer_wait/1000000000 WAIT_MS FROM performance_schema.events_waits_summary_global_by_event_name e
         WHERE e.count_star &gt; 0 ORDER BY e.event_name LIMIT 5000
     </sql>
-    
+
     <sql id="perf_thread_stmt_summary" comments="Display MySQL statement summary by name for a given thread">
         SELECT e.event_name, e.count_star, e.sum_timer_wait/1000000000 WAIT_MS, e.sum_lock_time/1000000000 LOCK_MS
             FROM performance_schema.events_statements_summary_by_thread_by_event_name e
             where e.count_star &gt; 0 AND thread_id = &amp; ?
             order by e.event_name
     </sql>
-    
+
     <sql id="perf_thread_waits_summary" comments="Display MySQL waits summary by name for a given thread">
         SELECT e.event_name, e.count_star, e.sum_timer_wait/1000000000 WAIT_MS
             FROM performance_schema.events_waits_summary_by_thread_by_event_name e
@@ -378,17 +373,18 @@
             avg_timer_wait/1000000000 AVG_WAIT_MS FROM performance_schema.objects_summary_global_by_type WHERE count_star&gt;0 order by  1 limit 5000
     </sql>
 
-    
+
     <sql id="perf_table_io_summary">
-        SELECT CONCAT(object_type, ':', object_schema, '.', object_name) NAME,
-        count_star, sum_timer_wait/1000000000 WAIT_MS, min_timer_wait/1000000000 MIN_WAIT_MS, max_timer_wait/1000000000 MAX_WAIT_MS, avg_timer_wait/1000000000 AVG_WAIT_MS,
-        count_read, sum_timer_read/1000000000 READ_MS, min_timer_read/1000000000 MIN_READ_MS, avg_timer_read/1000000000 AVG_READ_MS, max_timer_read/1000000000 MAX_READ_MS,
-        count_write, sum_timer_write/1000000000 WRITE_MS, min_timer_write/1000000000 MIN_WRITE_MS, avg_timer_write/1000000000 AVG_WRITE_MS, max_timer_write/1000000000 MAX_WRITE_MS,
-        count_fetch, sum_timer_fetch/1000000000 FETCH_MS, min_timer_fetch/1000000000 MIN_FETCH_MS, avg_timer_fetch/1000000000 AVG_FETCH_MS, max_timer_fetch/1000000000 MAX_FETCH_MS,
-        count_insert, sum_timer_insert/1000000000 INSERT_MS, min_timer_insert/1000000000 MIN_INSERT_MS, avg_timer_insert/1000000000 AVG_INSERT_MS, max_timer_insert/1000000000 MAX_INSERT_MS,
-        count_update, sum_timer_update/1000000000 UPDATE_MS, min_timer_update/1000000000 MIN_UPDATE_MS, avg_timer_update/1000000000 AVG_UPDATE_MS, max_timer_update/1000000000 MAX_UPDATE_MS,
-        count_delete, sum_timer_delete/1000000000 DELETE_MS, min_timer_delete/1000000000 MIN_DELETE_MS, avg_timer_delete/1000000000 AVG_DELETE_MS, max_timer_delete/1000000000 MAX_DELETE_MS
-        FROM performance_schema.table_io_waits_summary_by_table WHERE count_star&gt; 0 ORDER BY 1 LIMIT 5000
+        SELECT
+            CONCAT(object_type, ':', object_schema, '.', object_name) NAME,
+            count_star, sum_timer_wait/1000000000 WAIT_MS, min_timer_wait/1000000000 MIN_WAIT_MS, max_timer_wait/1000000000 MAX_WAIT_MS, avg_timer_wait/1000000000 AVG_WAIT_MS,
+            count_read, sum_timer_read/1000000000 READ_MS, min_timer_read/1000000000 MIN_READ_MS, avg_timer_read/1000000000 AVG_READ_MS, max_timer_read/1000000000 MAX_READ_MS,
+            count_write, sum_timer_write/1000000000 WRITE_MS, min_timer_write/1000000000 MIN_WRITE_MS, avg_timer_write/1000000000 AVG_WRITE_MS, max_timer_write/1000000000 MAX_WRITE_MS,
+            count_fetch, sum_timer_fetch/1000000000 FETCH_MS, min_timer_fetch/1000000000 MIN_FETCH_MS, avg_timer_fetch/1000000000 AVG_FETCH_MS, max_timer_fetch/1000000000 MAX_FETCH_MS,
+            count_insert, sum_timer_insert/1000000000 INSERT_MS, min_timer_insert/1000000000 MIN_INSERT_MS, avg_timer_insert/1000000000 AVG_INSERT_MS, max_timer_insert/1000000000 MAX_INSERT_MS,
+            count_update, sum_timer_update/1000000000 UPDATE_MS, min_timer_update/1000000000 MIN_UPDATE_MS, avg_timer_update/1000000000 AVG_UPDATE_MS, max_timer_update/1000000000 MAX_UPDATE_MS,
+            count_delete, sum_timer_delete/1000000000 DELETE_MS, min_timer_delete/1000000000 MIN_DELETE_MS, avg_timer_delete/1000000000 AVG_DELETE_MS, max_timer_delete/1000000000 MAX_DELETE_MS
+        FROM performance_schema.table_io_waits_summary_by_table WHERE count_star &gt; 0 ORDER BY 1 LIMIT 5000
     </sql>
 
     <sql id="perf_index_io_summary" comments="Display MySQL table lock wait summary by name">
@@ -403,7 +399,7 @@
         FROM performance_schema.table_io_waits_summary_by_index_usage WHERE index_name IS NOT NULL AND count_star&gt;0 order by  1 limit 5000
     </sql>
 
-    <sql handle="perf_table_lock_summary" comments="Display MySQL table lock wait summary by name">
+    <sql id="perf_table_lock_summary" comments="Display MySQL table lock wait summary by name">
        SELECT CONCAT(object_type, ':', object_schema, '.', object_name) NAME,
             count_star, sum_timer_wait/1000000000 WAIT_MS, min_timer_wait/1000000000 MIN_WAIT_MS, max_timer_wait/1000000000 MAX_WAIT_MS, avg_timer_wait/1000000000 AVG_WAIT_MS,
             count_read, sum_timer_read/1000000000 READ_MS, min_timer_read/1000000000 MIN_READ_MS, avg_timer_read/1000000000 AVG_READ_MS, max_timer_read/1000000000 MAX_READ_MS,
@@ -418,7 +414,7 @@
             count_write_low_priority, sum_timer_write_low_priority/1000000000 W_LOW_PRIORITY_MS, min_timer_write_low_priority/1000000000 MIN_W_LOW_PRIORITY_MS, avg_timer_write_low_priority/1000000000 AVG_W_LOW_PRIORITY_MS, max_timer_write_low_priority/1000000000 MAX_W_LOW_PRIORITY_MS,
             count_write_normal, sum_timer_write_normal/1000000000 W_NORMAL_MS, min_timer_write_normal/1000000000 MIN_W_NORMAL_MS, avg_timer_write_normal/1000000000 AVG_W_NORMAL_MS, max_timer_write_normal/1000000000 MAX_W_NORMAL_MS,
             count_write_external, sum_timer_write_external/1000000000 W_EXTERNAL_MS, min_timer_write_external/1000000000 MIN_W_EXTERNAL_MS, avg_timer_write_external/1000000000 AVG_W_EXTERNAL_MS, max_timer_write_external/1000000000 MAX_W_EXTERNAL_MS
-            FROM performance_schema.table_lock_waits_summary_by_table WHERE count_star&gt;0 ORDER BY 1 LIMIT 5000
+        FROM performance_schema.table_lock_waits_summary_by_table WHERE count_star&gt;0 ORDER BY 1 LIMIT 5000
     </sql>
 
 <!--  从性能模式（performance_schema）中的events_statements_summary_by_digest表中检索多个列的总计（COUNT_STAR），

@@ -48,7 +48,7 @@ public class SmallMyBatis {
                         String id = XmlHelper.getNodeAttribute(node, "id");
 
                         if (sqls.containsKey(id))
-                            LOGGER.warning("已有相同 id 的 sql，[id]：" + id);
+                            LOGGER.warning("已有相同 sqlId [{0}]", id);
 
                         String sql = XmlHelper.getNodeText(node);
                         sqls.put(id, sql);

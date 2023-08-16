@@ -4,7 +4,9 @@ import com.ajaxjs.developertools.monitor.JmxHelper;
 import com.ajaxjs.developertools.monitor.model.jvm.*;
 import com.sun.tools.attach.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sun.management.ConnectorAddressLink;
@@ -20,6 +22,13 @@ import java.util.*;
 @RequestMapping("/jvm")
 public class JvmMonitorController {
     JmxHelper INSTANCE = new JmxHelper();
+
+    @PostMapping("/test")
+    public boolean test(@Validated JvmInfo info) {
+        System.out.println(info);
+        return true;
+    }
+
 
     @Autowired
     private MonitorDashboardService monitorDashboardService;

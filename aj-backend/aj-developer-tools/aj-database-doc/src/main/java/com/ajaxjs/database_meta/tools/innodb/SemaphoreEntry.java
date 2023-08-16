@@ -76,6 +76,7 @@ public class SemaphoreEntry {
             } else if (line.contains("thread id") && line.contains("mode")) {// a writer (thread id 139924314879744) has reserved it in mode exclusive
                 Pattern pt = Pattern.compile("thread\\s+id\\s+(\\d+).+mode\\s+(.+)");
                 Matcher mt = pt.matcher(line);
+
                 if (mt.find()) {
                     this.lock_holder = mt.group(1);
                     this.hold_mode = mt.group(2);
@@ -89,6 +90,7 @@ public class SemaphoreEntry {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
         return true;// we parsed it
     }
 }

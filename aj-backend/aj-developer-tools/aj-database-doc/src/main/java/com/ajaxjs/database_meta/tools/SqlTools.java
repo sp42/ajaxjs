@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class SqlTools {
     public static class ExplainVO {
-
         public List<Map<String, Object>> list;
+
         public String cost;
 
     }

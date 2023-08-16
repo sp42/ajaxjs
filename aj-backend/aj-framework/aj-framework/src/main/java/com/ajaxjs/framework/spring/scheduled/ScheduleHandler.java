@@ -12,14 +12,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.config.*;
+import org.springframework.scheduling.support.CronExpression;
 import org.springframework.scheduling.support.ScheduledMethodRunnable;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Data
@@ -155,5 +153,56 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
 
         if (!CollectionUtils.isEmpty(scheduledTasks0))
             scheduledTasks.removeAll(scheduledTasks0);
+    }
+
+    /**
+     * 检验 Cron 表达式是否正确
+     */
+    public static boolean isValidExpression(String cron) {
+        return CronExpression.isValidExpression(cron);
+    }
+
+//    计算下次运行时间点
+
+    /**
+     * 获取下次时间点列表
+     *
+     * @param cron  表达式
+     * @param count 需要计算的数量
+     * @return 返回日期集合
+     */
+    public static List<Date> calNextPoint(String cron, int count) {
+        return calNextPoint(cron, new Date(), count);
+    }
+
+    /**
+     * 获取下次时间点列表
+     *
+     * @param cron  表达式
+     * @param date  当前日期
+     * @param count 需要计算的数量
+     * @return 返回日期集合
+     */
+    public static List<Date> calNextPoint(String cron, Date date, int count) {
+        List<Date> points = new ArrayList<>();
+
+        if (isValidExpression(cron)) {
+            CronExpression csg = CronExpression.parse(cron);
+            Date nextDate = date;
+
+            for (int i = 0; i < count; i++) {
+                nextDate = nextPoint(csg, nextDate);
+                points.add(nextDate);
+            }
+        }
+
+        return points;
+    }
+
+    /**
+     * 计算下次时间点
+     */
+    public static Date nextPoint(CronExpression csg, Date date) {
+        return Date.from(Objects.requireNonNull(csg.next(date.toInstant())));
     }
 }

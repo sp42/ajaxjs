@@ -90,20 +90,17 @@ public class ObjectHelper {
      *
      * @param timeout  挂起的时长
      * @param timeUnit 时长单位
-     * @return 被中断返回 false，否则 true
      */
-    public static boolean sleep(Number timeout, TimeUnit timeUnit) {
+    public static void sleep(Number timeout, TimeUnit timeUnit) {
         try {
             timeUnit.sleep(timeout.longValue());
         } catch (InterruptedException e) {
-            return false;
+            e.printStackTrace();
         }
-
-        return true;
     }
 
-    public static boolean sleep(Number timeout) {
-        return sleep(timeout, TimeUnit.SECONDS);
+    public static void sleep(Number timeout) {
+        sleep(timeout, TimeUnit.SECONDS);
     }
 
     /**
@@ -120,11 +117,13 @@ public class ObjectHelper {
 
         if ("".equals(value))
             return "";
+
         if ("null".equals(value))
             return null;
 
         if ("true".equalsIgnoreCase(value))
             return true;
+
         if ("false".equalsIgnoreCase(value))
             return false;
 

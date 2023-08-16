@@ -1,8 +1,10 @@
 package com.ajaxjs.developertools.monitor.model.jvm;
 
 import com.ajaxjs.framework.IBaseModel;
+//import com.ajaxjs.framework.spring.validator.model.NotBank;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -14,6 +16,7 @@ public class JvmInfo implements IBaseModel {
 
     private String name;
 
+    @NotNull
     private String classPath;
 
     private Long startTime;

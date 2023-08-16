@@ -134,6 +134,14 @@ public class JdbcConn {
 
     /**
      * 关闭当前进程的数据库连接
+     * 使用方式：
+     * <code>
+     * try {
+     *     ....
+     * } finally {
+     *     closeDb();
+     * }
+     * </code>
      */
     public static void closeDb() {
         closeDb(getConnection());

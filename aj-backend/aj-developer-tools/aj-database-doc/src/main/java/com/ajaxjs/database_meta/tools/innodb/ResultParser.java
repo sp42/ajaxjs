@@ -170,6 +170,7 @@ public class ResultParser {
             for (String v : vals) {
                 String v2 = v.trim();
                 int idx = v2.lastIndexOf(' ');
+
                 if (idx > 0)
                     valMap.put(v2.substring(0, idx), v2.substring(idx + 1));
             }
@@ -231,14 +232,15 @@ public class ResultParser {
                 } else if (v.startsWith("young-making rate")) {
                     int idx = v.lastIndexOf("not");
                     valMap.put("young-making rate", v.substring(18, idx));
-
                 } else {
                     int idx = v.lastIndexOf(' ');
 
                     if (idx >= 0) {
                         String k = v.substring(0, idx);
+
                         if (str.startsWith("Pages") && !k.startsWith("Pages"))
                             k = "Pages " + k;
+
                         valMap.put(k, v.substring(idx + 1));
                     }
                 }

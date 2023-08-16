@@ -3,6 +3,7 @@ package com.ajaxjs.developertools;
 import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.framework.spring.validator.ValidatorContextAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,28 +59,28 @@ public class DevToolsConfiguration implements WebMvcConfigurer {
         return new JdbcWriter();
     }
 
-// 初始化 Spring 任务调度器
-@Bean
-public ThreadPoolTaskExecutor taskExecutor() {
-    ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
-    pool.setCorePoolSize(5); // 指定线程数
-    pool.setMaxPoolSize(10);
-    pool.setWaitForTasksToCompleteOnShutdown(true);
+    // 初始化 Spring 任务调度器
+    @Bean
+    public ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
+        pool.setCorePoolSize(5); // 指定线程数
+        pool.setMaxPoolSize(10);
+        pool.setWaitForTasksToCompleteOnShutdown(true);
 
-    return pool;
-}
+        return pool;
+    }
 
-// 初始化任务调度管理
-@Bean(initMethod = "init")
-public ScheduleHandler scheduleHandler() {
-    return new ScheduleHandler();
-}
+    // 初始化任务调度管理
+    @Bean(initMethod = "init")
+    public ScheduleHandler scheduleHandler() {
+        return new ScheduleHandler();
+    }
 
-// 注入任务调度的控制器
-@Bean
-public ScheduledController scheduledController() {
-    return new ScheduledController();
-}
+    // 注入任务调度的控制器
+    @Bean
+    public ScheduledController scheduledController() {
+        return new ScheduledController();
+    }
 
     private static final AtomicLong ATOMIC_LONG = new AtomicLong(0L);
 
@@ -87,5 +88,10 @@ public ScheduledController scheduledController() {
     @Scheduled(cron = "0/2 * * * * *") // cron 表达式，每5秒执行
     public void doTask() {
         System.out.println("我是定时任务~" + ATOMIC_LONG.getAndIncrement());
+    }
+
+    @Bean
+    public ValidatorContextAware ValidatorContextAware() {
+        return new ValidatorContextAware();
     }
 }
