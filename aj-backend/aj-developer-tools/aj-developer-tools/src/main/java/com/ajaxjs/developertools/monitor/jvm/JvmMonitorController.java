@@ -2,13 +2,11 @@ package com.ajaxjs.developertools.monitor.jvm;
 
 import com.ajaxjs.developertools.monitor.JmxHelper;
 import com.ajaxjs.developertools.monitor.model.jvm.*;
+import com.ajaxjs.framework.spring.validator.custom.IdCard;
 import com.sun.tools.attach.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sun.management.ConnectorAddressLink;
 
 import javax.management.*;
@@ -23,12 +21,11 @@ import java.util.*;
 public class JvmMonitorController {
     JmxHelper INSTANCE = new JmxHelper();
 
-    @PostMapping("/test")
-    public boolean test(@Validated JvmInfo info) {
-        System.out.println(info);
+    @PostMapping("/test/{id}")
+    public boolean test(@PathVariable @IdCard String id) {
+        System.out.println(id);
         return true;
     }
-
 
     @Autowired
     private MonitorDashboardService monitorDashboardService;

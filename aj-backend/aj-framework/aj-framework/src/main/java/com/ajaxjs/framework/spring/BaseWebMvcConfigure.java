@@ -1,17 +1,15 @@
 package com.ajaxjs.framework.spring;
 
-import com.ajaxjs.framework.spring.filter.BeanValidation;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.ShowControllerInterceptor;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.framework.spring.response.MyJsonConverter;
-import com.ajaxjs.framework.spring.response.MyResponseBodyAdvice;
+import com.ajaxjs.framework.spring.validator.ValidatorInitializing;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -44,34 +42,10 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
         converters.add(new MyJsonConverter()); // 统一返回 JSON
     }
 
-    @RestControllerAdvice
-    private static class _MyResponseBodyAdvice extends MyResponseBodyAdvice {
-    }
-
-    /**
-     * 数据验证框架
-     *
-     * @return
-     */
-//    @Bean
-//    LocalValidatorFactoryBean localValidatorFactoryBean() {
-//        LocalValidatorFactoryBean v = new LocalValidatorFactoryBean();
-//        v.setProviderClass(ApacheValidationProvider.class);
-//
-//        return v;
-//    }
-
-    // Bean 验证前置拦截器
     @Bean
-    BeanValidation beanValidation() {
-        return new BeanValidation();
+    public ValidatorInitializing ValidatorContextAware() {
+        return new ValidatorInitializing();
     }
-
-// 没抛出 BindException 异常
-//    @Bean
-//    RestResponseEntityExceptionHandler restResponseEntityExceptionHandler() {
-//        return new RestResponseEntityExceptionHandler();
-//    }
 
     /**
      * YAML 配置文件
@@ -80,17 +54,17 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
      */
     @Bean
     public PropertySourcesPlaceholderConfigurer properties() {
-        PropertySourcesPlaceholderConfigurer cfger = new PropertySourcesPlaceholderConfigurer();
-        cfger.setIgnoreUnresolvablePlaceholders(true);// Don't fail if @Value is not supplied in properties. Ignore if not found
+        PropertySourcesPlaceholderConfigurer cfg = new CustomPropertySourcesPlaceholderConfigure();
+        cfg.setIgnoreUnresolvablePlaceholders(true);// Don't fail if @Value is not supplied in properties. Ignore if not found
         YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
         ClassPathResource c = new ClassPathResource("application.yml");
 
         if (c.exists()) {
             yaml.setResources(c);
-            cfger.setProperties(Objects.requireNonNull(yaml.getObject()));
+            cfg.setProperties(Objects.requireNonNull(yaml.getObject()));
         } else System.err.println("未设置 YAML 配置文件");
 
-        return cfger;
+        return cfg;
     }
 
     /**

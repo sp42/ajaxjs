@@ -1,6 +1,5 @@
-package com.ajaxjs.framework.spring.validator.model;
+package com.ajaxjs.framework.spring.validator;
 
-import com.ajaxjs.framework.spring.validator.ValidatorHelper;
 import org.springframework.util.StringUtils;
 
 

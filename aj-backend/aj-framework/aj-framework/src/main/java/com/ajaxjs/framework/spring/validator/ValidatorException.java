@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.spring.validator.model;
+package com.ajaxjs.framework.spring.validator;
 
 /**
  * @author xuhaohao

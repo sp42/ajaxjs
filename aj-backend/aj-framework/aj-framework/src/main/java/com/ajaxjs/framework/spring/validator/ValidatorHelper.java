@@ -112,6 +112,7 @@ public class ValidatorHelper {
             return true;
 
         int sum = 0;
+
         for (int i = 0; i < idCard.length(); i++) {
             String bit = String.valueOf(idCard.charAt(i));
 

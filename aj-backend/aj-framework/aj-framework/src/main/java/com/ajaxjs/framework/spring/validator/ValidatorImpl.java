@@ -1,19 +1,13 @@
 package com.ajaxjs.framework.spring.validator;
 
 
-import com.ajaxjs.framework.spring.validator.model.ValidatorEnum;
-import com.ajaxjs.framework.spring.validator.model.ValidatorException;
-import org.springframework.context.ApplicationContext;
+import com.ajaxjs.framework.spring.CustomPropertySourcesPlaceholderConfigure;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.core.env.AbstractEnvironment;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.EncodedResource;
-import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -22,15 +16,6 @@ import java.lang.reflect.Modifier;
  * @author volicy.xu
  */
 public class ValidatorImpl implements Validator {
-    /**
-     * 用于获取配置
-     */
-    private final ApplicationContext cxt;
-
-    public ValidatorImpl(ApplicationContext cxt) {
-        this.cxt = cxt;
-    }
-
     @Override
     public boolean supports(Class<?> clazz) {
         return true;
@@ -64,9 +49,6 @@ public class ValidatorImpl implements Validator {
             String name = annotationType.getName();
 
             if (name.contains(DEFAULT_PACKAGE) || name.contains(AJ_PACKAGE)) {
-//                Object required = AnnotationUtils.getValue(annotation, "required");
-//
-//                if (required != null && (boolean) required) {
                 ValidatorEnum validConstant = ValidatorEnum.getInstance(annotationType.getSimpleName());
 
                 if (validConstant != null) {
@@ -78,31 +60,25 @@ public class ValidatorImpl implements Validator {
                     validConstant.validated(value, message);
                 } else
                     throw new ValidatorException("Correctly configure easyvalidator annotation");
-//                }
             }
         }
     }
 
+    /**
+     * 从注解上获取错误信息，如果没有则从默认的 YAML 配置获取
+     */
     private String getValue(Annotation annotation) {
         String message = (String) AnnotationUtils.getValue(annotation, "message");
         assert message != null;
 
-        if (message.indexOf('{') > -1) {
-            String value = cxt.getEnvironment().getProperty("spring.org.easyvalidator.name");
+        if (message.indexOf('{') > -1) { // 注解上没设置 message，要读取配置
+            CustomPropertySourcesPlaceholderConfigure bean = DiContextUtil.getBean(CustomPropertySourcesPlaceholderConfigure.class);
+            assert bean != null;
+            String key = "javax-validation." + message.replaceAll("^\\{|}$", "");
+            Object o = bean.getLocalProperties().get(key);
 
-            if (value == null) {
-                AbstractEnvironment env = (AbstractEnvironment) cxt.getEnvironment();
-                EncodedResource encodedResource = new EncodedResource(new ClassPathResource("classpath:ValidationMessages.properties"), "utf-8");
-
-                try {
-                    env.getPropertySources().addFirst(new ResourcePropertySource("spring.org.easyvalidator.name", encodedResource));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return env.resolveRequiredPlaceholders(message);
-            } else
-                return null;
+            if (o != null)
+                message = o.toString();
         }
 
         return message;
