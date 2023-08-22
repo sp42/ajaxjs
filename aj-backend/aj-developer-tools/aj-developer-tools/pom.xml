@@ -61,12 +61,12 @@
         </dependency>
 
         <!-- 监控用 -->
-        <dependency>
+      <!--  <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-catalina-jmx-remote</artifactId>
             <version>8.5.75</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
 
 
         <!-- tomcat 对 jsp 支持 -->
