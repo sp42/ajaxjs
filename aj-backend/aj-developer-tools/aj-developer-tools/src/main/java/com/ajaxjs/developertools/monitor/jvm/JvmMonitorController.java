@@ -14,6 +14,7 @@ import javax.management.openmbean.CompositeData;
 import javax.management.openmbean.TabularDataSupport;
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.*;
 
 @RestController
@@ -25,6 +26,35 @@ public class JvmMonitorController {
     public boolean test(@PathVariable @IdCard String id) {
         System.out.println(id);
         return true;
+    }
+
+    @GetMapping("/jdbc_pool_status")
+    public Map<String, Object> jdbcPoolStatus() {
+        MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+        Set<ObjectName> objectNames = server.queryNames(null, null);
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            for (ObjectName name : objectNames) {
+                MBeanInfo info = server.getMBeanInfo(name);
+
+                if (info.getClassName().equals("org.apache.tomcat.jdbc.pool.jmx.ConnectionPool")) {
+                    for (MBeanAttributeInfo mf : info.getAttributes()) {
+                        Object attributeValue = server.getAttribute(name, mf.getName());
+
+                        if (attributeValue != null)
+                            result.put(mf.getName(), attributeValue);
+                    }
+
+                    break;
+                }
+            }
+        } catch (InstanceNotFoundException | IntrospectionException | ReflectionException | MBeanException |
+                 AttributeNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 
     @Autowired
