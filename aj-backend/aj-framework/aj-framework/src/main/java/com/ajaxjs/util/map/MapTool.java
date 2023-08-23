@@ -249,10 +249,10 @@ public class MapTool {
                 key = key.replaceFirst("^[A-Z]", String.valueOf(Character.toLowerCase(firstChar)));
             }
 
-//            LOGGER.info(key);
-//            if ("priceJie".equals(key)) {
-//                LOGGER.info(key);
-//            }
+            //            LOGGER.info(key);
+            //            if ("priceJie".equals(key)) {
+            //                LOGGER.info(key);
+            //            }
 
             try {
                 if (map != null && map.containsKey(key)) {
@@ -263,29 +263,38 @@ public class MapTool {
                     if (value != null) {
                         t = property.getPropertyType(); // Bean 值的类型，这是期望传入的类型，也就 setter 参数的类型
 
-//                        if (value.toString().startsWith("{\"zjxt_height\""))
-//                            LOGGER.info(value);
+                        //                        if (value.toString().startsWith("{\"zjxt_height\""))
+                        //                            LOGGER.info(value);
                         if (t == List.class) { // List 容器类，要处理里面的泛型
                             Type[] genericReturnType = Types.getGenericReturnType(property.getReadMethod());
                             Type beanT = genericReturnType[0];
                             Class<?> realT = Types.type2class(beanT);
 
-                            List<Map<String, Object>> oldValue;
-
-                            if (value instanceof String) {
-                                oldValue = JsonHelper.parseList((String) value);
-                            } else
-                                oldValue = (List<Map<String, Object>>) value;
-
-                            List<Object> newList = new ArrayList<>(oldValue.size());
-
-                            // 转换一个新 list
-                            for (Map<String, Object> _map : oldValue) {
-                                Object _bean = map2Bean(_map, realT, true);
-                                newList.add(_bean);
+                            List<?> _list = null;
+                            if (value instanceof List) {
+                                _list = (List<?>) value;
                             }
 
-                            value = newList;
+                            if (realT.equals(String.class) && _list != null) {
+                                // List<String> 不用处理
+                            } else {
+                                List<Map<String, Object>> oldValue;
+
+                                if (value instanceof String) {
+                                    oldValue = JsonHelper.parseList((String) value);
+                                } else
+                                    oldValue = (List<Map<String, Object>>) value;
+
+                                List<Object> newList = new ArrayList<>(oldValue.size());
+
+                                // 转换一个新 list
+                                for (Map<String, Object> _map : oldValue) {
+                                    Object _bean = map2Bean(_map, realT, true);
+                                    newList.add(_bean);
+                                }
+
+                                value = newList;
+                            }
                         } else {
                             if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
                                 value = ObjectHelper.objectCast(value, t);
@@ -297,32 +306,32 @@ public class MapTool {
                             LOGGER.info("method:" + property.getWriteMethod());
                             LOGGER.info("value type:" + value.getClass() + " vlaue: " + value);
 
-//							e.printStackTrace();
+                            //							e.printStackTrace();
                         }
                     }
                 }
 
                 // 子对象
                 if (isChild && map != null) {
-//					for (String mKey : map.keySet()) {
-//						if (mKey.contains(key + '_')) {
-//							Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter
-//																											// 方法
-//
-//							Object subBean = getter.invoke(bean);
-//							String subBeanKey = mKey.replaceAll(key + '_', "");
-//
-//							if (subBean != null) {// 已有子 bean
-//								if (map.get(mKey) != null) // null 值不用处理
-//									ReflectUtil.setProperty(subBean, subBeanKey, map.get(mKey));
-//							} else { // map2bean
-//								Map<String, Object> subMap = new HashMap<>();
-//								subMap.put(subBeanKey, map.get(mKey));
-//								subBean = map2Bean(subMap, setter.getParameterTypes()[0], isTransform);
-//								setter.invoke(bean, subBean); // 保存新建的 bean
-//							}
-//						}
-//					}
+                    //					for (String mKey : map.keySet()) {
+                    //						if (mKey.contains(key + '_')) {
+                    //							Method getter = property.getReadMethod(), setter = property.getWriteMethod();// 得到对应的 setter
+                    //																											// 方法
+                    //
+                    //							Object subBean = getter.invoke(bean);
+                    //							String subBeanKey = mKey.replaceAll(key + '_', "");
+                    //
+                    //							if (subBean != null) {// 已有子 bean
+                    //								if (map.get(mKey) != null) // null 值不用处理
+                    //									ReflectUtil.setProperty(subBean, subBeanKey, map.get(mKey));
+                    //							} else { // map2bean
+                    //								Map<String, Object> subMap = new HashMap<>();
+                    //								subMap.put(subBeanKey, map.get(mKey));
+                    //								subBean = map2Bean(subMap, setter.getParameterTypes()[0], isTransform);
+                    //								setter.invoke(bean, subBean); // 保存新建的 bean
+                    //							}
+                    //						}
+                    //					}
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 if (e instanceof IllegalArgumentException) {

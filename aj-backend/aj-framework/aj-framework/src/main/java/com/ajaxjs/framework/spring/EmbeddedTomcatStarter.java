@@ -50,7 +50,7 @@ public class EmbeddedTomcatStarter {
      */
     public boolean isStatedSpring;
 
-    public boolean isEnableJMX = true;
+    public boolean isEnableJMX = false;
 
     public void init(int port, Class<?>... clz) {
         init(port, null, clz);

@@ -181,6 +181,8 @@ public class JsonHelper {
             if (list.size() > 0) {
                 if (list.get(0) instanceof Integer)
                     return toJson(list.toArray(new Integer[list.size()]));
+                if (list.get(0) instanceof Long)
+                    return toJson(list.toArray(new Long[list.size()]));
                 else if (list.get(0) instanceof String)
                     return toJson(list.toArray(new String[list.size()]));
                 else if (list.get(0) instanceof Map) // Map 类型的输出

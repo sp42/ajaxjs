@@ -15,7 +15,6 @@ import com.ajaxjs.util.logger.LogHelper;
 /**
  * 初始化，检测是否可以运行
  */
-@Deprecated
 public class Version {
     private static final LogHelper LOGGER = LogHelper.getLog(Version.class);
 
@@ -28,21 +27,6 @@ public class Version {
      * 是否调试模式（开发模式）
      */
     public static boolean isDebug;
-
-    /**
-     * 是否苹果操作系统
-     */
-    public static final boolean isMac = OS_NAME.contains("mac");
-
-    /**
-     * 是否视窗操作系统
-     */
-    public static final boolean isWindows = OS_NAME.contains("window");
-
-    /**
-     * 是否 Linux 操作系统
-     */
-    public static final boolean isLinux = OS_NAME.contains("linux");
 
     static {
         if (!"Asia/Shanghai".equals(System.getProperty("user.timezone")))

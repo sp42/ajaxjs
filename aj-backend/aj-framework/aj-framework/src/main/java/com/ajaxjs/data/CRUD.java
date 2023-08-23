@@ -3,7 +3,9 @@ package com.ajaxjs.data;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.entity.IdField;
 import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
@@ -52,6 +54,7 @@ public abstract class CRUD {
         return jdbcReaderFactory().queryAsMap(sql, params);
     }
 
+
     /**
      * 查询列表记录，以 List Map 格式返回
      *
@@ -74,6 +77,12 @@ public abstract class CRUD {
         String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
 
         return list(sql, params);
+    }
+
+    public static Map<String, Object> infoMap(String sqlId, Map<String, Object> paramsMap, Object... params) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return info(sql, params);
     }
 
     public static <T> PageResult<T> page(Class<T> beanClz, String sql, Map<String, Object> paramsMap) {
@@ -124,12 +133,21 @@ public abstract class CRUD {
      * @param entity 实体类
      * @return 表名
      */
-    static String getTableName(Object entity) {
+    public static String getTableName(Object entity) {
         TableName tableNameA = entity.getClass().getAnnotation(TableName.class);
         if (tableNameA == null)
             throw new RuntimeException("实体类未提供表名");
 
         return tableNameA.value();
+    }
+
+    public static String getIdField(Object entity) {
+        IdField annotation = entity.getClass().getAnnotation(IdField.class);
+
+        if (annotation == null)
+            throw new BusinessException("没设置 IdField 注解，不知哪个主键字段");
+
+        return annotation.value();
     }
 
     public static Long create(String talebName, Object entity, String idField) {
@@ -146,6 +164,10 @@ public abstract class CRUD {
         return create(getTableName(entity), entity, null);
     }
 
+    public static Long createWithIdField(Object entity) {
+        return createWithIdField(entity, getIdField(entity));
+    }
+
     public static Long createWithIdField(Object entity, String idField) {
         return create(getTableName(entity), entity, idField);
     }
@@ -156,6 +178,8 @@ public abstract class CRUD {
 
         if (StringUtils.hasText(idField))
             jdbcWriter.setIdField(idField);
+        else
+            throw new BusinessException("未指定 id，这将会是批量全体更新！");
 
         return jdbcWriter.update(entity) > 0;
     }
@@ -166,6 +190,10 @@ public abstract class CRUD {
 
     public static boolean update(Object entity) {
         return update(getTableName(entity), entity);
+    }
+
+    public static boolean updateWithIdField(Object entity) {
+        return updateWithIdField(entity, getIdField(entity));
     }
 
     public static boolean updateWithIdField(Object entity, String idField) {

@@ -74,7 +74,7 @@ public class SmallMyBatis {
         }
 
         if (ObjectUtils.isEmpty(resources))
-            throw new RuntimeException("文件路径没有 xml");
+            throw new RuntimeException("文件路径[" + sqlLocations + "]没有 xml");
 
         // 写死 sql 目录下。Resource 不能返回相对目录
         String[] xmlArray = Arrays.stream(resources).map(n -> "sql/" + n.getFilename()).toArray(String[]::new);
@@ -130,7 +130,7 @@ public class SmallMyBatis {
         public BooleanExpressionParser() {
             super();
             context.setPropertyAccessors(Collections.singletonList(new MapAccessor()));
-//            context.setVariables(paramMap);
+            //            context.setVariables(paramMap);
         }
 
         public boolean get(String expression, Map<String, Object> paramMap) {
@@ -232,7 +232,7 @@ public class SmallMyBatis {
             paramsMap = new HashMap<>();
 
         sql = generateIfBlock(sql, paramsMap);
-        sql = parseForEach(sql, paramsMap);
+        //        sql = parseForEach(sql, paramsMap);
         sql = getValuedSQL(sql, paramsMap);
         sql = sql.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
 

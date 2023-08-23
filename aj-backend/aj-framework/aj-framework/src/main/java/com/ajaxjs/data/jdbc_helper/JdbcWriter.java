@@ -1,8 +1,10 @@
 package com.ajaxjs.data.jdbc_helper;
 
+import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
 import com.ajaxjs.framework.entity.TableName;
+import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
@@ -21,10 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -218,7 +217,23 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         return sp;
     }
 
-    // Bean 的值转换为符合 SQL 格式的
+    /**
+     * 转换为符合 SQL 的类型
+     */
+    static Object toSqlValue(Object value) {
+        if (value instanceof String)
+            return "'" + value + "'";
+        else if (value instanceof Boolean)
+            return ((Boolean) value) ? 1 : 0;
+        else if (value instanceof Date)
+            return DateUtil.formatDate((Date) value);
+
+        return value.toString();
+    }
+
+    /**
+     * Bean 的值转换为符合 SQL 格式的。这个适用于 ? 会自动转换类型
+     */
     private static Object beanValue2SqlValue(Object value) {
         if (value instanceof Enum) // 枚举类型，取其字符串保存
             return value.toString();
@@ -405,6 +420,98 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
 
         System.out.println(Arrays.toString(result));
         LOGGER.info("批量插入完毕 " + (System.currentTimeMillis() - start) + "ms");
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param entities  Map 列表或 Map 数组
+     * @param tableName 表名
+     */
+    @SuppressWarnings("unchecked")
+    public void createBatchMap(Object entities, String tableName) {
+        StringBuilder sb = new StringBuilder();
+        Map<String, Object>[] arr;
+
+        if (entities instanceof List) {
+            List<Map<String, Object>> list = (List<Map<String, Object>>) entities;
+            arr = new Map[list.size()];
+
+            for (int i = 0; i < list.size(); i++)
+                arr[i] = list.get(i);
+
+        } else if (entities instanceof Map[])  // Arrays
+            arr = (Map<String, Object>[]) entities;
+        else
+            throw new IllegalArgumentException("不支持参数");
+
+        Map<String, Object> firstEntity = arr[0];
+        sb.append("INSERT INTO ").append(tableName).append(" (");
+        everyMapField(firstEntity, (field, value) -> sb.append(" `").append(field).append("`,"));
+        sb.deleteCharAt(sb.length() - 1);// 删除最后一个
+        sb.append(") VALUES");
+
+        for (Map<String, Object> entity : arr) {
+            sb.append(" (");
+            everyMapField(entity, (field, value) -> sb.append(toSqlValue(value)).append(", "));
+            sb.deleteCharAt(sb.length() - 1);// 删除最后一个
+            sb.deleteCharAt(sb.length() - 1);// 删除最后一个
+            sb.append("),");
+        }
+
+        insertBatch(sb);
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param entities Bean 列表或 Bean 数组
+     */
+    public void createBatch(Object entities) {
+        StringBuilder sb = new StringBuilder();
+        Object[] arr;
+
+        if (entities instanceof List) {
+            List<?> list = (List<?>) entities;
+            arr = list.toArray();
+        } else if (entities instanceof Object[])  // Arrays
+            arr = (Object[]) entities;
+        else
+            throw new IllegalArgumentException("不支持参数");
+
+        Object firstEntity = arr[0];
+        sb.append("INSERT INTO ").append(CRUD.getTableName(firstEntity)).append(" (");
+        everyBeanField(firstEntity, (field, value) -> sb.append(" `").append(field).append("`,"));
+        sb.deleteCharAt(sb.length() - 1);// 删除最后一个
+        sb.append(") VALUES");
+
+        for (Object entity : arr) {
+            sb.append(" (");
+            everyBeanField(entity, (field, value) -> sb.append(toSqlValue(value)).append(", "));
+            sb.deleteCharAt(sb.length() - 1);// 删除最后一个
+            sb.deleteCharAt(sb.length() - 1);// 删除最后一个
+            sb.append("),");
+        }
+
+        insertBatch(sb);
+    }
+
+    private void insertBatch(StringBuilder sb) {
+        sb.deleteCharAt(sb.length() - 1);// 删除最后一个
+
+        String sql = sb.toString();
+        LOGGER.info("批量插入：：" + sql);
+        int[] result = new int[0];
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.addBatch();
+            result = ps.executeBatch();
+            ps.clearBatch();
+        } catch (SQLException e) {
+           throw new RuntimeException(e);
+        }
+
+        LOGGER.info("批量插入完成。" + Arrays.toString(result));
     }
 
     /**

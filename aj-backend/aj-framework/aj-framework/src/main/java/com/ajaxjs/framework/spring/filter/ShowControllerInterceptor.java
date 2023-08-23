@@ -29,11 +29,10 @@ public class ShowControllerInterceptor implements HandlerInterceptor {
             Map<String, String[]> parameterMap = request.getParameterMap();
 
             if (parameterMap.size() > 0) {
-                for (String key : parameterMap.keySet()) {
+                for (String key : parameterMap.keySet())
                     s.append(key).append("=").append(Arrays.toString(parameterMap.get(key))).append("\n");
-                }
 
-                LOGGER.info(request.getMethod() + "请求参数：" + s);
+                LOGGER.info(request.getMethod() + "请求参数：\n" + s);
             }
         }
 

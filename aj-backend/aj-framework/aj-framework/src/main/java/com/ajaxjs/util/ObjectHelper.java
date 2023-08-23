@@ -19,6 +19,7 @@ import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.sql.util.geo.LocationPoint;
 import com.ajaxjs.sql.util.geo.MySqlGeoUtils;
 import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.map.MapTool;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -237,8 +238,8 @@ public class ObjectHelper {
             value = toBoolean(value);
         else if (target == int.class || target == Integer.class) { // 整形
             if (value instanceof Integer) {
-//				System.out.println("::::::" + value.getClass());
-//				System.out.println("::::::" + value.getClass().getName());
+                //				System.out.println("::::::" + value.getClass());
+                //				System.out.println("::::::" + value.getClass().getName());
             } else {
                 String str = value.toString();
 
@@ -270,10 +271,10 @@ public class ObjectHelper {
                 String str = (String) value;
                 value = str.split(",");// 用于数组的分隔符
             }
-//            else {
+            //            else {
             // LOGGER.info("Bean 要求 String[] 类型，但实际传入类型：" +
             // value.getClass().getName());
-//            }
+            //            }
         } else if (target == Date.class)
             value = DateUtil.object2Date(value);
         else if (target == BigDecimal.class) {
@@ -298,17 +299,25 @@ public class ObjectHelper {
                 value = Float.parseFloat((String) value);
         } else if (target == List.class) {
             if (value instanceof String) {
-                String[] arr = ((String) value).split(",");
-                List<String> list = new ArrayList<>();
-                Collections.addAll(list, arr);
+                String str = (String) value;
 
-                return list;
+                if (str.charAt(0) == '[' && str.charAt(1) == '{') {// 判断为对象列表
+                    return JsonHelper.parseList(str);
+                } else {
+                    String[] arr = str.split(",");
+                    List<String> list = new ArrayList<>();
+                    Collections.addAll(list, arr);
+
+                    return list;
+                }
             }
         } else if (target == double.class || target == Double.class) {
-//			if (value instanceof Float) {
-//				value = ((Float) value).doubleValue();
-//			}
+            //			if (value instanceof Float) {
+            //				value = ((Float) value).doubleValue();
+            //			}
             value = Double.parseDouble(value.toString());
+        } else if (value instanceof Map && IBaseModel.class.isAssignableFrom(target)) {
+            value = MapTool.map2Bean((Map) value, target, true);
         } else if (value instanceof String && IBaseModel.class.isAssignableFrom(target)) {
             // json2bean
             value = JsonHelper.parseMapAsBean((String) value, target);

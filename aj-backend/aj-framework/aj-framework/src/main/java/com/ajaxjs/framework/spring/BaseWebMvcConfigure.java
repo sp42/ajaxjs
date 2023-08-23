@@ -4,7 +4,6 @@ import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.ShowControllerInterceptor;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.framework.spring.response.MyJsonConverter;
-import com.ajaxjs.framework.spring.validator.ValidatorInitializing;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -28,6 +27,21 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
         configure.enable();
     }
 
+//    @Bean
+//    SpringBeanAnalyse SpringBeanAnalyse() {
+//        return new SpringBeanAnalyse();
+//    }
+//
+//    @Bean
+//    LoggerBeanLoadCostPostProcessor LoggerBeanLoadCostPostProcessor() {
+//        return new LoggerBeanLoadCostPostProcessor();
+//    }
+
+//    @Bean
+//    ApplicationStartupTimeMetricPostProcessor ApplicationStartupTimeMetricPostProcessor() {
+//        return new ApplicationStartupTimeMetricPostProcessor();
+//    }
+
     /**
      * MVC 注解
      */
@@ -42,10 +56,10 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
         converters.add(new MyJsonConverter()); // 统一返回 JSON
     }
 
-    @Bean
-    public ValidatorInitializing ValidatorContextAware() {
-        return new ValidatorInitializing();
-    }
+//    @Bean
+//    public ValidatorInitializing ValidatorContextAware() {
+//        return new ValidatorInitializing();
+//    }
 
     /**
      * YAML 配置文件

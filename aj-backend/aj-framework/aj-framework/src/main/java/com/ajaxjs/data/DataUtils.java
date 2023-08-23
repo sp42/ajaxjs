@@ -87,6 +87,11 @@ public class DataUtils {
     }
 
     /**
+     * 多行空行
+     */
+    private final static String SPACE_LINE = "(?m)^[ \t]*\r?\n";
+
+    /**
      * 打印真实 SQL 执行语句
      *
      * @param sql    SQL 语句，可以带有 ? 的占位符
@@ -97,8 +102,10 @@ public class DataUtils {
         if (!StringUtils.hasText(sql))
             throw new IllegalArgumentException("SQL 语句不能为空！");
 
-//        if (isClosePrintRealSql)
-//            return null;
+        //        if (isClosePrintRealSql)
+        //            return null;
+
+        sql = sql.replaceAll(SPACE_LINE, "");
 
         if (params == null || params.length == 0) // 完整的 SQL 无须填充
             return sql;
