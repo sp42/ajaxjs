@@ -35,6 +35,4 @@ public interface BaseEntityConstants {
      * 下架/下线/隐藏
      */
     int STATUS_OFFLINE = 2;
-
-    public static final Date NULL_DATE = new Date(0);
 }

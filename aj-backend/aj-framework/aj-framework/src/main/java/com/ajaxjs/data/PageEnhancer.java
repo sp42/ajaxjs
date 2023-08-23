@@ -35,9 +35,8 @@ public class PageEnhancer {
      */
     public String pageSql;
 
-//    private String
-
     private int start;
+
     private int limit;
 
     /**
@@ -60,27 +59,26 @@ public class PageEnhancer {
 
         Integer pageNo = get(req, new String[]{"pageNo", "page"});
 
-        if (pageNo != null) {
+        if (pageNo != null)
             start = JdbcUtil.pageNo2start(pageNo, limit);
-        } else if (req.getParameter("start") != null) {
+        else if (req.getParameter("start") != null)
             start = Integer.parseInt(req.getParameter("start"));
-        } else
+        else
             start = 0;
     }
 
     private static Integer get(HttpServletRequest req, String[] maybe) {
         for (String m : maybe) {
-            if (req.getParameter(m) != null) {
+            if (req.getParameter(m) != null)
                 return Integer.parseInt(req.getParameter(m));
-            }
         }
 
         return null;
     }
 
-
     public PageEnhancer initSql(String sql) {
         getParams();
+
         return initSql(sql, start, limit);
     }
 
@@ -160,7 +158,6 @@ public class PageEnhancer {
             });
 
             countTotal = selectStatement.toString();
-//		System.out.println(result.countTotal);
         }
 
         return this;

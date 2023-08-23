@@ -10,7 +10,7 @@ import java.util.Properties;
  * PropertySourcesPlaceholderConfigurer 是一个由 Spring 提供的用于解析属性占位符的配置类，
  * 它没有提供直接获取私有属性 localProperties 的公开方法。但是，可以通过以下步骤获取 localProperties 的值
  */
-public class CustomPropertySourcesPlaceholderConfigure extends PropertySourcesPlaceholderConfigurer {
+public class CustomPropertySources extends PropertySourcesPlaceholderConfigurer {
     private Properties localProperties;
 
     @Override

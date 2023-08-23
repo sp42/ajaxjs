@@ -30,8 +30,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
      * @return true 表示为希望是 JSON
      */
     public static boolean isJson(HttpServletRequest request) {
-        String accept = request.getHeader("Accept");
-        return accept != null && "application/json".equals(accept);
+        return "application/json".equals(request.getHeader("Accept"));
     }
 
     public static final String EXCEPTION_CXT_KEY = "EXCEPTION_CXT_KEY";
@@ -62,8 +61,6 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
             } catch (IOException e) {
                 LOGGER.warning(e);
             }
-
-            return new ModelAndView();
         } else {
             msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covert(msg));
             resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
@@ -88,10 +85,9 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
             } catch (IOException e) {
                 LOGGER.warning(e);
             }
-
-            return new ModelAndView();
         }
 
+        return new ModelAndView();
 //        return null;// 默认视图，跳转 jsp
     }
 }

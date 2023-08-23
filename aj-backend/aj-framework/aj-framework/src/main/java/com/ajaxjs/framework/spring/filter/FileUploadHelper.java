@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.sql.util.SnowflakeId;
+import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.web.WebHelper;
 
@@ -25,9 +25,6 @@ import com.ajaxjs.web.WebHelper;
 public class FileUploadHelper {
     /**
      * 初始化文件上传
-     *
-     * @param cxt
-     * @param registration
      */
     public static void initUpload(ServletContext cxt, ServletRegistration.Dynamic registration) {
         String tempDir = WebHelper.mapPath(cxt, "upload_temp");
@@ -46,8 +43,6 @@ public class FileUploadHelper {
 
     /**
      * 文件上传
-     *
-     * @return
      */
     public static MultipartResolver multipartResolver() {
         StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
@@ -60,12 +55,6 @@ public class FileUploadHelper {
 
     public static final String CONTENT_TYPE2 = "multipart/form-data;charset=UTF-8";
 
-    /**
-     * @param file
-     * @param uploadDir
-     * @param isNewAutoName
-     * @return
-     */
     public static String uploadInWeb(MultipartFile file, String uploadDir, boolean isNewAutoName) {
         String _uploadDir = WebHelper.mapPath(DiContextUtil.getRequest(), uploadDir);
         return upload(file, _uploadDir, isNewAutoName);
@@ -77,7 +66,6 @@ public class FileUploadHelper {
      * @param file          文件
      * @param uploadDir     保存目录
      * @param isNewAutoName 是否重新命名？
-     * @return
      */
     public static String upload(MultipartFile file, String uploadDir, boolean isNewAutoName) {
         Objects.requireNonNull(file);
@@ -107,9 +95,6 @@ public class FileUploadHelper {
 
     /**
      * 生成自动名称，保留扩展名
-     *
-     * @param originalFilename
-     * @return
      */
     public static String getAutoName(String originalFilename) {
         String[] arr = originalFilename.split("\\.");

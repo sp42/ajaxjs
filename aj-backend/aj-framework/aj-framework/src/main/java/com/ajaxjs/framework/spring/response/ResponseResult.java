@@ -48,8 +48,6 @@ public class ResponseResult {
 
     /**
      * 方便 Spring 转换器使用
-     *
-     * @return
      */
     public byte[] getBytes() {
         return toString().getBytes(StandardCharsets.UTF_8);

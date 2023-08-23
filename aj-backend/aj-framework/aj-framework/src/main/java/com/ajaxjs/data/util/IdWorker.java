@@ -1,10 +1,10 @@
-package com.ajaxjs.sql.util;
+package com.ajaxjs.data.util;
 
 /**
  * 雪花算法
  */
 public class IdWorker {
-    //下面两个每个5位，加起来就是10位的工作机器id
+    // 下面两个每个5位，加起来就是10位的工作机器id
     private final long workerId;    //工作id
     private final long datacenterId;   //数据id
     //12位的序列号
@@ -51,22 +51,22 @@ public class IdWorker {
     public synchronized long nextId() {
         long timestamp = System.currentTimeMillis();
 
-        //获取当前时间戳如果小于上次时间戳，则表示时间戳获取出现异常
+        // 获取当前时间戳如果小于上次时间戳，则表示时间戳获取出现异常
         if (timestamp < lastTimestamp) {
             System.err.printf("clock is moving backwards.  Rejecting requests until %d.", lastTimestamp);
             throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
         }
 
-        //获取当前时间戳如果等于上次时间戳（同一毫秒内），则在序列号加一；否则序列号赋值为0，从0开始。
+        // 获取当前时间戳如果等于上次时间戳（同一毫秒内），则在序列号加一；否则序列号赋值为0，从0开始。
         if (lastTimestamp == timestamp) {
             sequence = (sequence + 1) & sequenceMask;
 
             if (sequence == 0)
-                timestamp = tilNextMillis(lastTimestamp);
+                timestamp = SnowflakeId.tilNextMillis(lastTimestamp);
         } else
             sequence = 0;
 
-        //将上次时间戳值刷新
+        // 将上次时间戳值刷新
         lastTimestamp = timestamp;
 
         /*
@@ -83,15 +83,6 @@ public class IdWorker {
                 sequence;
     }
 
-    //获取时间戳，并与上次时间戳比较
-    private long tilNextMillis(long lastTimestamp) {
-        long timestamp = System.currentTimeMillis();
-
-        while (timestamp <= lastTimestamp)
-            timestamp = System.currentTimeMillis();
-
-        return timestamp;
-    }
 
     private final static IdWorker INSTANCE = new IdWorker(1, 1, 1);
 
@@ -103,5 +94,4 @@ public class IdWorker {
     public static synchronized long get() {
         return INSTANCE.nextId();
     }
-
 }

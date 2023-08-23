@@ -1,14 +1,12 @@
 package com.ajaxjs.database_meta;
 
 import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.sql.util.DataBaseMetaHelper;
+import com.ajaxjs.data.util.DataBaseMetaHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

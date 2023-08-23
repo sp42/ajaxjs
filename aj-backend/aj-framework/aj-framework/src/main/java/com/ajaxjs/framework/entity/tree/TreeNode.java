@@ -1,11 +1,16 @@
 package com.ajaxjs.framework.entity.tree;
 
-import com.ajaxjs.data.entity.Identity;
-
 /**
  * 一个树节点
  */
-public interface TreeNode extends Identity<Long> {
+public interface TreeNode {
+    default void setId(Long id) {
+    }
+
+    default Long getId() {
+        return null;
+    }
+
     default Long getParentId() {
         throw new RuntimeException();
     }

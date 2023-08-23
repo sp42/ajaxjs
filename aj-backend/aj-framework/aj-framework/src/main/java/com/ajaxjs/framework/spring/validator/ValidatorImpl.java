@@ -1,7 +1,7 @@
 package com.ajaxjs.framework.spring.validator;
 
 
-import com.ajaxjs.framework.spring.CustomPropertySourcesPlaceholderConfigure;
+import com.ajaxjs.framework.spring.CustomPropertySources;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
@@ -72,7 +72,7 @@ public class ValidatorImpl implements Validator {
         assert message != null;
 
         if (message.indexOf('{') > -1) { // 注解上没设置 message，要读取配置
-            CustomPropertySourcesPlaceholderConfigure bean = DiContextUtil.getBean(CustomPropertySourcesPlaceholderConfigure.class);
+            CustomPropertySources bean = DiContextUtil.getBean(CustomPropertySources.class);
             assert bean != null;
             String key = "javax-validation." + message.replaceAll("^\\{|}$", "");
             Object o = bean.getLocalProperties().get(key);

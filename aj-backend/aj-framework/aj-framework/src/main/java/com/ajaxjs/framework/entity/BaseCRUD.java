@@ -2,7 +2,7 @@ package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.sql.util.IdWorker;
+import com.ajaxjs.data.util.IdWorker;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 

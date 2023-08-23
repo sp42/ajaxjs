@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-class BeanPostProcessStatistics {
-
+class Statistics {
     private String beanName;
 
     private long beforeInstantiationTime;
@@ -35,18 +34,6 @@ class BeanPostProcessStatistics {
     }
 
     public String toConsoleString() {
-        StringBuilder consoleString = new StringBuilder();
-        long totalCostTime = calculateTotalCostTime();
-
-        consoleString
-                .append("\t")
-                .append(getBeanName())
-                .append("\t")
-                .append(totalCostTime)
-                .append("\t\n");
-
-        return consoleString.toString();
-
+        return "\t" + getBeanName() + "\t" + calculateTotalCostTime() + "\t\n";
     }
-
 }

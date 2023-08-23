@@ -1,7 +1,7 @@
-package com.ajaxjs.sql.util;
+package com.ajaxjs.data.util;
 
 /**
- * Twitter 的分布式自增ID算法 Snowflake:雪花生成器。
+ * 雪花生成器
  * <p>
  * 默认其生成的 Long 主键是 28 位；但 JS Long 最大值是 16 位（Java Long 没此问题） 这个版本则是生成 16 位的
  *
@@ -26,11 +26,11 @@ public class SnowflakeId {
     /**
      * 机器ID最大值:16
      */
-    private final long maxWorkerId = -1L ^ -1L << workerIdBits;
+    private final long maxWorkerId = ~(-1L << workerIdBits);
 
     private final long workerIdShift = sequenceBits;
     private final long timestampLeftShift = sequenceBits + workerIdBits;
-    private final long sequenceMask = -1L ^ -1L << sequenceBits;
+    private final long sequenceMask = ~(-1L << sequenceBits);
 
     private final long workerId;
 
@@ -40,9 +40,6 @@ public class SnowflakeId {
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    /**
-     * @param workerId Worker 的 ID
-     */
     public SnowflakeId(long workerId) {
         if (workerId > maxWorkerId || workerId < 0)
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
@@ -77,9 +74,10 @@ public class SnowflakeId {
     }
 
     /**
-     * 等待下一个毫秒的到来, 保证返回的毫秒数在参数 lastTimestamp 之后
+     * 获取时间戳，并与上次时间戳比较。
+     * 等待下一个毫秒的到来， 保证返回的毫秒数在参数 lastTimestamp 之后
      */
-    private static long tilNextMillis(long lastTimestamp) {
+    public static long tilNextMillis(long lastTimestamp) {
         long timestamp = System.currentTimeMillis();
 
         while (timestamp <= lastTimestamp)
@@ -88,7 +86,9 @@ public class SnowflakeId {
         return timestamp;
     }
 
-    // 实例
+    /**
+     * 实例
+     */
     private final static SnowflakeId INSTANCE = new SnowflakeId(1L);
 
     /**

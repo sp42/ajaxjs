@@ -1,6 +1,6 @@
-package com.ajaxjs.sql.util;
+package com.ajaxjs.data.util;
 
-import com.ajaxjs.sql.JdbcHelper;
+import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
@@ -34,6 +34,7 @@ public class DataBaseMetaHelper {
         try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName)) {
             if (rs != null && rs.next()) {
                 String createDDL = rs.getString(2);
+
                 return parse(createDDL);
             }
         } catch (SQLException e) {
@@ -55,10 +56,11 @@ public class DataBaseMetaHelper {
         Map<String, String> map = new HashMap<>();
         boolean hasDbName = StringUtils.hasText(dbName);
 
-        JdbcHelper.stmt(conn, stmt -> {
+        try (Statement stmt = conn.createStatement()) {
             for (String tableName : tableNames) {
                 String t = hasDbName ? dbName + "." + tableName : tableName;
-                JdbcHelper.rsHandle(stmt, "SHOW CREATE TABLE " + t, rs -> {
+
+                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + t)) {
                     String createDDL = null;
 
                     try {
@@ -70,9 +72,11 @@ public class DataBaseMetaHelper {
 
                     String comment = parse(createDDL);
                     map.put(tableName, comment);
-                });
+                }
             }
-        });
+        } catch (SQLException e) {
+            LOGGER.warning(e);
+        }
 
         return map;
     }
@@ -130,7 +134,7 @@ public class DataBaseMetaHelper {
         List<String> tables = new ArrayList<>();
         String sql = StringUtils.hasText(dbName) ? "SHOW TABLES FROM " + dbName : "SHOW TABLES";
 
-        JdbcHelper.query(conn, sql, rs -> {
+        JdbcReader.query(conn, sql, rs -> {
             try {
                 while (rs.next())
                     tables.add(rs.getString(1));
@@ -152,9 +156,9 @@ public class DataBaseMetaHelper {
     public static Map<String, List<Map<String, String>>> getColumnComment(Connection conn, List<String> tableNames) {
         Map<String, List<Map<String, String>>> map = new HashMap<>();
 
-        JdbcHelper.stmt(conn, stmt -> {
+        JdbcReader.stmt(conn, stmt -> {
             for (String tableName : tableNames) {
-                JdbcHelper.rsHandle(stmt, "SHOW FULL COLUMNS FROM " + tableName, rs -> {
+                JdbcReader.rsHandle(stmt, "SHOW FULL COLUMNS FROM " + tableName, rs -> {
                     List<Map<String, String>> list = new ArrayList<>();
                     rs2list(rs, list);
                     map.put(tableName, list);
@@ -182,7 +186,7 @@ public class DataBaseMetaHelper {
         target += tableName;
 
         List<Map<String, String>> list = new ArrayList<>();
-        JdbcHelper.query(conn, "SHOW FULL COLUMNS FROM " + target, rs -> rs2list(rs, list));
+        JdbcReader.query(conn, "SHOW FULL COLUMNS FROM " + target, rs -> rs2list(rs, list));
 
         return list;
     }
@@ -196,7 +200,7 @@ public class DataBaseMetaHelper {
     public static List<String> getDatabase(Connection conn) {
         List<String> list = new ArrayList<>();
 
-        JdbcHelper.query(conn, "SHOW DATABASES", rs -> {
+        JdbcReader.query(conn, "SHOW DATABASES", rs -> {
             try {
                 while (rs.next())
                     list.add(rs.getString("Database"));
