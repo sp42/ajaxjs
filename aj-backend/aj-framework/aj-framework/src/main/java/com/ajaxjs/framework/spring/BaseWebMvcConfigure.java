@@ -4,7 +4,6 @@ import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.ShowControllerInterceptor;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.framework.spring.response.MyJsonConverter;
-import com.ajaxjs.framework.spring.util.StartupTimeMetric;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -26,11 +25,6 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configure) {
         configure.enable();
-    }
-
-    @Bean
-    StartupTimeMetric StartupTimeMetricPostProcessor() {
-        return new StartupTimeMetric();
     }
 
     /**

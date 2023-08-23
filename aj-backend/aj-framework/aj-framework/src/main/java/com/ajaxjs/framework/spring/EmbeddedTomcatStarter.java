@@ -1,16 +1,11 @@
 package com.ajaxjs.framework.spring;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.rmi.registry.LocateRegistry;
-import java.util.HashSet;
-
-import javax.management.remote.JMXConnectorServer;
-import javax.management.remote.JMXConnectorServerFactory;
-import javax.management.remote.JMXServiceURL;
-import javax.servlet.Filter;
-
+import com.ajaxjs.Version;
+import com.ajaxjs.framework.spring.filter.FileUploadHelper;
+import com.ajaxjs.framework.spring.filter.UTF8CharsetFilter;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.Resources;
+import com.ajaxjs.util.logger.LogHelper;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.LifecycleState;
@@ -23,13 +18,23 @@ import org.apache.catalina.webresources.StandardRoot;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
 import org.apache.tomcat.util.scan.StandardJarScanFilter;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.SpringServletContainerInitializer;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
 
-import com.ajaxjs.Version;
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.Resources;
-import com.ajaxjs.util.logger.LogHelper;
+import javax.management.remote.JMXConnectorServer;
+import javax.management.remote.JMXConnectorServerFactory;
+import javax.management.remote.JMXServiceURL;
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.rmi.registry.LocateRegistry;
 
 /**
  * 嵌入式使用 Tomcat
@@ -65,7 +70,7 @@ public class EmbeddedTomcatStarter {
             if (isStatedSpring || (event.getLifecycle().getState() != LifecycleState.STARTING_PREP))
                 return;
 
-            BaseWebInitializer.coreStartup(context.getServletContext(), clz);
+            coreStartup(context.getServletContext(), clz);
 //			anotherWayToStartStrping();
 
             if (isEnableJMX) { // 将定义好的 MBean 注册到 MBeanServer
@@ -118,25 +123,6 @@ public class EmbeddedTomcatStarter {
         LOGGER.info(tpl);
 
         tomcat.getServer().await(); // 保持主线程不退出，让其阻塞，不让当前线程结束，等待处理请求
-    }
-
-    /**
-     * 另外一种方式启动 Spring。但不能加入配置类 clz，且更繁琐。 WebAppInitializer 需要实现
-     * WebApplicationInitializer
-     */
-    @SuppressWarnings("unused")
-    private void anotherWayToStartSpring() {
-        try {
-            new SpringServletContainerInitializer().onStartup(new HashSet<Class<?>>() {
-                private static final long serialVersionUID = 1L;
-
-                {
-                    add(BaseWebInitializer.class);
-                }
-            }, context.getServletContext());
-        } catch (Throwable e) {
-            LOGGER.warning(e);
-        }
     }
 
     /**
@@ -217,7 +203,6 @@ public class EmbeddedTomcatStarter {
         tomcat.getService().addConnector(connector);// 只能设置一个 service,直接拿默认的
 
         if (isEnableJMX) {
-
 //            Connector jmxConnector = new Connector("org.apache.coyote.jmx.JmxProtocol");
 //            jmxConnector.setPort(8999); // Set the desired JMX port
 //            tomcat.getService().addConnector(jmxConnector);
@@ -264,5 +249,34 @@ public class EmbeddedTomcatStarter {
      */
     public static void start(int port, String contextPath, Class<?>... clz) {
         new EmbeddedTomcatStarter().init(port, contextPath, clz);
+    }
+
+    public static void coreStartup(ServletContext ctx, Class<?>... clz) {
+        if (ctx == null) // 可能在测试
+            return;
+
+        // 通过注解的方式初始化 Spring 的上下文，注册 Spring 的配置类（替代传统项目中 xml 的 configuration）
+        AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
+        ac.setServletContext(ctx);
+        if (!ObjectUtils.isEmpty(clz))
+            ac.register(clz);
+        ac.refresh();
+        ac.registerShutdownHook();
+
+        ctx.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+        ctx.addListener(new ContextLoaderListener()); // 监听器
+        ctx.setAttribute("ctx", ctx.getContextPath()); // 为 JSP 提供 shorthands
+
+        // 绑定 servlet
+        ServletRegistration.Dynamic registration = ctx.addServlet("dispatcher", new DispatcherServlet(ac));
+        registration.setLoadOnStartup(1);// 设置 tomcat 启动立即加载 servlet
+        registration.addMapping("/"); // 浏览器访问 uri。注意不要设置 /*
+
+        // 字符过滤器
+//        new CharacterEncodingFilter("UTF-8")
+        FilterRegistration.Dynamic filterReg = ctx.addFilter("InitMvcRequest", new UTF8CharsetFilter());
+        filterReg.addMappingForUrlPatterns(null, true, "/*");
+
+        FileUploadHelper.initUpload(ctx, registration);
     }
 }

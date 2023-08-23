@@ -2,7 +2,6 @@ package com.ajaxjs.framework.spring.response;
 
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.spring.BaseWebInitializer;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.map.MapTool;
