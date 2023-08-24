@@ -1,7 +1,7 @@
 package com.ajaxjs.developertools.monitor;
 
-import com.ajaxjs.developertools.monitor.model.jvm.Node;
-import com.ajaxjs.developertools.monitor.model.jvm.NodeType;
+import com.ajaxjs.developertools.monitor.jvm.model.Node;
+import com.ajaxjs.developertools.monitor.jvm.model.NodeType;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
@@ -10,7 +10,11 @@ import javax.management.openmbean.CompositeDataSupport;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -164,6 +168,7 @@ public class JmxHelper {
         return nodes;
     }
 
+    @SuppressWarnings("unchecked")
     public static SortedMap<String, Object> analyzeCompositeData(Object compositeData) {
         try {
             if (compositeData instanceof CompositeDataSupport) {
@@ -232,5 +237,88 @@ public class JmxHelper {
 
     public JMXConnector getConnector() {
         return connector;
+    }
+
+    /**
+     * 注册一个 MBean
+     * 接口必须以 MBean 结尾，且提供 String getStatus(); 方法。
+     * <pre>
+     * public interface CustomTomcatThreadPoolMBean {
+     *     String getStatus();
+     * }
+     * </pre>
+     *
+     * @param mBean MBean 对象，须实现接口方法
+     * @param name  ObjectName 须符合一定格式，如 "qww:type=CustomTomcatThreadPool"
+     */
+    public void registerMBean(Object mBean, String name) {
+        try {
+            ManagementFactory.getPlatformMBeanServer().registerMBean(mBean, new ObjectName(name));
+        } catch (InstanceAlreadyExistsException | MBeanRegistrationException | NotCompliantMBeanException |
+                 MalformedObjectNameException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void dumpMBean(MBeanServer server, ObjectName objName, MBeanInfo mbi, Writer writer) throws Exception {
+        writer.write(String.format("MBeanClassName=%s%n", mbi.getClassName()));
+        Map<String, String> props = new HashMap<>();
+        int idx = 0;
+
+        for (MBeanAttributeInfo mf : mbi.getAttributes()) {
+            idx++;
+
+            try {
+                Object attr = server.getAttribute(objName, mf.getName());
+
+                if (attr != null) props.put(mf.getName(), attr.toString());
+            } catch (Exception ex) {
+                // sun.management.RuntimeImpl: java.lang.UnsupportedOperationException(Boot class path mechanism is not supported)
+                props.put("error_" + idx, ex.getClass().getName() + " " + ex.getMessage());
+            }
+        }
+
+        // sort by hashmap keys
+        for (String sKey : new TreeSet<>(props.keySet()))
+            writer.write(String.format("%s=%s%n", sKey, props.get(sKey)));
+    }
+
+    /**
+     * Dump MBean management properties, all beans or named bean {@code dumpMBean.jsp?name=ConnectionPool,ContainerMBean}
+     * JSP as below:
+     * <pre>{@code
+     * <%@ page contentType="text/plain; charset=UTF-8"  pageEncoding="UTF-8" import="com.ajaxjs.developertools.monitor.JmxHelper"%>
+     * <%
+     *     JmxHelper.printMBean(request, out);
+     * %>
+     * }</pre>
+     */
+    public static void printMBean(HttpServletRequest request, JspWriter out) throws Exception {
+        String val = request.getParameter("name");
+        String[] names = val != null ? val.trim().split(",") : new String[0];
+        if (names.length == 1 && names[0].isEmpty()) names = new String[0];
+
+        MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+
+        for (ObjectName objName : server.queryNames(null, null)) {
+            MBeanInfo mbi = server.getMBeanInfo(objName);
+
+            boolean match = names.length < 1;
+            String name = mbi.getClassName();
+
+            for (String s : names) {
+                if (name.endsWith(s)) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                JmxHelper.dumpMBean(server, objName, mbi, out);
+                out.println("");
+            }
+        }
+
+        out.flush();
     }
 }

@@ -44,6 +44,11 @@ public class EmbeddedTomcatStarter {
 
     Tomcat tomcat;
 
+    /**
+     * 获取监控信息用
+     */
+    public static Tomcat TOMCAT;
+
     StandardContext context;
 
     public static long startedTime;
@@ -73,21 +78,8 @@ public class EmbeddedTomcatStarter {
             coreStartup(context.getServletContext(), clz);
 //			anotherWayToStartStrping();
 
-            if (isEnableJMX) { // 将定义好的 MBean 注册到 MBeanServer
-                try {
-                    LocateRegistry.createRegistry(9011); //这个步骤很重要，注册一个端口，绑定url  后用于客户端通过 rmi 方式连接 JMXConnectorServer
-                    JMXConnectorServer cs = JMXConnectorServerFactory.newJMXConnectorServer(
-                            new JMXServiceURL("service:jmx:rmi://localhost/jndi/rmi://localhost:9011/jmxrmi"),
-                            null,
-                            ManagementFactory.getPlatformMBeanServer() // 获取当前 JVM 的 MBeanServer，ObjectName 是 MBean 的唯一标示，一个 MBeanServer 不能有重复。
-                            // 完整的格式「自定义命名空间:type=自定义类型,name=自定义名称」。当然你可以只声明 type ，不声明 name
-                    );
-                    cs.start();
-                    LOGGER.info("成功启动 JMXConnectorServer");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            if (isEnableJMX)
+                connectMBeanServer();
 
             isStatedSpring = true;
             springTime = System.currentTimeMillis() - startedTime;
@@ -153,6 +145,8 @@ public class EmbeddedTomcatStarter {
         tomcat.enableNaming();
         tomcat.getHost().setAutoDeploy(false);
         tomcat.getHost().setAppBase("webapp");
+
+        TOMCAT = tomcat;
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
@@ -258,8 +252,10 @@ public class EmbeddedTomcatStarter {
         // 通过注解的方式初始化 Spring 的上下文，注册 Spring 的配置类（替代传统项目中 xml 的 configuration）
         AnnotationConfigWebApplicationContext ac = new AnnotationConfigWebApplicationContext();
         ac.setServletContext(ctx);
+
         if (!ObjectUtils.isEmpty(clz))
             ac.register(clz);
+
         ac.refresh();
         ac.registerShutdownHook();
 
@@ -278,5 +274,24 @@ public class EmbeddedTomcatStarter {
         filterReg.addMappingForUrlPatterns(null, true, "/*");
 
         FileUploadHelper.initUpload(ctx, registration);
+    }
+
+    /**
+     * 将定义好的 Tomcat MBean 注册到 MBeanServer
+     * 参见 <a href="https://blog.csdn.net/zhangxin09/article/details/132136748">...</a>
+     */
+    private static void connectMBeanServer() {
+        try {
+            LocateRegistry.createRegistry(9011); //这个步骤很重要，注册一个端口，绑定url  后用于客户端通过 rmi 方式连接 JMXConnectorServer
+
+            JMXConnectorServer cs = JMXConnectorServerFactory.newJMXConnectorServer(new JMXServiceURL("service:jmx:rmi://localhost/jndi/rmi://localhost:9011/jmxrmi"), null, ManagementFactory.getPlatformMBeanServer() // 获取当前 JVM 的 MBeanServer，ObjectName 是 MBean 的唯一标示，一个 MBeanServer 不能有重复。
+                    // 完整的格式「自定义命名空间:type=自定义类型,name=自定义名称」。当然你可以只声明 type ，不声明 name
+            );
+
+            cs.start();
+            LOGGER.info("成功启动 JMXConnectorServer");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,14 +1,12 @@
 package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.monitor.TomcatJdbcPoolMonitor;
 import com.ajaxjs.util.logger.LogHelper;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.sql.DataSource;
 import java.lang.management.ManagementFactory;
@@ -189,7 +187,7 @@ public class JdbcConn {
         p.setInitialSize(10);
         p.setMaxWait(10000);
         p.setMaxIdle(30);
-        p.setJmxEnabled(true);
+        p.setJmxEnabled(false);
         p.setMinIdle(5);
         p.setTestOnBorrow(true);
         p.setTestWhileIdle(true);
@@ -198,10 +196,22 @@ public class JdbcConn {
         p.setDefaultAutoCommit(true);
         org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
         ds.setPoolProperties(p);
-
-        TomcatJdbcPoolMonitor.registerMBean(ds);
+//        registerMBean(ds);
 
         return ds;
+    }
+
+    /**
+     * 一般来说 Tomcat 会自动注册但是我们现在手动使用 Pool，于是也得手动地注册到 MBean
+     */
+    private static void registerMBean(org.apache.tomcat.jdbc.pool.DataSource ds) {
+try {
+    MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+    ObjectName on = new ObjectName("org.apache.tomcat.jdbc.pool.jmx.ConnectionPool:type=Logging2");
+    server.registerMBean(ds.getPool().getJmxPool(), on);
+} catch (Throwable e) {
+    System.err.println(e);
+}
     }
 
     /**

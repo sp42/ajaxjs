@@ -1,9 +1,9 @@
 package com.ajaxjs.developertools.monitor.jvm;
 
 import com.ajaxjs.developertools.monitor.JmxHelper;
-import com.ajaxjs.developertools.monitor.model.jvm.MemoryUsage;
-import com.ajaxjs.developertools.monitor.model.jvm.ThreadInfo;
-import com.ajaxjs.developertools.monitor.model.jvm.*;
+import com.ajaxjs.developertools.monitor.jvm.model.*;
+import com.ajaxjs.developertools.monitor.jvm.model.MemoryUsage;
+import com.ajaxjs.developertools.monitor.jvm.model.ThreadInfo;
 import com.ajaxjs.util.reflect.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * 日期格式化
+ * SimpleDateFormat 不是线程安全的，Java 8 之后尽量使用 java.time.DateTimeFormatter
  * 
  * @author sp42 frank@ajaxjs.com
  *

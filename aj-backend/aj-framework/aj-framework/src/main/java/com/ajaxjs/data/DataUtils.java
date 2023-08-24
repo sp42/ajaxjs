@@ -3,6 +3,10 @@ package com.ajaxjs.data;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -164,5 +168,19 @@ public class DataUtils {
         }
 
         return sb.toString().trim();
+    }
+
+    /**
+     * 检测表是否存在
+     */
+    public  static boolean checkTableExists(Connection conn, String tableName) {
+        try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)) {
+            if (rs.next())
+                return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

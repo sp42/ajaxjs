@@ -1,12 +1,16 @@
 package com.ajaxjs.developertools.monitor.jvm;
 
 import com.ajaxjs.developertools.monitor.JmxHelper;
-import com.ajaxjs.developertools.monitor.model.jvm.*;
-import com.ajaxjs.framework.spring.validator.custom.IdCard;
+import com.ajaxjs.developertools.monitor.TomcatInfo;
+import com.ajaxjs.developertools.monitor.jvm.model.*;
+import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
+
+import com.ajaxjs.util.TestHelper;
 import com.sun.tools.attach.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import sun.management.ConnectorAddressLink;
 
 import javax.management.*;
@@ -22,9 +26,11 @@ import java.util.*;
 public class JvmMonitorController {
     JmxHelper INSTANCE = new JmxHelper();
 
-    @PostMapping("/test/{id}")
-    public boolean test(@PathVariable @IdCard String id) {
-        System.out.println(id);
+    @GetMapping("/test")
+    public boolean test() {
+        Map<String, String> tomcatSimplyInfo = TomcatInfo.getTomcatSimplyInfo(EmbeddedTomcatStarter.TOMCAT);
+        TestHelper.printJson(tomcatSimplyInfo);
+
         return true;
     }
 

@@ -1,6 +1,7 @@
 package com.ajaxjs.developertools.monitor;
 
-import com.ajaxjs.developertools.monitor.model.tomcat.TomcatInfo;
+import com.ajaxjs.developertools.monitor.tomcat_jmx.model.TomcatInfo;
+import com.ajaxjs.developertools.monitor.tomcat_jmx.TomcatJmx;
 import com.ajaxjs.util.TestHelper;
 import org.junit.Test;
 

@@ -6,6 +6,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import com.ajaxjs.developertools.monitor.oshi.OshiSystemMonitor;
 import org.junit.Test;
 
 import com.ajaxjs.util.map.JsonHelper;

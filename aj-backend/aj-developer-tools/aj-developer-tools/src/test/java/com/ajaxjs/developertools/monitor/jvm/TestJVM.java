@@ -1,9 +1,9 @@
 package com.ajaxjs.developertools.monitor.jvm;
 
 import com.ajaxjs.developertools.BaseTest;
-import com.ajaxjs.developertools.monitor.model.jvm.Node;
-import com.ajaxjs.developertools.monitor.model.jvm.Overview;
-import com.ajaxjs.developertools.monitor.model.jvm.Vm;
+import com.ajaxjs.developertools.monitor.jvm.model.Node;
+import com.ajaxjs.developertools.monitor.jvm.model.Overview;
+import com.ajaxjs.developertools.monitor.jvm.model.Vm;
 import com.ajaxjs.util.TestHelper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
