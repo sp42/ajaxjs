@@ -1,4 +1,4 @@
-package com.ajaxjs.db_meta;
+package com.ajaxjs.database_meta;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;

@@ -1,4 +1,4 @@
-//package com.ajaxjs.database_meta;
+package com.ajaxjs.database_meta;
 //
 //import com.ajaxjs.data.jdbc_helper.JdbcConn;
 //import com.ajaxjs.database_meta.model.DataSourceInfo;
@@ -17,7 +17,7 @@
 // *
 // * @author Frank Cheung sp42@qq.com
 // */
-//public abstract class BaseMakeDbDocController {
+public class BaseMakeDbDocController {
 //    /**
 //     * 使用了缓存，就不用保持到磁盘
 //     */
@@ -75,4 +75,4 @@
 //        this.jsonPath = jsonPath;
 //    }
 //
-//}
+}

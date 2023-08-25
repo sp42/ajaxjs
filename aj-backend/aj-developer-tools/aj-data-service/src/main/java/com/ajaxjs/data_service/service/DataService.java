@@ -8,7 +8,6 @@ import com.ajaxjs.data_service.plugin.IPlugin;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.entity.BaseEntityConstants;
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.sql.util.SnowflakeId;
 import com.ajaxjs.util.logger.LogHelper;
 import org.apache.ibatis.session.SqlSession;
@@ -188,7 +187,7 @@ public class DataService {
 					Map<String, Object> camel = new HashMap<>(result.size());
 
 					for (String key : result.keySet())
-						camel.put(JdbcUtil.changeColumnToFieldName(key), result.get(key));
+						camel.put(DataUtils.changeColumnToFieldName(key), result.get(key));
 
 					result.clear(); // 提早清除
 					result = camel;
@@ -218,7 +217,7 @@ public class DataService {
 					Map<String, Object> camel = new HashMap<>();
 
 					for (String key : map.keySet())
-						camel.put(JdbcUtil.changeColumnToFieldName(key), map.get(key));
+						camel.put(DataUtils.changeColumnToFieldName(key), map.get(key));
 
 					map.clear(); // 提早清除
 					list.set(i, camel);
@@ -305,7 +304,7 @@ public class DataService {
 
 		if (params.containsKey("pageNo")) {
 			int pageNo = (int) params.get("pageNo");
-			start = JdbcUtil.pageNo2start(pageNo, limit);
+			start = PageEnhancer.pageNo2start(pageNo, limit);
 		} else if (params.containsKey("start"))
 			start = (int) params.get("start");
 		else
@@ -434,7 +433,7 @@ public class DataService {
 			Map<String, Object> dbStyle = new HashMap<>();
 
 			for (String key : _params.keySet())
-				dbStyle.put(JdbcUtil.changeFieldToColumnName(key), _params.get(key));
+				dbStyle.put(DataUtils.changeFieldToColumnName(key), _params.get(key));
 
 			_params.clear(); // 提早清除
 			_params = dbStyle;
@@ -551,7 +550,7 @@ public class DataService {
 			Map<String, Object> dbStyle = new HashMap<>();
 
 			for (String key : _params.keySet())
-				dbStyle.put(JdbcUtil.changeFieldToColumnName(key), _params.get(key));
+				dbStyle.put(DataUtils.changeFieldToColumnName(key), _params.get(key));
 
 			_params.clear(); // 提早清除
 			_params = dbStyle;

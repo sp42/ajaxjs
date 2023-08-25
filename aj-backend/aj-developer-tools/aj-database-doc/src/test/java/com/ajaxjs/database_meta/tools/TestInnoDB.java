@@ -1,4 +1,4 @@
-package com.ajaxjs.db_meta.tools;
+package com.ajaxjs.database_meta.tools;
 
 import com.ajaxjs.util.TestHelper;
 import org.junit.Test;

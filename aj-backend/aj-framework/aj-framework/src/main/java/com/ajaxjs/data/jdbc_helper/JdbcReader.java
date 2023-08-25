@@ -2,7 +2,6 @@ package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.ResultSetProcessor;
-import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
@@ -66,7 +65,7 @@ public class JdbcReader extends JdbcConn {
         ResultSetMetaData metaData = rs.getMetaData();
 
         for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
-            String key = JdbcUtil.changeColumnToFieldName(metaData.getColumnLabel(i));
+            String key = DataUtils.changeColumnToFieldName(metaData.getColumnLabel(i));
             Object value = rs.getObject(i);
 
             map.put(key, value);
@@ -207,7 +206,7 @@ public class JdbcReader extends JdbcConn {
                 Object _value = rs.getObject(i); // Real value in DB
 
                 if (key.contains("_")) // 将以下划线分隔的数据库字段转换为驼峰风格的字符串
-                    key = JdbcUtil.changeColumnToFieldName(key);
+                    key = DataUtils.changeColumnToFieldName(key);
 
                 try {
                     PropertyDescriptor property = new PropertyDescriptor(key, beanClz);

@@ -1,7 +1,5 @@
-package com.ajaxjs.db_meta;
+package com.ajaxjs.database_meta;
 
-import com.ajaxjs.database_meta.BaseMakeDbDocController;
-import com.ajaxjs.database_meta.DB;
 import com.ajaxjs.database_meta.model.DataBaseDetail;
 import com.ajaxjs.database_meta.model.TableDesc;
 import com.ajaxjs.database_meta.model.TableDetailRes;

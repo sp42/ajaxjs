@@ -4,7 +4,6 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.entity.BaseEntityConstants;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.date.DateUtil;
 import org.springframework.util.CollectionUtils;
 
@@ -165,7 +164,7 @@ public class JspHelper {
 
 			if (req.getParameter("pageNo") != null) {
 				int pageNo = Integer.parseInt(req.getParameter("pageNo"));
-				start = JdbcUtil.pageNo2start(pageNo, limit);
+				start = PageEnhancer.pageNo2start(pageNo, limit);
 			} else if (req.getParameter("start") != null)
 				start = Integer.parseInt(req.getParameter("start"));
 			else

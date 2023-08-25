@@ -1,10 +1,9 @@
 package com.ajaxjs.database_meta;
 
+import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.database_meta.model.Column;
 import com.ajaxjs.database_meta.model.Database;
 import com.ajaxjs.database_meta.model.Table;
-import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.map.JsonHelper;
@@ -16,7 +15,9 @@ import net.sf.jsqlparser.statement.create.table.CreateTable;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,16 +37,14 @@ public class DataBaseQuery extends BaseMetaQuery {
      * @return 所有库名
      */
     public String[] getDatabase() {
-        List<String> list = new ArrayList<>();
-
-        JdbcHelper.query(conn, "SHOW DATABASES", rs -> {
+        List<String> list = getResult("SHOW DATABASES", rs -> {
             try {
-                while (rs.next())
-                    list.add(rs.getString("Database"));
+                return rs.getString("Database");
             } catch (SQLException e) {
                 e.printStackTrace();
+                return null;
             }
-        });
+        }, String.class);
 
         return list.toArray(new String[0]);
     }
@@ -66,10 +65,8 @@ public class DataBaseQuery extends BaseMetaQuery {
         TableQuery tableQuery = new TableQuery(conn);
 
         for (String databaseName : databases) {
-
             // ignore system table
-            if (StrUtil.isWordOneOfThem(databaseName, IGNORE_SYSTEM_TABLE))
-                continue;
+            if (StrUtil.isWordOneOfThem(databaseName, IGNORE_SYSTEM_TABLE)) continue;
 
             Database database = new Database();
             database.setUuid(String.valueOf(SnowflakeId.get()));
@@ -99,8 +96,7 @@ public class DataBaseQuery extends BaseMetaQuery {
                 }
             }
 
-            if (_database == null)
-                return null; // 找不到 dbName 的
+            if (_database == null) return null; // 找不到 dbName 的
             else {
                 List<Table> full = getDataBaseWithTableFull(_database.getTables(), _database.getName());
                 _database.setTableInfo(full);
@@ -132,18 +128,14 @@ public class DataBaseQuery extends BaseMetaQuery {
         List<Table> tables = new ArrayList<>();
         boolean hasDbName = StringUtils.hasText(dbName);
 
-        JdbcHelper.stmt(conn, stmt -> {
+        try (Statement stmt = conn.createStatement()) {
             for (String tableName : tableNames) {
                 String t = hasDbName ? dbName + "." + tableName : tableName;
-                JdbcHelper.rsHandle(stmt, "SHOW CREATE TABLE " + t, rs -> {
-                    String createDDL = null;
 
-                    try {
-                        if (rs.next())
-                            createDDL = rs.getString(2);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + tableName)) {
+                    String createDDL = null;
+                    if (rs.next())
+                        createDDL = rs.getString(2);
 
                     Table table = new Table();
                     tables.add(table);
@@ -151,11 +143,13 @@ public class DataBaseQuery extends BaseMetaQuery {
                     table.setUuid(String.valueOf(SnowflakeId.get()));
                     table.setName(tableName);
                     table.setDdl((createDDL));
-                    table.setComment(DataBaseMetaHelper.parse(createDDL));
+                    table.setComment(TableQuery.parse(createDDL));
                     table.setColumns(parseColumns(createDDL));
-                });
+                }
             }
-        });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return tables;
     }
@@ -183,8 +177,7 @@ public class DataBaseQuery extends BaseMetaQuery {
 
                 colInfo.setType(type);
                 String regMatch = RegExpUtils.regMatch("\\((\\d+)\\)", type, 1);
-                if (StringUtils.hasText(regMatch))
-                    colInfo.setLength(Integer.parseInt(regMatch));
+                if (StringUtils.hasText(regMatch)) colInfo.setLength(Integer.parseInt(regMatch));
 
                 String ddlItem = col.toString();
                 String comment = RegExpUtils.regMatch("COMMENT '(.*)'", ddlItem, 1);

@@ -1,19 +1,14 @@
 package com.ajaxjs.developertools.tools.mysql;
 
-import java.sql.Connection;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import com.ajaxjs.util.DateUtil;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.logger.LogHelper;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import com.ajaxjs.sql.JdbcReader;
-import com.ajaxjs.util.DateUtil;
-import com.ajaxjs.util.io.FileHelper;
-
-import com.ajaxjs.util.logger.LogHelper;
+import java.util.function.Consumer;
 
 /**
  * 免 mysqldump 命令备份 SQL
@@ -22,6 +17,21 @@ import com.ajaxjs.util.logger.LogHelper;
  */
 public class MysqlExport {
     private static final LogHelper LOGGER = LogHelper.getLog(MysqlExport.class);
+
+    /**
+     * ResultSet 处理器
+     *
+     * @param stmt   Statement 对象
+     * @param sql    SQL 语句
+     * @param handle 控制器
+     */
+    public static void rsHandle(Statement stmt, String sql, Consumer<ResultSet> handle) {
+        try (ResultSet rs = stmt.executeQuery(sql)) {
+            handle.accept(rs);
+        } catch (SQLException e) {
+            LOGGER.warning(e);
+        }
+    }
 
     /**
      * 创建 MysqlExport 对象
@@ -68,10 +78,9 @@ public class MysqlExport {
     private List<String> getAllTables() {
         List<String> tables = new ArrayList<>();
 
-        JdbcReader.rsHandle(stmt, "SHOW TABLE STATUS FROM `" + databaseName + "`;", rs -> {
+        rsHandle(stmt, "SHOW TABLE STATUS FROM `" + databaseName + "`;", rs -> {
             try {
-                while (rs.next())
-                    tables.add(rs.getString("Name"));
+                while (rs.next()) tables.add(rs.getString("Name"));
             } catch (SQLException e) {
                 LOGGER.warning(e);
             }
@@ -89,23 +98,21 @@ public class MysqlExport {
     private String getTableInsertStatement(String table) {
         StringBuilder sql = new StringBuilder();
 
-        JdbcReader.rsHandle(stmt, "SHOW CREATE TABLE `" + table + "`;", rs -> {
-            try {
-                while (rs.next()) {
-                    String qtbl = rs.getString(1), query = rs.getString(2);
-                    query = query.trim().replace("CREATE TABLE", "CREATE TABLE IF NOT EXISTS");
+        try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE `" + table + "`;")) {
+            while (rs.next()) {
+                String qtbl = rs.getString(1), query = rs.getString(2);
+                query = query.trim().replace("CREATE TABLE", "CREATE TABLE IF NOT EXISTS");
 
-                    sql.append("\n\n--");
-                    sql.append("\n").append(SQL_START_PATTERN).append(" table dump: ").append(qtbl);
-                    sql.append("\n--\n\n");
-                    sql.append(query).append(";\n\n");
-                }
-
-                sql.append("\n\n--\n").append(SQL_END_PATTERN).append(" table dump: ").append(table).append("\n--\n\n");
-            } catch (SQLException e) {
-                LOGGER.warning(e);
+                sql.append("\n\n--");
+                sql.append("\n").append(SQL_START_PATTERN).append(" table dump: ").append(qtbl);
+                sql.append("\n--\n\n");
+                sql.append(query).append(";\n\n");
             }
-        });
+
+            sql.append("\n\n--\n").append(SQL_END_PATTERN).append(" table dump: ").append(table).append("\n--\n\n");
+        } catch (SQLException e) {
+            LOGGER.warning(e);
+        }
 
         return sql.toString();
     }
@@ -119,7 +126,7 @@ public class MysqlExport {
     private String getDataInsertStatement(String table) {
         StringBuilder sql = new StringBuilder();
 
-        JdbcReader.rsHandle(stmt, "SELECT * FROM " + "`" + table + "`;", rs -> {
+        rsHandle(stmt, "SELECT * FROM " + "`" + table + "`;", rs -> {
             try {
                 rs.last();
 //				int rowCount = rs.getRow();
@@ -181,11 +188,9 @@ public class MysqlExport {
         sql.append("\n-- Date: ").append(DateUtil.now("d-M-Y H:m:s")).append("\n--");
 
         // these declarations are extracted from HeidiSQL
-        sql.append("\n\n/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;").append("\n/*!40101 SET NAMES utf8 */;\n/*!50503 SET NAMES utf8mb4 */;")
-                .append("\n/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;")
-                .append("\n/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;");
+        sql.append("\n\n/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;").append("\n/*!40101 SET NAMES utf8 */;\n/*!50503 SET NAMES utf8mb4 */;").append("\n/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;").append("\n/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;");
 
-               for (String s : getAllTables()) {
+        for (String s : getAllTables()) {
             sql.append(getTableInsertStatement(s.trim()));
             sql.append(getDataInsertStatement(s.trim()));
         }
@@ -196,9 +201,7 @@ public class MysqlExport {
             LOGGER.warning(e);
         }
 
-        sql.append("\n/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;")
-                .append("\n/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;")
-                .append("\n/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;");
+        sql.append("\n/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;").append("\n/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;").append("\n/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;");
 
         return sql.toString();
     }
@@ -219,6 +222,4 @@ public class MysqlExport {
 
         return fileName.replace(".sql", ".zip");
     }
-
-
 }

@@ -1,4 +1,4 @@
- package com.ajaxjs.db_meta;
+ package com.ajaxjs.database_meta;
 
  import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
  import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;

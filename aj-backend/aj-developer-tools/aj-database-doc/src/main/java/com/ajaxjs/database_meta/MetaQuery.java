@@ -59,6 +59,7 @@ public class MetaQuery extends BaseMetaQuery {
             try {
                 String name = rs.getString(1);
                 String value = rs.getString(2);
+
                 map.put(name, value);
             } catch (SQLException e) {
                 LOGGER.warning(e);

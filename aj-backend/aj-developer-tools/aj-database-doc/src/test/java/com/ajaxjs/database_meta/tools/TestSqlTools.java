@@ -1,7 +1,6 @@
-package com.ajaxjs.db_meta.tools;
+package com.ajaxjs.database_meta.tools;
 
-import com.ajaxjs.database_meta.tools.SqlTools;
-import com.ajaxjs.db_meta.BaseTest;
+import com.ajaxjs.database_meta.BaseTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

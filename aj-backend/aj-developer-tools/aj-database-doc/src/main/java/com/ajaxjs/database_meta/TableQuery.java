@@ -1,11 +1,12 @@
 package com.ajaxjs.database_meta;
 
-import com.ajaxjs.sql.JdbcHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,19 +31,15 @@ public class TableQuery extends BaseMetaQuery {
      * @return 所有表名称
      */
     public List<String> getAllTableName(String dbName) {
-        List<String> tables = new ArrayList<>();
         String sql = StringUtils.hasText(dbName) ? "SHOW TABLES FROM " + dbName : "SHOW TABLES";
 
-        JdbcHelper.query(conn, sql, rs -> {
+        return getResult(sql, rs -> {
             try {
-                while (rs.next())
-                    tables.add(rs.getString(1));
+                return rs.getString(1);
             } catch (SQLException e) {
-                LOGGER.warning(e);
+                throw new RuntimeException(e);
             }
-        });
-
-        return tables;
+        }, String.class);
     }
 
     /**
@@ -52,7 +49,33 @@ public class TableQuery extends BaseMetaQuery {
      * @return 表注释
      */
     public String getTableComment(String tableName) {
-        return DataBaseMetaHelper.getTableComment(conn, tableName);
+        return getMapResult("SHOW CREATE TABLE " + tableName, (rs, map) -> {
+            try {
+                String createDDL = rs.getString(2);
+                map.put("comment", parse(createDDL));
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).get("comment");
+    }
+
+    /**
+     * 返回注释信息
+     *
+     * @param all DDL
+     * @return 注释信息
+     */
+    public static String parse(String all) {
+        if (all == null)
+            return null;
+
+        int index = all.indexOf("COMMENT='");
+        if (index < 0)
+            return "";
+
+        String comment = all.substring(index + 9);
+
+        return comment.substring(0, comment.length() - 1);
     }
 
     /**
@@ -66,10 +89,11 @@ public class TableQuery extends BaseMetaQuery {
         Map<String, String> map = new HashMap<>();
         boolean hasDbName = StringUtils.hasText(dbName);
 
-        JdbcHelper.stmt(conn, stmt -> {
+        try (Statement stmt = conn.createStatement()) {
             for (String tableName : tableNames) {
                 String t = hasDbName ? dbName + "." + tableName : tableName;
-                JdbcHelper.rsHandle(stmt, "SHOW CREATE TABLE " + t, rs -> {
+
+                try (ResultSet rs = stmt.executeQuery("SHOW CREATE TABLE " + t)) {
                     String createDDL = null;
 
                     try {
@@ -79,11 +103,13 @@ public class TableQuery extends BaseMetaQuery {
                         LOGGER.warning(e);
                     }
 
-                    String comment = DataBaseMetaHelper.parse(createDDL);
+                    String comment = TableQuery.parse(createDDL);
                     map.put(tableName, comment);
-                });
+                }
             }
-        });
+        } catch (SQLException e) {
+            LOGGER.warning(e);
+        }
 
         return map;
     }

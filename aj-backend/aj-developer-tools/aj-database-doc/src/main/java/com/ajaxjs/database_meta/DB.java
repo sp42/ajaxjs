@@ -38,8 +38,7 @@ public class DB {
 
             // 使用正则表达式提取 IP 地址和端口号
             Matcher matcher = Pattern.compile("//(.*):(\\d+)/").matcher(url);
-            String ip = "";
-            String port = "";
+            String ip = "", port = "";
 
             if (matcher.find()) {
                 ip = matcher.group(1);

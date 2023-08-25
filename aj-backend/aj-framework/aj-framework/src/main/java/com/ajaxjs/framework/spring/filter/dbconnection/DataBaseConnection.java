@@ -3,7 +3,6 @@ package com.ajaxjs.framework.spring.filter.dbconnection;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
-import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
@@ -73,6 +72,11 @@ public class DataBaseConnection implements HandlerInterceptor {
         return conn;
     }
 
+    /**
+     * 为方便单测，设一个开关
+     */
+    public static boolean IS_DB_CONNECTION_AUTO_CLOSE = true;
+
     @Override
     public void afterCompletion(HttpServletRequest req, HttpServletResponse resp, Object handler, @Nullable Exception ex) {
         if (handler instanceof HandlerMethod) {
@@ -91,7 +95,7 @@ public class DataBaseConnection implements HandlerInterceptor {
                 } catch (Throwable e) {
                     LOGGER.warning(e);
                 } finally {
-                    if (JdbcUtil.IS_DB_CONNECTION_AUTO_CLOSE) // 保证一定关闭，哪怕有异常
+                    if (IS_DB_CONNECTION_AUTO_CLOSE) // 保证一定关闭，哪怕有异常
                         JdbcConn.closeDb();
                 }
             }

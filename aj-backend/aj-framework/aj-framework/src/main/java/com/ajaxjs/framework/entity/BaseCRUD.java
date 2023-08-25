@@ -2,7 +2,7 @@ package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.data.util.IdWorker;
+import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 
@@ -126,7 +126,7 @@ public class BaseCRUD<T, K extends Serializable> {
 
     public K create(Map<String, Object> params) {
         if (idType == 2)
-            params.put(idField, IdWorker.get());
+            params.put(idField, SnowflakeId.get());
 
         if (idType == 3)
             params.put(idField, StrUtil.uuid());

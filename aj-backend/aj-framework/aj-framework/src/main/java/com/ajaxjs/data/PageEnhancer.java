@@ -3,7 +3,6 @@ package com.ajaxjs.data;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.sql.JdbcUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import lombok.Data;
 import net.sf.jsqlparser.JSQLParserException;
@@ -60,7 +59,7 @@ public class PageEnhancer {
         Integer pageNo = get(req, new String[]{"pageNo", "page"});
 
         if (pageNo != null)
-            start = JdbcUtil.pageNo2start(pageNo, limit);
+            start = pageNo2start(pageNo, limit);
         else if (req.getParameter("start") != null)
             start = Integer.parseInt(req.getParameter("start"));
         else
@@ -194,5 +193,19 @@ public class PageEnhancer {
         p.initSql(sql);
 
         return p.page(beanClz);
+    }
+
+
+    /**
+     * pageSize 转换为 MySQL 的 start 分页
+     *
+     * @param pageNo
+     * @param limit
+     * @return
+     */
+    public static int pageNo2start(int pageNo, int limit) {
+        int start = (pageNo - 1) * limit;
+
+        return (start < 0) ? 0 : start;
     }
 }
