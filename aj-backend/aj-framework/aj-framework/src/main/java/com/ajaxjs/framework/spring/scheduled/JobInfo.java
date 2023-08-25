@@ -1,6 +1,6 @@
 package com.ajaxjs.framework.spring.scheduled;
 
-import com.ajaxjs.framework.entity.TableName;
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import lombok.Data;
 
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.entity;
+package com.ajaxjs.data.jdbc_helper.common;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

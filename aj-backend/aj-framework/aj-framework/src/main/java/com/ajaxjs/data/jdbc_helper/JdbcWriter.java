@@ -3,7 +3,7 @@ package com.ajaxjs.data.jdbc_helper;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
-import com.ajaxjs.framework.entity.TableName;
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
