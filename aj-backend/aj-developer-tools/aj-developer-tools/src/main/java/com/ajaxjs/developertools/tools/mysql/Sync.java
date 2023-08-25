@@ -1,4 +1,4 @@
-package com.ajaxjs.developertools.tools.mysql.tools;
+package com.ajaxjs.developertools.tools.mysql;
 
 import com.ajaxjs.util.logger.LogHelper;
 

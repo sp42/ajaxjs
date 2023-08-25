@@ -20,7 +20,7 @@ public class Table implements IBaseModel {
     private String name;
 
     /**
-     *
+     * 注释
      */
     private String comment;
 
@@ -29,5 +29,8 @@ public class Table implements IBaseModel {
      */
     private String ddl;
 
+    /**
+     * 所有列的定义
+     */
     private List<Column> columns;
 }

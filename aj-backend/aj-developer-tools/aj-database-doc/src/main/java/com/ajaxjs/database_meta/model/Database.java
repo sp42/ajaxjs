@@ -24,5 +24,8 @@ public class Database implements IBaseModel {
      */
     private List<String> tables;
 
+    /**
+     * 所有表的信息
+     */
     private List<Table> tableInfo;
 }

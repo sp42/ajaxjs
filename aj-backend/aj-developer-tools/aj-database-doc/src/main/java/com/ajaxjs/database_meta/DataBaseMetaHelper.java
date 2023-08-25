@@ -1,4 +1,4 @@
-package com.ajaxjs.data.util;
+package com.ajaxjs.database_meta;
 
 import com.ajaxjs.sql.JdbcReader;
 import com.ajaxjs.util.logger.LogHelper;

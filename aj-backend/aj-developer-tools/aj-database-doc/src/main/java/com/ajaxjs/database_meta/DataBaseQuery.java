@@ -4,7 +4,6 @@ import com.ajaxjs.database_meta.model.Column;
 import com.ajaxjs.database_meta.model.Database;
 import com.ajaxjs.database_meta.model.Table;
 import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.data.util.DataBaseMetaHelper;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;

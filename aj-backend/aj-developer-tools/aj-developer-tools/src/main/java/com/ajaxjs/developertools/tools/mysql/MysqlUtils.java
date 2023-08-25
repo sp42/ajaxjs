@@ -1,4 +1,4 @@
-package com.ajaxjs.developertools.tools.mysql.tools;
+package com.ajaxjs.developertools.tools.mysql;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,14 +35,5 @@ public class MysqlUtils {
         return sb.toString();
     }
 
-    public static void restartMysql() {
-        Runtime runtime = Runtime.getRuntime();
 
-        try {
-            runtime.exec("net stop mysql57");
-            runtime.exec("net start mysql57");
-        } catch (IOException e) {
-            LOGGER.warning(e);
-        }
-    }
 }

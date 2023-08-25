@@ -76,10 +76,10 @@ public class JvmMonitorController {
         List<VirtualMachineDescriptor> vms = VirtualMachine.list();
         List<Vm> list = new ArrayList<>(vms.size());
 
-        for (VirtualMachineDescriptor virtualMachineDescriptor : vms) {
+        for (VirtualMachineDescriptor descriptor : vms) {
             Vm jvm = new Vm();
-            jvm.setPid(Integer.parseInt(virtualMachineDescriptor.id()));
-            jvm.setName(virtualMachineDescriptor.displayName().split(" ")[0]);
+            jvm.setPid(Integer.parseInt(descriptor.id()));
+            jvm.setName(descriptor.displayName().split(" ")[0]);
             list.add(jvm);
         }
 

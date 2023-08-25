@@ -1,4 +1,4 @@
-package com.ajaxjs.developertools.tools.mysql.tools;
+package com.ajaxjs.developertools.tools.mysql;
 
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
@@ -141,6 +141,7 @@ public class MysqlExport {
 
                 while (rs.next()) {
                     sql.append("(");
+
                     for (int i = 0; i < columnCount; i++) {
                         int columnType = metaData.getColumnType(i + 1), columnIndex = i + 1;
 
@@ -184,9 +185,7 @@ public class MysqlExport {
                 .append("\n/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;")
                 .append("\n/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;");
 
-        List<String> tables = getAllTables();
-
-        for (String s : tables) {
+               for (String s : getAllTables()) {
             sql.append(getTableInsertStatement(s.trim()));
             sql.append(getDataInsertStatement(s.trim()));
         }

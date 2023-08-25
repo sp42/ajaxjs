@@ -1,7 +1,6 @@
 package com.ajaxjs.database_meta;
 
 import com.ajaxjs.sql.JdbcHelper;
-import com.ajaxjs.data.util.DataBaseMetaHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
