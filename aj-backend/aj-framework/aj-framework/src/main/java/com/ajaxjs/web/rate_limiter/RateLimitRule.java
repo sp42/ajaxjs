@@ -1,12 +1,12 @@
 package com.ajaxjs.web.rate_limiter;
 
+import com.ajaxjs.web.rate_limiter.config.RuleConfig;
+import com.ajaxjs.web.rate_limiter.model.ApiLimit;
+
 import java.util.HashMap;
-import java.util.List;
 
 /**
- * @author: wanggenshen
- * @date: 2020/6/23 00:12.
- * @description: 支持快速查询 ApiLimit
+ * 支持快速查询 ApiLimit
  * <p>
  * TODO:
  * (1) 精准匹配优化: 二分查找算法优化
@@ -17,16 +17,12 @@ public class RateLimitRule {
     /**
      * key : appId + api, value: limit
      */
-    private HashMap<String, ApiLimit> map = new HashMap<>();
+    private final HashMap<String, ApiLimit> map = new HashMap<>();
 
     public RateLimitRule(RuleConfig ruleConfig) {
-        List<AppRuleConfig> configs = ruleConfig.getConfigs();
-        configs.forEach(appRuleConfig -> {
+        ruleConfig.getConfigs().forEach(appRuleConfig -> {
             String appId = appRuleConfig.getAppId();
-            appRuleConfig.getLimits().forEach(apiLimit -> {
-                String key = appId + ":" + apiLimit.getApi();
-                map.put(key, apiLimit);
-            });
+            appRuleConfig.getLimits().forEach(apiLimit -> map.put(appId + ":" + apiLimit.getApi(), apiLimit));
         });
     }
 

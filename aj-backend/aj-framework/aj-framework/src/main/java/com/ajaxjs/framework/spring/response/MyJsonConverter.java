@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +118,8 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
              */
             ResponseResult resultWrapper = new ResponseResult();
 
+            String msg = "操作成功";
+
             if (result instanceof PageResult) { // 分页总数
                 PageResult<?> p = (PageResult<?>) result;
 
@@ -128,12 +131,18 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
                 resultWrapper.setData(json);
                 // 旧框架
                 //                resultWrapper.setTotal(p.getTotalCount());
+            } else if (result.equals(MyResponseBodyAdvice.NULL_DATA)) {
+                msg = "找不到数据，查询为空";
+                resultWrapper.setData("null");
+            } else if (result.equals(Collections.emptyList())) {
+                msg = "找不到数据，查询为空";
+                resultWrapper.setData("[]");
             } else {
                 String json = JsonHelper.toJson(result);
                 resultWrapper.setData(json);
             }
 
-            resultWrapper.setMessage("操作成功");
+            resultWrapper.setMessage(msg);
             outputMessage.getHeaders().setContentType(CONTENT_TYPE);
 
             try (OutputStream out = outputMessage.getBody()) {

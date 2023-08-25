@@ -1,27 +1,30 @@
 package com.ajaxjs.web.rate_limiter;
 
+import com.ajaxjs.web.rate_limiter.config.FileRuleConfigSource;
+import com.ajaxjs.web.rate_limiter.config.RuleConfig;
+import com.ajaxjs.web.rate_limiter.config.RuleConfigSource;
+import com.ajaxjs.web.rate_limiter.model.ApiLimit;
 import org.springframework.util.Assert;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * https://blog.csdn.net/noaman_wgs/article/details/107031814
- * https://blog.csdn.net/noaman_wgs/article/details/107032061
- * https://github.com/GenshenWang/inspire-demo/blob/master/Ch7_SentinelExe/src/main/java/com/wgs/sentinel/v2/parser/JsonRuleConfigParser.java
- *
- * @author: wanggenshen
- * @date: 2020/6/24 00:00.
- * @description: 接口限流类
+ * 接口限流类
+ * <p>
+ * <a href="https://blog.csdn.net/noaman_wgs/article/details/107031814">...</a>
+ * <a href="https://blog.csdn.net/noaman_wgs/article/details/107032061">...</a>
+ * <a href="https://github.com/GenshenWang/inspire-demo/blob/master/Ch7_SentinelExe/src/main/java/com/wgs/sentinel/v2/parser/JsonRuleConfigParser.java">...</a>
  */
 public class RateLimiter {
-    private RateLimitRule rule;
-    // 每个API内存中存储限流计数器, key为 api:url
-    private ConcurrentHashMap<String, RateLimitAlg> counters = new ConcurrentHashMap<>();
+    private final RateLimitRule rule;
 
-    private RuleConfigSource ruleConfigSource;
+    /**
+     * 每个API内存中存储限流计数器, key为 api:url
+     */
+    private final ConcurrentHashMap<String, RateLimitAlg> counters = new ConcurrentHashMap<>();
 
     public RateLimiter() {
-        ruleConfigSource = new FileRuleConfigSource();
+        RuleConfigSource ruleConfigSource = new FileRuleConfigSource();
         RuleConfig ruleConfig = ruleConfigSource.load();
         Assert.isTrue(ruleConfig != null, "Load from yaml file, RuleConfig is null");
         this.rule = new RateLimitRule(ruleConfig);
@@ -30,14 +33,12 @@ public class RateLimiter {
     /**
      * 判断接口是否限流
      *
-     * @param appId
-     * @param url
      * @return true: 不限流; false: 限流
-     * @throws InterruptedException
      */
     public boolean limit(String appId, String url) throws InterruptedException {
         // 接口未配置限流, 直接返回
         ApiLimit apiLimit = rule.getApiLimit(appId, url);
+
         if (apiLimit == null)
             return true;
 
@@ -54,6 +55,7 @@ public class RateLimiter {
         }
 
         // 固定窗口统计, 判断是否超过限流阈值
+        assert rateLimitAlg != null;
         return rateLimitAlg.tryAcquire();
 
     }

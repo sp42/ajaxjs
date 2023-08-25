@@ -12,6 +12,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -188,7 +189,7 @@ public class JdbcReader extends JdbcConn {
         return rs -> {
             ResultSetMetaData metaData = rs.getMetaData();
 
-            if (beanClz == Integer.class || beanClz == Long.class || beanClz == String.class) {
+            if (beanClz == Integer.class || beanClz == Long.class || beanClz == String.class || beanClz == Double.class || beanClz == BigDecimal.class  ) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
                     Object v = rs.getObject(i);
                     return (T) v;

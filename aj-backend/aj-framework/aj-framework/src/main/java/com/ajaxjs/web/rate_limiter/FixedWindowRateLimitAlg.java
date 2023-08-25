@@ -6,19 +6,17 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author: wanggenshen
- * @date: 2020/6/23 23:58.
- * @description: 固定时间窗口算法统计接口请求流量
+ * 固定时间窗口算法统计接口请求流量
  */
 public class FixedWindowRateLimitAlg implements RateLimitAlg {
     // ms
     private static final long LOCK_EXPIRE_TIME = 200L;
 
-    private Stopwatch stopWatch;
+    private final Stopwatch stopWatch;
     // 限流计数器
-    private AtomicInteger counter = new AtomicInteger(0);
+    private final AtomicInteger counter = new AtomicInteger(0);
     private final int limit;
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
     public FixedWindowRateLimitAlg(int limit) {
         this(limit, Stopwatch.createStarted());
@@ -33,9 +31,8 @@ public class FixedWindowRateLimitAlg implements RateLimitAlg {
     public boolean tryAcquire() throws InterruptedException {
         int currentCount = counter.incrementAndGet();
         // 未达到限流
-        if (currentCount < limit) {
+        if (currentCount < limit)
             return true;
-        }
 
         // 使用固定时间窗口统计当前窗口请求数
         // 请求到来时,加锁进行计数器统计工作
@@ -61,6 +58,4 @@ public class FixedWindowRateLimitAlg implements RateLimitAlg {
         // 出现异常 不能影响接口正常请求
         return true;
     }
-
-
 }

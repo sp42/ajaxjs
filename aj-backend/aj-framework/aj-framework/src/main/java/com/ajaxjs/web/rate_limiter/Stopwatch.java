@@ -225,15 +225,15 @@ public final class Stopwatch {
     }
 
     private static TimeUnit chooseUnit(long nanos) {
-        if (SECONDS.convert(nanos, NANOSECONDS) > 0) {
+        if (SECONDS.convert(nanos, NANOSECONDS) > 0)
             return SECONDS;
-        }
-        if (MILLISECONDS.convert(nanos, NANOSECONDS) > 0) {
+
+        if (MILLISECONDS.convert(nanos, NANOSECONDS) > 0)
             return MILLISECONDS;
-        }
-        if (MICROSECONDS.convert(nanos, NANOSECONDS) > 0) {
+
+        if (MICROSECONDS.convert(nanos, NANOSECONDS) > 0)
             return MICROSECONDS;
-        }
+
         return NANOSECONDS;
     }
 

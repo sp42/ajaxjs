@@ -4,6 +4,7 @@ import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.ShowControllerInterceptor;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.framework.spring.response.MyJsonConverter;
+import com.ajaxjs.framework.spring.response.MyResponseBodyAdvice;
 import com.ajaxjs.framework.spring.validator.ValidatorInitializing;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,11 @@ public abstract class BaseWebMvcConfigure implements WebMvcConfigurer {
     @Bean
     public ValidatorInitializing ValidatorContextAware() {
         return new ValidatorInitializing();
+    }
+
+    @Bean
+    MyResponseBodyAdvice MyResponseBodyAdvice() {
+        return new MyResponseBodyAdvice();
     }
 
     /**
