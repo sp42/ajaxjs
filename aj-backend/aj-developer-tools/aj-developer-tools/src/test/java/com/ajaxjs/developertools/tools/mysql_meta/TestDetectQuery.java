@@ -1,8 +1,9 @@
-package com.ajaxjs.database_meta;
+package com.ajaxjs.developertools.tools.mysql_meta;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
-import com.ajaxjs.database_meta.model.Column;
-import com.ajaxjs.database_meta.model.Table;
+import com.ajaxjs.developertools.BaseTest;
+import com.ajaxjs.developertools.tools.mysql_meta.model.Column;
+import com.ajaxjs.developertools.tools.mysql_meta.model.Table;
 import com.ajaxjs.util.TestHelper;
 import org.junit.Test;
 
@@ -13,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class TestDetectQuery extends BaseTest {
-
-
     @Test
     public void testGetDatabase() {
         Connection connection = JdbcConn.getConnection();

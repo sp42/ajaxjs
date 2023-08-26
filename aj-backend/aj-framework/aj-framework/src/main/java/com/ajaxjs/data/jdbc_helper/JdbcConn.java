@@ -30,6 +30,11 @@ public class JdbcConn {
         this.conn = conn;
     }
 
+    /**
+     * 获取数据库连接
+     *
+     * @return 数据库连接
+     */
     public Connection getConn() {
         if (conn == null)
             LOGGER.warning("未准备好数据库连接");

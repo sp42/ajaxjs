@@ -1,6 +1,7 @@
-package com.ajaxjs.database_meta;
+package com.ajaxjs.developertools.tools.mysql;
 
-import com.ajaxjs.database_meta.model.*;
+import com.ajaxjs.developertools.tools.mysql_meta.MetaQuery;
+import com.ajaxjs.developertools.tools.mysql_meta.model.*;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.io.StreamHelper;
 
@@ -11,7 +12,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DB {
+public class MySqlProbe {
     /**
      * 获取数据库详情
      */

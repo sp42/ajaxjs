@@ -1,6 +1,6 @@
-package com.ajaxjs.database_meta.tools;
+package com.ajaxjs.developertools.mpb;
 
-import com.ajaxjs.database_meta.BaseTest;
+import com.ajaxjs.developertools.BaseTest;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

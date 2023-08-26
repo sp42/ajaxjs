@@ -10,9 +10,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebMvc
 @EnableScheduling
-@ComponentScan(" com.ajaxjs.developertools")
+@ComponentScan("com.ajaxjs.developertools")
 public class DevToolsApplication extends BaseWebMvcConfigure {
     public static void main(String[] args) {
-        EmbeddedTomcatStarter.start(8301, DevToolsApplication.class, DevToolsConfiguration.class);
+        EmbeddedTomcatStarter.start(8302, DevToolsApplication.class, DevToolsConfiguration.class);
     }
 }

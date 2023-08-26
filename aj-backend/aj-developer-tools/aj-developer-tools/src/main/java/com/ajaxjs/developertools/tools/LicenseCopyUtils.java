@@ -14,7 +14,7 @@ public class LicenseCopyUtils implements FileFilter {
     /**
      * 读取 License 文件
      */
-    public String readLicenseHeader(InputStream in, String charset) {
+    public String readLicenseHeader(InputStream in) {
         StringBuilder builder = new StringBuilder("/**\r\n");
 
         StreamHelper.read(in, line -> {
@@ -33,7 +33,7 @@ public class LicenseCopyUtils implements FileFilter {
      */
     public void processLicenseHeader(File root, InputStream in, String charset) {
         System.out.println("开始读取并格式化license...");
-        String headerBody = readLicenseHeader(in, charset);
+        String headerBody = readLicenseHeader(in);
         System.out.println(headerBody);
         System.out.println("读取并格式化license完成...");
 

@@ -5,6 +5,11 @@
         <meta charset="UTF-8">
         <title>Developer Tools</title>
         <%@ include file="common/head.jsp" %>
+        <style>
+            html, body {
+                height:100%;
+            }
+        </style>
     </head>
     <body>
         <menu>
@@ -18,7 +23,10 @@
                     <a href="dashboard.jsp" target="iframe">系统</a> | <a href="jvm.jsp" target="iframe">JVM</a> | <a href="tomcat.jsp" target="iframe">Tomcat</a>
                 </li>
                 <li>
-                    <a href="">首页</a>
+                    <a target="iframe" href="mysql_probe/">MySQL 探针</a> | <a href="database-doc">MySQL 浏览器</a> | <a href="toolkit.jsp">MySQL 监控</a>
+                </li>
+                <li>
+                    <a target="iframe" href="toolkit/task.html">定时任务管理</a> | <a target="iframe" href="toolkit/toolkit.jsp">小工具</a>
                 </li>
             </ul>
         </menu>

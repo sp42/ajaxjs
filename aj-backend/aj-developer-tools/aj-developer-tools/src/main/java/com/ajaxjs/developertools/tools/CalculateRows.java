@@ -1,5 +1,8 @@
 package com.ajaxjs.developertools.tools;
 
+import com.ajaxjs.framework.IBaseModel;
+import lombok.Data;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,12 +13,13 @@ import java.io.IOException;
  *
  * @author <a href="https://blog.csdn.net/u014800380/article/details/73770823">...</a>
  */
-public class CalculateRows {
-    public static long classCount = 0; // Java类的数量
-    public static long normalLines = 0; // 空行
-    public static long commentLines = 0; // 注释行
-    public static long writeLines = 0; // 代码行
-    public static long allLines = 0; // 代码行
+@Data
+public class CalculateRows implements IBaseModel {
+    private long classCount = 0; // Java类的数量
+    private long normalLines = 0; // 空行
+    private long commentLines = 0; // 注释行
+    private long writeLines = 0; // 代码行
+    private long allLines = 0; // 代码行
 
     /**
      * 查找出一个目录下所有的 .java 文件
@@ -23,7 +27,7 @@ public class CalculateRows {
      * @param f    指定的文件目录
      * @param type 类型
      */
-    public static void treeFile(File f, String type) {
+    public void treeFile(File f, String type) {
         File[] children = f.listFiles();
 
         if (children == null)
@@ -38,7 +42,7 @@ public class CalculateRows {
         }
     }
 
-    public static void countFile(File file) {
+    private void countFile(File file) {
         classCount++;
         boolean comment = false;
 

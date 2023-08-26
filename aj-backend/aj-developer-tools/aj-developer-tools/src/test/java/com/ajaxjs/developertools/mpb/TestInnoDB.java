@@ -1,9 +1,8 @@
-package com.ajaxjs.database_meta.tools;
+package com.ajaxjs.developertools.mpb;
 
+import com.ajaxjs.developertools.mpb.innodb.ResultParser;
 import com.ajaxjs.util.TestHelper;
 import org.junit.Test;
-
-import com.ajaxjs.database_meta.tools.innodb.ResultParser;
 
 import java.util.HashMap;
 import java.util.Map;
