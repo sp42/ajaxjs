@@ -5,21 +5,16 @@
  */
 package com.ajaxjs.developertools.monitor.oshi;
 
-import com.ajaxjs.developertools.monitor.oshi.model.*;
+import com.ajaxjs.developertools.monitor.oshi.model.CpuInfo;
+import com.ajaxjs.developertools.monitor.oshi.model.DiskInfo;
+import com.ajaxjs.developertools.monitor.oshi.model.MemoryInfo;
+import com.ajaxjs.developertools.monitor.oshi.model.NetIoInfo;
 import com.ajaxjs.util.ObjectHelper;
-import org.springframework.util.CollectionUtils;
 import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.*;
 import oshi.util.FormatUtil;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.RuntimeMXBean;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -31,6 +26,9 @@ import java.util.*;
  * @since 2022-03-02
  */
 public class OshiSystemMonitor {
+    /**
+     * oshi
+     */
     public SystemInfo systemInfo = new SystemInfo();
 
     /**
@@ -52,35 +50,7 @@ public class OshiSystemMonitor {
     }
 
     /**
-     * 获取系统信息
-     *
-     * @return {@link SysInfo}
-     */
-    public SysInfo getSysInfo() {
-        Properties props = System.getProperties();
-        SysInfo sysInfo = new SysInfo();
-        InetAddress inetAddress;
-
-        try {
-            inetAddress = InetAddress.getLocalHost();
-            sysInfo.setName(inetAddress.getHostName());
-            sysInfo.setIp(inetAddress.getHostAddress());
-        } catch (UnknownHostException e) {
-            sysInfo.setName("unknown");
-            sysInfo.setIp("unknown");
-        }
-
-        sysInfo.setOsName(props.getProperty("os.name"));
-        sysInfo.setOsArch(props.getProperty("os.arch"));
-        sysInfo.setUserDir(props.getProperty("user.dir"));
-
-        return sysInfo;
-    }
-
-    /**
      * 获取 cpu 信息
-     *
-     * @return {@link CpuInfo}
      */
     public CpuInfo getCpuInfo() {
         CentralProcessor centralProcessor = getHardwareAbstractionLayer().getProcessor();
@@ -101,10 +71,10 @@ public class OshiSystemMonitor {
         CpuInfo cpuInfo = new CpuInfo();
         cpuInfo.setPhysicalProcessorCount(centralProcessor.getPhysicalProcessorCount());
         cpuInfo.setLogicalProcessorCount(centralProcessor.getLogicalProcessorCount());
-        cpuInfo.setSystemPercent(formatDouble(sys * 1.0 / totalCpu));
-        cpuInfo.setUserPercent(formatDouble(user * 1.0 / totalCpu));
-        cpuInfo.setWaitPercent(formatDouble(ioWait * 1.0 / totalCpu));
-        cpuInfo.setUsePercent(formatDouble(1.0 - (idle * 1.0 / totalCpu)));
+        cpuInfo.setSystemPercent(BaseInfo.formatDouble(sys * 1.0 / totalCpu));
+        cpuInfo.setUserPercent(BaseInfo.formatDouble(user * 1.0 / totalCpu));
+        cpuInfo.setWaitPercent(BaseInfo.formatDouble(ioWait * 1.0 / totalCpu));
+        cpuInfo.setUsePercent(BaseInfo.formatDouble(1.0 - (idle * 1.0 / totalCpu)));
 
         return cpuInfo;
     }
@@ -119,41 +89,12 @@ public class OshiSystemMonitor {
         long totalByte = globalMemory.getTotal();
         long availableByte = globalMemory.getAvailable();
         MemoryInfo memoryInfo = new MemoryInfo();
-        memoryInfo.setTotal(formatByte(totalByte));
-        memoryInfo.setUsed(formatByte(totalByte - availableByte));
-        memoryInfo.setFree(formatByte(availableByte));
-        memoryInfo.setUsePercent(formatDouble((totalByte - availableByte) * 1.0 / totalByte));
+        memoryInfo.setTotal(BaseInfo.formatByte(totalByte));
+        memoryInfo.setUsed(BaseInfo.formatByte(totalByte - availableByte));
+        memoryInfo.setFree(BaseInfo.formatByte(availableByte));
+        memoryInfo.setUsePercent(BaseInfo.formatDouble((totalByte - availableByte) * 1.0 / totalByte));
 
         return memoryInfo;
-    }
-
-    /**
-     * 获取 JVM 信息
-     *
-     * @return {@link JvmInfo}
-     */
-    public JvmInfo getJvmInfo() {
-        Properties props = System.getProperties();
-        Runtime runtime = Runtime.getRuntime();
-        long jvmTotalMemoryByte = runtime.totalMemory(), freeMemoryByte = runtime.freeMemory();
-
-        JvmInfo jvmInfo = new JvmInfo();
-        jvmInfo.setJdkVersion(props.getProperty("java.version"));
-        jvmInfo.setJdkHome(props.getProperty("java.home"));
-        jvmInfo.setVendor(props.getProperty("java.vm.vendor"));
-        jvmInfo.setArch(props.getProperty("os.arch"));
-        jvmInfo.setJvmTotalMemory(formatByte(jvmTotalMemoryByte));
-        jvmInfo.setMaxMemory(formatByte(runtime.maxMemory()));
-        jvmInfo.setUsedMemory(formatByte(jvmTotalMemoryByte - freeMemoryByte));
-        jvmInfo.setFreeMemory(formatByte(freeMemoryByte));
-        jvmInfo.setUsePercent(formatDouble((jvmTotalMemoryByte - freeMemoryByte) * 1.0 / jvmTotalMemoryByte));
-
-        RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-        jvmInfo.setJdkName(runtimeMXBean.getVmName());
-        jvmInfo.setStartTime(runtimeMXBean.getStartTime());
-        jvmInfo.setUptime(runtimeMXBean.getUptime());
-
-        return jvmInfo;
     }
 
     /**
@@ -179,14 +120,14 @@ public class OshiSystemMonitor {
             long usable = fs.getUsableSpace();
             diskInfo.setUsableSpace(usable);
             long total = fs.getTotalSpace();
-            diskInfo.setSize(formatByte(total));
+            diskInfo.setSize(BaseInfo.formatByte(total));
             diskInfo.setTotalSpace(total);
-            diskInfo.setAvail(formatByte(usable));
-            diskInfo.setUsed(formatByte(total - usable));
+            diskInfo.setAvail(BaseInfo.formatByte(usable));
+            diskInfo.setUsed(BaseInfo.formatByte(total - usable));
             double usedSize = (total - usable);
             double usePercent = 0;
 
-            if (total > 0) usePercent = formatDouble(usedSize / total * 100);
+            if (total > 0) usePercent = BaseInfo.formatDouble(usedSize / total * 100);
 
             diskInfo.setUsePercent(usePercent);
             diskInfoList.add(diskInfo);
@@ -196,73 +137,12 @@ public class OshiSystemMonitor {
     }
 
     /**
-     * 换算单位
-     */
-    public static String formatByte(long byteNumber) {
-        double FORMAT = 1024.0, kbNumber = byteNumber / FORMAT;
-
-        if (kbNumber < FORMAT) return decimalFormat("#.##KB", kbNumber);
-
-        double mbNumber = kbNumber / FORMAT;
-
-        if (mbNumber < FORMAT) return decimalFormat("#.##MB", mbNumber);
-
-        double gbNumber = mbNumber / FORMAT;
-
-        if (gbNumber < FORMAT) return decimalFormat("#.##GB", gbNumber);
-
-        return decimalFormat("#.##TB", gbNumber / FORMAT);
-    }
-
-    public static String decimalFormat(String pattern, double number) {
-        return new DecimalFormat(pattern).format(number);
-    }
-
-    public static double formatDouble(double str) {
-        return new BigDecimal(str).setScale(2, RoundingMode.HALF_UP).doubleValue();
-    }
-
-    public static Map<String, Object> get() {
-        OshiSystemMonitor oshiMonitor = new OshiSystemMonitor();
-        Map<String, Object> server = new HashMap<>(5);
-        server.put("sysInfo", oshiMonitor.getSysInfo());// 系统信息
-        server.put("cupInfo", oshiMonitor.getCpuInfo());// CPU 信息
-        server.put("memoryInfo", oshiMonitor.getMemoryInfo()); // 内存信息
-        server.put("jvmInfo", oshiMonitor.getJvmInfo()); // Jvm 虚拟机信息
-        List<DiskInfo> diskInfoList = oshiMonitor.getDiskInfoList();// 磁盘信息
-        server.put("diskInfo", diskInfoList);
-
-        if (!CollectionUtils.isEmpty(diskInfoList)) {
-            long usableSpace = 0, totalSpace = 0;
-
-            for (DiskInfo diskInfo : diskInfoList) {
-                usableSpace += diskInfo.getUsableSpace();
-                totalSpace += diskInfo.getTotalSpace();
-            }
-
-            double usedSize = (totalSpace - usableSpace);
-            server.put("diskUsePercent", formatDouble(usedSize / totalSpace * 100));// 统计所有磁盘的使用率
-        }
-
-//		server.put("processList", processMapList);
-
-        return server;
-    }
-
-    /**
      * 获取网络带宽信息
      *
      * @return {@link NetIoInfo}
      */
     public NetIoInfo getNetIoInfo() {
-        long rxBytesBegin = 0;
-        long txBytesBegin = 0;
-        long rxPacketsBegin = 0;
-        long txPacketsBegin = 0;
-        long rxBytesEnd = 0;
-        long txBytesEnd = 0;
-        long rxPacketsEnd = 0;
-        long txPacketsEnd = 0;
+        long rxBytesBegin = 0, txBytesBegin = 0, rxPacketsBegin = 0, txPacketsBegin = 0, rxBytesEnd = 0, txBytesEnd = 0, rxPacketsEnd = 0, txPacketsEnd = 0;
         HardwareAbstractionLayer hal = getHardwareAbstractionLayer();
         List<NetworkIF> listBegin = hal.getNetworkIFs();
 
@@ -392,7 +272,7 @@ public class OshiSystemMonitor {
             Map<String, Object> processMap = new HashMap<>(5);
             processMap.put("name", process.getName());
             processMap.put("pid", process.getProcessID());
-            processMap.put("cpu", formatDouble(process.getProcessCpuLoadCumulative()));
+            processMap.put("cpu", BaseInfo.formatDouble(process.getProcessCpuLoadCumulative()));
             processMapList.add(processMap);
         }
 

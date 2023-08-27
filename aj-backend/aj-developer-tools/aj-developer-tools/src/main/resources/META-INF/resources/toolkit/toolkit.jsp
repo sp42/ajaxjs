@@ -66,6 +66,19 @@
                     </div>
                  </tab-pane>
 
+                <tab-pane label="实时后台日志" name="websocket-log">
+                        TODO
+                        https://blog.csdn.net/zhangxin09/article/details/104412493
+                </tab-pane>
+
+                 <tab-pane label="JMX Bean 浏览器" name="JmxMBeanBrowser">
+                         <i-input placeholder="?name=xxx 查询参数" v-model="licenseFilePath" style="width:50%;"></i-input>
+                         <i-button type="primary" @click="calculateRows">查询</i-button>
+                         <br />
+                         <br />
+                         <iframe src="JmxMBeanBrowser.jsp"></iframe>
+                   </tab-pane>
+
                 <tab-pane label="其他" name="misc">
                     <i-input placeholder="输入一个磁盘目录" v-model="calculateRowsDir" style="width:60%;"></i-input>
 
@@ -101,13 +114,7 @@
                       </div>
 
                  </tab-pane>
-                  <tab-pane label="JMX Bean 浏览器" name="JmxMBeanBrowser">
-                        <i-input placeholder="?name=xxx 查询参数" v-model="licenseFilePath" style="width:50%;"></i-input>
-                        <i-button type="primary" @click="calculateRows">查询</i-button>
-                        <br />
-                        <br />
-                        <iframe src="JmxMBeanBrowser.jsp"></iframe>
-                  </tab-pane>
+
 
               </Tabs>
         </div>

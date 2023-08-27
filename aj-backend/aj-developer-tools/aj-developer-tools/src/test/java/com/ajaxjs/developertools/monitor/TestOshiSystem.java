@@ -6,6 +6,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import com.ajaxjs.developertools.api.SystemInfoController;
 import com.ajaxjs.developertools.monitor.oshi.OshiSystemMonitor;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class TestOshiSystem {
 
     @Test
     public void testMonitor() {
-        Map<String, Object> map = OshiSystemMonitor.get();
+        Map<String, Object> map = new SystemInfoController().get();
         String json = JsonHelper.toJson(map);
 
         System.out.println(prettyJson(json));

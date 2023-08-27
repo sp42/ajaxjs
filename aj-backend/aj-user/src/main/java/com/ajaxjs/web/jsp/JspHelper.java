@@ -38,6 +38,7 @@ public class JspHelper {
         DataSource ds = DiContextUtil.getBean(DataSource.class);
 
         try {
+            assert ds != null;
             Connection conn = ds.getConnection();
             request.setAttribute("conn", conn);
 
@@ -60,10 +61,6 @@ public class JspHelper {
 
     /**
      * 准备单个实体详情的 SQL，如果有 id 参数是修改，没用则是新建
-     *
-     * @param req
-     * @param sql
-     * @param idCol
      */
     public static void parepreInfoSql(HttpServletRequest req, String sql, String idCol) {
         boolean isCreate = req.getParameter("id") == null;

@@ -5,9 +5,7 @@ import com.ajaxjs.developertools.tools.mysql_meta.DataBaseQuery;
 import com.ajaxjs.developertools.tools.mysql_meta.model.DataSourceInfo;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.response.ResponseResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -18,6 +16,8 @@ import java.sql.SQLException;
  *
  * @author Frank Cheung sp42@qq.com
  */
+@RestController
+@RequestMapping("/make_database_doc")
 public class DbDocController {
     /**
      * 使用了缓存，就不用保持到磁盘

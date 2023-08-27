@@ -26,16 +26,13 @@ public class JspPageHelper {
 
 	/**
 	 * 上一页的连接
-	 * 
-	 * @return
 	 */
 	public String getPerLink() {
 		if (pageResult.getTotalCount() > 0 && pageResult.getStart() > 0) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("?start=" + (pageResult.getStart() - pageResult.getPageSize()));
-			sb.append(withoutParam("start"));
+			String sb = "?start=" + (pageResult.getStart() - pageResult.getPageSize()) +
+					withoutParam("start");
 
-			return String.format(PER, sb.toString());
+			return String.format(PER, sb);
 		} else
 			return EMPTY_STR;
 	}
@@ -45,7 +42,6 @@ public class JspPageHelper {
 	 * 通常由 request.getQueryString() 或 ${pageContext.request.queryString} 返回的 url 参数
 	 * 
 	 * @param param 不需要的那个参数
-	 * @return
 	 */
 	private String withoutParam(String param) {
 		String queryString = request.getQueryString();
@@ -67,8 +63,6 @@ public class JspPageHelper {
 
 	/**
 	 * 下一页的连接
-	 * 
-	 * @return
 	 */
 	public String getNextLink() {
 		if (pageResult.getStart() + pageResult.getPageSize() < pageResult.getTotalCount()) {
