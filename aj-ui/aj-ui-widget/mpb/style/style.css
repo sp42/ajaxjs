@@ -1,0 +1,89 @@
+ html,
+ body,
+ menu {
+     height: 100%;
+     padding: 0;
+     margin: 0;
+     overflow: hidden;
+ }
+
+ ul,
+ li {
+     padding: 0;
+     margin: 0;
+ }
+
+ menu {
+     width: 15%;
+     height: 100%;
+     border-right: 1px solid lightgray;
+     /* background: url(pngegg.png) no-repeat 120px 30px; */
+     background-size: 30%;
+     padding-top: 5px;
+     float: left;
+ }
+
+ menu li {
+     display: inline-block;
+     width: 100%;
+     box-sizing: border-box;
+     padding: 8px;
+     padding-left: 20%;
+     font-size: 13px;
+     color:lightgrgay;
+     border-bottom: 1px solid lightgray;
+ }
+
+ #main {
+     min-height: 600px;
+     width: 100%;
+     padding: 10px;
+ }
+
+ a {
+     font-size: 14px;
+     color: cadetblue;
+     text-decoration: none;
+ }
+
+ a:visited {
+     color: gray;
+ }
+
+ .container {
+     height: 100%;
+     display: flex;
+     /*      justify-content: center; */
+     /* 水平居中 */
+     /*      align-items: center; */
+     /* 垂直居中 */
+ }
+
+ nav {
+
+     min-height: 30px;
+     height: auto;
+     padding: 10px 0;
+ }
+
+ nav ul {
+     background-color: #eee;
+     min-height: 30px;
+
+ }
+
+ nav li {
+     display: inline-block;
+     list-style: none;
+     padding: 5px 10px;
+ }
+
+ nav li.selected {
+     color: black;
+     font-weight: bold;
+ }
+
+ h3 {
+     color: gray;
+     font-weight: normal;
+ }

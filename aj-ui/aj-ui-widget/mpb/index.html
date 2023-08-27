@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>AJ DevTools</title>
+        <link rel="stylesheet" type="text/css" href="style/style.css" />
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.min.js"></script>
+       
+    </head>
+    <body>
+        <div id="vue" style="height: 100%;">
+
+        <menu>
+            <h3 style="margin-left:10px;color:#2f518c">AJ DevTools</h3>
+            <br />
+            <ul id="menu">
+                <li>
+                    <a target="iframe" href="dashboard.html">首页</a>
+                </li>
+                <li>
+                    <a href="system-live.html" target="iframe">系统</a> | <a href="http://localhost:8302/jvm.jsp" target="iframe">JVM</a> | <a href="tomcat.jsp" target="iframe">Tomcat</a>
+                </li>
+                <li>
+                    MySQL <a target="iframe" href="http://localhost:8302/mysql_probe/">探针</a> | <a target="_blank" href="http://localhost:8302/database-doc">浏览器</a> </a>
+                </li>
+ 
+                <li v-for="item in menu">
+                    <a href="###" @click="subMenu = item.children">{{item.name}}</a>
+                </li>
+                <li>
+                    <a target="iframe" href="http://localhost:8302/toolkit/task.html">定时任务管理</a> | <a target="iframe" href="http://localhost:8302/toolkit/toolkit.jsp">小工具</a>
+                </li>
+            </ul>
+        </menu>
+        <div class="container">
+            <div id="main">
+                <nav v-if="subMenu.length > 0">
+                    <ul>
+                        <li v-for="item in subMenu"><a href="#" @click="go(item)">{{item.name}}</a></li>
+                    </ul>
+                </nav>
+
+
+                <iframe name="iframe" src="dashboard.html" frameborder="0" scrolling="yes"  height="95%" width="100%"></iframe>
+ 
+
+            </div>
+        </div>
+    </div>
+        <script src="data.js"></script>
+        <script src="js.js"></script>
+    </body>
+</html>
