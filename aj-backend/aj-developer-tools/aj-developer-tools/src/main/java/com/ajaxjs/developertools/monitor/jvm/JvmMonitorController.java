@@ -3,6 +3,7 @@ package com.ajaxjs.developertools.monitor.jvm;
 import com.ajaxjs.developertools.monitor.JmxHelper;
 import com.ajaxjs.developertools.monitor.TomcatInfo;
 import com.ajaxjs.developertools.monitor.jvm.model.*;
+import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
 
 import com.ajaxjs.util.TestHelper;
@@ -140,6 +141,9 @@ public class JvmMonitorController {
         List<Node> nodes = new ArrayList<>();
         MBeanServerConnection msc = INSTANCE.getMsc();
 
+        if (msc == null)
+            throw new BusinessException("你需要先连接一个 JVM 进程");
+
         try {
             for (String domain : msc.getDomains()) {
                 Node node = new Node();
@@ -203,7 +207,6 @@ public class JvmMonitorController {
                 } else if (mBeanAttributeInfo.getType().equals("javax.management.openmbean.TabularData")) {
                     List<SortedMap<String, Object>> mapList = new ArrayList<>();
                     TabularDataSupport tabularDataSupport = (TabularDataSupport) attribute;
-
 
                     for (Map.Entry<Object, Object> entry : tabularDataSupport.entrySet()) {
                         SortedMap<String, Object> map = JmxHelper.analyzeCompositeData(entry.getValue());

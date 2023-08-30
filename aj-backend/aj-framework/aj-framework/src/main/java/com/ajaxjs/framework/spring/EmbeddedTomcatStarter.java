@@ -110,7 +110,7 @@ public class EmbeddedTomcatStarter {
 //        ac.refresh();
 //        ac.registerShutdownHook();
 
-        String tpl = "Web 服务启动完毕。Spring 耗时：%sms，总耗时：%sms";
+        String tpl = "Web 服务启动完毕。Spring 耗时：%sms，总耗时：%sms 127.0.0.1:" + port + (contextPath == null ? "" : ("/" + contextPath));
         tpl = String.format(tpl, springTime, System.currentTimeMillis() - startedTime);
         LOGGER.info(tpl);
 

@@ -1,6 +1,6 @@
 package com.ajaxjs.workflow.model.po;
 
-import com.ajaxjs.framework.entity.TableName;
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.workflow.model.ProcessModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

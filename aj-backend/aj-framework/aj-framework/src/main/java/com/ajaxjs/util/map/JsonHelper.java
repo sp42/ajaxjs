@@ -210,8 +210,14 @@ public class JsonHelper {
             return "\"" + obj + "\"";
         } else { // 普通 Java Object
             List<String> arr = new ArrayList<>();
+//            String clz = obj.getClass().toString();
+//            System.out.println(clz);
+//            if (clz.contains("javax.management.MBeanAttributeInfo"))
+//                System.out.println(obj.getClass());
 
-            for (Field field : obj.getClass().getFields()) {
+            Field[] fields = obj.getClass().getDeclaredFields();
+
+            for (Field field : fields) {
                 field.setAccessible(true);
 
                 String key = field.getName();
@@ -226,7 +232,9 @@ public class JsonHelper {
                     LOGGER.warning(e);
                 }
 
-                arr.add('\"' + key + "\":" + toJson(_obj));
+//                arr.add('\"' + key + "\":" + toJson(_obj)); // 不要递归了
+                String value = "\"" + (_obj == null ? "" : jsonString_covert(_obj.toString())) + "\"";
+                arr.add('\"' + key + "\":" + value);
             }
 
             return '{' + String.join(",", arr) + '}';

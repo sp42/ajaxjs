@@ -4,7 +4,8 @@ import java.util.Date;
 import java.util.Map;
 
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
-import com.ajaxjs.framework.entity.TableName;
+
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.workflow.common.WfConstant.PerformType;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;

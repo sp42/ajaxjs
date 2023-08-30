@@ -22,8 +22,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 import com.ajaxjs.util.logger.LogHelper;
@@ -266,4 +269,18 @@ public class StreamHelper {
 
         return new String(hexChars, StandardCharsets.UTF_8);
     }
+
+    /**
+     * char 数组转 byte 数组
+     * 将char数组转换为byte数组需要考虑编码方式的问题
+     * <a href="https://houbb.github.io/2023/06/05/java-perf-02-chars-to-bytes">...</a>
+     */
+    public static byte[] charToByte(char[] chars) {
+        ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(CharBuffer.wrap(chars));
+        byte[] bytes = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+        Arrays.fill(byteBuffer.array(), (byte) 0);
+
+        return bytes;
+    }
+
 }
