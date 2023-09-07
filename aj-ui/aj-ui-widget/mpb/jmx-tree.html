@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>JMX Tree</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.ajaxjs.com/public/common.css" />
+    <link rel="stylesheet" type="text/css" href="http://www.ajaxjs.com/public/admin.css" />
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/iview.min.js"></script>
+    <script src="http://www.ajaxjs.com/public/common.js"></script>
+
+    <style>
+        body {
+            padding: 2%;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .bordered-table {
+            border-collapse: collapse;
+            border: 1px solid lightgray;
+        }
+
+        .bordered-table th{
+            background-color: #eee ;
+        }
+        .bordered-table th,
+        .bordered-table td {
+            border-bottom: 1px solid lightgray;
+            padding: 8px;
+            max-width: 380px;
+            word-break: break-all;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <h2>JMX Tree</h2>
+    <br />
+    <br />
+    <div id="jmx-tree" style="height: 92%;">
+        <div style="float:left;width:25%;overflow: auto;height: 100%;">
+            <Tree :data="data1" @on-select-change="showAttributes"></Tree>
+        </div>
+        <div style="float:left;width:75%;padding-left:3%">
+            <table width="100%" class="bordered-table">
+                <tr>
+                    <th>属性名称</th>
+                    <th>属性值</th>
+                    <th>是否可读</th>
+                    <th>是否可写</th>
+                    <th>类型</th>
+                </tr>
+                <tr v-for="item in attributes.beanAttributeInfos">
+                    <td>{{item.name}}</td>
+                    <td>{{item.value.data}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        new Vue({
+            el: '#jmx-tree',
+            data: {
+                data1: [
+
+                ],
+                attributes: {
+                    beanAttributeInfos: []
+                }
+            },
+            mounted() {
+                this.load();
+            },
+            methods: {
+                load() {
+                    let api = 'http://localhost:8302/jvm/domains';
+
+                    aj.xhr.get(api, json => {
+                        console.log(json);
+                        this.data1 = json.data;
+                    });
+                },
+                showAttributes(a, b) {
+                    if (b.fullName) {
+                        let api = 'http://localhost:8302/jvm/properties?fullName=' + b.fullName;
+
+                        aj.xhr.get(api, json => {
+                            console.log(json);
+                            this.attributes = json.data;
+                        });
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
