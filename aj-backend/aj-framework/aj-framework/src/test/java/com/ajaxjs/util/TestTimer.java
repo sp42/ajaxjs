@@ -5,7 +5,7 @@ import org.junit.Test;
 public class TestTimer {
 	@Test
 	public void testScheduledExecutor() throws InterruptedException {
-		SetTimeout.setTimeout(() -> {
+		ObjectHelper.setTimeout(() -> {
 			System.out.println("Hello");
 		}, 5);
 

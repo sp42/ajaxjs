@@ -188,7 +188,7 @@ public class JdbcReader extends JdbcConn {
         return rs -> {
             ResultSetMetaData metaData = rs.getMetaData();
 
-            if (beanClz == Integer.class || beanClz == Long.class || beanClz == String.class || beanClz == Double.class || beanClz == BigDecimal.class  ) {
+            if (beanClz == Integer.class || beanClz == Long.class || beanClz == String.class || beanClz == Double.class || beanClz == Float.class || beanClz == BigDecimal.class) {
                 for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
                     Object v = rs.getObject(i);
                     return (T) v;

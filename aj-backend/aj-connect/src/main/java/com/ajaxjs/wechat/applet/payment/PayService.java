@@ -1,7 +1,6 @@
 package com.ajaxjs.wechat.applet.payment;
 
 import com.ajaxjs.framework.BusinessException;
-import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
@@ -14,19 +13,23 @@ import com.ajaxjs.wechat.applet.payment.payment.RequestPayment;
 import com.ajaxjs.wechat.common.PemUtil;
 import com.ajaxjs.wechat.common.RsaCryptoUtil;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 小程序支付业务
  */
+@EqualsAndHashCode(callSuper = true)
 @Service
+@Data
 public class PayService extends CommonService {
     private static final LogHelper LOGGER = LogHelper.getLog(PayService.class);
 
@@ -47,15 +50,17 @@ public class PayService extends CommonService {
      * @return 预支付交易会话标识
      */
     public String preOrder(LoginSession session, String appId, int totalMoney, String outTradeNo, String description) {
-        // 支付者
-        HashMap<String, String> payer = new HashMap<>();
-        payer.put("openid", session.getOpenId());
+        return preOrder(session.getOpenId(), appId, totalMoney, outTradeNo, description);
+    }
 
-        // 金额
-        HashMap<String, Integer> amount = new HashMap<>();
-        amount.put("total", totalMoney);
+    public String preOrder(String openId, String appId, int totalMoney, String outTradeNo, String description) {
+        Map<String, String> payer = ObjectHelper.hashMap("openid", openId);// 支付者
+        Map<String, Integer> amount = ObjectHelper.hashMap("total", totalMoney); // 金额
 
         LOGGER.info(mchCfg.getMchId() + "::::::::" + appletPayNotifyUrl);
+
+        if (!StringUtils.hasText(appletPayNotifyUrl))
+            throw new IllegalArgumentException("appletPayNotifyUrl 不能为空");
 
         // 构建支付参数
         PreOrder p = new PreOrder();
@@ -63,7 +68,6 @@ public class PayService extends CommonService {
         p.setMchid(mchCfg.getMchId());
         p.setOut_trade_no(outTradeNo);
         p.setDescription(description);
-
         p.setNotify_url(appletPayNotifyUrl);
 
         Map<String, Object> params = MapTool.bean2Map(p);
@@ -76,9 +80,8 @@ public class PayService extends CommonService {
 
         if ((Boolean) map.get("isOk") && map.get("code") == null) {
             return map.get("prepay_id").toString();
-        } else {
+        } else
             throw new BusinessException(map.get("message").toString());
-        }
     }
 
     /**

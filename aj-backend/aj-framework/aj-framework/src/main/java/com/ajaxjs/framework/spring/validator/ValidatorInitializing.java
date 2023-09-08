@@ -57,6 +57,5 @@ public class ValidatorInitializing implements ApplicationContextAware, Initializ
         });
 
         adapter.setArgumentResolvers(resolvers);
-        System.out.println("init done");
     }
 }

@@ -54,6 +54,21 @@ public abstract class CRUD {
         return jdbcReaderFactory().queryAsMap(sql, params);
     }
 
+    public static Map<String, Object> infoMap(String sqlId, Map<String, Object> paramsMap, Object... params) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return info(sql, params);
+    }
+
+    public static <T> T info(String sqlId, Class<T> beanClz, Map<String, Object> paramsMap, Object... params) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return jdbcReaderFactory().queryAsBean(beanClz, sql, params);
+    }
+
+    public static <T> T info(Class<T> beanClz, String sql, Object... params) {
+        return jdbcReaderFactory().queryAsBean(beanClz, sql, params);
+    }
 
     /**
      * 查询列表记录，以 List Map 格式返回
@@ -79,12 +94,6 @@ public abstract class CRUD {
         return list(sql, params);
     }
 
-    public static Map<String, Object> infoMap(String sqlId, Map<String, Object> paramsMap, Object... params) {
-        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
-
-        return info(sql, params);
-    }
-
     public static <T> PageResult<T> page(Class<T> beanClz, String sql, Map<String, Object> paramsMap) {
         sql = SmallMyBatis.handleSql(sql, paramsMap);
 
@@ -95,16 +104,6 @@ public abstract class CRUD {
         String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
 
         return PageEnhancer.page(sql, beanClz);
-    }
-
-    public static <T> T info(String sqlId, Class<T> beanClz, Map<String, Object> paramsMap, Object... params) {
-        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
-
-        return jdbcReaderFactory().queryAsBean(beanClz, sql, params);
-    }
-
-    public static <T> T info(Class<T> beanClz, String sql, Object... params) {
-        return jdbcReaderFactory().queryAsBean(beanClz, sql, params);
     }
 
     /**

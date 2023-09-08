@@ -11,24 +11,19 @@
 package com.ajaxjs.login.weibo;
 
 import com.ajaxjs.framework.ClientAccessFullInfo;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 微博登录的配置
- * 
- * @author sp42 frank@ajaxjs.com
  *
+ * @author sp42 frank@ajaxjs.com
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class WeiboConfig extends ClientAccessFullInfo {
-	/**
-	 * 用户登录通过之后调转回来的地址
-	 */
-	private String loginUrl;
-
-	public String getLoginUrl() {
-		return loginUrl;
-	}
-
-	public void setLoginUrl(String loginUrl) {
-		this.loginUrl = loginUrl;
-	}
+    /**
+     * 用户登录通过之后调转回来的地址
+     */
+    private String loginUrl;
 }

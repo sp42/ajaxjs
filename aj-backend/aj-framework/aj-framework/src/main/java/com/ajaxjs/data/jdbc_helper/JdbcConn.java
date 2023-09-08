@@ -1,6 +1,7 @@
 package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.logger.LogHelper;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.util.ObjectUtils;
@@ -210,13 +211,13 @@ public class JdbcConn {
      * 一般来说 Tomcat 会自动注册但是我们现在手动使用 Pool，于是也得手动地注册到 MBean
      */
     private static void registerMBean(org.apache.tomcat.jdbc.pool.DataSource ds) {
-try {
-    MBeanServer server = ManagementFactory.getPlatformMBeanServer();
-    ObjectName on = new ObjectName("org.apache.tomcat.jdbc.pool.jmx.ConnectionPool:type=Logging2");
-    server.registerMBean(ds.getPool().getJmxPool(), on);
-} catch (Throwable e) {
-    System.err.println(e);
-}
+        try {
+            MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+            ObjectName on = new ObjectName("org.apache.tomcat.jdbc.pool.jmx.ConnectionPool:type=Logging2");
+            server.registerMBean(ds.getPool().getJmxPool(), on);
+        } catch (Throwable e) {
+            System.err.println(e);
+        }
     }
 
     /**

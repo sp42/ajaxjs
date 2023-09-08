@@ -12,8 +12,7 @@ package com.ajaxjs.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
@@ -52,7 +51,7 @@ public class DateUtil {
     }
 
     /**
-     * 对输入的时间进行格式化，采用格式 YYYY-MM-dd HH:MM
+     * 对输入的时间进行格式化，采用格式 YYYY-MM-dd HH:mm
      *
      * @param date 输入的时间
      * @return 转换到 YYYY-MM-dd HH:MM 格式的时间
@@ -72,7 +71,7 @@ public class DateUtil {
     }
 
     /**
-     * 返回当前时间的 YYYY-MM-dd HH:MM:ss 字符串类型
+     * 返回当前时间的 YYYY-MM-dd HH:MM 字符串类型
      *
      * @return 当前时间
      */
@@ -199,6 +198,33 @@ public class DateUtil {
 
     public static Date localDateTime2Date(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static Date localDate2Date(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    private static ZonedDateTime getZone(Date date) {
+        Instant instant;
+        /*
+            java.sql.Date仅支持日期组件（日期、月份、年份）。它不支持时间组件（小时、分钟、秒、毫秒）。
+            toInstant需要 Date 和 Time 组件，
+            因此 java.sql.Date 实例上的 toInstant 会引发 UnsupportedOperationException 异常
+        */
+        if (date instanceof java.sql.Date)
+            instant = Instant.ofEpochMilli(date.getTime());
+        else
+            instant = date.toInstant();
+
+        return instant.atZone(ZoneId.systemDefault());
+    }
+
+    public static LocalDate toLocalDate(Date date) {
+        return getZone(date).toLocalDate();
+    }
+
+    public static LocalDateTime toLocalDateTime(Date date) {
+        return getZone(date).toLocalDateTime();
     }
 
     public static Date string2dateShort(String str) {

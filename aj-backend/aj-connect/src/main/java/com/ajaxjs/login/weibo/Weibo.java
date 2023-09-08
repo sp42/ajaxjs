@@ -38,7 +38,7 @@ public class Weibo {
                 "&redirect_uri=" + cfg.getLoginUrl() +
                 "&code=" + code;
 
-        /**
+        /*
          * 返回数据 { "access_token": "ACCESS_TOKEN", "expires_in": 1234,
          * "remind_in":"798114", "uid":"12341234" }
          */
@@ -47,10 +47,6 @@ public class Weibo {
 
     /**
      * 根据用户 ID 获取用户信息 文档：<a href="https://open.weibo.com/wiki/2/users/show">...</a>
-     *
-     * @param accessToken
-     * @param uid
-     * @return
      */
     public Map<String, Object> getUserInfo(String accessToken, String uid) {
         String sb = "access_token=" + accessToken + "&uid=" + uid;

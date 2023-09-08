@@ -64,10 +64,28 @@ public class DataBaseConnection implements HandlerInterceptor {
     }
 
     public static Connection initDb() {
+        return initDb(false);
+    }
+
+    /**
+     * Shorthand
+     */
+    public static void closeDb() {
+        JdbcConn.closeDb();
+    }
+
+    public static Connection initDb(boolean isEnableTransaction) {
         DataSource ds = DiContextUtil.getBean(DataSource.class);
         Objects.requireNonNull(ds, "未配置数据源");
         Connection conn = new JdbcConn().getConnection(ds);
         JdbcConn.setConnection(conn); // 设置连接到库，使其可用
+
+        if (isEnableTransaction)
+            try {
+                conn.setAutoCommit(false);
+            } catch (SQLException e) {
+                LOGGER.warning(e);
+            }
 
         return conn;
     }
@@ -103,7 +121,7 @@ public class DataBaseConnection implements HandlerInterceptor {
         }
     }
 
-    private static void doTransaction(Exception ex) throws SQLException {
+    public static void doTransaction(Exception ex) throws SQLException {
         LOGGER.info("正在处理数据库事务……");
         Connection conn = JdbcConn.getConnection();
 

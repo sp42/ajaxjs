@@ -226,7 +226,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         else if (value instanceof Boolean)
             return ((Boolean) value) ? 1 : 0;
         else if (value instanceof Date)
-            return DateUtil.formatDate((Date) value);
+            return "'" + DateUtil.formatDate((Date) value) + "'";
 
         return value.toString();
     }
@@ -508,7 +508,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             result = ps.executeBatch();
             ps.clearBatch();
         } catch (SQLException e) {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
 
         LOGGER.info("批量插入完成。" + Arrays.toString(result));

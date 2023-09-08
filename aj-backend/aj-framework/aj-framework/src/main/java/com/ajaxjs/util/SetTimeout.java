@@ -136,30 +136,4 @@ public class SetTimeout extends Timer {
         }, delay * 1000L);
     }
 
-    private static ScheduledExecutorService scheduledThreadPool;
-
-    /**
-     * 设置一个定时任务
-     *
-     * @param command 待执行任务
-     * @param delay   延迟时间，单位秒
-     * @return 任务结果
-     */
-    public static ScheduledFuture<?> setTimeout(Runnable command, long delay) {
-        if (scheduledThreadPool == null)
-            scheduledThreadPool = Executors.newScheduledThreadPool(5);
-
-        return scheduledThreadPool.schedule(command, delay, TimeUnit.SECONDS);
-    }
-
-    /**
-     * 开启一个轮询任务
-     *
-     * @param job          待执行任务
-     * @param initialDelay 初始延迟时间，单位分钟
-     * @param period       轮询间隔，单位分钟
-     */
-    public static void timeout(Runnable job, int initialDelay, int period) {
-        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(job, 1, 1, TimeUnit.MINUTES);
-    }
 }

@@ -26,6 +26,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -297,6 +300,9 @@ public class ObjectHelper {
 
             if (value instanceof String)
                 value = Float.parseFloat((String) value);
+
+            if (value instanceof BigDecimal)
+                value = ((BigDecimal) value).floatValue();
         } else if (target == List.class) {
             if (value instanceof String) {
                 String str = (String) value;
@@ -358,5 +364,32 @@ public class ObjectHelper {
         }
 
         return value;
+    }
+
+    private static ScheduledExecutorService scheduledThreadPool;
+
+    /**
+     * 设置一个定时任务
+     *
+     * @param command 待执行任务
+     * @param delay   延迟时间，单位秒
+     * @return 任务结果
+     */
+    public static ScheduledFuture<?> setTimeout(Runnable command, long delay) {
+        if (scheduledThreadPool == null)
+            scheduledThreadPool = Executors.newScheduledThreadPool(5);
+
+        return scheduledThreadPool.schedule(command, delay, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 开启一个轮询任务
+     *
+     * @param job          待执行任务
+     * @param initialDelay 初始延迟时间，单位分钟
+     * @param period       轮询间隔，单位分钟
+     */
+    public static void timeout(Runnable job, int initialDelay, int period) {
+        Executors.newScheduledThreadPool(1).scheduleAtFixedRate(job, 1, 1, TimeUnit.MINUTES);
     }
 }

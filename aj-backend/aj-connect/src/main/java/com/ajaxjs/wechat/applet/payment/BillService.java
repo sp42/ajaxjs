@@ -14,9 +14,9 @@ import java.util.Map;
  *
  * @author Frank Cheung
  */
-@Service
+@Service("WxBillService")
 public class BillService {
-    @Autowired
+//    @Autowired
     private MerchantConfig mchCfg;
 
     /**

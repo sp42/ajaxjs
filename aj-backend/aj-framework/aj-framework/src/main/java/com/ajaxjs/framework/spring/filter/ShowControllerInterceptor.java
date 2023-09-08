@@ -24,6 +24,7 @@ public class ShowControllerInterceptor implements HandlerInterceptor {
         if (handler instanceof HandlerMethod) {
             HandlerMethod h = (HandlerMethod) handler;
             LOGGER.info("控制器方法：" + h);
+            LOGGER.info("请求 URL：" + request.getRequestURL());
 
             StringBuilder s = new StringBuilder();
             Map<String, String[]> parameterMap = request.getParameterMap();
