@@ -15,6 +15,9 @@
  */
 package com.ajaxjs.util.logger;
 
+import com.ajaxjs.Version;
+import com.ajaxjs.util.io.Resources;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,11 +26,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Filter;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
-
-import com.ajaxjs.Version;
-import com.ajaxjs.util.io.Resources;
 
 /**
  * 自定义日志工具类，封装了 Java 自带的日志类 java.util.logging.Logger。
@@ -47,7 +46,7 @@ public class LogHelper {
 
         if (!Version.isDebug) {
             URL url = LogHelper.class.getClassLoader().getResource("");
-            String logFolder = null;
+            String logFolder;
 
             if (url == null) { // jar running
                 logFolder = Resources.getJarDir();
@@ -98,22 +97,17 @@ public class LogHelper {
     /**
      * 所在的类名
      */
-    private String className;
+    private final String className;
 
     /**
      * 包装这个 logger
      */
-    private Logger logger;
+    private final Logger logger;
 
     /**
      * 过滤器，是否要日志服务
      */
-    private final static Filter filter = new Filter() {
-        @Override
-        public boolean isLoggable(LogRecord record) {
-            return (record.getMessage() == null || record.getMessage().contains("no log")) ? false : true;
-        }
-    };
+    private final static Filter filter = record -> record.getMessage() != null && !record.getMessage().contains("no log");
 
     /**
      * 获取自定义的 logger。这是外界调用本类最主要的方法。例如：
@@ -297,7 +291,7 @@ public class LogHelper {
      * @return 异常信息
      */
     public static String getStackTrace(Throwable throwable) {
-        try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw, Boolean.TRUE);) {
+        try (StringWriter sw = new StringWriter(); PrintWriter pw = new PrintWriter(sw, Boolean.TRUE)) {
             throwable.printStackTrace(pw);
 
             return sw.getBuffer().toString();

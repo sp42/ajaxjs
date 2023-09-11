@@ -13,16 +13,11 @@
         <version>1.11</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-<!--    <properties>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-    </properties>-->
+    <!--    <properties>
+            <maven.javadoc.skip>true</maven.javadoc.skip>
+        </properties>-->
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>5.3.25</version>
-            <scope>provided</scope>
-        </dependency>
+
     </dependencies>
 </project>

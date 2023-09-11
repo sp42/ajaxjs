@@ -10,31 +10,15 @@
  */
 package com.ajaxjs.util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-
 import com.ajaxjs.util.logger.LogHelper;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * 反射工具包
- *
- * @author sp42 frank@ajaxjs.com
  */
+@Deprecated
 public class ReflectUtil {
     private static final LogHelper LOGGER = LogHelper.getLog(ReflectUtil.class);
 
@@ -60,8 +44,10 @@ public class ReflectUtil {
         }
 
         // 获取构造器
+        assert args != null;
         Constructor<T> constructor = getConstructor(clz, args2class(args));
 
+        assert constructor != null;
         return newInstance(constructor, args);
     }
 
@@ -177,12 +163,12 @@ public class ReflectUtil {
      * @return 类对象列表
      */
     public static Class<?>[] args2class(Object[] args) {
-        Class<?>[] clazzes = new Class[args.length];
+        Class<?>[] clazz = new Class[args.length];
 
         for (int i = 0; i < args.length; i++)
-            clazzes[i] = args[i].getClass();
+            clazz[i] = args[i].getClass();
 
-        return clazzes;
+        return clazz;
     }
 
     /**
@@ -212,7 +198,7 @@ public class ReflectUtil {
             fields.addAll(Arrays.asList(currentInterfaces));
         }
 
-        return fields.toArray(new Class[fields.size()]);
+        return fields.toArray(new Class[0]);
     }
 
     /////////////// Methods ///////////////////////
@@ -229,7 +215,7 @@ public class ReflectUtil {
         Class<?> cls = obj instanceof Class ? (Class<?>) obj : obj.getClass();
 
         try {
-            return ObjectUtils.isEmpty(args) ? cls.getMethod(method) : cls.getMethod(method, args);
+            return ListUtils.isEmpty(args) ? cls.getMethod(method) : cls.getMethod(method, args);
         } catch (NoSuchMethodException | SecurityException e) {
             StringBuilder str = new StringBuilder();
             for (Class<?> clz : args)
@@ -241,7 +227,6 @@ public class ReflectUtil {
     }
 
     /**
-     *
      * 根据方法名称和参数列表查找方法。注意参数对象类型由于没有向上转型会造成不匹配而找不到方法，这时应使用上一个方法或
      * getMethodByUpCastingSearch()
      *
@@ -251,7 +236,7 @@ public class ReflectUtil {
      * @return 匹配的方法对象，null 表示找不到
      */
     public static Method getMethod(Object obj, String method, Object... args) {
-        if (!ObjectUtils.isEmpty(args))
+        if (!ListUtils.isEmpty(args))
             return getMethod(obj, method, args2class(args));
         else
             return getMethod(obj, method);
@@ -290,16 +275,16 @@ public class ReflectUtil {
         Method methodObj;
 
         for (Class<?> clazz = arg.getClass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
-            Type[] intfs = clazz.getGenericInterfaces();
+            Type[] interfaces = clazz.getGenericInterfaces();
 
-            if (intfs.length != 0) { // 有接口！
+            if (interfaces.length != 0) { // 有接口！
                 try {
-                    for (Type intf : intfs) {
+                    for (Type _interface : interfaces) {
                         // 旧方法，现在不行，不知道之前怎么可以的 methodObj = hostClazz.getDeclaredMethod(method,
-                        // (Class<?>)intf);
+                        // (Class<?>)_interface);
                         // methodObj = cls.getMethod(methodName,
-                        // ReflectNewInstance.getClassByInterface(intf));
-                        methodObj = getSuperClassDeclaredMethod(clz, method, getClassByInterface(intf));
+                        // ReflectNewInstance.getClassByInterface(_interface));
+                        methodObj = getSuperClassDeclaredMethod(clz, method, getClassByInterface(_interface));
 
                         if (methodObj != null)
                             return methodObj;
@@ -368,7 +353,7 @@ public class ReflectUtil {
             clz = clz.getSuperclass();
         }
 
-        return fieldList.toArray(new Field[fieldList.size()]);
+        return fieldList.toArray(new Field[0]);
     }
 
     public static Class<?>[] getAllSuperClazz(Class<?> clz) {
@@ -390,7 +375,7 @@ public class ReflectUtil {
         if (clzList.size() > 0)
             clzList.remove(0); // 排除自己
 
-        return clzList.toArray(new Class[clzList.size()]);
+        return clzList.toArray(new Class[0]);
     }
 
     /**
@@ -400,7 +385,7 @@ public class ReflectUtil {
      * @param method   方法对象
      * @param args     参数列表
      * @return 执行结果
-     * @throws Throwable
+     * @throws Throwable 任何异常
      */
     public static Object executeMethod_Throwable(Object instance, Method method, Object... args) throws Throwable {
         if (instance == null || method == null)
@@ -468,33 +453,33 @@ public class ReflectUtil {
     /**
      * 调用方法
      *
-     * @param instnace 对象实例，bean
+     * @param instance 对象实例，bean
      * @param method   方法对象名称
      * @param args     参数列表
      * @return 执行结果
      */
-    public static Object executeMethod(Object instnace, String method, Object... args) {
+    public static Object executeMethod(Object instance, String method, Object... args) {
         // 没有方法对象，先找到方法对象。可以支持方法重载，按照参数列表
-        Class<?>[] clazzes = args2class(args);
-        Method methodObj = getMethod(instnace.getClass(), method, clazzes);
+        Class<?>[] clazz = args2class(args);
+        Method methodObj = getMethod(instance.getClass(), method, clazz);
 
-        return methodObj != null ? executeMethod(instnace, methodObj, args) : null;
+        return methodObj != null ? executeMethod(instance, methodObj, args) : null;
     }
 
     /**
      * 调用方法。 注意获取方法对象，原始类型和包装类型不能混用，否则得不到正确的方法， 例如 Integer 不能与 int 混用。 这里提供一个
      * argType 的参数，指明参数类型为何。
      *
-     * @param instnace 对象实例
+     * @param instance 对象实例
      * @param method   方法名称
      * @param argType  参数类型
      * @param argValue 参数值
      * @return 执行结果
      */
-    public static Object executeMethod(Object instnace, String method, Class<?> argType, Object argValue) {
-        Method m = getMethod(instnace, method, argType);
+    public static Object executeMethod(Object instance, String method, Class<?> argType, Object argValue) {
+        Method m = getMethod(instance, method, argType);
         if (m != null)
-            return executeMethod(instnace, m, argValue);
+            return executeMethod(instance, m, argValue);
 
         return null;
     }
@@ -553,13 +538,10 @@ public class ReflectUtil {
      * @param value 要设置的属性值
      */
     public static void setProperty(Object bean, String name, Object value) {
-        String setMethodName = "set" + StringUtils.capitalize(name);
-
+        String setMethodName = "set" + StrUtil.capitalize(name);
         Objects.requireNonNull(bean, bean + "执行：" + setMethodName + " 未发现类");
 //		Objects.requireNonNull(value, bean + "执行：" + setMethodName + " 未发现参数 value");
-
         Class<?> clazz = bean.getClass();
-
         // 要把参数父类的也包括进来
         Method method = getMethodByUpCastingSearch(clazz, setMethodName, value);
 
@@ -578,11 +560,14 @@ public class ReflectUtil {
     }
 
     /**
+     * 常量转换为 Map
+     * 获取指定类中的所有 int 类型常量的名称和值，并返回它们构成的 Map 对象。
      *
-     * @param clz
-     * @return
+     * @param clz 常量类，一般为接口
+     * @return 常量的 Map 格式
      */
     public static Map<String, Integer> getConstantsInt(Class<?> clz) {
+        // 创建一个空的 HashMap 对象，用于存储常量名称和值的映射关系
         Map<String, Integer> map = new HashMap<>();
 
         Field[] fields = clz.getDeclaredFields();
@@ -591,6 +576,7 @@ public class ReflectUtil {
         for (Field field : fields) {
             String descriptor = Modifier.toString(field.getModifiers());// 获得其属性的修饰
 
+            // 判断该属性是否为 public static final 修饰的 int 类型常量
             if (descriptor.equals("public static final")) {
                 try {
                     map.put(field.getName(), (int) field.get(instance));
@@ -604,32 +590,10 @@ public class ReflectUtil {
     }
 
     /**
-     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     * 获取泛型类型数组。
      *
-     * @param method
-     * @return
-     */
-    public static Type[] getGenericReturnType(Method method) {
-        Type genericReturnType = method.getGenericReturnType();
-
-        return getActualType(genericReturnType);
-    }
-
-    public static Class<?> getGenericFirstReturnType(Method method) {
-        Type[] type = getGenericReturnType(method);
-
-        if (type == null || type.length == 0) {
-            LOGGER.warning("这很可能不是一个泛型");
-            return null;
-        }
-
-        return type2class(type[0]);
-    }
-
-    /**
-     *
-     * @param type
-     * @return
+     * @param type 要获取泛型类型数组的 Type 对象
+     * @return 返回泛型类型数组。如果指定的 Type 对象不是 ParameterizedType 类型，则返回 null。
      */
     public static Type[] getActualType(Type type) {
         if (type instanceof ParameterizedType) {
@@ -638,7 +602,31 @@ public class ReflectUtil {
             return pt.getActualTypeArguments();
         }
 
+        LOGGER.warning(type + " 很可能不是一个泛型");
         return null;
+    }
+
+    /**
+     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     *
+     * @param method 方法
+     * @return 实际类型，可能多个
+     */
+    public static Type[] getGenericReturnType(Method method) {
+        return getActualType(method.getGenericReturnType());
+    }
+
+    /**
+     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     * 这个方法获取第一个类型，并转换为 Class
+     *
+     * @param method 方法
+     * @return 第一个实际类型
+     */
+    public static Class<?> getGenericFirstReturnType(Method method) {
+        Type[] type = getGenericReturnType(method);
+
+        return type == null ? null : type2class(type[0]);
     }
 
     /**
@@ -646,7 +634,7 @@ public class ReflectUtil {
      *
      * @param clz 类必须先指向一个实例，参见
      *            <a href="https://stackoverflow.com/questions/8436055/how-to-get-class-of-generic-type-when-there-is-no-parameter-of-it">...</a>
-     * @return
+     * @return 实际类型
      */
     public static Type[] getActualType(Class<?> clz) {
         return getActualType(clz.getGenericSuperclass());
@@ -654,6 +642,7 @@ public class ReflectUtil {
 
     public static Class<?> getActualClass(Class<?> clz) {
         Type[] actualType = getActualType(clz);
+
         return type2class(actualType[0]);
     }
 
@@ -661,7 +650,7 @@ public class ReflectUtil {
      * Type 接口转换为 Class
      *
      * @param type Type 接口
-     * @return
+     * @return Class
      */
     public static Class<?> type2class(Type type) {
         return type instanceof Class ? (Class<?>) type : null;

@@ -10,32 +10,21 @@
  */
 package com.ajaxjs.util;
 
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 
-import com.ajaxjs.util.binrary.BytesUtil;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 普通未分类的工具类
@@ -43,6 +32,20 @@ import com.ajaxjs.util.binrary.BytesUtil;
  * @author sp42 frank@ajaxjs.com
  */
 public class StrUtil {
+    public static boolean hasText(String str) {
+        return (str != null && !str.isEmpty() && containsText(str));
+    }
+
+    private static boolean containsText(CharSequence str) {
+        int strLen = str.length();
+
+        for (int i = 0; i < strLen; i++) {
+            if (!Character.isWhitespace(str.charAt(i))) return true;
+        }
+
+        return false;
+    }
+
     /**
      * URL 网址的中文乱码处理。 如果 Tomcat 过滤器设置了 UTF-8 那么这里就不用重复转码了
      *
@@ -50,7 +53,7 @@ public class StrUtil {
      * @return 中文
      */
     public static String urlChinese(String str) {
-        return BytesUtil.byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
+        return byte2String(str.getBytes(StandardCharsets.ISO_8859_1));
     }
 
     /**
@@ -105,7 +108,6 @@ public class StrUtil {
         }
     }
 
-
     /**
      * BASE64 编码
      *
@@ -123,7 +125,7 @@ public class StrUtil {
      * @return 已编码的字符串
      */
     public static String base64Encode(String str) {
-        return Base64Utils.encodeToString(BytesUtil.getUTF8_Bytes(str));
+        return Base64Utils.encodeToString(getUTF8_Bytes(str));
     }
 
     /**
@@ -134,8 +136,7 @@ public class StrUtil {
      * @return 已解码的字符串
      */
     public static String base64Decode(String str) {
-        byte[] b = Base64Utils.decodeFromString(str);
-        return b == null ? null : BytesUtil.byte2String(b);
+        return byte2String(Base64Utils.decodeFromString(str));
     }
 
     /**
@@ -145,7 +146,7 @@ public class StrUtil {
 
     /**
      * 生成指定长度的随机字符，可能包含数字
-     * 另外一个方法https://blog.csdn.net/qq_41995919/article/details/115299461
+     * 另外一个方法 <a href="https://blog.csdn.net/qq_41995919/article/details/115299461">...</a>
      *
      * @param length 户要求产生字符串的长度
      * @return 随机字符
@@ -165,9 +166,9 @@ public class StrUtil {
     /**
      * 连接两个 url 目录字符串，如果没有 / 则加上；如果有则去掉一个
      *
-     * @param a
-     * @param b
-     * @return
+     * @param a 第一个 url 目录字符串
+     * @param b 第二个 url 目录字符串
+     * @return 拼接后的 url 目录字符串
      */
     public static String concatUrl(String a, String b) {
         char last = a.charAt(a.length() - 1), first = b.charAt(0);
@@ -177,9 +178,9 @@ public class StrUtil {
             result = a + b.substring(1);
         else if (last != '/' && first != '/') // haven't at all
             result = a + "/" + b;
-        else if (last == '/' && first != '/')
+        else if (last == '/' && first != '/')// a 有 /，b 没有 /
             result = a + b;
-        else if (last != '/' && first == '/')
+        else if (last != '/' && first == '/')// a 没有 /，b 有 /
             result = a + b;
 
         return result;
@@ -198,35 +199,35 @@ public class StrUtil {
         while (true) {
             index = str.indexOf(_char, index + 1);
 
-            if (index > 0)
-                count++;
-            else
-                break;
+            if (index > 0) count++;
+            else break;
         }
 
         return count;
     }
 
     /**
-     * 字符串补齐
+     * 字符串左填充方法
      * <p>
-     * System.out.println(leftPad("12345", 10, "@"));
+     * 例如: leftPad("12345", 10, "@")，输出："@@@@@12345"
      *
-     * @param str   输入字符串
-     * @param leng  字符串总长度
+     * @param str   待填充字符串
+     * @param len   总长度
      * @param _char 填充字符
-     * @return
+     * @return 左填充后的字符串
      */
-    public static String leftPad(String str, int leng, String _char) {
-        return String.format("%" + leng + "s", str).replaceAll("\\s", _char);
+    public static String leftPad(String str, int len, String _char) {
+        return String.format("%" + len + "s", str).replaceAll("\\s", _char);
     }
 
     private static final Pattern TPL_PATTERN = Pattern.compile("\\$\\{\\w+}");
 
     /**
-     * @param template
-     * @param params
-     * @return
+     * 简单模板替换方法。根据 Map 中的数据进行替换
+     *
+     * @param template 待替换的字符串模板
+     * @param params   存放替换数据的 Map
+     * @return 替换后的字符串
      */
     public static String simpleTpl(String template, Map<String, Object> params) {
         StringBuffer sb = new StringBuffer();
@@ -234,8 +235,9 @@ public class StrUtil {
 
         while (m.find()) {
             String param = m.group();
+            // 获取要替换的键名，即去除 '${' 和 '}' 后的部分
             Object value = params.get(param.substring(2, param.length() - 1));
-            m.appendReplacement(sb, value == null ? "" : value.toString());
+            m.appendReplacement(sb, value == null ? "" : value.toString());// 替换键值对应的值，若值为 null，则置为空字符串
         }
 
         m.appendTail(sb);
@@ -245,11 +247,12 @@ public class StrUtil {
     }
 
     /**
-     * 简单模板替换方法。这个根据 Map 数据
+     * 简单模板替换方法。根据 Map 中的数据进行替换。
+     * 与 simpleTpl 方法的区别在于这里将 null 值替换为字符串 "null"。
      *
-     * @param template
-     * @param data
-     * @return
+     * @param template 待替换的字符串模板
+     * @param data     存放替换数据的 Map
+     * @return 替换后的字符串
      */
     public static String simpleTpl2(String template, Map<String, Object> data) {
         String result = template;
@@ -258,8 +261,7 @@ public class StrUtil {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            if (value == null)
-                value = "null";
+            if (value == null) value = "null";
             String placeholder = "#{" + key + "}";
             result = result.replace(placeholder, value.toString());
         }
@@ -268,11 +270,11 @@ public class StrUtil {
     }
 
     /**
-     * 简单模板替换方法。这个根据 JavaBean 数据
+     * 简单模板替换方法。根据 JavaBean 中的数据进行替换。
      *
-     * @param template
-     * @param data
-     * @return
+     * @param template 待替换的字符串模板
+     * @param data     存放替换数据的 JavaBean 对象
+     * @return 替换后的字符串
      */
     public static String simpleTpl(String template, Object data) {
         String result = template;
@@ -282,8 +284,7 @@ public class StrUtil {
                 String name = descriptor.getName();
                 Object value = descriptor.getReadMethod().invoke(data);
 
-                if (value == null)
-                    value = "null";
+                if (value == null) value = "null";
 
                 String placeholder = "#{" + name + "}";
                 result = result.replace(placeholder, value.toString());
@@ -298,15 +299,14 @@ public class StrUtil {
     /**
      * 将列表中的元素使用指定的分隔符连接成一个字符串，并返回连接后的字符串
      *
-     * @param <T>
+     * @param <T>  数组类型
      * @param list 任何类型的列表
      * @param str  字符串类型的分隔符
      * @return 连接后的字符串
      */
     public static <T> String joinAnyList(List<T> list, String str) {
         Object[] objectArray = list.toArray();
-        @SuppressWarnings("unchecked")
-        T[] array = Arrays.copyOf(objectArray, objectArray.length, (Class<? extends T[]>) objectArray.getClass());
+        @SuppressWarnings("unchecked") T[] array = Arrays.copyOf(objectArray, objectArray.length, (Class<? extends T[]>) objectArray.getClass());
 
         return join(array, str);
     }
@@ -314,7 +314,7 @@ public class StrUtil {
     /**
      * 将数组中的元素使用指定的分隔符连接成一个字符串，并返回连接后的字符串
      *
-     * @param <T>
+     * @param <T> 数组类型
      * @param arr 任何类型的数组
      * @param str 字符串类型的分隔符
      * @return 连接后的字符串
@@ -325,59 +325,65 @@ public class StrUtil {
         for (int i = 0, len = arr.length; i < len; i++) {
             String s = arr[i].toString();
 
-            if (i != (len - 1))
-                sb.append(s + str);
-            else
-                sb.append(s);
+            if (i != (len - 1)) sb.append(s).append(str);
+            else sb.append(s);
         }
 
         return sb.toString();
     }
 
     /**
-     * @param arr
-     * @param tpl
-     * @param str
-     * @return
+     * 将字符串数组转为字符串，可自定义分隔符及字符串模板
+     *
+     * @param arr 字符串数组
+     * @param tpl 字符串格式化模板
+     * @param str 用于分隔字符串的字符
+     * @return 拼接结果字符串
      */
     public static String join(String[] arr, String tpl, String str) {
         return join(Arrays.asList(arr), tpl, str);
     }
 
     /**
-     * @param list
-     * @param str
-     * @return
+     * 将字符串列表转为字符串，可自定义分隔符
+     *
+     * @param list 字符串列表
+     * @param str  用于分隔字符串的字符
+     * @return 拼接结果字符串
      */
     public static String join(List<String> list, String str) {
         return join(list, null, str);
     }
 
+    /**
+     * 将字符串列表转为字符串，可自定义分隔符及字符串格式化模板
+     *
+     * @param list 字符串列表
+     * @param tpl  字符串格式化模板
+     * @param str  用于分隔字符串的字符
+     * @return 拼接结果字符串
+     */
     public static String join(List<String> list, String tpl, String str) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0, len = list.size(); i < len; i++) {
             String s = list.get(i);
 
-            if (tpl != null)
-                s = String.format(tpl, s);
+            if (tpl != null) s = String.format(tpl, s);
 
-            if (i != (len - 1))
-                sb.append(s + str);
-            else
-                sb.append(s);
+            if (i != (len - 1)) sb.append(s).append(str);
+            else sb.append(s);
         }
 
         return sb.toString();
     }
 
     /**
-     * 对象深度克隆 <a href="https://blog.csdn.net/qq_41995919/article/details/114486615">...</a> 1).
-     * 实现Cloneable接口并重写Object类中的clone()方法； 2). 实现Serializable接口，通过对象的序列化和反序列化实现克隆
+     * 对象深度克隆
      *
-     * @param <T>
-     * @param obj
-     * @return
+     * @param <T> 对象泛型参数
+     * @param obj 待克隆的对象
+     * @return 克隆后的对象
      */
     @SuppressWarnings("unchecked")
     public static <T extends Serializable> T clone(T obj) {
@@ -398,44 +404,46 @@ public class StrUtil {
     }
 
     /**
-     * word 是否数组里面的其中一员
+     * 判断一个字符串是否属于指定的字符串数组中
      *
-     * @param word
-     * @param strs
-     * @return
+     * @param word 待判断字符串
+     * @param strs 指定字符串数组
+     * @return 如果字符串属于数组中，则返回 true；否则返回 false
      */
     public static boolean isWordOneOfThem(String word, String[] strs) {
         for (String str : strs) {
-            if (word.equals(str))
-                return true;
+            if (word.equals(str)) return true;
         }
 
         return false;
     }
 
     /**
-     * word 是否数组里面的其中一员
+     * 判断一个字符串是否属于指定的字符串列表中
      *
-     * @param word
-     * @param strs
-     * @return
+     * @param word 待判断字符串
+     * @param strs 指定字符串列表
+     * @return 如果字符串属于列表中，则返回 true；否则返回 false
      */
     public static boolean isWordOneOfThem(String word, List<String> strs) {
-        return isWordOneOfThem(word, strs.toArray(new String[strs.size()]));
+        return isWordOneOfThem(word, strs.toArray(new String[0]));
     }
 
     /**
-     * @param str
-     * @return
+     * 计算一个字符串的 MD5 值
+     *
+     * @param str 待计算 MD5 的字符串
+     * @return 计算结果
      */
     public static String md5(String str) {
         return DigestUtils.md5DigestAsHex(str.getBytes());
     }
 
     /**
-     * Spring 提供的算法性能远远高于 JDK 的
+     * 生成一个 UUID，可选择是否去掉其中的 "-" 符号（Copy from Spring，Spring 提供的算法性能远远高于 JDK 的）
      *
-     * @return
+     * @param isRemove 是否去掉 "-" 符号
+     * @return 生成的 UUID 字符串
      */
     public static String uuid(boolean isRemove) {
         String uuid = new AlternativeJdkIdGenerator().generateId().toString();
@@ -443,7 +451,78 @@ public class StrUtil {
         return isRemove ? uuid.replace("-", "") : uuid;
     }
 
+    /**
+     * 生成一个去掉 "-" 字符的 UUID 字符串
+     *
+     * @return 生成的 UUID 字符串
+     */
     public static String uuid() {
         return uuid(true);
+    }
+
+    public static byte[] getUTF8_Bytes(String str) {
+        return str.getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 字节转编码为 字符串（ UTF-8 编码）
+     *
+     * @param bytes 输入的字节数组
+     * @return 字符串
+     */
+    public static String byte2String(byte[] bytes) {
+        return new String(bytes, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 字符串转为 UTF-8 编码的字符串
+     *
+     * @param str 输入的字符串
+     * @return UTF-8 字符串
+     */
+    public static String byte2String(String str) {
+        return byte2String(str.getBytes());
+    }
+
+    /**
+     * Capitalize a {@code String}, changing the first letter to
+     * upper case as per {@link Character#toUpperCase(char)}.
+     * No other letters are changed.
+     *
+     * @param str the {@code String} to capitalize
+     * @return the capitalized {@code String}
+     */
+    public static String capitalize(String str) {
+        return changeFirstCharacterCase(str, true);
+    }
+
+    public static boolean hasLength(String str) {
+        return (str != null && !str.isEmpty());
+    }
+
+    /**
+     * Uncapitalize a {@code String}, changing the first letter to
+     * lower case as per {@link Character#toLowerCase(char)}.
+     * No other letters are changed.
+     *
+     * @param str the {@code String} to uncapitalize
+     * @return the uncapitalized {@code String}
+     */
+    public static String uncapitalize(String str) {
+        return changeFirstCharacterCase(str, false);
+    }
+
+    private static String changeFirstCharacterCase(String str, boolean capitalize) {
+        if (!hasLength(str)) return str;
+
+        char baseChar = str.charAt(0);
+        char updatedChar = capitalize ? Character.toUpperCase(baseChar) : Character.toLowerCase(baseChar);
+
+        if (baseChar == updatedChar) return str;
+
+        char[] chars = str.toCharArray();
+        chars[0] = updatedChar;
+
+        return new String(chars);
     }
 }

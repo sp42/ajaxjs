@@ -1,7 +1,6 @@
 package com.ajaxjs.wechat.applet;
 
 import com.ajaxjs.net.http.Get;
-import com.ajaxjs.util.SetTimeout;
 import com.ajaxjs.util.logger.LogHelper;
 
 import java.util.Map;

@@ -10,12 +10,11 @@
  */
 package com.ajaxjs.util.io;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Consumer;
 
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
@@ -71,7 +70,7 @@ public class Resources {
      * 获取 Classpath 根目录下的资源文件
      *
      * @param resource 文件名称，输入空字符串这返回 Classpath 根目录。可以支持包目录，例如
-     *                 com\\ajaxjs\\newfile.txt
+     *                 com\\ajaxjs\\new-file.txt
      * @return 所在工程路径+资源路径，找不到文件则返回 null
      */
     public static String getResourcesFromClasspath(String resource) {
@@ -90,9 +89,10 @@ public class Resources {
             return null;
 
         String path;
-        if (isDecode) {
+
+        if (isDecode)
             path = StringUtils.uriDecode(new File(url.getPath()).toString(), StandardCharsets.UTF_8);
-        } else {
+        else {
             path = url.getPath();
             path = path.startsWith("/") ? path.substring(1) : path;
         }
@@ -121,9 +121,7 @@ public class Resources {
      * @return 资源文件的内容
      */
     public static String getResourceText(String path) {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-        try (InputStream in = classLoader.getResourceAsStream(path)) {
+        try (InputStream in = getResource(path)) {
             if (in == null) {
                 LOGGER.warning("[{0}] 下没有 [{1}] 资源文件", getResourcesFromClasspath(""), path);
                 return null;
@@ -134,6 +132,12 @@ public class Resources {
             LOGGER.warning(e);
             return null;
         }
+    }
+
+    public static InputStream getResource(String path) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        return classLoader.getResourceAsStream(path);
     }
 
     /**
@@ -152,5 +156,40 @@ public class Resources {
         }
 
         return jarDir;
+    }
+
+    /**
+     * 列出资源文件列表
+     */
+    static void listResourceFile() {
+        ClassLoader classLoader = Resources.class.getClassLoader();
+        URL resourceUrl = classLoader.getResource("");
+
+        if (resourceUrl != null) {
+            File[] files = new File(resourceUrl.getFile()).listFiles(); // 将URL转换为文件路径
+
+            assert files != null;
+            for (File file : files) {
+                if (file.isFile()) // 是否为普通文件（非目录）
+                    System.out.println(file.getName());
+            }
+        }
+    }
+
+    /**
+     * 执行 OS  命令
+     *
+     * @param cmd 命令
+     * @param fn  回调函数
+     */
+    public static void executeCMD(String cmd, Consumer<String> fn) {
+        Runtime runtime = Runtime.getRuntime();
+
+        try {
+            Process netStart = runtime.exec("net start");
+            StreamHelper.read(netStart.getInputStream(), fn);
+        } catch (IOException e) {
+            LOGGER.warning(e);
+        }
     }
 }
