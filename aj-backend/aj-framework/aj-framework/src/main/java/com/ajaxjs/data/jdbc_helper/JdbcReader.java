@@ -128,26 +128,28 @@ public class JdbcReader extends JdbcConn {
     public <T> T queryOne(String sql, Class<T> clz, Object... params) {
         Map<String, Object> map = queryAsMap(sql, params);
 
-        if (map != null)
-            for (String key : map.keySet()) {// 有且只有一个记录
-                Object obj = map.get(key);
+        if (map == null)
+            return null;
 
-                if (obj == null)
-                    return null;
-                else {
-                    if (obj instanceof Long && clz == int.class) {
-                        Object _int = ((Long) obj).intValue();
-                        return (T) _int;
-                    }
+        for (String key : map.keySet()) {// 有且只有一个记录
+            Object obj = map.get(key);
 
-                    if (obj instanceof Integer && (clz == long.class || clz == Long.class)) {
-                        Object _int = ((Integer) obj).longValue();
-                        return (T) _int;
-                    }
-
-                    return (T) obj;
+            if (obj == null)
+                return null;
+            else {
+                if (obj instanceof Long && clz == int.class) {
+                    Object _int = ((Long) obj).intValue();
+                    return (T) _int;
                 }
+
+                if (obj instanceof Integer && (clz == long.class || clz == Long.class)) {
+                    Object _int = ((Integer) obj).longValue();
+                    return (T) _int;
+                }
+
+                return (T) obj;
             }
+        }
 
         return null;
     }
@@ -189,15 +191,19 @@ public class JdbcReader extends JdbcConn {
             ResultSetMetaData metaData = rs.getMetaData();
 
             if (beanClz == Integer.class || beanClz == Long.class || beanClz == String.class || beanClz == Double.class || beanClz == Float.class || beanClz == BigDecimal.class) {
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
-                    Object v = rs.getObject(i);
-                    return (T) v;
-                }
+                Object v = rs.getObject(1);
+
+                return (T) v;
+//                for (int i = 1; i <= columnLength; i++) {// 遍历结果集
+//                    Object v = rs.getObject(i);
+//
+//                    return (T) v;
+//                }
             }
 
             T bean = NewInstance.newInstance(beanClz);
 
-//            if (beanClz.toString().contains("OrderProfitsharingReceivers")) {
+//            if (beanClz.toString().contains("xxx")) {
 //                System.out.println();
 //            }
 
@@ -222,7 +228,8 @@ public class JdbcReader extends JdbcConn {
                     try {
                         value = ObjectHelper.objectCast(_value, propertyType);
                     } catch (NumberFormatException e) {
-                        String input = (value == null ? " 空值 " : value.getClass().toString()), expect = property.getPropertyType().toString();
+                        String input = (value == null ? " 空值 " : value.getClass().toString());
+                        String expect = property.getPropertyType().toString();
 //                        LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, input, expect);
                         continue; // 转换失败，继续下一个字段
                     }

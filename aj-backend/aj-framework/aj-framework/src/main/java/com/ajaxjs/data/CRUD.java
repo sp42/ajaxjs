@@ -208,24 +208,28 @@ public abstract class CRUD {
     }
 
     /**
-     * 获取实体类上的表名（注解）
+     * 获取实体类上的表名（通过注解）
      *
      * @param entity 实体类
      * @return 表名
      */
     public static String getTableName(Object entity) {
         TableName tableNameA = entity.getClass().getAnnotation(TableName.class);
-        if (tableNameA == null)
-            throw new RuntimeException("实体类未提供表名");
+        if (tableNameA == null) throw new RuntimeException("实体类未提供表名");
 
         return tableNameA.value();
     }
 
+    /**
+     * 获取实体类上的 Id 字段名称（通过注解）
+     *
+     * @param entity 实体类
+     * @return 表名
+     */
     public static String getIdField(Object entity) {
         IdField annotation = entity.getClass().getAnnotation(IdField.class);
 
-        if (annotation == null)
-            throw new BusinessException("没设置 IdField 注解，不知哪个主键字段");
+        if (annotation == null) throw new BusinessException("没设置 IdField 注解，不知哪个主键字段");
 
         return annotation.value();
     }
@@ -234,32 +238,29 @@ public abstract class CRUD {
         JdbcWriter jdbcWriter = jdbcWriterFactory();
         jdbcWriter.setTableName(talebName);
 
-        if (StringUtils.hasText(idField))
-            jdbcWriter.setIdField(idField);
+        if (StringUtils.hasText(idField)) jdbcWriter.setIdField(idField);
 
         return (Long) jdbcWriter.create(entity);
-    }
-
-    public static Long create(Object entity) {
-        return create(getTableName(entity), entity, null);
-    }
-
-    public static Long createWithIdField(Object entity) {
-        return createWithIdField(entity, getIdField(entity));
     }
 
     public static Long createWithIdField(Object entity, String idField) {
         return create(getTableName(entity), entity, idField);
     }
 
+    public static Long createWithIdField(Object entity) {
+        return createWithIdField(entity, getIdField(entity));
+    }
+
+    public static Long create(Object entity) {
+        return create(getTableName(entity), entity, null);
+    }
+
     public static boolean update(String talebName, Object entity, String idField) {
         JdbcWriter jdbcWriter = jdbcWriterFactory();
         jdbcWriter.setTableName(talebName);
 
-        if (StringUtils.hasText(idField))
-            jdbcWriter.setIdField(idField);
-        else
-            throw new BusinessException("未指定 id，这将会是批量全体更新！");
+        if (StringUtils.hasText(idField)) jdbcWriter.setIdField(idField);
+        else throw new BusinessException("未指定 id，这将会是批量全体更新！");
 
         return jdbcWriter.update(entity) > 0;
     }
@@ -304,8 +305,7 @@ public abstract class CRUD {
     public static boolean delete(Object entity) {
         Object id = Methods.executeMethod(entity, "getId");
 
-        if (id != null)
-            return delete(entity, (Serializable) id);
+        if (id != null) return delete(entity, (Serializable) id);
         else {
             LOGGER.warning("没有 getId()");
             return false;

@@ -146,6 +146,12 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         public Object[] values;
     }
 
+    /**
+     * 对一个 Map 类型的实体对象的每个字段进行操作
+     *
+     * @param entity        Java Map 实体
+     * @param everyMapField 对键和值作为参数进行操作的回调函数
+     */
     private static void everyMapField(Object entity, BiConsumer<String, Object> everyMapField) {
         @SuppressWarnings("unchecked")
         Map<String, Object> map = (Map<String, Object>) entity;
@@ -154,22 +160,28 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         map.forEach(everyMapField);
     }
 
+    /**
+     * 对一个对象的每个字段进行操作
+     *
+     * @param entity         Java Bean 实体
+     * @param everyBeanField 传入一个回调函数，将数据库列名和字段值作为参数进行操作
+     */
     private static void everyBeanField(Object entity, BiConsumer<String, Object> everyBeanField) {
         try {
             BeanInfo beanInfo = Introspector.getBeanInfo(entity.getClass());
 
             for (PropertyDescriptor property : beanInfo.getPropertyDescriptors()) {
-                String filedName = property.getName();
+                String filedName = property.getName(); // 获取字段的名称
                 if ("class".equals(filedName)) continue;
 
-                Method method = property.getReadMethod();
+                Method method = property.getReadMethod(); // 获取字段对应的读取方法
                 if (method.getAnnotation(IgnoreDB.class) != null) // 忽略的字段，不参与
                     continue;
 
                 Object value = method.invoke(entity);
 
                 if (value != null) {// 有值的才进行操作
-                    String field = DataUtils.changeFieldToColumnName(filedName);
+                    String field = DataUtils.changeFieldToColumnName(filedName); // 将字段名转换为数据库列名
                     everyBeanField.accept(field, value);
                 }
             }
