@@ -1,6 +1,7 @@
 package com.ajaxjs.wechat.applet;
 
 import com.ajaxjs.net.http.Get;
+import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.logger.LogHelper;
 
 import java.util.Map;
@@ -68,6 +69,6 @@ public class GetToken {
      */
     public void init() {
         getAccessToken();
-        SetTimeout.simpleTimeout(this::getAccessToken, 7100);
+        ObjectHelper.setTimeout(this::getAccessToken, 7100);
     }
 }

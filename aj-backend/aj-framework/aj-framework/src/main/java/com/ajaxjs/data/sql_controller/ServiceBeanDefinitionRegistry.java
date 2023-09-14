@@ -42,7 +42,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        LOGGER.info("扫描控制器……" + controllerPackage);
+        LOGGER.info("扫描 SQL-Bind 控制器……" + controllerPackage);
         Set<Class<RestController>> scannerPackages = scannerPackages(controllerPackage);
 
         // 通过反射获取需要代理的接口的 clazz 列表

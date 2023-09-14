@@ -3,6 +3,7 @@ package com.ajaxjs.util.reflect;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.ObjectUtils;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -329,5 +330,27 @@ public class Methods {
      */
     public static boolean isStaticMethod(Method method) {
         return Modifier.isStatic(method.getModifiers());
+    }
+
+    /**
+     * 调用 Interface 的 default 方法
+     * <a href="https://www.jianshu.com/p/63691220f81f">...</a>
+     * <a href="https://link.jianshu.com/?t=http://stackoverflow.com/questions/22614746/how-do-i-invoke-java-8-default-methods-refletively">...</a>
+     */
+    public static Object executeDefault(Object proxy, Method method, Object[] args) {
+        try {
+            Constructor<MethodHandles.Lookup> constructor = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
+            constructor.setAccessible(true);
+
+            Class<?> declaringClass = method.getDeclaringClass();
+            int allModes = MethodHandles.Lookup.PUBLIC | MethodHandles.Lookup.PRIVATE | MethodHandles.Lookup.PROTECTED | MethodHandles.Lookup.PACKAGE;
+
+            return constructor.newInstance(declaringClass, allModes)
+                    .unreflectSpecial(method, declaringClass)
+                    .bindTo(proxy)
+                    .invokeWithArguments(args);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
 }

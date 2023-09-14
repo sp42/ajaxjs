@@ -126,6 +126,12 @@ public abstract class CRUD {
         return list(beanClz, sql, params);
     }
 
+    public static <T> List<T> listBeanInXml(String sqlId, Class<T> beanClz, Map<String, Object> paramsMap, Object... params) {
+        String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
+
+        return list(beanClz, sql, params);
+    }
+
     /**
      * 获取实体类上的表名（注解）
      *
