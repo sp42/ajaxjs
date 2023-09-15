@@ -31,12 +31,22 @@ public class CRUD2<T> {
 
     private Object[] orderedParams;
 
+    /**
+     * 获取 SQL 语句，如果是 SQL Id 则获取并解析之
+     *
+     * @return 最终 SQL 语句
+     */
     private String getRealSql() {
         if (StringUtils.hasText(sql)) return sql;
         else if (StringUtils.hasText(sqlId)) return SmallMyBatis.handleSql(mapParams, sqlId);
         else throw new IllegalArgumentException("没输入的 SQL 参数");
     }
 
+    /**
+     * 获取单笔详情
+     *
+     * @return 可能是 Map 或者 Java Bean，根据 beanClz 是否有值来决定
+     */
     public Object info() {
         String sql = getRealSql();
 

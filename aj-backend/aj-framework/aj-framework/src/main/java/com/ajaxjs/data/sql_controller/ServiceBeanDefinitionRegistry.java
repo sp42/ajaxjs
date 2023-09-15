@@ -29,19 +29,24 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
     /**
      * 控制器所在的包
      */
-    private final String controllerPackage;
+    private final String[] controllerPackage;
 
     /**
      * 创建一个 ServiceBeanDefinitionRegistry
      *
      * @param controllerPackage 控制器所在的包
      */
-    public ServiceBeanDefinitionRegistry(String controllerPackage) {
+    public ServiceBeanDefinitionRegistry(String... controllerPackage) {
         this.controllerPackage = controllerPackage;
     }
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        for (String p : controllerPackage)
+            postProcessBeanDefinitionRegistry(registry, p);
+    }
+
+    private void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry, String controllerPackage) throws BeansException {
         LOGGER.info("扫描 SQL-Bind 控制器……" + controllerPackage);
         Set<Class<RestController>> scannerPackages = scannerPackages(controllerPackage);
 

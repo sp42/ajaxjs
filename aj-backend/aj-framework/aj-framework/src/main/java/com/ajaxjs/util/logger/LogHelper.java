@@ -25,6 +25,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Filter;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,6 +45,11 @@ public class LogHelper {
         logger = Logger.getLogger(className);
         logger.setFilter(filter);
 
+//        Handler handler = new JsonHandler();
+//        handler.setFormatter(new JsonFormatter());
+//
+//        logger.addHandler(handler);
+
         if (!Version.isDebug) {
             URL url = LogHelper.class.getClassLoader().getResource("");
             String logFolder;
@@ -55,6 +61,7 @@ public class LogHelper {
                 logFolder = new File(logFolder).toString();
                 logFolder = logFolder.replace("classes", "LogHelper");
             }
+
 
             logger.addHandler(new FileHandler(logFolder, null, ".log"));// 初始化保存到磁盤的處理器
         }
