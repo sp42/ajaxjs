@@ -36,7 +36,6 @@ public class FastDoc {
      * @param clazz Bean 类，其实任意 Java 类都可以，包括控制器
      */
     public static void loadBeans(String dir, Class<?>... clazz) {
-
         Params params = new Params();
         params.sources = new ArrayList<>();
 

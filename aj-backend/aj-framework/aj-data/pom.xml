@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>aj-data</artifactId>
-    <description>Small Java Utils Library with many powerful components</description>
+    <description>Lightweight Data Access Object and SQL in XML</description>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -13,7 +13,6 @@
         <version>1.11</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-
 
     <dependencies>
         <dependency>
@@ -25,7 +24,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <!-- <version>5.3.6</version> -->
             <version>5.3.24</version>
         </dependency>
 

@@ -3,6 +3,9 @@ package com.ajaxjs.data.jdbc_helper.common;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * 表名
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TableName {
     /**

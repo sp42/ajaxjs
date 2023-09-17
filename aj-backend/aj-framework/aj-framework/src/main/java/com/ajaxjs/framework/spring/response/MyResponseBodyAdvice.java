@@ -34,11 +34,6 @@ public class MyResponseBodyAdvice implements ResponseBodyAdvice<Object> {
             if (clz == List.class || clz.isArray())
                 return Collections.emptyList();
 
-//            else if (IBaseModel.class.isAssignableFrom(clz)) {
-//                // JavaBean
-//                return new Object();
-//            }
-
             return NULL_DATA;
         }
 

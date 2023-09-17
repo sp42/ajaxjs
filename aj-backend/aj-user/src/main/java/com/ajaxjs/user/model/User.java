@@ -2,7 +2,6 @@ package com.ajaxjs.user.model;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.framework.entity.TableName;
 import com.ajaxjs.user.common.UserConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +12,6 @@ import java.util.Date;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("user")
 public class User extends BaseModel implements UserConstants, IBaseModel {
     /**
      * 用户名、登录名

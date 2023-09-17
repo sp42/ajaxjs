@@ -17,9 +17,6 @@ public class TestUserService extends BaseTest {
     @Autowired
     UserService userService;
 
-    @Autowired
-    UserController userController;
-
     @Test
     public void testInfo() {
         assertNotNull(userService);

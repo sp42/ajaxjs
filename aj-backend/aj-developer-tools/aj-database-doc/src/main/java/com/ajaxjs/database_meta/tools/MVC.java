@@ -1,6 +1,7 @@
 package com.ajaxjs.database_meta.tools;
 
 import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.CRUD2;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.database_meta.tools.innodb.ResultParser;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
@@ -28,7 +29,7 @@ public class MVC {
                     map = new ResultParser().parse("BUFFER POOL AND MEMORY");
                     break;
                 case "innodb_buffer_pool_status":
-                    Map<String, Object> _map = CRUD.info("SELECT * FROM information_schema.innodb_buffer_pool_stats");
+                    Map<String, Object> _map = CRUD2.infoMap("SELECT * FROM information_schema.innodb_buffer_pool_stats");
                     map = MapTool.as(_map, Object::toString);
                     break;
                 case "inno_status_ibuf":

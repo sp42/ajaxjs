@@ -1,48 +1,49 @@
 package com.ajaxjs.user.service;
 
 import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.CRUD2;
 import com.ajaxjs.framework.entity.BaseEntityConstants;
-import com.ajaxjs.sass.SaasUtils;
-import com.ajaxjs.user.controller.UserController;
+import com.ajaxjs.user.common.SaasUtils;
 import com.ajaxjs.user.model.User;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Service
-public class UserService implements UserController {
-    @Override
-    public User info(Long id) {
+@RestController
+@RequestMapping("/user")
+public interface UserService {
+    @GetMapping("/{id}")
+    default User info(Long id) {
         String sql = "SELECT * FROM user WHERE stat != 1 AND id = ?";
         sql = SaasUtils.addTenantIdQuery(sql);
 
         return CRUD.info(User.class, sql, id);
     }
 
-    @Override
-    public Long create(@Valid User user) {
+    @PostMapping
+    default Long create(@Valid User user) {
         if (checkRepeat("username", user.getUsername()))
             throw new IllegalArgumentException("用户的登录名" + user.getUsername() + "重复");
 
         return CRUD.create(user);
     }
 
-    @Override
-    public Boolean checkRepeat(String field, Object value) {
+
+    default Boolean checkRepeat(String field, Object value) {
         String sql = "SELECT * FROM user WHERE stat != 1 AND " + field + " = ?";
         sql = SaasUtils.addTenantIdQuery(sql);
         sql += "LIMIT 1";
 
-        return CRUD.info(sql, value) != null;
+        return CRUD2.infoMap(sql, value) != null;
     }
 
-    @Override
-    public Boolean update(User user) {
+    @PutMapping
+    default Boolean update(User user) {
         return CRUD.update(user);
     }
 
-    @Override
-    public Boolean delete(Long id) {
+    @DeleteMapping("/{id}")
+    default Boolean delete(Long id) {
         // 逻辑删除
         User user = new User();
         user.setId(id);

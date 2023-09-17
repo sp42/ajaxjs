@@ -29,24 +29,24 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
     /**
      * 控制器所在的包
      */
-    private final String[] controllerPackage;
+    private final String[] packages;
 
     /**
      * 创建一个 ServiceBeanDefinitionRegistry
      *
-     * @param controllerPackage 控制器所在的包
+     * @param packages 控制器所在的包
      */
-    public ServiceBeanDefinitionRegistry(String... controllerPackage) {
-        this.controllerPackage = controllerPackage;
+    public ServiceBeanDefinitionRegistry(String... packages) {
+        this.packages = packages;
     }
 
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        for (String p : controllerPackage)
-            postProcessBeanDefinitionRegistry(registry, p);
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
+        for (String _package : packages)
+            postProcessBeanDefinitionRegistry(registry, _package);
     }
 
-    private void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry, String controllerPackage) throws BeansException {
+    private void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry, String controllerPackage) {
         LOGGER.info("扫描 SQL-Bind 控制器……" + controllerPackage);
         Set<Class<RestController>> scannerPackages = scannerPackages(controllerPackage);
 
@@ -97,6 +97,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
      * @param basePackage basePackage
      * @return 类集合
      */
+    @SuppressWarnings("unchecked")
     private Set<Class<RestController>> scannerPackages(String basePackage) {
         Set<Class<RestController>> set = new LinkedHashSet<>();
         String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + ClassUtils.convertClassNameToResourcePath(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
@@ -120,10 +121,6 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
         return set;
     }
 
-    /**
-     * @param clz
-     * @return
-     */
     public static ServiceBeanDefinitionRegistry init(Class<?> clz) {
         return new ServiceBeanDefinitionRegistry(clz.getPackage().getName());
     }
