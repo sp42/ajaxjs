@@ -1,7 +1,6 @@
 package com.ajaxjs.developertools.mpb;
 
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.data.CRUD2;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +16,7 @@ public class SqlTools {
     public ExplainVO runExplainPlan(String sqlText) {
         List<Map<String, Object>> list = CRUD.list("EXPLAIN " + sqlText);
 
-        Map<String, Object> info = CRUD2.infoMap("SHOW STATUS LIKE 'Last_query_cost'");
+        Map<String, Object> info = CRUD.infoMap("SHOW STATUS LIKE 'Last_query_cost'");
         Object cost = info.get("Value");
 
         ExplainVO vo = new ExplainVO();

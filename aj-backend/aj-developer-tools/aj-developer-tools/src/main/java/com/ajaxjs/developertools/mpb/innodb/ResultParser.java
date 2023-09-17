@@ -1,6 +1,6 @@
 package com.ajaxjs.developertools.mpb.innodb;
 
-import com.ajaxjs.data.CRUD2;
+import com.ajaxjs.data.CRUD;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
@@ -15,7 +15,7 @@ public class ResultParser {
     private static final LogHelper LOGGER = LogHelper.getLog(ResultParser.class);
 
     public String getStatus() {
-        return CRUD2.infoMap("SHOW ENGINE INNODB STATUS").get("Status").toString();
+        return CRUD.infoMap("SHOW ENGINE INNODB STATUS").get("Status").toString();
     }
 
     static final Pattern SPLIT_PATTERN = Pattern.compile("-{2,}\n(.+?)\n-{2,}(.+?)(?=-{2,}\n|$)", Pattern.DOTALL);
