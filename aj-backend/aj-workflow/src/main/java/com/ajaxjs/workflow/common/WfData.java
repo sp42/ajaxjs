@@ -59,6 +59,7 @@ public interface WfData {
             int i = 0;
             for (String str : activeNodes)
                 activeNodes[i++] = "'" + str + "'";
+
             sql += "AND name IN (" + String.join(",", activeNodes) + ")";
         }
 

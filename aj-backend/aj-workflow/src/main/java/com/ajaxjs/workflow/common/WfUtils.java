@@ -31,6 +31,7 @@ public class WfUtils {
             sb.append(o).append(",");
 
         String str = sb.toString();
+
         return str.substring(0, str.length() - 1);
     }
 
