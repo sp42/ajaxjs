@@ -75,7 +75,7 @@ public class ControllerProxy implements InvocationHandler {
         String sqlXmlId = annotation.value(), sql = annotation.sql();
         Class<?> returnClz = method.getReturnType();
 
-        if (returnClz == List.class) {
+        if (returnClz == List.class) { // 列表
             Class<?> realReturnClz = Types.getGenericFirstReturnType(method);
 
             if (realReturnClz == Map.class) { // map
@@ -89,7 +89,7 @@ public class ControllerProxy implements InvocationHandler {
                 else
                     throw new BusinessException("value 和 sql 不能皆为空");
             }
-        } else if (returnClz == PageResult.class) {
+        } else if (returnClz == PageResult.class) { // 分页
             Class<?> realReturnClz = Types.getGenericFirstReturnType(method);
 
             if (realReturnClz == Map.class) { // map
@@ -100,7 +100,12 @@ public class ControllerProxy implements InvocationHandler {
                 return CRUD.page(sqlXmlId, realReturnClz, sqlParams.mapParams);
             }
         } else if (returnClz == Map.class) {
-            return CRUD.infoMap(sqlXmlId, null);
+            SqlParams sqlParams = getOrderedParams(method, args);
+
+            if (StringUtils.hasText(sqlXmlId))
+                return CRUD.infoMapBySqlId(sqlXmlId, sqlParams.mapParams, sqlParams.orderedParams);
+            else if (StringUtils.hasText(sql))
+                return CRUD.infoMap(sqlXmlId, sqlParams.orderedParams);
         } else if (IBaseModel.class.isAssignableFrom(returnClz)) { // Java bean
             SqlParams sqlParams = getOrderedParams(method, args);
 

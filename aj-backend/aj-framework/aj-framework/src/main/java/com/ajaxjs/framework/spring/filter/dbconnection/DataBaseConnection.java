@@ -51,6 +51,8 @@ public class DataBaseConnection implements HandlerInterceptor {
                     connection = initDb();
 
                 if (connection != null && method.getAnnotation(EnableTransaction.class) != null) {
+                    LOGGER.info("开启数据库事务……");
+
                     try {
                         connection.setAutoCommit(false);
                     } catch (SQLException e) {
@@ -105,6 +107,7 @@ public class DataBaseConnection implements HandlerInterceptor {
                 try {
                     if (method.getAnnotation(EnableTransaction.class) != null) {
                         Object obj = req.getAttribute(GlobalExceptionHandler.EXCEPTION_CXT_KEY);
+
                         if (ex == null && obj != null)
                             ex = (Exception) obj;
 

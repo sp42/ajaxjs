@@ -25,7 +25,7 @@ import java.util.Map;
 public class CRUD<T> extends BaseCRUD {
     private static final LogHelper LOGGER = LogHelper.getLog(CRUD.class);
 
-    private JdbcReader reader;
+    private JdbcReader reader = jdbcReaderFactory();
 
     /**
      * SQL XML 里的 id
@@ -52,6 +52,19 @@ public class CRUD<T> extends BaseCRUD {
         if (StringUtils.hasText(sql)) return sql;
         else if (StringUtils.hasText(sqlId)) return SmallMyBatis.handleSql(mapParams, sqlId);
         else throw new IllegalArgumentException("没输入的 SQL 参数");
+    }
+
+    /**
+     * 查询单行单列的记录
+     *
+     * @param clz    返回的类型
+     * @param sql    执行的 SQL
+     * @param params SQL 参数列表（选填项，能对应 SQL 里面的`?`的插值符）
+     * @param <T>    返回的类型
+     * @return 单行单列记录
+     */
+    public static <T> T queryOne(Class<T> clz, String sql, Object... params) {
+        return jdbcReaderFactory().queryOne(sql, clz, params);
     }
 
     /**
@@ -196,7 +209,7 @@ public class CRUD<T> extends BaseCRUD {
      * @param <T>       实体 Bean 类型
      * @return 查询结果，如果没数据返回一个空 List
      */
-    public static <T> List<T> list(Class<T> beanClz, String sqlId, Map<String, Object> paramsMap, Object... params) {
+    public static <T> List<T> listBySqlId(Class<T> beanClz, String sqlId, Map<String, Object> paramsMap, Object... params) {
         return new CRUD<T>().setBeanClz(beanClz).setSqlId(sqlId).setMapParams(paramsMap).setOrderedParams(params).listBean();
     }
 

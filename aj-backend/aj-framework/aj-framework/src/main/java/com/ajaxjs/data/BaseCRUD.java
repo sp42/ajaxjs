@@ -41,20 +41,6 @@ public abstract class BaseCRUD {
     }
 
     /**
-     * 查询单行单列的记录
-     *
-     * @param clz    返回的类型
-     * @param sql    执行的 SQL
-     * @param params SQL 参数列表（选填项，能对应 SQL 里面的`?`的插值符）
-     * @param <T>    返回的类型
-     * @return 单行单列记录
-     */
-    @Deprecated
-    public static <T> T queryOne(Class<T> clz, String sql, Object... params) {
-        return jdbcReaderFactory().queryOne(sql, clz, params);
-    }
-
-    /**
      * 查询单笔记录，以 Map 格式返回
      *
      * @param sql    SQL 语句
@@ -165,6 +151,7 @@ public abstract class BaseCRUD {
      * @param <T>       实体 Bean 类型
      * @return 查询结果，如果没数据返回一个空 List
      */
+    @Deprecated
     public static <T> List<T> list(String sqlId, Class<T> beanClz, Map<String, Object> paramsMap, Object... params) {
         return listBeanInXml(sqlId, beanClz, paramsMap, params);
     }
