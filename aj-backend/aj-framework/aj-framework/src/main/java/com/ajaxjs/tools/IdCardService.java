@@ -93,6 +93,11 @@ public class IdCardService {
      */
     private String idNo;
 
+    /**
+     * 创建一个 IdCardService 实例
+     *
+     * @param idNo 身份证号
+     */
     public IdCardService(String idNo) {
         this.idNo = idNo;
     }
@@ -109,19 +114,17 @@ public class IdCardService {
     /**
      * 身份证信息提取
      */
-    public void extractor() {
+    public IdCardService extractor() {
         province = PROVINCE_CODE_MAP.get(idNo.substring(0, 2)); // 获取省份
         gender = Integer.parseInt(idNo.substring(16, 17)) % 2 != 0 ? "男" : "女";// 获取性别
         birthday = LocalDate.parse(idNo.substring(6, 14), FORMATTER); // 获取出生日期
         year = birthday.getYear();
         month = birthday.getMonthValue();
         day = birthday.getDayOfMonth();
+
+        return this;
     }
 
-    public static void main(String[] args) {
-        System.out.println(check("430525199112134512"));
-        ;
-    }
     /**
      * 严格检查
      * 二代身份证号码有效性校验
