@@ -51,26 +51,24 @@ public class ControllerProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) {
         SqlBinding annotation = method.getAnnotation(SqlBinding.class);
 
-//        if (annotation == null) {
-//            LOGGER.warning("SqlBinding 注解必填");
-//            return null;
-//        }
-
-        if (annotation != null) {
-            String before = annotation.before();// before 拦截方法
-
-            if (StringUtils.hasText(before)) {
-                try {
-                    Method beforeMethod = interfaceType.getMethod(before, Object[].class);
-                    args = (Object[]) Methods.executeDefault(proxy, beforeMethod, args);
-                } catch (NoSuchMethodException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
         if (method.isDefault())  // 相当于定义了 Service 方法，完全执行它就行
             return Methods.executeDefault(proxy, method, args);
+
+        if (annotation == null) {
+            LOGGER.warning("SqlBinding 注解必填");
+            return null;
+        }
+
+        String before = annotation.before();// before 拦截方法
+
+        if (StringUtils.hasText(before)) {
+            try {
+                Method beforeMethod = interfaceType.getMethod(before, Object[].class);
+                args = (Object[]) Methods.executeDefault(proxy, beforeMethod, args);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         String sqlXmlId = annotation.value(), sql = annotation.sql();
         Class<?> returnClz = method.getReturnType();
@@ -78,7 +76,9 @@ public class ControllerProxy implements InvocationHandler {
         if (returnClz == List.class) { // 列表
             Class<?> realReturnClz = Types.getGenericFirstReturnType(method);
 
-            if (realReturnClz == Map.class) { // map
+            if (realReturnClz == null)
+                LOGGER.warning("realReturnClz 为空，设置了泛型为 ? 吗？");
+            else if (realReturnClz == Map.class) { // map
                 return CRUD.infoMap(sqlXmlId, null);
             } else { // bean
                 if (StringUtils.hasText(sqlXmlId)) {
@@ -97,7 +97,7 @@ public class ControllerProxy implements InvocationHandler {
             } else { // bean
                 SqlParams sqlParams = getOrderedParams(method, args);
 
-                return CRUD.page(sqlXmlId, realReturnClz, sqlParams.mapParams);
+                return CRUD.pageBySqlId(realReturnClz, sqlXmlId, sqlParams.mapParams);
             }
         } else if (returnClz == Map.class) {
             SqlParams sqlParams = getOrderedParams(method, args);

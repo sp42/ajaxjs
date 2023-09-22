@@ -137,17 +137,18 @@ public class JdbcReader extends JdbcConn {
             if (obj == null)
                 return null;
             else {
-                if (obj instanceof Long && clz == int.class) {
-                    Object _int = ((Long) obj).intValue();
-                    return (T) _int;
-                }
-
-                if (obj instanceof Integer && (clz == long.class || clz == Long.class)) {
-                    Object _int = ((Integer) obj).longValue();
-                    return (T) _int;
-                }
-
-                return (T) obj;
+                return (T) ObjectHelper.objectCast(obj, clz);
+//                if (obj instanceof Long && clz == int.class) {
+//                    Object _int = ((Long) obj).intValue();
+//                    return (T) _int;
+//                }
+//
+//                if (obj instanceof Integer && (clz == long.class || clz == Long.class)) {
+//                    Object _int = ((Integer) obj).longValue();
+//                    return (T) _int;
+//                }
+//
+//                return (T) obj;
             }
         }
 
