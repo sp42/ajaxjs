@@ -64,7 +64,9 @@ public class ControllerProxy implements InvocationHandler {
         if (StringUtils.hasText(before)) {
             try {
                 Method beforeMethod = interfaceType.getMethod(before, Object[].class);
-                args = (Object[]) Methods.executeDefault(proxy, beforeMethod, args);
+                // args.length == 1 时候，只传 args，节省资源
+                Object o = Methods.executeDefault(proxy, beforeMethod, args.length == 1 ? args : new Object[]{args});
+                args = (Object[]) o;
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
@@ -76,10 +78,12 @@ public class ControllerProxy implements InvocationHandler {
         if (returnClz == List.class) { // 列表
             Class<?> realReturnClz = Types.getGenericFirstReturnType(method);
 
-            if (realReturnClz == null)
-                LOGGER.warning("realReturnClz 为空，设置了泛型为 ? 吗？");
-            else if (realReturnClz == Map.class) { // map
-                return CRUD.infoMap(sqlXmlId, null);
+//            if (realReturnClz == null)
+//                LOGGER.warning("realReturnClz 为空，设置了泛型为 ? 吗？");
+//            else
+            if (realReturnClz == null || realReturnClz == Map.class) { // map
+                SqlParams sqlParams = getOrderedParams(method, args);
+                return CRUD.listMapBySqlId(sqlXmlId, sqlParams.mapParams, sqlParams.orderedParams);
             } else { // bean
                 if (StringUtils.hasText(sqlXmlId)) {
                     SqlParams sqlParams = getOrderedParams(method, args);

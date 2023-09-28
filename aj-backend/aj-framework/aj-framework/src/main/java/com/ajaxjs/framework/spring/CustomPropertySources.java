@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.spring;
 
+import com.ajaxjs.util.ObjectHelper;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
@@ -26,5 +27,31 @@ public class CustomPropertySources extends PropertySourcesPlaceholderConfigurer 
 
     public Properties getLocalProperties() {
         return localProperties;
+    }
+
+    /**
+     * 获取配置值
+     *
+     * @param key 配置 key
+     * @return 配置值
+     */
+    public static String getConfig(String key) {
+        CustomPropertySources bean = DiContextUtil.getBean(CustomPropertySources.class);
+        assert bean != null;
+        Object o = bean.getLocalProperties().get(key);
+
+        if (o != null)
+            return o.toString();
+        else {
+            System.err.println("找不到 " + key + "配置");
+
+            return null;
+        }
+    }
+
+    public static <T> T getConfig(String key, Class<T> clz) {
+        String value = getConfig(key);
+
+        return (T) ObjectHelper.objectCast(value, clz);
     }
 }
