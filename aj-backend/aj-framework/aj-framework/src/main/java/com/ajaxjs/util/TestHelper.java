@@ -1,7 +1,7 @@
 package com.ajaxjs.util;
 
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.Convert;
+import com.ajaxjs.util.convert.JsonHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -89,6 +89,6 @@ public class TestHelper {
     public static <T> T jsonStr2Bean(String jsonStr, Class<T> beanClz) {
         Map<String, Object> map = JsonHelper.parseMapClean(jsonStr);
 
-        return MapTool.map2Bean(map, beanClz, true);
+        return Convert.map2Bean(map, beanClz, true);
     }
 }

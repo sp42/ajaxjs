@@ -2,63 +2,64 @@ package com.ajaxjs.util;
 
 /**
  * 用户的测试用例
- * 
- * @author sp42 frank@ajaxjs.com
  *
+ * @author sp42 frank@ajaxjs.com
  */
 public class TestCaseUserBean {
-	private long id;
-	private String name;
-	private int age;
-	private boolean sex;
-	private String[] children;
-	private int[] luckyNumbers;
+    public String directField = "directField";
 
-	public String[] getChildren() {
-		return children;
-	}
+    private long id;
+    private String name;
+    private int age;
+    private boolean sex;
+    private String[] children;
+    private int[] luckyNumbers;
 
-	public void setChildren(String[] children) {
-		this.children = children;
-	}
+    public String[] getChildren() {
+        return children;
+    }
 
-	public int[] getLuckyNumbers() {
-		return luckyNumbers;
-	}
+    public void setChildren(String[] children) {
+        this.children = children;
+    }
 
-	public void setLuckyNumbers(int[] luckyNumbers) {
-		this.luckyNumbers = luckyNumbers;
-	}
+    public int[] getLuckyNumbers() {
+        return luckyNumbers;
+    }
 
-	public long getId() {
-		return id;
-	}
+    public void setLuckyNumbers(int[] luckyNumbers) {
+        this.luckyNumbers = luckyNumbers;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public boolean isSex() {
-		return sex;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	public void setSex(boolean sex) {
-		this.sex = sex;
-	}
+    public boolean isSex() {
+        return sex;
+    }
+
+    public void setSex(boolean sex) {
+        this.sex = sex;
+    }
 }

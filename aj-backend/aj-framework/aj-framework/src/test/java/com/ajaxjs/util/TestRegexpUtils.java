@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.JsonHelper;
 import com.ajaxjs.util.regexp.RegExpUtils;
 
 public class TestRegexpUtils {

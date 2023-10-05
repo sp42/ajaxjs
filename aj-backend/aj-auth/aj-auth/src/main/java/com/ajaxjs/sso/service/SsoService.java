@@ -20,7 +20,7 @@ public interface SsoService extends IBaseService {
 	 * @param client_id    客户端 ID
 	 * @param redirect_uri 回调 URL
 	 * @param scope        权限范围（非必填）
-	 * @param status       用于防止CSRF攻击（非必填）
+	 * @param status       用于防止C SRF 攻击（非必填）
 	 * @param req          请求对象
 	 * @return 返回给客户端一个 302 重定向
 	 */

@@ -1,7 +1,6 @@
 package com.ajaxjs.user.service;
 
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.data.CRUD2;
 import com.ajaxjs.framework.entity.BaseEntityConstants;
 import com.ajaxjs.user.common.SaasUtils;
 import com.ajaxjs.user.model.User;
@@ -34,7 +33,7 @@ public interface UserService {
         sql = SaasUtils.addTenantIdQuery(sql);
         sql += "LIMIT 1";
 
-        return CRUD2.infoMap(sql, value) != null;
+        return CRUD.infoMap(sql, value) != null;
     }
 
     @PutMapping
@@ -44,10 +43,9 @@ public interface UserService {
 
     @DeleteMapping("/{id}")
     default Boolean delete(Long id) {
-        // 逻辑删除
         User user = new User();
         user.setId(id);
-        user.setStat(BaseEntityConstants.STATUS_DELETED);
+        user.setStat(BaseEntityConstants.STATUS_DELETED);  // 逻辑删除
 
         return update(user);
     }

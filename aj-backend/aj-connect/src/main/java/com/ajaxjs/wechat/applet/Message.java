@@ -1,7 +1,7 @@
 package com.ajaxjs.wechat.applet;
 
 import com.ajaxjs.net.http.Get;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.JsonHelper;
 import com.ajaxjs.wechat.applet.model.TemplateMsgMp;
 import com.ajaxjs.wechat.applet.model.TemplateMsgWebApp;
 import org.springframework.http.*;

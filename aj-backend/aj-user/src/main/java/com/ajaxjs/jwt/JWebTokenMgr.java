@@ -1,8 +1,6 @@
 package com.ajaxjs.jwt;
 
-import com.ajaxjs.util.map.JsonHelper;
-
-import java.util.List;
+import com.ajaxjs.util.convert.JsonHelper;
 
 /**
  * JWT 管理器

@@ -1,7 +1,7 @@
 package com.ajaxjs.util.logger;
 
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.JsonHelper;
 
 import java.util.Map;
 import java.util.logging.Formatter;

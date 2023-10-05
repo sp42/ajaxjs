@@ -2,9 +2,10 @@ package com.ajaxjs.framework.spring.response;
 
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.util.convert.Convert;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.JsonHelper;
+import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.web.WebHelper;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -84,7 +85,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
                     if (!isJavaBean)
                         return parseMap;
                     else
-                        return MapTool.map2Bean(parseMap, clazz, true);// raw body json to bean
+                        return Convert.map2Bean(parseMap, clazz, true);// raw body json to bean
                 }
             } else {
                 if (!StringUtils.hasText(str))
@@ -94,7 +95,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
                 Map<String, Object> parseMap = MapTool.toMap(str.split("&"), null);
 
-                return MapTool.map2Bean(parseMap, clazz, true);
+                return Convert.map2Bean(parseMap, clazz, true);
             }
         }
 

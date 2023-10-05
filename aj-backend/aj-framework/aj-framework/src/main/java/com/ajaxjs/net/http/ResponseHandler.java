@@ -10,11 +10,13 @@
  */
 package com.ajaxjs.net.http;
 
+import com.ajaxjs.util.convert.Convert;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.JsonHelper;
+import com.ajaxjs.util.convert.MapTool;
+import com.ajaxjs.util.convert.Xml;
 
 import java.io.File;
 import java.io.IOException;
@@ -152,7 +154,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                map = MapTool.xmlToMap(resp.toString());
+                map = Xml.xmlToMap(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 XML 时候发生异常");
             }
@@ -161,14 +163,14 @@ public abstract class ResponseHandler {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
             } else
-                map = MapTool.xmlToMap(resp.getResponseText());
+                map = Xml.xmlToMap(resp.getResponseText());
         }
 
         return map;
     }
 
     public static <T> T toBean(ResponseEntity resp, Class<T> clz) {
-        return MapTool.map2Bean(toJson(resp), clz);
+        return Convert.map2Bean(toJson(resp), clz);
     }
 
     /**

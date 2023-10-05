@@ -13,8 +13,8 @@ package com.ajaxjs.net.http;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.JsonHelper;
+import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.util.regexp.RegExpUtils;
 import org.springframework.util.StringUtils;
 

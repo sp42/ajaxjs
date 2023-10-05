@@ -1,6 +1,6 @@
 package com.ajaxjs.jwt;
 
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.JsonHelper;
 import lombok.Data;
 
 /**
@@ -39,6 +39,7 @@ public class JWebToken {
      */
     public String headerPayload() {
         String p = Utils.encode(JsonHelper.toJson(payload));
+
         return encodedHeader + "." + p;
     }
 
