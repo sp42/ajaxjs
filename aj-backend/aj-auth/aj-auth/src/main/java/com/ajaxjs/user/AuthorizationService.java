@@ -77,11 +77,6 @@ public class AuthorizationService implements SsoDAO {
         System.out.println(LocalDateUtils.nextDaysSecond(ExpireEnum.ACCESS_TOKEN.getTime(), null));
     }
 
-    /**
-     * @param user
-     * @param at
-     * @return
-     */
     public String createRefreshToken(User user, AccessToken at) {
         // 过期时间
         Long expiresIn = LocalDateUtils.dayToSecond(ExpireEnum.REFRESH_TOKEN.getTime());

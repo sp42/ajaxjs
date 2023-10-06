@@ -1,7 +1,7 @@
 package com.ajaxjs.user.service;
 
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.user.model.Client;
+import com.ajaxjs.user.model.po.Client;
 import org.springframework.stereotype.Service;
 
 @Service

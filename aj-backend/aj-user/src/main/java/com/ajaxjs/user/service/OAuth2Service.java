@@ -5,7 +5,7 @@ import com.ajaxjs.user.common.oauth_error.SsoError;
 import com.ajaxjs.user.common.UserConstants;
 import com.ajaxjs.user.controller.OAuth2Controller;
 import com.ajaxjs.user.model.AccessToken;
-import com.ajaxjs.user.model.Client;
+import com.ajaxjs.user.model.po.Client;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.cache.Cache;

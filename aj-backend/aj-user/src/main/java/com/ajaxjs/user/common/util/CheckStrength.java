@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.user.common.util;
 
 /**
  * 密码强度校验

@@ -1,4 +1,4 @@
-package com.ajaxjs.util;
+package com.ajaxjs.user;
 
 import com.ajaxjs.model.User;
 import com.ajaxjs.model.UserConstants;

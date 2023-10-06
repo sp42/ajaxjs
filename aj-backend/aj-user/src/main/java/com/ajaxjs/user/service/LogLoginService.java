@@ -2,7 +2,6 @@ package com.ajaxjs.user.service;
 
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.user.common.UserConstants;
-import com.ajaxjs.user.model.LogLogin;
 import com.ajaxjs.user.model.User;
 import com.ajaxjs.web.WebHelper;
 import org.springframework.stereotype.Service;

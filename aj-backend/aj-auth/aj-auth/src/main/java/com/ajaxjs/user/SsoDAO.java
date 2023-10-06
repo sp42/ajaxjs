@@ -3,8 +3,7 @@ package com.ajaxjs.user;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.data_service.sdk.Caller;
-import com.ajaxjs.data_service.sdk.IDataService;
+
 import com.ajaxjs.model.AccessToken;
 import com.ajaxjs.model.ClientDetails;
 import com.ajaxjs.model.ClientUser;

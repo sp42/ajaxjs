@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 
 import com.ajaxjs.util.CheckStrength;
 import com.ajaxjs.util.CheckStrength.LEVEL;
-import com.ajaxjs.util.UserUtils;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cryptography.Digest;
 

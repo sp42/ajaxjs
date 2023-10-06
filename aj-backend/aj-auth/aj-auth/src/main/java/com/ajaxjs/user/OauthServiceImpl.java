@@ -3,9 +3,7 @@ package com.ajaxjs.user;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.model.OauthModel;
 import com.ajaxjs.model.User;
-import com.ajaxjs.util.UserUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;

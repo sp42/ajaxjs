@@ -1,4 +1,4 @@
-package com.ajaxjs.user.model;
+package com.ajaxjs.user.model.po;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
