@@ -1,19 +1,12 @@
 package com.ajaxjs.user.controller;
 
 import com.ajaxjs.user.model.AccessToken;
-import com.ajaxjs.user.model.User;
-import com.ajaxjs.user.service.OAuth2Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/oauth2")
 public interface OAuth2Controller {
-    @Autowired
-    OAuth2Service oauthService;
-
     /**
      * 获取授权码（Authorization Code）
      *
@@ -24,39 +17,35 @@ public interface OAuth2Controller {
      * @return 重定向到指定的 redirect_uri，并携带授权码
      */
     @GetMapping("/authorize")
-    public ModelAndView authorize(@RequestParam String clientId, @RequestParam String redirectUri, @RequestParam(required = false) String scope, @RequestParam(required = false) String status) {
-        User loginedUser = null;
-
-        // 生成 Authorization Code
-        String authorizationCode = oauthService.createAuthorizationCode(clientId, scope, loginedUser);
-        String params = "?code=" + authorizationCode;
-
-        if (StringUtils.hasText(status))
-            params += "&status=" + status;
-
-        return new ModelAndView("redirect:" + redirectUri + params);
-    }
+    ModelAndView authorize(@RequestParam String clientId, @RequestParam String redirectUri, @RequestParam(required = false) String scope, @RequestParam(required = false) String status);
 
     @PostMapping("/token")
-    public AccessToken getToken(@RequestParam String clientId, @RequestParam String clientSecret, @RequestParam String code) {
-        return oauthService.token(clientId, clientSecret, code);
-    }
+    AccessToken getToken(@RequestParam String clientId, @RequestParam String clientSecret, @RequestParam String code);
 
+    /**
+     * 刷新访问令牌
+     *
+     * @param refreshToken 刷新用的 Token
+     * @return 返回包含新的访问令牌的JSON数据，包括access_token、expires_in、token_type等字段
+     */
     @PostMapping("/token/refresh")
-    public AccessToken refreshToken(@RequestBody RefreshTokenRequest request) {
-        TokenResponse response = authorizationService.refreshToken(request);
-        return ResponseEntity.ok(response);
-    }
+    AccessToken refreshToken(@RequestParam String refreshToken);
 
+    /**
+     * 验证访问令牌
+     *
+     * @param token AccessToken
+     * @return 返回包含访问令牌信息的JSON数据
+     */
     @PostMapping("/token/check")
-    public String checkToken(@RequestParam String token) {
-        TokenInfoResponse response = authorizationService.checkToken(token);
-        return ResponseEntity.ok(response);
-    }
+    String checkToken(@RequestParam String token);
 
+    /**
+     * 撤销访问令牌
+     *
+     * @param token AccessToken
+     * @return 是否成功
+     */
     @PostMapping("/token/revoke")
-    public ResponseEntity<RevokeTokenResponse> revokeToken(@RequestParam("token") String token) {
-        RevokeTokenResponse response = authorizationService.revokeToken(token);
-        return ResponseEntity.ok(response);
-    }
+    Boolean revokeToken(@RequestParam String token);
 }

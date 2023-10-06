@@ -1,10 +1,14 @@
 package com.ajaxjs.user.service;
 
+import com.ajaxjs.user.BaseTest;
 import com.ajaxjs.user.model.User;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.ModelAndView;
 
-public class TestOAuth2Service {
-    OAuth2Service oAuth2Service = new OAuth2Service();
+public class TestOAuth2Service extends BaseTest {
+    @Autowired
+    OAuth2Service oAuth2Service;
 
     @Test
     public void testCreateAuthorizationCode() {
@@ -12,7 +16,7 @@ public class TestOAuth2Service {
         user.setId(1L);
         user.setUsername("admin");
 
-        String code = oAuth2Service.createAuthorizationCode("C2Oj5hKcwMmgxiKygwquLCSN", null, user);
-        System.out.println(code);
+        ModelAndView mv = oAuth2Service.authorize("C2Oj5hKcwMmgxiKygwquLCSN", "http://qq.com", null, null);
+        System.out.println(mv);
     }
 }

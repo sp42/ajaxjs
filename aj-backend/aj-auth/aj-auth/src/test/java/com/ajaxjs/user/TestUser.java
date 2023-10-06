@@ -21,7 +21,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.ajaxjs.TestConfig;
 import com.ajaxjs.data_service.service.DataService;
-import com.ajaxjs.user.service.RegisterServiceImpl;
 import com.ajaxjs.util.TestHelper;
 
 @ContextConfiguration(classes = TestConfig.class)

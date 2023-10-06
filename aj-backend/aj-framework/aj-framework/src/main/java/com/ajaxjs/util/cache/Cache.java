@@ -12,7 +12,7 @@ public interface Cache<K, V> {
      *
      * @param key     键
      * @param value   对象
-     * @param timeout 过期时间
+     * @param timeout 过期时间，单位：毫秒， 0表示无限长
      */
     void put(K key, V value, long timeout);
 
@@ -23,6 +23,12 @@ public interface Cache<K, V> {
      * @return 键对应的对象
      */
     V get(K key);
+
+    default <T> T get(K key, Class<T> clz) {
+        V v = get(key);
+
+        return (T) v;
+    }
 
     /**
      * 从缓存中删除对象

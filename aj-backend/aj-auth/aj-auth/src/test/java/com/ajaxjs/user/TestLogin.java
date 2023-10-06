@@ -25,7 +25,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.ajaxjs.sql.JdbcConnection;
 import com.ajaxjs.user.controller.LoginController;
-import com.ajaxjs.user.service.LoginServiceImpl;
 
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
