@@ -21,8 +21,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.ajaxjs.TestConfig;
 import com.ajaxjs.sso.controller.SsoController;
-import com.ajaxjs.model.IssueToken;
-import com.ajaxjs.model.IssueTokenWithUser;
+import com.ajaxjs.user.model.IssueToken;
+import com.ajaxjs.user.model.IssueTokenWithUser;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.util.regexp.RegExpUtils;

@@ -19,8 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.TestConfig;
 import com.ajaxjs.data_service.service.DataService;
-import com.ajaxjs.model.IssueToken;
-import com.ajaxjs.model.IssueTokenWithUser;
+import com.ajaxjs.user.model.IssueToken;
+import com.ajaxjs.user.model.IssueTokenWithUser;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.util.TestHelper;

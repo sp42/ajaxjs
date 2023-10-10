@@ -1,4 +1,4 @@
-package com.ajaxjs.model;
+package com.ajaxjs.user.model;
 
 /**
  * 能够对 Token 进行是否超时的检查

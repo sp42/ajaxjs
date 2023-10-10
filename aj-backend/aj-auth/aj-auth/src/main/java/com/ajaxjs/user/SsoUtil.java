@@ -2,7 +2,7 @@ package com.ajaxjs.user;
 
 import com.ajaxjs.framework.TestHelper;
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.model.ExpiresCheck;
+import com.ajaxjs.user.model.ExpiresCheck;
 import com.ajaxjs.util.date.LocalDateUtils;
 import org.springframework.util.StringUtils;
 

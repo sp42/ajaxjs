@@ -2,7 +2,9 @@ package com.ajaxjs.user.service;
 
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.user.common.UserConstants;
+import com.ajaxjs.user.controller.LogLoginController;
 import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.model.po.LogLogin;
 import com.ajaxjs.web.WebHelper;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Service
-public class LogLoginService implements UserConstants {
+public class LogLoginService implements LogLoginController, UserConstants {
     /**
      * 用户登录日志
      */

@@ -3,14 +3,14 @@ package com.ajaxjs.user;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.ajaxjs.model.User;
+import com.ajaxjs.user.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ajaxjs.model.ClientDetails;
-import com.ajaxjs.model.ClientUser;
-import com.ajaxjs.model.Scope;
+import com.ajaxjs.user.model.ClientDetails;
+import com.ajaxjs.user.model.ClientUser;
+import com.ajaxjs.user.model.Scope;
 import com.ajaxjs.util.StrUtil;
 
 /**

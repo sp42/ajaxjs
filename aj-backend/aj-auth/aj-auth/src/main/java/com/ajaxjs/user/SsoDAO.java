@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-import com.ajaxjs.model.AccessToken;
-import com.ajaxjs.model.ClientDetails;
-import com.ajaxjs.model.ClientUser;
-import com.ajaxjs.model.RefreshToken;
-import com.ajaxjs.model.Scope;
+import com.ajaxjs.user.model.AccessToken;
+import com.ajaxjs.user.model.ClientDetails;
+import com.ajaxjs.user.model.ClientUser;
+import com.ajaxjs.user.model.RefreshToken;
+import com.ajaxjs.user.model.Scope;
 
 /**
  * 

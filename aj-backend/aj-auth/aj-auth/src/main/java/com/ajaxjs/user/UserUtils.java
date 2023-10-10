@@ -1,7 +1,7 @@
 package com.ajaxjs.user;
 
-import com.ajaxjs.model.User;
-import com.ajaxjs.model.UserConstants;
+import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.model.UserConstants;
 
 import java.util.regex.Pattern;
 

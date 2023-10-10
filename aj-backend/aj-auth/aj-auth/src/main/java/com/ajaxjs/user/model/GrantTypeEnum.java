@@ -1,4 +1,4 @@
-package com.ajaxjs.model;
+package com.ajaxjs.user.model;
 
 /**
  * 授权方式

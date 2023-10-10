@@ -1,7 +1,5 @@
-package com.ajaxjs.user;
+package com.ajaxjs.user.common.util;
 
-import com.ajaxjs.net.mail.Mail;
-import com.ajaxjs.net.mail.Sender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.EvaluationContext;
@@ -30,19 +28,19 @@ public class SendEmail {
     /**
      * 发送邮件
      */
-    public boolean send(String to, String subject, String content) {
-        Mail mail = new Mail();
-        mail.setMailServer(emailServer);
-        mail.setAccount(account);
-        mail.setPassword(password);
-        mail.setFrom(account);
-        mail.setTo(to);
-        mail.setSubject(subject);
-        mail.setHTML_body(true);
-        mail.setContent(content);
-
-        return Sender.send(mail);
-    }
+//    public boolean send(String to, String subject, String content) {
+//        Mail mail = new Mail();
+//        mail.setMailServer(emailServer);
+//        mail.setAccount(account);
+//        mail.setPassword(password);
+//        mail.setFrom(account);
+//        mail.setTo(to);
+//        mail.setSubject(subject);
+//        mail.setHTML_body(true);
+//        mail.setContent(content);
+//
+//        return Sender.send(mail);
+//    }
 
     /**
      * 计算表达式

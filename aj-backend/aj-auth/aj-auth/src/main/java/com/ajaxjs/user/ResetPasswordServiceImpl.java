@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ajaxjs.model.User;
+import com.ajaxjs.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,6 @@ public class ResetPasswordServiceImpl {
      *
      */
     private final static String FIND_BY_EMAIL = "/user/reset_password/findByEmail/";
-
 
     public boolean sendRestEmail(String email) {
         int tenantId = SsoUtil.getTenantId();
@@ -60,7 +59,6 @@ public class ResetPasswordServiceImpl {
 
     @Autowired(required = false)
     ISendSMS sendSMS;
-
 
     public boolean sendRestPhone(String phone) {
         int tenantId = SsoUtil.getTenantId();

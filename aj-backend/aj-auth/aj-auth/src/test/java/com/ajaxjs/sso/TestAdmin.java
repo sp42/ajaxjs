@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.ajaxjs.model.ClientDetails;
+import com.ajaxjs.user.model.ClientDetails;
 
 @ContextConfiguration(locations = { "classpath*:applicationContext.xml" })
 @RunWith(SpringJUnit4ClassRunner.class)

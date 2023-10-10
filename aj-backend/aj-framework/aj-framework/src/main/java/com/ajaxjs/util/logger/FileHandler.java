@@ -414,7 +414,6 @@ public class FileHandler extends Handler {
 
         // Set error manager
         setErrorManager(new ErrorManager());
-
     }
 
     private String getProperty(String name, String defaultValue) {

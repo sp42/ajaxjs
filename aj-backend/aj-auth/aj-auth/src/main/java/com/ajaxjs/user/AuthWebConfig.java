@@ -1,4 +1,4 @@
-package com.ajaxjs.auth;
+package com.ajaxjs.user;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
