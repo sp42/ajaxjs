@@ -3,7 +3,6 @@ package com.ajaxjs.data.jdbc_helper;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.ResultSetProcessor;
 import com.ajaxjs.framework.MyConvert;
-import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import com.ajaxjs.util.reflect.NewInstance;
@@ -138,7 +137,7 @@ public class JdbcReader extends JdbcConn {
             if (obj == null)
                 return null;
             else {
-                return MyConvert.getConvertValue().cast(obj, clz);
+                return MyConvert.getConvertValue().basicCast(obj, clz);
 //                if (obj instanceof Long && clz == int.class) {
 //                    Object _int = ((Long) obj).intValue();
 //                    return (T) _int;
@@ -228,7 +227,7 @@ public class JdbcReader extends JdbcConn {
 //						value = dbValue2Enum(propertyType, _value);
 //					else {
                     try {
-                        value = MyConvert.getConvertValue().to(_value, propertyType);
+                        value = MyConvert.getConvertValue().basicConvert(_value, propertyType);
                     } catch (NumberFormatException e) {
                         String input = (value == null ? " 空值 " : value.getClass().toString());
                         String expect = property.getPropertyType().toString();

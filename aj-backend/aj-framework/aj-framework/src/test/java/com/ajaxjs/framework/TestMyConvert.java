@@ -1,5 +1,6 @@
 package com.ajaxjs.framework;
 
+import com.ajaxjs.util.convert.ConvertComplexValue;
 import lombok.Data;
 import org.junit.Test;
 
@@ -14,18 +15,20 @@ public class TestMyConvert {
 
     @Test
     public void test() {
+        MyConvert.set();
+
         String json = "[{a:1, b:2}]";
-        Object o = MyConvert.getConvertValue().to(json, List.class);
+        Object o = ConvertComplexValue.INSTANCE.convert(json, List.class);
         System.out.println(o);
 
         json = "{a:1, b:2}";
-        Map map = (Map) MyConvert.getConvertValue().to(json, Map.class);
+        Map map = (Map) ConvertComplexValue.INSTANCE.convert(json, Map.class);
         System.out.println(map);
 
-        o = MyConvert.getConvertValue().to(json, A.class);
+        o = ConvertComplexValue.INSTANCE.convert(json, A.class);
         System.out.println(o);
 
-        Object o1 = MyConvert.getConvertValue().to(map, A.class);
+        Object o1 = ConvertComplexValue.INSTANCE.convert(map, A.class);
         System.out.println(o1);
     }
 }

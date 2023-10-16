@@ -2,7 +2,6 @@ package com.ajaxjs.util.convert;
 
 import com.ajaxjs.framework.BaseModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,7 @@ public class ConvertToJson {
         } else if (obj instanceof String)
             return '\"' + jsonStringConvert((String) obj) + '\"';
         else if (obj instanceof Map)
-            return stringifyMap((Map<?, ?>) obj);
+            return EntityConvert.map2json((Map<?, ?>) obj);
         else if (obj instanceof List)
             return list2Json((List<?>) obj);
         else if (clz.isArray()) { // 数组的
@@ -50,7 +49,7 @@ public class ConvertToJson {
             else if (clz == String[].class)
                 return jsonArr((String[]) obj, v -> "\"" + jsonStringConvert(v) + "\"");
             else if (obj instanceof Map[]) // map 子类都可以识别，效率差点
-                return jsonArr((Map<?, ?>[]) obj, ConvertToJson::stringifyMap);
+                return jsonArr((Map<?, ?>[]) obj, EntityConvert::map2json);
         }
 
         return null;
@@ -73,7 +72,7 @@ public class ConvertToJson {
                 return toJson(list.toArray(new BaseModel[0]));
             else { // Bean
                 Object[] array = list.toArray(new Object[0]);
-                return jsonArr(array, Convert::beanToJson);
+                return jsonArr(array, EntityConvert::beanToJson);
             }
         } else
             return "[]";
@@ -113,23 +112,91 @@ public class ConvertToJson {
     }
 
     /**
-     * 输入一个 Map，将其转换为 JSON Str
+     * 格式化 JSON，使其美观输出到控制或其他地方 请注意 对于json中原有\n \t 的情况未做过多考虑 得到格式化json数据 退格用\t 换行用\r
      *
-     * @param map 输入数据
-     * @return JSON 字符串
+     * @param json 原 JSON 字符串
+     * @return 格式化后美观的 JSON
      */
-    static String stringifyMap(Map<?, ?> map) {
-        if (map == null)
-            return null;
+    public static String format(String json) {
+        int level = 0;
+        StringBuilder str = new StringBuilder();
 
-        if (map.size() == 0)
-            return "{}";
+        for (int i = 0; i < json.length(); i++) {
+            char c = json.charAt(i);
 
-        List<String> arr = new ArrayList<>(map.size());
+            if (level > 0 && '\n' == str.charAt(str.length() - 1))
+                str.append(repeatStr("\t", "", level));
 
-        for (Object key : map.keySet())
-            arr.add('\"' + key.toString() + "\":" + toJson(map.get(key)));
+            switch (c) {
+                case '{':
+                case '[':
+                    str.append(c).append("\n");
+                    level++;
 
-        return '{' + String.join(",", arr) + '}';
+                    break;
+                case ',':
+                    if (json.charAt(i + 1) == '"' || json.charAt(i - 1) == '"') {// 后面必定是跟着 key 的双引号，但 其实 json 可以 key 不带双引号的
+                        str.append(c).append("\n");
+                        break;
+                    }
+
+                    str.append(c);
+                    break;
+                case '}':
+                case ']':
+                    str.append("\n");
+                    level--;
+                    str.append(repeatStr("\t", "", level));
+                    str.append(c);
+                    break;
+                default:
+                    str.append(c);
+                    break;
+            }
+        }
+
+        return str.toString();
+    }
+
+    /**
+     * 重复字符串 repeat 次并以 div 分隔
+     *
+     * @param str    要重复的字符串
+     * @param div    字符串之间的分隔符
+     * @param repeat 重复次数
+     * @return 结果
+     */
+    static String repeatStr(String str, String div, int repeat) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+
+        while (i++ < repeat) {
+            sb.append(str);
+
+            if (i != repeat)
+                sb.append(div);
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * 清除 \r\n 字符
+     *
+     * @param str JSON 字符串
+     * @return 转换后的字符串
+     */
+    public static String removeCr(String str) {
+        return str.replaceAll("[\\r\\n]", "");
+    }
+
+    /**
+     * 删除 JS 注释
+     *
+     * @param str 待处理的字符串
+     * @return 删除注释后的字符串
+     */
+    public static String removeComment(String str) {
+        return str.replaceAll("//[^\\n]*|/\\*([^*^/]*|[*^/]*|[^*/]*)*\\*+/", "");
     }
 }

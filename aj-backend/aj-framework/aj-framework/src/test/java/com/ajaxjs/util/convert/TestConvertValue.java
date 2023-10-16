@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.ajaxjs.util.convert.ConvertValue.toBoolean;
-import static com.ajaxjs.util.convert.ConvertValue.object2int;
-import static com.ajaxjs.util.convert.ConvertValue.object2long;
-import static com.ajaxjs.util.convert.ConvertValue.object2double;
-import static com.ajaxjs.util.convert.ConvertValue.object2float;
+import static com.ajaxjs.util.convert.ConvertBasicValue.toBoolean;
+import static com.ajaxjs.util.convert.ConvertBasicValue.object2int;
+import static com.ajaxjs.util.convert.ConvertBasicValue.object2long;
+import static com.ajaxjs.util.convert.ConvertBasicValue.object2double;
+import static com.ajaxjs.util.convert.ConvertBasicValue.object2float;
 import static org.junit.Assert.*;
 
 public class TestConvertValue {
@@ -160,20 +160,20 @@ public class TestConvertValue {
 
         String[] expected = {"foo", "bar"};
 
-        Object result = new ConvertValue().toArray(input, String[].class);
+        Object result = ConvertBasicValue.toArray(input, String[].class);
         assertArrayEquals(expected, (String[]) result);
 
         String inputStr = "foo,bar,baz";
 
         String[] expected2 = {"foo", "bar", "baz"};
 
-        result = new ConvertValue().toArray(inputStr, String[].class);
+        result = ConvertBasicValue.toArray(inputStr, String[].class);
         assertArrayEquals(expected2, (String[]) result);
 
         String inputInt = "1,2,3";
         int[] expected3 = {1, 2, 3};
 
-        result = new ConvertValue().toArray(inputInt, int[].class);
+        result = ConvertBasicValue.toArray(inputInt, int[].class);
         assertArrayEquals(expected3, (int[]) result);
 
         List<Integer> inputList = new ArrayList<>();
@@ -183,29 +183,28 @@ public class TestConvertValue {
 
         int[] expected4 = {1, 2, 3};
 
-        result = new ConvertValue().toArray(inputList, int[].class);
+        result = ConvertBasicValue.toArray(inputList, int[].class);
         assertArrayEquals(expected4, (int[]) result);
     }
 
     @Test
-    public void testObjectCast() {
-        ConvertValue convertValue = ConvertValue.getConvertValue();
-        assertTrue((boolean) convertValue.to("true", boolean.class));
-        assertEquals(1000, (int) convertValue.to("1000", int.class));
-        assertEquals(1L, (long) convertValue.to("1", long.class));
-        assertEquals("foo", convertValue.to("foo", String.class));
+    public void testBasicConvert() {
+        assertTrue((boolean) ConvertBasicValue.basicConvert("true", boolean.class));
+        assertEquals(1000, (int) ConvertBasicValue.basicConvert("1000", int.class));
+        assertEquals(1L, (long) ConvertBasicValue.basicConvert("1", long.class));
+        assertEquals("foo", ConvertBasicValue.basicConvert("foo", String.class));
 
-        int[] arr = (int[]) convertValue.to("1,2,3", int[].class);
+        int[] arr = (int[]) ConvertBasicValue.basicConvert("1,2,3", int[].class);
         assertArrayEquals(new int[]{1, 2, 3}, arr);
 
         List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(3);
-        arr = (int[]) convertValue.to(list, int[].class);
+        arr = (int[]) ConvertBasicValue.basicConvert(list, int[].class);
         assertArrayEquals(new int[]{1, 2, 3}, arr);
 
-        String[] arr2 = (String[]) convertValue.to("1,2,3", String[].class);
+        String[] arr2 = (String[]) ConvertBasicValue.basicConvert("1,2,3", String[].class);
         assertArrayEquals(new String[]{"1", "2", "3"}, arr2);
 
         List<String> list2 = new ArrayList<>();
@@ -213,9 +212,47 @@ public class TestConvertValue {
         list2.add("2");
         list2.add("3");
 
-        arr2 = (String[]) convertValue.to(list2, String[].class);
+        arr2 = (String[]) ConvertBasicValue.basicConvert(list2, String[].class);
         assertArrayEquals(new String[]{"1", "2", "3"}, arr2);
 
-        assertEquals("Tue Feb 20 00:00:00 CST 2018", (convertValue.to("2018-2-20", Date.class)).toString());
+        assertEquals("Tue Feb 20 00:00:00 CST 2018", (ConvertBasicValue.basicConvert("2018-2-20", Date.class)).toString());
+    }
+
+    @Test
+    public void testToJavaValue() {
+        String input = "null";
+        Object expected = null;
+
+        Object result = ConvertBasicValue.toJavaValue(input);
+        assertEquals(expected, result);
+
+        input = "true";
+        expected = true;
+
+        result = ConvertBasicValue.toJavaValue(input);
+        assertEquals(expected, result);
+
+        input = "123";
+        expected = 123;
+
+        result = ConvertBasicValue.toJavaValue(input);
+        assertEquals(expected, result);
+
+        input = "1234567890123";
+        expected = 1234567890123L;
+
+        result = ConvertBasicValue.toJavaValue(input);
+        assertEquals(expected, result);
+
+        input = "3.14";
+        expected = 3.14;
+
+        result = ConvertBasicValue.toJavaValue(input);
+        assertEquals(expected, result);
+
+        assertEquals(123, (int) ConvertBasicValue.toJavaValue("123"));
+        assertEquals(true, ConvertBasicValue.toJavaValue("true"));
+        assertEquals(false, ConvertBasicValue.toJavaValue("false"));
+        assertNull(ConvertBasicValue.toJavaValue("null"));
     }
 }

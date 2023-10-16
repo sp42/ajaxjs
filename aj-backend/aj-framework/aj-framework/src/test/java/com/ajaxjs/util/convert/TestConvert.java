@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ajaxjs.util.convert.Convert.*;
+import static com.ajaxjs.util.convert.EntityConvert.*;
 import static org.junit.Assert.*;
 
 public class TestConvert {
@@ -39,7 +39,7 @@ public class TestConvert {
         expected.put("name", "John");
         expected.put("active", true);
 
-        Map<String, Object> result = simpleBean2Map(bean);
+        Map<String, Object> result = bean2MapSimple(bean);
         assertEquals(expected, result);
     }
 
@@ -90,42 +90,6 @@ public class TestConvert {
         assertEquals(expectedOutput, output);
     }
 
-    @Test
-    public void testToJavaValue() {
-        String input = "null";
-        Object expected = null;
 
-        Object result = toJavaValue(input);
-        assertEquals(expected, result);
-
-        input = "true";
-        expected = true;
-
-        result = toJavaValue(input);
-        assertEquals(expected, result);
-
-        input = "123";
-        expected = 123;
-
-        result = toJavaValue(input);
-        assertEquals(expected, result);
-
-        input = "1234567890123";
-        expected = 1234567890123L;
-
-        result = toJavaValue(input);
-        assertEquals(expected, result);
-
-        input = "3.14";
-        expected = 3.14;
-
-        result = toJavaValue(input);
-        assertEquals(expected, result);
-
-        assertEquals(123, (int) toJavaValue("123"));
-        assertEquals(true, toJavaValue("true"));
-        assertEquals(false, toJavaValue("false"));
-        assertNull(toJavaValue("null"));
-    }
 
 }

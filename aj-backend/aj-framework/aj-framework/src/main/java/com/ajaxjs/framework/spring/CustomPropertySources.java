@@ -1,7 +1,6 @@
 package com.ajaxjs.framework.spring;
 
 import com.ajaxjs.framework.MyConvert;
-import com.ajaxjs.util.ObjectHelper;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
@@ -53,6 +52,6 @@ public class CustomPropertySources extends PropertySourcesPlaceholderConfigurer 
     public static <T> T getConfig(String key, Class<T> clz) {
         String value = getConfig(key);
 
-        return MyConvert.getConvertValue().cast(value, clz);
+        return MyConvert.getConvertValue().basicCast(value, clz);
     }
 }

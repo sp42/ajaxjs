@@ -24,7 +24,7 @@ public class Xml {
     public static final LogHelper LOGGER = LogHelper.getLog(Xml.class);
 
     public static String beanToXml(Object bean) {
-        return mapToXml(Convert.bean2Map(bean));
+        return mapToXml(EntityConvert.bean2Map(bean));
     }
 
     /**

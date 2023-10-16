@@ -1,6 +1,6 @@
 package com.ajaxjs.jwt;
 
-import com.ajaxjs.util.convert.JsonHelper;
+import com.ajaxjs.util.convert.EntityConvert;
 
 /**
  * JWT 管理器
@@ -65,7 +65,7 @@ public class JWebTokenMgr {
             throw new IllegalArgumentException("非法的 JWT Header: " + parts[0]);
 
         String json = Utils.decode(parts[1]);
-        Payload payload = JsonHelper.parseMapAsBean(json, Payload.class);
+        Payload payload = EntityConvert.json2bean(json, Payload.class);
 
         if (payload == null)
             throw new RuntimeException("Payload is Empty: ");

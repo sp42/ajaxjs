@@ -11,6 +11,7 @@
 package com.ajaxjs.net.http;
 
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.convert.JsonHelper;
@@ -342,7 +343,7 @@ public class Post extends Base implements HttpConstants {
         String json = resp.toString();
 
         if (StringUtils.hasText(json))
-            return JsonHelper.parseMap(json);
+            return EntityConvert.json2map(json);
         else
             return null;
     }

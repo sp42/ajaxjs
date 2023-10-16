@@ -1,17 +1,25 @@
 package com.ajaxjs.util.logger;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.ErrorManager;
 import java.util.regex.Pattern;
 
 public class DeleteLogFile {
+    /**
+     * 日志文件名的前缀 The prefix that is added to log file filenames.
+     */
+    private String prefix;
+
+    /**
+     * 日志文件名的后缀 The suffix that is added to log file filenames.
+     */
+    private String suffix;
+
     /**
      * 日志文件的保存目录 The directory in which log files are created.
      */
@@ -40,8 +48,9 @@ public class DeleteLogFile {
 
         DELETE_FILES_SERVICE.submit(() -> {
             for (File file : streamFilesForDelete()) {
-                if (!file.delete())
-                    reportError("Unable to delete log files older than [" + maxDays + "] days", null, ErrorManager.GENERIC_FAILURE);
+                file.delete();
+//                if (!file.delete())
+//                    reportError("Unable to delete log files older than [" + maxDays + "] days", null, ErrorManager.GENERIC_FAILURE);
             }
         });
     }

@@ -2,7 +2,7 @@ package com.ajaxjs.user.interceptor;
 
 import com.ajaxjs.user.common.UserConstants;
 import com.ajaxjs.user.model.BaseUser;
-import com.ajaxjs.util.convert.JsonHelper;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +51,7 @@ public class UserInterceptor implements HandlerInterceptor {
                 LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
 
                 if (StringUtils.hasText(jsonUser)) {
-                    BaseUser user = JsonHelper.parseMapAsBean(jsonUser, BaseUser.class);
+                    BaseUser user = EntityConvert.json2bean(jsonUser, BaseUser.class);
                     request.setAttribute(UserConstants.USER_KEY, user);
 
                     return true;
