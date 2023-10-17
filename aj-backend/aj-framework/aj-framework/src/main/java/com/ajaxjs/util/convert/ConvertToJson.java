@@ -21,7 +21,7 @@ public class ConvertToJson {
      * @return JSON 字符串
      */
     public static String toJson2(Object obj) {
-        Class<?> clz = obj.getClass();
+
 
         if (obj instanceof Boolean || obj instanceof Number) {
             if (obj instanceof Long) {
@@ -38,11 +38,17 @@ public class ConvertToJson {
             return obj.toString();
         } else if (obj instanceof String)
             return '\"' + jsonStringConvert((String) obj) + '\"';
+        else if (obj instanceof Date)
+            return '\"' + DateUtil.simpleDateFormatFactory(DateUtil.DATE_FORMAT).format((Date) obj) + '\"';
+        else if (obj instanceof BaseModel || obj instanceof IBaseModel)
+            return EntityConvert.beanToJson(obj);
         else if (obj instanceof Map)
             return EntityConvert.map2json((Map<?, ?>) obj);
         else if (obj instanceof List)
             return list2Json((List<?>) obj);
-        else if (clz.isArray()) { // 数组的
+        else if (obj.getClass().isArray()) { // 数组的
+            Class<?> clz = obj.getClass();
+
             if (clz == int[].class || clz == Integer[].class)
                 return jsonArr(clz == Integer[].class ? (Integer[]) obj : Arrays.stream((int[]) obj).boxed().toArray(Integer[]::new), String::valueOf);
             else if (clz == long[].class || clz == Long[].class)
@@ -51,6 +57,48 @@ public class ConvertToJson {
                 return jsonArr((String[]) obj, v -> "\"" + jsonStringConvert(v) + "\"");
             else if (obj instanceof Map[]) // map 子类都可以识别，效率差点
                 return jsonArr((Map<?, ?>[]) obj, EntityConvert::map2json);
+            else if (obj instanceof BaseModel[])
+                return jsonArr((BaseModel[]) obj, EntityConvert::beanToJson);
+            else if (obj instanceof IBaseModel[])
+                return jsonArr((IBaseModel[]) obj, EntityConvert::beanToJson);
+            else if (obj instanceof Object[])
+                return jsonArr((Object[]) obj, ConvertToJson::toJson);
+        } else if (obj instanceof Enum) {
+//			if (obj instanceof ValueEnmu) {
+//				Serializable v = ((ValueEnmu) obj).getValue();
+//
+//				if (v instanceof String)
+//					return "\"" + v + "\"";
+//				else
+//					return (String) v;
+//			} else
+
+            return "\"" + obj + "\"";
+        } else { // 普通 Java Object
+            List<String> arr = new ArrayList<>();
+            Field[] fields = obj.getClass().getDeclaredFields();
+
+            for (Field field : fields) {
+                field.setAccessible(true);
+
+                String key = field.getName();
+                if (key.contains("this$"))
+                    continue;
+
+                Object _obj = null;
+
+                try {
+                    _obj = field.get(obj);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+//                arr.add('\"' + key + "\":" + toJson(_obj)); // 不要递归了
+                String value = "\"" + (_obj == null ? "" : jsonStringConvert(_obj.toString())) + "\"";
+                arr.add('\"' + key + "\":" + value);
+            }
+
+            return '{' + String.join(",", arr) + '}';
         }
 
         return null;
