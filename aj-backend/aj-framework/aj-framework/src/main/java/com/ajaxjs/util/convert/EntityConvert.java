@@ -280,7 +280,7 @@ public class EntityConvert {
         List<String> arr = new ArrayList<>(map.size());
 
         for (Object key : map.keySet())
-            arr.add('\"' + key.toString() + "\":" + ConvertToJson.toJson2(map.get(key)));
+            arr.add('\"' + key.toString() + "\":" + ConvertToJson.toJson(map.get(key)));
 
         return '{' + String.join(",", arr) + '}';
     }
