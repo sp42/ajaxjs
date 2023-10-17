@@ -13,29 +13,29 @@ public class TestConvertToJson {
     @Test
     public void testToJsonBasicType() {
         Object obj = true;
-        String json = JsonHelper.toJson(obj);
+        String json = ConvertToJson.toJson(obj);
         assertEquals("true", json);
 
         obj = 123;
-        json = JsonHelper.toJson(obj);
+        json = ConvertToJson.toJson(obj);
         assertEquals("123", json);
 
         obj = 100000000000000001L;
-        json = JsonHelper.toJson(obj);
+        json = ConvertToJson.toJson(obj);
         assertEquals("\"100000000000000001\"", json);
 
         obj = 99999L;
-        json = JsonHelper.toJson(obj);
+        json = ConvertToJson.toJson(obj);
         assertEquals("99999", json);
 
         obj = "hello";
-        json = JsonHelper.toJson(obj);
+        json = ConvertToJson.toJson(obj);
         assertEquals("\"hello\"", json);
 
         Map<String, Object> map = new HashMap<>();
         map.put("name", "John");
         map.put("age", 30);
-        json = JsonHelper.toJson(map);
+        json = ConvertToJson.toJson(map);
         assertEquals("{\"name\":\"John\",\"age\":30}", json);
     }
 

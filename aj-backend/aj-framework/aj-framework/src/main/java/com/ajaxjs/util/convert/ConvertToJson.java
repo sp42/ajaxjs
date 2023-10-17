@@ -1,10 +1,11 @@
 package com.ajaxjs.util.convert;
 
 import com.ajaxjs.framework.BaseModel;
+import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.util.DateUtil;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -19,7 +20,7 @@ public class ConvertToJson {
      * @param obj 任意对象
      * @return JSON 字符串
      */
-    public static String toJson(Object obj) {
+    public static String toJson2(Object obj) {
         Class<?> clz = obj.getClass();
 
         if (obj instanceof Boolean || obj instanceof Number) {
@@ -61,15 +62,15 @@ public class ConvertToJson {
     static String list2Json(List<?> list) {
         if (list.size() > 0) {
             if (list.get(0) instanceof Integer) {
-                return toJson(list.toArray(new Integer[0]));
+                return toJson2(list.toArray(new Integer[0]));
             } else if (list.get(0) instanceof Long)
-                return toJson(list.toArray(new Long[0]));
+                return toJson2(list.toArray(new Long[0]));
             else if (list.get(0) instanceof String)
-                return toJson(list.toArray(new String[0]));
+                return toJson2(list.toArray(new String[0]));
             else if (list.get(0) instanceof Map) // Map 类型的输出
-                return toJson(list.toArray(new Map[0]));
+                return toJson2(list.toArray(new Map[0]));
             else if (list.get(0) instanceof BaseModel) // Bean
-                return toJson(list.toArray(new BaseModel[0]));
+                return toJson2(list.toArray(new BaseModel[0]));
             else { // Bean
                 Object[] array = list.toArray(new Object[0]);
                 return jsonArr(array, EntityConvert::beanToJson);
@@ -198,5 +199,134 @@ public class ConvertToJson {
      */
     public static String removeComment(String str) {
         return str.replaceAll("//[^\\n]*|/\\*([^*^/]*|[*^/]*|[^*/]*)*\\*+/", "");
+    }
+
+    /**
+     * List 专为 JSON 字符串
+     *
+     * @param list 列表
+     * @param fn   元素处理器，返回元素 JSON 字符串
+     * @return 列表的 JSON 字符串
+     */
+    static <T> String eachList(List<T> list, Function<T, String> fn) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < list.size(); i++) {
+            sb.append(fn.apply(list.get(i)));
+
+            if (i != (list.size() - 1))
+                sb.append(", ");
+        }
+
+        return '[' + sb.toString() + ']';
+    }
+
+    public static String toJson(Object obj) {
+        if (obj == null)
+            return null;
+
+        if (obj instanceof Boolean || obj instanceof Number) {
+            if (obj instanceof Long) {
+                Long l = (Long) obj;// js number 最大长度为 16，转换为字符串
+
+                if (l > 100000L) {
+                    String s = l.toString();
+                    if (s.length() > 15) // gson 最大 15
+                        return '\"' + s + '\"';
+                }
+            }
+
+            return obj.toString();
+        } else if (obj instanceof String)
+            return '\"' + jsonStringConvert((String) obj) + '\"';
+        else if (obj instanceof String[])
+            return jsonArr((String[]) obj, v -> "\"" + jsonStringConvert(v) + "\"");
+        else if (obj.getClass() == Integer[].class)
+            return jsonArr((Integer[]) obj, String::valueOf);
+        else if (obj.getClass() == int[].class) {
+            Integer[] arr = Arrays.stream((int[]) obj).boxed().toArray(Integer[]::new);
+            return jsonArr(arr, String::valueOf);
+        } else if (obj instanceof Long[])
+            return jsonArr((Long[]) obj, Object::toString);
+        else if (obj instanceof long[]) {
+            Long[] arr = Arrays.stream((long[]) obj).boxed().toArray(Long[]::new);
+            return jsonArr(arr, Object::toString);
+        } else if (obj instanceof Date)
+            return '\"' + DateUtil.simpleDateFormatFactory(DateUtil.DATE_FORMAT).format((Date) obj) + '\"';
+        else if (obj instanceof Map)
+            return EntityConvert.map2json((Map<?, ?>) obj);
+        else if (obj instanceof Map[])
+            return jsonArr((Map<?, ?>[]) obj, EntityConvert::map2json);
+//		else if (obj instanceof ValueEnmu) {
+//			if (obj instanceof IntegerValueEnum && ((IntegerValueEnum) obj).isUsingOrdinal())
+//				return (((IntegerValueEnum) obj).getValue() + 1) + "";
+//			else
+//				return ((ValueEnmu) obj).getValue().toString();
+//		}
+        else if (obj instanceof BaseModel || obj instanceof IBaseModel)
+            return EntityConvert.beanToJson(obj);
+        else if (obj instanceof BaseModel[])
+            return jsonArr((BaseModel[]) obj, EntityConvert::beanToJson);
+        else if (obj instanceof IBaseModel[])
+            return jsonArr((IBaseModel[]) obj, EntityConvert::beanToJson);
+        else if (obj instanceof List) {
+            List<?> list = (List<?>) obj;
+
+            if (list.size() > 0) {
+                if (list.get(0) instanceof Integer)
+                    return toJson(list.toArray(new Integer[0]));
+                if (list.get(0) instanceof Long)
+                    return toJson(list.toArray(new Long[0]));
+                else if (list.get(0) instanceof String)
+                    return toJson(list.toArray(new String[0]));
+                else if (list.get(0) instanceof Map) // Map 类型的输出
+                    return toJson(list.toArray(new Map[0]));
+                else if (list.get(0) instanceof BaseModel) // Bean
+                    return toJson(list.toArray(new BaseModel[0]));
+                else { // Bean
+                    Object[] array = list.toArray(new Object[0]);
+                    return jsonArr(array, EntityConvert::beanToJson);
+                }
+            } else
+                return "[]";
+        } else if (obj instanceof Object[])
+            return jsonArr((Object[]) obj, ConvertToJson::toJson);
+        else if (obj instanceof Enum) {
+//			if (obj instanceof ValueEnmu) {
+//				Serializable v = ((ValueEnmu) obj).getValue();
+//
+//				if (v instanceof String)
+//					return "\"" + v + "\"";
+//				else
+//					return (String) v;
+//			} else
+
+            return "\"" + obj + "\"";
+        } else { // 普通 Java Object
+            List<String> arr = new ArrayList<>();
+            Field[] fields = obj.getClass().getDeclaredFields();
+
+            for (Field field : fields) {
+                field.setAccessible(true);
+
+                String key = field.getName();
+                if (key.contains("this$"))
+                    continue;
+
+                Object _obj = null;
+
+                try {
+                    _obj = field.get(obj);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+//                arr.add('\"' + key + "\":" + toJson(_obj)); // 不要递归了
+                String value = "\"" + (_obj == null ? "" : jsonStringConvert(_obj.toString())) + "\"";
+                arr.add('\"' + key + "\":" + value);
+            }
+
+            return '{' + String.join(",", arr) + '}';
+        }
     }
 }

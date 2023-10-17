@@ -2,7 +2,6 @@ package com.ajaxjs.util;
 
 import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.convert.EntityConvert;
-import com.ajaxjs.util.convert.JsonHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -17,7 +16,7 @@ import java.util.Map;
 public class TestHelper {
     public static void json(Object obj) {
         System.out.println("---------------");
-        System.out.println(JsonHelper.toJson(obj));
+        System.out.println(ConvertToJson.toJson(obj));
     }
 
     /**
@@ -25,11 +24,11 @@ public class TestHelper {
      */
     public static void printJson(Object obj) {
         System.out.println("---------------");
-        System.out.println(ConvertToJson.format(JsonHelper.toJson(obj)));
+        System.out.println(ConvertToJson.format(ConvertToJson.toJson(obj)));
     }
 
     public static void printJson2(Object obj) {
-        System.out.println((JsonHelper.toJson(obj)));
+        System.out.println((ConvertToJson.toJson(obj)));
     }
 
     public static void printArr(Object[] arr) {

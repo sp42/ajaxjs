@@ -3,7 +3,6 @@ package com.ajaxjs.framework;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import com.ajaxjs.util.convert.ConvertComplexValue;
 import com.ajaxjs.util.convert.EntityConvert;
-import com.ajaxjs.util.convert.JsonHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -50,6 +49,6 @@ public class MyConvert extends ConvertComplexValue {
 
     @Override
     protected List<Map<String, Object>> parseList(String value) {
-        return JsonHelper.parseList(value);
+        return EntityConvert.json2MapList(value);
     }
 }

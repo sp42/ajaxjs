@@ -11,8 +11,7 @@
 package com.ajaxjs.net.http;
 
 import com.ajaxjs.util.convert.EntityConvert;
-import com.ajaxjs.util.convert.JsonHelper;
-import com.ajaxjs.util.convert.Xml;
+import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
@@ -96,7 +95,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                list = JsonHelper.parseList(resp.toString());
+                list = EntityConvert.json2MapList(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 JSON 时候发生异常");
             }
@@ -153,7 +152,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                map = Xml.xmlToMap(resp.toString());
+                map = MapTool.xmlToMap(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 XML 时候发生异常");
             }
@@ -162,7 +161,7 @@ public abstract class ResponseHandler {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
             } else
-                map = Xml.xmlToMap(resp.getResponseText());
+                map = MapTool.xmlToMap(resp.getResponseText());
         }
 
         return map;

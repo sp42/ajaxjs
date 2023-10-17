@@ -1,6 +1,8 @@
 package com.ajaxjs.util.convert;
 
 import com.ajaxjs.framework.IBaseModel;
+import com.ajaxjs.jsonparser.JsonParseException;
+import com.ajaxjs.jsonparser.syntax.FMS;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.NewInstance;
@@ -98,7 +100,7 @@ public class EntityConvert {
                 if (realT.equals(String.class) && _list != null) {
                     // List<String> 不用处理
                 } else {
-                    List<Map<String, Object>> oldValue = value instanceof String ? JsonHelper.parseList((String) value) : (List<Map<String, Object>>) value;
+                    List<Map<String, Object>> oldValue = value instanceof String ? json2MapList((String) value) : (List<Map<String, Object>>) value;
                     List<Object> newList = new ArrayList<>(oldValue.size());
 
                     // 转换一个新 list
@@ -205,7 +207,7 @@ public class EntityConvert {
         try {
             props = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
         } catch (IntrospectionException e) {
-            JsonHelper.LOGGER.warning(e);
+            LOGGER.warning(e);
         }
 
         if (!ObjectUtils.isEmpty(props)) {
@@ -214,7 +216,7 @@ public class EntityConvert {
                 key = firstCharToLowercase(key); // 永远第一个字符为小写，符合驼峰的风格
                 key = "\"" + key + "\"";
 
-                String _value = JsonHelper.toJson(value);
+                String _value = ConvertToJson.toJson(value);
 
                 sb.append(key);
                 sb.append(":");
@@ -229,7 +231,7 @@ public class EntityConvert {
             if (!ObjectUtils.isEmpty(bean.getClass().getFields())) {
                 Clazz.eachFields(bean, (name, _value) -> {
                     name = "\"" + name + "\"";
-                    String value = JsonHelper.toJson(_value);
+                    String value = ConvertToJson.toJson(_value);
 
                     sb.append(name);
                     sb.append(":");
@@ -278,7 +280,7 @@ public class EntityConvert {
         List<String> arr = new ArrayList<>(map.size());
 
         for (Object key : map.keySet())
-            arr.add('\"' + key.toString() + "\":" + ConvertToJson.toJson(map.get(key)));
+            arr.add('\"' + key.toString() + "\":" + ConvertToJson.toJson2(map.get(key)));
 
         return '{' + String.join(",", arr) + '}';
     }
@@ -292,7 +294,7 @@ public class EntityConvert {
      */
     @SuppressWarnings("unchecked")
     public static Map<String, Object> json2map(String json) {
-        return (Map<String, Object>) JsonHelper.parse(json);
+        return (Map<String, Object>) parse(json);
     }
 
     /**
@@ -307,5 +309,54 @@ public class EntityConvert {
         Map<String, Object> map = json2map(json);
 
         return map2Bean(map, clz, true); // 应该为 false
+    }
+
+    /**
+     * 解析 JSON 为 Map 或 List
+     *
+     * @param str JSON 字符串
+     * @return Map 或 List
+     */
+    private static Object parse(String str) {
+        str = ConvertToJson.removeCr(str);
+
+        try {
+            return new FMS(str).parse();
+        } catch (JsonParseException e) {
+            LOGGER.warning("JSON 解析错误：" + str);
+
+            throw e;
+        }
+    }
+
+    /**
+     * 解析 JSON 字符串为 List
+     *
+     * @param str JSON 字符串
+     * @return List
+     */
+    @SuppressWarnings("unchecked")
+    public static List<Map<String, Object>> json2MapList(String str) {
+        return (List<Map<String, Object>>) parse(str);
+    }
+
+    /**
+     * 解析 JSON 字符串为 List（Bean）
+     *
+     * @param json JSON 字符串
+     * @param clz  Bean 类
+     * @param <T>  Bean 类
+     * @return List
+     */
+    public static <T> List<T> json2BeanList(String json, Class<T> clz) {
+        List<T> list = new ArrayList<>();
+        List<Map<String, Object>> maps = json2MapList(json);
+
+        for (Map<String, Object> map : maps) {
+            T bean = map2Bean(map, clz);
+            list.add(bean);
+        }
+
+        return list;
     }
 }
