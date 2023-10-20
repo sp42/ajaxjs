@@ -10,11 +10,11 @@
  */
 package com.ajaxjs.net.http;
 
+import com.ajaxjs.util.convert.EntityConvert;
+import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
 
 import java.io.File;
 import java.io.IOException;
@@ -95,7 +95,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                list = JsonHelper.parseList(resp.toString());
+                list = EntityConvert.json2MapList(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 JSON 时候发生异常");
             }
@@ -106,7 +106,7 @@ public abstract class ResponseHandler {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
             } else
-                map = JsonHelper.parseMap(resp.getResponseText());
+                map = EntityConvert.json2map(resp.getResponseText());
 
             list = new ArrayList<>();
             list.add(map);
@@ -126,7 +126,7 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                map = JsonHelper.parseMap(resp.toString());
+                map = EntityConvert.json2map(resp.toString());
             } catch (Exception e) {
                 LOGGER.warning(e, "解析 JSON 时候发生异常");
             }
@@ -135,7 +135,7 @@ public abstract class ResponseHandler {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
             } else
-                map = JsonHelper.parseMap(resp.getResponseText());
+                map = EntityConvert.json2map(resp.getResponseText());
         }
 
         return map;
@@ -168,7 +168,7 @@ public abstract class ResponseHandler {
     }
 
     public static <T> T toBean(ResponseEntity resp, Class<T> clz) {
-        return MapTool.map2Bean(toJson(resp), clz);
+        return EntityConvert.map2Bean(toJson(resp), clz);
     }
 
     /**

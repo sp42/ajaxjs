@@ -2,7 +2,6 @@ package com.ajaxjs.user;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
-import com.ajaxjs.sql.JdbcConnection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;

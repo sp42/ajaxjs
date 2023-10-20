@@ -1,0 +1,29 @@
+package com.ajaxjs.user.common.session;
+
+import com.ajaxjs.user.model.User;
+
+/**
+ * 基于 Redis 的用户会话管理
+ * TODO
+ */
+public class RedisUserSession implements UserSession {
+    @Override
+    public void put(String key, User user) {
+
+    }
+
+    @Override
+    public void delete(String key) {
+
+    }
+
+    @Override
+    public void setExpires(int minutes) {
+
+    }
+
+    @Override
+    public void removeAllUser() {
+
+    }
+}

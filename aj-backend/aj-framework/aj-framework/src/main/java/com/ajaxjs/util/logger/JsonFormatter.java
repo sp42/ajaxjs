@@ -1,7 +1,7 @@
 package com.ajaxjs.util.logger;
 
 import com.ajaxjs.util.ObjectHelper;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.ConvertToJson;
 
 import java.util.Map;
 import java.util.logging.Formatter;
@@ -20,6 +20,6 @@ public class JsonFormatter extends Formatter {
             map.put("exception", throwable.toString());
 
         // 返回格式化后的JSON字符串
-        return JsonHelper.toJson(map) + System.lineSeparator();
+        return ConvertToJson.toJson(map) + System.lineSeparator();
     }
 }

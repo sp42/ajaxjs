@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.util.regexp.RegExpUtils;
 
 /**
@@ -81,7 +81,7 @@ public class Get extends Base {
     }
 
     public static <T> T api2bean(String url, Class<T> beanClz) {
-        return MapTool.map2Bean(api(url), beanClz);
+        return EntityConvert.map2Bean(api(url), beanClz);
     }
 
     /**

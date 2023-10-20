@@ -3,6 +3,7 @@ package com.ajaxjs.sso;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import com.ajaxjs.user.SsoServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ajaxjs.TestConfig;
 import com.ajaxjs.data_service.service.DataService;
-import com.ajaxjs.sso.model.IssueToken;
-import com.ajaxjs.sso.model.IssueTokenWithUser;
-import com.ajaxjs.sso.service.SsoServiceImpl;
+import com.ajaxjs.user.model.IssueToken;
+import com.ajaxjs.user.model.IssueTokenWithUser;
 import com.ajaxjs.user.User;
 import com.ajaxjs.user.UserConstant;
 import com.ajaxjs.util.TestHelper;

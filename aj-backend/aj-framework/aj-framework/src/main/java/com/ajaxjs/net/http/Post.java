@@ -11,10 +11,11 @@
 package com.ajaxjs.net.http;
 
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.util.regexp.RegExpUtils;
 import org.springframework.util.StringUtils;
 
@@ -200,7 +201,7 @@ public class Post extends Base implements HttpConstants {
      * POST JSON as RawBody
      */
     public static Map<String, Object> apiJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
-        String json = JsonHelper.toJson(params);
+        String json = ConvertToJson.toJson(params);
         json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
         System.out.println("JSON>>>" + json);
 
@@ -211,7 +212,7 @@ public class Post extends Base implements HttpConstants {
      * PUT JSON as RawBody
      */
     public static Map<String, Object> putJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
-        String json = JsonHelper.toJson(params);
+        String json = ConvertToJson.toJson(params);
         json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
 
         return putApi(url, json, fn);
@@ -342,7 +343,7 @@ public class Post extends Base implements HttpConstants {
         String json = resp.toString();
 
         if (StringUtils.hasText(json))
-            return JsonHelper.parseMap(json);
+            return EntityConvert.json2map(json);
         else
             return null;
     }

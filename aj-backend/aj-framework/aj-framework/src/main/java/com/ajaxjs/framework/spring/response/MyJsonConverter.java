@@ -2,9 +2,10 @@ package com.ajaxjs.framework.spring.response;
 
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.web.WebHelper;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -77,14 +78,14 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
             if (str.startsWith("[") || str.startsWith("{")) { // 识别 JSON
                 if (isListParams) {
-                    return JsonHelper.parseList(str);
+                    return EntityConvert.json2MapList(str);
                 } else {
-                    Map<String, Object> parseMap = JsonHelper.parseMap(str);
+                    Map<String, Object> parseMap = EntityConvert.json2map(str);
 
                     if (!isJavaBean)
                         return parseMap;
                     else
-                        return MapTool.map2Bean(parseMap, clazz, true);// raw body json to bean
+                        return EntityConvert.map2Bean(parseMap, clazz, true);// raw body json to bean
                 }
             } else {
                 if (!StringUtils.hasText(str))
@@ -94,7 +95,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
                 Map<String, Object> parseMap = MapTool.toMap(str.split("&"), null);
 
-                return MapTool.map2Bean(parseMap, clazz, true);
+                return EntityConvert.map2Bean(parseMap, clazz, true);
             }
         }
 
@@ -127,7 +128,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
                 dto.setRows(p);
                 dto.setTotal(p.getTotalCount());
 
-                String json = JsonHelper.toJson(dto);
+                String json = ConvertToJson.toJson(dto);
                 resultWrapper.setData(json);
                 // 旧框架
                 //                resultWrapper.setTotal(p.getTotalCount());
@@ -138,7 +139,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
                 msg = "找不到数据，查询为空";
                 resultWrapper.setData("[]");
             } else {
-                String json = JsonHelper.toJson(result);
+                String json = ConvertToJson.toJson(result);
                 resultWrapper.setData(json);
             }
 

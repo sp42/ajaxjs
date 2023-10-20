@@ -1,11 +1,11 @@
 package com.ajaxjs.web;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.TestHelper;
+import com.ajaxjs.util.convert.ConvertBasicValue;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.MapTool;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;
@@ -225,7 +225,7 @@ public class WebHelper {
      * @return 参数、值集合
      */
     public static Map<String, Object> getRawBodyAsJson(HttpServletRequest req) {
-        return JsonHelper.parseMap(getRawBody(req));
+        return EntityConvert.json2map(getRawBody(req));
     }
 
     /**
@@ -255,7 +255,7 @@ public class WebHelper {
         try (InputStream in = req.getInputStream()) {
             String params = StreamHelper.byteStream2string(in);
 
-            return MapTool.toMap(params.split("&"), v -> ObjectHelper.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
+            return MapTool.toMap(params.split("&"), v -> ConvertBasicValue.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -270,7 +270,7 @@ public class WebHelper {
          * 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的， 要求的是 string 因为 map 从 request
          * 所以最后一个参数为 true
          */
-        return MapTool.map2Bean(getParameterMap(req), clz, true);
+        return EntityConvert.map2Bean(getParameterMap(req), clz, true);
     }
 
     /**
@@ -307,7 +307,7 @@ public class WebHelper {
             String v = keyValuePair[1];
             v = uriDecode(v);
 
-            map.put(keyValuePair[0], keyValuePair.length == 1 ? "" : ObjectHelper.toJavaValue(v));
+            map.put(keyValuePair[0], keyValuePair.length == 1 ? "" : ConvertBasicValue.toJavaValue(v));
         }
 
         return map;

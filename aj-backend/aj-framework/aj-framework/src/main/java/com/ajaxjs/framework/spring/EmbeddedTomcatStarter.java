@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.rmi.registry.LocateRegistry;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 嵌入式使用 Tomcat
@@ -140,11 +142,23 @@ public class EmbeddedTomcatStarter {
         startedTime = System.currentTimeMillis();
 
         tomcat = new Tomcat();
+
         if (Version.isDebug)
             tomcat.setBaseDir(Resources.getJarDir()); // 设置 JSP 编译目录
+
         tomcat.enableNaming();
         tomcat.getHost().setAutoDeploy(false);
         tomcat.getHost().setAppBase("webapp");
+
+        // Tomcat 的 startStopThreads 属性用于配置 Tomcat 服务器启动和关闭时的线程池大小。它决定了 Tomcat 在启动和关闭过程中能够同时处理的任务数。
+        // 对于 Tomcat 8，没有直接的编程方式来设置 startStopThreads 属性
+        Executor executor = tomcat.getConnector().getProtocolHandler().getExecutor();
+        if (executor instanceof ThreadPoolExecutor) {
+            ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
+            // 设置核心线程数和最大线程数
+            threadPoolExecutor.setCorePoolSize(3);
+            threadPoolExecutor.setMaximumPoolSize(3);
+        }
 
         TOMCAT = tomcat;
 

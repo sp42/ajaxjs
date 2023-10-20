@@ -2,9 +2,9 @@ package com.ajaxjs.util;
 
 import java.util.Map;
 
+import com.ajaxjs.util.convert.EntityConvert;
 import org.junit.Test;
 
-import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.regexp.RegExpUtils;
 
 public class TestRegexpUtils {
@@ -16,7 +16,7 @@ public class TestRegexpUtils {
 	public void testCallback() {
 		String j = RegExpUtils.kexuejishu(json);
 		System.out.println(j);
-		Map<String, Object> map = JsonHelper.parseMap(j);
+		Map<String, Object> map = EntityConvert.json2map(j);
 		@SuppressWarnings("unchecked")
 		Map<String, Object> payload = (Map<String, Object> )map.get("payload");
 		System.out.println(payload.get("pitchspeed"));

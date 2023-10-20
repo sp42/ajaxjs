@@ -85,13 +85,11 @@ public class Resources {
      * @return 转换路径
      */
     private static String url2path(URL url, boolean isDecode) {
-        if (url == null)
-            return null;
+        if (url == null) return null;
 
         String path;
 
-        if (isDecode)
-            path = StringUtils.uriDecode(new File(url.getPath()).toString(), StandardCharsets.UTF_8);
+        if (isDecode) path = StringUtils.uriDecode(new File(url.getPath()).toString(), StandardCharsets.UTF_8);
         else {
             path = url.getPath();
             path = path.startsWith("/") ? path.substring(1) : path;
@@ -134,6 +132,10 @@ public class Resources {
         }
     }
 
+    /**
+     * 可以在 JAR 中获取资源文件
+     * <a href="https://www.cnblogs.com/coderxx/p/13566423.html">...</a>
+     */
     public static InputStream getResource(String path) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 

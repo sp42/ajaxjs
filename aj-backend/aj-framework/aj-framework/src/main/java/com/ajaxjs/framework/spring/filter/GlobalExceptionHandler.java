@@ -1,20 +1,18 @@
 package com.ajaxjs.framework.spring.filter;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.ajaxjs.framework.BusinessException;
+import com.ajaxjs.framework.spring.ICustomException;
+import com.ajaxjs.framework.spring.response.ResponseResult;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ajaxjs.framework.spring.ICustomException;
-import com.ajaxjs.framework.spring.response.ResponseResult;
-import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 全局异常拦截器
@@ -62,7 +60,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
                 LOGGER.warning(e);
             }
         } else {
-            msg = JsonHelper.javaValue2jsonValue(JsonHelper.jsonString_covert(msg));
+            msg = javaValue2jsonValue(ConvertToJson.jsonStringConvert(msg));
             resp.setContentType(MediaType.APPLICATION_JSON_VALUE); // 设置 ContentType
 
             ResponseResult resultWrapper = new ResponseResult();
@@ -89,5 +87,15 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
         return new ModelAndView();
 //        return null;// 默认视图，跳转 jsp
+    }
+
+    /**
+     * 转义注释和缩进
+     *
+     * @param str JSON 字符串
+     * @return 转换后的字符串
+     */
+    private static String javaValue2jsonValue(String str) {
+        return str.replaceAll("\"", "\\\\\"").replaceAll("\t", "\\\\\t");
     }
 }

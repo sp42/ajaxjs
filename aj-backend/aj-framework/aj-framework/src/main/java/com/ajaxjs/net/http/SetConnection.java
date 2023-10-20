@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.MapTool;
 
 /**
  * 为初始化 HTTP Connection 所准备的函数。该类不能创建实例 你可以链式调用这些 lambda，xxx.andThen(xxx)

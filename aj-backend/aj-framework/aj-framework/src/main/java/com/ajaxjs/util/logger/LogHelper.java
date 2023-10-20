@@ -25,7 +25,6 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Filter;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

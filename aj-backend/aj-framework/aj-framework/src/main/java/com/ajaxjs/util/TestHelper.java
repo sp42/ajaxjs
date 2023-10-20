@@ -1,7 +1,7 @@
 package com.ajaxjs.util;
 
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.convert.EntityConvert;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -16,7 +16,7 @@ import java.util.Map;
 public class TestHelper {
     public static void json(Object obj) {
         System.out.println("---------------");
-        System.out.println(JsonHelper.toJson(obj));
+        System.out.println(ConvertToJson.toJson(obj));
     }
 
     /**
@@ -24,11 +24,11 @@ public class TestHelper {
      */
     public static void printJson(Object obj) {
         System.out.println("---------------");
-        System.out.println(JsonHelper.format(JsonHelper.toJson(obj)));
+        System.out.println(ConvertToJson.format(ConvertToJson.toJson(obj)));
     }
 
     public static void printJson2(Object obj) {
-        System.out.println((JsonHelper.toJson(obj)));
+        System.out.println((ConvertToJson.toJson(obj)));
     }
 
     public static void printArr(Object[] arr) {
@@ -87,8 +87,9 @@ public class TestHelper {
     }
 
     public static <T> T jsonStr2Bean(String jsonStr, Class<T> beanClz) {
-        Map<String, Object> map = JsonHelper.parseMapClean(jsonStr);
+        jsonStr = ConvertToJson.removeCr(jsonStr);
+        Map<String, Object> map = EntityConvert.json2map(jsonStr);
 
-        return MapTool.map2Bean(map, beanClz, true);
+        return EntityConvert.map2Bean(map, beanClz, true);
     }
 }
