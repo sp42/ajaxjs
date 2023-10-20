@@ -102,6 +102,7 @@ public abstract class ResponseHandler {
         } else {
             // TODO 列表如何返回错误信息？
             Map<String, Object> map;
+
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());

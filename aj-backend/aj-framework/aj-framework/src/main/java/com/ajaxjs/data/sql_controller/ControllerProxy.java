@@ -5,6 +5,7 @@ import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.Methods;
 import com.ajaxjs.util.reflect.Types;
 import org.springframework.util.ObjectUtils;
@@ -12,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -47,6 +49,20 @@ public class ControllerProxy implements InvocationHandler {
      */
     public static ThreadLocal<String> ACTION_COMMENT = new ThreadLocal<>();
 
+    public static Method getStaticMethod(String m) throws NoSuchMethodException {
+        String[] split = m.split("\\.");
+        String methodName = split[split.length - 1];
+        String clzName = m.replaceAll("\\." + methodName, "");
+
+        Class<?> targetClass = Clazz.getClassByName(clzName);
+
+        assert targetClass != null;
+        Method method = targetClass.getMethod(methodName, Object[].class); // 获取静态方法
+        method.setAccessible(true);
+
+        return method;
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         SqlBinding annotation = method.getAnnotation(SqlBinding.class);
@@ -62,12 +78,20 @@ public class ControllerProxy implements InvocationHandler {
         String before = annotation.before();// before 拦截方法
 
         if (StringUtils.hasText(before)) {
+            Method beforeMethod;
+            Object o;
+
             try {
-                Method beforeMethod = interfaceType.getMethod(before, Object[].class);
-                // args.length == 1 时候，只传 args，节省资源
-                Object o = Methods.executeDefault(proxy, beforeMethod, args.length == 1 ? args : new Object[]{args});
+                if (before.contains(".")) {// 静态方法
+                    beforeMethod = getStaticMethod(before);
+                    o = beforeMethod.invoke(null, new Object[]{args});
+                } else {
+                    beforeMethod = interfaceType.getMethod(before, Object[].class);
+                    o = Methods.executeDefault(proxy, beforeMethod, new Object[]{args});
+                }
+
                 args = (Object[]) o;
-            } catch (NoSuchMethodException e) {
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -87,7 +111,7 @@ public class ControllerProxy implements InvocationHandler {
             } else { // bean
                 if (StringUtils.hasText(sqlXmlId)) {
                     SqlParams sqlParams = getOrderedParams(method, args);
-                    return CRUD.listBeanInXml(sqlXmlId, realReturnClz, sqlParams.mapParams, sqlParams.orderedParams);
+                    return CRUD.listBySqlId(realReturnClz, sqlXmlId, sqlParams.mapParams, sqlParams.orderedParams);
                 } else if (StringUtils.hasText(sql))
                     return CRUD.list(realReturnClz, sql, args);
                 else
@@ -114,7 +138,7 @@ public class ControllerProxy implements InvocationHandler {
             SqlParams sqlParams = getOrderedParams(method, args);
 
             if (StringUtils.hasText(sqlXmlId))
-                return CRUD.info(sqlXmlId, returnClz, sqlParams.mapParams, sqlParams.orderedParams);
+                return CRUD.infoBySqlId(returnClz, sqlXmlId, sqlParams.mapParams, sqlParams.orderedParams);
             else if (StringUtils.hasText(sql))
                 return CRUD.info(returnClz, sql, sqlParams.orderedParams);
         } else if (isSingleValue(returnClz)) {

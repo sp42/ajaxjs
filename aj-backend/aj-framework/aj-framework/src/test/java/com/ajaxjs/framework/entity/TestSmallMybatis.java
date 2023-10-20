@@ -14,14 +14,23 @@ public class TestSmallMybatis {
         xmlSqlHelper.loadXML();
     }
 
+    public static int p(){
+        System.out.println("hi");
+        return 10;
+    }
+
     @Test
     public void loadIf() {
         String sql = "SELECT * FROM user WHERE name LIKE #{name} AND " +
-                "<if test=\"age eq 20\">age = ${age}</if><if test=\"age ne 20\">XXXXXXX</if>";
+                "<if test=\"age eq 20\">age = ${age}</if><if test=\"age ne 20\">" +
+                "#{T(com.ajaxjs.framework.entity.TestSmallMybatis).p()}</if>";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("name", "%Tom%");
         paramMap.put("age", "240");
 
         String actualSql = SmallMyBatis.generateIfBlock(sql, paramMap);
+
+        actualSql = SmallMyBatis.getValuedSQL(actualSql, paramMap);
+        System.out.println(actualSql);
     }
 }

@@ -36,7 +36,6 @@ public class DataBaseConnection implements HandlerInterceptor {
 
 //	private DataSource ds;
 
-    // TODO 没权限时候还会连接，应该禁止 有时会连接两次
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
         if (handler instanceof HandlerMethod) {
