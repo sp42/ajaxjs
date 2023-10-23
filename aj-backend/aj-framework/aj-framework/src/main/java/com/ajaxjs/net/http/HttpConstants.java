@@ -7,5 +7,7 @@ public interface HttpConstants {
 
     String PUT = "PUT";
 
+    String DELETE = "DELETE";
+
     String CONTENT_TYPE = "Content-Type";
 }

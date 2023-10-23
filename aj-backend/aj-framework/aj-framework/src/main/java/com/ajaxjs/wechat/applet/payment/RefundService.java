@@ -1,10 +1,9 @@
 package com.ajaxjs.wechat.applet.payment;
 
-import com.ajaxjs.util.ListUtils;
+
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.wechat.applet.payment.payment.RefundNotifyResult;
 import com.ajaxjs.wechat.applet.payment.payment.RefundResult;
 import com.ajaxjs.wechat.applet.payment.payment.RefundResultAmount;
@@ -47,8 +46,8 @@ public class RefundService extends CommonService {
 
         String url = "/v3/refund/domestic/refunds";
         Map<String, Object> map = AppletPayUtils.postMap(mchCfg, url, params);
-        RefundResult bean = MapTool.map2Bean(map, RefundResult.class, false, false);
-        RefundResultAmount amount = MapTool.map2Bean((Map<String, Object>) map.get("amount"), RefundResultAmount.class, false, false);
+        RefundResult bean = EntityConvert.map2Bean(map, RefundResult.class, false, false);
+        RefundResultAmount amount = EntityConvert.map2Bean((Map<String, Object>) map.get("amount"), RefundResultAmount.class, false, false);
         bean.setAmount(amount);
 
         return bean;
@@ -80,8 +79,8 @@ public class RefundService extends CommonService {
             // 退款成功
             String json = decrypt(params);
 
-            Map<String, Object> map = JsonHelper.parseMap(json);
-            RefundNotifyResult bean = MapTool.map2Bean(map, RefundNotifyResult.class, false, false);
+            Map<String, Object> map = EntityConvert.json2map(json);
+            RefundNotifyResult bean = EntityConvert.map2Bean(map, RefundNotifyResult.class, false, false);
 
             @SuppressWarnings("unchecked")
             Map<String, Object> amount = (Map<String, Object>) map.get("amount");

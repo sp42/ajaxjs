@@ -1,10 +1,10 @@
 package com.ajaxjs.wechat.applet.payment;
 
-import com.ajaxjs.util.ListUtils;
+
 import com.ajaxjs.util.ObjectHelper;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+
 import com.ajaxjs.wechat.applet.payment.profit_sharing.*;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,10 +265,10 @@ public class ProfitSharingApiService extends CommonService {
         if (params.containsKey("event_type") && SUCCESS.equals(params.get("event_type"))) {
             String json = decrypt(params);
 
-            Map<String, Object> map = JsonHelper.parseMap(json);
-            ResultNotify bean = MapTool.map2Bean(map, ResultNotify.class, false, false);
+            Map<String, Object> map = EntityConvert.json2map(json);
+            ResultNotify bean = EntityConvert.map2Bean(map, ResultNotify.class, false, false);
             Map<String, Object> ro = (Map<String, Object>) map.get("receiver");
-            RequestOrderReceivers receiver = MapTool.map2Bean(ro, RequestOrderReceivers.class, false, false);
+            RequestOrderReceivers receiver = EntityConvert.map2Bean(ro, RequestOrderReceivers.class, false, false);
             bean.setReceiver(receiver);
 
             return bean;

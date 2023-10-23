@@ -1,10 +1,9 @@
 package com.ajaxjs.wechat.applet.payment;
 
 import com.ajaxjs.net.http.Get;
-import com.ajaxjs.net.http.HttpEnum;
+import com.ajaxjs.net.http.HttpConstants;
 import com.ajaxjs.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -83,7 +82,7 @@ public class BillService {
      * @param url 账单 url，由 getBills() 返回
      */
     public void billDownload(String url) {
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpEnum.GET, url);
+        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstants.GET, url);
         Map<String, Object> result = Get.api(url, AppletPayUtils.getSetHeadFn(mchCfg, rw));
         // 流数据处理
     }

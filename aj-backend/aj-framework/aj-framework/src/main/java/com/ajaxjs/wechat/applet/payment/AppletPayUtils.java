@@ -1,10 +1,10 @@
 package com.ajaxjs.wechat.applet.payment;
 
 import com.ajaxjs.net.http.Get;
-import com.ajaxjs.net.http.HttpEnum;
+import com.ajaxjs.net.http.HttpConstants;
 import com.ajaxjs.net.http.Post;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.wechat.merchant.HttpRequestWrapper;
 import com.ajaxjs.wechat.merchant.MerchantConfig;
 import com.ajaxjs.wechat.merchant.SignerMaker;
@@ -82,8 +82,8 @@ public class AppletPayUtils {
     }
 
     public static Map<String, Object> postMap(MerchantConfig mchCfg, String url, Object params) {
-        String rawJson = JsonHelper.toJson(params);
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpEnum.POST, url, rawJson);
+        String rawJson = ConvertToJson.toJson(params);
+        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstants.POST, url, rawJson);
 
         System.out.println(":::请求参数：" + rawJson);
         Map<String, Object> result = Post.api(API_DOMAIN + url, rawJson, getSetHeadFn(mchCfg, rw));
@@ -103,12 +103,12 @@ public class AppletPayUtils {
         if (resultClz == Map.class)
             return (T) result;
 
-        return MapTool.map2Bean(result, resultClz);
+        return EntityConvert.map2Bean(result, resultClz);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T get(MerchantConfig mchCfg, String url, Class<T> resultClz) {
-        HttpRequestWrapper rw = new HttpRequestWrapper(HttpEnum.GET, url);
+        HttpRequestWrapper rw = new HttpRequestWrapper(HttpConstants.GET, url);
         Map<String, Object> result = Get.api(API_DOMAIN + url, getSetHeadFn(mchCfg, rw));
 
         if (result.containsKey("code") && result.containsKey("message"))
@@ -119,6 +119,6 @@ public class AppletPayUtils {
         if (resultClz == Map.class)
             return (T) result;
         else
-            return MapTool.map2Bean(result, resultClz);
+            return EntityConvert.map2Bean(result, resultClz);
     }
 }

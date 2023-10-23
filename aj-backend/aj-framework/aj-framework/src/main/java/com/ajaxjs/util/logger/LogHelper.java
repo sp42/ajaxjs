@@ -55,7 +55,7 @@ public class LogHelper {
         }
 
 //        logger.addHandler(new JsonHandler(logFolder));
-        logger.addHandler(new JsonHandler(logFolder, null, ".json"));
+//        logger.addHandler(new JsonHandler(logFolder, null, ".json"));
 
         if (!Version.isDebug) {
             logger.addHandler(new TomcatFileHandler(logFolder, null, ".log"));// 初始化保存到磁盤的處理器

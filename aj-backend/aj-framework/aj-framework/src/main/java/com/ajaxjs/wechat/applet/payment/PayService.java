@@ -3,9 +3,8 @@ package com.ajaxjs.wechat.applet.payment;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.ObjectHelper;
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.util.map.MapTool;
 import com.ajaxjs.wechat.applet.model.LoginSession;
 import com.ajaxjs.wechat.applet.payment.payment.PayResult;
 import com.ajaxjs.wechat.applet.payment.payment.PreOrder;
@@ -70,7 +69,7 @@ public class PayService extends CommonService {
         p.setDescription(description);
         p.setNotify_url(appletPayNotifyUrl);
 
-        Map<String, Object> params = MapTool.bean2Map(p);
+        Map<String, Object> params = EntityConvert.bean2Map(p);
         params.put("amount", amount);
         params.put("payer", payer);
         params.put("settle_info", ObjectHelper.hashMap("profit_sharing", true));
@@ -156,8 +155,8 @@ public class PayService extends CommonService {
      * @return PayResult
      */
     private static PayResult json2PayResultBean(String json) {
-        Map<String, Object> map = JsonHelper.parseMap(json);
-        PayResult bean = MapTool.map2Bean(map, PayResult.class, false, false);
+        Map<String, Object> map = EntityConvert.json2map(json);
+        PayResult bean = EntityConvert.map2Bean(map, PayResult.class, false, false);
 
         @SuppressWarnings("unchecked")
         Map<String, Object> amount = (Map<String, Object>) map.get("amount");
@@ -187,28 +186,22 @@ public class PayService extends CommonService {
         String sign = getSign(mchCfg.getPrivateKey(), rp, appId);
         rp.setPaySign(sign);
 
-        Map<String, Object> map = MapTool.bean2Map(rp);
+        Map<String, Object> map = EntityConvert.bean2Map(rp);
         map.put("package", rp.getPrepayIdPackage());
         map.remove("prepayIdPackage");
 
-        return JsonHelper.toJson(map);
+        return EntityConvert.map2json(map);
     }
 
-    /**
-     * @param privateKey
-     * @param rp
-     * @return
-     */
     private String getSign(String privateKey, RequestPayment rp, String appId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(appId + "\n");
-        sb.append(rp.getTimeStamp() + "\n");
-        sb.append(rp.getNonceStr() + "\n");
-        sb.append(rp.getPrepayIdPackage() + "\n");
+        String sb = appId + "\n" +
+                rp.getTimeStamp() + "\n" +
+                rp.getNonceStr() + "\n" +
+                rp.getPrepayIdPackage() + "\n";
 
         PrivateKey key = PemUtil.loadPrivateKeyByPath(privateKey);
 
-        return RsaCryptoUtil.sign(key, sb.toString().getBytes(StandardCharsets.UTF_8));
+        return RsaCryptoUtil.sign(key, sb.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

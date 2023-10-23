@@ -1,10 +1,14 @@
 package com.ajaxjs.wechat.applet;
 
 import com.ajaxjs.net.http.Get;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.wechat.applet.model.TemplateMsgMp;
 import com.ajaxjs.wechat.applet.model.TemplateMsgWebApp;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -42,7 +46,7 @@ public class Message {
         if (webAppMsg != null)
             params.put("weapp_template_msg", webAppMsg);
 
-        Map<String, Object> result = postJson(UNIFORM_SEND_API + appletCfg.getAccessToken(), JsonHelper.toJson(params));
+        Map<String, Object> result = postJson(UNIFORM_SEND_API + appletCfg.getAccessToken(), ConvertToJson.toJson(params));
 
 //        check(result);
 
@@ -62,7 +66,7 @@ public class Message {
             throw new RuntimeException("远程请求 " + url + "返回空");
         else {
             System.out.println("远程请求 " + url + "返回：\n" + resultJson);
-            return JsonHelper.parseMap(resultJson);
+            return EntityConvert.json2map(resultJson);
         }
     }
 
