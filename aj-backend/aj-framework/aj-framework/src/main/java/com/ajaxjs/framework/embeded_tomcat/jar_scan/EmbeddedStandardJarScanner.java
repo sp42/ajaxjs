@@ -36,8 +36,8 @@ import org.apache.tomcat.util.scan.UrlJar;
  * Just need to scan WebappClassLoader and AppClassLoader.
  */
 @Data
-public class EmbededStandardJarScanner implements JarScanner {
-    private static final Log log = LogFactory.getLog(EmbededStandardJarScanner.class);
+public class EmbeddedStandardJarScanner implements JarScanner {
+    private static final Log log = LogFactory.getLog(EmbeddedStandardJarScanner.class);
 
     /**
      * The string resources for this package.

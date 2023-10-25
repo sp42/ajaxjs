@@ -68,8 +68,14 @@ public class TomcatStarter {
         tomcat.setPort(cfg.getPort());
         tomcat.setHostname(cfg.getHostName());
         tomcat.enableNaming();
-        tomcat.getHost().setAutoDeploy(false);
-        tomcat.getHost().setAppBase("webapp");
+
+//        String tomcatBaseDir = cfg.getTomcatBaseDir();
+//
+//        if (tomcatBaseDir == null)
+//            tomcatBaseDir = TomcatUtil.createTempDir("tomcat_embed_works_tmpdir").getAbsolutePath();
+//
+//        tomcat.setBaseDir(tomcatBaseDir);
+
         TOMCAT = tomcat;
     }
 
@@ -128,7 +134,11 @@ public class TomcatStarter {
 //        System.out.println("jspFolder::::::" + Resources.getJarDir());
 //        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("/mycar/mycar-service-4.0/security-oauth2-uam/sync/jsp").getAbsolutePath());
 //        context = tomcat.addWebapp(contextPath, jspFolder);
-        context = tomcat.addWebapp(tomcat.getHost(), cfg.getContextPath(), jspFolder, (LifecycleListener) new EmbededContextConfig());
+        Host host = tomcat.getHost();
+        host.setAutoDeploy(false);
+        host.setAppBase("webapp");
+
+        context = tomcat.addWebapp(host, cfg.getContextPath(), jspFolder, (LifecycleListener) new EmbededContextConfig());
         context.setReloadable(false);// 禁止重新载入
         context.addLifecycleListener(new Tomcat.FixContextListener());// required if you don't use web.xml
 
@@ -143,6 +153,8 @@ public class TomcatStarter {
         if (!cfg.getEnableJsp())
             disableJsp();
 
+//        context.setJarScanner(new EmbeddedStandardJarScanner());
+//        context.setParentClassLoader(TomcatStarter.class.getClassLoader());// needs?
         addWebXmlMountListener();
         setTomcatDisableScan();
 //        initFilterByTomcat(UTF8CharsetFilter.class);
@@ -215,7 +227,7 @@ public class TomcatStarter {
         // 对于 Tomcat 8，没有直接的编程方式来设置 startStopThreads 属性
         Executor executor = handler.getExecutor();
 
-        if (executor instanceof ThreadPoolExecutor) {
+        if (executor instanceof ThreadPoolExecutor) {// doesn't work
             ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) executor;
             threadPoolExecutor.setCorePoolSize(3);// 设置核心线程数和最大线程数
             threadPoolExecutor.setMaximumPoolSize(3);
