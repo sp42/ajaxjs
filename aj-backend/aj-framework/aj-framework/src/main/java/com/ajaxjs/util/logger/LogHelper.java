@@ -41,7 +41,6 @@ public class LogHelper {
         className = clazz.getName().trim();
         logger = Logger.getLogger(className);
 //        logger.setFilter(filter);
-//        logger.addHandler(new JsonHandler());
 
         URL url = LogHelper.class.getClassLoader().getResource("");
         String logFolder;
@@ -55,7 +54,7 @@ public class LogHelper {
         }
 
 //        logger.addHandler(new JsonHandler(logFolder));
-//        logger.addHandler(new JsonHandler(logFolder, null, ".json"));
+        logger.addHandler(new JsonHandler(logFolder, null, ".json"));
 
         if (!Version.isDebug) {
             logger.addHandler(new TomcatFileHandler(logFolder, null, ".log"));// 初始化保存到磁盤的處理器

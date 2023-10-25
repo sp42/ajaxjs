@@ -36,7 +36,7 @@ public class Resources {
         URL url = Resources.class.getClassLoader().getResource(resource);
 
         if (url == null) {
-            LOGGER.warning("获取资源 {0} 失败", resource);
+            LOGGER.info("获取资源 {0} 失败", resource);
             return null;
         }
 

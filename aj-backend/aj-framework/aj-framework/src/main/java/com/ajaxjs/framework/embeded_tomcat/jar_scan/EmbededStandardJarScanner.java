@@ -30,13 +30,10 @@ import org.apache.tomcat.util.scan.StandardJarScanFilter;
 import org.apache.tomcat.util.scan.UrlJar;
 
 /**
- * <pre>
- * When boot by spring boot loader, WebappClassLoader.getParent() is LaunchedURLClassLoader,
+ * When boot by SpringBoot loader, WebappClassLoader.getParent() is LaunchedURLClassLoader,
  * Just need to scan WebappClassLoader and LaunchedURLClassLoader.
- *
  * When boot in IDE, WebappClassLoader.getParent() is AppClassLoader,
  * Just need to scan WebappClassLoader and AppClassLoader.
- * </pre>}
  */
 @Data
 public class EmbededStandardJarScanner implements JarScanner {
@@ -107,6 +104,7 @@ public class EmbededStandardJarScanner implements JarScanner {
 
             while (it.hasNext()) {
                 String path = it.next();
+
                 if (path.endsWith(Constants.JAR_EXT) && getJarScanFilter().check(scanType, path.substring(path.lastIndexOf('/') + 1))) {
                     // Need to scan this JAR
                     if (log.isDebugEnabled())
@@ -121,10 +119,8 @@ public class EmbededStandardJarScanner implements JarScanner {
                     } catch (IOException e) {
                         log.warn(sm.getString("jarScan.webinflibFail", url), e);
                     }
-                } else {
-                    if (log.isTraceEnabled())
-                        log.trace(sm.getString("jarScan.webinflibJarNoScan", path));
-                }
+                } else if (log.isTraceEnabled())
+                    log.trace(sm.getString("jarScan.webinflibJarNoScan", path));
             }
         }
 
@@ -163,7 +159,7 @@ public class EmbededStandardJarScanner implements JarScanner {
 
             if (classLoader.getParent() != null) {
                 // there are two cases:
-                // 1. boot by spring boot loader
+                // 1. boot by SpringBoot loader
                 // 2. boot in IDE
                 // in two case, just need to scan WebappClassLoader and
                 // WebappClassLoader.getParent()
@@ -179,10 +175,8 @@ public class EmbededStandardJarScanner implements JarScanner {
                     URL[] urls = ((URLClassLoader) classLoader).getURLs();
 
                     for (URL url : urls) {
-                        if (processedURLs.contains(url)) {
-                            // Skip this URL it has already been processed
-                            continue;
-                        }
+                        if (processedURLs.contains(url))
+                            continue;// Skip this URL it has already been processed
 
                         ClassPathEntry cpe = new ClassPathEntry(url);
 
@@ -231,7 +225,7 @@ public class EmbededStandardJarScanner implements JarScanner {
             System.out.println("-----scan UrlJar: " + urlStr);
 
             if (nestedJar(urlStr) && !(callback instanceof FragmentJarScannerCallback)) {
-                //ScanTest.scan(new UrlJar(conn.getURL()), webappPath, isWebapp);
+                //JarFileUrlNestedJar.scanTest(new UrlJar(conn.getURL()), webappPath, isWebapp);
                 //callback.scan(new JarFileUrlNestedJar(conn.getURL()), webappPath, isWebapp);
             } else
                 callback.scan(new UrlJar(conn.getURL()), webappPath, isWebapp);
@@ -262,9 +256,9 @@ public class EmbededStandardJarScanner implements JarScanner {
                             if (scanType == JarScanType.PLUGGABILITY)
                                 callback.scan(f, webappPath, isWebapp);
                             else {
-                                File metainf = new File(f.getAbsoluteFile() + File.separator + "META-INF");
+                                File metaInf = new File(f.getAbsoluteFile() + File.separator + "META-INF");
 
-                                if (metainf.isDirectory())
+                                if (metaInf.isDirectory())
                                     callback.scan(f, webappPath, isWebapp);
                             }
                         }

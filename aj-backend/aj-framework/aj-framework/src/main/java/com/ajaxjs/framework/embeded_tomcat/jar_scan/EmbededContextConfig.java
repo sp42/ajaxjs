@@ -1,6 +1,5 @@
 package com.ajaxjs.framework.embeded_tomcat.jar_scan;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -16,12 +15,7 @@ import org.apache.tomcat.Jar;
 import org.apache.tomcat.util.scan.JarFactory;
 
 /**
- * <pre>
- * Support jar in jar. when boot by spring boot loader,
- * jar url will be: fat.jar!/lib/!/test.jar!/ .
- * </pre>
- *
- * @author hengyunabc, zollty
+ * Support jar in jar. when boot by spring boot loader, jar url will be: fat.jar!/lib/!/test.jar!/ .
  */
 public class EmbededContextConfig extends ContextConfig {
     private static final Log log = LogFactory.getLog(EmbededContextConfig.class);
@@ -35,15 +29,14 @@ public class EmbededContextConfig extends ContextConfig {
     protected void processResourceJARs(Set<WebXml> fragments) {
         for (WebXml fragment : fragments) {
             URL url = fragment.getURL();
+            String urlString = url.toString();
+
+            // It's a nested jar, but we now don't want the suffix
+            // because Tomcat is going to try and locate it as a root URL (not the resource inside it)
+            if (isInsideNestedJar(urlString))
+                urlString = urlString.substring(0, urlString.length() - 2);
 
             try {
-                String urlString = url.toString();
-
-                // It's a nested jar, but we now don't want the suffix
-                // because Tomcat is going to try and locate it as a root URL (not the resource inside it)
-                if (isInsideNestedJar(urlString))
-                    urlString = urlString.substring(0, urlString.length() - 2);
-
                 url = new URL(urlString);
 
                 if ("jar".equals(url.getProtocol())) {

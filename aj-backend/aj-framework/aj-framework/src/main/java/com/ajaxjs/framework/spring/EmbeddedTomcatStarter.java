@@ -209,6 +209,7 @@ public class EmbeddedTomcatStarter {
         connector.setThrowOnFailure(true);
 
         tomcat.getService().addConnector(connector);// 只能设置一个 service,直接拿默认的
+        tomcat.setConnector(connector); // 设置执行器
 
         if (isEnableJMX) {
 //            Connector jmxConnector = new Connector("org.apache.coyote.jmx.JmxProtocol");
@@ -216,7 +217,7 @@ public class EmbeddedTomcatStarter {
 //            tomcat.getService().addConnector(jmxConnector);
         }
 
-        tomcat.setConnector(connector); // 设置执行器
+
     }
 
     /**

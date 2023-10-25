@@ -1,41 +1,75 @@
 package com.ajaxjs.framework.embeded_tomcat;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 @Data
 public class TomcatConfig {
     private String hostName = "localhost";
 
-    private Integer port = 8080;
+    /**
+     * 访问的端口
+     */
+    private Integer port = 8082;
 
-    private String contextPath = "/";
+    /**
+     * Web 上下文目录
+     */
+    private String contextPath;
 
+    /**
+     * Web 目录的磁盘路径，如 D:/1sync/static
+     */
     private String docBase;
 
+    /**
+     * Tomcat 临时文件的目录
+     */
     private String tomcatBaseDir;
 
+    /**
+     * 关闭的端口
+     */
     private Integer shutdownPort = 8005;
 
+    /**
+     * 是否激活 SSI（服务器端嵌入）
+     */
     private Boolean enableSsi = false;
 
+    /**
+     * 是否激活 JSP
+     */
     private Boolean enableJsp = true;
 
     /**
-     * Maximum amount of worker threads.
+     * 是否激活 JMX 监控
+     */
+    private boolean enableJMX = false;
+
+    /**
+     * 自定义连接器
+     */
+    private boolean customerConnector = false;
+
+    /**
+     * 最大工作线程数 Maximum amount of worker threads.
      */
     private int maxThreads = 0;
 
     /**
-     * Minimum amount of worker threads. if not set, default value is 10
+     * 最小工作线程数，默认是 10。Minimum amount of worker threads. if not set, default value is 10
      */
     private int minSpareThreads = 0;
 
     /**
+     * 当客户端从 Tomcat 获取数据时候，距离关闭连接的等待时间
      * When Tomcat expects data from the client, this is the time Tomcat will wait for that data to arrive before closing the connection.
      */
     private int connectionTimeout = 0;
 
     /**
+     * 最大连接数
      * Maximum number of connections that the server will accept and process at any
      * given time. Once the limit has been reached, the operating system may still
      * accept connections based on the "acceptCount" property.
@@ -43,11 +77,13 @@ public class TomcatConfig {
     private int maxConnections = 0;
 
     /**
+     * 当请求超过可用的线程试试，最大的请求排队数
      * Maximum queue length for incoming connection requests when all possible request processing threads are in use.
      */
     private int acceptCount = 0;
 
     /**
+     * Tomcat 临时文件的目录。如果不需要（如不需要 jsp）禁止 work dir。
      * Tomcat needs a directory for temp files. This should be the first method called.
      *
      * <p>
@@ -65,10 +101,7 @@ public class TomcatConfig {
         this.tomcatBaseDir = tomcatBaseDir;
     }
 
-    /**
-     * When Tomcat expects data from the client, this is the time Tomcat will wait for that data to arrive before closing the connection.
-     */
-    public int getConnectionTimeout() {
-        return connectionTimeout;
+    public String getContextPath() {
+        return StringUtils.hasText(contextPath) ? contextPath : "";
     }
 }

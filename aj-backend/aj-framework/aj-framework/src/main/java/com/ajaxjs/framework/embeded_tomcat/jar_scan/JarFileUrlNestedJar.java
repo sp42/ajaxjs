@@ -8,7 +8,9 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.apache.tomcat.Jar;
 import org.apache.tomcat.util.scan.AbstractInputStreamJar;
+import org.apache.tomcat.util.scan.JarFactory;
 import org.apache.tomcat.util.scan.NonClosingJarInputStream;
 
 /**
@@ -54,5 +56,22 @@ public class JarFileUrlNestedJar extends AbstractInputStreamJar {
     @Override
     protected NonClosingJarInputStream createJarInputStream() throws IOException {
         return new NonClosingJarInputStream(warFile.getInputStream(jarEntry));
+    }
+
+    private static final String TLD_EXT = ".tld";
+
+    public static void scanTest(Jar jar, String webappPath, boolean isWebapp) throws IOException {
+        URL jarFileUrl = jar.getJarFileURL();
+        System.out.println("xxxx------" + jarFileUrl.toString());
+        jar.nextEntry();
+
+        for (String entryName = jar.getEntryName(); entryName != null; jar.nextEntry(), entryName = jar.getEntryName()) {
+            if (!(entryName.startsWith("META-INF/") && entryName.endsWith(TLD_EXT)))
+                continue;
+
+            URL entryUrl = JarFactory.getJarEntryURL(jarFileUrl, entryName);
+            System.out.println(entryName + ": " + entryUrl);
+            entryUrl.openStream();
+        }
     }
 }
