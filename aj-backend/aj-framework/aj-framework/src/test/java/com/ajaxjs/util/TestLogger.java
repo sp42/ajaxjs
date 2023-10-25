@@ -8,7 +8,7 @@ import java.util.logging.LogRecord;
 
 import org.junit.Test;
 
-import com.ajaxjs.util.logger.FileHandler;
+import com.ajaxjs.util.logger.TomcatFileHandler;
 import com.ajaxjs.util.logger.LogHelper;
 
 public class TestLogger {
@@ -54,7 +54,7 @@ public class TestLogger {
 
 //	 @Test
 	public void testFileHandler() throws SecurityException, IOException {
-		FileHandler handler = new FileHandler("c:/temp", "CMS-", ".log");
+		TomcatFileHandler handler = new TomcatFileHandler("c:/temp", "CMS-", ".log");
 		assertNotNull(handler);
 		LogRecord record = new LogRecord(Level.WARNING, "test");
 		handler.flush();

@@ -50,7 +50,7 @@ public class ValidatorInitializing implements ApplicationContextAware, Initializ
             protected Object resolveName(String name, MethodParameter parameter, NativeWebRequest request) throws Exception {
                 Object value = super.resolveName(name, parameter, request);
                 // validateIfApplicable
-                new ValidatorImpl().resolveAnnotations(parameter.getParameterAnnotations(), value);
+                new ValidatorImpl().resolveAnnotations(parameter.getParameterAnnotations(), value, name);
 
                 return value;
             }

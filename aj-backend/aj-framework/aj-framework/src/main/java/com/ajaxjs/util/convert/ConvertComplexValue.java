@@ -11,8 +11,8 @@ import java.util.Map;
 /**
  * 转换复杂的对象
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
 public abstract class ConvertComplexValue extends ConvertBasicValue {
     /**
      * 能够表示 Java Bean 的接口
@@ -22,7 +22,18 @@ public abstract class ConvertComplexValue extends ConvertBasicValue {
     /**
      * 实例、单例
      */
-    public static ConvertComplexValue INSTANCE;
+    public volatile static ConvertComplexValue INSTANCE;
+
+    public static ConvertComplexValue getConvertValue() {
+        if (INSTANCE == null) {
+            synchronized (ConvertComplexValue.class) {
+                if (INSTANCE == null)
+                    INSTANCE = new DefaultConvertValue();
+            }
+        }
+
+        return INSTANCE;
+    }
 
     /**
      * 输入 JSON 字符串，转换为 Map
@@ -76,5 +87,22 @@ public abstract class ConvertComplexValue extends ConvertBasicValue {
         }
 
         return converted;
+    }
+
+    public static class DefaultConvertValue extends ConvertComplexValue {
+        @Override
+        protected Map<String, Object> parseJsonAsMap(String str) {
+            return EntityConvert.json2map(str);
+        }
+
+        @Override
+        protected <T> T parseJsonMapAsBean(String str, Class<T> clz) {
+            return EntityConvert.json2bean(str, clz);
+        }
+
+        @Override
+        protected List<Map<String, Object>> parseList(String str) {
+            return EntityConvert.json2MapList(str);
+        }
     }
 }

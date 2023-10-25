@@ -59,7 +59,7 @@ public class BaseCRUD<T, K extends Serializable> {
      * 获取单笔记录
      */
     public Map<String, Object> infoMap(K id) {
-        return CRUD.info("SELECT * FROM " + tableName + " WHERE " + idField + " = ?", id);
+        return CRUD.infoMap("SELECT * FROM " + tableName + " WHERE " + idField + " = ?", id);
     }
 
     /**
@@ -74,7 +74,7 @@ public class BaseCRUD<T, K extends Serializable> {
     public List<Map<String, Object>> listMap() {
         String sql = getListSql(null);
 
-        return CRUD.list(sql);
+        return CRUD.listMap(sql);
     }
 
     /**

@@ -1,16 +1,17 @@
 package com.ajaxjs.data;
 
+import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.data.jdbc_helper.common.IdField;
 import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
 
@@ -19,11 +20,26 @@ import java.util.List;
 import java.util.Map;
 
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-public class CRUD<T> extends BaseCRUD {
+public class CRUD<T> {
     private static final LogHelper LOGGER = LogHelper.getLog(CRUD.class);
+
+    public static JdbcReader jdbcReaderFactory() {
+        JdbcReader reader = new JdbcReader();
+        reader.setConn(JdbcConn.getConnection());
+
+        return reader;
+    }
+
+    public static JdbcWriter jdbcWriterFactory() {
+        //  JdbcWriter 有较多前期的全局配置，故一般在注入阶段配置好
+        JdbcWriter writer = DiContextUtil.getBean(JdbcWriter.class);
+        assert writer != null;
+        writer.setConn(JdbcConn.getConnection());
+
+        return writer;
+    }
 
     private JdbcReader reader = jdbcReaderFactory();
 
@@ -210,6 +226,7 @@ public class CRUD<T> extends BaseCRUD {
      * @return 查询结果，如果没数据返回一个空 List
      */
     public static <T> List<T> listBySqlId(Class<T> beanClz, String sqlId, Map<String, Object> paramsMap, Object... params) {
+//        LOGGER.warning(new Exception("ffifi0"));
         return new CRUD<T>().setBeanClz(beanClz).setSqlId(sqlId).setMapParams(paramsMap).setOrderedParams(params).listBean();
     }
 
@@ -239,7 +256,7 @@ public class CRUD<T> extends BaseCRUD {
      */
     public static <T> PageResult<T> pageBySqlId(Class<T> beanClz, String sqlId, Map<String, Object> paramsMap) {
         String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
-
+//        LOGGER.warning(new Exception("ffifi"));
         return PageEnhancer.page(sql, beanClz);
     }
 

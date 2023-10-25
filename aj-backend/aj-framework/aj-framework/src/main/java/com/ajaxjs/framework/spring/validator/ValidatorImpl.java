@@ -29,7 +29,7 @@ public class ValidatorImpl implements Validator {
             for (Field field : declaredFields) {
                 if (!Modifier.isStatic(field.getModifiers()) && !Modifier.isFinal(field.getModifiers())) {// isPrivate
                     field.setAccessible(true);
-                    resolveAnnotations(field.getDeclaredAnnotations(), field.get(target));
+                    resolveAnnotations(field.getDeclaredAnnotations(), field.get(target), field.getName());
                 }
             }
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class ValidatorImpl implements Validator {
     private static final String DEFAULT_PACKAGE = "javax.validation.constraints";
     private static final String AJ_PACKAGE = "com.ajaxjs.framework.spring.validator";
 
-    public void resolveAnnotations(Annotation[] annotations, Object value) {
+    public void resolveAnnotations(Annotation[] annotations, Object value, String fieldName) {
         for (Annotation annotation : annotations) {
             Class<? extends Annotation> annotationType = annotation.annotationType();
             String name = annotationType.getName();
@@ -57,9 +57,9 @@ public class ValidatorImpl implements Validator {
                     if (!StringUtils.hasText(message))
                         throw new ValidatorException("Correctly configure annotation message property");
 
-                    validConstant.validated(value, message);
+                    validConstant.validated(value, fieldName + " " + message);
                 } else
-                    throw new ValidatorException("Correctly configure easyvalidator annotation");
+                    throw new ValidatorException("Correctly configure easy validator annotation");
             }
         }
     }

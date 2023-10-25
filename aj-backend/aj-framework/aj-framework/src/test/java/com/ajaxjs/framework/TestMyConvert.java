@@ -15,8 +15,6 @@ public class TestMyConvert {
 
     @Test
     public void test() {
-        MyConvert.set();
-
         String json = "[{a:1, b:2}]";
         Object o = ConvertComplexValue.INSTANCE.convert(json, List.class);
         System.out.println(o);

@@ -24,9 +24,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.logging.Filter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 
 /**
  * 自定义日志工具类，封装了 Java 自带的日志类 java.util.logging.Logger。
@@ -42,27 +40,25 @@ public class LogHelper {
     public LogHelper(Class<?> clazz) {
         className = clazz.getName().trim();
         logger = Logger.getLogger(className);
-        logger.setFilter(filter);
+//        logger.setFilter(filter);
+//        logger.addHandler(new JsonHandler());
 
-//        Handler handler = new JsonHandler();
-//        handler.setFormatter(new JsonFormatter());
-//
-//        logger.addHandler(handler);
+        URL url = LogHelper.class.getClassLoader().getResource("");
+        String logFolder;
+
+        if (url == null) { // jar running
+            logFolder = Resources.getJarDir();
+        } else {
+            logFolder = url.getPath();
+            logFolder = new File(logFolder).toString();
+            logFolder = logFolder.replace("classes", "LogHelper");
+        }
+
+//        logger.addHandler(new JsonHandler(logFolder));
+//        logger.addHandler(new JsonHandler(logFolder, null, ".json"));
 
         if (!Version.isDebug) {
-            URL url = LogHelper.class.getClassLoader().getResource("");
-            String logFolder;
-
-            if (url == null) { // jar running
-                logFolder = Resources.getJarDir();
-            } else {
-                logFolder = url.getPath();
-                logFolder = new File(logFolder).toString();
-                logFolder = logFolder.replace("classes", "LogHelper");
-            }
-
-
-            logger.addHandler(new FileHandler(logFolder, null, ".log"));// 初始化保存到磁盤的處理器
+            logger.addHandler(new TomcatFileHandler(logFolder, null, ".log"));// 初始化保存到磁盤的處理器
         }
     }
 
@@ -156,8 +152,8 @@ public class LogHelper {
      * @param msg 日志信息
      */
     public void debug(String msg) {
-        if (Version.isDebug)
-            info(msg);
+//        if (Version.isDebug)
+        info(msg);
     }
 
     /**
@@ -167,8 +163,8 @@ public class LogHelper {
      * @param params 信息参数
      */
     public void debug(String msgTpl, Object... params) {
-        if (Version.isDebug)
-            info(msgTpl, params);
+//        if (Version.isDebug)
+        info(msgTpl, params);
     }
 
     /**

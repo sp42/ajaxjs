@@ -7,13 +7,13 @@ import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-
 
 import java.io.IOException;
 import java.util.*;
@@ -145,12 +145,14 @@ public class SmallMyBatis {
         }
     }
 
-    static private final BooleanExpressionParser EXP_PARSER = new BooleanExpressionParser();
+    private static final BooleanExpressionParser BOL_EXP_PARSER = new BooleanExpressionParser();
+
+    private static final ExpressionParser EXP_PARSER = new SpelExpressionParser();
 
     private static boolean evalIfBlock(String ifBlock, Map<String, Object> params) {
         String test = ifBlock.substring(ifBlock.indexOf("test=") + 6, ifBlock.lastIndexOf("\""));
 
-        return EXP_PARSER.get(test, params);
+        return BOL_EXP_PARSER.get(test, params);
     }
 
     private static String parseForEach(String sql, Map<String, Object> params) {
@@ -192,25 +194,31 @@ public class SmallMyBatis {
 
         while (matcher.find()) {
             String placeholder = matcher.group(2); // 获取占位符中的键名
-            Object value = paramMap.get(placeholder); // 获取键名对应的值
             String strValue;
 
-            if (value == null) {
-                strValue = ""; // 如果值为空，替换为空字符串
+            if (placeholder.startsWith("T(")) { // 调用 Java 类的方法
+                Object value = EXP_PARSER.parseExpression(placeholder).getValue();
+                strValue = value == null ? "" : value.toString();
             } else {
-                strValue = value.toString().replaceAll("\\\\", "\\\\\\\\").replaceAll("\\$", "\\\\\\$"); // 处理转义字符和 $ 符号
+                Object value = paramMap.get(placeholder); // 获取键名对应的值
 
-                if (matcher.group(1).equals("#{")) {
-                    // 使用 PreparedStatement 设置参数，自动转换类型
+                if (value == null) {
+                    strValue = ""; // 如果值为空，替换为空字符串
+                } else {
+                    strValue = value.toString().replaceAll("\\\\", "\\\\\\\\").replaceAll("\\$", "\\\\\\$"); // 处理转义字符和 $ 符号
 
-                    if (value instanceof Number)
-                        strValue = String.valueOf(value);
-                    else if (value.equals(true))
-                        strValue = "1";
-                    else if (value.equals(false))
-                        strValue = "0";
-                    else
-                        strValue = "'" + value + "'"; // 如果是非数字类型，加上单引号
+                    if (matcher.group(1).equals("#{")) {
+                        // 使用 PreparedStatement 设置参数，自动转换类型
+
+                        if (value instanceof Number)
+                            strValue = String.valueOf(value);
+                        else if (value.equals(true))
+                            strValue = "1";
+                        else if (value.equals(false))
+                            strValue = "0";
+                        else
+                            strValue = "'" + value + "'"; // 如果是非数字类型，加上单引号
+                    }
                 }
             }
 
