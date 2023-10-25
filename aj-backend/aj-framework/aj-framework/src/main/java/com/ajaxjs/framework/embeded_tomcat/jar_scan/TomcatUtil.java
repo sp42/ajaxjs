@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.embeded_tomcat;
+package com.ajaxjs.framework.embeded_tomcat.jar_scan;
 
 import java.io.*;
 import java.net.InetAddress;

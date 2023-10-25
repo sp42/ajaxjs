@@ -1,7 +1,6 @@
 package com.ajaxjs.framework.embeded_tomcat;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.embeded_tomcat.jar_scan.EmbededContextConfig;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
@@ -40,7 +39,7 @@ public class TomcatStarter {
         this.cfg = cfg;
     }
 
-    TomcatConfig cfg;
+    public TomcatConfig cfg;
 
     Tomcat tomcat;
 
@@ -142,6 +141,8 @@ public class TomcatStarter {
         context.setReloadable(false);// 禁止重新载入
         context.addLifecycleListener(new Tomcat.FixContextListener());// required if you don't use web.xml
 
+        onContextReady(context);
+
         // seems not work
         WebResourceRoot resources = new StandardRoot(context);// 创建 WebRoot
         String classDir = new File("target/classes").getAbsolutePath();
@@ -158,6 +159,12 @@ public class TomcatStarter {
         addWebXmlMountListener();
         setTomcatDisableScan();
 //        initFilterByTomcat(UTF8CharsetFilter.class);
+    }
+
+    /**
+     * You can override it
+     */
+    public void onContextReady(Context context) {
     }
 
     public static String getDevelopJspFolder() {
@@ -321,7 +328,7 @@ public class TomcatStarter {
      * 将定义好的 Tomcat MBean 注册到 MBeanServer
      * 参见 <a href="https://blog.csdn.net/zhangxin09/article/details/132136748">...</a>
      */
-    private static void connectMBeanServer() {
+     protected static void connectMBeanServer() {
         try {
             LocateRegistry.createRegistry(9011); //这个步骤很重要，注册一个端口，绑定url  后用于客户端通过 rmi 方式连接 JMXConnectorServer
             JMXConnectorServer cs = JMXConnectorServerFactory.newJMXConnectorServer(new JMXServiceURL("service:jmx:rmi://localhost/jndi/rmi://localhost:9011/jmxrmi"), null, ManagementFactory.getPlatformMBeanServer() // 获取当前 JVM 的 MBeanServer，ObjectName 是 MBean 的唯一标示，一个 MBeanServer 不能有重复。

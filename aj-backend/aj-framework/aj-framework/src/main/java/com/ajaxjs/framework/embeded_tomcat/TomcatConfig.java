@@ -3,8 +3,14 @@ package com.ajaxjs.framework.embeded_tomcat;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
+/**
+ * Tomcat 配置参数
+ */
 @Data
 public class TomcatConfig {
+    /**
+     * 主机名称
+     */
     private String hostName = "localhost";
 
     /**

@@ -1,4 +1,4 @@
-package com.ajaxjs.framework.embeded_tomcat.jar_scan;
+package com.ajaxjs.framework.embeded_tomcat;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,8 @@ public class EmbededContextConfig extends ContextConfig {
     private static final Log log = LogFactory.getLog(EmbededContextConfig.class);
 
     /**
+     * 扫描包含 web-fragment.xml 文件的 JAR 文件，以查看它们是否还包含静态资源，并将其添加到上下文中。
+     * 如果找到静态资源，则按照 web-fragment.xml 的优先级顺序添加。
      * Scan JARs that contain web-fragment.xml files that will be used to
      * configure this application to see if they also contain static resources. If static resources are found,
      * add them to the context. Resources are added in web-fragment.xml priority order.
