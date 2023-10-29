@@ -11,7 +11,7 @@ public interface OAuth2Controller {
      * 获取授权码（Authorization Code）
      *
      * @param clientId    客户端标识符，表示 OAuth 客户端的唯一标识
-     * @param redirectUri 重定向 URI，表示授权服务器将授权码发送到此URI
+     * @param redirectUri 重定向 URI，表示授权服务器将授权码发送到此 URI
      * @param scope       作用域，表示客户端请求的权限范围
      * @param status      用于防止 CSRF 攻击（非必填）
      * @return 重定向到指定的 redirect_uri，并携带授权码

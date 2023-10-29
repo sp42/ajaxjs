@@ -67,12 +67,12 @@ public class ClientController {
         bodyParams.add("redirect_uri", redirectUri);
 
         ResponseEntity<String> responseEntity = new RestTemplate().exchange(tokenUrl, HttpMethod.POST, new HttpEntity<>(bodyParams, headers), String.class);
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            // 处理授权成功的逻辑，例如解析并保存访问令牌和刷新令牌等
-            return "success";
-        } else {
-            // 处理授权失败的逻辑
-            return "error";
-        }
+//        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+//            // 处理授权成功的逻辑，例如解析并保存访问令牌和刷新令牌等
+//            return "success";
+//        } else {
+//            // 处理授权失败的逻辑
+//            return "error";
+//        }
     }
 }

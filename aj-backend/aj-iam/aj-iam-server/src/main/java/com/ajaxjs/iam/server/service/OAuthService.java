@@ -72,6 +72,12 @@ public class OAuthService implements OAuthController, IamConstants {
         if (!GrantType.REFRESH_TOKEN.equals(grantType))
             throw new IllegalArgumentException("grantType must be 'refresh_token'");
 
+        OauthAccessToken accessToken = CRUD.info(OauthAccessToken.class, "SELECT * FROM oauth_access_token WHERE refresh_token = ?", refreshToken);
+
+        if (accessToken == null)
+            throw new BusinessException("找不到 RefreshToken " + refreshToken);
+
+
         return null;
     }
 }
