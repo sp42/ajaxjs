@@ -21,6 +21,9 @@ public class ConvertToJson {
      * @return JSON 字符串
      */
     public static String toJson(Object obj) {
+        if (obj == null)
+            return null;
+
         if (obj instanceof Boolean || obj instanceof Number) {
             if (obj instanceof Long) {
                 Long l = (Long) obj;// js number 最大长度为 16，转换为字符串

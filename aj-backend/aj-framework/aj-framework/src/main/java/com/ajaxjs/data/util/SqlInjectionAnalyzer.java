@@ -172,7 +172,6 @@ public class SqlInjectionAnalyzer extends TablesNamesFinder {
         boolean allowComplexParsing = CCJSqlParserUtil.getNestingDepth(sql) <= CCJSqlParserUtil.ALLOWED_NESTING_DEPTH;
 
         try {
-//            CCJSqlParserUtil.parse(sql).accept(injectionChecker);
             CCJSqlParserUtil.newParser(sql).withAllowComplexParsing(allowComplexParsing).Statement().accept(injectionChecker);
             return true;
         } catch (Exception e) {

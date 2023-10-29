@@ -1,5 +1,6 @@
 package com.ajaxjs.user.service;
 
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.net.http.Get;
 import com.ajaxjs.user.common.UserConstants;
 import com.ajaxjs.user.controller.LogLoginController;
@@ -9,6 +10,7 @@ import com.ajaxjs.web.WebHelper;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -52,5 +54,20 @@ public class LogLoginService implements LogLoginController, UserConstants {
 
         bean.setIp(ip);
         bean.setUserAgent(req.getHeader("user-agent"));
+    }
+
+    @Override
+    public PageResult<LogLogin> page() {
+        return null;
+    }
+
+    @Override
+    public List<LogLogin> findListByUserId(Long userId) {
+        return null;
+    }
+
+    @Override
+    public LogLogin getLastUserLoginInfo(long userId) {
+        return null;
     }
 }

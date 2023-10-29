@@ -28,7 +28,7 @@ public class FileUploadHelper {
      */
     public static void initUpload(ServletContext cxt, ServletRegistration.Dynamic registration) {
         String tempDir = WebHelper.mapPath(cxt, "upload_temp");
-        System.out.println(System.getProperty("user.dir"));
+//        System.out.println(System.getProperty("user.dir"));
 
         if (tempDir == null) {
 //            tempDir = EmbeddedTomcatStarter.getDevelopJspFolder() + FileHelper.SEPARATOR + "upload_temp";
