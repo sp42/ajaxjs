@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.server.model.po;
 
+import com.ajaxjs.data.jdbc_helper.common.IdField;
 import com.ajaxjs.data.jdbc_helper.common.TableName;
 import lombok.Data;
 
@@ -7,6 +8,7 @@ import java.util.Date;
 
 @Data
 @TableName("oauth_access_token")
+@IdField("id")
 public class OauthAccessToken {
     /**
      * 主键 id，自增

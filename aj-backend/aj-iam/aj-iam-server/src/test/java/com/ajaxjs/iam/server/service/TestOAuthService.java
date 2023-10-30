@@ -1,6 +1,7 @@
 package com.ajaxjs.iam.server.service;
 
 import com.ajaxjs.iam.server.BaseTest;
+import com.ajaxjs.iam.server.common.IamConstants;
 import com.ajaxjs.iam.server.model.AccessToken;
 import com.ajaxjs.util.TestHelper;
 import org.junit.Test;
@@ -44,6 +45,13 @@ public class TestOAuthService extends BaseTest {
     @Test
     public void testClientCredentials() {
         AccessToken accessToken = oAuthService.clientCredentials("clientCredentials", "G5IFeG7Eesbny3f", "J1Bb4zhchfziuDipKI7sgo6iyk");
+        System.out.println(accessToken);
+    }
+
+    @Test
+    public void testRefreshToken() {
+        AccessToken accessToken = oAuthService.refreshToken(IamConstants.GrantType.REFRESH_TOKEN, "G5IFeG7Eesbny3f", "J1Bb4zhchfziuDipKI7sgo6iyk",
+                "bf173e7d-1131-89d3-e1f7-96a236571681");
         System.out.println(accessToken);
     }
 }
