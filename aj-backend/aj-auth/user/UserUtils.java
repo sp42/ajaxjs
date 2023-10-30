@@ -21,8 +21,6 @@ import javax.servlet.http.HttpSession;
  * @author Frank Cheung
  */
 public class UserUtils {
-
-
     private static final String AUTH_TENANT_CODE = "auth_tenant_code";
 
     /**
@@ -88,16 +86,5 @@ public class UserUtils {
      */
     public static boolean isValidPhone(String phoneNo) {
         return phoneNo.matches(PHONE_REGEXP);
-    }
-
-    /**
-     * 测试 8421 码是否包含 v
-     *
-     * @param v   当前权限值
-     * @param all 同值
-     * @return true=已包含
-     */
-    public static boolean testBCD(int v, int all) {
-        return (v & all) == v;
     }
 }

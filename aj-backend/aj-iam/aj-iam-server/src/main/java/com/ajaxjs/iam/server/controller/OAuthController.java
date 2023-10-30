@@ -11,6 +11,19 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/oauth")
 public interface OAuthController {
     /**
+     * 授权同意页面
+     * 入参跟 authorize() 的一样
+     *
+     * @param clientId    客户端标识符，表示 OAuth 客户端的唯一标识
+     * @param redirectUri 重定向 URI，表示授权服务器将授权码发送到此 URI
+     * @param scope       作用域，表示客户端请求的权限范围
+     * @param status      用于防止 CSRF 攻击（非必填）
+     * @return 跳转
+     */
+    @GetMapping("/agree")
+    ModelAndView agree(@RequestParam String clientId, @RequestParam String redirectUri, @RequestParam(required = false) String scope, @RequestParam(required = false) String status);
+
+    /**
      * 获取授权码（Authorization Code）
      *
      * @param clientId    客户端标识符，表示 OAuth 客户端的唯一标识
@@ -35,6 +48,7 @@ public interface OAuthController {
      */
     @PostMapping("/client_credentials")
     AccessToken clientCredentials(@RequestParam("grant_type") String grantType, @RequestParam("client_id") String clientId, @RequestParam("client_secret") String clientSecret);
+
 
     /**
      * 客户端凭证获取 Token

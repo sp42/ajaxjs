@@ -12,3 +12,11 @@
 
 - 多数时候，client 与 resource-server 可以合二为一。
 - `aj-iam-client`、`aj-iam-resource-server` 代码量比较少，或者不用 SDK 整合，直接拷贝代码到你的工程即可
+
+
+# Aj-SSO 单点登录用户系统
+
+参见我博客：
+
+- [SSO 轻量级实现指南（原生 Java 实现）：SSO Server 部分](https://zhangxin.blog.csdn.net/article/details/123292897)
+- [SSO 轻量级实现指南（原生 Java 实现）：SSO Client 部分](https://zhangxin.blog.csdn.net/article/details/124401580)
