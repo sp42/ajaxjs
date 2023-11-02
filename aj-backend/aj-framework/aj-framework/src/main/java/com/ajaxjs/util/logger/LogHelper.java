@@ -33,6 +33,16 @@ import java.util.logging.*;
  */
 public class LogHelper {
     /**
+     * 所在的类名
+     */
+    private final String className;
+
+    /**
+     * 包装这个 logger
+     */
+    private final Logger logger;
+
+    /**
      * 创建一个日志类
      *
      * @param clazz 当前日志记录的那个类
@@ -94,16 +104,6 @@ public class LogHelper {
     // FOREGROUND_RED + SUFFIX;
     private static final String DEBUG_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_CYAN + SUFFIX;
 //	private static final String TRACE_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_BLUE + SUFFIX;
-
-    /**
-     * 所在的类名
-     */
-    private final String className;
-
-    /**
-     * 包装这个 logger
-     */
-    private final Logger logger;
 
     /**
      * 过滤器，是否要日志服务

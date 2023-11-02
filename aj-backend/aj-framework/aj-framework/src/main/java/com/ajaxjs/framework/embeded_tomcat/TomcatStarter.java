@@ -105,7 +105,7 @@ public class TomcatStarter {
 
         // 注册关闭端口以进行关闭
         // 可以通过Socket关闭tomcat： telnet 127.0.0.1 8005，输入SHUTDOWN字符串
-        tomcat.getServer().setPort(cfg.getShutdownPort());
+//        tomcat.getServer().setPort(cfg.getShutdownPort());
         tomcat.getServer().await(); // 保持主线程不退出，让其阻塞，不让当前线程结束，等待处理请求
         LOGGER.info("正在关闭 Tomcat，shutdown......");
 
