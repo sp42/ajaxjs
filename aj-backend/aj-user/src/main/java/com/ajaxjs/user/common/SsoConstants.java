@@ -1,4 +1,4 @@
-package com.ajaxjs.user;
+package com.ajaxjs.user.common;
 
 /**
  * 常量

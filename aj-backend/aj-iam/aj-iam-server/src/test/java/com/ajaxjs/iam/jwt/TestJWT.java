@@ -1,8 +1,6 @@
-package com.ajaxjs.jwt;
+package com.ajaxjs.iam.jwt;
 
 import org.junit.Test;
-
-import java.util.Collections;
 
 import static org.junit.Assert.assertTrue;
 

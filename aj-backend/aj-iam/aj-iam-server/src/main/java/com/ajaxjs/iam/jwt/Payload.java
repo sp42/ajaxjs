@@ -1,4 +1,4 @@
-package com.ajaxjs.jwt;
+package com.ajaxjs.iam.jwt;
 
 import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;

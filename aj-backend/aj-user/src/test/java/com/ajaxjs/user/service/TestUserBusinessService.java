@@ -1,7 +1,8 @@
-package com.ajaxjs.user.service.business;
+package com.ajaxjs.user.service;
 
 import com.ajaxjs.user.BaseTest;
 import com.ajaxjs.user.model.User;
+import com.ajaxjs.user.service.business.UserBusinessService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
