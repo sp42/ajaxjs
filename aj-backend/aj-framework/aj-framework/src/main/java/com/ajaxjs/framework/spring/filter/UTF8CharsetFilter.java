@@ -8,6 +8,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import com.ajaxjs.util.StrUtil;
 
 /**
  * 避免乱码
@@ -19,12 +20,10 @@ public class UTF8CharsetFilter implements Filter {
     public void init(FilterConfig filterConfig) {
     }
 
-    private static final String UTF8 = "UTF-8";
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        request.setCharacterEncoding(UTF8);
-        response.setCharacterEncoding(UTF8);
+        request.setCharacterEncoding(StrUtil.UTF8_SYMBOL);
+        response.setCharacterEncoding(StrUtil.UTF8_SYMBOL);
         chain.doFilter(request, response);
     }
 

@@ -3,6 +3,7 @@ package com.ajaxjs.framework.spring.filter;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.spring.ICustomException;
 import com.ajaxjs.framework.spring.response.ResponseResult;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
         req.setAttribute(EXCEPTION_CXT_KEY, _ex);
 
-        resp.setCharacterEncoding("UTF-8"); // 避免乱码
+        resp.setCharacterEncoding(StrUtil.UTF8_SYMBOL); // 避免乱码
         resp.setHeader("Cache-Control", "no-cache, must-revalidate");
 
         if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError || _ex instanceof IllegalAccessException)// 设置状态码

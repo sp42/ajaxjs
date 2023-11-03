@@ -1,5 +1,6 @@
 package com.ajaxjs.base.controller;
 
+import com.ajaxjs.base.model.MailVo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,5 +17,5 @@ public interface MessageController {
      * @return 是否成功
      */
     @PostMapping("/email")
-    boolean email();
+    boolean email(MailVo mail);
 }

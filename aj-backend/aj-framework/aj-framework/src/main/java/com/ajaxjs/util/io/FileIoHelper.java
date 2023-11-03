@@ -10,6 +10,7 @@
  */
 package com.ajaxjs.util.io;
 
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -28,7 +29,7 @@ public class FileIoHelper {
     private static final LogHelper LOGGER = LogHelper.getLog(FileIoHelper.class);
 
     public static String openContent(Resource res) {
-        EncodedResource encRes = new EncodedResource(res, "UTF-8");
+        EncodedResource encRes = new EncodedResource(res, StrUtil.UTF8_SYMBOL);
 
         try {
             return FileCopyUtils.copyToString(encRes.getReader());

@@ -1,6 +1,7 @@
 package com.ajaxjs.framework.embeded_tomcat;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
@@ -206,7 +207,7 @@ public class TomcatStarter {
         } else
             connector = tomcat.getConnector();
 
-        connector.setURIEncoding("UTF-8"); // 设置 URI 编码支持中文
+        connector.setURIEncoding(StrUtil.UTF8_SYMBOL); // 设置 URI 编码支持中文
 
         ProtocolHandler handler = connector.getProtocolHandler();
 
@@ -349,8 +350,8 @@ public class TomcatStarter {
         context.setPrivileged(true);
         Wrapper servlet = Tomcat.addServlet(context, "ssi", "org.apache.catalina.ssi.SSIServlet");
         servlet.addInitParameter("buffered", "1");
-        servlet.addInitParameter("inputEncoding", "UTF-8");
-        servlet.addInitParameter("outputEncoding", "UTF-8");
+        servlet.addInitParameter("inputEncoding", StrUtil.UTF8_SYMBOL);
+        servlet.addInitParameter("outputEncoding", StrUtil.UTF8_SYMBOL);
         servlet.addInitParameter("debug", "0");
         servlet.addInitParameter("expires", "666");
         servlet.addInitParameter("isVirtualWebappRelative", "4");

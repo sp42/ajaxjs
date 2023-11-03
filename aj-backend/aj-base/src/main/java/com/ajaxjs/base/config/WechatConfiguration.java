@@ -1,6 +1,9 @@
 package com.ajaxjs.base.config;
 
-public class ConfigWechat {
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class WechatConfiguration {
 
 //    @Value("${wechat.user.appId}")
 //    private String wechatAppId;

@@ -57,6 +57,7 @@ public class FileUploadHelper {
 
     public static String uploadInWeb(MultipartFile file, String uploadDir, boolean isNewAutoName) {
         String _uploadDir = WebHelper.mapPath(DiContextUtil.getRequest(), uploadDir);
+
         return upload(file, _uploadDir, isNewAutoName);
     }
 

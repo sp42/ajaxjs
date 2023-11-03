@@ -17,6 +17,7 @@ package com.ajaxjs.util.io;
 
 import com.ajaxjs.Version;
 import com.ajaxjs.util.DateUtil;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StreamUtils;
 
@@ -453,7 +454,7 @@ public class FileHelper extends StreamHelper {
      */
     public static void readLargeFileContent(String path, Consumer<String> fn) {
         try (FileInputStream inputStream = new FileInputStream(path);
-             Scanner sc = new Scanner(inputStream, "UTF-8")) {
+             Scanner sc = new Scanner(inputStream, StrUtil.UTF8_SYMBOL)) {
             while (sc.hasNextLine())
                 fn.accept(sc.nextLine());
 

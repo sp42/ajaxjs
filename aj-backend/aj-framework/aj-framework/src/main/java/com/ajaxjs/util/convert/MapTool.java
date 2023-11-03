@@ -15,6 +15,7 @@
  */
 package com.ajaxjs.util.convert;
 
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.ObjectUtils;
@@ -205,7 +206,7 @@ public class MapTool {
 
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.ENCODING, StrUtil.UTF8_SYMBOL);
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
             try (StringWriter writer = new StringWriter()) {

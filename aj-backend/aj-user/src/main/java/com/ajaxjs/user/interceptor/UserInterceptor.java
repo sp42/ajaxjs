@@ -2,6 +2,7 @@ package com.ajaxjs.user.interceptor;
 
 import com.ajaxjs.user.common.UserConstants;
 import com.ajaxjs.user.model.BaseUser;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,7 @@ public class UserInterceptor implements HandlerInterceptor {
     private void returnMsg(HttpServletResponse response, String errorCode, String title, String message) {
         byte[] bytes = String.format(ERR_JSON, title, message).getBytes();
 
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(StrUtil.UTF8_SYMBOL);
         response.setContentType("application/json;charset=utf-8");
         response.setContentLength(bytes.length);
         response.setStatus(Integer.parseInt(errorCode));

@@ -1,6 +1,7 @@
 package com.ajaxjs.web;
 
 import com.ajaxjs.Version;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import com.ajaxjs.util.convert.EntityConvert;
@@ -284,7 +285,7 @@ public class WebHelper {
             + "			</svg></td></tr>" + "		<tr><td><br />%s</td>" + "</tr></table></div>";
 
     public static String uriDecode(String str) {
-        return UriUtils.decode(str, "utf-8");
+        return UriUtils.decode(str, StrUtil.UTF8_SYMBOL);
     }
 
     /**

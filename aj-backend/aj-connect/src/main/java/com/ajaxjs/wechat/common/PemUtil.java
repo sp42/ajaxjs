@@ -76,7 +76,7 @@ public class PemUtil {
                 os.write(buffer, 0, length);
             }
 
-            privateKey = os.toString("UTF-8");
+            privateKey = os.toString(StrUtil.UTF8_SYMBOL);
         } catch (IOException e) {
             throw new IllegalArgumentException("无效的密钥", e);
         }

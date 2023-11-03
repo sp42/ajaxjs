@@ -1,4 +1,5 @@
-package com.ajaxjs.net.email;
+package com.ajaxjs.base.service.message.email;
+
 
 import org.junit.Test;
 

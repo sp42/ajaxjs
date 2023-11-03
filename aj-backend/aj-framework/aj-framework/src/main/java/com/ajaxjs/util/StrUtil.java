@@ -65,6 +65,11 @@ public class StrUtil {
     }
 
     /**
+     * UTF-8 字符串而已
+     */
+    public static final String UTF8_SYMBOL = "UTF-8";
+
+    /**
      * URL 编码
      *
      * @param str 输入的字符串
@@ -72,7 +77,7 @@ public class StrUtil {
      */
     public static String urlEncode(String str) {
         try {
-            return URLEncoder.encode(str, "UTF-8");
+            return URLEncoder.encode(str, UTF8_SYMBOL);
         } catch (UnsupportedEncodingException e) {
             return null;
         }
@@ -85,7 +90,7 @@ public class StrUtil {
      * @return URL 解码后的字符串
      */
     public static String urlDecode(String str) {
-        return urlDecode(str, "UTF-8");
+        return urlDecode(str, UTF8_SYMBOL);
     }
 
     /**

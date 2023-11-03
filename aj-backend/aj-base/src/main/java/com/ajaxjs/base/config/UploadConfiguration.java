@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * OSS 配置
  */
 @Configuration
-public class ConfigUpload {
+public class UploadConfiguration {
     @Bean
     public NsoHttpUpload fileUpload() {
         return new NsoHttpUpload();
