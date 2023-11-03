@@ -2,7 +2,6 @@ package com.ajaxjs.user.model;
 
 import java.util.Date;
 
-import com.ajaxjs.framework.SimpleBaseModel;
 
 public interface PermissionModel extends AuthConstant {
 	/**

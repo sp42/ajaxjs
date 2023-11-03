@@ -1,8 +1,5 @@
 package com.ajaxjs.web.jsp;
 
-import com.ajaxjs.net.http.Get;
-import com.ajaxjs.util.map.JsonHelper;
-import com.ajaxjs.web.WebHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

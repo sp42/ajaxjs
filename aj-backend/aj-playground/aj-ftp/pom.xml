@@ -5,7 +5,7 @@
     <artifactId>aj-ftp</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <name>FTP Client</name>
+    <name>aj-ftp</name>
     <description>FTP Client</description>
 
     <parent>
