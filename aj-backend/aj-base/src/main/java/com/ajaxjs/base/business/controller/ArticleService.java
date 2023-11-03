@@ -1,31 +1,54 @@
-package com.ajaxjs.base.business.service;
+package com.ajaxjs.base.business.controller;
 
 import com.ajaxjs.base.business.model.Article;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 图文业务
  */
 public interface ArticleService {
+    /**
+     * 获取单笔图文
+     *
+     * @param id
+     * @return 单笔图文
+     */
     @GetMapping("/{id}")
-    @ControllerMethod("获取单笔图文")
     Article info(@PathVariable Long id);
 
+    /**
+     * 分页获取图文列表
+     *
+     * @return 图文列表
+     */
     @GetMapping("/page")
-    @ControllerMethod("分页获取图文列表")
     PageResult<Article> page();
 
+    /**
+     * 创建图文
+     *
+     * @param entity
+     * @return
+     */
     @PostMapping
-    @ControllerMethod("创建图文")
     Long create(@RequestBody Article entity);
 
+    /**
+     * 修改图文
+     *
+     * @param entity 图文
+     * @return
+     */
     @PutMapping
-    @ControllerMethod("修改图文")
     Boolean update(@RequestBody Article entity);
 
+    /**
+     * 删除单笔图文
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
-    @ControllerMethod("删除单笔图文")
     Boolean delete(@PathVariable Long id);
 }

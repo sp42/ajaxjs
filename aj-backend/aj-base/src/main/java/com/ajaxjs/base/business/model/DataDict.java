@@ -1,6 +1,6 @@
 package com.ajaxjs.base.business.model;
 
-import com.ajaxjs.framework.entity.CommonEntity;
+import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Frank Cheung
  */
 @Data
-public class DataDict implements CommonEntity {
+public class DataDict implements IBaseModel {
     private static final long serialVersionUID = 8694943130249360094L;
 
     /**

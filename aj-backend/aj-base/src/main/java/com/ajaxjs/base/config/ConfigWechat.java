@@ -1,4 +1,4 @@
-package com.ajaxjs.base;
+package com.ajaxjs.base.config;
 
 public class ConfigWechat {
 

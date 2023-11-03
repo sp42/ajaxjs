@@ -1,5 +1,6 @@
 package com.ajaxjs.base.business.service;
 
+import com.ajaxjs.base.business.controller.ArticleService;
 import com.ajaxjs.base.business.model.Article;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.PageResult;

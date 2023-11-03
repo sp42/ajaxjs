@@ -1,5 +1,8 @@
 package com.ajaxjs.base;
 
+import com.ajaxjs.base.config.BaseConfiguration;
+import com.ajaxjs.base.config.ConfigSms;
+import com.ajaxjs.base.config.ConfigUpload;
 import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
 import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
 import org.springframework.context.annotation.ComponentScan;

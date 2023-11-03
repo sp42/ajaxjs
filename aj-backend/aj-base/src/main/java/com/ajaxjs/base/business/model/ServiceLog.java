@@ -2,10 +2,9 @@ package com.ajaxjs.base.business.model;
 
 import java.util.Date;
 
+import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.sql.IgnoreDB;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 操作日志
@@ -72,6 +71,5 @@ public class ServiceLog implements IBaseModel {
         done = error == null || "".equals(error);
         return done;
     }
-
 
 }

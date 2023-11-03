@@ -1,12 +1,15 @@
-package com.ajaxjs.base;
+package com.ajaxjs.base.config;
 
-import com.ajaxjs.oss.NsoHttpUpload;
-import com.ajaxjs.oss.OssUpload;
+
+import com.ajaxjs.base.service.file_upload.NsoHttpUpload;
+import com.ajaxjs.base.service.file_upload.OssUpload;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * OSS 配置
  */
+@Configuration
 public class ConfigUpload {
     @Bean
     public NsoHttpUpload fileUpload() {

@@ -1,6 +1,6 @@
 package com.ajaxjs.base.business.model;
 
-import com.ajaxjs.base.business.common.BaseEntityConstant.AttachmentType;
+import com.ajaxjs.base.business.model.BaseEntityConstant.AttachmentType;
 import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
 

@@ -69,8 +69,7 @@ public class Resources {
     /**
      * 获取 Classpath 根目录下的资源文件
      *
-     * @param resource 文件名称，输入空字符串这返回 Classpath 根目录。可以支持包目录，例如
-     *                 com\\ajaxjs\\new-file.txt
+     * @param resource 文件名称，输入空字符串这返回 Classpath 根目录。可以支持包目录，例如  com\\ajaxjs\\new-file.txt
      * @return 所在工程路径+资源路径，找不到文件则返回 null
      */
     public static String getResourcesFromClasspath(String resource) {

@@ -1,16 +1,12 @@
-package com.ajaxjs.base;
+package com.ajaxjs.base.config;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
-import com.ajaxjs.framework.entity.SmallMyBatis;
-import com.ajaxjs.framework.spring.response.MyResponseBodyAdvice;
-import org.apache.bval.jsr.ApacheValidationProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -66,14 +62,6 @@ public class BaseConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedHeaders("*").allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").allowedOrigins("*");
-    }
-
-    @Bean
-    SmallMyBatis getXmlSqlHelper() {
-        SmallMyBatis my = new SmallMyBatis();
-        my.loadXML();
-
-        return my;
     }
 
 }

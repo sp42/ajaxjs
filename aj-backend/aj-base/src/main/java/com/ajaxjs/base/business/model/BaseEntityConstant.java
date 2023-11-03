@@ -1,4 +1,4 @@
-package com.ajaxjs.base.business.common;
+package com.ajaxjs.base.business.model;
 
 /**
  * 基础业务常量

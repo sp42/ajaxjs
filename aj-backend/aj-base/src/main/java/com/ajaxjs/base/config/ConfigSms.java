@@ -1,6 +1,6 @@
-package com.ajaxjs.base;
+package com.ajaxjs.base.config;
 
-import com.ajaxjs.message.sms.ali.AliyunSmsEntity;
+import com.ajaxjs.base.service.message.ali_sms.AliyunSmsEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 

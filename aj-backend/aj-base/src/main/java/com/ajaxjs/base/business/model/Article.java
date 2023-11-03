@@ -1,8 +1,8 @@
 package com.ajaxjs.base.business.model;
 
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
-import com.ajaxjs.framework.entity.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
