@@ -12,13 +12,17 @@
  */
 package com.ajaxjs.jsonparser.lexer;
 
-import com.ajaxjs.jsonparser.JsonParseException;
-
 import java.util.Stack;
+
+import com.ajaxjs.jsonparser.JsonParseException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 词法分析器
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Lexer extends BaseLexer {
     /**
      * 当前行号
@@ -102,21 +106,21 @@ public class Lexer extends BaseLexer {
         }
 
         char c;
+
         while ((c = nextChar()) != 0) {
             startLine = lineNum;
             startCol = getColNum();
 
-            if (c == '"' || c == '\'') {
+            if (c == '"' || c == '\'')
                 return new StringToken(getStrValue(c));
-            } else if (isLetterUnderline(c)) {
+            else if (isLetterUnderline(c))
                 return getValueToken();
-            } else if (isNum(c) || c == '-') {
+            else if (isNum(c) || c == '-')
                 return new NumberToken(getNumValue());
-            } else if (isSpace(c)) {
+            else if (isSpace(c))
                 continue;
-            } else {
+            else
                 return parseSymbol(c);
-            }
         }
 
         if (c == 0)
@@ -138,9 +142,8 @@ public class Lexer extends BaseLexer {
         while ((c = nextChar()) != 0) {
             if (c == '\\') {// 跳过斜杠以及后面的字符
                 c = nextChar();
-            } else if (s == c) { // 遇到结束的 引号 结束了 返回这个字符串
+            } else if (s == c)  // 遇到结束的 引号 结束了 返回这个字符串
                 return str.substring(start + 1, cur);
-            }
         }
 
         checkEnd();
@@ -192,6 +195,7 @@ public class Lexer extends BaseLexer {
         }
 
         checkEnd();
+
         return null;
     }
 
@@ -280,23 +284,7 @@ public class Lexer extends BaseLexer {
         return new JsonParseException(cur, startLine, startCol, msg, e);
     }
 
-    public int getLineNum() {
-        return lineNum;
-    }
-
     public int getColNum() {
         return cur - colMarks.peek();
-    }
-
-    public int getCur() {
-        return cur;
-    }
-
-    public String getStr() {
-        return str;
-    }
-
-    public int getLen() {
-        return len;
     }
 }

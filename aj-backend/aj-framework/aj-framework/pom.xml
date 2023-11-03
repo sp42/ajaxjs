@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ajaxjs-framework</artifactId>
     <version>1.0.9</version>
+    <name>aj-framework</name>
     <description>轻量级的开发框架</description>
     <packaging>jar</packaging>
 
@@ -27,7 +28,6 @@
             <!-- <scope>runtime</scope> -->
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -39,7 +39,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <!-- <version>5.3.6</version> -->
-            <version>5.3.24</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <!-- YAML 配置文件 -->
@@ -49,6 +49,12 @@
             <version>1.33</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>aj-json</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- <dependency> <groupId>com.ajaxjs</groupId> <artifactId>ajaxjs-javadoc</artifactId>
             <version>1.0.2</version> <scope>test</scope> </dependency> -->
 
@@ -56,14 +62,14 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>8.5.84</version>
+            <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <version>8.5.84</version>
+            <version>${tomcat.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -78,6 +84,7 @@
             <artifactId>jsqlparser</artifactId>
             <version>4.4</version>
         </dependency>
+
     </dependencies>
 
 </project>

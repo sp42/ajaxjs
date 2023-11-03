@@ -2,63 +2,93 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.ajaxjs</groupId>
     <artifactId>aj-common-parent</artifactId>
     <name>aj-common-parent</name>
     <version>1.1</version>
     <packaging>pom</packaging>
     <description>常见项目的依赖</description>
 
-    <url>https://framework.ajaxjs.com</url>
-    <inceptionYear>2023</inceptionYear>
-
-    <developers>
-        <developer>
-            <name>Frank Cheung</name>
-            <email>frank@ajaxjs.com</email>
-        </developer>
-    </developers>
+    <parent>
+        <groupId>com.ajaxjs</groupId>
+        <artifactId>ajaxjs-parent</artifactId>
+        <version>1.11</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- IDEA Maven 插件默认 Java 1.5 编译，这里强制声明一下 -->
-        <java.version>1.8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- servlet3 不需要 web.xml 问题 -->
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-
         <!-- 当发生javadoc编译错误时继续执行 -->
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.9.0</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <compilerArgs>
-                        <arg>-parameters</arg><!-- IDEA 设置 Javac 编译参数对于 Maven 无效 -->
-                    </compilerArgs>
-                </configuration>
-            </plugin>
+    <profiles>
+        <!--开发环境-->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!--测试环境-->
+        <profile>
+            <id>test</id>
+            <properties>
+                <spring.profiles.active>test</spring.profiles.active>
+            </properties>
+        </profile>
+        <!--生产环境-->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
-            <!-- 打包带上 Java 源码 -->
+    <build>
+        <finalName>${project.name}</finalName>
+
+        <!-- 使用profiles指定资源加载位置 -->
+        <resources>
+            <resource>
+                <directory>${basedir}/src/profiles/${spring.profiles.active}</directory>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- 用于将依赖包拷贝到指定的位置 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>jar-no-fork</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies2</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <includeScope>system</includeScope>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -70,20 +100,20 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-framework</artifactId>
-            <version>1.0.8</version>
+            <version>1.0.9</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
-            <version>8.5.84</version>
+            <version>${tomcat.version}</version>
         </dependency>
 
         <!-- tomcat 对 jsp 支持 -->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jasper</artifactId>
-            <version>8.5.84</version>
+            <version>${tomcat.version}</version>
         </dependency>
 
         <!-- Tomcat JNDI 数据源 -->
@@ -91,45 +121,6 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
             <version>8.5.69</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- 单元测试 -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- 模拟对象 -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>2.0.2-beta</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>5.3.24</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <!-- Tomcat JNDI 数据源 -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-            <version>8.5.69</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

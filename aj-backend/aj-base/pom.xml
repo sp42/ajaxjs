@@ -15,18 +15,6 @@
     <description>基础服务</description>
 
     <dependencies>
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
-            <artifactId>ajaxjs-framework</artifactId>
-            <version>1.0.9</version>
-        </dependency>
-
-        <!-- Tomcat JNDI 数据源 -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-            <version>8.5.69</version>
-        </dependency>
 
         <!--        <dependency>
                     <groupId>org.apache.dubbo</groupId>

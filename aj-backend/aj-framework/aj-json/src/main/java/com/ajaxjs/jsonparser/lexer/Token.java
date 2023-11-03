@@ -15,9 +15,12 @@
  */
 package com.ajaxjs.jsonparser.lexer;
 
+import lombok.Data;
+
 /**
  * Token 类型
  */
+@Data
 public class Token {
     /**
      * 创建一个 Token
@@ -115,63 +118,5 @@ public class Token {
     @Override
     public String toString() {
         return type > 1 ? "[" + getTypeName() + "]" : String.format(strTpl, getTypeName(), getTypeNameChinese(), value);
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    /**
-     * @return the javaValue
-     */
-    public Object getJavaValue() {
-        return javaValue;
-    }
-
-    /**
-     * @param javaValue the javaValue to set
-     */
-    public void setJavaValue(Object javaValue) {
-        this.javaValue = javaValue;
-    }
-
-    /**
-     * @return the typeName
-     */
-    public String getTypeName() {
-        return typeName;
-    }
-
-    /**
-     * @param typeName the typeName to set
-     */
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
-    /**
-     * @return the typeNameChinese
-     */
-    public String getTypeNameChinese() {
-        return typeNameChinese;
-    }
-
-    /**
-     * @param typeNameChinese the typeNameChinese to set
-     */
-    public void setTypeNameChinese(String typeNameChinese) {
-        this.typeNameChinese = typeNameChinese;
     }
 }

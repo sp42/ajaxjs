@@ -80,9 +80,8 @@ public class StringToken extends Token {
                     default:
                         throw new JsonParseException("“\\”后面期待“\"\\/bfnrtu”中的字符，结果得到“" + c + "”");
                 }
-            } else {
+            } else
                 sb.append(c);
-            }
         }
 
         return sb.toString();

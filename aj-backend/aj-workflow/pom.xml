@@ -9,18 +9,12 @@
 
 	<parent>
 		<groupId>com.ajaxjs</groupId>
-		<artifactId>ajaxjs-parent</artifactId>
-		<version>1.11</version>
-		<relativePath>../pom.xml</relativePath>
+		<artifactId>aj-common-parent</artifactId>
+		<version>1.1</version>
+		<relativePath/>
 	</parent>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.ajaxjs</groupId>
-			<artifactId>ajaxjs-framework</artifactId>
-			<version>1.0.9</version>
-		</dependency>
-
 		<dependency>
 			<groupId>com.ajaxjs</groupId>
 			<artifactId>aj-cache</artifactId>

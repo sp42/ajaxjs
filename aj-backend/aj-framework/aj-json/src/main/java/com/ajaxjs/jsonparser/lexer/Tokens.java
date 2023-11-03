@@ -18,66 +18,66 @@ package com.ajaxjs.jsonparser.lexer;
  * @author sp42 frank@ajaxjs.com
  */
 public interface Tokens {
-    /**
+    /*
      * 注意：Token 0 为 字符串类型 Token，参见 StringToken 类，这里不写
      */
 
-    /**
+    /*
      * 注意：Token 1 为 数字类型 Token，参见 NumberToken 类，这里不写
      */
 
     /**
      * 对象的值
      */
-    public static final Token DESC = new Token(2, "DESC", ":");
+    Token DESC = new Token(2, "DESC", ":");
 
     /**
      * 多个元素之间的分隔符
      */
-    public static final Token SPLIT = new Token(3, "SPLIT", ",");
+    Token SPLIT = new Token(3, "SPLIT", ",");
 
     /**
      * 数组开始
      */
-    public static final Token ARRS = new Token(4, "ARRS", "[");
+    Token ARRS = new Token(4, "ARRS", "[");
 
     /**
      * 对象开始
      */
-    public static final Token OBJS = new Token(5, "OBJS", "{");
+    Token OBJS = new Token(5, "OBJS", "{");
 
     /**
      * 数组结束
      */
-    public static final Token ARRE = new Token(6, "ARRE", "]");
+    Token ARRE = new Token(6, "ARRE", "]");
 
     /**
      * 对象结束
      */
-    public static final Token OBJE = new Token(7, "OBJE", "}");
+    Token OBJE = new Token(7, "OBJE", "}");
 
     /**
      * FALSE 值
      */
-    public static final Token FALSE = new Token(8, "FALSE", "false", false);
+    Token FALSE = new Token(8, "FALSE", "false", false);
 
     /**
      * TRUE 值
      */
-    public static final Token TRUE = new Token(9, "TRUE", "true", true);
+    Token TRUE = new Token(9, "TRUE", "true", true);
 
     /**
      * NULL 空值
      */
-    public static final Token NIL = new Token(10, "NIL", "null", null);
+    Token NIL = new Token(10, "NIL", "null", null);
 
     /**
      * 开始
      */
-    public static final Token BGN = new Token(11, "BGN", "开始");
+    Token BGN = new Token(11, "BGN", "开始");
 
     /**
      * 结束
      */
-    public static final Token EOF = new Token(12, "EOF", "结束");
+    Token EOF = new Token(12, "EOF", "结束");
 }

@@ -10,11 +10,19 @@
  */
 package com.ajaxjs.jsonparser.syntax;
 
-import com.ajaxjs.jsonparser.JsonParseException;
-import com.ajaxjs.jsonparser.lexer.*;
-
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+import com.ajaxjs.jsonparser.JsonParseException;
+import com.ajaxjs.jsonparser.lexer.Lexer;
+import com.ajaxjs.jsonparser.lexer.NumberToken;
+import com.ajaxjs.jsonparser.lexer.StringToken;
+import com.ajaxjs.jsonparser.lexer.Token;
+import com.ajaxjs.jsonparser.lexer.Tokens;
 
 /**
  * 该类负责栈的实际操作

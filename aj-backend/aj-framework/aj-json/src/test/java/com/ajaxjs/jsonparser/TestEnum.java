@@ -1,7 +1,6 @@
-//package com.ajaxjs.jsonparser;
-//
-//import com.ajaxjs.framework.BaseModel;
-//import com.ajaxjs.util.map.JsonHelper;
+package com.ajaxjs.jsonparser;
+
+
 //import org.junit.Test;
 //
 ///**
