@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ajaxjs-framework</artifactId>
-    <version>1.0.9</version>
+    <version>1.1.2</version>
     <name>aj-framework</name>
     <description>轻量级的开发框架</description>
     <packaging>jar</packaging>
@@ -16,8 +16,8 @@
     </parent>
 
     <properties>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-        <maven.gpg.skip>true</maven.gpg.skip>
+      <!--  <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.gpg.skip>true</maven.gpg.skip>-->
     </properties>
 
     <dependencies>
@@ -25,7 +25,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.22</version>
-            <!-- <scope>runtime</scope> -->
+           <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-json</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <!-- <dependency> <groupId>com.ajaxjs</groupId> <artifactId>ajaxjs-javadoc</artifactId>

@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>aj-json</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <description>JSON 反序列化</description>
     <packaging>jar</packaging>
 
@@ -13,8 +13,4 @@
         <version>1.11</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-
-    <dependencies>
-
-    </dependencies>
 </project>
