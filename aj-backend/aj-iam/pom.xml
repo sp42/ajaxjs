@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>aj-iam</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <description>用户认证</description>
+
+    <modules>
+        <module>aj-iam-resource-server</module>
+        <module>aj-iam-client</module>
+        <module>aj-iam-server</module>
+    </modules>
+
+    <parent>
+        <groupId>com.ajaxjs</groupId>
+        <artifactId>ajaxjs-parent</artifactId>
+        <version>1.11</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <!-- 当发生javadoc编译错误时继续执行 -->
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+</project>
