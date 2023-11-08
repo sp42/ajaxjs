@@ -10,7 +10,7 @@ import com.ajaxjs.iam.user.common.util.CheckStrength;
 import com.ajaxjs.iam.user.controller.UserLoginRegisterController;
 import com.ajaxjs.iam.user.model.UserAuth;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.WebHelper;
+import com.ajaxjs.util.WebHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

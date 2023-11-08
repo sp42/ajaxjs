@@ -7,7 +7,7 @@ import com.ajaxjs.iam.user.model.LogLogin;
 import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.net.http.Get;
 
-import com.ajaxjs.web.WebHelper;
+import com.ajaxjs.util.WebHelper;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;

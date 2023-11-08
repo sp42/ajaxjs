@@ -1,12 +1,10 @@
-package com.ajaxjs.web;
+package com.ajaxjs.util;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.TestHelper;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import com.ajaxjs.util.convert.EntityConvert;
-import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.convert.MapTool;
+import com.ajaxjs.util.io.StreamHelper;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;

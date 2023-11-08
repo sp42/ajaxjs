@@ -5,7 +5,7 @@ import com.ajaxjs.base.model.UploadResult;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.web.WebHelper;
+import com.ajaxjs.util.WebHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -136,9 +136,9 @@ public class FileUploadService implements FileUploadController {
             String[] arr = originalFilename.split("\\.");
 
             if (arr.length >= 2) ext = "." + arr[arr.length - 1];
-            else {
-                // 没有扩展名
-            }
+//            else {
+//                // 没有扩展名
+//            }
         }
 
         return SnowflakeId.get() + ext;

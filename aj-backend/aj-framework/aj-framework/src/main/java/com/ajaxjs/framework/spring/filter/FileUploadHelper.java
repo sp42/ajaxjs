@@ -15,7 +15,7 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.web.WebHelper;
+import com.ajaxjs.util.WebHelper;
 
 /**
  * 文件上传的辅助类
@@ -78,9 +78,10 @@ public class FileUploadHelper {
 
         try {
             file.transferTo(file2);
-            file2.setReadable(true, false);
-            file2.setExecutable(true, false);
-            file2.setWritable(true, false);
+            boolean v;
+            v = file2.setReadable(true, false);
+            v = file2.setExecutable(true, false);
+            v = file2.setWritable(true, false);
         } catch (IllegalStateException | IOException e) {
             System.err.println("文件上传失败");
             e.printStackTrace();
@@ -98,9 +99,9 @@ public class FileUploadHelper {
 
         if (arr.length >= 2)
             ext = "." + arr[arr.length - 1];
-        else {
-            // 没有扩展名
-        }
+//        else {
+        // 没有扩展名
+//        }
 
         return SnowflakeId.get() + ext;
     }

@@ -1,7 +1,7 @@
 //package com.ajaxjs.wechat.applet;
 //
 ////
-////import com.ajaxjs.web.WebHelper;
+////import com.ajaxjs.util.WebHelper;
 ////import com.ajaxjs.wechat_applet.user.model.LoginSession;
 ////
 //
