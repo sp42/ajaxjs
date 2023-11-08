@@ -43,7 +43,6 @@ public interface IController {
      */
     static Action findTreeByPath(Map<String, Action> tree, Queue<String> path, String basePath, boolean createIfEmpty) {
         while (!path.isEmpty()) {
-
             String key = path.poll(); // remove the first item in the queue and return it
             basePath += key + "/";
 

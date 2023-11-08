@@ -1,4 +1,4 @@
-package com.ajaxjs.framework;
+package com.ajaxjs.web;
 
 import java.io.IOException;
 import java.lang.reflect.UndeclaredThrowableException;

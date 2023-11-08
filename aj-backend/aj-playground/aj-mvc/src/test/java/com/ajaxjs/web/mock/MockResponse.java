@@ -28,8 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.mockito.ArgumentCaptor;
 
-import com.ajaxjs.web.ByteArrayOutput;
-
 /**
  * 模拟一个 Response 对象
  * 

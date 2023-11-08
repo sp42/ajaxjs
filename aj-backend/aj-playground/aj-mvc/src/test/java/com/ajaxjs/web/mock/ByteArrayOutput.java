@@ -1,4 +1,4 @@
-package com.ajaxjs.web;
+package com.ajaxjs.web.mock;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

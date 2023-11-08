@@ -61,17 +61,6 @@ public class ServletHelper {
     }
 
     /**
-     * 简单检查字符串有否 SQL 关键字
-     *
-     * @return true 表示为字符串中有 SQL 关键字
-     */
-    public static boolean preventSQLInject(String str) {
-        str = str.toUpperCase();
-
-        return !str.contains("DELETE") && !str.contains("ASCII") && !str.contains("UPDATE") && !str.contains("SELECT") && !str.contains("'") && !str.contains("SUBSTR(") && !str.contains("COUNT(") && !str.contains(" OR ") && !str.contains(" AND ") && str.indexOf("DROP") < 0 && str.indexOf("EXECUTE") < 0 && str.indexOf("EXEC") < 0 && str.indexOf("TRUNCATE") < 0 && !str.contains("INTO") && str.indexOf("DECLARE") < 0 && str.indexOf("MASTER") < 0;
-    }
-
-    /**
      * 转义 MySql 语句中使用的字符串中的特殊字符
      *
      * @param str SQL
@@ -87,44 +76,5 @@ public class ServletHelper {
         str = str.replace("\\x1a", "\\Z");
 
         return str;
-    }
-
-    // --------------IP 拦截----------------
-
-    static LRUCache<String, Boolean> cache = new LRUCache<>(20);
-
-    public static boolean isChinaMainlandIp(String ip) {
-        try {
-            Map<String, Object> map = Tools.getIpLocation(ip);
-            Object c = map.get("country");
-
-            if (c != null && "中国".equals(c.toString())) {
-                Object r = map.get("region");
-
-                return r == null || (!"香港".equals(r.toString()) && !"澳门".equals(r.toString()) && !"台湾".equals(r.toString()));
-            } else
-                return false;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return true;
-    }
-
-    public static boolean isChinaMainlandIp_Cache(String ip) {
-        Boolean isChinaMainlandIp = cache.get(ip);
-
-        if (isChinaMainlandIp == null) {
-            isChinaMainlandIp = isChinaMainlandIp(ip);
-            cache.put(ip, isChinaMainlandIp);
-        }
-
-        return isChinaMainlandIp;
-    }
-
-    public static boolean isChinaMainlandIp_Cache(HttpServletRequest req) {
-        String ip = req instanceof MvcRequest ? ((MvcRequest) req).getIp() : new MvcRequest(req).getIp();
-        return isChinaMainlandIp_Cache(ip);
     }
 }

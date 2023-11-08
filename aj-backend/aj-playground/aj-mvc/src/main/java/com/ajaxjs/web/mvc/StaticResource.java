@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 
-import com.ajaxjs.framework.Application;
+import com.ajaxjs.web.Application;
 import com.ajaxjs.framework.IComponent;
 
 /**

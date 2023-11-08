@@ -9,8 +9,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>aj-demo</artifactId>
+    <artifactId>aj-mvc2</artifactId>
     <version>1.0</version>
-    <description>DEMO</description>
+    <description>A toy of Spring MVC</description>
     <packaging>jar</packaging>
 </project>
