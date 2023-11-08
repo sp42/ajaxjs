@@ -22,9 +22,7 @@ public class UserUtils {
     /**
      * 验证 email 是否合法正确
      */
-    private final static String EMAIL_REGEXP = "^([a-z0-9A-Z]+[-|.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-
-    public final static Pattern EMAIL_REG = Pattern.compile(EMAIL_REGEXP);
+    private final static Pattern EMAIL_REG = Pattern.compile("^([a-z0-9A-Z]+[-|.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
 
     /**
      * 是否合法的邮件
@@ -33,15 +31,13 @@ public class UserUtils {
      * @return true 表示为合法邮件
      */
     public static boolean isValidEmail(String email) {
-        return email.matches(EMAIL_REGEXP);
+        return EMAIL_REG.matcher(email).find();
     }
 
     /**
      * 验证手机号码是否合法正确
      */
-    private static final String PHONE_REGEXP = "^1[3-8]\\d{9}$";
-
-    public final static Pattern PHONE_REG = Pattern.compile(PHONE_REGEXP);
+    private final static Pattern PHONE_REG = Pattern.compile("^1[3-8]\\d{9}$");
 
     /**
      * 是否合法的手机号码，仅限中国大陆号码
@@ -50,7 +46,7 @@ public class UserUtils {
      * @return true 表示为手机号码
      */
     public static boolean isValidPhone(String phoneNo) {
-        return phoneNo.matches(PHONE_REGEXP);
+        return PHONE_REG.matcher(phoneNo).find();
     }
 
     /**
@@ -85,15 +81,5 @@ public class UserUtils {
         }
 
         return table;
-    }
-
-    public static void main(String[] args) {
-        List<Map<String, String>> table = addressResolution("浙江省杭州市拱墅区湖墅南路湖墅新村4幢");
-        System.out.println(table);
-        System.out.println(table.get(0).get("province"));
-        System.out.println(table.get(0).get("city"));
-        System.out.println(table.get(0).get("county"));
-        System.out.println(table.get(0).get("town"));
-        System.out.println(table.get(0).get("village"));
     }
 }

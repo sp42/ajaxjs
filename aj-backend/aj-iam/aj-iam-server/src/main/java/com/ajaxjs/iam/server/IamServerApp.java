@@ -12,6 +12,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan("com.ajaxjs.iam.server")
 public class IamServerApp extends BaseWebMvcConfigure {
     public static void main(String[] args) {
-        EmbeddedTomcatStarter.start(IamServerApp.class, IamConfig.class);
+        EmbeddedTomcatStarter.start(IamServerApp.class);
     }
 }

@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
  * @author xinzhang
  */
 public class RegExpUtils {
+    public boolean isMatch(Pattern pattern, String str) {
+        return pattern.matcher(str).find();
+    }
+
     /**
      * 返回 Matcher
      *

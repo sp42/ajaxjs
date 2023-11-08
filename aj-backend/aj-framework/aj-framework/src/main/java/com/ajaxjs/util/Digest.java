@@ -151,7 +151,6 @@ public class Digest {
 
     /**
      * HMAC 加密
-     * <p>
      * 单向加密、不可逆的、类似 MD5
      *
      * @param data 需要加密的字符串

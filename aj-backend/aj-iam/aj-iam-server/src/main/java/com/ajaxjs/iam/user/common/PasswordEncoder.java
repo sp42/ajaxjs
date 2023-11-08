@@ -9,7 +9,7 @@ public class PasswordEncoder {
     /**
      * 盐值
      */
-    private static final String SALT = "@#D2s!As12";
+    public String salt;
 
     /**
      * 基本的密码加密
@@ -17,7 +17,7 @@ public class PasswordEncoder {
      * @param psw 明文
      * @return 密文
      */
-    public static String md5salt(String psw) {
-        return Digest.md5(psw + SALT).toLowerCase();
+    public String md5salt(String psw) {
+        return Digest.md5(psw + salt).toLowerCase();
     }
 }

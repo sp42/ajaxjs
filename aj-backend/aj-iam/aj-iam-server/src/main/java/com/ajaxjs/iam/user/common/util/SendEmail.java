@@ -1,5 +1,8 @@
 package com.ajaxjs.iam.user.common.util;
 
+import com.ajaxjs.base.MailVo;
+import com.ajaxjs.base.Sdk;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.EvaluationContext;
@@ -16,31 +19,22 @@ import java.util.Map;
 
 @Component
 public class SendEmail {
-    @Value("${email.server}")
-    private String emailServer;
-
-    @Value("${email.account}")
-    private String account;
-
-    @Value("${email.password}")
-    private String password;
+    @Autowired
+    private Sdk baseService;
 
     /**
      * 发送邮件
      */
-//    public boolean send(String to, String subject, String content) {
-//        Mail mail = new Mail();
-//        mail.setMailServer(emailServer);
-//        mail.setAccount(account);
-//        mail.setPassword(password);
-//        mail.setFrom(account);
-//        mail.setTo(to);
-//        mail.setSubject(subject);
-//        mail.setHTML_body(true);
-//        mail.setContent(content);
-//
-//        return Sender.send(mail);
-//    }
+    public boolean send(String to, String subject, String content) {
+        MailVo mail = new MailVo();
+        mail.setTo(to);
+        mail.setSubject(subject);
+        mail.setHtmlBody(true);
+        mail.setContent(content);
+
+        baseService.sendEmail(mail);
+        return true;
+    }
 
     /**
      * 计算表达式
@@ -84,9 +78,6 @@ public class SendEmail {
 
         return expression.getValue(context, String.class); // 使用Expression.getValue() 获取表达式的值，这里传入了 Evaluation 上下文，第二个参数是类型参数，表示返回值的类型。
     }
-
-    @Value("${email.template_1}") // 不能读取表达式
-    private String template;
 
     /**
      * 邮件模板

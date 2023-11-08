@@ -24,9 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-import static com.ajaxjs.iam.user.common.UserUtils.EMAIL_REG;
-import static com.ajaxjs.iam.user.common.UserUtils.PHONE_REG;
-
 @Service
 public class UserLoginRegisterService implements UserLoginRegisterController, UserConstants {
     private static final LogHelper LOGGER = LogHelper.getLog(UserLoginRegisterService.class);
@@ -80,9 +77,9 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
     public User getUserLoginByPassword(String loginId, String password) {
         String sql = "SELECT u.* FROM user u INNER JOIN user_auth a ON a.user_id = u.id WHERE u.stat != -1 AND u.%s = ? AND a.credential = ?";
 
-        if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_EMAIL, loginIdType) && EMAIL_REG.matcher(loginId).find())
+        if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_EMAIL, loginIdType) && UserUtils.isValidEmail(loginId))
             sql = String.format(sql, "email");
-        else if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_PHONE, loginIdType) && PHONE_REG.matcher(loginId).find())
+        else if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_PHONE, loginIdType) && UserUtils.isValidPhone(loginId))
             sql = String.format(sql, "phone");
         else
             sql = String.format(sql, "username");

@@ -265,6 +265,7 @@ public class StrUtil {
 
             if (value == null)
                 value = "null";
+
             String placeholder = "#{" + key + "}";
             result = result.replace(placeholder, value.toString());
         }

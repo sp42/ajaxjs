@@ -84,9 +84,8 @@ public class MakePassword {
 
 		// 2. 填补其他位置的字符
 		for (int i = 0; i < length; i++) {
-			if (chars[i] == 0) {
+			if (chars[i] == 0)
 				chars[i] = nextChar(rnd);
-			}
 		}
 
 		// 3. 返回结果

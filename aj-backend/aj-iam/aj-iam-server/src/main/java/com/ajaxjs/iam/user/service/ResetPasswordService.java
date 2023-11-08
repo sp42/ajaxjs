@@ -3,12 +3,15 @@ package com.ajaxjs.iam.user.service;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.iam.user.common.UserUtils;
 import com.ajaxjs.iam.user.common.util.CheckStrength;
+import com.ajaxjs.iam.user.common.util.SendEmail;
 import com.ajaxjs.iam.user.controller.ResetPasswordController;
 import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.iam.user.model.UserAuth;
 import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.EncryptUtil;
 import com.ajaxjs.util.StrUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -16,17 +19,27 @@ import org.springframework.util.StringUtils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class ResetPasswordService implements ResetPasswordController {
-    @Value("${ResetPassword.encryptKey}")
+    @Autowired
+    private SendEmail sendEmail;
+
+    @Autowired
+    @Qualifier("passwordEncode")
+    Function<String, String> passwordEncode;
+
+    @Value("${User.restPassword.encryptKey}")
     private String encryptKey;
-    //
-//    @Autowired
-//    SendEmail sendEmail;
-//
+
     @Value("${Website.basePath}")
-    String websiteBasePath;
+    private String websiteBasePath;
+
+    /**
+     *
+     */
+    private final static int TOKEN_TIMEOUT = 20;
 
     /**
      *
@@ -50,7 +63,7 @@ public class ResetPasswordService implements ResetPasswordController {
 
     @Override
     public boolean sendRestEmail(String email) {
-        if (!StringUtils.hasText(email) || !UserUtils.EMAIL_REG.matcher(email).find())
+        if (!StringUtils.hasText(email) || !UserUtils.isValidEmail(email))
             throw new IllegalArgumentException("请提交有效的邮件地址");
 
         Integer tenantId = TenantService.getTenantId();
@@ -63,20 +76,15 @@ public class ResetPasswordService implements ResetPasswordController {
         map.put("username", user.getUsername());
         map.put("link", url);
         map.put("desc", title);
-        map.put("timeout", String.valueOf(tokenTimeout));
+        map.put("timeout", String.valueOf(TOKEN_TIMEOUT));
+        String content = sendEmail.getEmailContent(map);
 
-//        String content = sendEmail.getEmailContent(map);
-
-//        return sendEmail.send(email, title, content);
-        return true;
+        return sendEmail.send(email, title, content);
     }
-//
-//    @Autowired(required = false)
-//    ISendSMS sendSMS;
 
     @Override
     public boolean sendRestPhone(String phone) {
-        if (!StringUtils.hasText(phone) || !UserUtils.PHONE_REG.matcher(phone).find())
+        if (!StringUtils.hasText(phone) || !UserUtils.isValidPhone(phone))
             throw new IllegalArgumentException("请提交有效的手机");
 
         User user = findUserBy("phone", phone, TenantService.getTenantId());
@@ -88,14 +96,9 @@ public class ResetPasswordService implements ResetPasswordController {
 
     @Override
     public Boolean verifySmsUpdatePsw(String code, String newPsw, String phone) {
-//        UserDAO.setWhereQuery(" u.phone = '" + phone + "' AND u.tenantId = 1 ");
-//        Map<String, Object> user = UserDAO.findOneWithAuth();
-//
-//        if (user == null)
-//            throw new IllegalAccessError(String.format("不存在手机号码[%s]的用户", phone));
-//
+        User user = findUserBy("phone", phone, TenantService.getTenantId());
 //        sendSMS.checkSmsCode(phone, code); // 没有异常就表示通过
-//
+
 //        return updatePwd(user, newPsw);
         return false;
     }
@@ -131,9 +134,6 @@ public class ResetPasswordService implements ResetPasswordController {
         return emailToken + timeToken;
     }
 
-    @Value("${ResetPassword.tokenTimeout}")
-    int tokenTimeout;
-
     /**
      * 验证重置密码的 token 是否有效
      *
@@ -151,15 +151,11 @@ public class ResetPasswordService implements ResetPasswordController {
         long cha = new Date().getTime() - Long.parseLong(expireHex, 16);
         double result = cha * 1.0 / (1000 * 60 * 60);
 
-        if (result <= tokenTimeout)
-            // 合法
-            return true;
+        if (result <= TOKEN_TIMEOUT)
+            return true;// 合法
         else
             throw new IllegalAccessError("该请求已经过期，请重新发起");
     }
-
-//    @Autowired
-//    LoginService loginService;
 
     /**
      * 更新用户密码
@@ -169,24 +165,20 @@ public class ResetPasswordService implements ResetPasswordController {
      * @return 是否修改成功
      */
     public boolean updatePwd(Map<String, Object> user, String newPassword) {
-        // 检测密码强度
-        CheckStrength.LEVEL passwordLevel = CheckStrength.getPasswordLevel(newPassword);
+        CheckStrength.LEVEL passwordLevel = CheckStrength.getPasswordLevel(newPassword); // 检测密码强度
 
         if (passwordLevel == CheckStrength.LEVEL.EASY)
             throw new UnsupportedOperationException("密码强度太低");
 
-//        newPassword = loginService.encodePassword(newPassword);
-//
-//        if (newPassword.equalsIgnoreCase(user.get("password").toString()))
-//            throw new UnsupportedOperationException("新密码与旧密码一致，没有修改");
-//
+        newPassword = passwordEncode.apply(newPassword);
+
+        if (newPassword.equalsIgnoreCase(user.get("password").toString()))
+            throw new UnsupportedOperationException("新密码与旧密码一致，没有修改");
+
         UserAuth updateAuth = new UserAuth();
         updateAuth.setId(Long.parseLong(String.valueOf(user.get("authId"))));
-//        updateAuth.setCredential(newPassword);
+        updateAuth.setCredential(newPassword);
 
-////		if (com.ajaxjs.user.common.service.UserDAO.UserAuthDAO.update(updateAuth)) // 密码修改成功
-////			return true;
-
-        return false; // 密码修改失败
+        return CRUD.update(updateAuth);
     }
 }

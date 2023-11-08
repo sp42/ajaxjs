@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.server.config;
 
+import com.ajaxjs.base.Sdk;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.iam.user.common.PasswordEncoder;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
@@ -53,11 +55,15 @@ public class IamConfig implements WebMvcConfigurer {
         return new ServletUserSession();
     }
 
-    /**
-     * 指定密码的加密规则
-     */
-    @Bean("passwordEncode")
-    Function<String, String> passwordEncode() {
-        return PasswordEncoder::md5salt;
+    @Value("${BaseService.endPoint}")
+    private String baseServiceEndPoint;
+
+    @Bean
+    Sdk initBaseSDK() {
+        Sdk sdk = new Sdk();
+        sdk.setEndPoint(baseServiceEndPoint);
+        sdk.setRestTemplate(new RestTemplate());
+
+        return sdk;
     }
 }
