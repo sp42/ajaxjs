@@ -105,4 +105,15 @@ public interface OAuthController {
      */
     @PostMapping("/token/revoke")
     Boolean revokeToken(@RequestParam String token);
+
+    /**
+     * @param clientId     应用 id
+     * @param clientSecret 应用密钥
+     * @return 应用的 AccessToken
+     */
+    @PostMapping("/app_login")
+    AccessToken appLogin(@RequestParam String clientId, @RequestParam String clientSecret);
+
+    @PostMapping("/app_login/head")
+    AccessToken appLogin(@RequestParam String clientId);
 }

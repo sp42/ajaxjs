@@ -1,36 +1,40 @@
 package com.ajaxjs.iam.user.controller;
 
+import com.ajaxjs.iam.user.model.User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 /**
- * User 控制器
+ * 用户相关控制器
  */
 @RestController
 @RequestMapping("/user")
 public interface UserController {
     /**
-     * 检测用户是否已经登录
+     * 获取用户详情
      *
-     * @return true 表示已登录
+     * @param id 用户 id
+     * @return 用户详情
      */
-    @GetMapping("/is_login")
-    Boolean isLogin();
+    @GetMapping("/{id}")
+    User info(Long id);
 
     /**
-     * 普通用户登录
+     * 修改用户
      *
-     * @param loginId   登录账号，用户标识，可以是 username/email/phone 中的一种，后台自动判断
-     * @param password  密码
-     * @param returnUrl 跳转地址
-     * @return 若成功登录跳转
+     * @param user 用户详情
+     * @return 是否成功
      */
-    @PostMapping("/login")
-    ModelAndView login(@RequestParam String loginId, @RequestParam String password, @RequestParam String returnUrl);
+    @PutMapping
+    Boolean update(User user);
 
     /**
-     * 用户登出
+     * 注销用户账号
+     *
+     * @param id 用户 id
+     * @return 是否成功
      */
-    @PostMapping("/logout")
-    ModelAndView logout(@RequestParam String returnUrl);
+    @DeleteMapping("/{id}")
+    Boolean delete(Long id);
 }

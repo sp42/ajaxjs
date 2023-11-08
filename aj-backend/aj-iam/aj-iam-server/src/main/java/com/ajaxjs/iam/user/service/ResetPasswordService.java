@@ -1,20 +1,31 @@
-//package com.ajaxjs.iam.user.service;
-//
-//import com.ajaxjs.iam.user.controller.ResetPasswordController;
-//import com.ajaxjs.iam.user.model.User;
-//import com.ajaxjs.util.StrUtil;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Service;
-//import org.springframework.util.StringUtils;
-//
-//import java.util.Date;
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//@Service
-//public class ResetPasswordServiceImpl implements ResetPasswordController {
-//    @Value("${ResetPassword.encryptKey}")
+package com.ajaxjs.iam.user.service;
+
+import com.ajaxjs.iam.user.controller.ResetPasswordController;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ResetPasswordService implements ResetPasswordController {
+    @Override
+    public boolean sendRestEmail(String email) {
+        return false;
+    }
+
+    @Override
+    public boolean verifyTokenUpdatePsw(String token, String newPsw, String email) {
+        return false;
+    }
+
+    @Override
+    public boolean sendRestPhone(String phone) {
+        return false;
+    }
+
+    @Override
+    public Boolean verifySmsUpdatePsw(String code, String newPsw, String phone) {
+        return null;
+    }
+
+    //    @Value("${ResetPassword.encryptKey}")
 //    private String encryptKey;
 //
 //    @Autowired
@@ -174,5 +185,5 @@
 //
 //        return false; // 密码修改失败
 //    }
-//
-//}
+
+}
