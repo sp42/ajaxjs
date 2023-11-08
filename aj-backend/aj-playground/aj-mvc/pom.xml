@@ -34,7 +34,6 @@
             <version>1.2.6</version>
         </dependency>
 
-
         <!-- MVC 框架用的注解 -->
         <dependency>
             <groupId>javax.ws.rs</groupId>

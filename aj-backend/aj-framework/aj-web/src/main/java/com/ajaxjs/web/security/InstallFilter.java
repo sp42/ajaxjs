@@ -16,28 +16,27 @@ import java.io.IOException;
  */
 @WebFilter("/*")
 public class InstallFilter implements Filter {
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-	}
+    @Override
+    public void init(FilterConfig filterConfig) {
+    }
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		SecurityRequest securityRequest = new SecurityRequest(httpRequest);
-		SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        SecurityRequest securityRequest = new SecurityRequest(httpRequest);
+        SecurityResponse securityResponse = new SecurityResponse((HttpServletResponse) response);
 
-		Object obj = httpRequest.getServletContext().getAttribute("");
+        Object obj = httpRequest.getServletContext().getAttribute("");
 
-		if (obj != null) {
+        if (obj != null) {
 
-		}
-		
-		chain.doFilter(securityRequest, securityResponse);// 继续处理请求
-	}
+        }
 
-	@Override
-	public void destroy() {
-	}
+        chain.doFilter(securityRequest, securityResponse);// 继续处理请求
+    }
 
+    @Override
+    public void destroy() {
+    }
 }

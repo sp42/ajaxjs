@@ -3,7 +3,6 @@ package com.ajaxjs.iam.user.common.util;
 import com.ajaxjs.base.MailVo;
 import com.ajaxjs.base.Sdk;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -33,6 +32,7 @@ public class SendEmail {
         mail.setContent(content);
 
         baseService.sendEmail(mail);
+
         return true;
     }
 

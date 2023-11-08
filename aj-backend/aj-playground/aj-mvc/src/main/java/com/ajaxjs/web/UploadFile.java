@@ -80,7 +80,6 @@ public class UploadFile extends HttpServletRequestWrapper {
      * 执行上传，主要的调用方法
      *
      * @return 上传结果
-     * @throws IOException
      */
     public UploadFileInfo upload() throws IOException {
         if (uploadFileInfo.beforeUpload != null && !uploadFileInfo.beforeUpload.apply(uploadFileInfo))

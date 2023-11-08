@@ -1,11 +1,11 @@
 /**
  * Copyright 2015 Sp42 frank@ajaxjs.com
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a
  * copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations
  * under the License.
@@ -13,67 +13,65 @@
 package com.ajaxjs.web.mvc;
 
 /**
- * 
  * @author sp42 frank@ajaxjs.com
- *
  */
 public interface MvcConstant {
-	/**
-	 * MV 用的 key
-	 */
-	public static final String PAGE_RESULT = "PageResult";
+    /**
+     * MV 用的 key
+     */
+    String PAGE_RESULT = "PageResult";
 
-	public static final String START = "start";
+    String START = "start";
 
-	public static final String LIMIT = "limit";
+    String LIMIT = "limit";
 
-	public static final String ID = "id";
+    String ID = "id";
 
-	public static final String LIST = "list";
+    String LIST = "list";
 
-	public static final String INFO = "info";
+    String INFO = "info";
 
-	public static final String ID_INFO = "{id}";
+    String ID_INFO = "{id}";
 
-	public static final String CATALOGS = "catalogs";
-	
-	public static final String CATALOG_ID = "catalogId";
+    String CATALOGS = "catalogs";
 
-	/**
-	 * 搜索关键字
-	 */
-	public static final String KEYWORD = "keyword";
+    String CATALOG_ID = "catalogId";
 
-	/**
-	 * JSON 类型
-	 */
-	public static final String JSON_TYPE = "application/json";
+    /**
+     * 搜索关键字
+     */
+    String KEYWORD = "keyword";
 
-	public static final String USER_SESSION_ID = "X-Ajaxjs-Token";
+    /**
+     * JSON 类型
+     */
+    String JSON_TYPE = "application/json";
 
-	public static final String USER_ID = "X-Ajaxjs-UserId";
-	
-	public static final String USER_ID_HEADER = "X-Ajaxjs-UserId";
+    String USER_SESSION_ID = "X-Ajaxjs-Token";
 
-	public static final String DOMAIN_CATALOG_ID = "domainCatalog_Id";
+    String USER_ID = "X-Ajaxjs-UserId";
 
-	/**
-	 * 全局 json 模板路径 之 WEB-INF前缀
-	 */
-	public static final String JSP_PERFIX_WEBINF = "/WEB-INF/jsp";
+    String USER_ID_HEADER = "X-Ajaxjs-UserId";
 
-	/**
-	 * 操作失败，返回 msg 信息
-	 */
-	public static final String JSON_NOT_OK = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
+    String DOMAIN_CATALOG_ID = "domainCatalog_Id";
 
-	/**
-	 * 操作成功，返回 msg 信息，可扩展字段的
-	 */
-	public static final String JSON_OK_EXTENSION = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
+    /**
+     * 全局 json 模板路径 之 WEB-INF前缀
+     */
+    String JSP_PERFIX_WEBINF = "/WEB-INF/jsp";
 
-	/**
-	 * 操作成功，返回 msg 信息
-	 */
-	public static final String JSON_OK = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
+    /**
+     * 操作失败，返回 msg 信息
+     */
+    String JSON_NOT_OK = "json::{\"isOk\": false, \"msg\" : \"%s\"}";
+
+    /**
+     * 操作成功，返回 msg 信息，可扩展字段的
+     */
+    String JSON_OK_EXTENSION = "json::{\"isOk\": true, \"msg\" : \"%s\", %s}";
+
+    /**
+     * 操作成功，返回 msg 信息
+     */
+    String JSON_OK = "json::{\"isOk\": true, \"msg\" : \"%s\"}";
 }

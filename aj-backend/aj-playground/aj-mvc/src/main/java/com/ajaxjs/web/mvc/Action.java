@@ -29,226 +29,217 @@ import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * A action = controller + methods
- * 
- * @author sp42 frank@ajaxjs.com
  *
+ * @author sp42 frank@ajaxjs.com
  */
 public class Action {
-	private static final LogHelper LOGGER = LogHelper.getLog(Action.class);
+    private static final LogHelper LOGGER = LogHelper.getLog(Action.class);
 
-	/**
-	 * 完整路径
-	 */
-	public String path;
+    /**
+     * 完整路径
+     */
+    public String path;
 
-	/**
-	 * 下级路径集合
-	 */
-	public Map<String, Action> children;
+    /**
+     * 下级路径集合
+     */
+    public Map<String, Action> children;
 
-	/**
-	 * 控制器实例，方便反射时候调用（如果 HTTP 对应控制器没有，则读取这个）
-	 */
-	public IController controller;
+    /**
+     * 控制器实例，方便反射时候调用（如果 HTTP 对应控制器没有，则读取这个）
+     */
+    public IController controller;
 
-	// 下面是不同 HTTP 方法的控制器
-	public IController getMethodController;
+    // 下面是不同 HTTP 方法的控制器
+    public IController getMethodController;
 
-	public IController postMethodController;
+    public IController postMethodController;
 
-	public IController putMethodController;
+    public IController putMethodController;
 
-	public IController deleteMethodController;
+    public IController deleteMethodController;
 
-	/**
-	 * 该路径的 get 请求时对应的控制器方法
-	 */
-	public Method getMethod;
+    /**
+     * 该路径的 get 请求时对应的控制器方法
+     */
+    public Method getMethod;
 
-	/**
-	 * 该路径的 get 请求时对应的控制器方法
-	 */
-	public Method postMethod;
+    /**
+     * 该路径的 get 请求时对应的控制器方法
+     */
+    public Method postMethod;
 
-	/**
-	 * 该路径的 put 请求时对应的控制器方法
-	 */
-	public Method putMethod;
+    /**
+     * 该路径的 put 请求时对应的控制器方法
+     */
+    public Method putMethod;
 
-	/**
-	 * 该路径的 delete 请求时对应的控制器方法
-	 */
-	public Method deleteMethod;
+    /**
+     * 该路径的 delete 请求时对应的控制器方法
+     */
+    public Method deleteMethod;
 
-	/**
-	 * 创建控制器实例
-	 * 
-	 * @param clz 控制器类
-	 */
-	public void createControllerInstance(Class<? extends IController> clz) {
-		if (clz.getAnnotation(Component.class) != null) { // 如果有 ioc，则从容器中查找
-			controller = ComponentMgr.get(clz);
+    /**
+     * 创建控制器实例
+     *
+     * @param clz 控制器类
+     */
+    public void createControllerInstance(Class<? extends IController> clz) {
+        if (clz.getAnnotation(Component.class) != null) { // 如果有 ioc，则从容器中查找
+            controller = ComponentMgr.get(clz);
 
-			if (controller == null)
-				LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
-		} else
-			controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
-	}
+            if (controller == null)
+                LOGGER.warning("在 IOC 资源库中找不到该类 {0} 的实例，请检查该类是否已经加入了 IOC 扫描？  The IOC library not found that Controller, plz check if it added to the IOC scan.", clz.getName());
+        } else controller = ReflectUtil.newInstance(clz);// 保存的是 控制器 实例。
+    }
 
-	/**
-	 * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then
-	 * add the urlMapping.
-	 */
-	public void parseMethod() {
-		Class<? extends IController> clz = controller.getClass();
-		String topPath = null;
+    /**
+     * 根据路径信息加入到 urlMapping。Check out all methods which has Path annotation, then
+     * add the urlMapping.
+     */
+    public void parseMethod() {
+        Class<? extends IController> clz = controller.getClass();
+        String topPath = null;
 
-		for (Method method : clz.getMethods()) {
-			Path subPath = null;
-			try {
+        for (Method method : clz.getMethods()) {
+            Path subPath = null;
 
-				subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
-			} catch (Throwable e) {
-				LOGGER.info(":::"+method + "");
-				System.out.println(method);
-				e.printStackTrace();
-			}
+            try {
 
-			if (subPath != null) {
-				String subPathValue = subPath.value();
+                subPath = method.getAnnotation(Path.class); // 看看这个控制器方法有木有 URL 路径的信息，若有，要处理
+            } catch (Throwable e) {
+                LOGGER.info(":::" + method);
+                System.out.println(method);
+                e.printStackTrace();
+            }
 
-				if (subPathValue.startsWith("/")) { // 根目录开始
-					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
+            if (subPath != null) {
+                String subPathValue = subPath.value();
 
-					if (subPathValue.contains("{root}")) { // 顶部路径
-						if (topPath == null)
-							topPath = getRootPath(clz);
+                if (subPathValue.startsWith("/")) { // 根目录开始
+                    subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
 
-						subPathValue = subPathValue.replaceAll("\\{root\\}", topPath);
-					}
+                    if (subPathValue.contains("{root}")) { // 顶部路径
+                        if (topPath == null) topPath = getRootPath(clz);
 
-					Action subAction = IController.findTreeByPath(IController.urlMappingTree, subPathValue, "", true);
-					subAction.controller = controller;
-					subAction.methodSend(method);
+                        subPathValue = subPathValue.replaceAll("\\{root\\}", topPath);
+                    }
 
-				} else {
-					subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
+                    Action subAction = IController.findTreeByPath(IController.urlMappingTree, subPathValue, "", true);
+                    subAction.controller = controller;
+                    subAction.methodSend(method);
 
-					// add sub action starts from parent Node, not the top node
-					if (children == null)
-						children = new HashMap<>();
+                } else {
+                    subPathValue = subPathValue.replaceAll("^/", ""); // 一律不要前面的 /
 
-					Action subAction = IController.findTreeByPath(children, subPathValue, path + "/", true);
-					subAction.controller = controller; // the same controller cause the same class over there
-					subAction.methodSend(method);
-				}
-			} else {
-				// this method is for class url
-				methodSend(method); // 没有 Path 信息，就是属于类本身的方法（一般最多只有四个方法 GET/POST/PUT/DELETE）
-			}
-		}
-	}
+                    // add sub action starts from parent Node, not the top node
+                    if (children == null) children = new HashMap<>();
 
-	/**
-	 * HTTP 方法对号入座，什么方法就进入到什么属性中保存起来。
-	 * 
-	 * @param method 控制器方法
-	 */
-	private void methodSend(Method method) {
-		if (isSend(GET.class, method, getMethod)) {
-			getMethod = method;
-			getMethodController = controller;
-		} else if (isSend(POST.class, method, postMethod)) {
-			postMethod = method;
-			postMethodController = controller;
-		} else if (isSend(PUT.class, method, putMethod)) {
-			putMethod = method;
-			putMethodController = controller;
-		} else if (isSend(DELETE.class, method, deleteMethod)) {
-			deleteMethod = method;
-			deleteMethodController = controller;
-		}
-	}
+                    Action subAction = IController.findTreeByPath(children, subPathValue, path + "/", true);
+                    subAction.controller = controller; // the same controller cause the same class over there
+                    subAction.methodSend(method);
+                }
+            } else {
+                // this method is for class url
+                methodSend(method); // 没有 Path 信息，就是属于类本身的方法（一般最多只有四个方法 GET/POST/PUT/DELETE）
+            }
+        }
+    }
 
-	/**
-	 * 检测是否已经登记的控制器
-	 * 
-	 * @param anClz
-	 * @param method         控制器方法
-	 * @param action
-	 * @param getExistMethod
-	 * @return
-	 */
-	private <T extends Annotation> boolean isSend(Class<T> anClz, Method method, Method existMethod) {
-		if (method.getAnnotation(anClz) != null) {
-			if (existMethod == null)
-				return true; // if the Action is empty, allow to add a new method object
-			else {
-				String[] arr = anClz.toString().split("\\.");
-				LOGGER.warning("控制器上的[{0}]的 [{1}]方法已在[{2}]登记，不接受[{3}]的重复登记。", path, arr[arr.length - 1], method, existMethod);
-				return false;
-			}
-		} else
-			return false;
-	}
+    /**
+     * HTTP 方法对号入座，什么方法就进入到什么属性中保存起来。
+     *
+     * @param method 控制器方法
+     */
+    private void methodSend(Method method) {
+        if (isSend(GET.class, method, getMethod)) {
+            getMethod = method;
+            getMethodController = controller;
+        } else if (isSend(POST.class, method, postMethod)) {
+            postMethod = method;
+            postMethodController = controller;
+        } else if (isSend(PUT.class, method, putMethod)) {
+            putMethod = method;
+            putMethodController = controller;
+        } else if (isSend(DELETE.class, method, deleteMethod)) {
+            deleteMethod = method;
+            deleteMethodController = controller;
+        }
+    }
 
-	/**
-	 * 根据 httpMethod 请求方法返回控制器类身上的方法。
-	 * 
-	 * @param method HTTP 请求的方法
-	 * @return 控制器方法
-	 */
-	public Method getMethod(String method) {
-		switch (method.toUpperCase()) {
-		case "GET":
-			return getMethod;
-		case "POST":
-			return postMethod;
-		case "PUT":
-			return putMethod;
-		case "DELETE":
-			return deleteMethod;
-		}
+    /**
+     * 检测是否已经登记的控制器
+     */
+    private <T extends Annotation> boolean isSend(Class<T> anClz, Method method, Method existMethod) {
+        if (method.getAnnotation(anClz) != null) {
+            if (existMethod == null) return true; // if the Action is empty, allow to add a new method object
+            else {
+                String[] arr = anClz.toString().split("\\.");
+                LOGGER.warning("控制器上的[{0}]的 [{1}]方法已在[{2}]登记，不接受[{3}]的重复登记。", path, arr[arr.length - 1], method, existMethod);
+                return false;
+            }
+        } else return false;
+    }
 
-		return null;
-	}
+    /**
+     * 根据 httpMethod 请求方法返回控制器类身上的方法。
+     *
+     * @param method HTTP 请求的方法
+     * @return 控制器方法
+     */
+    public Method getMethod(String method) {
+        switch (method.toUpperCase()) {
+            case "GET":
+                return getMethod;
+            case "POST":
+                return postMethod;
+            case "PUT":
+                return putMethod;
+            case "DELETE":
+                return deleteMethod;
+        }
 
-	/**
-	 * 根据 httpMethod 请求方法返回控制器
-	 * 
-	 * @param method HTTP 请求的方法
-	 * @return 控制器
-	 */
-	public IController getController(String method) {
-		switch (method.toUpperCase()) {
-		case "GET":
-			return getMethodController;
-		case "POST":
-			return postMethodController;
-		case "PUT":
-			return putMethodController;
-		case "DELETE":
-			return deleteMethodController;
-		default:
-			return controller;
-		}
-	}
+        return null;
+    }
 
-	/**
-	 * 获取控制器类的根目录设置
-	 * 
-	 * @param clz 控制器类
-	 * @return 根目录
-	 */
-	public static String getRootPath(Class<? extends IController> clz) {
-		Path path = clz.getAnnotation(Path.class); // 总路径
+    /**
+     * 根据 httpMethod 请求方法返回控制器
+     *
+     * @param method HTTP 请求的方法
+     * @return 控制器
+     */
+    public IController getController(String method) {
+        switch (method.toUpperCase()) {
+            case "GET":
+                return getMethodController;
+            case "POST":
+                return postMethodController;
+            case "PUT":
+                return putMethodController;
+            case "DELETE":
+                return deleteMethodController;
+            default:
+                return controller;
+        }
+    }
 
-		if (path == null && !Modifier.isAbstract(clz.getModifiers())) { // 检查控制器类是否有 Path
-			LOGGER.warning("控制器[{0}]不存在任何 Path 信息，控制器类应该至少设置一个 Path 注解。", clz.toString());
-			return null;
-		}
+    /**
+     * 获取控制器类的根目录设置
+     *
+     * @param clz 控制器类
+     * @return 根目录
+     */
+    public static String getRootPath(Class<? extends IController> clz) {
+        Path path = clz.getAnnotation(Path.class); // 总路径
 
-		String rootPath = path.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
-		return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
-	}
+        if (path == null && !Modifier.isAbstract(clz.getModifiers())) { // 检查控制器类是否有 Path
+            LOGGER.warning("控制器[{0}]不存在任何 Path 信息，控制器类应该至少设置一个 Path 注解。", clz.toString());
+            return null;
+        }
+
+        assert path != null;
+        String rootPath = path.value();// 控制器类上定义的 Path 注解总是从根目录开始的。 the path in class always starts from top 1
+
+        return rootPath.replaceAll("^/", ""); // remove the first / so that the array would be right length
+    }
 }

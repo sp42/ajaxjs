@@ -53,10 +53,6 @@ public class ByteArrayOutput extends ServletOutputStream {
 		out.write(b);
 	}
 
-	/**
-	 * 
-	 * @param _out
-	 */
 	public void writeTo(OutputStream _out) {
 		ByteArrayOutputStream bos = (ByteArrayOutputStream) out;
 
