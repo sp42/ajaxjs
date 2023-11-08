@@ -82,7 +82,8 @@ public class EncryptUtil {
      */
     private String keyGeneratorMac(String res, String algorithm, String key) {
         try {
-            SecretKey sk = null;
+            SecretKey sk;
+
             if (key == null) {
                 KeyGenerator kg = KeyGenerator.getInstance(algorithm);
                 sk = kg.generateKey();

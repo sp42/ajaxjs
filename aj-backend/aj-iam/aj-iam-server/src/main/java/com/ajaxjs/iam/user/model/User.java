@@ -14,6 +14,16 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseModel implements UserConstants, IBaseModel {
     /**
+     * 部门 ID
+     */
+    private Long orgId;
+
+    /**
+     * 租户 id
+     */
+    private Long tenantId;
+
+    /**
      * 用户名、登录名
      */
     @NotNull

@@ -31,7 +31,7 @@ public class TenantService {
      *
      * @return 租户编码
      */
-    public static int getTenantId() {
+    public static Integer getTenantId() {
         HttpServletRequest request = DiContextUtil.getRequest();
 
         if (request == null)
@@ -39,7 +39,7 @@ public class TenantService {
 
         String id = request.getHeader(AUTH_TENANT_ID);
 
-        return StringUtils.hasText(id) ? Integer.parseInt(id) : 0;
+        return StringUtils.hasText(id) ? Integer.parseInt(id) : null;
     }
 
     /**
