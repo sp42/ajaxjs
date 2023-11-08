@@ -63,8 +63,8 @@ public class TransferProtocolClient extends NetworkClient {
         int continuingCode = -1;
         int code;
         String response;
-
         serverResponse.setSize(0);
+
         while (true) {
             while ((c = serverInput.read()) != -1) {
                 if (c == '\r') {

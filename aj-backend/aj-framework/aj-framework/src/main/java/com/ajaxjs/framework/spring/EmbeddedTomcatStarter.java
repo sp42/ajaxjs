@@ -6,14 +6,19 @@ import com.ajaxjs.framework.spring.filter.FileUploadHelper;
 import com.ajaxjs.framework.spring.filter.UTF8CharsetFilter;
 import com.ajaxjs.util.logger.LogHelper;
 import org.apache.catalina.*;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.yaml.snakeyaml.Yaml;
 
 import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * 嵌入式使用 Tomcat
@@ -78,6 +83,45 @@ public class EmbeddedTomcatStarter extends TomcatStarter {
             isStatedSpring = true;
             springTime = System.currentTimeMillis() - startedTime;
         });
+    }
+
+
+    public static void start(Class<?>... clz) {
+        TomcatConfig cfg = new TomcatConfig();
+        Map<String, Object> serverConfig = getServerConfig();
+        int port = 8301; // default port
+
+        if (serverConfig != null) {
+            Object p = serverConfig.get("port");
+
+            if (p != null)
+                port = (int) p;
+
+            String context = (String) serverConfig.get("context-path");
+
+            if (StringUtils.hasText(context))
+                cfg.setContextPath(context);
+        }
+
+        cfg.setPort(port);
+
+        new EmbeddedTomcatStarter(cfg, clz).start();
+    }
+
+    @SuppressWarnings("unchecked")
+    static Map<String, Object> getServerConfig() {
+        ClassPathResource resource = new ClassPathResource("application.yml");
+
+        if (!resource.exists())
+            return null;
+
+        try {
+            Map<String, Object> yamlMap = new Yaml().load(resource.getInputStream());
+
+            return (Map<String, Object>) yamlMap.get("server");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

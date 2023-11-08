@@ -1,12 +1,9 @@
 package com.ajaxjs.web.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
 import java.util.List;
 import java.util.regex.Pattern;
+
+import com.ajaxjs.web.Utils;
 
 /**
  * 白名单/黑名单
@@ -14,20 +11,16 @@ import java.util.regex.Pattern;
  * @author sp42 frank@ajaxjs.com
  *
  */
-@Component
 public class ListCheck {
 	/**
 	 * 白名单
 	 */
-	@Qualifier("Security_White_List")
-	@Autowired(required = false)
 	private List<String> whiteList;
 
 	/**
 	 * 黑名单
 	 */
-	@Qualifier("Security_Black_List")
-	@Autowired(required = false)
+
 	private List<String> blackList;
 
 	/**
@@ -63,7 +56,7 @@ public class ListCheck {
 	 * @return true 表示为包含；false 表示为不包含
 	 */
 	private static boolean isInList(String str, List<String> list) {
-		if (CollectionUtils.isEmpty(list))
+		if (Utils.isEmptyList(list))
 			return false;
 
 		for (String pattern : list) {

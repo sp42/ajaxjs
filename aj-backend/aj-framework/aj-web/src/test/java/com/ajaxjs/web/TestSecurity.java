@@ -3,20 +3,10 @@ package com.ajaxjs.web;
 import com.ajaxjs.web.security.Filter;
 import com.ajaxjs.web.security.ListCheck;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-
 import static org.junit.Assert.assertEquals;
 
-@ContextConfiguration(locations = { "classpath*:applicationContext.xml" })
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
 public class TestSecurity {
 
-	@Autowired
 	private ListCheck c;
 
 //	@Test

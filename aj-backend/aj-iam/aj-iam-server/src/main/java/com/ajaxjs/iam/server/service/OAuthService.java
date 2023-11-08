@@ -26,13 +26,18 @@ import java.util.Date;
 public class OAuthService implements OAuthController, IamConstants {
     private static final LogHelper LOGGER = LogHelper.getLog(OAuthService.class);
 
-    @Autowired
+    @Autowired(required = false)
     Cache<String, Object> cache;
 
     /**
      * 授权码超时 5分钟
      */
     private static final int AUTHORIZATION_CODE_TIMEOUT = 5 * 60 * 100;
+
+    @Override
+    public ModelAndView agree(String clientId, String redirectUri, String scope, String status) {
+        return null;
+    }
 
     @Override
     public ModelAndView authorize(String clientId, String redirectUri, String scope, String status) {

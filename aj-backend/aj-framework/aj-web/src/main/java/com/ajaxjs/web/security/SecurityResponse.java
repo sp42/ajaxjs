@@ -15,25 +15,21 @@
  */
 package com.ajaxjs.web.security;
 
-import com.ajaxjs.framework.config.EasyConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.IOException;
 
 /**
  * 
- * @author sp42 frank@ajaxjs.com
- *
  */
 public class SecurityResponse extends HttpServletResponseWrapper {
-	@Autowired
-	private EasyConfig config;
-	
+	private boolean isXssCheck = true;
 
-	private final static String IS_ENABLE_CRLF = "webSecurity.isCRLF_Filter";
+	private boolean isCRLFCheck = true;
+
+	private boolean isCookiesSizeCheck = true;
 
 	/**
 	 * 创建一个 SecurityResponse 实例。
@@ -46,7 +42,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void addCookie(Cookie cookie) {
-		if (config.getBol(IS_ENABLE_CRLF)) {
+		if (isCRLFCheck) {
 			String name = cookie.getName(), value = cookie.getValue();
 			Cookie newCookie = new Cookie(Filter.cleanCRLF(name), Filter.cleanCRLF(value));
 
@@ -63,7 +59,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 			/*
 			 * 检查 Cookie 容量大小和是否在白名单中。
 			 */
-			if (config.getBol("security.isCookiesSizeCheck") && (cookie.getValue().length() > MAX_COOKIE_SIZE))
+			if (isCookiesSizeCheck && (cookie.getValue().length() > MAX_COOKIE_SIZE))
 				throw new SecurityException("超出 Cookie 允许容量：" + MAX_COOKIE_SIZE);
 
 //		if (!delegate.isInWhiteList(cookie.getName()))
@@ -81,7 +77,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void setDateHeader(String name, long date) {
-		if (config.getBol(IS_ENABLE_CRLF))
+		if (isCRLFCheck)
 			name = Filter.cleanCRLF(name);
 
 		super.setDateHeader(name, date);
@@ -89,7 +85,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void setIntHeader(String name, int value) {
-		if (config.getBol(IS_ENABLE_CRLF))
+		if (isCRLFCheck)
 			name = Filter.cleanCRLF(name);
 
 		super.setIntHeader(name, value);
@@ -97,10 +93,10 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void addHeader(String name, String value) {
-		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
+		if (isXssCheck)
 			value = Filter.cleanXSS(value);
 
-		if (config.getBol(IS_ENABLE_CRLF)) {
+		if (isCRLFCheck) {
 			name = Filter.cleanCRLF(name);
 			value = Filter.cleanCRLF(value);
 		}
@@ -110,10 +106,10 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void setHeader(String name, String value) {
-		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
+		if (isXssCheck)
 			value = Filter.cleanXSS(value);
 
-		if (config.getBol(IS_ENABLE_CRLF)) {
+		if (isCRLFCheck) {
 			name = Filter.cleanCRLF(name);
 			value = Filter.cleanCRLF(value);
 		}
@@ -124,7 +120,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void setStatus(int sc, String value) {
-		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
+		if (isXssCheck)
 			value = Filter.cleanCRLF(value);
 
 		super.setStatus(sc, value);
@@ -132,7 +128,7 @@ public class SecurityResponse extends HttpServletResponseWrapper {
 
 	@Override
 	public void sendError(int sc, String value) throws IOException {
-		if (config.getBol(SecurityRequest.IS_ENABLE_XSS))
+		if (isXssCheck)
 			value = Filter.cleanCRLF(value);
 
 		super.sendError(sc, value);

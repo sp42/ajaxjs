@@ -46,7 +46,7 @@ public class BaseCRUD<T, K extends Serializable> {
     /**
      * 1=自增；2=雪花；3=UUID
      */
-    private Integer idType = 1;
+    private Integer idType = BaseEntityConstants.IdType.AUTO_INC;
 
     /**
      * 获取单笔记录

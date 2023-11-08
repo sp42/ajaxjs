@@ -29,16 +29,6 @@ public interface UserConstants {
     }
 
     /**
-     * 验证 email 是否合法正确
-     */
-    Pattern EMAIL_REG = Pattern.compile("^([a-z0-9A-Z]+[-|.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$");
-
-    /**
-     * 验证手机号码是否合法正确
-     */
-    Pattern PHONE_REG = Pattern.compile("^1[3-8]\\d{9}$");
-
-    /**
      * 登录类型
      *
      * @author Frank Cheung

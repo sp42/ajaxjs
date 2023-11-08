@@ -113,7 +113,7 @@ public class EntityConvert {
                 }
             } else {
                 if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
-                    value = ConvertComplexValue.INSTANCE.convert(value, t);
+                    value = ConvertComplexValue.getConvertValue().convert(value, t);
             }
 
             try {
@@ -140,7 +140,7 @@ public class EntityConvert {
             Class<?> t = field.getType();
             // TODO list
             if (isTransform && t != value.getClass()) // 类型相同，直接传入；类型不相同，开始转换
-                value = ConvertComplexValue.INSTANCE.convert(value, t);
+                value = ConvertComplexValue.getConvertValue().convert(value, t);
 
             try {
                 field.set(bean, value);

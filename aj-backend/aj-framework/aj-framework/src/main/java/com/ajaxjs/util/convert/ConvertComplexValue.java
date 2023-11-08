@@ -1,5 +1,6 @@
 package com.ajaxjs.util.convert;
 
+import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,13 +23,15 @@ public abstract class ConvertComplexValue extends ConvertBasicValue {
     /**
      * 实例、单例
      */
-    public volatile static ConvertComplexValue INSTANCE;
+    private volatile static ConvertComplexValue INSTANCE;
 
     public static ConvertComplexValue getConvertValue() {
         if (INSTANCE == null) {
             synchronized (ConvertComplexValue.class) {
-                if (INSTANCE == null)
+                if (INSTANCE == null) {
                     INSTANCE = new DefaultConvertValue();
+                    INSTANCE.setBeanClz(IBaseModel.class);
+                }
             }
         }
 

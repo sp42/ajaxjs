@@ -256,21 +256,19 @@ public class FtpClient extends TransferProtocolClient {
             case 1:
                 replyPending = true;
                 /* falls into ... */
-
             case 2:
             case 3:
                 return FTP_SUCCESS;
-
             case 5:
                 if (lastReplyCode == 530) {
-                    if (!loggedIn) {
+                    if (!loggedIn)
                         throw new FtpLoginException("Not logged in");
-                    }
+
                     return FTP_ERROR;
                 }
-                if (lastReplyCode == 550) {
+
+                if (lastReplyCode == 550)
                     throw new FileNotFoundException(command + ": " + getResponseString());
-                }
         }
 
         /* this statement is not reached */
@@ -287,7 +285,7 @@ public class FtpClient extends TransferProtocolClient {
     protected Socket openPassiveDataConnection() throws IOException {
         String serverAnswer;
         int port;
-        InetSocketAddress dest = null;
+        InetSocketAddress dest;
 
         /*
          * Here is the idea:
@@ -304,6 +302,7 @@ public class FtpClient extends TransferProtocolClient {
             // We can safely use EPSV commands
             if (issueCommand("EPSV") == FTP_ERROR)
                 throw new FtpProtocolException("EPSV Failed: " + getResponseString());
+
             serverAnswer = getResponseString();
 
             // The response string from a EPSV command will contain the port number
@@ -314,16 +313,18 @@ public class FtpClient extends TransferProtocolClient {
 
             Pattern p = Pattern.compile("^229 .* \\(\\|\\|\\|(\\d+)\\|\\)");
             Matcher m = p.matcher(serverAnswer);
+
             if (!m.find())
                 throw new FtpProtocolException("EPSV failed : " + serverAnswer);
+
             // Yay! Let's extract the port number
             String s = m.group(1);
             port = Integer.parseInt(s);
             InetAddress add = serverSocket.getInetAddress();
 
-            if (add != null) {
+            if (add != null)
                 dest = new InetSocketAddress(add, port);
-            } else {
+            else {
                 // This means we used an Unresolved address to connect in
                 // the first place. Most likely because the proxy is doing
                 // the name resolution for us, so let's keep using unresolved
@@ -351,6 +352,7 @@ public class FtpClient extends TransferProtocolClient {
 
             Pattern p = Pattern.compile("227 .* \\(?(\\d{1,3},\\d{1,3},\\d{1,3},\\d{1,3}),(\\d{1,3}),(\\d{1,3})\\)?");
             Matcher m = p.matcher(serverAnswer);
+
             if (!m.find())
                 throw new FtpProtocolException("PASV failed : " + serverAnswer);
             // Get port number out of group 2 & 3
@@ -374,6 +376,7 @@ public class FtpClient extends TransferProtocolClient {
                 s = new Socket(Proxy.NO_PROXY);
         } else
             s = new Socket();
+
         if (connectTimeout >= 0)
             s.connect(dest, connectTimeout);
         else {
@@ -401,7 +404,7 @@ public class FtpClient extends TransferProtocolClient {
      */
     protected Socket openDataConnection(String cmd) throws IOException {
         ServerSocket portSocket;
-        Socket clientSocket = null;
+        Socket clientSocket;
         String portCmd;
         InetAddress myAddress;
         IOException e;
@@ -550,17 +553,20 @@ public class FtpClient extends TransferProtocolClient {
 
         // keep the welcome message around, so we can put it in the resulting HTML page.
         String l;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < serverResponse.size(); i++) {
-            l = (String) serverResponse.elementAt(i);
+            l = serverResponse.elementAt(i);
+
             if (l != null) {
-                if (l.length() >= 4 && l.startsWith("230")) {
+                if (l.length() >= 4 && l.startsWith("230"))
                     // get rid of the "230-" prefix
                     l = l.substring(4);
-                }
+
                 sb.append(l);
             }
         }
+
         welcomeMsg = sb.toString();
         loggedIn = true;
     }

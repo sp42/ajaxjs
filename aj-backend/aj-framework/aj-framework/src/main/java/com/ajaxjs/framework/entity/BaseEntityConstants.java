@@ -1,11 +1,10 @@
 package com.ajaxjs.framework.entity;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public interface BaseEntityConstants {
-   Map<Integer, String> STATE = new HashMap<Integer, String>() {
+    Map<Integer, String> STATE = new HashMap<Integer, String>() {
         private static final long serialVersionUID = -873485978038563365L;
 
         {
@@ -35,4 +34,20 @@ public interface BaseEntityConstants {
      * 下架/下线/隐藏
      */
     int STATUS_OFFLINE = 2;
+
+    interface IdType {
+        /**
+         * 自增
+         */
+        int AUTO_INC = 1;
+
+        /**
+         */
+        int SNOW = 2;
+
+        /**
+         * UUID
+         */
+        int UUID = 3;
+    }
 }

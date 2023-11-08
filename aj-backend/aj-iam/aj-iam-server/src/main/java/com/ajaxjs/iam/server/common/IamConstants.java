@@ -49,4 +49,6 @@ public interface IamConstants {
     enum PermissionType {
         FUNCTION, API;
     }
+
+    String USER_IN_SESSION = "USER_IN_SESSION";
 }

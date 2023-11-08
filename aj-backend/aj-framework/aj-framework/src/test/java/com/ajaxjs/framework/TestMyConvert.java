@@ -16,17 +16,17 @@ public class TestMyConvert {
     @Test
     public void test() {
         String json = "[{a:1, b:2}]";
-        Object o = ConvertComplexValue.INSTANCE.convert(json, List.class);
+        Object o = ConvertComplexValue.getConvertValue().convert(json, List.class);
         System.out.println(o);
 
         json = "{a:1, b:2}";
-        Map map = (Map) ConvertComplexValue.INSTANCE.convert(json, Map.class);
+        Map map = (Map) ConvertComplexValue.getConvertValue().convert(json, Map.class);
         System.out.println(map);
 
-        o = ConvertComplexValue.INSTANCE.convert(json, A.class);
+        o = ConvertComplexValue.getConvertValue().convert(json, A.class);
         System.out.println(o);
 
-        Object o1 = ConvertComplexValue.INSTANCE.convert(map, A.class);
+        Object o1 = ConvertComplexValue.getConvertValue().convert(map, A.class);
         System.out.println(o1);
     }
 }

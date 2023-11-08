@@ -19,3 +19,4 @@ public class UserNotLogined extends AbstractUserLogin {
 			getJspBody().invoke(null);
 	}
 }
+

@@ -61,7 +61,7 @@
 			</tr>
 			<tr :class="{hide: !isShowCreate}">
 				<td></td>
-				<td><input type="text" v-model="item.name" /></td>
+				<td><input type="text" v-model="create.name" /></td>
 				<td>
                     <select v-model="create.objGroup">
                         <option v-for="(k, v) in OBJECT_GROUP" :value="v">

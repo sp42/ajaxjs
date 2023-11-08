@@ -1,15 +1,13 @@
 package com.ajaxjs.web.security;
 
-import org.springframework.util.StringUtils;
-
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ajaxjs.web.Utils;
+
 /**
  * 过滤器
- * 
- * @author Frank Cheung sp42@qq.com
  *
  */
 public class Filter {
@@ -22,7 +20,7 @@ public class Filter {
 	 * @return
 	 */
 	private static String clean(String str, Pattern p, Function<Matcher, String> replFn) {
-		if (!StringUtils.hasText(str))
+		if (Utils.isEmtpyString(str))
 			return str;
 
 		Matcher matcher = p.matcher(str);

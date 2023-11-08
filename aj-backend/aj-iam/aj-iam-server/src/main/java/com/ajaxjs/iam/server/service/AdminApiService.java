@@ -15,27 +15,10 @@ public class AdminApiService extends BaseCRUDService implements AdminApiControll
         app.setTableName("app");
         namespaces.put("app", app);
 
-        BaseCRUD<Map<String, Object>, Long> combat = new BaseCRUD<>();
-        combat.setTableName("et_combat");
-        combat.setIdField("et_id");
-        combat.setIdType(2);
-        namespaces.put("combat", combat);
-
-        BaseCRUD<Map<String, Object>, Long> objectType = new BaseCRUD<>();
-        objectType.setTableName("et_object_type");
-        objectType.setIdField("object_type_id");
-        objectType.setHasIsDeleted(true);
-        namespaces.put("objectType", objectType);
-
         BaseCRUD<Map<String, Object>, Long> user = new BaseCRUD<>();
         user.setTableName("user");
-        user.setIdField("user_id");
-        user.setHasIsDeleted(true);
-        namespaces.put("user", user);
 
-        BaseCRUD<Map<String, Object>, Long> taskTypeObjType = new BaseCRUD<>();
-        taskTypeObjType.setTableName("et_task_type_relation_object_type");
-        namespaces.put("taskTypeObjType", taskTypeObjType);
+        namespaces.put("user", user);
     }
 
 //    public static void getMenuGroup(HttpServletRequest request) {

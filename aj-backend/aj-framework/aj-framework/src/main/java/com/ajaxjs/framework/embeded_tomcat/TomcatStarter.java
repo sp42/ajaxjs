@@ -15,6 +15,8 @@ import org.apache.coyote.AbstractProtocol;
 import org.apache.coyote.ProtocolHandler;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
+import org.apache.tomcat.util.descriptor.web.JspPropertyGroup;
+import org.apache.tomcat.util.descriptor.web.JspPropertyGroupDescriptorImpl;
 import org.apache.tomcat.util.scan.StandardJarScanFilter;
 
 import javax.management.remote.JMXConnectorServer;
@@ -27,6 +29,7 @@ import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.registry.LocateRegistry;
+import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -139,7 +142,7 @@ public class TomcatStarter {
         host.setAppBase("webapp");
 
         context = tomcat.addWebapp(host, cfg.getContextPath(), jspFolder, (LifecycleListener) new EmbededContextConfig());
-        context.setReloadable(false);// 禁止重新载入
+        context.setReloadable(cfg.getEnableJsp());// 设置 JSP 文件的自动编译属性
         context.addLifecycleListener(new Tomcat.FixContextListener());// required if you don't use web.xml
 
         onContextReady(context);
@@ -154,12 +157,32 @@ public class TomcatStarter {
 
         if (!cfg.getEnableJsp())
             disableJsp();
+        else
+            initJSP();
 
 //        context.setJarScanner(new EmbeddedStandardJarScanner());
 //        context.setParentClassLoader(TomcatStarter.class.getClassLoader());// needs?
         addWebXmlMountListener();
         setTomcatDisableScan();
 //        initFilterByTomcat(UTF8CharsetFilter.class);
+    }
+
+    /**
+     * <a href="https://blog.csdn.net/hundan_520520/article/details/103483041">...</a>
+     * <a href="http://www.ice-maple.com/2019/12/06/springboot%E9%85%8D%E7%BD%AEjsp-config%E7%9A%84%E6%8E%A2%E7%A9%B6/">...</a>
+     */
+    private void initJSP() {
+        JspPropertyGroup jspPropertyGroup = new JspPropertyGroup();
+        jspPropertyGroup.setElIgnored("false");
+        jspPropertyGroup.addUrlPattern("*.jsp");
+        jspPropertyGroup.setPageEncoding(StrUtil.UTF8_SYMBOL);
+
+        // 项目启动时，可以在每个 JSP 页面上加入 tagelibs.jspf 的头文件
+//        jspPropertyGroup.addIncludePrelude("/WEB-INF/tags/taglibs.jspf");
+        JspPropertyGroupDescriptorImpl jspPropertyGroupDescriptor = new JspPropertyGroupDescriptorImpl(jspPropertyGroup);
+        // jsp-property-group列表和taglib列表
+//        context.setJspConfigDescriptor(new JspConfigDescriptorImpl(Collections.singletonList(jspPropertyGroupDescriptor), Collections.emptyList()));
+//        context.addLifecycleListener(new org.apache.catalina.core.JasperListener());
     }
 
     /**
@@ -329,7 +352,7 @@ public class TomcatStarter {
      * 将定义好的 Tomcat MBean 注册到 MBeanServer
      * 参见 <a href="https://blog.csdn.net/zhangxin09/article/details/132136748">...</a>
      */
-     protected static void connectMBeanServer() {
+    protected static void connectMBeanServer() {
         try {
             LocateRegistry.createRegistry(9011); //这个步骤很重要，注册一个端口，绑定url  后用于客户端通过 rmi 方式连接 JMXConnectorServer
             JMXConnectorServer cs = JMXConnectorServerFactory.newJMXConnectorServer(new JMXServiceURL("service:jmx:rmi://localhost/jndi/rmi://localhost:9011/jmxrmi"), null, ManagementFactory.getPlatformMBeanServer() // 获取当前 JVM 的 MBeanServer，ObjectName 是 MBean 的唯一标示，一个 MBeanServer 不能有重复。

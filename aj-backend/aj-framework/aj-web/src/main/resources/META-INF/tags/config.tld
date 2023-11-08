@@ -9,18 +9,6 @@
 	<description>自定义标签库</description>
 
 	<tag>
-		<name>siteStru</name>
-		<tag-class>com.ajaxjs.web.site_stru.SiteStruTag</tag-class>
-		<description>网站页面结构标签</description>
-		<body-content>scriptless</body-content>
-		<attribute>
-			<name>type</name>
-			<required>true</required>
-			<description>标签类型</description>
-		</attribute>
-	</tag> 
-
-	<tag>
 		<name>logined</name>
 		<tag-class>com.ajaxjs.web.user.UserLogined</tag-class>
 		<description>會員已经登录时</description>

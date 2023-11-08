@@ -28,7 +28,7 @@ public abstract class AbstractUserLogin extends SimpleTagSupport {
 	 * 会员是否已经登录
 	 * 
 	 * @param request 请求对象
-	 * @return true=會員已經登錄；fasle=未登录
+	 * @return true=會員已經登錄；false=未登录
 	 */
 	public static boolean isLogined(HttpServletRequest request) {
 		return request != null && request.getSession() != null && request.getSession().getAttribute("userId") != null;
