@@ -1,7 +1,5 @@
-package com.ajaxjs.framework.spring;
+package com.ajaxjs.framework.embeded_tomcat;
 
-import com.ajaxjs.framework.embeded_tomcat.TomcatConfig;
-import com.ajaxjs.framework.embeded_tomcat.TomcatStarter;
 import com.ajaxjs.framework.spring.filter.FileUploadHelper;
 import com.ajaxjs.framework.spring.filter.UTF8CharsetFilter;
 import com.ajaxjs.util.logger.LogHelper;
@@ -75,7 +73,12 @@ public class EmbeddedTomcatStarter extends TomcatStarter {
             FilterRegistration.Dynamic filterReg = ctx.addFilter("InitMvcRequest", new UTF8CharsetFilter());
             filterReg.addMappingForUrlPatterns(null, true, "/*");
 
-            FileUploadHelper.initUpload(ctx, registration);
+            if (cfg.getEnableLocalFileUpload()) {
+                if (cfg.getLocalFileUploadDir() == null)
+                    FileUploadHelper.initUpload(ctx, registration);
+                else
+                    FileUploadHelper.initUpload(ctx, registration, cfg.getLocalFileUploadDir());
+            }
 
             if (cfg.isEnableJMX())
                 connectMBeanServer();
@@ -101,6 +104,18 @@ public class EmbeddedTomcatStarter extends TomcatStarter {
 
             if (StringUtils.hasText(context))
                 cfg.setContextPath(context);
+
+            Object upObj = serverConfig.get("localFileUpload");
+
+            if (upObj != null) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> upCfg = (Map<String, Object>) upObj;
+
+                if (upCfg.get("enable") != null)
+                    cfg.setEnableLocalFileUpload((boolean) upCfg.get("enable"));
+
+                cfg.setLocalFileUploadDir((String) upCfg.get("dir"));
+            }
         }
 
         cfg.setPort(port);

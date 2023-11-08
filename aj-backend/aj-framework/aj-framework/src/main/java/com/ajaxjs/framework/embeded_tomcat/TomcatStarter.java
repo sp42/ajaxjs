@@ -29,7 +29,6 @@ import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.registry.LocateRegistry;
-import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -39,12 +38,23 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class TomcatStarter {
     private static final LogHelper LOGGER = LogHelper.getLog(TomcatStarter.class);
 
+    /**
+     * 创建一个 TomcatStarter
+     *
+     * @param cfg 配置
+     */
     public TomcatStarter(TomcatConfig cfg) {
         this.cfg = cfg;
     }
 
+    /**
+     * 自定义配置
+     */
     public TomcatConfig cfg;
 
+    /**
+     * Tomcat 对象
+     */
     Tomcat tomcat;
 
     /**
@@ -52,12 +62,24 @@ public class TomcatStarter {
      */
     public static Tomcat TOMCAT;
 
+    /**
+     * Tomcat 上下文对象
+     */
     Context context;
 
+    /**
+     * 记录启动时间
+     */
     public static long startedTime;
 
+    /**
+     * 记录 Spring 启动时间
+     */
     public static long springTime;
 
+    /**
+     * 启动 Tomcat
+     */
     public void start() {
         startedTime = System.currentTimeMillis();
         initTomcat();
@@ -66,22 +88,28 @@ public class TomcatStarter {
         runTomcat();
     }
 
+    /**
+     * 初始化 Tomcat 对象
+     */
     private void initTomcat() {
         tomcat = new Tomcat();
+        String tomcatBaseDir = cfg.getBaseDir();
+
+        if (tomcatBaseDir == null)
+            tomcatBaseDir = System.getProperty("java.io.tmpdir") + "tomcat_embed_works_tmpdir";
+//            tomcatBaseDir = TomcatUtil.createTempDir("tomcat_embed_works_tmpdir").getAbsolutePath();
+
+        tomcat.setBaseDir(tomcatBaseDir);
         tomcat.setPort(cfg.getPort());
         tomcat.setHostname(cfg.getHostName());
         tomcat.enableNaming();
 
-//        String tomcatBaseDir = cfg.getTomcatBaseDir();
-//
-//        if (tomcatBaseDir == null)
-//            tomcatBaseDir = TomcatUtil.createTempDir("tomcat_embed_works_tmpdir").getAbsolutePath();
-//
-//        tomcat.setBaseDir(tomcatBaseDir);
-
         TOMCAT = tomcat;
     }
 
+    /**
+     * 启动 Tomcat
+     */
     private void runTomcat() {
         try {
             tomcat.start(); // tomcat 启动
@@ -127,7 +155,10 @@ public class TomcatStarter {
      * 读取项目路径
      */
     private void initContext() {
-        String jspFolder = getDevelopJspFolder();
+        String jspFolder = cfg.getDocBase();
+
+        if (jspFolder == null)
+            jspFolder = Resources.getResourcesFromClasspath("META-INF\\resources");// 开放调试阶段，直接读取源码的
 
         if (jspFolder == null) {
             jspFolder = Resources.getJarDir() + "/../webapp"; // 部署阶段。这个并不会实际保存 jsp。因为 jsp 都在 META-INF/resources 里面。但因为下面的 addWebapp() 又需要
@@ -136,7 +167,6 @@ public class TomcatStarter {
 
 //        System.out.println("jspFolder::::::" + Resources.getJarDir());
 //        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("/mycar/mycar-service-4.0/security-oauth2-uam/sync/jsp").getAbsolutePath());
-//        context = tomcat.addWebapp(contextPath, jspFolder);
         Host host = tomcat.getHost();
         host.setAutoDeploy(false);
         host.setAppBase("webapp");
@@ -189,10 +219,6 @@ public class TomcatStarter {
      * You can override it
      */
     public void onContextReady(Context context) {
-    }
-
-    public static String getDevelopJspFolder() {
-        return Resources.getResourcesFromClasspath("META-INF\\resources");// 开放调试阶段，直接读取源码的
     }
 
     /**

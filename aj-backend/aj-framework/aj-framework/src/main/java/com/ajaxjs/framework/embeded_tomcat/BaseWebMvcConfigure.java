@@ -1,5 +1,7 @@
-package com.ajaxjs.framework.spring;
+package com.ajaxjs.framework.embeded_tomcat;
 
+import com.ajaxjs.framework.spring.CustomPropertySources;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
 import com.ajaxjs.framework.spring.filter.ShowControllerInterceptor;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;

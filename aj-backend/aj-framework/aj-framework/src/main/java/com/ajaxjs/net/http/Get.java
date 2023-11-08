@@ -151,7 +151,7 @@ public class Get extends Base {
      */
     public static String download(String url, Consumer<HttpURLConnection> fn, String saveDir, String newFileName) {
         HttpURLConnection conn = initHttpConnection(url, "GET");
-        SetConnection.SET_USERAGENT_DEFAULT.accept(conn);
+        SetConnection.SET_USER_AGENT_DEFAULT.accept(conn);
         conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
         conn.setDoOutput(true);
 

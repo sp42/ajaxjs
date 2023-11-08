@@ -47,7 +47,6 @@ public class Post extends Base implements HttpConstants {
      * @param fn     自定义 HTTP 头的时候可设置，可选的
      * @return 响应消息体
      */
-
     private static ResponseEntity p(boolean isPost, String url, Object params, Consumer<HttpURLConnection> fn) {
         return any(isPost ? POST : PUT, url, params, fn);
     }
@@ -141,8 +140,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *               <pre>byte[]、String、Map<String, Object>
      *               <p>
-     *                                                                                                                                                                                                                                                             类型，实际表示了表单数据 KeyValue 的请求数据
-     *                                                                                                                                                                                                                                               @return 响应消息体
+     *                                                                                                                                                                                                                                                                           类型，实际表示了表单数据 KeyValue 的请求数据
+     *                                                                                                                                                                                                                                                             @return 响应消息体
      */
     public static ResponseEntity put(String url, Object params) {
         return put(url, params, null);
@@ -184,8 +183,8 @@ public class Post extends Base implements HttpConstants {
      * @param params 请求参数，可以是
      *
      *               <pre>
-     *                                                                                                                                                                                                                                                                                                                                                                                                         byte[]、String、Map<String, Object>
-     *                                                                                                                                                                                                                                                                                                                                                                                                                       </pre>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                       byte[]、String、Map<String, Object>
+     *                                                                                                                                                                                                                                                                                                                                                                                                                                     </pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的

@@ -27,18 +27,13 @@ public class FileUploadHelper {
      * 初始化文件上传
      */
     public static void initUpload(ServletContext cxt, ServletRegistration.Dynamic registration) {
-        String tempDir = WebHelper.mapPath(cxt, "upload_temp");
-//        System.out.println(System.getProperty("user.dir"));
+        initUpload(cxt, registration, System.getProperty("java.io.tmpdir") + "upload_dir");
+    }
 
-        if (tempDir == null) {
-//            tempDir = EmbeddedTomcatStarter.getDevelopJspFolder() + FileHelper.SEPARATOR + "upload_temp";
-            tempDir = "c:\\temp\\" + FileHelper.SEPARATOR + "upload_temp";
-            tempDir = System.getProperty("user.dir") + FileHelper.SEPARATOR + "upload_temp";
-        }
-
+    public static void initUpload(ServletContext cxt, ServletRegistration.Dynamic registration, String uploadDir) {
         // 如果不存在则创建
-        FileHelper.mkDir(tempDir);
-        registration.setMultipartConfig(new MultipartConfigElement(tempDir, 50000000, 50000000, 0));// 文件上传
+        FileHelper.mkDir(uploadDir);
+        registration.setMultipartConfig(new MultipartConfigElement(uploadDir, 50000000, 50000000, 0));// 文件上传
     }
 
     /**

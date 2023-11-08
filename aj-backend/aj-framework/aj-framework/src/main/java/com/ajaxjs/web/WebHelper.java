@@ -31,7 +31,6 @@ import java.util.Set;
  * @author Frank Cheung
  */
 public class WebHelper {
-
     /**
      * 获取请求 ip
      *
@@ -235,9 +234,9 @@ public class WebHelper {
     public static Map<String, Object> getParamMap(HttpServletRequest req, Map<String, Object> formPostMap) {
         Map<String, Object> map;
 
-        if (formPostMap.size() == 0 && req.getContentType().contains("application/json")) {
+        if (formPostMap.size() == 0 && req.getContentType().contains("application/json"))
             map = getRawBodyAsJson(req);// 不是标准的 表单格式，而是 RawBody Payload
-        } else
+        else
             map = formPostMap;
 
         if (map.size() == 0)

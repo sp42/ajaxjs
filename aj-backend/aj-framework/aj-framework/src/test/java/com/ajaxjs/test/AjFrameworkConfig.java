@@ -1,7 +1,7 @@
 package com.ajaxjs.test;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
-import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
+import com.ajaxjs.framework.embeded_tomcat.BaseWebMvcConfigure;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

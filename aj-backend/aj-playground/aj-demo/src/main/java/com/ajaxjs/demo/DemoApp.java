@@ -1,8 +1,8 @@
 package com.ajaxjs.demo;
 
 import com.ajaxjs.data.sql_controller.ServiceBeanDefinitionRegistry;
-import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
-import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
+import com.ajaxjs.framework.embeded_tomcat.BaseWebMvcConfigure;
+import com.ajaxjs.framework.embeded_tomcat.EmbeddedTomcatStarter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

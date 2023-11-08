@@ -29,9 +29,9 @@ public class TomcatConfig {
     private String docBase;
 
     /**
-     * Tomcat 临时文件的目录
+     * Tomcat 临时文件的目录，work 目录
      */
-    private String tomcatBaseDir;
+    private String baseDir;
 
     /**
      * 关闭的端口
@@ -47,6 +47,16 @@ public class TomcatConfig {
      * 是否激活 JSP
      */
     private Boolean enableJsp = true;
+
+    /**
+     * 是否激活本地文件上传
+     */
+    private Boolean enableLocalFileUpload = true;
+
+    /**
+     * 本地文件上传的目录
+     */
+    private String localFileUploadDir;
 
     /**
      * 是否激活 JMX 监控
@@ -103,8 +113,8 @@ public class TomcatConfig {
      * <p>
      * TODO: disable work dir if not needed ( no jsp, etc ).
      */
-    public void setTomcatBaseDir(String tomcatBaseDir) {
-        this.tomcatBaseDir = tomcatBaseDir;
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
     }
 
     public String getContextPath() {
