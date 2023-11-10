@@ -20,6 +20,7 @@ public class Utils {
             Mac sha256Hmac = Mac.getInstance("HmacSHA256");
             sha256Hmac.init(new SecretKeySpec(hash, "HmacSHA256"));
             byte[] signedBytes = sha256Hmac.doFinal(data.getBytes(StandardCharsets.UTF_8));
+
             return Utils.encode(signedBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();

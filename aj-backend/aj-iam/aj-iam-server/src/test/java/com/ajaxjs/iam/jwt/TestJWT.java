@@ -9,7 +9,7 @@ public class TestJWT {
 
     @Test
     public void testMakeToken() {
-        JWebToken token = mgr.tokenFactory("user01", "admin, guest", Utils.setExpire(24));
+        JWebToken token = mgr.tokenFactory("1000", "user01", "admin, guest", Utils.setExpire(24));
         System.out.println(token.toString());
     }
 

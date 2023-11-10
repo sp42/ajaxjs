@@ -35,6 +35,13 @@ public interface UserSession {
     void setExpires(int minutes);
 
     /**
+     * 从 session 获取当前用户
+     *
+     * @return 当前用户
+     */
+    User getUserFromSession();
+
+    /**
      * 删除会话中所有的用户
      */
     void removeAllUser();

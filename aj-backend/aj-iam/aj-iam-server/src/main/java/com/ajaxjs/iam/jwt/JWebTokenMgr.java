@@ -1,15 +1,29 @@
 package com.ajaxjs.iam.jwt;
 
 import com.ajaxjs.util.convert.EntityConvert;
+import lombok.Data;
 
 /**
  * JWT 管理器
  */
+@Data
 public class JWebTokenMgr {
+    /**
+     * 密钥
+     */
     private String secretKey = "Df87sD#$%#A";
+
+    /**
+     * 颁发者
+     */
     private String issuer = "foo@bar.net";
 
-
+    /**
+     * 创建一个 JWebTokenMgr
+     *
+     * @param secretKey 密钥
+     * @param issuer    颁发者颁发者
+     */
     public JWebTokenMgr(String secretKey, String issuer) {
         this.secretKey = secretKey;
         this.issuer = issuer;
@@ -37,14 +51,16 @@ public class JWebTokenMgr {
     /**
      * 创建 JWT Token
      *
-     * @param sub
-     * @param aud
-     * @param expires
+     * @param sub     用户 ID
+     * @param name    用户名称
+     * @param aud     角色的意思，可为多个
+     * @param expires 过期时间
      * @return JWT Token
      */
-    public JWebToken tokenFactory(String sub, String aud, long expires) {
+    public JWebToken tokenFactory(String sub, String name, String aud, long expires) {
         Payload payload = new Payload();
         payload.setSub(sub);
+        payload.setName(name);
         payload.setAud(aud);
         payload.setExp(expires);
 

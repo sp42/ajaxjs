@@ -24,6 +24,11 @@ public class RedisUserSession implements UserSession {
     }
 
     @Override
+    public User getUserFromSession() {
+        return null;
+    }
+
+    @Override
     public void removeAllUser() {
 
     }

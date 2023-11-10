@@ -12,7 +12,6 @@ import java.util.Objects;
  * 基于 Servlet Session 最简单的用户会话，适合单机，不支持集群
  */
 public class ServletUserSession implements UserSession {
-
     private HttpSession getSession() {
         return Objects.requireNonNull(DiContextUtil.getRequest()).getSession();
     }
@@ -30,6 +29,26 @@ public class ServletUserSession implements UserSession {
     @Override
     public void setExpires(int minutes) {
         getSession().setMaxInactiveInterval(minutes * 60);
+    }
+
+    @Override
+    public User getUserFromSession() {
+        HttpSession session = getSession();
+        Enumeration<String> attributeNames = session.getAttributeNames();
+        User user = null;
+
+        while (attributeNames.hasMoreElements()) {
+            String attributeName = attributeNames.nextElement();
+
+            if (attributeName.startsWith(SESSION_KEY)) {
+                Object attributeValue = session.getAttribute(attributeName);
+                user = (User) attributeValue;
+
+                break;
+            }
+        }
+
+        return user;
     }
 
     @Override

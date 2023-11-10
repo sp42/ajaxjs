@@ -7,9 +7,9 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("oauth_access_token")
+@TableName("access_token")
 @IdField("id")
-public class OauthAccessToken {
+public class AccessTokenPo {
     /**
      * 主键 id，自增
      */

@@ -5,13 +5,24 @@
 		<meta charset="UTF-8" />
 		<title>统一用户管理</title>
 		<%@ include file="../pages/common.jsp" %>
+		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" defer></script>
 		<style>
             html,
             body {
                height: 100%;
-                overflow: hidden;
+               overflow: hidden;
             }
 		</style>
+		<script>
+            window.onloadTurnstileCallback = function () {
+                turnstile.render('#captcha-el', {
+                    sitekey: '0x4AAAAAAAA2NqTaXauncxkr',
+                    callback: function(token) {
+                        console.log(`Challenge Success ${token}`);
+                    },
+                });
+            };
+        </script>
 	</head>
 
 	<body>
@@ -26,7 +37,7 @@
                         <br />
                         <input class="text-input-1" type="password" name="password" placeholder="密码" />
                         <br />
-                        <br />
+                        <br /><div id="captcha-el"></div>
                         <br />
                         <button class="button-1" onclick="login();return false;">登录</button>
                     </fieldset>
@@ -41,19 +52,15 @@
 		</table>
 	</body>
 	<script>
-	// http://www.ajaxjs.com/public/temp.js
-	function login() {
-        let userName = document.querySelector('*[name=userName]').value;
-        let password = document.querySelector('*[name=password]').value;
+        function login() {
+            let userName = document.querySelector('*[name=userName]').value;
+            let password = document.querySelector('*[name=password]').value;
 
-        aj.xhr.postForm('user', { userName: userName, password: password }, json => {
-            if (json.status) {
-                localStorage.setItem("accessToken", json.data.accessToken);
-                localStorage.setItem("userInfo", JSON.stringify(json.data.userInfo));
-
-                location.assign('admin.jsp');
-            }
-        });
-    }
+            aj.xhr.postForm('../user/login', { loginId: userName, password: password }, json => {
+                if (json.status) {
+                    location.assign('../oidc/authorization' + location.search);
+                }
+            });
+        }
 	</script>
 </html>

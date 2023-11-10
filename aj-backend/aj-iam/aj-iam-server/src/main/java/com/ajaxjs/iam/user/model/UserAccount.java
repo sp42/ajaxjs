@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.user.model;
 
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;
 import lombok.Data;
@@ -13,8 +14,9 @@ import java.util.Date;
  * @author sp42 frank@ajaxjs.com
  */
 @Data
+@TableName("user_account")
 @EqualsAndHashCode(callSuper = true)
-public class UserAuth extends BaseModel implements IBaseModel {
+public class UserAccount extends BaseModel implements IBaseModel {
     /**
      * 用户id
      */
@@ -53,7 +55,7 @@ public class UserAuth extends BaseModel implements IBaseModel {
     /**
      * 密码凭证（站内的保存密码，站外的不保存或保存token）
      */
-    private String credential;
+    private String password;
 
     /**
      * Token 过期时间

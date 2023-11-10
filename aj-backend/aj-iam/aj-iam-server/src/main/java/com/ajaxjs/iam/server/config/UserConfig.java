@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.server.config;
 
+import com.ajaxjs.iam.jwt.JWebTokenMgr;
 import com.ajaxjs.iam.user.common.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,5 +22,16 @@ public class UserConfig {
         e.salt = pswSalt;
 
         return e::md5salt;
+    }
+
+    @Value("${User.oidc.jwtSecretKey}")
+    private String jwtSecretKey;
+
+    @Bean
+    JWebTokenMgr jWebTokenMgr() {
+        JWebTokenMgr mgr = new JWebTokenMgr();
+        mgr.setSecretKey(jwtSecretKey);
+
+        return mgr;
     }
 }

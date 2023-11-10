@@ -6,7 +6,7 @@ import com.ajaxjs.iam.user.common.util.CheckStrength;
 import com.ajaxjs.iam.user.common.util.SendEmail;
 import com.ajaxjs.iam.user.controller.ResetPasswordController;
 import com.ajaxjs.iam.user.model.User;
-import com.ajaxjs.iam.user.model.UserAuth;
+import com.ajaxjs.iam.user.model.UserAccount;
 import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.EncryptUtil;
 import com.ajaxjs.util.StrUtil;
@@ -175,9 +175,9 @@ public class ResetPasswordService implements ResetPasswordController {
         if (newPassword.equalsIgnoreCase(user.get("password").toString()))
             throw new UnsupportedOperationException("新密码与旧密码一致，没有修改");
 
-        UserAuth updateAuth = new UserAuth();
+        UserAccount updateAuth = new UserAccount();
         updateAuth.setId(Long.parseLong(String.valueOf(user.get("authId"))));
-        updateAuth.setCredential(newPassword);
+        updateAuth.setPassword(newPassword);
 
         return CRUD.update(updateAuth);
     }

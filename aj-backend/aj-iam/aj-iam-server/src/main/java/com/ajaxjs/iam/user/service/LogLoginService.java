@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.user.service;
 
+import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.iam.user.common.UserConstants;
 import com.ajaxjs.iam.user.controller.LogLoginController;
@@ -8,6 +9,7 @@ import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.net.http.Get;
 
 import com.ajaxjs.util.WebHelper;
+import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,8 @@ import java.util.Map;
 
 @Service
 public class LogLoginService implements LogLoginController, UserConstants {
+    private static final LogHelper LOGGER = LogHelper.getLog(LogLoginService.class);
+
     /**
      * 用户登录日志
      */
@@ -26,8 +30,10 @@ public class LogLoginService implements LogLoginController, UserConstants {
         userLoginLog.setLoginType(LoginType.PASSWORD);
         saveIp(userLoginLog, req);
 
-//		if (LogLoginDAO.create(userLoginLog) == null)
-//			LOGGER.warning("更新会员登录日志出错");
+        Long id = CRUD.create(userLoginLog);
+
+        if (CRUD.create(userLoginLog) == null)
+            LOGGER.warning("更新会员登录日志出错");
     }
 
     void saveIp(LogLogin bean, HttpServletRequest req) {
@@ -50,7 +56,7 @@ public class LogLoginService implements LogLoginController, UserConstants {
                 } else
                     throw new Exception("接口返回不成功 " + map.get("errMsg"));
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.warning(e);
             }
         }
 

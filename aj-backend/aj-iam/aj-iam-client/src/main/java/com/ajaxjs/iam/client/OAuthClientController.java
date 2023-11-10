@@ -53,7 +53,6 @@ public class OAuthClientController {
                 .queryParam("scope", scope)                 // 必选，申请获取的资源权限，必须包含 openid，表明申请获取 id token
                 .queryParam("state", StrUtil.getRandomString(5))   // 推荐，不透明字符串，当OP重定向到redirect_uri时，会原样返回给RP，用于防止 CSRF、 XSRF。
                 // 由于OP会原样返回此参数，可将 state 值与用户在RP登录前最后浏览的URI绑定，便于登录完成后将用户重定向回最后浏览的页面
-                .queryParam("nonce", StrUtil.getRandomString(5))   // 可选，不透明字符串，当 OP 返回 id token 时，id token 中会原样包含此值，用于减少重播攻击
                 .toUriString();
 
         return new RedirectView(authorizationUrl);

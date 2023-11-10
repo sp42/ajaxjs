@@ -49,9 +49,9 @@ public class TenantService {
      * @return SQL
      */
     public static String addTenantIdQuery(String sql) {
-        int tenantId = getTenantId();
+        Integer tenantId = getTenantId();
 
-        if (tenantId != 0)
+        if (tenantId != null && tenantId != 0)
             sql += " AND　tenant_id = " + tenantId;
 
         return sql;

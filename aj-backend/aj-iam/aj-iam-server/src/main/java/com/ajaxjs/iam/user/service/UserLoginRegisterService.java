@@ -3,12 +3,14 @@ package com.ajaxjs.iam.user.service;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.iam.server.common.IamUtils;
 import com.ajaxjs.iam.user.common.UserConstants;
 import com.ajaxjs.iam.user.common.UserUtils;
 import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.iam.user.common.util.CheckStrength;
 import com.ajaxjs.iam.user.controller.UserLoginRegisterController;
-import com.ajaxjs.iam.user.model.UserAuth;
+import com.ajaxjs.iam.user.model.UserAccount;
+import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.WebHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import com.ajaxjs.iam.user.model.User;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -30,7 +34,7 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
 
     @Override
     public Boolean isLogin() {
-        return null;
+        return userSession.getUserFromSession() != null;
     }
 
     @Autowired
@@ -40,16 +44,13 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
     LogLoginService logLoginService;
 
     @Override
-    public ModelAndView login(String loginId, String password, String returnUrl) {
+    public boolean login(String loginId, String password, String returnUrl, HttpServletRequest req, HttpServletResponse resp) {
         loginId = loginId.trim();
 
         User user = getUserLoginByPassword(loginId, password);
-        HttpServletRequest req = DiContextUtil.getRequest();
 
         // 会员登录之后的动作，会保存 userId 和 userName 在 Session 中
-        assert req != null;
-//        HttpSession session = req.getSession();
-        userSession.put(UserSession.SESSION_KEY + user.getId(), user);
+        userSession.put(UserSession.SESSION_KEY + user.getId() + "-" + StrUtil.getRandomString(4), user); // 同一个用户多端登录，加随机码区分
 //        session.setAttribute("userGroupId", user.getRoleId());// 获取资源权限总值
 
 //        if (user.getRoleId() == null || user.getRoleId() == 0L) {
@@ -61,7 +62,10 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
 //        }
         logLoginService.saveLoginLog(user, req);
 
-        return null;
+        if (StringUtils.hasText(returnUrl))
+            IamUtils.send303Redirect(resp, returnUrl);
+
+        return true;
     }
 
     @Value("${user.loginIdType:1}")
@@ -75,14 +79,14 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
      * 密码支持帐号、邮件、手机作为身份凭证
      */
     public User getUserLoginByPassword(String loginId, String password) {
-        String sql = "SELECT u.* FROM user u INNER JOIN user_auth a ON a.user_id = u.id WHERE u.stat != -1 AND u.%s = ? AND a.credential = ?";
+        String sql = "SELECT u.* FROM user u INNER JOIN user_account a ON a.user_id = u.id WHERE u.stat != -1 AND u.%s = ? AND a.password = ?";
 
         if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_EMAIL, loginIdType) && UserUtils.isValidEmail(loginId))
             sql = String.format(sql, "email");
         else if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_PHONE, loginIdType) && UserUtils.isValidPhone(loginId))
             sql = String.format(sql, "phone");
         else
-            sql = String.format(sql, "username");
+            sql = String.format(sql, "name");
 
         String encodePsw = passwordEncode.apply(password);
         User user = CRUD.info(User.class, sql, loginId, encodePsw);
@@ -144,9 +148,9 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
             throw new UnsupportedOperationException("密码强度太低");
 
         long userId = CRUD.create(params); // 写入数据库
-        UserAuth auth = new UserAuth();
+        UserAccount auth = new UserAccount();
         auth.setUserId(userId);
-        auth.setCredential(passwordEncode.apply(psw));
+        auth.setPassword(passwordEncode.apply(psw));
         auth.setRegisterType(LoginType.PASSWORD);
         auth.setRegisterIp(WebHelper.getIp(Objects.requireNonNull(DiContextUtil.getRequest())));
 

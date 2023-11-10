@@ -14,6 +14,11 @@ public class Payload implements IBaseModel {
     private String sub;
 
     /**
+     * 用户名称
+     */
+    private String name;
+
+    /**
      * 受众
      */
     private String aud;

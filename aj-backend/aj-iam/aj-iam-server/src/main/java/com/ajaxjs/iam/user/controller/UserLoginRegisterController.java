@@ -3,6 +3,8 @@ package com.ajaxjs.iam.user.controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -28,7 +30,7 @@ public interface UserLoginRegisterController {
      * @return 若成功登录跳转
      */
     @PostMapping("/login")
-    ModelAndView login(@RequestParam String loginId, @RequestParam String password, @RequestParam String returnUrl);
+    boolean login(@RequestParam String loginId, @RequestParam String password, @RequestParam(required = false) String returnUrl, HttpServletRequest req, HttpServletResponse resp);
 
     /**
      * 用户登出
