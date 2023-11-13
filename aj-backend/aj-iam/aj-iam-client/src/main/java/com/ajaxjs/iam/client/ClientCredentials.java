@@ -1,11 +1,13 @@
 package com.ajaxjs.iam.client;
 
-import com.ajaxjs.util.StrUtil;
+
 import lombok.Data;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import com.ajaxjs.iam.Utils;
 
 /**
  * OAuth 2.0 中的客户端凭证（Client Credentials）授权模式请求
@@ -49,7 +51,7 @@ public class ClientCredentials {
         String clientAndSecret = clientId + ":" + clientSecret;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", "Basic " + StrUtil.base64Encode(clientAndSecret)); // 请求头
+        headers.set("Authorization", "Basic " + Utils.encodeBase64(clientAndSecret)); // 请求头
 
         MultiValueMap<String, Object> bodyParams = new LinkedMultiValueMap<>();
         bodyParams.add("grant_type", "client_credentials");

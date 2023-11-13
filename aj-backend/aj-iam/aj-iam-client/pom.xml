@@ -15,43 +15,18 @@
     </parent>
 
     <dependencies>
-        <!-- RedisTemplate -->
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
-            <version>2.6.10</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.lettuce</groupId>
-            <artifactId>lettuce-core</artifactId>
-            <version>6.2.3.RELEASE</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
-            <artifactId>ajaxjs-framework</artifactId>
-            <version>1.0.9</version>
-        </dependency>
-
-        <!-- IDEA 下面没 Tomcat，FOR JAR 启动 -->
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>8.5.84</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <version>8.5.84</version>
-        </dependency>
-
-        <!-- Tomcat JNDI 数据源 -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-            <version>8.5.69</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.7.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -2,6 +2,8 @@ package com.ajaxjs.web.user;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
 import java.io.IOException;
 
 /**
@@ -10,13 +12,12 @@ import java.io.IOException;
  * @author sp42 frank@ajaxjs.com
  *
  */
-public class UserNotLogined extends AbstractUserLogin {
+public class UserNotLogined extends SimpleTagSupport {
 	@Override
 	public void doTag() throws JspException, IOException {
-		HttpServletRequest request = getRequest(getJspContext());
+		HttpServletRequest request = UserLogined.getRequest(getJspContext());
 
-		if (!isLogined(request))
+		if (!UserLogined.isLogined(request))
 			getJspBody().invoke(null);
 	}
 }
-

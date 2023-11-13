@@ -1,5 +1,7 @@
 package com.ajaxjs.iam.server.controller;
 
+import com.ajaxjs.framework.spring.response.Result;
+import com.ajaxjs.iam.server.model.JwtAccessToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +36,5 @@ public interface OidcController {
      * @return 令牌 Token
      */
     @PostMapping("/token")
-    Object token(@RequestHeader String authorization, @RequestParam String code, @RequestParam String state, @RequestParam("grant_type") String grantType);
-
+    Result<JwtAccessToken> token(@RequestHeader String authorization, @RequestParam String code, @RequestParam String state, @RequestParam("grant_type") String grantType);
 }

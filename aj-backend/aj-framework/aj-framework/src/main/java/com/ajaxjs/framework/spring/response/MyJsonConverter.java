@@ -52,7 +52,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
     @Override
     protected boolean supports(Class<?> clazz /* 控制器方法的参数 */) {
-        boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz) || IBaseModel.class.isAssignableFrom(clazz);
+        boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz) || IBaseModel.class.isAssignableFrom(clazz) || clazz == Result.class;
 
         if (isContainerType) // 优化：出现频率较高，放在前面
             return true;
@@ -104,14 +104,22 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
     @Override
     protected void writeInternal(Object result, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
+        byte[] output;
+
         if (result instanceof String && ((String) result).startsWith(ResponseResult.PLAIN_TEXT_OUTPUT)) {
             // 字符串原文输出
             String str = (String) result;
             str = str.replace(ResponseResult.PLAIN_TEXT_OUTPUT, "");
 
-            try (OutputStream out = outputMessage.getBody()) {
-                out.write(str.getBytes());
-            }
+            output = str.getBytes();
+        } else if (result instanceof Result) {
+            Result<?> r = (Result<?>) result;
+            Object r2 = r.getResult();
+
+            if (r2 != null) {
+                output = ConvertToJson.toJson(r2).getBytes();
+            } else
+                output = new byte[]{};
         } else {
             /*
              * Spring Boot 如果 RestController 中返回 null，则不会走进自定义 HttpMessageConverter
@@ -138,6 +146,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
             } else if (result.equals(Collections.emptyList())) {
                 msg = "找不到数据，查询为空";
                 resultWrapper.setData("[]");
+
             } else {
                 String json = ConvertToJson.toJson(result);
                 resultWrapper.setData(json);
@@ -145,10 +154,11 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
             resultWrapper.setMessage(msg);
             outputMessage.getHeaders().setContentType(CONTENT_TYPE);
+            output = resultWrapper.getBytes();
+        }
 
-            try (OutputStream out = outputMessage.getBody()) {
-                out.write(resultWrapper.getBytes());
-            }
+        try (OutputStream out = outputMessage.getBody()) {
+            out.write(output);
         }
     }
 }

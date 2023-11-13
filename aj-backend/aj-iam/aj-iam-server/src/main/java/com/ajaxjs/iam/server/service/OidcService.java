@@ -1,6 +1,6 @@
 package com.ajaxjs.iam.server.service;
 
-import com.ajaxjs.iam.jwt.JWebToken;
+import com.ajaxjs.framework.spring.response.Result;
 import com.ajaxjs.iam.jwt.JWebTokenMgr;
 import com.ajaxjs.iam.jwt.Utils;
 import com.ajaxjs.iam.server.common.IamConstants;
@@ -13,6 +13,7 @@ import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cache.Cache;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,18 @@ public class OidcService implements OidcController, IamConstants {
 
     @Autowired(required = false)
     Cache<String, Object> cache;
+
+    @Autowired
+    ClientService clientService;
+
+    @Autowired
+    OAuthService oAuthService;
+
+    @Autowired
+    JWebTokenMgr jWebTokenMgr;
+
+    @Value("${User.oidc.jwtExpireHours}")
+    int jwtExpireHours;
 
     @Override
     public void authorization(String responseType, String clientId, String redirectUri, String scope, String state, HttpServletRequest req, HttpServletResponse resp) {
@@ -59,20 +72,15 @@ public class OidcService implements OidcController, IamConstants {
         }
     }
 
-    @Autowired
-    ClientService clientService;
+    @Data
+    static class TokenUser {
+        Long userId;
 
-    @Autowired
-    OAuthService oAuthService;
-
-    @Autowired
-    JWebTokenMgr jWebTokenMgr;
-
-    @Value("${User.oidc.jwtExpireHours}")
-    int jwtExpireHours;
+        JwtAccessToken accessToken;
+    }
 
     @Override
-    public JwtAccessToken token(String authorization, String code, String state, String grantType) {
+    public Result<JwtAccessToken> token(String authorization, String code, String state, String grantType) {
         if (!"authorization_code".equals(grantType))
             throw new IllegalArgumentException("参数 grant_type 只能是 authorization_code");
 
@@ -88,18 +96,23 @@ public class OidcService implements OidcController, IamConstants {
         // 如果能够通过 Authorization Code 获取到对应的用户信息，则说明该 Authorization Code 有效
         if (StringUtils.hasText(scope) && user != null) {
             // 删除缓存
-            cache.remove(code + ":scope");
-            cache.remove(code + ":user");
+//            cache.remove(code + ":scope");
+//            cache.remove(code + ":user");
 
             // 生成 Access Token
             JwtAccessToken accessToken = new JwtAccessToken();
             oAuthService.createToken(accessToken, app);
 
+            // 保存 token 在缓存
+            TokenUser tokenUser = new TokenUser();
+            String key = TOKEN_USER_KEY + "-" + accessToken.getAccess_token();
+            cache.put(key, tokenUser, oAuthService.getTokenExpires(app));
+
             // 生成 JWT Token
-            String jWebToken = jWebTokenMgr.tokenFactory("1000", "user01", "admin, guest", Utils.setExpire(jwtExpireHours)).toString();
+            String jWebToken = jWebTokenMgr.tokenFactory(String.valueOf(user.getId()), user.getName(), "admin, guest", Utils.setExpire(jwtExpireHours)).toString();
             accessToken.setId_token(jWebToken);
 
-            return accessToken;
+            return new Result<>(accessToken, true);
         } else
             throw new IllegalArgumentException("非法 code：" + code);
     }

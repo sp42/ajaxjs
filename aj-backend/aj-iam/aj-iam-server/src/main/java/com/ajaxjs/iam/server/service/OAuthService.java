@@ -129,6 +129,12 @@ public class OAuthService implements OAuthController, IamConstants {
         CRUD.create(save);
     }
 
+    public long getTokenExpires(App app) {
+        Integer minutes = app.getExpires() == null ? clientExpires : app.getExpires();
+
+        return minutes * 60 * 1000;
+    }
+
     /**
      * 将到期的分钟数转换为到期的时间
      */

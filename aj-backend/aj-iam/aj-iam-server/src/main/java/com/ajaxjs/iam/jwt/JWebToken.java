@@ -38,7 +38,8 @@ public class JWebToken {
      * @return 头部 + Payload
      */
     public String headerPayload() {
-        String p = Utils.encode(ConvertToJson.toJson(payload));
+        String json = ConvertToJson.toJson(payload);
+        String p = Utils.encode(json);
 
         return encodedHeader + "." + p;
     }

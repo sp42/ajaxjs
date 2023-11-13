@@ -1,0 +1,38 @@
+package com.ajaxjs.iam.client;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import com.ajaxjs.iam.client.model.JwtAccessToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.Data;
+
+@Data
+public abstract class BaseOidcClinetUserController {
+	@Value("${user.tokenApi}")
+	private String tokenApi;
+
+	@Autowired(required = false)
+	RestTemplate restTemplate;
+
+	public RestTemplate getRestTemplate() {
+		if (restTemplate == null) {
+			restTemplate = new RestTemplate();
+			MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+			converter.setObjectMapper(new ObjectMapper());
+			restTemplate.getMessageConverters().add(converter);
+		}
+
+		return restTemplate;
+	}
+
+	/**
+	 * 用 AcessToken 可用的时候
+	 */
+	public abstract void onAccessTokenGot(JwtAccessToken token, HttpSession session);
+}

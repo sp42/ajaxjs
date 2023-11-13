@@ -1,7 +1,8 @@
 package com.ajaxjs.iam.client;
 
-
-import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.iam.Utils;
+import com.ajaxjs.iam.client.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -51,7 +51,7 @@ public class OAuthClientController {
                 .queryParam("client_id", clientId)          // 必选，RP 在 OP 注册的 client_id
                 .queryParam("redirect_uri", redirectUri)    // 必选，用户登录成功后，OP 回传授权码等信息给RP的接口
                 .queryParam("scope", scope)                 // 必选，申请获取的资源权限，必须包含 openid，表明申请获取 id token
-                .queryParam("state", StrUtil.getRandomString(5))   // 推荐，不透明字符串，当OP重定向到redirect_uri时，会原样返回给RP，用于防止 CSRF、 XSRF。
+                .queryParam("state", Utils.getRandomString(5))   // 推荐，不透明字符串，当OP重定向到redirect_uri时，会原样返回给RP，用于防止 CSRF、 XSRF。
                 // 由于OP会原样返回此参数，可将 state 值与用户在RP登录前最后浏览的URI绑定，便于登录完成后将用户重定向回最后浏览的页面
                 .toUriString();
 

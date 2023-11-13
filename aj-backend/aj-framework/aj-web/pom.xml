@@ -15,6 +15,28 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	
+	<build>
+    <plugins>
+		<!--Maven 打包 META-INF/reources 目录-->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <includes>
+                            <include>META-INF/**</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.ajaxjs</groupId>

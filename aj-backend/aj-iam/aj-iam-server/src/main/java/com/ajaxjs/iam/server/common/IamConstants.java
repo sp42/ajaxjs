@@ -59,5 +59,10 @@ public interface IamConstants {
         FUNCTION, API;
     }
 
+    /**
+     * Token 关联 User 的 Key
+     */
+    String TOKEN_USER_KEY = "S_USER:TOKEN_USER:";
+
     String USER_IN_SESSION = "USER_IN_SESSION";
 }
