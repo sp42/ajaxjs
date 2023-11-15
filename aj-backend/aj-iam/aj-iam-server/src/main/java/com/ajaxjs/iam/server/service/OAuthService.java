@@ -7,9 +7,7 @@ import com.ajaxjs.iam.server.controller.OAuthController;
 import com.ajaxjs.iam.server.model.AccessToken;
 import com.ajaxjs.iam.server.model.po.AccessTokenPo;
 import com.ajaxjs.iam.server.model.po.App;
-import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.iam.user.model.User;
-import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.logger.LogHelper;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,41 +27,15 @@ public class OAuthService extends OAuthCommon implements OAuthController {
     @Autowired(required = false)
     private Cache<String, Object> cache;
 
-    @Autowired
-    UserSession userSession;
-
     @Value("${oauth.token.user_expires: 120}")
     private Integer userExpires;
 
     @Override
-    public ModelAndView agree(String clientId, String redirectUri, String scope, String status) {
-        return null;
-    }
-
-    @Override
     public void authorization(String responseType, String clientId, String redirectUri, String scope, String state, HttpServletRequest req, HttpServletResponse resp) {
-        if (!"code".equals(responseType))
-            throw new IllegalArgumentException("参数 response_type 只能是 code");
-
-        User user = userSession.getUserFromSession();
-
-
-        if (!StringUtils.hasText(scope)) scope = "DEFAULT_SCOPE";
-
-        // 生成授权码（Authorization Code）
-        String code = Digest.getSHA1(clientId + scope + System.currentTimeMillis());
-        String params = "?code=" + code;
-
-        params += "&state=" + state;
-
-        cache.put(code + ":user", loginedUser, AUTHORIZATION_CODE_TIMEOUT); // 保存本次请求所属的用户信息
-        cache.put(code + ":scope", scope, AUTHORIZATION_CODE_TIMEOUT);// 保存本次请求的授权范围
-
         // 检测用户已经登录，如果没跳到登录页面让用户输入帐密
         // 如果已经登录，则提示转到一个页面，询问用户是否同意，授权可访问
         // 若是则生成 code，跳转到 redirectUri，那是一个回调
-
-//        return new ModelAndView("redirect:" + redirectUri + params);
+        sendAuthCode(responseType, clientId, redirectUri, scope, state, req, resp, cache);
     }
 
     @Data
@@ -106,9 +77,11 @@ public class OAuthService extends OAuthCommon implements OAuthController {
 
     @Override
     @EnableTransaction
-    public AccessToken refreshToken(String grantType, String clientId, String clientSecret, String refreshToken) {
+    public AccessToken refreshToken(String grantType, String authorization, String refreshToken) {
         if (!GrantType.REFRESH_TOKEN.equals(grantType))
             throw new IllegalArgumentException("grantType must be 'refresh_token'");
+
+        App app = getAppByAuthHeader(authorization);
 
         AccessTokenPo accessTokenPO = CRUD.info(AccessTokenPo.class, "SELECT * FROM access_token WHERE refresh_token = ?", refreshToken);
 
@@ -123,9 +96,9 @@ public class OAuthService extends OAuthCommon implements OAuthController {
 
         if (GrantType.CLIENT_CREDENTIALS.equals(accessTokenPO.getGrantType())) {
             // 客户端的 token
-            if (!clientId.equals(accessTokenPO.getClientId())) throw new BusinessException("ClientId 不一致");
+            if (!app.getClientId().equals(accessTokenPO.getClientId())) throw new BusinessException("ClientId 不一致");
 
-            minutes = CRUD.queryOne(Integer.class, "SELECT expires FROM app WHERE client_id = ?", clientId);
+            minutes = app.getExpires();
 
             if (minutes == null) minutes = 120; // default value
         } else minutes = userExpires;// 用户
@@ -142,14 +115,6 @@ public class OAuthService extends OAuthCommon implements OAuthController {
         CRUD.updateWithIdField(updated);
 
         return accessToken;
-    }
-
-    @Override
-    @EnableTransaction
-    public AccessToken refreshTokenWithBasic(String grantType, String authorization, String refreshToken) {
-        String[] arr = getClientInfo(authorization);
-
-        return refreshToken(grantType, arr[0], arr[1], refreshToken);
     }
 
     @Override

@@ -8,7 +8,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
@@ -50,8 +52,7 @@ public class TestOAuthService extends BaseTest {
 
     @Test
     public void testRefreshToken() {
-        AccessToken accessToken = oAuthService.refreshToken(IamConstants.GrantType.REFRESH_TOKEN, "G5IFeG7Eesbny3f", "J1Bb4zhchfziuDipKI7sgo6iyk",
-                "bf173e7d-1131-89d3-e1f7-96a236571681");
+        AccessToken accessToken = oAuthService.refreshToken(IamConstants.GrantType.REFRESH_TOKEN, "G5IFeG7Eesbny3f", "bf173e7d-1131-89d3-e1f7-96a236571681");
         System.out.println(accessToken);
     }
 }

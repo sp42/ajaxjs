@@ -31,27 +31,16 @@ public class ClientCredentials {
 
     private RestTemplate restTemplate;
 
-    public void request() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    public static String encodeClient(String clientId, String clientSecret) {
+        String clientAndSecret = clientId + ":" + clientSecret;
 
-        MultiValueMap<String, Object> bodyParams = new LinkedMultiValueMap<>();
-        bodyParams.add("client_id", clientId);
-        bodyParams.add("client_secret", clientSecret);
-        bodyParams.add("grant_type", "client_credentials");
-
-        ResponseEntity<String> responseEntity = restTemplate.exchange(tokenEndPoint, HttpMethod.POST, new HttpEntity<>(bodyParams, headers), String.class);
-
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-
-        }
+        return "Basic " + Utils.encodeBase64(clientAndSecret);
     }
 
     public void requestWithBasic(String clientId, String clientSecret) {
-        String clientAndSecret = clientId + ":" + clientSecret;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", "Basic " + Utils.encodeBase64(clientAndSecret)); // 请求头
+        headers.set("Authorization", encodeClient(clientId, clientSecret)); // 请求头
 
         MultiValueMap<String, Object> bodyParams = new LinkedMultiValueMap<>();
         bodyParams.add("grant_type", "client_credentials");

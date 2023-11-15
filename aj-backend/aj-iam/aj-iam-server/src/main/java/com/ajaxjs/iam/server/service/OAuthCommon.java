@@ -3,16 +3,58 @@ package com.ajaxjs.iam.server.service;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.iam.server.common.IamConstants;
+import com.ajaxjs.iam.server.common.IamUtils;
 import com.ajaxjs.iam.server.model.AccessToken;
 import com.ajaxjs.iam.server.model.po.AccessTokenPo;
 import com.ajaxjs.iam.server.model.po.App;
+import com.ajaxjs.iam.user.common.session.UserSession;
+import com.ajaxjs.iam.user.model.User;
+import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.cache.Cache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
 import java.util.Date;
 
 public abstract class OAuthCommon implements IamConstants {
+    static final String NOT_LOGIN_TEXT = "<meta http-equiv=\"refresh\" content=\"2;url=%s\" /> 用户尚未登录，两秒后跳转到登录页面……";
+
+    @Autowired
+    UserSession userSession;
+
+    public void sendAuthCode(String responseType, String clientId, String redirectUri, String scope, String state,
+                             HttpServletRequest req, HttpServletResponse resp, Cache<String, Object> cache) {
+        if (!"code".equals(responseType))
+            throw new IllegalArgumentException("参数 response_type 只能是 code");
+
+        User user = userSession.getUserFromSession();
+
+        if (user == null) { // 未登录
+            // 返回一段 HTML
+            String html = String.format(NOT_LOGIN_TEXT, "../login?" + req.getQueryString());
+            IamUtils.responseHTML(resp, html);
+        } else {// 已登录，发送授权码
+            StringBuilder sb = new StringBuilder();
+            sb.append("?status=").append(state);
+            // 生成授权码（Authorization Code）
+            String code = Digest.getSHA1(clientId + StrUtil.getRandomString(6));
+            sb.append("&code=").append(code);
+
+            if (!StringUtils.hasText(scope))
+                scope = "DEFAULT_SCOPE";
+
+            cache.put(code + ":user", user, AUTHORIZATION_CODE_TIMEOUT); // 保存本次请求所属的用户信息
+            cache.put(code + ":scope", scope, AUTHORIZATION_CODE_TIMEOUT);// 保存本次请求的授权范围
+
+            IamUtils.send303Redirect(resp, redirectUri + sb); // 跳转到客户机
+        }
+    }
+
     public App getApp(String clientId, String clientSecret) {
         App app = CRUD.info(App.class, "SELECT * FROM app WHERE stat = 1 AND client_id = ? AND client_secret = ?", clientId, clientSecret);
 
@@ -20,13 +62,6 @@ public abstract class OAuthCommon implements IamConstants {
             throw new BusinessException("应用不存在或非法密钥");
 
         return app;
-    }
-
-    static String[] getClientInfo(String authorization) {
-        authorization = authorization.replaceAll("Basic ", "");
-        String base64Str = StrUtil.base64Decode(authorization);
-
-        return base64Str.split(":");
     }
 
     /**
