@@ -36,13 +36,4 @@ public class ClientService {
     App findClientDetailsByClientId(String clientId) {
         return CRUD.info(App.class, "SELECT * FROM app WHERE stat = 1 AND client_id = ?", clientId);
     }
-
-    public App getApp(String clientId, String clientSecret) {
-        App app = CRUD.info(App.class, "SELECT * FROM app WHERE stat = 1 AND client_id = ? AND client_secret = ?", clientId, clientSecret);
-
-        if (app == null)
-            throw new BusinessException("应用不存在或非法密钥");
-
-        return app;
-    }
 }

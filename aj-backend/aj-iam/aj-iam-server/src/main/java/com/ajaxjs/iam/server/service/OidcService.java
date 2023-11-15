@@ -3,7 +3,6 @@ package com.ajaxjs.iam.server.service;
 import com.ajaxjs.framework.spring.response.Result;
 import com.ajaxjs.iam.jwt.JWebTokenMgr;
 import com.ajaxjs.iam.jwt.Utils;
-import com.ajaxjs.iam.server.common.IamConstants;
 import com.ajaxjs.iam.server.common.IamUtils;
 import com.ajaxjs.iam.server.controller.OidcController;
 import com.ajaxjs.iam.server.model.JwtAccessToken;
@@ -11,7 +10,6 @@ import com.ajaxjs.iam.server.model.po.App;
 import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.util.Digest;
-import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cache.Cache;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
-public class OidcService implements OidcController, IamConstants {
+public class OidcService extends OAuthCommon implements OidcController {
     private static final String NOT_LOGIN_TEXT = "<meta http-equiv=\"refresh\" content=\"2;url=%s\" /> 用户尚未登录，两秒后跳转到登录页面……";
 
     @Autowired
@@ -31,12 +29,6 @@ public class OidcService implements OidcController, IamConstants {
 
     @Autowired(required = false)
     Cache<String, Object> cache;
-
-    @Autowired
-    ClientService clientService;
-
-    @Autowired
-    OAuthService oAuthService;
 
     @Autowired
     JWebTokenMgr jWebTokenMgr;
@@ -80,37 +72,33 @@ public class OidcService implements OidcController, IamConstants {
     }
 
     @Override
-    public Result<JwtAccessToken> token(String authorization, String code, String state, String grantType) {
+    public Result<JwtAccessToken> token(String authorization, String grantType, String code, String state) {
         if (!"authorization_code".equals(grantType))
             throw new IllegalArgumentException("参数 grant_type 只能是 authorization_code");
-
-        authorization = authorization.replaceAll("Basic ", "");
-        authorization = StrUtil.base64Decode(authorization);
-        String[] arr = authorization.split(":");
-        String clientId = arr[0], clientSecret = arr[1];
-        App app = clientService.getApp(clientId, clientSecret);
 
         User user = cache.get(code + ":user", User.class);
         String scope = cache.get(code + ":scope", String.class);
 
         // 如果能够通过 Authorization Code 获取到对应的用户信息，则说明该 Authorization Code 有效
         if (StringUtils.hasText(scope) && user != null) {
-            // 删除缓存
-//            cache.remove(code + ":scope");
-//            cache.remove(code + ":user");
+            App app = getAppByAuthHeader(authorization);
 
             // 生成 Access Token
             JwtAccessToken accessToken = new JwtAccessToken();
-            oAuthService.createToken(accessToken, app);
+            createToken(accessToken, app, GrantType.OIDC);
 
             // 保存 token 在缓存
             TokenUser tokenUser = new TokenUser();
-            String key = TOKEN_USER_KEY + "-" + accessToken.getAccess_token();
-            cache.put(key, tokenUser, oAuthService.getTokenExpires(app));
+            String key = JWT_TOKEN_USER_KEY + "-" + accessToken.getAccess_token();
+            cache.put(key, tokenUser, getTokenExpires(app));
 
             // 生成 JWT Token
-            String jWebToken = jWebTokenMgr.tokenFactory(String.valueOf(user.getId()), user.getName(), "admin, guest", Utils.setExpire(jwtExpireHours)).toString();
+            String jWebToken = jWebTokenMgr.tokenFactory(String.valueOf(user.getId()), user.getName(), scope, Utils.setExpire(jwtExpireHours)).toString();
             accessToken.setId_token(jWebToken);
+
+            // 删除缓存
+            cache.remove(code + ":scope");
+            cache.remove(code + ":user");
 
             return new Result<>(accessToken, true);
         } else

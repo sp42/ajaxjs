@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 
 @Data
-public abstract class BaseOidcClinetUserController {
+public abstract class BaseOidcClientUserController {
 	@Value("${user.tokenApi}")
 	private String tokenApi;
 

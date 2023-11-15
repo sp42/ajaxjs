@@ -26,6 +26,8 @@ public class JWebToken {
 
 	/**
 	 * 载荷(json)
+	 * <p>
+	 * 不同的 json 反序列化，对 key 顺序不一致。所以直接拿 json 字符串加密
 	 */
 	private String payloadJson;
 

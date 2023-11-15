@@ -64,5 +64,10 @@ public interface IamConstants {
      */
     String TOKEN_USER_KEY = "S_USER:TOKEN_USER:";
 
+    /**
+     * JWT Token 关联 User 的 Key
+     */
+    String JWT_TOKEN_USER_KEY = "S_USER:JWT_TOKEN_USER:";
+
     String USER_IN_SESSION = "USER_IN_SESSION";
 }

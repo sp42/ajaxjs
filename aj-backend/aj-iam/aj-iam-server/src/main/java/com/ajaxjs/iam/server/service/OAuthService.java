@@ -3,36 +3,38 @@ package com.ajaxjs.iam.server.service;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.spring.filter.dbconnection.EnableTransaction;
-import com.ajaxjs.iam.server.common.IamConstants;
 import com.ajaxjs.iam.server.controller.OAuthController;
 import com.ajaxjs.iam.server.model.AccessToken;
-import com.ajaxjs.iam.server.model.po.App;
 import com.ajaxjs.iam.server.model.po.AccessTokenPo;
+import com.ajaxjs.iam.server.model.po.App;
+import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.logger.LogHelper;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Calendar;
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
-public class OAuthService implements OAuthController, IamConstants {
+public class OAuthService extends OAuthCommon implements OAuthController {
     private static final LogHelper LOGGER = LogHelper.getLog(OAuthService.class);
 
     @Autowired(required = false)
-    Cache<String, Object> cache;
+    private Cache<String, Object> cache;
 
-    /**
-     * 授权码超时 5分钟
-     */
-    private static final int AUTHORIZATION_CODE_TIMEOUT = 5 * 60 * 100;
+    @Autowired
+    UserSession userSession;
+
+    @Value("${oauth.token.user_expires: 120}")
+    private Integer userExpires;
 
     @Override
     public ModelAndView agree(String clientId, String redirectUri, String scope, String status) {
@@ -40,11 +42,12 @@ public class OAuthService implements OAuthController, IamConstants {
     }
 
     @Override
-    public ModelAndView authorize(String clientId, String redirectUri, String scope, String status) {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("admin");
-        User loginedUser = user;
+    public void authorization(String responseType, String clientId, String redirectUri, String scope, String state, HttpServletRequest req, HttpServletResponse resp) {
+        if (!"code".equals(responseType))
+            throw new IllegalArgumentException("参数 response_type 只能是 code");
+
+        User user = userSession.getUserFromSession();
+
 
         if (!StringUtils.hasText(scope)) scope = "DEFAULT_SCOPE";
 
@@ -52,7 +55,7 @@ public class OAuthService implements OAuthController, IamConstants {
         String code = Digest.getSHA1(clientId + scope + System.currentTimeMillis());
         String params = "?code=" + code;
 
-        if (StringUtils.hasText(status)) params += "&status=" + status;
+        params += "&state=" + state;
 
         cache.put(code + ":user", loginedUser, AUTHORIZATION_CODE_TIMEOUT); // 保存本次请求所属的用户信息
         cache.put(code + ":scope", scope, AUTHORIZATION_CODE_TIMEOUT);// 保存本次请求的授权范围
@@ -61,95 +64,44 @@ public class OAuthService implements OAuthController, IamConstants {
         // 如果已经登录，则提示转到一个页面，询问用户是否同意，授权可访问
         // 若是则生成 code，跳转到 redirectUri，那是一个回调
 
-        return new ModelAndView("redirect:" + redirectUri + params);
+//        return new ModelAndView("redirect:" + redirectUri + params);
     }
 
-    @Autowired
-    ClientService clientService;
+    @Data
+    static class TokenUser {
+        Long userId;
+
+        AccessToken accessToken;
+    }
 
     @Override
-    public AccessToken getToken(String clientId, String clientSecret, String code) {
-        App app = clientService.getApp(clientId, clientSecret);
+    public AccessToken token(String authorization, String grantType, String code, String state) {
+        if (!"authorization_code".equals(grantType))
+            throw new IllegalArgumentException("参数 grant_type 只能是 authorization_code");
 
         String scope = cache.get(code + ":scope", String.class);
         User user = cache.get(code + ":user", User.class);
 
         // 如果能够通过 Authorization Code 获取到对应的用户信息，则说明该 Authorization Code 有效
         if (StringUtils.hasText(scope) && user != null) {
-//             生成 Access Token
-//            AccessToken accessToken = createAccessToken(user, client, scope);
-//            // 查询已经插入到数据库的 Access Token
-////			AccessToken accessToken = AcessTokenDAO.setWhereQuery("accessToken", accessTokenStr).findOne();
-////			LOGGER.info(accessToken.getExpiresIn());
-//            // 生成 Refresh Token
-//            accessToken.setRefresh_token(createRefreshToken(user, accessToken));
+            App app = getAppByAuthHeader(authorization);
 
-//            return accessToken;
-        }
+            // 生成 Access Token
+            AccessToken accessToken = new AccessToken();
+            createToken(accessToken, app, GrantType.OAUTH);
 
-        return null;
-    }
+            // 保存 token 在缓存
+            TokenUser tokenUser = new TokenUser();
+            String key = TOKEN_USER_KEY + "-" + accessToken.getAccess_token();
+            cache.put(key, tokenUser, getTokenExpires(app));
 
-    @Value("${oauth.token.client_expires: 120}")
-    private Integer clientExpires;
+            // 删除缓存
+            cache.remove(code + ":scope");
+            cache.remove(code + ":user");
 
-    @Value("${oauth.token.user_expires: 120}")
-    private Integer userExpires;
-
-
-    @Override
-    public AccessToken clientCredentials(String grantType, String clientId, String clientSecret) {
-        if (!GrantType.CLIENT_CREDENTIALS.equals(grantType))
-            throw new IllegalArgumentException("grantType must be 'clientCredentials'");
-
-        App app = clientService.getApp(clientId, clientSecret);
-
-        AccessToken accessToken = new AccessToken();
-        createToken(accessToken, app);
-
-        return accessToken;
-    }
-
-    public void createToken(AccessToken accessToken, App app) {
-        accessToken.setAccess_token(StrUtil.uuid(false));
-        accessToken.setRefresh_token(StrUtil.uuid(false));
-
-        Integer minutes = app.getExpires() == null ? clientExpires : app.getExpires();
-        accessToken.setExpires_in(minutes * 60);
-
-        // 保存 token
-        AccessTokenPo save = new AccessTokenPo();
-        save.setAccessToken(accessToken.getAccess_token());
-        save.setRefreshToken(accessToken.getRefresh_token());
-        save.setExpiresDate(calculateExpirationDate(minutes));
-        save.setGrantType(GrantType.CLIENT_CREDENTIALS);
-        save.setClientId(app.getClientId());
-        save.setCreateDate(new Date());
-
-        CRUD.create(save);
-    }
-
-    public long getTokenExpires(App app) {
-        Integer minutes = app.getExpires() == null ? clientExpires : app.getExpires();
-
-        return minutes * 60 * 1000;
-    }
-
-    /**
-     * 将到期的分钟数转换为到期的时间
-     */
-    public static Date calculateExpirationDate(int minutesToExpiration) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, minutesToExpiration);
-
-        return calendar.getTime();
-    }
-
-    @Override
-    public AccessToken clientCredentialsWithBasic(String grantType, String authorization) {
-        String[] arr = getClientInfo(authorization);
-
-        return clientCredentials(grantType, arr[0], arr[1]);
+            return accessToken;
+        } else
+            throw new IllegalArgumentException("非法 code：" + code);
     }
 
     @Override
@@ -192,12 +144,6 @@ public class OAuthService implements OAuthController, IamConstants {
         return accessToken;
     }
 
-    private static String[] getClientInfo(String authorization) {
-        String base64Str = StrUtil.base64Decode(authorization);
-
-        return base64Str.split(":");
-    }
-
     @Override
     @EnableTransaction
     public AccessToken refreshTokenWithBasic(String grantType, String authorization, String refreshToken) {
@@ -207,22 +153,40 @@ public class OAuthService implements OAuthController, IamConstants {
     }
 
     @Override
-    public String checkToken(String token) {
+    public AccessToken clientCredentials(String grantType, String clientId, String clientSecret) {
+        return clientCredentials(getApp(clientId, clientSecret), grantType);
+    }
+
+    @Override
+    public AccessToken clientCredentialsWithBasic(String grantType, String authorization) {
+        return clientCredentials(getAppByAuthHeader(authorization), grantType);
+    }
+
+    @Override
+    public void implicitAuthorization(String responseType, String clientId, String redirectUri, String scope, String state, HttpServletRequest req, HttpServletResponse resp) {
+    }
+
+    @Override
+    public void passwordAuthorization(String grantType, String clientId, String clientSecret, String loginId, String password) {
+    }
+
+    private AccessToken clientCredentials(App app, String grantType) {
+        if (!GrantType.CLIENT_CREDENTIALS.equals(grantType))
+            throw new IllegalArgumentException("grantType must be 'clientCredentials'");
+
+        AccessToken accessToken = new AccessToken();
+        createToken(accessToken, app, GrantType.CLIENT_CREDENTIALS);
+
+        return accessToken;
+    }
+
+    @Override
+    public Boolean checkToken(String token) {
         return null;
     }
 
     @Override
     public Boolean revokeToken(String token) {
         return false;
-    }
-
-    @Override
-    public AccessToken appLogin(String clientId, String clientSecret) {
-        return null;
-    }
-
-    @Override
-    public AccessToken appLogin(String clientId) {
-        return null;
     }
 }
