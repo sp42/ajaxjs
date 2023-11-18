@@ -1,6 +1,6 @@
 package com.ajaxjs.util.reflect;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -10,9 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public class BeanUtils {
-    private static final LogHelper LOGGER = LogHelper.getLog(BeanUtils.class);
-
     /**
      * 根据方法名称来截取属性名称，例如把 getter 的 getXxx() 转换为 xxx 的字段名
      *
@@ -22,6 +21,7 @@ public class BeanUtils {
      */
     public static String getFieldName(String method, String action) {
         method = method.replace(action, "");
+
         return Character.toString(method.charAt(0)).toLowerCase() + method.substring(1);
     }
 
@@ -76,7 +76,7 @@ public class BeanUtils {
                 try {
                     map.put(field.getName(), (int) field.get(instance));
                 } catch (IllegalArgumentException | IllegalAccessException e) {
-                    LOGGER.warning(e);
+                    log.warn("WARN>>>>>", e);
                 }
             }
         }

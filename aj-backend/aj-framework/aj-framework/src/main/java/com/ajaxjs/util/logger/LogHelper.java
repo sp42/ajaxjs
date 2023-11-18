@@ -35,7 +35,7 @@ public class LogHelper {
     /**
      * 所在的类名
      */
-    private final String className;
+    public final String className;
 
     /**
      * 包装这个 logger
@@ -48,7 +48,11 @@ public class LogHelper {
      * @param clazz 当前日志记录的那个类
      */
     public LogHelper(Class<?> clazz) {
-        className = clazz.getName().trim();
+        this(clazz.getName().trim());
+    }
+
+    public LogHelper(String className) {
+        this.className = className;
         logger = Logger.getLogger(className);
 //        logger.setFilter(filter);
 
@@ -102,7 +106,7 @@ public class LogHelper {
     private static final String COLOUR_END = PREFIX + "0m";
     // private static final String ERROR_COLOUR = PREFIX + NORMAL + SEPARATOR +
     // FOREGROUND_RED + SUFFIX;
-    private static final String DEBUG_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_CYAN + SUFFIX;
+    public static final String DEBUG_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_CYAN + SUFFIX;
 //	private static final String TRACE_COLOUR = PREFIX + NORMAL + SEPARATOR + FOREGROUND_BLUE + SUFFIX;
 
     /**
@@ -151,8 +155,7 @@ public class LogHelper {
      * @param msg 日志信息
      */
     public void debug(String msg) {
-//        if (Version.isDebug)
-        info(msg);
+        logMsg(Level.INFO, DEBUG_COLOUR + msg + COLOUR_END);
     }
 
     /**
@@ -162,7 +165,6 @@ public class LogHelper {
      * @param params 信息参数
      */
     public void debug(String msgTpl, Object... params) {
-//        if (Version.isDebug)
         info(msgTpl, params);
     }
 
@@ -172,7 +174,7 @@ public class LogHelper {
      * @param msg 日志信息
      */
     public void info(String msg) {
-        logMsg(Level.INFO, DEBUG_COLOUR + msg + COLOUR_END);
+        logMsg(Level.INFO, INFO_COLOUR + msg + COLOUR_END);
     }
 
     public void info(Object obj) {
@@ -189,7 +191,7 @@ public class LogHelper {
      * @param params 信息参数
      */
     public void info(String msgTpl, Object... params) {
-        logMsg(Level.INFO, DEBUG_COLOUR + msgTpl + COLOUR_END, params);
+        logMsg(Level.INFO, INFO_COLOUR + msgTpl + COLOUR_END, params);
     }
 
     public void infoGreen(String msg) {
@@ -242,7 +244,7 @@ public class LogHelper {
      * @param params 信息参数
      */
     public void warning(Throwable e, String msg, Object... params) {
-        for (int i = 0; i < params.length; i++) // jre 没有这个方法的重载，写一个吧
+        for (int i = 0; i < params.length; i++) // JDK 没有这个方法的重载，写一个吧
             msg = msg.replace("{" + i + "}", params[i] == null ? "[NULL]" : params[i].toString());
 
         warning(e, msg);

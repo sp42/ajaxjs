@@ -16,7 +16,7 @@
 package com.ajaxjs.util;
 
 import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 
@@ -40,9 +40,8 @@ import java.util.Objects;
 /**
  * 字符串的编码、解密 支持 MD5、SHA-1 和 SHA-2（SHA256）摘要算法
  */
+@Slf4j
 public class Digest {
-    private static final LogHelper LOGGER = LogHelper.getLog(Digest.class);
-
     /**
      * 生成字符串的 SHA1/SHA-256 哈希值
      *
@@ -56,7 +55,7 @@ public class Digest {
         try {
             md = MessageDigest.getInstance(hash);
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
             return null;
         }
 
@@ -122,7 +121,7 @@ public class Digest {
         try {
             generator = KeyGenerator.getInstance(algorithm);
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
             return null;
         }
 
@@ -169,7 +168,7 @@ public class Digest {
             mac.init(secretKey);
             bytes = mac.doFinal(data.getBytes());
         } catch (Exception e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
         }
 
         assert bytes != null;
@@ -183,7 +182,7 @@ public class Digest {
 
             return mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
             return null;
         }
     }
@@ -221,7 +220,7 @@ public class Digest {
 
             return StreamHelper.bytesToHexStr(digest.digest());
         } catch (IOException | NoSuchAlgorithmException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
             return "";
         }
     }

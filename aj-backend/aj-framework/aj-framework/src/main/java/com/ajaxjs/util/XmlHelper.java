@@ -10,7 +10,7 @@
  */
 package com.ajaxjs.util;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.*;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
@@ -38,9 +38,8 @@ import java.util.function.Consumer;
  *
  * @author sp42 frank@ajaxjs.com
  */
+@Slf4j
 public class XmlHelper {
-    private static final LogHelper LOGGER = LogHelper.getLog(XmlHelper.class);
-
     /**
      * 创建 DocumentBuilderFactory 实例
      *
@@ -59,7 +58,7 @@ public class XmlHelper {
         try {
             return initBuilderFactory().newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
             return null;
         }
     }
@@ -82,7 +81,7 @@ public class XmlHelper {
             for (int i = 0; i < nodes.getLength(); i++)
                 fn.accept(nodes.item(i));
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
         }
     }
 
@@ -103,7 +102,7 @@ public class XmlHelper {
             }
 
         } catch (SAXException | IOException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
         }
     }
 
@@ -111,7 +110,7 @@ public class XmlHelper {
         try (InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))) {
             return Objects.requireNonNull(initBuilder()).parse(in).getDocumentElement();
         } catch (SAXException | IOException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>>>>", e);
         }
 
         return null;

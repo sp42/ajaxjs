@@ -1,6 +1,6 @@
 package com.ajaxjs.util;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Array;
@@ -17,9 +17,8 @@ import java.util.stream.Collectors;
  *
  * @author frank
  */
+@Slf4j
 public class ListUtils {
-    private static final LogHelper LOGGER = LogHelper.getLog(ListUtils.class);
-
     /**
      * 即使 List 为空（null），也要返回一个空的 List
      *
@@ -41,13 +40,13 @@ public class ListUtils {
      */
     public static void printArray(Object[] arr) {
         if (arr == null)
-            LOGGER.debug("数组为空，null！");
+            log.debug("数组为空，null！");
 
         assert arr != null;
         if (arr.length == 0)
-            LOGGER.debug("数组不为空，但没有一个元素在内！");
+            log.debug("数组不为空，但没有一个元素在内");
 
-        LOGGER.debug(Arrays.toString(arr));
+        log.debug(Arrays.toString(arr));
     }
 
     /**

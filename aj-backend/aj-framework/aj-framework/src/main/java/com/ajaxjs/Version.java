@@ -10,7 +10,12 @@
  */
 package com.ajaxjs;
 
+import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.net.URL;
 
 /**
  * 初始化，检测是否可以运行

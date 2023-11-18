@@ -1,8 +1,6 @@
 package com.ajaxjs.iam.resource_server;
 
-import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.convert.EntityConvert;
-import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -10,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,12 +29,12 @@ import java.util.Enumeration;
 public class UserInterceptor implements HandlerInterceptor {
     @Value("${auth.run:true}")
     private String run;
-//
-//    @Value("${auth.cacheType:'jvm_hash'}")
-//    private String cacheType;
-//
-//    @Autowired
-//    private StringRedisTemplate redis;
+
+    @Value("${auth.cacheType:'jvm_hash'}")
+    private String cacheType;
+
+    @Autowired
+    private StringRedisTemplate redis;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -47,21 +44,22 @@ public class UserInterceptor implements HandlerInterceptor {
             if (StringUtils.hasText(token)) {
                 String jsonUser = null;
 
-//                if("redis".equals(cacheType)){
-//                    jsonUser = redis.opsForValue().get(UserConstants.REDIS_PREFIX + token);
-//                } else
-//
+                if ("redis".equals(cacheType)) {
+                    jsonUser = redis.opsForValue().get(UserConstants.REDIS_PREFIX + token);
+                } else
+
 //                LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
-//
-//                if (StringUtils.hasText(jsonUser)) {
-//                    BaseUser user = EntityConvert.json2bean(jsonUser, BaseUser.class);
-//                    request.setAttribute(UserConstants.USER_KEY, user);
-//
-//                    return true;
-//                } else
-//                    return returnErrorMsg(401, response);
-            } else
-                return returnErrorMsg(401, response);
+
+                    if (StringUtils.hasText(jsonUser)) {
+                        User user = EntityConvert.json2bean(jsonUser, User.class);
+                        request.setAttribute(UserConstants.USER_KEY, user);
+
+                        return true;
+                    } else
+                        return returnErrorMsg(401, response);
+            }
+
+            return returnErrorMsg(401, response);
         } else
             return true; // 关掉了认证
     }
