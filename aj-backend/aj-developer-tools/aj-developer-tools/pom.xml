@@ -9,19 +9,12 @@
 
     <parent>
         <groupId>com.ajaxjs</groupId>
-        <artifactId>ajaxjs-parent</artifactId>
-        <version>1.11</version>
-        <relativePath>../../pom.xml</relativePath>
+        <artifactId>aj-common-parent</artifactId>
+        <version>1.2</version>
+        <relativePath/>
     </parent>
 
     <dependencies>
-
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
-            <artifactId>ajaxjs-framework</artifactId>
-            <version>1.0.9</version>
-        </dependency>
-
         <!-- 系统监控 -->
         <dependency>
             <groupId>com.github.oshi</groupId>
@@ -48,34 +41,12 @@
             <systemPath>D:/dev/jdk1.8.0_181/lib/tools.jar</systemPath>
         </dependency>
 
-        <!-- Tomcat JNDI 数据源 -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-            <version>8.5.69</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>8.5.84</version>
-        </dependency>
-
         <!-- 监控用 -->
-      <!--  <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-catalina-jmx-remote</artifactId>
-            <version>8.5.75</version>
-            <type>jar</type>
-        </dependency>-->
-
-
-        <!-- tomcat 对 jsp 支持 -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jasper</artifactId>
-            <version>8.5.84</version>
-        </dependency>
+        <!--  <dependency>
+              <groupId>org.apache.tomcat</groupId>
+              <artifactId>tomcat-catalina-jmx-remote</artifactId>
+              <version>8.5.75</version>
+              <type>jar</type>
+          </dependency>-->
     </dependencies>
-
 </project>

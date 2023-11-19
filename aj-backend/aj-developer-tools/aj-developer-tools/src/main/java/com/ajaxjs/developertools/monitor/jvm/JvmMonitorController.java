@@ -4,8 +4,8 @@ import com.ajaxjs.developertools.monitor.JmxHelper;
 import com.ajaxjs.developertools.monitor.TomcatInfo;
 import com.ajaxjs.developertools.monitor.jvm.model.*;
 import com.ajaxjs.framework.BusinessException;
-import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
 
+import com.ajaxjs.framework.embeded_tomcat.EmbeddedTomcatStarter;
 import com.ajaxjs.util.TestHelper;
 import com.sun.tools.attach.*;
 import org.springframework.beans.factory.annotation.Autowired;

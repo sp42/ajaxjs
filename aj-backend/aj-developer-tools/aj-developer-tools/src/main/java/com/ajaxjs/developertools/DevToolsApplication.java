@@ -1,7 +1,8 @@
 package com.ajaxjs.developertools;
 
-import com.ajaxjs.framework.spring.BaseWebMvcConfigure;
-import com.ajaxjs.framework.spring.EmbeddedTomcatStarter;
+
+import com.ajaxjs.framework.embeded_tomcat.BaseWebMvcConfigure;
+import com.ajaxjs.framework.embeded_tomcat.EmbeddedTomcatStarter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;

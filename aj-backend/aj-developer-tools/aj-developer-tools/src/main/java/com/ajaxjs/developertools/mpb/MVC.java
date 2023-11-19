@@ -4,7 +4,7 @@ import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.developertools.mpb.innodb.ResultParser;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
-import com.ajaxjs.util.map.MapTool;
+import com.ajaxjs.util.convert.MapTool;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,13 +66,13 @@ public class MVC {
         try {
             switch (id) {
                 case "innodb_metrics":
-                    list = CRUD.list("SELECT NAME, COUNT, TIME_ELAPSED from information_schema.innodb_metrics ORDER BY NAME");
+                    list = CRUD.listMap("SELECT NAME, COUNT, TIME_ELAPSED from information_schema.innodb_metrics ORDER BY NAME");
                     break;
                 case "mysql_innodb_mutex":
-                    list = CRUD.list("SHOW ENGINE INNODB MUTEX");
+                    list = CRUD.listMap("SHOW ENGINE INNODB MUTEX");
                     break;
                 default:
-                    list = CRUD.listMap(id, null);
+                    list = CRUD.listMap(id);
             }
         } finally {
             JdbcConn.closeDb();

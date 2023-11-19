@@ -11,9 +11,7 @@ import javax.websocket.OnError;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-//import javax.ws.rs.Path;
 
-import com.ajaxjs.util.logger.FileHandler;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
@@ -31,6 +29,8 @@ public class TailLogController {
      */
     private LogFileTail tail;
 
+    private String logPath;
+
     /**
      * 新的 WebSocket 请求开启
      */
@@ -42,7 +42,7 @@ public class TailLogController {
             LOGGER.warning(e);
         }
 
-        tail = new LogFileTail(FileHandler.LOG_PATH, 1000, true);
+        tail = new LogFileTail(logPath, 1000, true);
         tail.setTailing(true);
         tail.addListener(log -> {
             try {
