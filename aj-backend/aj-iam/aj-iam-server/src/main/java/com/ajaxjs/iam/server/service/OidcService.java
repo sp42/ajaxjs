@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.server.service;
 
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.response.Result;
 import com.ajaxjs.iam.jwt.JWebTokenMgr;
 import com.ajaxjs.iam.jwt.Utils;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 @Service
 public class OidcService extends OAuthCommon implements OidcController {
@@ -33,8 +35,9 @@ public class OidcService extends OAuthCommon implements OidcController {
     int jwtExpireHours;
 
     @Override
-    public void authorization(String responseType, String clientId, String redirectUri, String scope, String state, HttpServletRequest req, HttpServletResponse resp) {
-        sendAuthCode(responseType, clientId, redirectUri, scope, state, req, resp, cache);
+    public void authorization(String responseType, String clientId, String redirectUri, String scope, String state,
+                              String webUrl, HttpServletRequest req, HttpServletResponse resp) {
+        sendAuthCode(responseType, clientId, redirectUri, scope, state, webUrl, req, resp, cache);
     }
 
     @Data
@@ -45,7 +48,7 @@ public class OidcService extends OAuthCommon implements OidcController {
     }
 
     @Override
-    public Result<JwtAccessToken> token(String authorization, String grantType, String code, String state) {
+    public Result<JwtAccessToken> token(String authorization, String grantType, String code, String state, String webUrl) {
         if (!"authorization_code".equals(grantType))
             throw new IllegalArgumentException("参数 grant_type 只能是 authorization_code");
 

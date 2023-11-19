@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" type="image/x-icon" href="asset/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="asset/favicon.ico" />
+    <script src="../common/utils.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.min.js"></script>
 </head>
 
 <body>
-    <menu>
-        <img src="asset/logo.png"
-            width="90%" />
+    <menu> 
+        <img src="asset/logo.png" width="90%" />
         <ul>
             <li class="selected">
                 <a target="topFrame" href="../data-service">
@@ -26,6 +27,21 @@
                         </g>
                     </svg>
                     <div>工作台</div>
+                </a>
+            </li>
+
+            <li>
+                <a target="topFrame" href="../workflow">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true" role="img" class="icon iconify iconify--gitee" width="1em" height="1em"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 20 20">
+                        <g fill="none" fill-rule="evenodd">
+
+                            <path stroke="#5f6d84" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                d="M3 1h12M3 1v16M3 1H2m13 0v16m0-16h1m-1 16H3m12 0h2M3 17H1M6 4h1v1H6V4Zm5 0h1v1h-1V4ZM6 8h1v1H6V8Zm5 0h1v1h-1V8Zm-3 4h2a1 1 0 0 1 1 1v4H7v-4a1 1 0 0 1 1-1Z" />
+                        </g>
+                    </svg>
+                    <div>Base管理</div>
                 </a>
             </li>
             <li>
@@ -76,20 +92,38 @@
             <li>
                 <a target="topFrame" href="../database-doc/index.htm">
                     <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" class="icon iconify iconify--gitee" width="1em" height="1em" x="0px" y="0px" viewBox="0 0 489.5 489.5"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" class="icon iconify iconify--gitee" width="1em"
+                        height="1em" x="0px" y="0px" viewBox="0 0 489.5 489.5"
                         style="enable-background:new 0 0 489.5 489.5;" xml:space="preserve">
-                    
-                                <g fill="currentColor">
-                                    <rect y="1.35" width="97.5" height="97.5" />
-                                    <rect x="138.3" y="27.45" width="351.2" height="43.1" />
-                                    <rect y="195.95" width="97.5" height="97.5" />
-                                    <rect x="138.3" y="222.05" width="351.2" height="43.1" />
-                                    <rect y="390.65" width="97.5" height="97.5" />
-                                    <rect x="138.3" y="416.65" width="351.2" height="43.1" />
-                                </g>
-                       
+
+                        <g fill="currentColor">
+                            <rect y="1.35" width="97.5" height="97.5" />
+                            <rect x="138.3" y="27.45" width="351.2" height="43.1" />
+                            <rect y="195.95" width="97.5" height="97.5" />
+                            <rect x="138.3" y="222.05" width="351.2" height="43.1" />
+                            <rect y="390.65" width="97.5" height="97.5" />
+                            <rect x="138.3" y="416.65" width="351.2" height="43.1" />
+                        </g>
+
                     </svg>
                     <div>列表表单生成器</div>
+                </a>
+            </li>
+
+            <li>
+                <a target="topFrame" href="../iam">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        aria-hidden="true" role="img" class="icon iconify iconify--gitee" width="24px" height="24px"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                        <g fill="none" fill-rule="evenodd">
+                            <path
+                                d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                                stroke="#5f6d84" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#5f6d84"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                    </svg>
+                    <div>用户管理</div>
                 </a>
             </li>
             <li>
@@ -107,14 +141,15 @@
                     <div>UI设计器</div>
                 </a>
             </li>
+
             <li>
                 <a target="topFrame" href="../workflow">
                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                         class="icon iconify iconify--gitee" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                         viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" width="1.5em" height="1.5em">
-                        
-                            <g>
-                                <path fill="currentColor" d="M445.66,49.341H340.206L294.008,3.143c-4.192-4.191-10.99-4.191-15.183,0l-49.341,49.342
+
+                        <g>
+                            <path fill="currentColor" d="M445.66,49.341H340.206L294.008,3.143c-4.192-4.191-10.99-4.191-15.183,0l-49.341,49.342
                            c-4.192,4.192-4.192,10.99,0,15.183l46.198,46.198v38.494h-80.516c-5.929,0-10.736,4.806-10.736,10.735v21.471h-42.942v-21.471
                            c0-5.929-4.806-10.735-10.736-10.735H66.34c-5.929,0-10.735,4.806-10.735,10.735v64.413c0,5.929,4.806,10.735,10.735,10.735
                            h20.755v93.798c0,5.929,4.806,10.736,10.735,10.736h95.437l-10.346,10.346c-4.192,4.192-4.193,10.99,0,15.182
@@ -134,7 +169,7 @@
                            c-4.192-4.191-10.99-4.191-15.183,0l-15.175,15.175c-4-8.766-10.505-16.738-19.242-23.378
                            c-11.932-9.068-26.987-14.783-43.205-16.539v-32.792h80.516c5.929,0,10.735-4.806,10.735-10.735v-64.413
                            c0-5.929-4.806-10.735-10.735-10.735h-80.516v-38.494l43.054-43.054h94.718v250.494H379.61z" />
-                            </g>
+                        </g>
                     </svg>
                     <div>工作流设计器</div>
                 </a>
@@ -156,10 +191,72 @@
             </li>
         </ul>
     </menu>
+
+    <!-- 登录控制 -->
+    <div id="user-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img"
+            class="icon iconify iconify--gitee" width="18px" height="18px" preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+                <path
+                    d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z"
+                    stroke="#5f6d84" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="#5f6d84"
+                    stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </svg>
+
+        <span v-if="jwtToken != null">      
+            <a href="user-info.html" target="topFrame">{{jwtToken.name}}</a>
+            <div>已登录</div>
+            <a href="#">登出</a>
+            <a href="#">数据源</a>
+            <select style="vertical-align: top;margin-top: 4px;">
+                <option>不分租户</option>
+                <option>IBM</option>
+                <option>京东</option>
+            </select>
+        </span>
+
+        <span v-if="jwtToken == null">
+            <div>未登录</div>
+            <a :href="loginUrl">用户登录</a>
+        </span>
+    </div>
+
+    <script>
+        const loginUrl = 'http://127.0.0.1:8302/user/login?web_url=http://192.168.1.107:8080/dev-plat/';
+        const token = getQueryParam("token");
+        let accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken && !token) {
+            alert('你未登录！');
+            location.assign(loginUrl);
+        }
+
+        if (token) {
+            accessToken = decodeURIComponent(token);
+            localStorage.setItem("accessToken", accessToken);
+        }
+
+        window.JWT_TOKEN = JSON.parse(accessToken);
+
+        // 将JWT Token拆分为三个部分
+        const tokenParts = window.JWT_TOKEN.id_token.split('.')
+        const payload = JSON.parse(atob(tokenParts[1])); // 解析载荷
+
+        new Vue({
+            el: '#user-bar',
+            data:{
+                jwtToken: payload,
+                loginUrl: loginUrl
+            }
+        });
+    </script>
+
     <iframe src="../database-doc/index.htm" name="topFrame" frameborder="no" height="100%"></iframe>
 
     <script>
-
         function onSelect() {
             let old = document.querySelector('.selected');
             old.classList.remove('selected');

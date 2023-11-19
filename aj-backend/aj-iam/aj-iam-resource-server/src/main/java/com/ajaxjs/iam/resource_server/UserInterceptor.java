@@ -1,6 +1,5 @@
 package com.ajaxjs.iam.resource_server;
 
-import com.ajaxjs.util.convert.EntityConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -41,29 +40,33 @@ public class UserInterceptor implements HandlerInterceptor {
         if (StringUtils.hasText(run) && Boolean.parseBoolean(run)) {
             String token = extractToken(request);
 
-            if (StringUtils.hasText(token)) {
-                String jsonUser = null;
+            if (!StringUtils.hasText(token))
+                return returnErrorMsg(401, response);
 
-                if ("redis".equals(cacheType)) {
+            String jsonUser;
+
+            switch (cacheType) {
+                case "redis":
                     jsonUser = redis.opsForValue().get(UserConstants.REDIS_PREFIX + token);
-                } else
-
+                    break;
+                case "jvm_hash":
+                    jsonUser = redis.opsForValue().get(UserConstants.REDIS_PREFIX + token);
+                    break;
+                default:
+                    return returnErrorMsg(500, response);// 配置参数不正确
+            }
 //                LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
 
-                    if (StringUtils.hasText(jsonUser)) {
-                        User user = EntityConvert.json2bean(jsonUser, User.class);
-                        request.setAttribute(UserConstants.USER_KEY, user);
+            if (StringUtils.hasText(jsonUser)) {
+                User user = Utils.jsonStr2Bean(jsonUser, User.class);
+                request.setAttribute(UserConstants.USER_KEY_IN_REQUEST, user);
 
-                        return true;
-                    } else
-                        return returnErrorMsg(401, response);
-            }
-
-            return returnErrorMsg(401, response);
+                return true;
+            } else
+                return returnErrorMsg(401, response);
         } else
             return true; // 关掉了认证
     }
-
 
     /**
      * 根据错误代码返回响应的信息

@@ -2,6 +2,7 @@ package com.ajaxjs.iam.client;
 
 import javax.servlet.http.HttpSession;
 
+import com.ajaxjs.iam.client.model.JWebToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -32,7 +33,7 @@ public abstract class BaseOidcClientUserController {
 	}
 
 	/**
-	 * 用 AcessToken 可用的时候
+	 * 用 AccessToken 可用的时候
 	 */
-	public abstract void onAccessTokenGot(JwtAccessToken token, HttpSession session);
+	public abstract JwtAccessToken onAccessTokenGot(JwtAccessToken token, HttpSession session);
 }

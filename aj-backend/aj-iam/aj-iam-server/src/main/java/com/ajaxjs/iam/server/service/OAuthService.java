@@ -35,7 +35,7 @@ public class OAuthService extends OAuthCommon implements OAuthController {
         // 检测用户已经登录，如果没跳到登录页面让用户输入帐密
         // 如果已经登录，则提示转到一个页面，询问用户是否同意，授权可访问
         // 若是则生成 code，跳转到 redirectUri，那是一个回调
-        sendAuthCode(responseType, clientId, redirectUri, scope, state, req, resp, cache);
+        sendAuthCode(responseType, clientId, redirectUri, scope, state, null, req, resp, cache);
     }
 
     @Data

@@ -27,7 +27,11 @@ public abstract class OAuthCommon implements IamConstants {
     @Autowired
     UserSession userSession;
 
+    /**
+     * @param webUrl 前端页面地址，用于跳到这里以便获取 Token
+     */
     public void sendAuthCode(String responseType, String clientId, String redirectUri, String scope, String state,
+                             String webUrl,
                              HttpServletRequest req, HttpServletResponse resp, Cache<String, Object> cache) {
         if (!"code".equals(responseType))
             throw new IllegalArgumentException("参数 response_type 只能是 code");
@@ -36,14 +40,18 @@ public abstract class OAuthCommon implements IamConstants {
 
         if (user == null) { // 未登录
             // 返回一段 HTML
-            String html = String.format(NOT_LOGIN_TEXT, "../login?" + req.getQueryString());
+            String qs = req.getQueryString();
+            String html = String.format(NOT_LOGIN_TEXT, "../login?" + qs);
             IamUtils.responseHTML(resp, html);
         } else {// 已登录，发送授权码
             StringBuilder sb = new StringBuilder();
-            sb.append("?status=").append(state);
+            sb.append("?state=").append(state);
             // 生成授权码（Authorization Code）
             String code = Digest.getSHA1(clientId + StrUtil.getRandomString(6));
             sb.append("&code=").append(code);
+
+            if (StringUtils.hasText(webUrl))
+                sb.append("&web_url=").append(webUrl);
 
             if (!StringUtils.hasText(scope))
                 scope = "DEFAULT_SCOPE";

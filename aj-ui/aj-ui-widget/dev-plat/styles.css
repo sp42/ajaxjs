@@ -68,10 +68,11 @@ li.bottom {
     position: fixed;
     width: 63px;
     bottom: 0px;
-    left:0px;
+    left: 0px;
     padding-bottom: 20px;
     margin: 0;
 }
+
 a {
     color: gray;
     text-decoration: none;
@@ -82,4 +83,30 @@ a {
     color: #5f6d84;
     font-size: 24px;
     margin: 10px 0 5px 0;
+}
+
+#user-bar {
+    font-size: 14px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 30px;
+    width: 380px;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), #69cdff);
+    text-align: center;
+}
+
+#user-bar a,
+#user-bar div {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 3px;
+}
+
+#user-bar a {
+    text-decoration: underline;
+}
+
+#user-bar .icon {
+    margin-top: 5px;
 }
