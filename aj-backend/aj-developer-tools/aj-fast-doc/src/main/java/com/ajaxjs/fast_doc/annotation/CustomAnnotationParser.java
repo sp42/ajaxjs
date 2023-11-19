@@ -1,8 +1,8 @@
 package com.ajaxjs.fast_doc.annotation;
 
-import com.ajaxjs.fast_doc.Model.ArgInfo;
-import com.ajaxjs.fast_doc.Model.Item;
-import com.ajaxjs.fast_doc.Model.Return;
+import com.ajaxjs.fast_doc.model.ArgInfo;
+import com.ajaxjs.fast_doc.model.Item;
+import com.ajaxjs.fast_doc.model.Return;
 import com.ajaxjs.framework.spring.easy_controller.anno.ControllerMethod;
 import com.ajaxjs.framework.spring.easy_controller.anno.Example;
 import com.ajaxjs.framework.spring.easy_controller.anno.PathForDoc;

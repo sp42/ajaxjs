@@ -1,6 +1,6 @@
 package com.ajaxjs.fast_doc;
 
-import com.ajaxjs.fast_doc.Model.ControllerInfo;
+import com.ajaxjs.fast_doc.model.ControllerInfo;
 import com.ajaxjs.fast_doc.annotation.CustomAnnotationParser;
 import com.ajaxjs.fast_doc.annotation.SpringMvcAnnotationParser;
 import com.ajaxjs.fast_doc.doclet.JavaDocParser;
@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class TestFastDoc {
-//	@Test
+	@Test
 	public void testDoclet() {
 		Params params = new Params();
 		params.sources = new ArrayList<>();
@@ -25,7 +25,7 @@ public class TestFastDoc {
 		JavaDocParser.init(params);
 	}
 
-//	@Test
+	@Test
 	public void testDoclet2() {
 		Params params = new Params();
 		params.sources = new ArrayList<>();
@@ -35,7 +35,7 @@ public class TestFastDoc {
 		JavaDocParser.init(params);
 	}
 
-//	@Test
+	@Test
 	public void testSpringMvcAnnotationParser() {
 		SpringMvcAnnotationParser p = new SpringMvcAnnotationParser(FooController.class);
 		ControllerInfo info = p.parse();
@@ -43,7 +43,7 @@ public class TestFastDoc {
 		TestHelper.printJson(info);
 	}
 
-//	@Test
+	@Test
 	public void testCustomAnnotationParser() {
 		CustomAnnotationParser p = new CustomAnnotationParser(FooController.class);
 		ControllerInfo info = p.parse();
@@ -67,7 +67,7 @@ public class TestFastDoc {
 		FastDoc.run(run);
 	}
 
-//	@Test
+	@Test
 	public void testFastDocWorkwe() {
 		FastDoc.loadBeans("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooBean.class, BarBean.class, InnerClass.class);
 		FastDoc.loadControllersDoc("C:\\code\\aj\\aj-framework\\src\\test\\java\\", FooController.class);

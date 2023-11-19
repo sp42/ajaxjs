@@ -34,7 +34,6 @@ public class JavaDocParser extends Doclet implements DocModel {
      * javadoc 调用入口
      *
      * @param root 文档根节点
-     * @return
      */
     public static boolean start(RootDoc root) {
         ClassDoc[] classDocs = root.classes();
@@ -85,9 +84,6 @@ public class JavaDocParser extends Doclet implements DocModel {
 
     /**
      * 提取字段
-     *
-     * @param clzDoc
-     * @return
      */
     private static FieldInfo[] getFields(ClassDoc clzDoc) {
         FieldDoc[] fieldDocs = clzDoc.fields(false);
@@ -114,9 +110,6 @@ public class JavaDocParser extends Doclet implements DocModel {
 
     /**
      * 提取方法
-     *
-     * @param clzDoc
-     * @return
      */
     private static MethodInfo[] getMethod(ClassDoc clzDoc) {
         MethodDoc[] methods = clzDoc.methods();
@@ -147,9 +140,6 @@ public class JavaDocParser extends Doclet implements DocModel {
 
     /**
      * 提取参数列表内容
-     *
-     * @param method
-     * @return
      */
     private static ParameterInfo[] getParameters(MethodDoc method) {
         Parameter[] parameters = method.parameters();
@@ -192,9 +182,6 @@ public class JavaDocParser extends Doclet implements DocModel {
 
     /**
      * 提取 return 标签
-     *
-     * @param method
-     * @return
      */
     private static String getReturnComment(MethodDoc method) {
         Tag[] tags = method.tags(RETURN_TAG);

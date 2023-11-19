@@ -1,9 +1,9 @@
 package com.ajaxjs.fast_doc.annotation;
 
-import com.ajaxjs.fast_doc.Model.ArgInfo;
-import com.ajaxjs.fast_doc.Model.ControllerInfo;
-import com.ajaxjs.fast_doc.Model.Item;
-import com.ajaxjs.fast_doc.Model.Return;
+import com.ajaxjs.fast_doc.model.ArgInfo;
+import com.ajaxjs.fast_doc.model.ControllerInfo;
+import com.ajaxjs.fast_doc.model.Item;
+import com.ajaxjs.fast_doc.model.Return;
 import com.ajaxjs.fast_doc.Util;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.util.ReflectUtil;
@@ -29,9 +29,6 @@ public class SpringMvcAnnotationParser {
     public SpringMvcAnnotationParser() {
     }
 
-    /**
-     * @param clz
-     */
     public SpringMvcAnnotationParser(Class<?> clz) {
         this.clz = clz;
     }
@@ -54,9 +51,6 @@ public class SpringMvcAnnotationParser {
      */
     private String rootUrl;
 
-    /**
-     * @return
-     */
     public ControllerInfo parse() {
         rootUrl = getRootUrl();
 
@@ -82,8 +76,6 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 遍历每个方法
-     *
-     * @return
      */
     private List<Item> parseControllerMethod() {
         Method[] methods = clz.getMethods(); // 可以获取父类的
@@ -108,8 +100,6 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 获取根 url
-     *
-     * @return
      */
     private String getRootUrl() {
         String rootUrl = null;
@@ -125,8 +115,6 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 某些情况下控制器不能直接加 SpringMVC 的 @RequestMapping，于是可以用别的自定义注解代替，值一样的
-     *
-     * @return
      */
     String getRootUrlIfRequestMappingNull() {
         return null;
@@ -134,9 +122,6 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 获取方法的一些基本信息
-     *
-     * @param item
-     * @param method
      */
     private void getInfo(Item item, Method method) {
         item.methodName = method.getName();
@@ -184,9 +169,6 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 获取 URL。若注解上有则获取之，没有则表示是类定义的 rootUrl
-     *
-     * @param arr
-     * @return
      */
     private String setUrl(String[] arr) {
         if (!ObjectUtils.isEmpty(arr) && StringUtils.hasText(arr[0]))
@@ -197,9 +179,6 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 生成返回值信息
-     *
-     * @param item
-     * @param method
      */
     private void getReturnType(Item item, Method method) {
         Class<?> returnType = method.getReturnType();
@@ -253,19 +232,12 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 由你自己的覆盖实现提供
-     *
-     * @param item
-     * @param method
-     * @param r
      */
     void getReturnType(Item item, Method method, Return r) {
     }
 
     /**
      * 参数 入参
-     *
-     * @param item
-     * @param method
      */
     private void getArgs(Item item, Method method) {
         item.args = Util.makeListByArray(method.getParameters(), param -> {
@@ -320,11 +292,6 @@ public class SpringMvcAnnotationParser {
 
     /**
      * 由你自己的覆盖实现提供
-     *
-     * @param item
-     * @param method
-     * @param param
-     * @param arg
      */
     public void getArgs(Item item, Method method, Parameter param, ArgInfo arg) {
     }

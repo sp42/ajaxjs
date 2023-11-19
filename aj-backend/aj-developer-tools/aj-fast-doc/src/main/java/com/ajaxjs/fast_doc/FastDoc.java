@@ -1,9 +1,9 @@
 package com.ajaxjs.fast_doc;
 
-import com.ajaxjs.fast_doc.Model.ArgInfo;
-import com.ajaxjs.fast_doc.Model.CommonValue;
-import com.ajaxjs.fast_doc.Model.ControllerInfo;
-import com.ajaxjs.fast_doc.Model.Item;
+import com.ajaxjs.fast_doc.model.ArgInfo;
+import com.ajaxjs.fast_doc.model.CommonValue;
+import com.ajaxjs.fast_doc.model.ControllerInfo;
+import com.ajaxjs.fast_doc.model.Item;
 import com.ajaxjs.fast_doc.annotation.CustomAnnotationParser;
 import com.ajaxjs.fast_doc.annotation.IgnoreController;
 import com.ajaxjs.fast_doc.annotation.SpringMvcAnnotationParser;
@@ -227,10 +227,6 @@ public class FastDoc {
 
     /**
      * 以文件的形式来获取包下的所有 Class
-     *
-     * @param packagePath
-     * @param recursive
-     * @param classes
      */
     public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, boolean recursive, Set<Class<?>> classes) {
         // 获取此包的目录 建立一个File
@@ -271,8 +267,6 @@ public class FastDoc {
 
     /**
      * 生成 JSON 配置
-     *
-     * @param run
      */
     public static void run(FastDocRun run) {
         loadBeans(run.sourceDir, run.beanClasses);

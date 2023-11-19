@@ -7,7 +7,7 @@ public interface DocModel {
 	 * @author Frank Cheung sp42@qq.com
 	 *
 	 */
-	abstract static class WithComment {
+	abstract class WithComment {
 		public String commentText;
 	}
 
