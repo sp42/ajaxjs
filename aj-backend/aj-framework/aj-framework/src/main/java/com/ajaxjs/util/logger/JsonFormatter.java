@@ -11,7 +11,8 @@ public class JsonFormatter extends Formatter {
     @Override
     public String format(LogRecord record) {
         // 设置日志记录的级别、消息和时间戳等信息
-        Map<String, Object> map = ObjectHelper.hashMap("level", record.getLevel().getName(), "message", formatMessage(record), "timestamp", record.getMillis());
+        Map<String, Object> map = ObjectHelper.hashMap("level", record.getLevel().getName(),
+                "message", formatMessage(record), "timestamp", record.getMillis());
 
         // 获取异常信息，如果有的话
         Throwable throwable = record.getThrown();

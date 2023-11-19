@@ -1,6 +1,5 @@
 package com.ajaxjs.util.logger;
 
-import com.ajaxjs.Version;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -21,5 +20,6 @@ public class TestSlf4J {
         log.debug("Hello {}, it's {} day.3", "Frank", "good");
         log.debug("Hello {}, it's {} day{}3", "Frank", "good", "?");
 
+        log.warn("Hello {}, it's {} day{}4", "Frank", "good", "?");
     }
 }
