@@ -3,21 +3,33 @@ package com.ajaxjs.iam.server.config;
 import com.ajaxjs.base.Sdk;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.iam.resource_server.UserInterceptor;
 import com.ajaxjs.iam.user.common.PasswordEncoder;
 import com.ajaxjs.iam.user.common.session.ServletUserSession;
 import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.expiry.ExpiryCache;
+import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 import java.util.function.Function;
+
+import static com.ajaxjs.iam.server.common.IamConstants.JWT_TOKEN_USER_KEY;
 
 @Configuration
 public class IamConfig implements WebMvcConfigurer {
@@ -45,6 +57,42 @@ public class IamConfig implements WebMvcConfigurer {
         return jdbcWriter;
     }
 
+    /**
+     * 用户全局拦截器
+     */
+    @Bean
+    UserInterceptor authInterceptor() {
+        return new UserInterceptor();
+    }
+
+    @Bean
+    Function<String, String> getUserFromJvmHash() {
+        return token -> {
+            Cache<String, Object> cache = simpleJvmCache();
+            String key = JWT_TOKEN_USER_KEY + "-" + token;
+
+            return cache.get(key, String.class);
+        };
+    }
+    @Value("${auth.excludes: }")
+    private String excludes;
+
+    /**
+     * 加入认证拦截器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        LogHelper.p("初始化 SSO 拦截器");
+        InterceptorRegistration interceptorRegistration = registry.addInterceptor(authInterceptor());
+        interceptorRegistration.addPathPatterns("/**"); // 拦截所有
+
+        // 不需要的拦截路径
+        if (StringUtils.hasText(excludes)) {
+            String[] arr = excludes.split("\\|");
+            interceptorRegistration.excludePathPatterns(arr);
+        }
+    }
+
     @Bean
     Cache<String, Object> simpleJvmCache() {
         return ExpiryCache.getInstance();
@@ -66,4 +114,33 @@ public class IamConfig implements WebMvcConfigurer {
 
         return sdk;
     }
+
+//    @Bean
+//    CrossFilter CrossFilter() {
+//        return new CrossFilter();
+//    }
+
+    /**
+     * 跨域
+     *
+     * @param registry 注册跨域
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedHeaders("*").allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE").allowedOrigins("*").allowCredentials(false);
+    }
+
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("*");
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//
+//        return new CorsFilter(source);
+//    }
 }

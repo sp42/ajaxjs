@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <menu> 
+    <menu>
         <img src="asset/logo.png" width="90%" />
         <ul>
             <li class="selected">
@@ -206,10 +206,10 @@
             </g>
         </svg>
 
-        <span v-if="jwtToken != null">      
+        <span v-if="jwtToken != null">
             <a href="user-info.html" target="topFrame">{{jwtToken.name}}</a>
             <div>已登录</div>
-            <a href="#">登出</a>
+            <a href="#" @click="logout">登出</a>
             <a href="#">数据源</a>
             <select style="vertical-align: top;margin-top: 4px;">
                 <option>不分租户</option>
@@ -247,9 +247,15 @@
 
         new Vue({
             el: '#user-bar',
-            data:{
+            data: {
                 jwtToken: payload,
                 loginUrl: loginUrl
+            },
+            methods: {
+                logout() {
+                    localStorage.removeItem("accessToken");
+                    location.assign(loginUrl);
+                }
             }
         });
     </script>

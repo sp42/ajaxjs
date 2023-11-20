@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Enumeration;
+import java.util.function.Function;
 
 /**
  * 资源拦截器
@@ -22,18 +23,21 @@ import java.util.Enumeration;
  *
  * @Bean UserInterceptor authInterceptor() {
  * return new UserInterceptor();
- * </code>
  * }
+ * </code>
  */
 public class UserInterceptor implements HandlerInterceptor {
     @Value("${auth.run:true}")
     private String run;
 
-    @Value("${auth.cacheType:'jvm_hash'}")
+    @Value("${auth.cacheType:jvm_hash}")
     private String cacheType;
 
-    @Autowired
+    @Autowired(required = false)
     private StringRedisTemplate redis;
+
+    @Autowired(required = false)
+    private Function<String, String> getUserFromJvmHash;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -50,10 +54,17 @@ public class UserInterceptor implements HandlerInterceptor {
                     jsonUser = redis.opsForValue().get(UserConstants.REDIS_PREFIX + token);
                     break;
                 case "jvm_hash":
-                    jsonUser = redis.opsForValue().get(UserConstants.REDIS_PREFIX + token);
+                    if (getUserFromJvmHash == null) {
+                        serverErr(response, "配置参数不正确");
+
+                        return false;
+                    } else
+                        jsonUser = getUserFromJvmHash.apply(token);
                     break;
                 default:
-                    return returnErrorMsg(500, response);// 配置参数不正确
+                    serverErr(response, "配置参数不正确");
+
+                    return false;
             }
 //                LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
 
@@ -91,6 +102,10 @@ public class UserInterceptor implements HandlerInterceptor {
     }
 
     private final static String ERR_JSON = "{\"error\":\"%s\",\"error_description\":\"%s\"}";
+
+    private void serverErr(HttpServletResponse response, String msg) {
+        returnMsg(response, HttpStatus.INTERNAL_SERVER_ERROR.value(), "error", msg);
+    }
 
     /**
      * 返回响应信息
@@ -130,6 +145,8 @@ public class UserInterceptor implements HandlerInterceptor {
 
     public String extractToken(HttpServletRequest request) {
         String token = extractHeaderToken(request);
+        String authorization = request.getHeader("Authorization");
+        String authorization2 = request.getHeader("authorization");
 
         if (token == null) {
             token = request.getHeader("token");
