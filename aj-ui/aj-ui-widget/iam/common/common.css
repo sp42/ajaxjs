@@ -1,0 +1,240 @@
+/* CSS Reset */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+ul,
+li {
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    font-size: 14px;
+    color: cadetblue;
+    text-decoration: none;
+    transition: color ease-in-out .15s;
+}
+
+a:visited {
+    color: gray;
+}
+
+a:hover {
+    color: cadetblue;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
+    outline: none;
+}
+
+.hide {
+    display: none;
+}
+
+table.list-table {
+    width: 100%;
+    border-top: 2px solid gray;
+    border-bottom: 2px solid gray;
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #c6c6c6 !important;
+    margin-bottom: 20px;
+}
+
+table.list-table th {
+    border-collapse: collapse;
+    border-right: 1px solid #c6c6c6 !important;
+    border-bottom: 1px solid #c6c6c6 !important;
+    background-color: #ddeeff !important;
+    padding: 5px 9px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 3px;
+}
+
+table.list-table td {
+    border-collapse: collapse;
+    border-right: 1px solid #c6c6c6 !important;
+    border-bottom: 1px solid #c6c6c6 !important;
+    padding: 12px 10px;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+table.list-table tr:nth-child(even) td {
+    background-color: #F0F0F0;
+}
+
+fieldset.fieldset-box {
+    border: 1px solid lightgray;
+    border-radius: 6px;
+    padding: 3% 2%;
+    margin-right: 5%;
+}
+
+fieldset.fieldset-box legend {
+    font-weight: bold;
+    font-size: 16px;
+    padding: 0 5px;
+    letter-spacing: 2px;
+}
+
+fieldset.fieldset-box li {
+    word-break: break-all;
+}
+
+.text-input-1 {
+    outline-style: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 8px 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.text-input-1:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+}
+
+.button-1 {
+    /* 按钮美化 */
+    width: 270px;
+    /* 宽度 */
+    height: 40px;
+    /* 高度 */
+    border-width: 0px;
+    /* 边框宽度 */
+    border-radius: 3px;
+    /* 边框半径 */
+    background: #1E90FF;
+    /* 背景颜色 */
+    cursor: pointer;
+    /* 鼠标移入按钮范围时出现手势 */
+    outline: none;
+    /* 不显示轮廓线 */
+    color: white;
+    /* 字体颜色 */
+    font-size: 17px;
+    /* 字体大小 */
+}
+
+.button-1:hover {
+    /* 鼠标移入按钮范围时改变颜色 */
+    background: #5599FF;
+}
+
+select {
+    height: 31px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+input[type=text],
+input[type=password],
+input[type=number] {
+    padding: 0 6px;
+    height: 28px;
+    font-size: 14px;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+input[type=text]:focus ,
+input[type=password]:focus ,
+input[type=number]:focus {
+ border-color: gray;
+}
+
+select:focus {
+    border-color: gray;
+}

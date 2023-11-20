@@ -69,8 +69,8 @@ public class UserInterceptor implements HandlerInterceptor {
 //                LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
 
             if (StringUtils.hasText(jsonUser)) {
-                User user = Utils.jsonStr2Bean(jsonUser, User.class);
-                request.setAttribute(UserConstants.USER_KEY_IN_REQUEST, user);
+//                User user = Utils.jsonStr2Bean(jsonUser, User.class);
+//                request.setAttribute(UserConstants.USER_KEY_IN_REQUEST, user);
 
                 return true;
             } else

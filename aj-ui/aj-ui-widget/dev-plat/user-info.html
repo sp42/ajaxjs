@@ -1,0 +1,84 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>活映开发平台</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/x-icon" href="asset/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="asset/favicon.ico" />
+    <script src="../common/utils.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.14/vue.min.js"></script>
+    <style>
+        .user-info {
+            width: 360px;
+            min-height: 200px;
+            margin: auto;
+            border: 1px solid lightgray;
+            border-radius: 10px;
+            padding: 2%;
+        }
+
+        .user-avatar {
+            width: 100px;
+            float: left;
+            border-radius: 50%;
+            margin-right: 30px;
+        }
+
+        .user-name {
+            font-size: 14px;
+        }
+
+        .user-info-content {
+            margin-top: 5%;
+        }
+
+        .user-info-content>div {
+            margin-bottom: 5%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn {
+            clear: both;
+            text-align: center;
+            padding-top: 8%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="user-info">
+        <img class="user-avatar"
+            src="https://n.sinaimg.cn/sinakd10200/360/w180h180/20221113/29e0-c2e9fe496ca49f267fb029c187885dce.jpg"
+            alt="用户头像">
+        <div class="user-info-content">
+            <div class="user-id">用户 ID： {{jwtToken.sub}}</div>
+            <div class="user-name">用户名称： {{jwtToken.name}}</div>
+        </div>
+
+        <div class="btn">
+            <a href="#">退出登录</a>
+        </div>
+    </div>
+    <script>
+        let accessToken = localStorage.getItem("accessToken");
+
+        if (accessToken) {
+            window.JWT_TOKEN = JSON.parse(accessToken);
+
+            // 将JWT Token拆分为三个部分
+            const tokenParts = window.JWT_TOKEN.id_token.split('.')
+            const payload = JSON.parse(atob(tokenParts[1])); // 解析载荷
+
+            new Vue({
+                el: '.user-info',
+                data: {
+                    jwtToken : payload
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

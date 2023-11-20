@@ -4,11 +4,14 @@ import com.ajaxjs.base.Sdk;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.iam.resource_server.UserInterceptor;
+import com.ajaxjs.iam.server.service.OAuthService;
+import com.ajaxjs.iam.server.service.OidcService;
 import com.ajaxjs.iam.user.common.PasswordEncoder;
 import com.ajaxjs.iam.user.common.session.ServletUserSession;
 import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.expiry.ExpiryCache;
+import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -71,7 +74,9 @@ public class IamConfig implements WebMvcConfigurer {
             Cache<String, Object> cache = simpleJvmCache();
             String key = JWT_TOKEN_USER_KEY + "-" + token;
 
-            return cache.get(key, String.class);
+            OidcService.TokenUser tokenUser = cache.get(key, OidcService.TokenUser.class);
+
+            return ConvertToJson.toJson(tokenUser.getAccessToken());
         };
     }
     @Value("${auth.excludes: }")

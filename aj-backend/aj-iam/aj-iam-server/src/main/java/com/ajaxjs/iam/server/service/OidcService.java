@@ -41,7 +41,7 @@ public class OidcService extends OAuthCommon implements OidcController {
     }
 
     @Data
-    static class TokenUser {
+    public static class TokenUser {
         Long userId;
 
         JwtAccessToken accessToken;
@@ -65,6 +65,9 @@ public class OidcService extends OAuthCommon implements OidcController {
 
             // 保存 token 在缓存
             TokenUser tokenUser = new TokenUser();
+            tokenUser.setUserId(user.getId());
+            tokenUser.setAccessToken(accessToken);
+
             String key = JWT_TOKEN_USER_KEY + "-" + accessToken.getAccess_token();
             cache.put(key, tokenUser, getTokenExpires(app));
 
