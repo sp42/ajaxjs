@@ -77,7 +77,7 @@
     </Modal>
 
     <template slot="config-panel">
-      <ConfigPanel :list-cfg="cfg" :parent="this" :api-root="apiRoot" />
+      <ConfigPanel :list-cfg="cfg"  :api-root="apiRoot" />
     </template>
 
     <template slot="more-attrib" slot-scope="scope">

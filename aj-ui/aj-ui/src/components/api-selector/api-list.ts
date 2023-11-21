@@ -8,7 +8,7 @@ export default {
     mixins: [dataservice, swagger],
     data() {
         return {
-            API: this.apiRoot + '/admin',
+            API: this.apiRoot,
             showSelector: false,
             selectedTab: 'dataservice',
             treeAllApi: [],

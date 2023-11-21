@@ -51,7 +51,7 @@ export default {
 
         deleteInfo(id: number, index: number): void {
             this.list.loading = true;
-            xhr_del(`${this.API}?id=${id}`, List.afterDelete(() => {
+            xhr_del(`${this.API}/${id}`, List.afterDelete(() => {
                 this.list.data.splice(index, 1);
                 this.list.total--;
                 this.list.loading = false;
@@ -77,16 +77,14 @@ export default {
                 }
             }
 
-            xhr_get(`${this.API}/list`, (j: RepsonseResult) => {
+            xhr_get(`${this.API}/page`, (j: RepsonseResult) => {
                 this.list.loading = false;
-                let r: any = j.result;
 
-                if (j.isOk) {
-                    this.list.data = r;
-                    // @ts-ignore
-                    this.list.total = j.total;
+                if (j.status) {
+                    this.list.data = j.data.rows;
+                    this.list.total = j.data.total;
                 } else
-                    this.$Message.warning(j.msg || '未知异常');
+                    this.$Message.warning(j.message || '未知异常');
             }, params);
         },
 
@@ -104,8 +102,8 @@ export default {
             if (this.$refs.FormLoader && this.$refs.FormLoader.$refs.FromRenderer)
                 this.$refs.FormLoader.$refs.FromRenderer.data = {}; // 清除之前的数据
 
-            xhr_get(`${this.API}?id=${row.id}`, (j: RepsonseResult) => {
-                let r: any = j.result;
+            xhr_get(`${this.API}/${row.id}`, (j: RepsonseResult) => {
+                let r: any = j.data;
 
                 if (r) {
                     this.perview.title = row.name;

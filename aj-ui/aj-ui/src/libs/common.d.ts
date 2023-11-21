@@ -10,17 +10,17 @@ declare interface RepsonseResult {
     /**
      * 操作是否成功
      */
-    isOk: boolean;
+    status: boolean;
 
     /**
      * 操作说明
      */
-    msg: string;
+    message: string;
 
     /**
      * 结果，实体，
      */
-    result: any;
+    data: any;
 
     /**
      * 进行新建的时候返回的实体 id

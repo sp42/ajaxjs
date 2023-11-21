@@ -3,7 +3,7 @@
   <Tabs style="min-height:600px" :animated="false">
     <TabPane label="列表配置">
       <Form :label-width="120" label-colon>
-        <FormItem label="记录 id">{{parent.id}}</FormItem>
+<!--         <FormItem label="记录 id">{{$parent.id}}</FormItem>
         <Row>
           <Col span="12">
           <FormItem label="数据源">
@@ -15,7 +15,7 @@
             {{parent.tableName}}
           </FormItem>
           </Col>
-        </Row>
+        </Row> -->
 
         <FormItem label="绑定的表单">{{getFormConfig()}} <Button size="small" @click="$refs.SelectForm.isShowListModal = true">选择表单</Button></FormItem>
 
@@ -35,7 +35,7 @@
         <EventGroup :cfg="listCfg" type="actionButtons" name="操作按钮" style="margin:0 auto;width:65%" />
 
         <!-- 选择哪张表单绑定 -->
-        <ListSelector ref="SelectForm" title="表单配置" :API="apiRoot + '/api/cms/form-factory/list'" @on-select="onFormSelected($event)" :columns="formSelectorCols" />
+        <ListSelector ref="SelectForm" title="表单配置" :API="apiRoot + '/common_api/widget_config/list'" @on-select="onFormSelected($event)" :columns="formSelectorCols" />
 
         <FormPerviewLoader ref="FormPerviewLoader" />
       </Form>

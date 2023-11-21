@@ -31,14 +31,13 @@ export default {
 
             xhr_get(this.API, (j: RepsonseResult) => {
                 this.list.loading = false;
-                let r: any = j.result;
+       
 
-                if (j.isOk) {
-                    this.list.data = r;
-                    // @ts-ignore
-                    this.list.total = j.total;
+                if (j.status) {
+                    this.list.data = j.data.rows;
+                    this.list.total = j.data.total;
                 } else
-                    this.$Message.warning(j.msg || '获取列表失败');
+                    this.$Message.warning(j.message || '获取列表失败');
             }, params);
         },
 

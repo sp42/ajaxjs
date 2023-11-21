@@ -9,7 +9,7 @@ export default {
     mixins: [CommonFactory],
     data() {
         return {
-            API: this.api || `${this.apiRoot}/api/cms/list-factory`,
+            API: this.api || `${this.apiRoot}/common_api/widget_config`,
             list: {
                 columns: [
                     List.id,
@@ -24,7 +24,7 @@ export default {
                     },
                     {
                         title: '接口地址', minWidth: 230, render: (h, params) => {
-                            return h('span', JSON.parse(params.row.listCfg).dataBinding.url)
+                            return h('span', params.row.config.dataBinding.url);
                         }, ellipsis: true, tooltip: true
                     },
                     List.createDate,

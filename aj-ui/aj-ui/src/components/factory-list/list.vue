@@ -1,8 +1,8 @@
 <template>
   <div>
-    <SearchPanel :search="list.search" :cmp="this">
+     <SearchPanel :search="list.search" :cmp="this">
       <Input suffix="ios-search" v-model="list.search.name" @on-enter="getData" clearable placeholder="请输入列表名称" />
-    </SearchPanel>
+    </SearchPanel> 
     <br />
     <div>
       <!--     <TagListPanel /> -->
@@ -35,7 +35,7 @@
 
     <Modal v-model="isShowEdit" title="编辑" width="1300" ok-text="关闭" cancel-text="">
 
-      <ListFactory ref="WidgetFactory" :api-root="apiRoot" :api="api" />
+   <ListFactory ref="WidgetFactory" :api-root="apiRoot" :api="api" />
 
     </Modal>
   </div>

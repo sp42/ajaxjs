@@ -28,8 +28,8 @@ export default {
          * 获取单个数据
          */
         getDataBase(cb: Function): void {
-            xhr_get(`${this.API}?id=${this.id}`, (j: RepsonseResult) => {
-                let r: any = j.result;
+            xhr_get(`${this.API}/${this.id}`, (j: RepsonseResult) => {
+                let r: any = j.data;
 
                 if (r) {
                     this.name = r.name;

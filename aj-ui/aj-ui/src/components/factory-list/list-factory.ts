@@ -12,7 +12,7 @@ export default {
     mixins: [InfoMixins],
     data(): {} {
         return {
-            API: this.api || `${this.apiRoot}/api/cms/list-factory`,
+            API: this.api || `${this.apiRoot}/common_api/widget_config`,
             isShowPerview: false,
             initTableData: [], // 预览用的表格数据
             rendererColDef: [] as iViewTableColumn[], // 渲染器的列定义
@@ -41,7 +41,7 @@ export default {
          */
         getData(cb?: Function): void {
             let _cb: Function = (r: any) => {
-                this.cfg = JSON.parse(r.listCfg);
+                this.cfg = r.config;
                 setTimeout(() => cb && cb(), 100);
             };
 
