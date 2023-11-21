@@ -21,7 +21,7 @@ export default {
             if (dp_appId)
                 p.appId = dp_appId;
 
-            xhr_get(`${this.apiRoot}/admin/datasource`, (j: JsonResponse) => {
+            xhr_get(`${this.apiRoot}/datasource`, (j: JsonResponse) => {
                 this.datasource.list = j.data;
                 this.datasource.id = this.datasource.list[0].id; // 默认显示第一个数据源的
                 this.getData();

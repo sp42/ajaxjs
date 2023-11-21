@@ -3,9 +3,11 @@ package com.ajaxjs.data.jdbc_helper;
 import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.data.jdbc_helper.common.ResultSetProcessor;
 import com.ajaxjs.util.convert.ConvertBasicValue;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import com.ajaxjs.util.reflect.NewInstance;
+import lombok.extern.slf4j.Slf4j;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -21,6 +23,7 @@ import java.util.*;
 /**
  * 基本 JDBC 查询操作的封装
  */
+@Slf4j
 public class JdbcReader extends JdbcConn {
     private static final LogHelper LOGGER = LogHelper.getLog(JdbcReader.class);
 
@@ -42,15 +45,17 @@ public class JdbcReader extends JdbcConn {
                 if (rs.next()) {
                     return processor.process(rs);
                 } else {
-                    LOGGER.info("查询 SQL：{0} 没有符合的记录！", sql);
+                    log.info("查询 SQL：{} 没有符合的记录！", sql);
                     return null;
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("ERR:", e);
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    private static final String JSON_TYPE_MYSQL8 = "JSON";
 
     /**
      * 记录集合转换为 Map
@@ -67,6 +72,11 @@ public class JdbcReader extends JdbcConn {
         for (int i = 1; i <= metaData.getColumnCount(); i++) {// 遍历结果集
             String key = DataUtils.changeColumnToFieldName(metaData.getColumnLabel(i));
             Object value = rs.getObject(i);
+
+//            log.debug(columnName+"::"+columnTypeName);
+            /* mysql 8 json 字段对应 jdbc 的类型是？有没有办法让 jdbc 得知这个是一个 json 类型的字段？ */
+            if (value != null && JSON_TYPE_MYSQL8.equals(metaData.getColumnTypeName(i)))
+                value = EntityConvert.json2map(value.toString());
 
             map.put(key, value);
         }
@@ -166,10 +176,6 @@ public class JdbcReader extends JdbcConn {
     public <T> T[] queryArray(Class<T> clz, String sql, Object... params) {
         return executeQuery((ResultSet rs) -> {
             List<T> list = forEachRs(rs, _rs -> (T) rs.getObject(1));
-
-            if (list == null)
-                return null;
-
             Object array = Array.newInstance(clz, list.size());// List 转为数组 这里可否优化？
 
             for (int i = 0; i < list.size(); i++)
@@ -217,8 +223,7 @@ public class JdbcReader extends JdbcConn {
                 try {
                     PropertyDescriptor property = new PropertyDescriptor(key, beanClz);
                     Method method = property.getWriteMethod();
-                    Object value = null;
-
+                    Object value;
                     Class<?> propertyType = property.getPropertyType();
 
                     // 枚举类型的支持
@@ -228,8 +233,8 @@ public class JdbcReader extends JdbcConn {
                     try {
                         value = ConvertBasicValue.basicConvert(_value, propertyType);
                     } catch (NumberFormatException e) {
-                        String input = (value == null ? " 空值 " : value.getClass().toString());
-                        String expect = property.getPropertyType().toString();
+//                        String input = (value == null ? " 空值 " : value.getClass().toString());
+//                        String expect = property.getPropertyType().toString();
 //                        LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, input, expect);
                         continue; // 转换失败，继续下一个字段
                     }

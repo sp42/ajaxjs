@@ -122,7 +122,7 @@ export default {
          * 弹窗“选择表”
          */
         showSelectTable(): void {
-            this.selectTable.api = this.isEmbed ? `${this.apiRoot}/admin/datasource/getAllTables` : `${this.apiRoot}/admin/datasource/${this.datasource.id}/getAllTables`;
+            this.selectTable.api = this.isEmbed ? `${this.apiRoot}/datasource/getAllTables` : `${this.apiRoot}/datasource/${this.datasource.id}/getAllTables`;
 
             setTimeout(() => { // maybe nextTick
                 this.$refs.selectTableList.getData();

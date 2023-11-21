@@ -1,7 +1,6 @@
 package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.logger.LogHelper;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.util.ObjectUtils;

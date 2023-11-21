@@ -165,7 +165,7 @@ public class TomcatStarter {
             FileHelper.mkDir(jspFolder);
         }
 
-        System.out.println("jspFolder::::::" + jspFolder);
+//        System.out.println("jspFolder::::::" + jspFolder);
 //        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File("/mycar/mycar-service-4.0/security-oauth2-uam/sync/jsp").getAbsolutePath());
         Host host = tomcat.getHost();
         host.setAutoDeploy(false);

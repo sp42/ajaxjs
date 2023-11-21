@@ -40,8 +40,8 @@ public class CrossFilter implements Filter {
 
         // 允许跨域请求
         if (origin != null) {
-            res.addHeader("Access-Control-Allow-Origin", origin);
         }
+        res.addHeader("Access-Control-Allow-Origin", "*");
         res.addHeader("Access-Control-Allow-Methods", "*");
         res.addHeader("Access-Control-Allow-Credentials", "true");
         res.addHeader("Access-Control-Allow-Headers", "*");

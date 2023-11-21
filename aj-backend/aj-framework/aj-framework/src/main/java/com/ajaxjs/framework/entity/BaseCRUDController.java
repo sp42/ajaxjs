@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.framework.PageResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public interface BaseCRUDController {
      * @param id        实体 id
      * @return 实体 Map
      */
-    @GetMapping("/common/{namespace}/{id}")
+    @GetMapping("/{namespace}/{id}")
     Map<String, Object> info(@PathVariable String namespace, @PathVariable Long id);
 
     /**
@@ -28,15 +29,24 @@ public interface BaseCRUDController {
      * @param namespace 实体的命名空间
      * @return 实体列表
      */
-    @GetMapping("/common/{namespace}/list")
+    @GetMapping("/{namespace}/list")
     List<Map<String, Object>> list(@PathVariable String namespace);
 
-    @PostMapping("/common/{namespace}/create")
+    /**
+     * 分页获取实体列表
+     *
+     * @param namespace 实体的命名空间
+     * @return 实体列表
+     */
+    @GetMapping("/{namespace}/page")
+    PageResult<Map<String, Object>> page(@PathVariable String namespace);
+
+    @PostMapping("/{namespace}/create")
     Long create(@PathVariable String namespace, @RequestParam Map<String, Object> params);
 
-    @PostMapping("/common/{namespace}/update")
+    @PostMapping("/{namespace}/update")
     Boolean update(@PathVariable String namespace, @RequestParam Map<String, Object> params);
 
-    @PostMapping("/common/{namespace}/delete/{id}")
+    @PostMapping("/{namespace}/delete/{id}")
     Boolean delete(@PathVariable String namespace, @PathVariable Long id);
 }

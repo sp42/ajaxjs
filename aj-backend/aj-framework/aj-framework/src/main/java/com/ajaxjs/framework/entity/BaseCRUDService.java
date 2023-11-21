@@ -1,6 +1,7 @@
 package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.framework.BusinessException;
+import com.ajaxjs.framework.PageResult;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,14 @@ public abstract class BaseCRUDService implements BaseCRUDController {
             throw new BusinessException("没有配置 BaseCRUD");
 
         return namespaces.get(namespace).listMap();
+    }
+
+    @Override
+    public PageResult<Map<String, Object>> page(String namespace) {
+        if (!namespaces.containsKey(namespace))
+            throw new BusinessException("没有配置 BaseCRUD");
+
+        return (PageResult<Map<String, Object>>) namespaces.get(namespace).page(null);
     }
 
     @Override

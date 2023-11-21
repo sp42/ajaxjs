@@ -38,6 +38,10 @@ public class PageEnhancer {
 
     private int limit;
 
+    private static final String[] PAGE_SIZE = new String[]{"pageSize", "rows", "limit"};
+
+    private static final String[] PAGE_NO = new String[]{"pageNo", "page"};
+
     /**
      * 获取分页参数
      */
@@ -53,10 +57,9 @@ public class PageEnhancer {
             return;
         }
 
-        Integer pageSize = get(req, new String[]{"pageSize", "rows", "limit"});
+        Integer pageSize = get(req, PAGE_SIZE);
         limit = pageSize == null ? PageResult.DEFAULT_PAGE_SIZE : pageSize;
-
-        Integer pageNo = get(req, new String[]{"pageNo", "page"});
+        Integer pageNo = get(req, PAGE_NO);
 
         if (pageNo != null)
             start = pageNo2start(pageNo, limit);
@@ -95,7 +98,6 @@ public class PageEnhancer {
         try {
             selectStatement = (Select) CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
-            LOGGER.info(sql);
             LOGGER.warning(e);
         }
 
@@ -198,10 +200,6 @@ public class PageEnhancer {
 
     /**
      * pageSize 转换为 MySQL 的 start 分页
-     *
-     * @param pageNo
-     * @param limit
-     * @return
      */
     public static int pageNo2start(int pageNo, int limit) {
         int start = (pageNo - 1) * limit;

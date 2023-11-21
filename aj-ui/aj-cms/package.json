@@ -1,0 +1,55 @@
+{
+  "name": "@bingo/ui-template",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "npm run dev",
+    "start": "npm run serve",
+    "build": "bingo-builder build --config ./build/config.js --dist ./dist/build",
+    "build:output": "bingo-builder build --inspect --mode production --config ./build/config.js --dist ./dist/build > webpack.output.js",
+    "dev": "bingo-builder dev --config ./build/config.js  --dist ./dist/dev",
+    "dev:output": "bingo-builder dev --inspect --mode development --config ./build/config.js  --dist ./dist/dev > webpack.output.js",
+    "pack": "bingo-builder pack --config ./build/config.js --dist ./dist/pack",
+    "pack:output": "bingo-builder pack --inspect --mode production --config ./build/config.js --dist ./dist/pack > webpack.output.js",
+    "packdev": "bingo-builder packdev --config ./build/config.js --dist ./dist/packdev",
+    "build:nomock": "bingo-builder build --mode nomock",
+    "build:travis": "bingo-builder build --mode travis",
+    "update": "bingo-builder updateSnapshot --config ./build/config.js",
+    "release": "npm run pack && npm publish ./dist/pack --registry=https://repo.bingosoft.net/repository/npm-bingo/",
+    "release:dev": "npm run pack && npm publish ./dist/pack --registry=https://repo.bingosoft.net/repository/npm-snapshot/",
+    "lint": "vue-cli-service lint --fix",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "@bingo/components": "1.1.0-snapshot",
+    "@bingo/core": "1.1.0-snapshot",
+    "@bingo/iview-pro": "1.1.0-snapshot",
+    "@bingo/iview-pro-style": "1.1.0-snapshot",
+    "@bingo/iview-admin": "1.1.0-snapshot",
+    "better-scroll": "1.12.1",
+    "echarts": "4.1.0",
+    "js-cookie": "2.2.0",
+    "lowdb": "1.0.0",
+    "quill": "1.3.6",
+    "screenfull": "4.0.0",
+    "simplemde": "1.11.2",
+    "ua-parser-js": "0.7.18"
+  },
+  "devDependencies": {
+    "@bingo/builder": "1.1.0-snapshot",
+    "@types/lodash": "4.14.122"
+  },
+  "vuePlugins": {
+    "resolveFrom": "./node_modules/@bingo/builder/vuePlugins"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}

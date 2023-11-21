@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <!-- no cache headers -->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <meta http-equiv="Cache-Control" content="no-cache">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link rel="shortcut icon" href="./favicon.ico">
+    <title><%= VUE_APP_TITLE %></title>
+    <script src="./config.js?r=<%= VUE_APP_BUILD_TIME %>"></script>
+    <script>
+        // sso注销，修复部分场景无法注销的问题
+        if(window.location.hash && window.location.hash.indexOf("logout")>0){
+          var contextPath=getWebContext();
+          var exp = new Date();
+          exp.setTime(exp.getTime() - 1);
+          var sessionId="m_vue_session_id";
+          document.cookie=sessionId+"=-1;expires="+exp.toGMTString()+";path="+contextPath;
+          if(localStorage){
+            var sessionKey="_session_"+contextPath;
+            localStorage.removeItem(sessionKey);
+          }
+        }
+        function getWebContext() {
+          var webContext=window.location.pathname;
+          if(webContext.indexOf('/')>1){
+            webContext=webContext.substring(0,webContext.lastIndexOf('/'));
+          }
+          return webContext;
+        }
+      </script>
+</head>
+<body>
+<noscript>
+    <strong>
+        请开启 JavaScript 功能来使用 <%= VUE_APP_TITLE %>。
+    </strong>
+</noscript>
+<div id="app">
+
+</div>
+</body>
+</html>

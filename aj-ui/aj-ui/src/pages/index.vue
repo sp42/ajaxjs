@@ -91,7 +91,7 @@ export default {
   components: { DataServiceIndex, DataSource, DataService,  FactoryList, FactoryListLoader,  ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
-      load: 'DataService',
+      load: 'FactoryList',
       apiRoot: window.config.dsApiRoot,
       theme2: 'light',
       listId: 0

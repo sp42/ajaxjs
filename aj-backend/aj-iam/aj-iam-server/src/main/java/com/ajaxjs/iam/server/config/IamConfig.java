@@ -73,12 +73,15 @@ public class IamConfig implements WebMvcConfigurer {
         return token -> {
             Cache<String, Object> cache = simpleJvmCache();
             String key = JWT_TOKEN_USER_KEY + "-" + token;
-
             OidcService.TokenUser tokenUser = cache.get(key, OidcService.TokenUser.class);
+
+            if (tokenUser == null)
+                throw new SecurityException("找不到用户信息");
 
             return ConvertToJson.toJson(tokenUser.getAccessToken());
         };
     }
+
     @Value("${auth.excludes: }")
     private String excludes;
 

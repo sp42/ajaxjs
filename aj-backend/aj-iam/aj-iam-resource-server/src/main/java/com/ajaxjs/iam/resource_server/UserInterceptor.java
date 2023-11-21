@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.resource_server;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,6 +27,7 @@ import java.util.function.Function;
  * }
  * </code>
  */
+@Slf4j
 public class UserInterceptor implements HandlerInterceptor {
     @Value("${auth.run:true}")
     private String run;
@@ -127,7 +129,7 @@ public class UserInterceptor implements HandlerInterceptor {
         try (PrintWriter writer = resp.getWriter()) {
             writer.write(msg);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("err::", e);
         }
     }
 
@@ -155,7 +157,7 @@ public class UserInterceptor implements HandlerInterceptor {
                 token = request.getParameter("access_token");
 
                 if (token == null)
-                    System.err.println("Token not found in request parameters. Not an OAuth2 request.");
+                    log.warn("Token not found in request parameters. Not an OAuth2 request.");
             }
         }
 

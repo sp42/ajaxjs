@@ -13,7 +13,7 @@ export default {
     },
     data(): {} {
         return {
-            API: `${this.apiRoot}/admin/datasource`,
+            API: `${this.apiRoot}/datasource`,
             form: {
                 data: {},
                 isLoading: false,

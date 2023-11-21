@@ -8,7 +8,7 @@ export default {
     },
     data() {
         return {
-            API: `${this.apiRoot}/admin/datasource`,
+            API: `${this.apiRoot}/datasource`,
             datasource: {
                 id: 0,
                 list: [],
@@ -41,8 +41,9 @@ export default {
                 params.appId = dp_appId;
 
             xhr_get(this.API, (j: RepsonseResult) => {
-                if (j.result) {
-                    this.datasource.list = j.result;
+                if (j.status) {
+                    this.datasource.list = j.data;
+                    
                     if (this.datasource.list[0])
                         this.datasource.id = this.datasource.list[0].id; // 默认显示第一个数据源的
                 } else
