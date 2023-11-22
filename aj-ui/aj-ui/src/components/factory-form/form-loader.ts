@@ -125,10 +125,10 @@ export default {
             else
                 this.status = 1;
 
-            xhr_get(`${window["config"].dsApiRoot}/api/cms/form-factory?id=${this.formId}`,
+            xhr_get(`${window["config"].dsApiRoot}/common_api/widget_config/${this.formId}`,
                 (j: RepsonseResult) => {
-                    if (j && j.result) {
-                        this.cfg = JSON.parse(j.result.json);
+                    if (j && j.status) {
+                        this.cfg = j.data.config;
 
                         let cfg: FormFactory_Config = this.cfg
                         let isJsonBased = cfg.jsonBased.isJsonBased;
@@ -157,7 +157,7 @@ export default {
                                         this.$refs.FromRenderer.data = j;
                                         this.$refs.FromRenderer.$forceUpdate();
                                     } else {
-                                        let r = j.result;
+                                        let r = j.data;
 
                                         if (r) {
                                             this.$refs.FromRenderer.data = r;
@@ -194,6 +194,7 @@ function deleteFieldIfNull(params: any): void {
 function date2str(params: any): void {
     for (let i in params) {
         let v = params[i];
+        
         if (v instanceof Date)
             params[i] = dateFormat.call(v, 'yyyy-MM-dd hh:mm:ss');
     }

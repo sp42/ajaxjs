@@ -10,6 +10,7 @@ export default {
     data() {
         return {
             API: this.api || `${this.apiRoot}/common_api/widget_config`,
+            listParams: 'q_type=LIST',
             list: {
                 columns: [
                     List.id,

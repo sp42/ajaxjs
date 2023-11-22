@@ -35,7 +35,7 @@
         <EventGroup :cfg="listCfg" type="actionButtons" name="操作按钮" style="margin:0 auto;width:65%" />
 
         <!-- 选择哪张表单绑定 -->
-        <ListSelector ref="SelectForm" title="表单配置" :API="apiRoot + '/common_api/widget_config/list'" @on-select="onFormSelected($event)" :columns="formSelectorCols" />
+        <ListSelector ref="SelectForm" title="表单配置" :API="apiRoot + '/common_api/widget_config/list?q_type=LIST'" @on-select="onFormSelected($event)" :columns="formSelectorCols" />
 
         <FormPerviewLoader ref="FormPerviewLoader" />
       </Form>

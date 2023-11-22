@@ -13,6 +13,7 @@ export default {
             id: "",
             loadFormId: 0,
             isShow: false,
+            name: '',
             cfg: {
                 fields: [],
             },

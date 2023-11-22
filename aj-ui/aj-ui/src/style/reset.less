@@ -17,3 +17,33 @@ input[type=password],input[type=text],select,textarea{outline:0;-moz-appearance:
         /* -webkit-user-select:none; */
     }
 }	
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+/* 修改 firefox 滚动条的样式 */
+* {
+    /* 宽度 */
+    scrollbar-width: thin;
+    /* "auto" 或 "thin" 或 "none" */
+    /* 轨道颜色 */
+    scrollbar-track-color: #f1f1f1;
+    /* 滑块颜色 */
+    scrollbar-thumb-color: #888;
+    /* 滑块圆角 */
+    scrollbar-thumb-border-radius: 10px;
+    /* 滑块悬停时的样式 */
+    scrollbar-thumb-hover-color: #555;
+}

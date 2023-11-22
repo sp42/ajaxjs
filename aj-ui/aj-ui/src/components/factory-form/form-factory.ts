@@ -11,7 +11,7 @@ export default {
     mixins: [InfoMixins],
     data(): {} {
         return {
-            API: this.api || `${this.apiRoot}/api/cms/form-factory`,
+            API: this.api || `${this.apiRoot}/common_api/widget_config`,
             cfg: {
                 labelWidth: 80,
                 dataBinding: {
@@ -93,7 +93,7 @@ export default {
          */
         getData(): void {
             this.getDataBase((r: any) => {
-                this.cfg = JSON.parse(r.json);
+                this.cfg = r.config;
                 if (this.cfg.jsonBased && this.cfg.jsonBased.isJsonBased)
                     this.view = 'form';
             });

@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;

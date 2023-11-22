@@ -1,6 +1,6 @@
 <!-- 演示预览用的 loader -->
 <template>
-  <Modal v-model="isShow" :title="'预览表单 ' + $parent.$parent.name" cancel-text="" width="900">
+  <Modal v-model="isShow" :title="'预览表单 ' + name" cancel-text="" width="900">
     <FromRenderer ref="FromRenderer" :cfg="cfg" />
 
     <div slot="footer">

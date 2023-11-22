@@ -47,7 +47,7 @@
         <MenuItem name="6-8" @click.native="routeTo('api-helper')">Api Helper</MenuItem>
       </Submenu>
     </Menu>
-    <div style="float:left;width:83%;height: 100%;">
+    <div style="float:left;width:83%;height: 100%;padding-top:3%">
       <div v-if="!load" class="center" style="text-align:center;margin-top:25%;">Welcome!</div>
       <DataSource v-if="load == 'DataSource'" :api-root="apiRoot" />
       <DataService v-if="load == 'DataService'" :api-root="apiRoot" />
@@ -91,7 +91,7 @@ export default {
   components: { DataServiceIndex, DataSource, DataService,  FactoryList, FactoryListLoader,  ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
-      load: 'FactoryList',
+      load: 'ModelMgr',
       apiRoot: window.config.dsApiRoot,
       theme2: 'light',
       listId: 0
@@ -120,4 +120,10 @@ export default {
   max-width: 800px;
   margin: 10px auto;
 }
+
+html, body, .main, .main > .ivu-menu {
+  height: 100%;
+}
+
+
 </style>

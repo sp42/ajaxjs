@@ -77,7 +77,12 @@ export default {
                 }
             }
 
-            xhr_get(`${this.API}/page`, (j: RepsonseResult) => {
+            let api: string = `${this.API}/page`;
+
+            if (this.listParams)
+                api += '?' + this.listParams;
+
+            xhr_get(api, (j: RepsonseResult) => {
                 this.list.loading = false;
 
                 if (j.status) {

@@ -50,7 +50,8 @@ export default {
   mixins: [CommonFactory],
   data() {
     return {
-      API: this.api || `${this.apiRoot}/api/cms/form-factory`,
+      API: this.api || `${this.apiRoot}/common_api/widget_config`,
+      listParams: "q_type=FORM",
       list: {
         columns: [
           List.id,
@@ -81,7 +82,7 @@ export default {
         search: {
           name: "",
         },
-      }
+      },
     };
   },
 
@@ -100,21 +101,20 @@ export default {
      * @param row
      */
     openPerview(row) {
-      if (
-        this.$refs.FormPerviewLoader &&
-        this.$refs.FormPerviewLoader.$refs.FromRenderer
-      )
-        this.$refs.FormPerviewLoader.$refs.FromRenderer.data = {}; // 清除之前的数据
+      let loader = this.$refs.FormPerviewLoader;
+      if (loader && loader.$refs.FromRenderer)
+        loader.$refs.FromRenderer.data = {}; // 清除之前的数据
 
-      xhr_get(`${this.API}?id=${row.id}`, (j) => {
-        let r = j.result;
+      xhr_get(`${this.API}/${row.id}`, (j) => {
+        let r = j.data;
 
         if (r) {
-          this.$refs.FormPerviewLoader.cfg = JSON.parse(r.json); // 数据库记录转换到 配置对象;
-          this.$refs.FormPerviewLoader.isShow = true;
+          loader.name = r.name;
+          loader.cfg = r.config; // 数据库记录转换到 配置对象;
+          loader.isShow = true;
         } else {
           this.$Message.error("未有任何配置");
-          this.$refs.FormPerviewLoader.cfg = {};
+          loader.cfg = {};
         }
       });
     },
