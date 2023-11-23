@@ -14,7 +14,7 @@ public class SqlTools {
     }
 
     public ExplainVO runExplainPlan(String sqlText) {
-        List<Map<String, Object>> list = CRUD.list("EXPLAIN " + sqlText);
+        List<Map<String, Object>> list = CRUD.listMap("EXPLAIN " + sqlText);
 
         Map<String, Object> info = CRUD.infoMap("SHOW STATUS LIKE 'Last_query_cost'");
         Object cost = info.get("Value");
@@ -46,6 +46,6 @@ public class SqlTools {
         else
             sql = "SELECT * FROM information_schema.processlist where command!='Sleep' limit 5000";
 
-        return CRUD.list(sql);
+        return CRUD.listMap(sql);
     }
 }

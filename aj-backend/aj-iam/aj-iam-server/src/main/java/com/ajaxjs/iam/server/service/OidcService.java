@@ -1,6 +1,5 @@
 package com.ajaxjs.iam.server.service;
 
-import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.response.Result;
 import com.ajaxjs.iam.jwt.JWebTokenMgr;
 import com.ajaxjs.iam.jwt.Utils;
@@ -18,7 +17,6 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 @Service
 public class OidcService extends OAuthCommon implements OidcController {

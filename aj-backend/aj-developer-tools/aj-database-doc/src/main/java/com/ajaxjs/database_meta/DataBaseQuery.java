@@ -5,8 +5,8 @@ import com.ajaxjs.database_meta.model.Column;
 import com.ajaxjs.database_meta.model.Database;
 import com.ajaxjs.database_meta.model.Table;
 import com.ajaxjs.util.StrUtil;
+import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.map.JsonHelper;
 import com.ajaxjs.util.regexp.RegExpUtils;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -195,7 +195,7 @@ public class DataBaseQuery extends BaseMetaQuery {
         DataBaseQuery d = new DataBaseQuery(conn);
         Database[] dataBaseWithTable = d.getDataBaseWithTableFull(dbName);
 
-        return JsonHelper.toJson(dataBaseWithTable);
+        return ConvertToJson.toJson(dataBaseWithTable);
     }
 
     public static void saveToDiskJson(Connection conn, String path, String dbName) {

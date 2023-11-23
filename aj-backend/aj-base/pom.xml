@@ -14,4 +14,59 @@
     <version>1.0</version>
     <name>aj-base</name>
     <description>基础服务</description>
+
+    <build>
+        <plugins>
+            <!-- 生成 META-INF/MANIFEST.MF 文件的部分内容 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- 这里是项目主类运行入口 -->
+                            <mainClass>com.ajaxjs.base.BaseApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!--一键部署到服务器 SSH-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>2.0.2</version>
+
+                <executions>
+                    <execution>
+                        <id>upload-deploy</id>
+                        <!-- 运行package打包的同时运行upload-single和sshexec -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>upload-single</goal>
+                            <goal>sshexec</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 指定 SSH 账号 -->
+                            <serverId>usa.ajaxjs.com</serverId>
+                            <!-- 要更新的 jar 包 -->
+                            <fromFile>target/aj-base.jar</fromFile>
+                            <!-- 服务器部署位置 -->
+                            <url>${ssh.url.base}</url>
+                            <!-- 重启脚本 先切换目录，才能正确执行脚本 -->
+                            <commands>
+                                <command>cd /home/service/aj-base;./startup.sh</command>
+                            </commands>
+                            <!-- 显示运行命令的输出结果 -->
+                            <displayCommandOutputs>true</displayCommandOutputs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
 </project>

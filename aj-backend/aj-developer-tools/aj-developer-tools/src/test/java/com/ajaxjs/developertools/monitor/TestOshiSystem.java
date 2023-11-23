@@ -8,9 +8,9 @@ import javax.script.ScriptException;
 
 import com.ajaxjs.developertools.api.SystemInfoController;
 import com.ajaxjs.developertools.monitor.oshi.OshiSystemMonitor;
+import com.ajaxjs.util.convert.ConvertToJson;
 import org.junit.Test;
 
-import com.ajaxjs.util.map.JsonHelper;
 
 public class TestOshiSystem {
     public static String prettyJson(String json) {
@@ -30,7 +30,7 @@ public class TestOshiSystem {
     @Test
     public void testMonitor() {
         Map<String, Object> map = new SystemInfoController().get();
-        String json = JsonHelper.toJson(map);
+        String json = ConvertToJson.toJson(map);
 
         System.out.println(prettyJson(json));
     }
