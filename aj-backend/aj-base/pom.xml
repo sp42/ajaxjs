@@ -67,6 +67,20 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
+
+    <dependencies>
+        <!-- 认证 SDK -->
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>aj-iam-client</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.7.1</version>
+        </dependency>
+    </dependencies>
 </project>

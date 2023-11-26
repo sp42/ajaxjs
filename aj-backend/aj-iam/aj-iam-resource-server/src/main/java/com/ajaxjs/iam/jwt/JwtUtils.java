@@ -1,7 +1,5 @@
-package com.ajaxjs.iam;
+package com.ajaxjs.iam.jwt;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.Base64Utils;
 
 import javax.crypto.Mac;
@@ -15,7 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Random;
 
-public class Utils {
+public class JwtUtils {
     /**
      * 随机字符串
      */
@@ -50,7 +48,7 @@ public class Utils {
             sha256Hmac.init(new SecretKeySpec(hash, "HmacSHA256"));
             byte[] signedBytes = sha256Hmac.doFinal(data.getBytes(StandardCharsets.UTF_8));
 
-            return Utils.encode(signedBytes);
+            return JwtUtils.encode(signedBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
             return null;
@@ -70,11 +68,13 @@ public class Utils {
     }
 
     public static String encodeBase64(String str) {
-        return Base64Utils.encodeToString(Base64Utils.encode(str.getBytes()));
+//        return Base64Utils.encodeToString(Base64Utils.encode(str.getBytes()));
+        return Base64Utils.encodeToString(str.getBytes());
     }
 
     public static String decodeBase64(String str) {
-        return Base64Utils.encodeToString(Base64Utils.decodeFromString(str));
+        return Base64Utils.encodeToString(str.getBytes());
+//        return Base64Utils.encodeToString(Base64Utils.decodeFromString(str));
     }
 
     public static long now() {
@@ -89,22 +89,5 @@ public class Utils {
      */
     public static long setExpire(int hours) {
         return LocalDateTime.now().plus(hours, ChronoUnit.HOURS).toEpochSecond(ZoneOffset.UTC);
-    }
-
-    public static <T> T jsonStr2Bean(String str, Class<T> clz) {
-        try {
-            return new ObjectMapper().readValue(str, clz);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static String bean2json(Object bean) {
-        try {
-            return new ObjectMapper().writeValueAsString(bean);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

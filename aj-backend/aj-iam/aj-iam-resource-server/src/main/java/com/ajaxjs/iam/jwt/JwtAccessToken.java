@@ -1,5 +1,6 @@
-package com.ajaxjs.iam.client.model;
+package com.ajaxjs.iam.jwt;
 
+import com.ajaxjs.iam.model.AccessToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

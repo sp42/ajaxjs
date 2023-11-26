@@ -49,4 +49,12 @@ public interface BaseCRUDController {
 
     @PostMapping("/{namespace}/delete/{id}")
     Boolean delete(@PathVariable String namespace, @PathVariable Long id);
+
+    /**
+     * 重新加载数据库的配置
+     *
+     * @return 是否成功
+     */
+    @GetMapping("/reload_config")
+    boolean reloadConfig();
 }

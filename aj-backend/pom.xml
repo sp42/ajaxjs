@@ -8,7 +8,7 @@
     <version>1.11</version>
     <modules>
         <module>aj-framework/aj-json</module>
-        <module>aj-framework/aj-net</module>
+        <!--<module>aj-framework/aj-net</module>-->
         <module>aj-framework/aj-web</module>
         <module>aj-framework/aj-framework</module>
         <module>aj-framework/aj-common-parent</module>

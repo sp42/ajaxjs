@@ -81,4 +81,22 @@ public class OidcService extends OAuthCommon implements OidcController {
         } else
             throw new IllegalArgumentException("非法 code：" + code);
     }
+
+    @Override
+    public Result<JwtAccessToken> clientCredentials(String grantType, String authorization) {
+        if (!GrantType.CLIENT_CREDENTIALS.equals(grantType))
+            throw new IllegalArgumentException("grantType must be 'clientCredentials'");
+
+        App app = getAppByAuthHeader(authorization);
+
+        // 生成 Access Token
+        JwtAccessToken accessToken = new JwtAccessToken();
+        createToken(accessToken, app, GrantType.OIDC);
+
+        // 生成 JWT Token
+        String jWebToken = jWebTokenMgr.tokenFactory(String.valueOf(app.getId()), app.getName(), "", 0L /* 0 表示不过期*/).toString();
+        accessToken.setId_token(jWebToken);
+
+        return new Result<>(accessToken, true);
+    }
 }

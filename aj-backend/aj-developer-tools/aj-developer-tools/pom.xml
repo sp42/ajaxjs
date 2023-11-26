@@ -79,6 +79,7 @@
             <version>2.12.7.1</version>
         </dependency>
 
+        <!-- 认证 SDK -->
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>aj-iam-client</artifactId>

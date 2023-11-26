@@ -50,7 +50,7 @@
                         </goals>
                         <configuration>
                             <!-- 指定 SSH 账号 -->
-                            <serverId>usa.ajaxjs.com</serverId>
+                            <serverId>high.ajaxjs.com</serverId>
                             <!-- 要更新的 jar 包 -->
                             <fromFile>target/aj-iam-server.jar</fromFile>
                             <!-- 服务器部署位置 -->

@@ -1,8 +1,12 @@
 package com.ajaxjs.iam.resource_server;
 
+import com.ajaxjs.iam.jwt.JWebToken;
+import com.ajaxjs.iam.jwt.JWebTokenMgr;
+import com.ajaxjs.iam.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -38,8 +42,29 @@ public class UserInterceptor implements HandlerInterceptor {
     @Autowired(required = false)
     private StringRedisTemplate redis;
 
+    /**
+     * 本地可以获取用户信息
+     * 这个回调函数决定如何获取
+     */
     @Autowired(required = false)
     private Function<String, String> getUserFromJvmHash;
+
+    /**
+     * JWT 验证的密钥
+     */
+    @Value("${auth.jwtSecretKey}")
+    private String jwtSecretKey;
+
+    /**
+     * JWT 解密
+     */
+    @Bean
+    JWebTokenMgr jWebTokenMgr() {
+        JWebTokenMgr mgr = new JWebTokenMgr();
+        mgr.setSecretKey(jwtSecretKey);
+
+        return mgr;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -57,11 +82,26 @@ public class UserInterceptor implements HandlerInterceptor {
                     break;
                 case "jvm_hash":
                     if (getUserFromJvmHash == null) {
-                        serverErr(response, "配置参数不正确");
+                        serverErr(response, "配置参数 jvm_hash 不正确");
 
                         return false;
                     } else
                         jsonUser = getUserFromJvmHash.apply(token);
+                    break;
+                case "jwt":
+                    JWebTokenMgr mgr = jWebTokenMgr();
+                    JWebToken jwt = mgr.parse(token);
+
+                    if (mgr.isValid(jwt)) {
+                        jsonUser = "{\"id\": %s, \"name\": \"%s\"}";
+                        jsonUser = String.format(jsonUser, jwt.getPayload().getSub(), jwt.getPayload().getName());
+                    } else {
+//                        throw new SecurityException("返回非法 JWT Token");
+                        returnErrorMsg(403, response);
+
+                        return false;
+                    }
+
                     break;
                 default:
                     serverErr(response, "配置参数不正确");
@@ -71,8 +111,8 @@ public class UserInterceptor implements HandlerInterceptor {
 //                LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
 
             if (StringUtils.hasText(jsonUser)) {
-//                User user = Utils.jsonStr2Bean(jsonUser, User.class);
-//                request.setAttribute(UserConstants.USER_KEY_IN_REQUEST, user);
+                User user = Utils.jsonStr2Bean(jsonUser, User.class);
+                request.setAttribute(UserConstants.USER_KEY_IN_REQUEST, user);
 
                 return true;
             } else

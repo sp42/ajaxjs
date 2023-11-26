@@ -1,6 +1,7 @@
 package com.ajaxjs.iam.server.controller;
 
 import com.ajaxjs.framework.spring.response.Result;
+import com.ajaxjs.iam.server.model.AccessToken;
 import com.ajaxjs.iam.server.model.JwtAccessToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,4 +46,15 @@ public interface OidcController {
     Result<JwtAccessToken> token(@RequestHeader String authorization, @RequestParam("grant_type") String grantType,
                                  @RequestParam String code, @RequestParam String state,
                                  @RequestParam(value = "web_url", required = false) String webUrl);
+
+    /**
+     * 客户端凭证获取 Token
+     * 这是通过头传输 client_id/client_secret
+     *
+     * @param grantType     必填，且固定是 client_credentials
+     * @param authorization 包含  client_id/client_secret 的头，用 Base64 编码
+     * @return 应用的 JWT AccessToken
+     */
+    @PostMapping("/client_credentials")
+    Result<JwtAccessToken> clientCredentials(@RequestParam("grant_type") String grantType, @RequestHeader("Authorization") String authorization);
 }

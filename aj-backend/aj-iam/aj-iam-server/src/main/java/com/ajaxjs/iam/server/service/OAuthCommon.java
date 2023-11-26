@@ -78,6 +78,10 @@ public abstract class OAuthCommon implements IamConstants {
     public App getAppByAuthHeader(String authorization) {
         authorization = authorization.replaceAll("Basic ", "");
         String base64Str = StrUtil.base64Decode(authorization);
+
+        if (!base64Str.contains(":"))
+            throw new IllegalArgumentException("非法 Token");
+
         String[] arr = base64Str.split(":");
         String clientId = arr[0], clientSecret = arr[1];
 

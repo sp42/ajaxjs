@@ -1,8 +1,7 @@
-package com.ajaxjs.iam.user.service;
+package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.TestHelper;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;

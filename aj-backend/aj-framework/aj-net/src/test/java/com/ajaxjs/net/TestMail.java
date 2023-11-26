@@ -1,7 +1,6 @@
 package com.ajaxjs.net;
 
-import com.ajaxjs.net.mail.Mail;
-import com.ajaxjs.net.mail.Sender;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

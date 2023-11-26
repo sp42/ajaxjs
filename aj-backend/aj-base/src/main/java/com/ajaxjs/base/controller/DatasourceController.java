@@ -1,6 +1,6 @@
-package com.ajaxjs.developertools.api;
+package com.ajaxjs.base.controller;
 
-import com.ajaxjs.developertools.model.DataSourceInfo;
+import com.ajaxjs.base.model.DataSourceInfo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

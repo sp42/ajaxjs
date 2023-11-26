@@ -41,6 +41,11 @@ public class BaseCRUD<T, K extends Serializable> {
      */
     private boolean hasIsDeleted;
 
+    /**
+     * 是否加入租户数据隔离
+     */
+    private boolean isTenantIsolation;
+
     private String delField = "is_deleted";
 
     /**
@@ -48,18 +53,26 @@ public class BaseCRUD<T, K extends Serializable> {
      */
     private Integer idType = BaseEntityConstants.IdType.AUTO_INC;
 
+    private final static String SELECT_SQL = "SELECT * FROM %s WHERE 1=1 ";
+
+    private String getInfoSql() {
+        String sql = String.format(SELECT_SQL, tableName) + " AND " + idField + " = ?";
+
+        return isTenantIsolation ? TenantService.addTenantIdQuery(sql) : sql;
+    }
+
     /**
      * 获取单笔记录
      */
     public T info(K id) {
-        return CRUD.info(clz, "SELECT * FROM " + tableName + " WHERE " + idField + " = ?", id);
+        return CRUD.info(clz, getInfoSql(), id);
     }
 
     /**
      * 获取单笔记录
      */
     public Map<String, Object> infoMap(K id) {
-        return CRUD.infoMap("SELECT * FROM " + tableName + " WHERE " + idField + " = ?", id);
+        return CRUD.infoMap(getInfoSql(), id);
     }
 
     /**
@@ -71,10 +84,30 @@ public class BaseCRUD<T, K extends Serializable> {
         return list(null);
     }
 
+    /**
+     * 获取列表（Map 格式）
+     *
+     * @return 列表（Map 格式）
+     */
     public List<Map<String, Object>> listMap() {
         String sql = getListSql(null);
 
         return CRUD.listMap(sql);
+    }
+
+    private String getListSql(String where) {
+        String sql = String.format(SELECT_SQL, tableName);
+
+        if (hasIsDeleted)
+            sql += " AND " + delField + " = 0";
+
+        if (isTenantIsolation)
+            sql = TenantService.addTenantIdQuery(sql);
+
+        if (where != null)
+            sql += where;
+
+        return sql;
     }
 
     /**
@@ -87,18 +120,6 @@ public class BaseCRUD<T, K extends Serializable> {
         String sql = getListSql(where);
 
         return CRUD.list(clz, sql);
-    }
-
-    private String getListSql(String where) {
-        String sql = "SELECT * FROM " + tableName + " WHERE 1=1 ";
-
-        if (hasIsDeleted)
-            sql += " AND " + delField + " = 0";
-
-        if (where != null)
-            sql += where;
-
-        return sql;
     }
 
     /**
@@ -124,6 +145,13 @@ public class BaseCRUD<T, K extends Serializable> {
      */
     private Consumer<Map<String, Object>> beforeCreate;
 
+    /**
+     * 创建实体
+     *
+     * @param params 实体
+     * @return NewlyId
+     */
+    @SuppressWarnings("unchecked")
     public K create(Map<String, Object> params) {
         if (idType == 2)
             params.put(idField, SnowflakeId.get());
@@ -133,6 +161,11 @@ public class BaseCRUD<T, K extends Serializable> {
 
         if (beforeCreate != null)
             beforeCreate.accept(params);
+
+        Integer tenantId = TenantService.getTenantId();
+
+        if (tenantId != null)
+            params.put("tenant_id", tenantId);
 
         return (K) CRUD.create(tableName, params, idField);
     }

@@ -1,4 +1,4 @@
-package com.ajaxjs.developertools.model;
+package com.ajaxjs.base.model;
 
 import com.ajaxjs.framework.BaseModel;
 import com.ajaxjs.framework.IBaseModel;

@@ -1,11 +1,11 @@
-package com.ajaxjs.developertools.service;
+package com.ajaxjs.base.service;
 
 
+import com.ajaxjs.base.model.DataServiceConstant;
+import com.ajaxjs.base.model.DataSourceInfo;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
-import com.ajaxjs.developertools.model.DataServiceConstant;
-import com.ajaxjs.developertools.model.DataSourceInfo;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import lombok.extern.slf4j.Slf4j;
 

@@ -2,15 +2,19 @@ package com.ajaxjs.base.config;
 
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
+import com.ajaxjs.iam.jwt.JWebTokenMgr;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+
+import com.ajaxjs.iam.resource_server.UserInterceptor;
 
 /**
  * 程序配置
@@ -39,6 +43,19 @@ public class BaseConfiguration implements WebMvcConfigurer {
         jdbcWriter.setIsAutoIns(true);
 
         return jdbcWriter;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor()).addPathPatterns("/**");
+    }
+
+    /**
+     * 用户全局拦截器
+     */
+    @Bean
+    UserInterceptor authInterceptor() {
+        return new UserInterceptor();
     }
 
     /**

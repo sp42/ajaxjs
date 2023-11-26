@@ -1,4 +1,4 @@
-package com.ajaxjs.iam.client.model;
+package com.ajaxjs.iam.model;
 
 
 import lombok.Data;

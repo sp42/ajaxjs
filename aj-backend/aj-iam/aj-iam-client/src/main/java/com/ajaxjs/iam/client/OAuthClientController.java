@@ -19,8 +19,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.ajaxjs.iam.Utils;
-import com.ajaxjs.iam.client.model.User;
+import com.ajaxjs.iam.jwt.JwtUtils;
+import com.ajaxjs.iam.client.model.UserAccessToken;
 
 /**
  * OAuth 授权客户端控制器
@@ -56,7 +56,7 @@ public class OAuthClientController {
                 .queryParam("client_id", clientId)          // 必选，RP 在 OP 注册的 client_id
                 .queryParam("redirect_uri", redirectUri)    // 必选，用户登录成功后，OP 回传授权码等信息给RP的接口
                 .queryParam("scope", scope)                 // 必选，申请获取的资源权限，必须包含 openid，表明申请获取 id token
-                .queryParam("state", Utils.getRandomString(5))   // 推荐，不透明字符串，当OP重定向到redirect_uri时，会原样返回给RP，用于防止 CSRF、 XSRF。
+                .queryParam("state", JwtUtils.getRandomString(5))   // 推荐，不透明字符串，当OP重定向到redirect_uri时，会原样返回给RP，用于防止 CSRF、 XSRF。
                 // 由于OP会原样返回此参数，可将 state 值与用户在RP登录前最后浏览的URI绑定，便于登录完成后将用户重定向回最后浏览的页面
                 .toUriString();
 
@@ -150,23 +150,23 @@ public class OAuthClientController {
      */
     public static final String USER_SESSION_KEY = "USER";
 
-    public static User getLoginedUser(HttpServletRequest req) {
+    public static UserAccessToken getLoginedUser(HttpServletRequest req) {
         return getLoginedUser(req.getSession());
     }
 
     /**
      * 获取用户
      */
-    public static User getLoginedUser(HttpSession session) {
+    public static UserAccessToken getLoginedUser(HttpSession session) {
         Object obj = session.getAttribute(USER_SESSION_KEY);
 
         if (obj == null)
             throw new IllegalAccessError("用户未登录，非法访问");
 
-        if (!(obj instanceof User))
+        if (!(obj instanceof UserAccessToken))
             throw new IllegalStateException("用户不是 User 类型");
 
-        return (User) obj;
+        return (UserAccessToken) obj;
     }
 
     /**

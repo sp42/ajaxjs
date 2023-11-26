@@ -12,4 +12,12 @@ public class Utils {
             return null;
         }
     }
+
+    public static String bean2json(Object bean) {
+        try {
+            return new ObjectMapper().writeValueAsString(bean);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

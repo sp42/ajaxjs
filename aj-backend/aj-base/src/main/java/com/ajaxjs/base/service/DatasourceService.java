@@ -1,8 +1,8 @@
-package com.ajaxjs.developertools.service;
+package com.ajaxjs.base.service;
 
+import com.ajaxjs.base.controller.DatasourceController;
+import com.ajaxjs.base.model.DataSourceInfo;
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.developertools.api.DatasourceController;
-import com.ajaxjs.developertools.model.DataSourceInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

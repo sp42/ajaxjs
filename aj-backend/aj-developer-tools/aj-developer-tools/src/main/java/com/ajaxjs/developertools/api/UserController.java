@@ -1,11 +1,11 @@
 package com.ajaxjs.developertools.api;
 
-import com.ajaxjs.iam.Utils;
 import com.ajaxjs.iam.client.BaseOidcClientUserController;
-import com.ajaxjs.iam.client.JWebTokenMgr;
-import com.ajaxjs.iam.client.model.JWebToken;
-import com.ajaxjs.iam.client.model.JwtAccessToken;
-import com.ajaxjs.iam.client.model.User;
+import com.ajaxjs.iam.client.model.UserAccessToken;
+import com.ajaxjs.iam.jwt.JWebToken;
+import com.ajaxjs.iam.jwt.JWebTokenMgr;
+import com.ajaxjs.iam.jwt.JwtAccessToken;
+import com.ajaxjs.iam.resource_server.Utils;
 import com.ajaxjs.util.StrUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -103,9 +103,15 @@ public class UserController extends BaseOidcClientUserController {
         }
     }
 
+    /**
+     * JWT 验证的密钥
+     */
     @Value("${user.jwtSecretKey}")
     private String jwtSecretKey;
 
+    /**
+     * JWT 解密
+     */
     @Bean
     JWebTokenMgr jWebTokenMgr() {
         JWebTokenMgr mgr = new JWebTokenMgr();
@@ -121,7 +127,7 @@ public class UserController extends BaseOidcClientUserController {
         JWebToken jwt = mgr.parse(idToken);
 
         if (mgr.isValid(jwt)) {
-            User user = new User();
+            UserAccessToken user = new UserAccessToken();
             user.setId(Long.parseLong(jwt.getPayload().getSub()));
             user.setName(jwt.getPayload().getName());
 

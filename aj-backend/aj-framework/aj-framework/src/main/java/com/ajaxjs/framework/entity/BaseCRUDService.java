@@ -1,8 +1,12 @@
 package com.ajaxjs.framework.entity;
 
+import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -111,4 +115,34 @@ public abstract class BaseCRUDService implements BaseCRUDController {
         return whereClause.toString();
     }
 
+    @Override
+    public boolean reloadConfig() {
+        loadConfigFromDatabase();
+
+        return true;
+    }
+
+    /**
+     * 从数据库中加载配置
+     */
+    public void loadConfigFromDatabase() {
+        DataBaseConnection.initDb();
+        namespaces.clear();
+
+        try {
+            List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM common_api WHERE stat != 1");
+
+            if (!CollectionUtils.isEmpty(list)) {
+                for (ConfigPO config : list) {
+                    // 定义表的 CRUD
+                    BaseCRUD<Map<String, Object>, Long> app = new BaseCRUD<>();
+                    BeanUtils.copyProperties(config, app);
+
+                    namespaces.put(config.getNamespace(), app);
+                }
+            }
+        } finally {
+            DataBaseConnection.closeDb();
+        }
+    }
 }
