@@ -59,7 +59,6 @@ public class EmbeddedTomcatStarter extends TomcatStarter {
 
             ac.refresh();
             ac.registerShutdownHook();
-
             ctx.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
             ctx.addListener(new ContextLoaderListener()); // 监听器
             ctx.setAttribute("ctx", ctx.getContextPath()); // 为 JSP 提供 shorthands
@@ -87,7 +86,6 @@ public class EmbeddedTomcatStarter extends TomcatStarter {
             springTime = System.currentTimeMillis() - startedTime;
         });
     }
-
 
     public static void start(Class<?>... clz) {
         TomcatConfig cfg = new TomcatConfig();

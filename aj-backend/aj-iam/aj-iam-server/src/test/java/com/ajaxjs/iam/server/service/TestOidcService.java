@@ -33,7 +33,7 @@ public class TestOidcService extends BaseTest {
 
     @Test
     public void testClient() {
-        String s = encodeClient("y5agHzACGrIpg46", "zKvmMA4KmJ2CIijlBubqbBpHm1");
+        String s = encodeClient("G5IFeG7Eesbny3f", "J1Bb4zhchfziuDipKI7sgo6iyk");
 
         Result<JwtAccessToken> jwtAccessTokenResult = OidcService.clientCredentials(IamConstants.GrantType.CLIENT_CREDENTIALS, s);
         System.out.println(jwtAccessTokenResult.getResult().getAccess_token());

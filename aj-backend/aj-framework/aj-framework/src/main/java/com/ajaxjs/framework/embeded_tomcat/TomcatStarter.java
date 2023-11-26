@@ -185,10 +185,10 @@ public class TomcatStarter {
         if (cfg.getEnableSsi())
             ssi();
 
-        if (!cfg.getEnableJsp())
-            disableJsp();
-        else
+        if (cfg.getEnableJsp())
             initJSP();
+//        else
+//            disableJsp();
 
 //        context.setJarScanner(new EmbeddedStandardJarScanner());
 //        context.setParentClassLoader(TomcatStarter.class.getClassLoader());// needs?
@@ -232,6 +232,8 @@ public class TomcatStarter {
          * 这个对启动 tomcat 时间影响很大 又 很多 Servlet 3.0 新特性，不能禁掉，比如在 jar 里面放
          * jsp（部署时候就会这样，但开放阶段不用）。 故，用 isDebug 判断下
          */
+
+        filter.setDefaultPluggabilityScan(cfg.getEnableJsp());
 //        if (Version.isDebug)
 //            filter.setDefaultPluggabilityScan(false);
 //      String oldTldSkip = filter.getTldSkip();

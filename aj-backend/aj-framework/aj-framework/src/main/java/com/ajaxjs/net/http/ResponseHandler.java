@@ -15,6 +15,7 @@ import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Frank Cheung
  */
+@Slf4j
 public abstract class ResponseHandler {
     private static final LogHelper LOGGER = LogHelper.getLog(ResponseHandler.class);
 
@@ -49,7 +51,7 @@ public abstract class ResponseHandler {
 
             int maxLength = 500;
             String resultMsg = (result.length() > maxLength) ? result.substring(0, maxLength) + " ..." : result;
-            LOGGER.info("{0} {1} 响应状态：{3}，请求结果\n{2}", resp.getHttpMethod(), resp.getUrl(), resultMsg, resp.getHttpCode());
+            log.info("{} {} 响应状态：{}，请求结果\n{}", resp.getHttpMethod(), resp.getUrl(), resultMsg, resp.getHttpCode());
         }
 
         return resp;
@@ -68,7 +70,7 @@ public abstract class ResponseHandler {
 
         try (OutputStream out = Files.newOutputStream(file.toPath())) {
             StreamHelper.write(resp.getIn(), out, true);
-            LOGGER.info("文件 [{0}]写入成功", file.toString());
+            log.info("文件 [{}]写入成功", file);
 
             return file.toString();
         } catch (IOException e) {

@@ -46,7 +46,7 @@ public class TomcatConfig {
     /**
      * 是否激活 JSP
      */
-    private Boolean enableJsp = true;
+    private Boolean enableJsp = false;
 
     /**
      * 是否激活本地文件上传
