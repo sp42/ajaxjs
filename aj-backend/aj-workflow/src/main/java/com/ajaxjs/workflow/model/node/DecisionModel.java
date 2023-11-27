@@ -1,6 +1,5 @@
 package com.ajaxjs.workflow.model.node;
 
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.Execution;
@@ -10,6 +9,7 @@ import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.el.ExpressionFactory;
@@ -19,11 +19,10 @@ import java.util.function.Function;
 /**
  * 决策定义 decision 元素
  */
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class DecisionModel extends NodeModel {
-    public static final LogHelper LOGGER = LogHelper.getLog(DecisionModel.class);
-
     private static final long serialVersionUID = -806621814645169999L;
 
     /**
@@ -73,7 +72,7 @@ public class DecisionModel extends NodeModel {
 
     @Override
     public void exec(Execution exec) {
-        LOGGER.info("任务[{0}]运行抉择表达式的参数是[{1}]", exec.getOrder().getId(), exec.getArgs());
+        log.info("任务[{}]运行抉择表达式的参数是[{}]", exec.getOrder().getId(), exec.getArgs());
         String next;
 
         if (StringUtils.hasText(expr))
@@ -81,11 +80,11 @@ public class DecisionModel extends NodeModel {
         else if (decide != null)
             next = decide.decide(exec);
         else {
-            LOGGER.warning("任务[{0}]不能获取下一步的步骤！", exec.getOrder().getId());
+            log.warn("任务[{}]不能获取下一步的步骤！", exec.getOrder().getId());
             return;
         }
 
-        LOGGER.info("任务[{0}]运行抉择表达式[{1}]的结果是[{2}]", exec.getOrder().getId(), expr, next);
+        log.info("任务[{}]运行抉择表达式[{}]的结果是[{}]", exec.getOrder().getId(), expr, next);
         boolean isFound = false;
 
         for (TransitionModel tm : getOutputs()) {

@@ -1,7 +1,6 @@
 package com.ajaxjs.workflow;
 
-import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.common.WfData;
@@ -19,6 +18,7 @@ import com.ajaxjs.workflow.service.OrderService;
 import com.ajaxjs.workflow.service.ProcessService;
 import com.ajaxjs.workflow.service.SurrogateService;
 import com.ajaxjs.workflow.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -29,10 +29,9 @@ import java.util.*;
 /**
  * 基本的流程引擎实现类
  */
+@Slf4j
 @Component
 public class WorkflowEngine {
-    public static final LogHelper LOGGER = LogHelper.getLog(WorkflowEngine.class);
-
     /**
      * 启动
      *
@@ -151,7 +150,7 @@ public class WorkflowEngine {
         StartModel start = process.getModel().getStart();
         Objects.requireNonNull(start, "流程定义[id=" + process.getId() + "]没有开始节点");
 
-        LOGGER.info("运行 start 节点");
+        log.info("运行 start 节点");
         start.execute(exec);
     }
 
@@ -170,7 +169,7 @@ public class WorkflowEngine {
 
         Execution current = new Execution(this, process, order, args);
         current.setOperator(operator);
-        LOGGER.info("创建 Execution 对象完毕");
+        log.info("创建 Execution 对象完毕");
 
         return current;
     }
@@ -184,7 +183,7 @@ public class WorkflowEngine {
      * @return 任务列表
      */
     public List<Task> executeTask(Long taskId, Long operator, Args args) {
-        LOGGER.info("开始执行对象，先初始化相关的参数");
+        log.info("开始执行对象，先初始化相关的参数");
 
         Execution exec = executeTaskCore(taskId, operator, args); // 完成任务，并且构造执行对象
 
@@ -200,7 +199,7 @@ public class WorkflowEngine {
 
         // 将执行对象交给该任务对应的节点模型执行
         String taskName = exec.getTask().getName();
-        LOGGER.info("正在执行任务 {0}", taskName);
+        log.info("正在执行任务 {}", taskName);
         exec.getProcess().getModel().getNode(taskName).execute(exec);
 
         return exec.getTasks();
@@ -262,13 +261,13 @@ public class WorkflowEngine {
         _update.setId(order.getId());
         _update.setUpdater(operator);
         orderService.update(_update);
-        LOGGER.info("更新流程实例 {0} 完成", _update.getId());
+        log.info("更新流程实例 {} 完成", _update.getId());
 
         // 协办任务完成不产生执行对象
         if (task.getTaskType() != TaskType.MAJOR)
             return null;
 
-        Map<String, Object> orderMaps = JsonHelper.parseMap(order.getVariable());
+        Map<String, Object> orderMaps = EntityConvert.json2map(order.getVariable());
         if (orderMaps == null)
             orderMaps = Collections.emptyMap();
 
@@ -284,7 +283,7 @@ public class WorkflowEngine {
         Execution exec = new Execution(this, process, order, args);
         exec.setOperator(operator);
         exec.setTask(task);
-        LOGGER.info("驱动任务 {0} 继续执行", task.getId());
+        log.info("驱动任务 {} 继续执行", task.getId());
 
         return exec;
     }

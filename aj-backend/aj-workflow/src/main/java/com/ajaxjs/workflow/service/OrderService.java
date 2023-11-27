@@ -1,13 +1,14 @@
 package com.ajaxjs.workflow.service;
 
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.workflow.common.WfConstant;
 import com.ajaxjs.workflow.common.WfData;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.ProcessModel;
 import com.ajaxjs.workflow.model.po.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -23,9 +24,9 @@ import java.util.function.BiConsumer;
  *
  * @author Frank Cheung
  */
+@Slf4j
 @Component
 public class OrderService implements WfConstant {
-    public static final LogHelper LOGGER = LogHelper.getLog(OrderService.class);
 
     @Autowired(required = false)
     private TaskService taskService;
@@ -44,7 +45,7 @@ public class OrderService implements WfConstant {
      * @return 活动流程实例对象
      */
     public Order create(ProcessPO process, Long operator, Map<String, Object> args, Long parentId, String parentNodeName) {
-        LOGGER.info("创建流程实例 " + process.getName());
+        log.info("创建流程实例 " + process.getName());
 
         Order order = new Order();
         order.setParentId(parentId);
@@ -53,12 +54,12 @@ public class OrderService implements WfConstant {
         order.setUpdater(operator);
         order.setProcessId(process.getId());
         order.setVersion(0);
-        order.setVariable(JsonHelper.toJson(args));
+        order.setVariable(ConvertToJson.toJson(args));
 
         ProcessModel model = process.getModel();
 
         if (model != null && args != null) {
-            LOGGER.info("设置过期时间或生成编号");
+            log.info("设置过期时间或生成编号");
 
             if (model.getExpireDate() != null) // 过期时间
                 order.setExpireDate(model.getExpireDate());
@@ -85,7 +86,7 @@ public class OrderService implements WfConstant {
     private Long create(Order order) {
         Long id = CRUD.create(order);
         order.setId(id);
-        LOGGER.info("保存历史流程实例 " + order.getName());
+        log.info("保存历史流程实例 " + order.getName());
         OrderHistory history = new OrderHistory(order);// 复制一份
         history.setStat(WfConstant.STATE_ACTIVE);
         CRUD.create(history);
@@ -109,7 +110,7 @@ public class OrderService implements WfConstant {
     public void addVariable(Long orderId, Map<String, Object> args) {
         Order order = WfData.findOrderHistory(orderId);
 
-        Map<String, Object> data = JsonHelper.parseMap(order.getVariable());
+        Map<String, Object> data = EntityConvert.json2map(order.getVariable());
         if (data == null)
             data = Collections.emptyMap();
 
@@ -117,7 +118,7 @@ public class OrderService implements WfConstant {
 
         Order _order = new Order();
         _order.setId(orderId);
-        _order.setVariable(JsonHelper.toJson(data));
+        _order.setVariable(ConvertToJson.toJson(data));
 
         update(_order);
     }
@@ -148,7 +149,7 @@ public class OrderService implements WfConstant {
      * @param orderId 流程实例id
      */
     public void complete(Long orderId) {
-        LOGGER.info("结束 {0} 流程", orderId);
+        log.info("结束 {} 流程", orderId);
         updateHistoryOrder(orderId, WfConstant.STATE_FINISH);
     }
 
@@ -226,10 +227,10 @@ public class OrderService implements WfConstant {
      */
     private BiConsumer<TaskHistory, OrderHistory> completion = (TaskHistory task, OrderHistory order) -> {
         if (task != null)
-            LOGGER.info("任务[{0}] 已经由用户 [{1}] 执行完成。", task.getId(), task.getOperator());
+            log.info("任务[{}] 已经由用户 [{}] 执行完成。", task.getId(), task.getOperator());
 
         if (order != null)
-            LOGGER.info("流程[{0}] 已经完成。", order.getId());
+            log.info("流程[{}] 已经完成。", order.getId());
     };
 
     public BiConsumer<TaskHistory, OrderHistory> getCompletion() {

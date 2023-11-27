@@ -1,18 +1,17 @@
 package com.ajaxjs.workflow.model.po;
 
-import java.util.Date;
-import java.util.Map;
-
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
-
 import com.ajaxjs.data.jdbc_helper.common.TableName;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.workflow.common.WfConstant.PerformType;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;
-import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.common.WfUtils;
+import com.ajaxjs.workflow.model.node.work.TaskModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 任务实体类
@@ -101,7 +100,7 @@ public class Task extends BasePersistantObject {
     @IgnoreDB
     public Long[] getActorIds() {
         if (actorIds == null) {
-            Map<String, Object> map = JsonHelper.parseMap(variable);
+            Map<String, Object> map = EntityConvert.json2map(variable);
 
             if (map != null && map.get(KEY_ACTOR) != null) {
                 String actorStr = (String) map.get(KEY_ACTOR);

@@ -1,9 +1,5 @@
 package com.ajaxjs.workflow.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.po.Order;
@@ -11,13 +7,14 @@ import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.Task;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 流程执行过程中所传递的执行对象，其中包含流程定义、流程模型、流程实例对象、执行参数、返回的任务列表
  */
 @Data
 public class Execution {
-    public static final LogHelper LOGGER = LogHelper.getLog(Execution.class);
-
     /**
      * 构造函数，接收流程定义、流程实例对象、执行参数
      *

@@ -2,7 +2,6 @@ package com.ajaxjs.workflow.common;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.model.po.*;
 import org.springframework.util.ObjectUtils;
 
@@ -13,8 +12,6 @@ import java.util.Objects;
  * DAO
  */
 public interface WfData {
-    LogHelper LOGGER = LogHelper.getLog(WfData.class);
-
     static List<ProcessPO> findProcess() {
         return CRUD.list(ProcessPO.class, "SELECT * FROM wf_process");
     }

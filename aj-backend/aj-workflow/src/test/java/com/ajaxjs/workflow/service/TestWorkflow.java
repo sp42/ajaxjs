@@ -1,6 +1,5 @@
 package com.ajaxjs.workflow.service;
 
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.BaseTest;
 import com.ajaxjs.workflow.common.WfData;
 import com.ajaxjs.workflow.model.Args;
@@ -10,6 +9,7 @@ import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.util.List;
@@ -214,11 +214,10 @@ public class TestWorkflow extends BaseTest {
         }
     }
 
+    @Slf4j
     public static class LocalTaskInterceptor implements WorkflowInterceptor {
-        public static final LogHelper LOGGER = LogHelper.getLog(LocalTaskInterceptor.class);
-
         public void intercept(Execution execution) {
-            LOGGER.info("LocalTaskInterceptor start...");
+            log.info("LocalTaskInterceptor start...");
 
             for (Task task : execution.getTasks()) {
                 StringBuilder buffer = new StringBuilder(100);
@@ -228,15 +227,14 @@ public class TestWorkflow extends BaseTest {
                 buffer.append(",参与者={");
 
                 if (task.getActorIds() != null) {
-                    for (Long actor : task.getActorIds()) {
+                    for (Long actor : task.getActorIds())
                         buffer.append(actor).append(";");
-                    }
                 }
                 buffer.append("}]");
-                LOGGER.info(buffer.toString());
+                log.info(buffer.toString());
             }
 
-            LOGGER.info("LocalTaskInterceptor finish...");
+            log.info("LocalTaskInterceptor finish...");
         }
     }
 

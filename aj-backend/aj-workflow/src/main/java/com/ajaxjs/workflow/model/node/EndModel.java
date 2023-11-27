@@ -1,6 +1,5 @@
 package com.ajaxjs.workflow.model.node;
 
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.WorkflowEngine;
 import com.ajaxjs.workflow.common.WfConstant.TaskType;
 import com.ajaxjs.workflow.common.WfData;
@@ -12,6 +11,7 @@ import com.ajaxjs.workflow.model.node.work.SubProcessModel;
 import com.ajaxjs.workflow.model.po.Order;
 import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.Task;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
@@ -20,15 +20,14 @@ import java.util.List;
 /**
  * 结束节点 end 元素
  */
+@Slf4j
 public class EndModel extends NodeModel {
-    public static final LogHelper LOGGER = LogHelper.getLog(NodeModel.class);
-
     private static final long serialVersionUID = -7793175180140842894L;
 
     @Override
     public void exec(Execution exec) {
         fire(exec1 -> {
-            LOGGER.info("准备要完成了，运行  End 节点");
+            log.info("准备要完成了，运行  End 节点");
 
             WorkflowEngine engine = exec1.getEngine();
             Order order = exec1.getOrder();

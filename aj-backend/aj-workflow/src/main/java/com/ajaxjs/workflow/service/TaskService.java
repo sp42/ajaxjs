@@ -1,23 +1,10 @@
 package com.ajaxjs.workflow.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiFunction;
-
 import com.ajaxjs.data.CRUD;
-import com.ajaxjs.workflow.common.WfData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-
-import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.map.JsonHelper;
+import com.ajaxjs.util.convert.ConvertToJson;
+import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.workflow.common.WfConstant;
+import com.ajaxjs.workflow.common.WfData;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.common.WfUtils;
 import com.ajaxjs.workflow.model.Args;
@@ -30,21 +17,24 @@ import com.ajaxjs.workflow.model.node.NodeModel;
 import com.ajaxjs.workflow.model.node.StartModel;
 import com.ajaxjs.workflow.model.node.work.SubProcessModel;
 import com.ajaxjs.workflow.model.node.work.TaskModel;
-import com.ajaxjs.workflow.model.po.Order;
-import com.ajaxjs.workflow.model.po.ProcessPO;
-import com.ajaxjs.workflow.model.po.Task;
-import com.ajaxjs.workflow.model.po.TaskActor;
-import com.ajaxjs.workflow.model.po.TaskHistory;
+import com.ajaxjs.workflow.model.po.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * Task 怎么生成？ Task 就是根据 XML 里面的定义转换到 Java 对象，再持久化
  *
  * @author sp42 frank@ajaxjs.com
  */
+@Slf4j
 @Component
 public class TaskService implements WfConstant {
-    public static final LogHelper LOGGER = LogHelper.getLog(TaskService.class);
-
     @Autowired
     private ProcessService processService;
 
@@ -81,19 +71,19 @@ public class TaskService implements WfConstant {
      */
     public Task complete(Long taskId, Long operator, Map<String, Object> args) {
         Task task = WfData.findTask(taskId);
-        task.setVariable(JsonHelper.toJson(args));
+        task.setVariable(ConvertToJson.toJson(args));
 
 //		if (!isAllowed(task, operator))
 //			throw new WorkflowException("当前参与者[" + operator + "]不允许执行任务[taskId=" + taskId + "]");
 
-        LOGGER.info("完成任务：创建历史任务，然后删除 Task");
+        log.info("完成任务：创建历史任务，然后删除 Task");
         TaskHistory history = new TaskHistory(task);
         history.setFinishDate(new Date());
         history.setStat(WfConstant.STATE_FINISH);
         history.setOperator(operator);
 
         if (history.getActorIds() == null) {
-            LOGGER.info("查询 任务参与者，保存到 TaskHistory");
+            log.info("查询 任务参与者，保存到 TaskHistory");
             List<TaskActor> actors = WfData.findTaskActorsByTaskId(task.getId());
             Long[] actorIds = new Long[actors.size()];
 
@@ -119,7 +109,7 @@ public class TaskService implements WfConstant {
      * @return Task 任务对象
      */
     public Task take(Long taskId, Long operator) {
-        LOGGER.info("提取任务 [{0}]", taskId);
+        log.info("提取任务 [{}]", taskId);
         Task task = WfData.findTask(taskId);
 
         if (!isAllowed(task, operator))
@@ -345,7 +335,7 @@ public class TaskService implements WfConstant {
             task.setParentId(exec.getTask().getId());
 
         Map<String, Object> args = getArgs(exec, actors);
-        task.setVariable(JsonHelper.toJson(args));
+        task.setVariable(ConvertToJson.toJson(args));
 
         // 设置 actionUrl
         String form = taskModel.getForm();
@@ -502,7 +492,7 @@ public class TaskService implements WfConstant {
 
         if (task.getTaskType() == TaskType.MAJOR) {
             // removeTaskActor(task.getId(), actors);
-            Map<String, Object> taskData = JsonHelper.parseMap(task.getVariable());
+            Map<String, Object> taskData = EntityConvert.json2map(task.getVariable());
             String actorStr = (String) taskData.get(Task.KEY_ACTOR);
 
             if (StringUtils.hasText(actorStr)) {
@@ -530,7 +520,7 @@ public class TaskService implements WfConstant {
 
                 newActor.deleteCharAt(newActor.length() - 1);
                 taskData.put(Task.KEY_ACTOR, newActor.toString());
-                task.setVariable(JsonHelper.toJson(taskData));
+                task.setVariable(ConvertToJson.toJson(taskData));
                 CRUD.update(task);
             }
         }
@@ -564,31 +554,32 @@ public class TaskService implements WfConstant {
 
         if (performType == null || performType == PerformType.ANY) {
             assignTask(task.getId(), actors);
-            Map<String, Object> data = JsonHelper.parseMap(task.getVariable());
+            Map<String, Object> data = EntityConvert.json2map(task.getVariable());
+
             if (data == null)
                 data = Collections.emptyMap();
 
             String oldActor = (String) data.get(Task.KEY_ACTOR);
             data.put(Task.KEY_ACTOR, oldActor + "," + WfUtils.join(actors));
-            task.setVariable(JsonHelper.toJson(data));
+            task.setVariable(ConvertToJson.toJson(data));
 
             if (!CRUD.update(task))
-                LOGGER.warning("更新任务失败");
+                log.info("更新任务失败");
         } else if (performType == PerformType.ALL) {
             try {
                 for (Long actor : actors) {
                     Task newTask = (Task) task.clone();
                     newTask.setOperator(actor);
 
-                    Map<String, Object> taskData = JsonHelper.parseMap(task.getVariable());
+                    Map<String, Object> taskData = EntityConvert.json2map(task.getVariable());
                     if (taskData == null)
                         taskData = Collections.emptyMap();
 
                     taskData.put(Task.KEY_ACTOR, actor);
-                    task.setVariable(JsonHelper.toJson(taskData));
+                    task.setVariable(ConvertToJson.toJson(taskData));
 
                     if (CRUD.create(newTask) == null)
-                        LOGGER.warning("创建任务失败");
+                        log.info("创建任务失败");
                     assignTask(newTask.getId(), actor);
                 }
             } catch (CloneNotSupportedException ex) {
@@ -668,7 +659,7 @@ public class TaskService implements WfConstant {
             List<Args> vars = new ArrayList<>();
 
             for (TaskHistory hist : histTasks) {
-                Map<String, Object> map = JsonHelper.parseMap(hist.getVariable());
+                Map<String, Object> map = EntityConvert.json2map(hist.getVariable());
                 if (map == null)
                     map = Collections.emptyMap();
 

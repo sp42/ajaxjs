@@ -1,6 +1,7 @@
 package com.ajaxjs.workflow.model.po;
 
-import com.ajaxjs.framework.entity.TableName;
+
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import lombok.Data;
 
 import java.io.Serializable;

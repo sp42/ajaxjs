@@ -4,6 +4,7 @@ package com.ajaxjs.workflow.service.interceptor;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.po.Task;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -11,9 +12,8 @@ import com.ajaxjs.workflow.model.po.Task;
  *
  * @author sp42 frank@ajaxjs.com
  */
+@Slf4j
 public class LogInterceptor implements WorkflowInterceptor {
-    public static final LogHelper LOGGER = LogHelper.getLog(LogInterceptor.class);
-
     /**
      * 拦截产生的任务对象，打印日志
      */
@@ -32,7 +32,7 @@ public class LogInterceptor implements WorkflowInterceptor {
             }
 
             buffer.append("}]");
-            LOGGER.info(buffer.toString());
+            log.info(buffer.toString());
         }
     }
 }

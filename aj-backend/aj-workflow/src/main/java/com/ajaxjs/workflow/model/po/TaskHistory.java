@@ -1,7 +1,7 @@
 package com.ajaxjs.workflow.model.po;
 
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
-import com.ajaxjs.framework.entity.TableName;
+import com.ajaxjs.data.jdbc_helper.common.TableName;
 import com.ajaxjs.workflow.common.WfConstant.PerformType;
 
 /**

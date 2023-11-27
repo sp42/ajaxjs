@@ -14,19 +14,18 @@
  */
 package com.ajaxjs.workflow.service;
 
-import java.util.List;
-
-import com.ajaxjs.workflow.common.WfData;
-import com.ajaxjs.workflow.model.po.ProcessPO;
-import org.junit.Test;
-
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.BaseTest;
+import com.ajaxjs.workflow.common.WfData;
 import com.ajaxjs.workflow.model.Args;
 import com.ajaxjs.workflow.model.node.work.TaskModel;
 import com.ajaxjs.workflow.model.po.Order;
+import com.ajaxjs.workflow.model.po.ProcessPO;
 import com.ajaxjs.workflow.model.po.Task;
 import com.ajaxjs.workflow.service.scheduling.JobCallback;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+
+import java.util.List;
 
 public class TestMisc extends BaseTest {
     // 实例编号自定义
@@ -73,13 +72,12 @@ public class TestMisc extends BaseTest {
 
     private static final String PROCESSNAME = "expire";
 
+    @Slf4j
     public static class TestCallback implements JobCallback {
-        public static final LogHelper LOGGER = LogHelper.getLog(TestCallback.class);
-
         @Override
         public void callback(Long taskId, List<Task> newTasks) {
-            LOGGER.info("callback taskId=" + taskId);
-            LOGGER.info("newTasks=" + newTasks);
+            log.info("callback taskId=" + taskId);
+            log.info("newTasks=" + newTasks);
         }
     }
 

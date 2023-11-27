@@ -1,6 +1,5 @@
 package com.ajaxjs.workflow.model.node;
 
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.workflow.common.WfException;
 import com.ajaxjs.workflow.model.BaseWfModel;
@@ -9,6 +8,7 @@ import com.ajaxjs.workflow.model.TransitionModel;
 import com.ajaxjs.workflow.service.interceptor.WorkflowInterceptor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -18,12 +18,10 @@ import java.util.function.Consumer;
 /**
  * 节点元素（存在输入输出的变迁）
  */
-
+@Slf4j
 @Data
 @EqualsAndHashCode(callSuper = true)
 public abstract class NodeModel extends BaseWfModel {
-    public static final LogHelper LOGGER = LogHelper.getLog(NodeModel.class);
-
     private static final long serialVersionUID = -2377317472320109317L;
 
     /**
@@ -171,7 +169,7 @@ public abstract class NodeModel extends BaseWfModel {
             for (WorkflowInterceptor interceptor : intercepts)
                 interceptor.intercept(exec);
         } catch (Exception e) {
-            LOGGER.warning("拦截器执行失败=" + e.getMessage());
+            log.warn("拦截器执行失败=", e);
             throw new WfException(e);
         }
     }
