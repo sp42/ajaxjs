@@ -79,14 +79,14 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
      * 密码支持帐号、邮件、手机作为身份凭证
      */
     public User getUserLoginByPassword(String loginId, String password) {
-        String sql = "SELECT u.* FROM user u INNER JOIN user_account a ON a.user_id = u.id WHERE u.stat != -1 AND u.%s = ? AND a.password = ?";
+        String sql = "SELECT u.* FROM user u INNER JOIN user_account a ON a.user_id = u.id WHERE u.stat != 1 AND u.%s = ? AND a.password = ?";
 
         if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_EMAIL, loginIdType) && UserUtils.isValidEmail(loginId))
             sql = String.format(sql, "email");
         else if (UserUtils.testBCD(LoginIdType.PSW_LOGIN_PHONE, loginIdType) && UserUtils.isValidPhone(loginId))
             sql = String.format(sql, "phone");
         else
-            sql = String.format(sql, "name");
+            sql = String.format(sql, "login_id");
 
         String encodePsw = passwordEncode.apply(password);
         User user = CRUD.info(User.class, sql, loginId, encodePsw);

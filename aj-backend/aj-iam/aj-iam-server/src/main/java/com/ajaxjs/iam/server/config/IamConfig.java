@@ -11,6 +11,7 @@ import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.expiry.ExpiryCache;
 import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +30,7 @@ import java.util.function.Function;
 import static com.ajaxjs.iam.server.common.IamConstants.JWT_TOKEN_USER_KEY;
 
 @Configuration
+@Slf4j
 public class IamConfig implements WebMvcConfigurer {
     @Value("${db.url}")
     private String url;
@@ -69,8 +71,10 @@ public class IamConfig implements WebMvcConfigurer {
             String key = JWT_TOKEN_USER_KEY + "-" + token;
             OidcService.TokenUser tokenUser = cache.get(key, OidcService.TokenUser.class);
 
-            if (tokenUser == null)
+            if (tokenUser == null) {
+
                 throw new SecurityException("找不到用户信息");
+            }
 
             return ConvertToJson.toJson(tokenUser.getAccessToken());
         };

@@ -36,7 +36,7 @@ public interface UserLoginRegisterController {
      * 用户登出
      */
     @PostMapping("/logout")
-    ModelAndView logout(@RequestParam String returnUrl);
+    ModelAndView logout(@RequestParam(required = false) String returnUrl);
 
     /**
      * 用户注册

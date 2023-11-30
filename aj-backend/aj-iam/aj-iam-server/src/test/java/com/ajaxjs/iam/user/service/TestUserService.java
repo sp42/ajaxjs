@@ -31,7 +31,7 @@ public class TestUserService extends BaseTest {
     @Test
     public void testCreate() {
         User user = new User();
-        user.setUsername("TesdAdmin");
+        user.setLoginId("TesdAdmin");
         user.setGender(UserConstants.Gender.MALE);
         user.setBirthday(new Date());
         user.setAvatar("https://example.com/avatar.jpg");
@@ -49,7 +49,7 @@ public class TestUserService extends BaseTest {
     public void testUpdate() {
         User user = new User();
         user.setId(316L);
-        user.setUsername("John Doe");
+        user.setLoginId("John Doe");
         user.setGender(UserConstants.Gender.MALE);
         user.setBirthday(new Date());
         user.setAvatar("https://example.com/avatar.jpg");

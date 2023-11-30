@@ -1,11 +1,16 @@
 package com.ajaxjs.framework.embeded_tomcat;
 
-import com.ajaxjs.Version;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
-import org.apache.catalina.*;
+import org.apache.catalina.Context;
+import org.apache.catalina.Host;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleListener;
+import org.apache.catalina.Wrapper;
+import org.apache.catalina.WebResourceRoot;
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.WebResourceRoot.ResourceSetType;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;

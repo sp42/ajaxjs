@@ -3,7 +3,10 @@ package com.ajaxjs.framework.embeded_tomcat;
 import com.ajaxjs.framework.spring.filter.FileUploadHelper;
 import com.ajaxjs.framework.spring.filter.UTF8CharsetFilter;
 import com.ajaxjs.util.logger.LogHelper;
-import org.apache.catalina.*;
+
+import org.apache.catalina.Context;
+import org.apache.catalina.LifecycleEvent;
+import org.apache.catalina.LifecycleState;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;

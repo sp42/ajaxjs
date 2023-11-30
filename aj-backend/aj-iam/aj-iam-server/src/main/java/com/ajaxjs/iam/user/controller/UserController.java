@@ -18,7 +18,7 @@ public interface UserController {
      * @return 用户详情
      */
     @GetMapping("/{id}")
-    User info(Long id);
+    User info(@PathVariable Long id);
 
     /**
      * 修改用户

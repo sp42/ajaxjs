@@ -19,7 +19,7 @@ public class TestOidcService extends BaseTest {
     public void testCreateAuthorizationCode() {
         User user = new User();
         user.setId(1L);
-        user.setUsername("admin");
+        user.setLoginId("admin");
 
 //        ModelAndView mv = OidcService.authorization("C2Oj5hKcwMmgxiKygwquLCSN", "http://qq.com", null, null);
 //        System.out.println(mv);

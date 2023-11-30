@@ -22,7 +22,9 @@ public abstract class BaseOidcClientUserController {
 
 	public RestTemplate getRestTemplate() {
 		if (restTemplate == null) {
+			SkipSSL.init(); // 忽略 SSL 证书
 			restTemplate = new RestTemplate();
+
 			MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
 			converter.setObjectMapper(new ObjectMapper());
 			restTemplate.getMessageConverters().add(converter);

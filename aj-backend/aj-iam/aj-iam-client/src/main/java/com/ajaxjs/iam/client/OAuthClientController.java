@@ -1,6 +1,7 @@
 package com.ajaxjs.iam.client;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -47,16 +48,18 @@ public class OAuthClientController {
      * @return 跳转地址
      */
     @GetMapping("/login")
-    public RedirectView redirectToLogin() {
+    public RedirectView redirectToLogin(HttpSession session) {
         String redirectUri = "http://your-callback-url.com/oauth/callback";
         String scope = "openid profile email address phone"; // 定义需要获取的权限范围
+        String state = JwtUtils.getRandomString(5);
+        session.setAttribute(ClientUtils.OAUTH_STATE, state);// 将 state 值保存到会话中
 
         String authorizationUrl = UriComponentsBuilder.fromHttpUrl(authorizeUrl)
                 .queryParam("response_type", "code") // 必选，希望 OP 采用哪种 OAuth 2.0 授权流程来响应，code 代表授权码流程
                 .queryParam("client_id", clientId)          // 必选，RP 在 OP 注册的 client_id
                 .queryParam("redirect_uri", redirectUri)    // 必选，用户登录成功后，OP 回传授权码等信息给RP的接口
                 .queryParam("scope", scope)                 // 必选，申请获取的资源权限，必须包含 openid，表明申请获取 id token
-                .queryParam("state", JwtUtils.getRandomString(5))   // 推荐，不透明字符串，当OP重定向到redirect_uri时，会原样返回给RP，用于防止 CSRF、 XSRF。
+                .queryParam("state", state)   				// 推荐，不透明字符串，当OP重定向到redirect_uri时，会原样返回给RP，用于防止 CSRF、 XSRF。
                 // 由于OP会原样返回此参数，可将 state 值与用户在RP登录前最后浏览的URI绑定，便于登录完成后将用户重定向回最后浏览的页面
                 .toUriString();
 
@@ -64,7 +67,15 @@ public class OAuthClientController {
     }
 
     @RequestMapping("/callback")
-    public void token(@RequestParam String code, @RequestParam(required = false) String state) {
+    public void token(@RequestParam String code, @RequestParam String state, HttpSession session,
+			HttpServletResponse resp) {
+		// 从会话中获取之前保存的 state 值
+		String savedState = (String) session.getAttribute(ClientUtils.OAUTH_STATE);
+
+		if (!state.equals(savedState)) { // 检查返回的 state 值是否与之前保存的值匹配
+			ClientUtils.returnForbidden(resp);
+		}
+		
         String redirectUri = "http://your-callback-url.com/oauth/callback";
 
         HttpHeaders headers = new HttpHeaders();

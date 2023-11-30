@@ -73,7 +73,7 @@ public class ResetPasswordService implements ResetPasswordController {
 
         String title = "重置密码";
         Map<String, String> map = new HashMap<>();
-        map.put("username", user.getUsername());
+        map.put("username", user.getLoginId());
         map.put("link", url);
         map.put("desc", title);
         map.put("timeout", String.valueOf(TOKEN_TIMEOUT));

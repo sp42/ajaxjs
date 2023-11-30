@@ -10,6 +10,7 @@ import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.util.cache.Cache;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Service
+@Slf4j
 public class OidcService extends OAuthCommon implements OidcController {
     @Autowired
     UserSession userSession;
@@ -66,12 +68,13 @@ public class OidcService extends OAuthCommon implements OidcController {
             tokenUser.setUserId(user.getId());
             tokenUser.setAccessToken(accessToken);
 
-            String key = JWT_TOKEN_USER_KEY + "-" + accessToken.getAccess_token();
-            cache.put(key, tokenUser, getTokenExpires(app));
-
             // 生成 JWT Token
             String jWebToken = jWebTokenMgr.tokenFactory(String.valueOf(user.getId()), user.getName(), scope, Utils.setExpire(jwtExpireHours)).toString();
             accessToken.setId_token(jWebToken);
+
+            String key = JWT_TOKEN_USER_KEY + "-" + jWebToken;
+            cache.put(key, tokenUser, getTokenExpires(app));
+            log.info("save user {} to cache, key: {}", tokenUser, key);
 
             // 删除缓存
             cache.remove(code + ":scope");
