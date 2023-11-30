@@ -24,6 +24,15 @@ public interface Cache<K, V> {
      */
     V get(K key);
 
+    /**
+     * 根据指定的键获取相应的值，并将该值转换为指定的类型返回。
+     *
+     * @param key 键
+     * @param clz 指定的类
+     * @param <T> 期望的类型
+     * @return 转换后的值
+     */
+    @SuppressWarnings("unchecked")
     default <T> T get(K key, Class<T> clz) {
         V v = get(key);
 

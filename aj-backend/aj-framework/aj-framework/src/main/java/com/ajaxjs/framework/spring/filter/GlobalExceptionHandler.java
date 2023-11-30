@@ -5,7 +5,7 @@ import com.ajaxjs.framework.spring.ICustomException;
 import com.ajaxjs.framework.spring.response.ResponseResult;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.convert.ConvertToJson;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -20,9 +20,8 @@ import java.io.IOException;
  *
  * @author Frank Cheung
  */
+@Slf4j
 public class GlobalExceptionHandler implements HandlerExceptionResolver {
-    private static final LogHelper LOGGER = LogHelper.getLog(GlobalExceptionHandler.class);
-
     /**
      * 判断是否期望 JSON 的结果
      *
@@ -36,7 +35,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
     @Override
     public ModelAndView resolveException(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) {
-        LOGGER.warning(ex);
+        log.warn("ERROR>>", ex);
 
         Throwable _ex = ex.getCause() != null ? ex.getCause() : ex;
         String msg = _ex.getMessage();
@@ -58,7 +57,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
             try {
                 resp.getWriter().write(msg);
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         } else {
             msg = javaValue2jsonValue(ConvertToJson.jsonStringConvert(msg));
@@ -82,7 +81,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
             try {
                 resp.getWriter().write(resultWrapper.toString());
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }
 

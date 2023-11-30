@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * 统一返回结果容器
+ */
 @Data
 public class ResponseResult {
     private Integer status;
@@ -44,7 +47,6 @@ public class ResponseResult {
 
         return str;
     }
-
 
     /**
      * 方便 Spring 转换器使用

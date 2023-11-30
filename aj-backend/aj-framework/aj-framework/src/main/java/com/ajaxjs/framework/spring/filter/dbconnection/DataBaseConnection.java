@@ -3,7 +3,7 @@ package com.ajaxjs.framework.spring.filter.dbconnection;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.filter.GlobalExceptionHandler;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -31,16 +31,14 @@ import java.util.Objects;
  *
  * @author Frank Cheung
  */
+@Slf4j
 public class DataBaseConnection implements HandlerInterceptor {
-    private static final LogHelper LOGGER = LogHelper.getLog(DataBaseConnection.class);
-
 //	private DataSource ds;
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
         if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Method method = handlerMethod.getMethod();
+            Method method = ((HandlerMethod) handler).getMethod();
 
             if (method != null) {
                 Connection connection = null;
@@ -50,12 +48,12 @@ public class DataBaseConnection implements HandlerInterceptor {
                     connection = initDb();
 
                 if (connection != null && method.getAnnotation(EnableTransaction.class) != null) {
-                    LOGGER.info("开启数据库事务……");
+                    log.info("开启数据库事务……");
 
                     try {
                         connection.setAutoCommit(false);
                     } catch (SQLException e) {
-                        LOGGER.warning(e);
+                        log.warn("ERROR>>", e);
                     }
                 }
             }
@@ -64,17 +62,28 @@ public class DataBaseConnection implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * 初始化数据库连接
+     *
+     * @return 返回数据库连接对象
+     */
     public static Connection initDb() {
         return initDb(false);
     }
 
     /**
-     * Shorthand
+     * 关闭数据库连接 Shorthand
      */
     public static void closeDb() {
         JdbcConn.closeDb();
     }
 
+    /**
+     * 初始化数据库连接
+     *
+     * @param isEnableTransaction 是否启用事务
+     * @return 数据库连接对象
+     */
     public static Connection initDb(boolean isEnableTransaction) {
         DataSource ds = DiContextUtil.getBean(DataSource.class);
         Objects.requireNonNull(ds, "未配置数据源");
@@ -85,11 +94,12 @@ public class DataBaseConnection implements HandlerInterceptor {
             try {
                 conn.setAutoCommit(false);
             } catch (SQLException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
 
         return conn;
     }
+
 
     /**
      * 为方便单测，设一个开关
@@ -113,7 +123,7 @@ public class DataBaseConnection implements HandlerInterceptor {
                         doTransaction(ex);
                     }
                 } catch (Throwable e) {
-                    LOGGER.warning(e);
+                    log.warn("ERROR>>", e);
                 } finally {
                     if (IS_DB_CONNECTION_AUTO_CLOSE) // 保证一定关闭，哪怕有异常
                         JdbcConn.closeDb();
@@ -123,8 +133,14 @@ public class DataBaseConnection implements HandlerInterceptor {
         }
     }
 
+    /**
+     * 执行数据库事务
+     *
+     * @param ex 异常对象
+     * @throws SQLException 如果数据库连接已关闭或未关闭自动提交事务，抛出异常
+     */
     public static void doTransaction(Exception ex) throws SQLException {
-        LOGGER.info("正在处理数据库事务……");
+        log.info("正在处理数据库事务……");
         Connection conn = JdbcConn.getConnection();
 
         if (conn.isClosed())
@@ -140,4 +156,5 @@ public class DataBaseConnection implements HandlerInterceptor {
 
         conn.setAutoCommit(true);
     }
+
 }

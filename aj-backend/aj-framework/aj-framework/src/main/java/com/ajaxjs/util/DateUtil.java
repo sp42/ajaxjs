@@ -179,6 +179,13 @@ public class DateUtil {
         return format.format(new Date());
     }
 
+    /**
+     * 将字符串转换为LocalDateTime对象
+     *
+     * @param str    字符串日期
+     * @param format 格式化字符串
+     * @return 转换后的LocalDateTime对象，如果转换失败则返回null
+     */
     public static LocalDateTime string2localDate(String str, String format) {
         try {
             return LocalDateTime.parse(str, DateTimeFormatter.ofPattern(format));
@@ -188,6 +195,12 @@ public class DateUtil {
         }
     }
 
+    /**
+     * 将字符串转换为LocalDateTime类型的日期对象（短格式）
+     *
+     * @param str 待转换的字符串
+     * @return 转换后的LocalDateTime类型的日期对象
+     */
     public static LocalDateTime string2localDateShort(String str) {
         return string2localDate(str, DATE_FORMAT_SHORT);
     }

@@ -143,7 +143,6 @@ public class XmlHelper {
         return map;
     }
 
-
     /**
      * 获取节点内的文本内容，包括标签
      *
@@ -158,9 +157,8 @@ public class XmlHelper {
         NodeList childNodes = node.getChildNodes();
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < childNodes.getLength(); i++) {
+        for (int i = 0; i < childNodes.getLength(); i++)
             sb.append(lsSerializer.writeToString(childNodes.item(i)));
-        }
 
         return sb.toString();
     }

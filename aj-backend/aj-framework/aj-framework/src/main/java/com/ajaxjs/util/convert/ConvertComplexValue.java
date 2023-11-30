@@ -25,6 +25,11 @@ public abstract class ConvertComplexValue extends ConvertBasicValue {
      */
     private volatile static ConvertComplexValue INSTANCE;
 
+    /**
+     * 获取 ConvertComplexValue 实例
+     *
+     * @return ConvertComplexValue 实例
+     */
     public static ConvertComplexValue getConvertValue() {
         if (INSTANCE == null) {
             synchronized (ConvertComplexValue.class) {
@@ -53,6 +58,14 @@ public abstract class ConvertComplexValue extends ConvertBasicValue {
      */
     protected abstract List<Map<String, Object>> parseList(String value);
 
+    /**
+     * 转换方法
+     * 将传入的值转换为目标类型
+     *
+     * @param value 要转换的值
+     * @param clz   目标类型
+     * @return 转换后的值，如果转换不成功返回null
+     */
     public Object convert(Object value, Class<?> clz) {
         Object converted = basicConvert(value, clz);
 

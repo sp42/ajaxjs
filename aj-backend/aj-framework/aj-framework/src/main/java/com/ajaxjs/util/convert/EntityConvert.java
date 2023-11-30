@@ -3,10 +3,10 @@ package com.ajaxjs.util.convert;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.jsonparser.JsonParseException;
 import com.ajaxjs.jsonparser.syntax.FMS;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.NewInstance;
 import com.ajaxjs.util.reflect.Types;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
 import java.beans.IntrospectionException;
@@ -23,9 +23,8 @@ import java.util.Map;
  * 实体转换
  * Bean、Map、Json 三者的相互转换
  */
+@Slf4j
 public class EntityConvert {
-    public static final LogHelper LOGGER = LogHelper.getLog(EntityConvert.class);
-
     /**
      * Bean 转为 Map
      *
@@ -42,6 +41,9 @@ public class EntityConvert {
 
     /**
      * 简单的 bean（没 getter/setter 的）转换为 Map。JSP 的 El 表达式会使用到
+     *
+     * @param bean Java Bean 实体
+     * @return Map 实体
      */
     public static Map<String, Object> bean2MapSimple(Object bean) {
         Map<String, Object> map = new HashMap<>();
@@ -50,6 +52,12 @@ public class EntityConvert {
         return map;
     }
 
+    /**
+     * 将 List<?> 类型的 beanList 转换成 List<Map<String, Object>> 类型
+     *
+     * @param beanList 要转换的 beanList
+     * @return 转换后的 List<Map<String, Object>> 类型
+     */
     public static List<Map<String, Object>> bean2MapSimple(List<?> beanList) {
         List<Map<String, Object>> list = new ArrayList<>();
 
@@ -58,6 +66,7 @@ public class EntityConvert {
 
         return list;
     }
+
 
     /**
      * Map 实体 转为 Java Bean 实体
@@ -123,10 +132,10 @@ public class EntityConvert {
                     child();
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 if (e instanceof IllegalArgumentException) {
-                    LOGGER.warning("Method:[0], JSON in DB：[1]", property.getWriteMethod(), IBaseModel.class.isAssignableFrom(t));
-                    LOGGER.warning("[{0}] 参数类型不匹配，期望类型是[{1}], 输入值是 [{2}], 输入类型是 [{3}]", key, t, value, value.getClass().toString());
+                    log.warn("Method:[{}], JSON in DB：[{}]", property.getWriteMethod(), IBaseModel.class.isAssignableFrom(t));
+                    log.warn("[{}] 参数类型不匹配，期望类型是[{}], 输入值是 [{}], 输入类型是 [{}]", key, t, value, value.getClass().toString());
                 } else
-                    LOGGER.warning(e);
+                    log.warn("ERROR>>", e);
             }
         });
 
@@ -145,7 +154,7 @@ public class EntityConvert {
             try {
                 field.set(bean, value);
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         });
 
@@ -207,7 +216,7 @@ public class EntityConvert {
         try {
             props = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
         } catch (IntrospectionException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         if (!ObjectUtils.isEmpty(props)) {
@@ -323,8 +332,7 @@ public class EntityConvert {
         try {
             return new FMS(str).parse();
         } catch (JsonParseException e) {
-            LOGGER.warning("JSON 解析错误：" + str);
-
+            log.warn("JSON 解析错误：" + str);
             throw e;
         }
     }

@@ -12,7 +12,7 @@
  */
 package com.ajaxjs.util.io;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -25,9 +25,8 @@ import java.util.zip.*;
  *
  * @author sp42 frank@ajaxjs.com
  */
+@Slf4j
 public class ZipHelper {
-    private static final LogHelper LOGGER = LogHelper.getLog(ZipHelper.class);
-
     /**
      * 解压文件
      *
@@ -62,10 +61,10 @@ public class ZipHelper {
             }
             zis.closeEntry();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
-        LOGGER.info("解压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, save);
+        log.info("解压缩完成，耗时：{}ms，保存在{}", System.currentTimeMillis() - start, save);
     }
 
     /**
@@ -94,10 +93,10 @@ public class ZipHelper {
         try (FileOutputStream fos = new FileOutputStream(saveZip); ZipOutputStream zipOut = new ZipOutputStream(fos)) {
             zip(fileToZip, fileToZip.getName(), zipOut, everyFile);
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
-        LOGGER.info("压缩完成，耗时：{0}ms，保存在{1}", System.currentTimeMillis() - start, saveZip);
+        log.info("压缩完成，耗时：{}ms，保存在{}", System.currentTimeMillis() - start, saveZip);
     }
 
     /**
@@ -132,7 +131,7 @@ public class ZipHelper {
                 StreamHelper.write(in, zipOut, false);
             }
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -158,7 +157,7 @@ public class ZipHelper {
             }
 
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -187,7 +186,7 @@ public class ZipHelper {
                 }
             }
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -203,7 +202,7 @@ public class ZipHelper {
             while (checkedinputstream.read() != -1) {
             }
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         return crc32.getValue();
@@ -215,6 +214,12 @@ public class ZipHelper {
 
 //    private static final String ZIP_MAGIC_NUMBER = "504B0304";
 
+    /**
+     * 判断给定的文件路径是否为 ZIP 文件。
+     *
+     * @param filePath 文件路径
+     * @return 如果是 ZIP 文件则返回 true，否则返回 false
+     */
     public static boolean isZipFile(String filePath) {
         try (InputStream inputStream = Files.newInputStream(Paths.get(filePath))) {
             byte[] magicNumber = new byte[4];
@@ -228,4 +233,5 @@ public class ZipHelper {
 
         return false;
     }
+
 }

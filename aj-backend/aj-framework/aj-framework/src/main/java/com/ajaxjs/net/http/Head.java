@@ -10,20 +10,19 @@
  */
 package com.ajaxjs.net.http;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.function.Consumer;
-
-import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * HEAD 请求
  *
  * @author Frank Cheung
  */
+@Slf4j
 public class Head extends Base {
-    private static final LogHelper LOGGER = LogHelper.getLog(Head.class);
-
     /**
      * HEAD 请求
      *
@@ -33,14 +32,13 @@ public class Head extends Base {
     public static HttpURLConnection head(String url) {
         HttpURLConnection conn = initHttpConnection(url, "HEAD");
         conn.setInstanceFollowRedirects(false); // 必须设置 false，否则会自动 redirect 到 Location 的地址
-
         ResponseEntity response = connect(conn);
 
         if (response.getIn() != null) {// 不需要转化响应文本，节省资源
             try {
                 response.getIn().close();
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }
         return conn;
@@ -66,7 +64,7 @@ public class Head extends Base {
         try {
             return head(url).getResponseCode() == 404;
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return false;
         }
     }
@@ -89,10 +87,15 @@ public class Head extends Base {
     };
 
     /**
-     * OAuth
+     * 生成一个用于设置 OAuth 认证头的 Consumer 对象
+     *
+     * @param token 认证令牌
+     * @return 一个Consumer对象，用于设置 HTTP 连接的认证头
      */
     public static Consumer<HttpURLConnection> oauth(String token) {
-//        LOGGER.info("Bearer " + token);
+        // 打印日志信息
+        // LOGGER.info("Bearer " + token);
+        // 返回一个Consumer对象，用于设置HTTP连接的认证头
         return (head) -> head.setRequestProperty("Authorization", "Bearer " + token);
     }
 }

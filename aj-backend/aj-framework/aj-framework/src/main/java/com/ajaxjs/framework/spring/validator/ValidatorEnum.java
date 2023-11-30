@@ -2,7 +2,6 @@ package com.ajaxjs.framework.spring.validator;
 
 import org.springframework.util.StringUtils;
 
-
 /**
  * @author volicy.xu
  */

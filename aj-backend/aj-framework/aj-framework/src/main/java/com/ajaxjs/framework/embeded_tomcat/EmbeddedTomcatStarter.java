@@ -2,8 +2,6 @@ package com.ajaxjs.framework.embeded_tomcat;
 
 import com.ajaxjs.framework.spring.filter.FileUploadHelper;
 import com.ajaxjs.framework.spring.filter.UTF8CharsetFilter;
-import com.ajaxjs.util.logger.LogHelper;
-
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.LifecycleState;
@@ -25,8 +23,6 @@ import java.util.Map;
  * 嵌入式使用 Tomcat
  */
 public class EmbeddedTomcatStarter extends TomcatStarter {
-    private static final LogHelper LOGGER = LogHelper.getLog(EmbeddedTomcatStarter.class);
-
     /**
      * LifecycleState.STARTING_PREP 会执行两次，不知为何
      */

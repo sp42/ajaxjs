@@ -1,14 +1,13 @@
 package com.ajaxjs.util.reflect;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+@Slf4j
 public class Types {
-    private static final LogHelper LOGGER = LogHelper.getLog(Types.class);
-
     /**
      * 获取泛型类型数组。
      *
@@ -22,7 +21,7 @@ public class Types {
             return pt.getActualTypeArguments();
         }
 
-        LOGGER.warning(type + " 很可能不是一个泛型");
+        log.warn(type + " 很可能不是一个泛型");
         return null;
     }
 
@@ -60,11 +59,17 @@ public class Types {
         return getActualType(clz.getGenericSuperclass());
     }
 
+    /**
+     * 获取实际类
+     * @param clz 类型
+     * @return 实际类
+     */
     public static Class<?> getActualClass(Class<?> clz) {
         Type[] actualType = getActualType(clz);
 
         return type2class(actualType[0]);
     }
+
 
     /**
      * Type 接口转换为 Class

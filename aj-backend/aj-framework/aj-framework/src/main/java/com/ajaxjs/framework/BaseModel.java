@@ -63,8 +63,15 @@ public abstract class BaseModel {
         this.extractData = extractData;
     }
 
+    /**
+     * 获取指定键对应的整数值
+     *
+     * @param key 指定键
+     * @return 指定键对应的整数值，如果不存在则返回0
+     */
     public int getExtractInt(String key) {
         Object obj = getExtractData().get(key);
         return obj != null ? (int) obj : 0;
     }
+
 }

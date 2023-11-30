@@ -13,6 +13,11 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Objects;
 
+/**
+ * <a href="https://raw.githubusercontent.com/535404515/MYSQL-TOMCAT-MONITOR/master/nlpms-task-monitor/src/main/java/com/nuoli/mysqlprotect/util/EncryptUtil.java">...</a>
+ *
+ * @author Caiyuhui
+ */
 public class EncryptUtil {
     public static final String MD5 = "MD5";
     public static final String SHA1 = "SHA1";

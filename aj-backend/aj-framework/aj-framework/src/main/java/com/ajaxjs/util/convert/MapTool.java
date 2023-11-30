@@ -17,7 +17,7 @@ package com.ajaxjs.util.convert;
 
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.XmlHelper;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,9 +44,8 @@ import java.util.function.Function;
  *
  * @author sp42 frank@ajaxjs.com
  */
+@Slf4j
 public class MapTool {
-    private static final LogHelper LOGGER = LogHelper.getLog(MapTool.class);
-
     // --------------------------------------------------------------------------------------------------
     // -----------------------------------------------Map转换---------------------------------------------
     // --------------------------------------------------------------------------------------------------
@@ -70,14 +69,37 @@ public class MapTool {
         return String.join(div, pairs);
     }
 
+    /**
+     * 将指定的 Map 对象转换为字符串，使用指定的分隔符分隔每个元素。
+     *
+     * @param map 要转换的 Map 对象
+     * @param fn  将 Map 中的值转换为字符串的函数
+     * @param <T> Map 中的值的类型
+     * @return 转换后的字符串
+     */
     public static <T> String join(Map<String, T> map, Function<T, String> fn) {
         return join(map, "&", fn);
     }
 
+    /**
+     * 将 Map 中的值使用指定的分隔符进行拼接。
+     *
+     * @param map 要拼接的 Map 对象
+     * @param div 分隔符
+     * @param <T> Map 中元素的类型
+     * @return 拼接后的字符串
+     */
     public static <T> String join(Map<String, T> map, String div) {
         return join(map, div, v -> v == null ? null : v.toString());
     }
 
+    /**
+     * 将给定的 Map 对象转换为字符串，使用指定的分隔符将键值对连接起来
+     *
+     * @param map 要转换的 Map 对象
+     * @param <T> 键值对的类型
+     * @return 连接后的字符串
+     */
     public static <T> String join(Map<String, T> map) {
         return join(map, "&");
     }
@@ -164,6 +186,12 @@ public class MapTool {
         return _map;
     }
 
+    /**
+     * 将给定的 map 转换为 Map<String, Object> 类型的结果
+     *
+     * @param map 要转换的 map，包含 String 和 String[] 类型的键值对
+     * @return 转换后的 Map<String, Object> 类型的结果
+     */
     public static Map<String, Object> as(Map<String, String[]> map) {
         return as(map, arr -> ConvertBasicValue.toJavaValue(arr[0]));
     }
@@ -179,6 +207,13 @@ public class MapTool {
 
         return newMap;
     }
+
+    /**
+     * 将给定的对象转换为XML格式的字符串
+     *
+     * @param bean 要转换的对象
+     * @return 转换后的XML格式的字符串
+     */
     public static String beanToXml(Object bean) {
         return mapToXml(EntityConvert.bean2Map(bean));
     }
@@ -215,7 +250,7 @@ public class MapTool {
                 return writer.getBuffer().toString();
             }
         } catch (IOException | TransformerException | TransformerFactoryConfigurationError e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         return null;
@@ -249,7 +284,7 @@ public class MapTool {
 
             return data;
         } catch (IOException | SAXException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }

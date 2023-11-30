@@ -1,7 +1,7 @@
 package com.ajaxjs.util.reflect;
 
 import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
 import java.beans.IntrospectionException;
@@ -13,8 +13,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+/**
+ * 类相关的反射
+ */
+@Slf4j
 public class Clazz {
-    private static final LogHelper LOGGER = LogHelper.getLog(Clazz.class);
 
     /**
      * 根据类名字符串获取类对象
@@ -26,7 +29,7 @@ public class Clazz {
         try {
             return Class.forName(clzName);
         } catch (ClassNotFoundException e) {
-            LOGGER.warning(e, "找不到这个类：{0}。", clzName);
+            log.warn("找不到这个类： " + clzName, e);
         }
 
         return null;
@@ -103,11 +106,17 @@ public class Clazz {
                 Object value = field.get(bean);
                 fn.accept(name, value);
             } catch (IllegalAccessException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         });
     }
 
+    /**
+     * 遍历给定类的所有非静态字段，并对每个字段执行给定的操作。
+     *
+     * @param clz 要遍历的类
+     * @param fn  对于每个字段执行的操作
+     */
     public static void eachFields2(Class<?> clz, BiConsumer<String, Field> fn) {
         Field[] fields = clz.getFields();
 
@@ -115,13 +124,13 @@ public class Clazz {
 
         try {
             for (Field field : fields) {
-                if (Modifier.isStatic(field.getModifiers()))// static 的不要
+                if (Modifier.isStatic(field.getModifiers()))// 如果是静态的字段，则跳过
                     continue;
 
-                fn.accept(field.getName(), field);
+                fn.accept(field.getName(), field);// 对于当前字段执行给定的操作
             }
         } catch (IllegalArgumentException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -141,7 +150,7 @@ public class Clazz {
             PropertyDescriptor[] props = Introspector.getBeanInfo(bean.getClass(), Object.class).getPropertyDescriptors();
             eachField(bean, props, fn);
         } catch (IntrospectionException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -169,7 +178,7 @@ public class Clazz {
                     fn.item(key, value, property);
                 }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 }

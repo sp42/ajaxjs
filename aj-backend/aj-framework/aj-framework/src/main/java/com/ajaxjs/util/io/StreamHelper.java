@@ -15,13 +15,9 @@
  */
 package com.ajaxjs.util.io;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -29,14 +25,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
-import com.ajaxjs.util.logger.LogHelper;
-
 /**
  * 流操作助手类
  */
+@Slf4j
 public class StreamHelper {
-    private static final LogHelper LOGGER = LogHelper.getLog(StreamHelper.class);
-
     /**
      * 读输入的字节流转换到字符流，将其转换为文本（多行）的字节流转换为字符串
      *
@@ -72,18 +65,18 @@ public class StreamHelper {
     public static void read(InputStreamReader inReader, Consumer<String> fn) {
         try (
                 /*
-                 * Decorator，装饰模式，又称为 Wrapper，使它具有了缓冲功能 BufferedInputStream、BufferedOutputStream
-                 * 只是在这之前动态的为它们加上一些功能（像是缓冲区功能）
+                 * 装饰器模式，又称为包装器，可以在不修改被包装类的情况下动态添加功能（例如缓冲区功能）
+                 * 这里使用BufferedReader为输入流添加缓冲功能
                  */
                 BufferedReader reader = new BufferedReader(inReader)) {
             String line;
 
-            while ((line = reader.readLine()) != null) { // 一次读入一行，直到读入 null 为文件结束
-                // 指定编码集的另外一种方法 line = new String(line.getBytes(), encodingSet);
+            while ((line = reader.readLine()) != null) { // 一次读入一行，直到读入 null 表示文件结束
+                // 指定编码集的另外一种写法 line = new String(line.getBytes(), encodingSet);
                 fn.accept(line);
             }
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -122,7 +115,7 @@ public class StreamHelper {
                 out.flush();
             }
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -140,7 +133,7 @@ public class StreamHelper {
 
             return out.toByteArray();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }
@@ -178,7 +171,7 @@ public class StreamHelper {
 
             out.flush();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 

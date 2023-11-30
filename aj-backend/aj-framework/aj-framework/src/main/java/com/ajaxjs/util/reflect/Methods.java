@@ -1,6 +1,6 @@
 package com.ajaxjs.util.reflect;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 
 import java.lang.invoke.MethodHandles;
@@ -9,14 +9,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 方法相关的反射
+ */
+@Slf4j
 public class Methods {
-    private static final LogHelper LOGGER = LogHelper.getLog(Methods.class);
-
     public static Method getDeclaredMethod(Class<?> clz, String methodName) {
         try {
             return clz.getDeclaredMethod(methodName);
         } catch (NoSuchMethodException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }
@@ -39,7 +41,7 @@ public class Methods {
             for (Class<?> clz : args)
                 str.append(clz.getName());
 
-            LOGGER.warning("类找不到这个方法 {0}.{1}({2})。", cls.getName(), method, str.toString().equals("") ? "void" : str.toString());
+            log.warn("类找不到这个方法 {}.{}({})。", cls.getName(), method, str.toString().equals("") ? "void" : str.toString());
             return null;
         }
     }
@@ -108,7 +110,7 @@ public class Methods {
                             return methodObj;
                     }
                 } catch (Exception e) {
-                    LOGGER.warning(e);
+                    log.warn("ERROR>>", e);
                 }
             }
             //			else {
@@ -216,7 +218,7 @@ public class Methods {
 
             if (e1 instanceof InvocationTargetException) {
                 e = ((InvocationTargetException) e1).getTargetException();
-                LOGGER.warning("反射执行方法异常！所在类[{0}] 方法：[{1}]", instance.getClass().getName(), method.getName());
+                log.warn("反射执行方法异常！所在类[{}] 方法：[{}]", instance.getClass().getName(), method.getName());
 
                 throw e;
             }
@@ -314,10 +316,10 @@ public class Methods {
             try {
                 return executeMethod_Throwable(new Object(), method, args);
             } catch (Throwable e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         } else
-            LOGGER.warning("这不是一个静态方法：" + method);
+            log.warn("这不是一个静态方法：" + method);
 
         return null;
     }

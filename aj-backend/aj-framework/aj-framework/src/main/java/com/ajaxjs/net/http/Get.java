@@ -10,6 +10,12 @@
  */
 package com.ajaxjs.net.http;
 
+import com.ajaxjs.util.convert.EntityConvert;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.StreamHelper;
+import com.ajaxjs.util.regexp.RegExpUtils;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -17,20 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.ajaxjs.util.convert.EntityConvert;
-import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.logger.LogHelper;
-import com.ajaxjs.util.regexp.RegExpUtils;
-
 /**
  * GET 请求
  *
  * @author Frank Cheung
  */
+@Slf4j
 public class Get extends Base {
-    private static final LogHelper LOGGER = LogHelper.getLog(Get.class);
-
     /**
      * 简单 GET 请求（原始 API 版），返回文本。
      *
@@ -41,7 +40,7 @@ public class Get extends Base {
         try {
             return StreamHelper.byteStream2string(new URL(url).openStream());
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }

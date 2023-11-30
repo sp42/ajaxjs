@@ -54,6 +54,11 @@ public class LFUCache<K, V> implements Cache<K, V> {
         cacheMap.remove(key);
     }
 
+    /**
+     * 判断缓存是否已满
+     *
+     * @return 如果缓存已满，返回true；否则，返回false
+     */
     public boolean isFull() {
         return (capacity > 0) && (cacheMap.size() >= capacity);
     }

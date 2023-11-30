@@ -10,8 +10,6 @@ import java.util.Map;
 
 /**
  * 单元测试的辅助工具类
- *
- * @author xinzhang
  */
 public class TestHelper {
     public static void json(Object obj) {
@@ -27,10 +25,20 @@ public class TestHelper {
         System.out.println(ConvertToJson.format(ConvertToJson.toJson(obj)));
     }
 
+    /**
+     * 将传入的对象转换为JSON字符串并打印
+     *
+     * @param obj 要转换为JSON的对象
+     */
     public static void printJson2(Object obj) {
-        System.out.println((ConvertToJson.toJson(obj)));
+        System.out.println(ConvertToJson.toJson(obj));
     }
 
+    /**
+     * 打印数组中的元素
+     *
+     * @param arr 要打印的数组
+     */
     public static void printArr(Object[] arr) {
         System.out.println(Arrays.toString(arr));
     }
@@ -86,10 +94,19 @@ public class TestHelper {
         System.out.println(sb);
     }
 
+    /**
+     * 将JSON字符串转换为指定类型的Java对象
+     *
+     * @param jsonStr JSON字符串
+     * @param beanClz Java对象的类型
+     * @param <T>     Java对象的类型
+     * @return 转换后的Java对象
+     */
     public static <T> T jsonStr2Bean(String jsonStr, Class<T> beanClz) {
         jsonStr = ConvertToJson.removeCr(jsonStr);
         Map<String, Object> map = EntityConvert.json2map(jsonStr);
 
         return EntityConvert.map2Bean(map, beanClz, true);
     }
+
 }

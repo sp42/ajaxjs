@@ -18,7 +18,7 @@ package com.ajaxjs.util.io;
 import com.ajaxjs.Version;
 import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.StrUtil;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StreamUtils;
 
 import java.io.*;
@@ -38,9 +38,8 @@ import java.util.stream.Stream;
  *
  * @author sp42 frank@ajaxjs.com
  */
+@Slf4j
 public class FileHelper extends StreamHelper {
-    private static final LogHelper LOGGER = LogHelper.getLog(FileHelper.class);
-
     /**
      * 当前系统的分隔符(linux、windows)
      */
@@ -88,7 +87,7 @@ public class FileHelper extends StreamHelper {
         }
 
         if (!file.delete())
-            LOGGER.warning("文件 {0} 删除失败！", file.toString());
+            log.warn("文件 {} 删除失败！", file);
     }
 
     /**
@@ -108,7 +107,7 @@ public class FileHelper extends StreamHelper {
      * @return 文件内容
      */
     public static String openAsText(String filePath, Charset encode) {
-        LOGGER.info("读取文件[{0}]", filePath);
+        log.info("读取文件[{}]", filePath);
 
         Path path = Paths.get(filePath);
 
@@ -116,7 +115,7 @@ public class FileHelper extends StreamHelper {
             if (Files.isDirectory(path))
                 throw new IOException("参数 full path：" + filePath + " 不能是目录，请指定文件");
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
 
@@ -127,7 +126,7 @@ public class FileHelper extends StreamHelper {
 
             return sb.toString();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         return null;
@@ -153,7 +152,7 @@ public class FileHelper extends StreamHelper {
         try {
             return StreamUtils.copyToByteArray(Files.newInputStream(file.toPath()));
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
 
             return null;
         }
@@ -167,10 +166,10 @@ public class FileHelper extends StreamHelper {
      * @param isOverwrite 是否覆盖文件，true = 允许覆盖
      */
     public static void save(File file, byte[] data, boolean isOverwrite) {
-        LOGGER.info("正在保存文件" + file);
+        log.info("正在保存文件" + file);
 
         if (data == null) {
-            LOGGER.warning("要保存的文件内容为空");
+            log.warn("要保存的文件内容为空");
             return;
         }
 
@@ -183,11 +182,11 @@ public class FileHelper extends StreamHelper {
 
             if (!file.exists())
                 if (file.createNewFile())
-                    LOGGER.info("不会走到这一步");
+                    log.info("不会走到这一步");
 
             Files.write(file.toPath(), data);
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -203,7 +202,7 @@ public class FileHelper extends StreamHelper {
         try (OutputStream out = Files.newOutputStream(file.toPath())) {
             bytes2output(out, data, false, off, len);
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -216,9 +215,9 @@ public class FileHelper extends StreamHelper {
     public static void saveText(File file, String text) {
         if (Version.isDebug) {
             String _text = text.length() > 200 ? text.substring(0, 200) + "..." : text;
-            LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString(), _text);
+            log.info("正在保存文件{}， 保存内容：\n{}", file.toString(), _text);
         } else
-            LOGGER.info("正在保存文件{0}， 保存内容：\n{1}", file.toString());
+            log.info("正在保存文件{}", file.toString());
 
 //		try (BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);) {
 //			writer.write(text);
@@ -250,7 +249,7 @@ public class FileHelper extends StreamHelper {
 
         if (!_folder.exists())// 先检查目录是否存在，若不存在建立
             if (!_folder.mkdirs()) // 可以创建多级目录，如果某个父级目录不存在，会一并创建
-                LOGGER.warning("创建目录 {0} 失败", folder);
+                log.warn("创建目录 {} 失败", folder);
 
         if (!_folder.mkdir()) {// 只能创建单级目录，且父目录必须存在
         }
@@ -299,7 +298,7 @@ public class FileHelper extends StreamHelper {
      * @return 新建文件的 File 对象
      */
     public static File createFile(String folder, String fileName) {
-        LOGGER.info("正在新建文件 {0}", folder + SEPARATOR + fileName);
+        log.info("正在新建文件 {}", folder + SEPARATOR + fileName);
 
         mkDir(folder);
         return new File(folder + SEPARATOR + fileName);
@@ -314,7 +313,7 @@ public class FileHelper extends StreamHelper {
      * @throws IOException 文件已经存在
      */
     public static File createFile(String filePath, boolean isOverwrite) throws IOException {
-        LOGGER.info("正在新建文件 {0}", filePath);
+        log.info("正在新建文件 {}", filePath);
 
         mkDirByFileName(filePath);
 
@@ -338,7 +337,7 @@ public class FileHelper extends StreamHelper {
                 System.out.println(e.getFileName());
 
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -399,7 +398,7 @@ public class FileHelper extends StreamHelper {
         try (Stream<Path> stream = Files.list(path)) {
             return stream.map(Path::toFile).filter(File::isFile).collect(Collectors.toList());
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }
@@ -427,7 +426,7 @@ public class FileHelper extends StreamHelper {
         try {
             return file.toURI().toURL().openConnection().getContentType();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }
@@ -443,7 +442,7 @@ public class FileHelper extends StreamHelper {
         try {
             return URLConnection.guessContentTypeFromStream(new BufferedInputStream(in));
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }
@@ -462,7 +461,7 @@ public class FileHelper extends StreamHelper {
             if (sc.ioException() != null)
                 throw sc.ioException();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 }

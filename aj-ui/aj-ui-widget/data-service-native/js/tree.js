@@ -119,7 +119,6 @@ function getTreeData2(j, callback) {
             });
         }
 
-
         let treeNode = {
             title: item.name,
             children: dmls

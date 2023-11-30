@@ -2,11 +2,10 @@ package com.ajaxjs.framework.spring.response;
 
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
+import com.ajaxjs.util.WebHelper;
 import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.convert.EntityConvert;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.convert.MapTool;
-import com.ajaxjs.util.WebHelper;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -29,8 +28,6 @@ import java.util.Map;
  * @author Frank Cheung sp42@qq.com
  */
 public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
-    private static final LogHelper LOGGER = LogHelper.getLog(MyJsonConverter.class);
-
     /**
      * 对于 POST Raw Body 的识别，通常是 JSON
      */
@@ -74,7 +71,7 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
         // 对于 @RequestBody 有效
         if (isMapParams || isJavaBean || isListParams) {
             String str = StreamUtils.copyToString(inputMessage.getBody(), StandardCharsets.UTF_8);
-            LOGGER.info("POST >>>>" + str);
+//            log.info("POST >>>>" + str);
 
             if (str.startsWith("[") || str.startsWith("{")) { // 识别 JSON
                 if (isListParams) {

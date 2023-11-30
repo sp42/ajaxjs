@@ -50,6 +50,14 @@ public class FileUploadHelper {
 
     public static final String CONTENT_TYPE2 = "multipart/form-data;charset=UTF-8";
 
+    /**
+     * 在 Web 环境中上传文件到指定目录
+     *
+     * @param file          要上传的文件
+     * @param uploadDir     上传目录
+     * @param isNewAutoName 是否自动为文件生成新名称
+     * @return 上传后的文件路径
+     */
     public static String uploadInWeb(MultipartFile file, String uploadDir, boolean isNewAutoName) {
         String _uploadDir = WebHelper.mapPath(DiContextUtil.getRequest(), uploadDir);
 
@@ -91,7 +99,10 @@ public class FileUploadHelper {
     }
 
     /**
-     * 生成自动名称，保留扩展名
+     * 根据原始文件名生成自动名称，保留扩展名
+     *
+     * @param originalFilename 原始文件名
+     * @return 自动文件名
      */
     public static String getAutoName(String originalFilename) {
         String[] arr = originalFilename.split("\\.");
@@ -100,9 +111,10 @@ public class FileUploadHelper {
         if (arr.length >= 2)
             ext = "." + arr[arr.length - 1];
 //        else {
-        // 没有扩展名
+//            // 没有扩展名
 //        }
 
         return SnowflakeId.get() + ext;
     }
+
 }

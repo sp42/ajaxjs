@@ -10,12 +10,7 @@
  */
 package com.ajaxjs;
 
-import com.ajaxjs.util.io.Resources;
 import com.ajaxjs.util.logger.LogHelper;
-import lombok.extern.slf4j.Slf4j;
-
-import java.io.File;
-import java.net.URL;
 
 /**
  * 初始化，检测是否可以运行
@@ -36,12 +31,6 @@ public class Version {
     static {
         if (!"Asia/Shanghai".equals(System.getProperty("user.timezone")))
             LOGGER.warning("当前 JVM 非中国大陆时区");
-
-        // 版本检测
-        if (Double.parseDouble(System.getProperty("java.specification.version")) < 1.5) {/* or Major Version, get java.runtime.version */
-            LOGGER.warning("请升级你的 JRE/JDK版本 >= 1.8");
-//			System.exit(1);
-        }
 
         /*
          * 有两种模式：本地模式和远程模式（自动判断） 返回 true 表示是非 linux 环境，为开发调试的环境，即 isDebug = true； 返回

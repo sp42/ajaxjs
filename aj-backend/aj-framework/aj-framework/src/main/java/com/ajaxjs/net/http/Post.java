@@ -51,6 +51,15 @@ public class Post extends Base implements HttpConstants {
         return any(isPost ? POST : PUT, url, params, fn);
     }
 
+    /**
+     * 向指定 URL 发送指定方法的请求并返回响应
+     *
+     * @param method 请求的方法类型，如 GET、POST
+     * @param url    请求的 URL
+     * @param params 请求的参数
+     * @param fn     用于配置 HttpURLConnection 的 Consumer
+     * @return 响应的  ResponseEntity  对象
+     */
     public static ResponseEntity any(String method, String url, Object params, Consumer<HttpURLConnection> fn) {
         final byte[] _params;
 
@@ -63,23 +72,25 @@ public class Post extends Base implements HttpConstants {
             if (map.size() > 0) {
                 String str = MapTool.join(map, v -> v == null ? null : StrUtil.urlEncode(v.toString()));
                 _params = str.getBytes(StandardCharsets.UTF_8);
-            } else
+            } else {
                 _params = null;
-        } else if (params instanceof byte[])
+            }
+        } else if (params instanceof byte[]) {
             _params = (byte[]) params;
-        else
+        } else {
             _params = null;
+        }
 
         return connect(url, method, conn -> {
-            conn.setDoOutput(true); // for conn.getOutputStream().write(someBytes);
-            conn.setDoInput(true);
+            conn.setDoOutput(true); // 允许写入输出流
+            conn.setDoInput(true); // 允许读取输入流
 
             if (fn != null)
                 fn.accept(conn);
 
             if (_params != null && _params.length > 0) {
                 try (OutputStream out = conn.getOutputStream()) {
-                    out.write(_params); // 输出流写入字节数据
+                    out.write(_params); // 通过输出流写入字节数据
                     out.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -137,11 +148,7 @@ public class Post extends Base implements HttpConstants {
      * PUT 请求
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object>
-     *               <p>
-     *                                                                                                                                                                                                                                                                           类型，实际表示了表单数据 KeyValue 的请求数据
-     *                                                                                                                                                                                                                                                             @return 响应消息体
+     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
      */
     public static ResponseEntity put(String url, Object params) {
         return put(url, params, null);
@@ -151,10 +158,7 @@ public class Post extends Base implements HttpConstants {
      * PUT API 请求，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
-     *               <p>
-     *               类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
      * @return 响应消息体
      */
@@ -166,10 +170,7 @@ public class Post extends Base implements HttpConstants {
      * PUT API 请求，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
-     *               <p>
-     *               类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应消息体
      */
     public static Map<String, Object> putApi(String url, Object params) {
@@ -180,13 +181,7 @@ public class Post extends Base implements HttpConstants {
      * POST API，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是
-     *
-     *               <pre>
-     *                                                                                                                                                                                                                                                                                                                                                                                                                       byte[]、String、Map<String, Object>
-     *                                                                                                                                                                                                                                                                                                                                                                                                                                     </pre>
-     *               <p>
-     *               类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
      * @return 响应的 JSON，Map 格式
      */
@@ -221,16 +216,19 @@ public class Post extends Base implements HttpConstants {
      * POST API，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
-     *               <p>
-     *               类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应的 JSON，Map 格式
      */
     public static Map<String, Object> api(String url, Object params) {
         return api(url, params, null);
     }
 
+    /**
+     * 调用 API 请求指定的 URL 并返回结果。
+     *
+     * @param url 请求的 URL
+     * @return 包含 API 响应结果的 Map 对象
+     */
     public static Map<String, Object> api(String url) {
         return api(url, null);
     }
@@ -239,10 +237,7 @@ public class Post extends Base implements HttpConstants {
      * POST API，返回 XML
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
-     *               <p>
-     *               类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
      * @return 响应的 XML，Map 格式
      */
@@ -256,10 +251,7 @@ public class Post extends Base implements HttpConstants {
      * POST API，返回 XML
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
-     *               <p>
-     *               类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应的 XML，Map 格式
      */
     public static Map<String, String> apiXML(String url, Object params) {
@@ -328,21 +320,37 @@ public class Post extends Base implements HttpConstants {
         return post(url, toFromData(data), conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
     }
 
+    /**
+     * 以POST方法上传文件
+     *
+     * @param url       上传文件的URL
+     * @param fieldName 文件字段名
+     * @param fileName  文件名
+     * @param file      文件内容
+     * @param fn        用于设置HTTP连接的回调函数
+     * @return 上传成功返回文件上传结果的Map，否则返回null
+     */
     public static Map<String, Object> postFile(String url, String fieldName, String fileName, byte[] file, Consumer<HttpURLConnection> fn) {
-        String field = String.format(FIELD, fieldName, fileName, "application/octet-stream");
-        byte[] bytes = StreamHelper.concat(field.getBytes(), file);
-        bytes = StreamHelper.concat(bytes, END_DATA);
+        String field = String.format(FIELD, fieldName, fileName, "application/octet-stream");// 构造文件字段
+        byte[] bytes = StreamHelper.concat(field.getBytes(), file);   // 将字段和文件内容拼接
+        bytes = StreamHelper.concat(bytes, END_DATA);// 拼接结束数据
 
+        // 如果回调函数不为空，添加设置HTTP请求内容类型的操作
         if (fn != null)
             fn = fn.andThen(conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY));
+            // 如果回调函数为空，直接设置HTTP请求内容类型
         else
             fn = conn -> conn.setRequestProperty(CONTENT_TYPE, "multipart/form-data; boundary=" + BOUNDARY);
 
+        // 发送POST请求并获取响应实体
         ResponseEntity resp = post(url, bytes, fn);
+        // 将响应实体转换为JSON字符串
         String json = resp.toString();
 
+        // 如果JSON字符串有内容，将其转换为Map返回
         if (StringUtils.hasText(json))
             return EntityConvert.json2map(json);
+            // 如果JSON字符串为空，返回null
         else
             return null;
     }

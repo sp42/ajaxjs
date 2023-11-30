@@ -1,13 +1,11 @@
 package com.ajaxjs.framework.spring.filter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.ajaxjs.util.logger.LogHelper;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -16,15 +14,14 @@ import java.util.Map;
  *
  * @author Frank Cheung sp42@qq.com
  */
+@Slf4j
 public class ShowControllerInterceptor implements HandlerInterceptor {
-    private static final LogHelper LOGGER = LogHelper.getLog(ShowControllerInterceptor.class);
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (handler instanceof HandlerMethod) {
             HandlerMethod h = (HandlerMethod) handler;
-            LOGGER.info("控制器方法：" + h);
-            LOGGER.info("请求 URL：" + request.getRequestURL());
+            log.info("控制器方法：" + h);
+            log.info("请求 URL：" + request.getRequestURL());
 
             StringBuilder s = new StringBuilder();
             Map<String, String[]> parameterMap = request.getParameterMap();
@@ -33,7 +30,7 @@ public class ShowControllerInterceptor implements HandlerInterceptor {
                 for (String key : parameterMap.keySet())
                     s.append(key).append("=").append(Arrays.toString(parameterMap.get(key))).append("\n");
 
-                LOGGER.info(request.getMethod() + "请求参数：\n" + s);
+                log.info(request.getMethod() + "请求参数：\n" + s);
             }
         }
 

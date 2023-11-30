@@ -49,9 +49,18 @@ public class CustomPropertySources extends PropertySourcesPlaceholderConfigurer 
         }
     }
 
+    /**
+     * 从配置中获取指 定key 对应的值，并将其转换为指定类型后返回
+     *
+     * @param key 配置的 key
+     * @param clz 需要转换的目标类型
+     * @param <T> 类型参数
+     * @return 转换后的值
+     */
     public static <T> T getConfig(String key, Class<T> clz) {
         String value = getConfig(key);
 
         return ConvertBasicValue.basicCast(value, clz);
     }
+
 }

@@ -85,8 +85,10 @@ public class DiContextUtil implements ApplicationContextAware {
     }
 
     /**
-     * @param key
-     * @return
+     * 获取指定key对应的消息。
+     *
+     * @param key 指定消息的 key
+     * @return 返回指定 key 对应的消息
      */
     public static String getMessage(String key) {
         return context.getMessage(key, null, Locale.getDefault());
@@ -108,6 +110,7 @@ public class DiContextUtil implements ApplicationContextAware {
      */
     public static BeanDefinitionRegistry getRegistry() {
         ConfigurableApplicationContext c = (ConfigurableApplicationContext) context;
+
         return (DefaultListableBeanFactory) c.getBeanFactory();
     }
 
@@ -153,6 +156,11 @@ public class DiContextUtil implements ApplicationContextAware {
         ((ConfigurableApplicationContext) context).close();
     }
 
+    /**
+     * 获取当前请求的 HttpServletRequest 对象
+     * 如果当前没有请求上下文，则根据是否正在运行测试来返回对应的请求对象
+     * @return 当前请求的 HttpServletRequest 对象，如果不存在请求上下文则返回 null
+     */
     public static HttpServletRequest getRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
 
@@ -166,11 +174,21 @@ public class DiContextUtil implements ApplicationContextAware {
         return ((ServletRequestAttributes) requestAttributes).getRequest();
     }
 
+
+    /**
+     * 获取当前请求的响应对象
+     *
+     * @return 响应对象
+     */
     public static HttpServletResponse getResponse() {
-        HttpServletResponse response = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
-        return response;
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
     }
 
+    /**
+     * 获取当前请求的 HttpSession 对象
+     *
+     * @return 当前请求的 HttpSession 对象
+     */
     public static HttpSession getSession() {
         return Objects.requireNonNull(getRequest()).getSession();
     }

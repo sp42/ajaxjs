@@ -10,21 +10,22 @@
  */
 package com.ajaxjs.util.io;
 
-import java.io.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Consumer;
 
-import com.ajaxjs.util.logger.LogHelper;
-import org.springframework.util.StringUtils;
-
 /**
  * 资源工具类
  */
+@Slf4j
 public class Resources {
-    private static final LogHelper LOGGER = LogHelper.getLog(Resources.class);
-
     /**
      * 获取 Classpath 根目录下的资源文件
      *
@@ -36,7 +37,7 @@ public class Resources {
         URL url = Resources.class.getClassLoader().getResource(resource);
 
         if (url == null) {
-            LOGGER.info("获取资源 {0} 失败", resource);
+            log.info("获取资源 {} 失败", resource);
             return null;
         }
 
@@ -120,13 +121,13 @@ public class Resources {
     public static String getResourceText(String path) {
         try (InputStream in = getResource(path)) {
             if (in == null) {
-                LOGGER.warning("[{0}] 下没有 [{1}] 资源文件", getResourcesFromClasspath(""), path);
+                log.warn("[{}] 下没有 [{}] 资源文件", getResourcesFromClasspath(""), path);
                 return null;
             }
 
             return StreamHelper.byteStream2string(in);
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }
@@ -153,7 +154,7 @@ public class Resources {
         try {
             jarDir = new File(Resources.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParent();
         } catch (URISyntaxException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         return jarDir;
@@ -190,7 +191,7 @@ public class Resources {
             Process netStart = runtime.exec("net start");
             StreamHelper.read(netStart.getInputStream(), fn);
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 }

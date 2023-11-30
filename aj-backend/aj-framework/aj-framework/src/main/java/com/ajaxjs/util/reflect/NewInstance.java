@@ -1,13 +1,15 @@
 package com.ajaxjs.util.reflect;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * 创建实例的相关反射
+ */
+@Slf4j
 public class NewInstance {
-    private static final LogHelper LOGGER = LogHelper.getLog(NewInstance.class);
-
     /**
      * 根据类创建实例，可传入构造器参数。
      *
@@ -17,7 +19,7 @@ public class NewInstance {
      */
     public static <T> T newInstance(Class<T> clz, Object... args) {
         if (clz.isInterface()) {
-            LOGGER.warning("所传递的 class 类型参数为接口 {0}，无法实例化", clz.toString());
+            log.warn("所传递的 class 类型参数为接口 {}，无法实例化", clz);
             return null;
         }
 
@@ -25,7 +27,7 @@ public class NewInstance {
             try {
                 return clz.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }
 
@@ -49,7 +51,7 @@ public class NewInstance {
             return constructor.newInstance(args); // 实例化
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException e) {
-            LOGGER.warning(e, "实例化对象失败：" + constructor.getDeclaringClass());
+            log.warn("实例化对象失败：" + constructor.getDeclaringClass(), e);
             return null;
         }
     }
@@ -105,9 +107,9 @@ public class NewInstance {
         try {
             return argClz != null ? clz.getConstructor(argClz) : clz.getConstructor();
         } catch (NoSuchMethodException e) {
-            LOGGER.warning(e, "找不到这个 {0} 类的构造器。", clz.getName());
+            log.warn("找不到这个 " + clz.getName() + " 类的构造器。", e);
         } catch (SecurityException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         return null;

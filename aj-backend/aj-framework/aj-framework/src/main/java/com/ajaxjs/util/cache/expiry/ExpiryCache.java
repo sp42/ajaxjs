@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ExpiryCache<K, V> implements Cache<K, V> {
     /**
      * 使用阻塞队列中的等待队列，因为DelayQueue是基于PriorityQueue实现的，而PriorityQueue底层是一个最小堆，可以按过期时间排序，
-     * 所以等待队列本身只需要维护根节点的一个定时器就可以了，而且插入和删除都是时间复杂度都是 logn，资源消耗很少
+     * 所以等待队列本身只需要维护根节点的一个定时器就可以了，而且插入和删除都是时间复杂度都是 logN，资源消耗很少
      */
     private final DelayQueue<ExpiryCacheItem<K>> DELAY = new DelayQueue<>();
 
@@ -49,6 +49,13 @@ public class ExpiryCache<K, V> implements Cache<K, V> {
         });
     }
 
+    /**
+     * 向缓存中添加键值对，并设置过期时间。
+     *
+     * @param key    键
+     * @param data   值
+     * @param expire 过期时间，单位为毫秒
+     */
     @Override
     public void put(K key, V data, long expire) {
         CACHE.put(key, data);
@@ -58,8 +65,9 @@ public class ExpiryCache<K, V> implements Cache<K, V> {
             DELAY.offer(new ExpiryCacheItem<>(key, System.currentTimeMillis() + expire));
 
         size.incrementAndGet();
-//        System.out.printf("添加缓存项。key: %s, value: %s。%n", key, data);
+//    System.out.printf("添加缓存项。key: %s, value: %s。%n", key, data);
     }
+
 
     @Override
     public V get(K key) {
@@ -71,16 +79,24 @@ public class ExpiryCache<K, V> implements Cache<K, V> {
         CACHE.remove(key);
     }
 
+    /**
+     * 清空缓存
+     */
     public void clear() {
-        size.compareAndSet(size.get(), 0);
-        valid = false;
-        DELAY.clear();
-        CACHE.clear();
+        size.compareAndSet(size.get(), 0); // 将缓存大小设为 0
+        valid = false; // 将 valid 标志设为 false
+        DELAY.clear(); // 清空延迟队列
+        CACHE.clear(); // 清空缓存
     }
 
-    private static volatile ExpiryCache<String, Object> INSTANCE;
+    private static volatile ExpiryCache<String, Object> INSTANCE
 
-    // 使用单例模式，加上双重验证，可适用于多线程高并发情况
+    /**
+     * 获取 ExpiryCache 的单例实例
+     * 使用单例模式，加上双重验证，可适用于多线程高并发情况
+     *
+     * @return ExpiryCache 的单例实例
+     */
     public static ExpiryCache<String, Object> getInstance() {
         if (INSTANCE == null)
             synchronized (ExpiryCache.class) {
@@ -90,4 +106,5 @@ public class ExpiryCache<K, V> implements Cache<K, V> {
 
         return INSTANCE;
     }
+
 }

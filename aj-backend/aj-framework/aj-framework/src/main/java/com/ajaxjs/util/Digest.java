@@ -135,6 +135,13 @@ public class Digest {
         return generator.generateKey();
     }
 
+    /**
+     * 根据指定算法和安全随机数生成一个秘密密钥，并将其以 Base64 编码的字符串形式返回
+     *
+     * @param algorithm 算法名称
+     * @param secure    安全随机数
+     * @return Base64 编码后的秘密密钥字符串
+     */
     public static String getSecretKey(String algorithm, SecureRandom secure) {
         return Base64Utils.encodeToString(Objects.requireNonNull(getSecretKey(algorithm, secure, null)).getEncoded());
     }
@@ -175,18 +182,39 @@ public class Digest {
         return StreamHelper.bytesToHexStr(bytes);
     }
 
+    /**
+     * 获取指定算法的 MAC 值
+     *
+     * @param algorithm 算法名称
+     * @param key       用于生成 MAC 值的密钥
+     * @param data      要进行 MAC 计算的数据
+     * @return 生成的MAC值
+     */
     public static byte[] getMac(String algorithm, String key, String data) {
         try {
+            // 获取指定算法的Mac对象
             Mac mac = Mac.getInstance(algorithm);
+
+            // 使用指定算法初始化Mac对象
             mac.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), algorithm));
 
+            // 对指定数据进行MAC计算
             return mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            // 捕获算法不存在和密钥无效异常
             log.warn("WARN>>>>>", e);
             return null;
         }
     }
 
+    /**
+     * 使用指定的算法、密钥和数据生成 MAC，并将结果以字符串形式返回
+     *
+     * @param algorithm 算法名称
+     * @param key       密钥
+     * @param data      数据
+     * @return MAC 结果的字符串表示形式
+     */
     public static String getMacAsStr(String algorithm, String key, String data) {
         return Base64Utils.encodeToString(Objects.requireNonNull(getMac(algorithm, key, data)));
     }
@@ -198,6 +226,13 @@ public class Digest {
         return getMacAsStr("HmacSHA1", key, data);
     }
 
+    /**
+     * 使用 HmacSHA256 算法进行 HMAC 操作
+     *
+     * @param key  密钥
+     * @param data 数据
+     * @return 计算得出的 HMAC 值的字符串表示
+     */
     public static String doHmacSHA256(String key, String data) {
         return getMacAsStr("HmacSHA256", key, data);
     }

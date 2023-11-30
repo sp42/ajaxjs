@@ -94,9 +94,15 @@ public class ObjectHelper {
         }
     }
 
+    /**
+     * 基于一个数值和时间单位来使当前线程休眠指定的时间。
+     *
+     * @param timeout 要休眠的数值，以秒为单位
+     */
     public static void sleep(Number timeout) {
         sleep(timeout, TimeUnit.SECONDS);
     }
+
 
     private static ScheduledExecutorService scheduledThreadPool;
 
