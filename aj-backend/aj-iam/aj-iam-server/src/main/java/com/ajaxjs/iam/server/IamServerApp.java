@@ -2,7 +2,6 @@ package com.ajaxjs.iam.server;
 
 import com.ajaxjs.framework.embeded_tomcat.BaseWebMvcConfigure;
 import com.ajaxjs.framework.embeded_tomcat.EmbeddedTomcatStarter;
-import com.ajaxjs.iam.server.config.IamConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

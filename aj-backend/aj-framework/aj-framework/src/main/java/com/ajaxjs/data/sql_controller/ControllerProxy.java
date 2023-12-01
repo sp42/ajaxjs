@@ -4,10 +4,10 @@ import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.Methods;
 import com.ajaxjs.util.reflect.Types;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -27,9 +27,8 @@ import java.util.Map;
  *
  * @author Frank Cheung sp42@qq.com
  */
+@Slf4j
 public class ControllerProxy implements InvocationHandler {
-    private static final LogHelper LOGGER = LogHelper.getLog(ControllerProxy.class);
-
     /**
      * 控制器接口类
      */
@@ -71,7 +70,7 @@ public class ControllerProxy implements InvocationHandler {
             return Methods.executeDefault(proxy, method, args);
 
         if (annotation == null) {
-            LOGGER.warning("SqlBinding 注解必填");
+            log.warn("SqlBinding 注解必填");
             return null;
         }
 
@@ -142,13 +141,11 @@ public class ControllerProxy implements InvocationHandler {
             else if (StringUtils.hasText(sql))
                 return CRUD.info(returnClz, sql, sqlParams.orderedParams);
         } else if (isSingleValue(returnClz)) {
-            System.out.println("返回 single");
-
+            log.info("返回 single");
             // CRUD.queryOne
-
-        } else { // Java bean
-
         }
+//        else { // Java bean
+//        }
 
         return null;
     }
@@ -201,7 +198,15 @@ public class ControllerProxy implements InvocationHandler {
         return sqlParams;
     }
 
+    /**
+     * 判断返回值类型是否为单值类型
+     *
+     * @param returnClz 返回值类型
+     * @return 如果返回值类型为字符串、布尔型或者数值类型，则返回 true；否则返回 false
+     */
     static boolean isSingleValue(Class<?> returnClz) {
+
         return returnClz == String.class || returnClz == Boolean.class || Number.class.isAssignableFrom(returnClz);
     }
+
 }

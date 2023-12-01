@@ -31,7 +31,7 @@ public class Operator {
     /**
      * 词法分析器
      */
-    private Lexer lex;
+    private final Lexer lex;
 
     /**
      * 保存当前值的变量
@@ -46,17 +46,17 @@ public class Operator {
     /**
      * 状态栈
      */
-    private Stack<State> statusStack = new Stack<>();
+    private final Stack<State> statusStack = new Stack<>();
 
     /**
      * 值栈
      */
-    private Stack<Object> keyStack = new Stack<>();
+    private final Stack<Object> keyStack = new Stack<>();
 
     /**
      * MAP | LIST
      */
-    private Stack<Object> objStack = new Stack<>();
+    private final Stack<Object> objStack = new Stack<>();
 
     /**
      * 创建一个栈管理器
@@ -79,7 +79,7 @@ public class Operator {
         if (from != FMS.BGN)
             statusStack.push(from);
 
-        curObj = new HashMap<Object, Object>();
+        curObj = new HashMap<>();
         objStack.push(curObj);
 
         return to;
@@ -230,7 +230,7 @@ public class Operator {
      */
     static Method getMethod(String methodName) {
         try {
-            return Operator.class.getMethod(methodName, new Class[]{State.class, State.class, Token.class});
+            return Operator.class.getMethod(methodName, State.class, State.class, Token.class);
         } catch (SecurityException | NoSuchMethodException e) {
             e.printStackTrace();
             return null;

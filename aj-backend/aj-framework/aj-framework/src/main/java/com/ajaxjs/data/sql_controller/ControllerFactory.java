@@ -1,10 +1,9 @@
 package com.ajaxjs.data.sql_controller;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.lang.reflect.Proxy;
 
 /**
  * 接口实例工厂，这里主要是用于提供接口的实例对象

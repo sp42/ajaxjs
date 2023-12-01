@@ -9,7 +9,7 @@ import java.util.Set;
  * 常见树结构的方法
  */
 public class TreeCommonService {
-    private String pidField = "pId";
+    private final String pidField = "pId";
 
     /**
      * Map 里面每个元素是树节点，都有 id、pid 字段，pid 是指向父亲节点，

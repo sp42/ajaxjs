@@ -1,7 +1,6 @@
 
 package com.ajaxjs.workflow.service.interceptor;
 
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.workflow.model.Execution;
 import com.ajaxjs.workflow.model.po.Task;
 import lombok.extern.slf4j.Slf4j;

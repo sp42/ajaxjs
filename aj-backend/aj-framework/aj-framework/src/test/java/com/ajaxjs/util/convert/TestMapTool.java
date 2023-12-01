@@ -30,9 +30,9 @@ public class TestMapTool {
 
     @Test
     public void testToMap() {
-        assertEquals(1, MapTool.toMap(new String[]{"a", "b", "d"}, new String[]{"1", "c", "2"}, ConvertBasicValue::toJavaValue).get("a"));
-        assertEquals(1, MapTool.toMap(new String[]{"a=1", "b=2", "d=c"}, ConvertBasicValue::toJavaValue).get("a"));
-        assertEquals("你好", MapTool.toMap(new String[]{"a=%e4%bd%a0%e5%a5%bd", "b=2", "d=c"}, v -> StringUtils.uriDecode(v, StandardCharsets.UTF_8)).get("a"));
+        assertEquals(1, Objects.requireNonNull(MapTool.toMap(new String[]{"a", "b", "d"}, new String[]{"1", "c", "2"}, ConvertBasicValue::toJavaValue)).get("a"));
+        assertEquals(1, Objects.requireNonNull(MapTool.toMap(new String[]{"a=1", "b=2", "d=c"}, ConvertBasicValue::toJavaValue)).get("a"));
+        assertEquals("你好", Objects.requireNonNull(MapTool.toMap(new String[]{"a=%e4%bd%a0%e5%a5%bd", "b=2", "d=c"}, v -> StringUtils.uriDecode(v, StandardCharsets.UTF_8))).get("a"));
     }
 
     @Test
@@ -124,4 +124,25 @@ public class TestMapTool {
         String xml = MapTool.mapToXml(userWithoutChild);
         assertEquals(xml, MapTool.mapToXml(Objects.requireNonNull(MapTool.xmlToMap(xml))));
     }
+
+    @Test
+    public void testDeepCopy() {
+        // Create a sample map
+        Map<Integer, String> originalMap = new HashMap<>();
+        originalMap.put(1, "One");
+        originalMap.put(2, "Two");
+        originalMap.put(3, "Three");
+
+        // Clone the map using MapTool deepCopy method
+        Map<Integer, String> clonedMap = MapTool.deepCopy(originalMap);
+
+        // Assert that the cloned map is not the same object as the original map
+        assertNotSame(originalMap, clonedMap);
+
+        // Assert that the cloned map has the same key-value pairs as the original map
+        assertEquals(originalMap.size(), clonedMap.size());
+        for (Integer key : originalMap.keySet())
+            assertEquals(originalMap.get(key), clonedMap.get(key));
+    }
 }
+

@@ -267,6 +267,7 @@ public class Post extends Base implements HttpConstants {
     private static final String NEWLINE = "\r\n";
 
     private static final String BOUNDARY_PREFIX = "--";
+
     // 定义数据分隔线
     public static String BOUNDARY = "------------7d4a6d158c9";
 

@@ -10,9 +10,9 @@ public class MatchNginxRequestWrapper extends HttpServletRequestWrapper {
 		oldRequestURI = request.getRequestURI();
 	}
 
-	private String oldContextPath;
+	private final String oldContextPath;
 
-	private String oldRequestURI;
+	private final String oldRequestURI;
 
 	@Override
 	public String getContextPath() {

@@ -9,13 +9,11 @@ import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.ListUtils;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +22,6 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 public class CRUD<T> {
-    private static final LogHelper LOGGER = LogHelper.getLog(CRUD.class);
-
     public static JdbcReader jdbcReaderFactory() {
         JdbcReader reader = new JdbcReader();
         reader.setConn(JdbcConn.getConnection());
@@ -345,10 +341,24 @@ public class CRUD<T> {
         return jdbcWriter.updateWhere(entity, where) > 0;
     }
 
+    /**
+     * 删除指定实体的指定 id 对应的记录
+     *
+     * @param entity 实体对象
+     * @param id     实体的 id
+     * @return 如果删除成功则返回 true，否则返回 false
+     */
     public static boolean delete(Object entity, Serializable id) {
         return delete(getTableName(entity), id);
     }
 
+    /**
+     * 根据给定的使用者姓名和 ID 删除数据
+     *
+     * @param talebName 数据表名
+     * @param id        实体的 id
+     * @return 如果删除成功则返回 true，否则返回 false
+     */
     public static boolean delete(String talebName, Serializable id) {
         JdbcWriter jdbcWriter = jdbcWriterFactory();
         jdbcWriter.setTableName(talebName);
@@ -356,13 +366,21 @@ public class CRUD<T> {
         return jdbcWriter.delete(id);
     }
 
+    /**
+     * 删除实体对象
+     *
+     * @param entity 实体对象
+     * @return 如果删除成功则返回 true，否则返回 false
+     */
     public static boolean delete(Object entity) {
         Object id = Methods.executeMethod(entity, "getId");
 
-        if (id != null) return delete(entity, (Serializable) id);
-        else {
-            LOGGER.warning("没有 getId()");
+        if (id != null) {
+            return delete(entity, (Serializable) id);
+        } else {
+            System.err.println("没有 getId()");
             return false;
         }
     }
+
 }

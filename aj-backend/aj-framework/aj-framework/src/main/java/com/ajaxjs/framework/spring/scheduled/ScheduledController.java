@@ -3,9 +3,9 @@ package com.ajaxjs.framework.spring.scheduled;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
-import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Clazz;
 import com.ajaxjs.util.reflect.Methods;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.config.CronTask;
@@ -20,9 +20,8 @@ import java.util.TimeZone;
 
 @RestController
 @RequestMapping("/scheduled")
+@Slf4j
 public class ScheduledController {
-    private static final LogHelper LOGGER = LogHelper.getLog(ScheduledController.class);
-
     @Autowired
     ScheduleHandler scheduleHandler;
 
@@ -55,7 +54,7 @@ public class ScheduledController {
                 assert clazz != null;
                 clazz.getDeclaredMethod(info.getMethod()).invoke(scheduleHandler.getBeanFactory().getBean(clazz));
             } catch (Exception e) {
-                LOGGER.warning("Trigger Error", e);
+                log.warn("Trigger Error", e);
             }
         });
 

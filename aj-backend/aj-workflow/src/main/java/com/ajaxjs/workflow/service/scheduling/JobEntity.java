@@ -18,7 +18,7 @@ public class JobEntity implements Serializable {
 	 * 参与类型
 	 */
 	public enum JobType {
-		EXECUTER, REMINDER;
+		EXECUTER, REMINDER
 	}
 
 	/**

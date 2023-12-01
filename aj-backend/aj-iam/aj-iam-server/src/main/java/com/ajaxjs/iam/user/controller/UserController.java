@@ -3,8 +3,6 @@ package com.ajaxjs.iam.user.controller;
 import com.ajaxjs.iam.user.model.User;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 /**
  * 用户相关控制器
  */

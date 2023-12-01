@@ -10,14 +10,10 @@
  */
 package com.ajaxjs;
 
-import com.ajaxjs.util.logger.LogHelper;
-
 /**
  * 初始化，检测是否可以运行
  */
 public class Version {
-    private static final LogHelper LOGGER = LogHelper.getLog(Version.class);
-
     /**
      * 获取操作系统名称
      */
@@ -30,8 +26,7 @@ public class Version {
 
     static {
         if (!"Asia/Shanghai".equals(System.getProperty("user.timezone")))
-            LOGGER.warning("当前 JVM 非中国大陆时区");
-
+            System.err.println("当前 JVM 非中国大陆时区");
         /*
          * 有两种模式：本地模式和远程模式（自动判断） 返回 true 表示是非 linux 环境，为开发调试的环境，即 isDebug = true； 返回
          * false 表示在部署的 linux 环境下。 Linux 的为远程模式

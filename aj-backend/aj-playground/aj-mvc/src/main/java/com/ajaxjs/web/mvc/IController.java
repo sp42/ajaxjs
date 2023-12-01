@@ -83,8 +83,7 @@ public interface IController {
         return findTreeByPath(tree, ListMap.split2Queue(path), basePath);
     }
 
-    static final Pattern idRegexp = Pattern.compile("/\\d+");
-
+    Pattern idRegexp = Pattern.compile("/\\d+");
 
     static Action findTreeByPath(String path) {
         Matcher match = idRegexp.matcher(path); // 处理Path上的参数

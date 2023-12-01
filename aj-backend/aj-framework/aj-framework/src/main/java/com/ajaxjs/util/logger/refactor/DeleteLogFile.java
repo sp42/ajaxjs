@@ -29,7 +29,7 @@ public class DeleteLogFile {
      * 日志文件保留的最大天数。超过指定天数的日志文件将被删除，-1 则不删除
      * Maximum number of days to keep the log files
      */
-    private int maxDays = -1;
+    private final int maxDays = -1;
 
     /**
      * 日志文件名的模式。模式格式为 {prefix}{date}{suffix}，其中日期部分的格式为 YYYY-MM-DD。该字段用于进行日志文件名的匹配和处理。

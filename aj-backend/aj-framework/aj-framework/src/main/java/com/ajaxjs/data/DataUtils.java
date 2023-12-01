@@ -4,7 +4,6 @@ import com.ajaxjs.util.logger.LogHelper;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -171,9 +170,14 @@ public class DataUtils {
     }
 
     /**
+     * 检查数据库中是否存在指定的表
      * 检测表是否存在
+     *
+     * @param conn      数据库连接对象
+     * @param tableName 表名
+     * @return 如果表存在则返回true，否则返回false
      */
-    public  static boolean checkTableExists(Connection conn, String tableName) {
+    public static boolean checkTableExists(Connection conn, String tableName) {
         try (ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null)) {
             if (rs.next())
                 return true;
@@ -183,4 +187,5 @@ public class DataUtils {
 
         return false;
     }
+
 }

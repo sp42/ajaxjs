@@ -68,7 +68,6 @@ public class ExpiryCache<K, V> implements Cache<K, V> {
 //    System.out.printf("添加缓存项。key: %s, value: %s。%n", key, data);
     }
 
-
     @Override
     public V get(K key) {
         return CACHE.get(key);
@@ -89,7 +88,7 @@ public class ExpiryCache<K, V> implements Cache<K, V> {
         CACHE.clear(); // 清空缓存
     }
 
-    private static volatile ExpiryCache<String, Object> INSTANCE
+    private static volatile ExpiryCache<String, Object> INSTANCE;
 
     /**
      * 获取 ExpiryCache 的单例实例

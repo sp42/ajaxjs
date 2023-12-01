@@ -408,7 +408,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
     public void createBatch(String fields, String values) {
         long start = System.currentTimeMillis();
         String sql = "INSERT INTO " + tableName + " (" + fields + ") VALUE " + values;
-        System.out.println(sql);
+        LOGGER.info(sql);
 
         int[] result = null;
 
@@ -513,7 +513,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
 
         String sql = sb.toString();
         LOGGER.info("批量插入：：" + sql);
-        int[] result = new int[0];
+        int[] result;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.addBatch();

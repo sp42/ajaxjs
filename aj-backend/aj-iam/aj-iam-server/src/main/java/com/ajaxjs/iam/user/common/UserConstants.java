@@ -1,7 +1,5 @@
 package com.ajaxjs.iam.user.common;
 
-import java.util.regex.Pattern;
-
 /**
  * 用户常量
  */

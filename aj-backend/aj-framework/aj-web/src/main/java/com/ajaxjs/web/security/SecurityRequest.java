@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
  *
  */
 public class SecurityRequest extends HttpServletRequestWrapper {
-	private boolean isXssCheck = true;
+	private final boolean isXssCheck = true;
 
 	/**
 	 * 创建一个 SecurityRequest 实例

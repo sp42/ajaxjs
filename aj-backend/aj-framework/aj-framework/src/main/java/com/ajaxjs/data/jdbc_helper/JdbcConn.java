@@ -1,7 +1,7 @@
 package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.Version;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -18,9 +18,8 @@ import java.sql.SQLException;
 /**
  * 数据库连接
  */
+@Slf4j
 public class JdbcConn {
-    private static final LogHelper LOGGER = LogHelper.getLog(JdbcConn.class);
-
     /**
      * 数据库连接对象
      */
@@ -37,7 +36,7 @@ public class JdbcConn {
      */
     public Connection getConn() {
         if (conn == null)
-            LOGGER.warning("未准备好数据库连接");
+            log.warn("未准备好数据库连接");
 
         return conn;
     }
@@ -59,9 +58,9 @@ public class JdbcConn {
                 conn = DriverManager.getConnection(jdbcUrl, userName, password);
             else conn = DriverManager.getConnection(jdbcUrl);
 
-            LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
+            log.info("数据库连接成功： " + conn.getMetaData().getURL());
         } catch (SQLException e) {
-            LOGGER.warning("数据库连接失败！", e);
+            log.warn("数据库连接失败！", e);
         }
 
         return conn;
@@ -106,12 +105,12 @@ public class JdbcConn {
         try {
             conn = source.getConnection();
 
-            if (conn == null) LOGGER.warning("DataSource 不能建立数据库连接");
+            if (conn == null) log.warn("DataSource 不能建立数据库连接");
 
             if (Version.isDebug)
-                LOGGER.info("数据库连接成功： " + conn.getMetaData().getURL());
+                log.info("数据库连接成功： " + conn.getMetaData().getURL());
         } catch (SQLException e) {
-            LOGGER.warning(e, "通过数据源对象获得数据库连接对象失败！");
+            log.warn("通过数据源对象获得数据库连接对象失败！", e);
         }
 
         return conn;
@@ -166,10 +165,10 @@ public class JdbcConn {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
                 if (Version.isDebug)
-                    LOGGER.info("关闭数据库连接成功！ Closed database OK！");
+                    log.info("关闭数据库连接成功！ Closed database OK！");
             }
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -215,7 +214,7 @@ public class JdbcConn {
             ObjectName on = new ObjectName("org.apache.tomcat.jdbc.pool.jmx.ConnectionPool:type=Logging2");
             server.registerMBean(ds.getPool().getJmxPool(), on);
         } catch (Throwable e) {
-            System.err.println(e);
+            log.warn("ERROR>>", e);
         }
     }
 

@@ -51,6 +51,7 @@ public class MvcRequest extends HttpServletRequestWrapper {
             // 为防止中文乱码，统一设置 UTF-8，设置请求编码方式
             setCharacterEncoding(StandardCharsets.UTF_8.toString());
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 

@@ -31,7 +31,7 @@ public class Filter {
 			return str;
 	}
 
-	private static Pattern CRLF_Pattern = Pattern.compile("\\r|\\n");
+	private static final Pattern CRLF_Pattern = Pattern.compile("\\r|\\n");
 
 	/**
 	 * 检测 CRLF 的过滤器 又叫做 HTTP Response Splitting
@@ -46,10 +46,10 @@ public class Filter {
 	/**
 	 * 侦测 SQL 脚本的正则
 	 */
-	private static String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|"
+	private static final String reg = "(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|"
 			+ "(\\b(select|update|union|delete|insert|trancate|char|into|substr|ascii|declare|exec|count|master|into|drop|execute)\\b)";
 
-	private static Pattern SQL_Pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
+	private static final Pattern SQL_Pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
 
 	/**
 	 * 检测 SQL 注入的过滤器
@@ -66,7 +66,7 @@ public class Filter {
 	/**
 	 * 对于敏感字符串该如何处理
 	 */
-	public static enum Handle {
+	public enum Handle {
 		/**
 		 * 转义字符串
 		 */
@@ -75,7 +75,7 @@ public class Filter {
 		/**
 		 * 删除字符串
 		 */
-		TYPE_DELETE;
+		TYPE_DELETE
 	}
 
 	/**

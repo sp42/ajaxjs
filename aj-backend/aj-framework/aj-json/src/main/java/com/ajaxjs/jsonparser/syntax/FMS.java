@@ -31,12 +31,12 @@ public class FMS implements States {
     /**
      * 词法分析器实例
      */
-    private Lexer lex;
+    private final Lexer lex;
 
     /**
      * 堆栈管理器
      */
-    private Operator opt;
+    private final Operator opt;
 
     /**
      * 当前状态
@@ -70,14 +70,14 @@ public class FMS implements States {
                 throw lex.exceptionFactory("发现不能识别的 token：" + lex.getCurChar());
 
             if (status == VAL || status == EOF || status == ERR)
-                throw lex.exceptionFactory(String.format(strTpl, oldStatus.getDescription(), "结束", tk.toString()));
+                throw lex.exceptionFactory(String.format(strTpl, oldStatus.getDescription(), "结束", tk));
 
             oldStatus = status;
             status = states[oldStatus.getId()][tk.getType()];
 
             if (status == ERR) {
                 String expectStr = ETS[oldStatus.getId()];
-                throw lex.exceptionFactory(String.format(strTpl, oldStatus.getDescription(), expectStr, tk.toString()));
+                throw lex.exceptionFactory(String.format(strTpl, oldStatus.getDescription(), expectStr, tk));
             }
 
             Method m = TKOL[tk.getType()];

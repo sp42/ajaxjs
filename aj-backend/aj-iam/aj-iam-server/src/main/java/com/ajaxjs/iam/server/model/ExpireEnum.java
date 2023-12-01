@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
  * 过期时间相关枚举
  *
  * @author zifangsky
- * @date 2018/8/18
  */
 public enum ExpireEnum {
 	/**
@@ -27,12 +26,12 @@ public enum ExpireEnum {
 	/**
 	 * 过期时间
 	 */
-	private int time;
+	private final int time;
 
 	/**
 	 * 时间单位
 	 */
-	private TimeUnit timeUnit;
+	private final TimeUnit timeUnit;
 
 	/**
 	 * 创建过期时间相关枚举

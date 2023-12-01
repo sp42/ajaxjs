@@ -1,7 +1,6 @@
 package com.ajaxjs.iam.server.controller;
 
 import com.ajaxjs.framework.spring.response.Result;
-import com.ajaxjs.iam.server.model.AccessToken;
 import com.ajaxjs.iam.server.model.JwtAccessToken;
 import org.springframework.web.bind.annotation.*;
 

@@ -15,15 +15,9 @@
  */
 package com.ajaxjs.web;
 
-import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import com.ajaxjs.net.http.Tools;
-import com.ajaxjs.util.cache.LRUCache;
-import com.ajaxjs.web.mvc.MvcRequest;
 
 /**
  * Servlet 辅助工具类

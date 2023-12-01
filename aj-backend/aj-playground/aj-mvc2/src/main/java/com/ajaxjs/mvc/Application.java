@@ -10,7 +10,4 @@ public class Application {
         // scan controllers
     }
 
-    public static void main(String[] args) {
-
-    }
 }

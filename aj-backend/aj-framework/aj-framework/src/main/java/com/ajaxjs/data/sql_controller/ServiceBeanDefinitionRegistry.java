@@ -1,6 +1,6 @@
 package com.ajaxjs.data.sql_controller;
 
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.*;
@@ -23,9 +23,8 @@ import java.util.Set;
  *
  * @author Frank Cheung sp42@qq.com
  */
+@Slf4j
 public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPostProcessor, ResourceLoaderAware {
-    private static final LogHelper LOGGER = LogHelper.getLog(ServiceBeanDefinitionRegistry.class);
-
     /**
      * 控制器所在的包
      */
@@ -47,7 +46,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
     }
 
     private void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry, String controllerPackage) {
-        LOGGER.info("扫描 SQL-Bind 控制器……" + controllerPackage);
+        log.info("扫描 SQL-Bind 控制器……" + controllerPackage);
         Set<Class<RestController>> scannerPackages = scannerPackages(controllerPackage);
 
         // 通过反射获取需要代理的接口的 clazz 列表
@@ -115,7 +114,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
                 }
             }
         } catch (ClassNotFoundException | IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         return set;

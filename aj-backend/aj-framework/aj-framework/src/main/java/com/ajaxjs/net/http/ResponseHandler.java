@@ -14,7 +14,6 @@ import com.ajaxjs.util.convert.EntityConvert;
 import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
-import com.ajaxjs.util.logger.LogHelper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -36,8 +35,6 @@ import java.util.zip.GZIPInputStream;
  */
 @Slf4j
 public abstract class ResponseHandler {
-    private static final LogHelper LOGGER = LogHelper.getLog(ResponseHandler.class);
-
     /**
      * 响应数据转换为文本
      *
@@ -74,12 +71,12 @@ public abstract class ResponseHandler {
 
             return file.toString();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         } finally {
             try {
                 resp.getIn().close();
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }
 
@@ -99,7 +96,7 @@ public abstract class ResponseHandler {
             try {
                 list = EntityConvert.json2MapList(resp.toString());
             } catch (Exception e) {
-                LOGGER.warning(e, "解析 JSON 时候发生异常");
+                log.warn("解析 JSON 时候发生异常", e);
             }
         } else {
             // TODO 列表如何返回错误信息？
@@ -131,7 +128,7 @@ public abstract class ResponseHandler {
             try {
                 map = EntityConvert.json2map(resp.toString());
             } catch (Exception e) {
-                LOGGER.warning(e, "解析 JSON 时候发生异常");
+                log.warn("解析 JSON 时候发生异常", e);
             }
         } else {
             if (resp.getEx() != null) {
@@ -157,7 +154,7 @@ public abstract class ResponseHandler {
             try {
                 map = MapTool.xmlToMap(resp.toString());
             } catch (Exception e) {
-                LOGGER.warning(e, "解析 XML 时候发生异常");
+                log.warn("解析 XML 时候发生异常", e);
             }
         } else {
             if (resp.getEx() != null) {
@@ -170,22 +167,36 @@ public abstract class ResponseHandler {
         return map;
     }
 
+    /**
+     * 将 ResponseEntity 响应对象转换为指定类型的对象
+     *
+     * @param resp ResponseEntity 响应对象
+     * @param clz  要转换为的类型
+     * @param <T>  转换后的类型
+     * @return 转换后的对象
+     */
     public static <T> T toBean(ResponseEntity resp, Class<T> clz) {
         return EntityConvert.map2Bean(toJson(resp), clz);
     }
 
     /**
+     * 判断是否为 GZip 格式的输入流并返回相应的输入流
      * 有些网站强制加入 Content-Encoding:gzip，而不管之前的是否有 GZip 的请求
+     *
+     * @param conn HTTP 连接
+     * @param in   输入流
+     * @return 如果Content-Encoding为gzip，则返回  GZIPInputStream 输入流，否则返回 null
      */
     public static InputStream gzip(HttpURLConnection conn, InputStream in) {
         if ("gzip".equals(conn.getHeaderField("Content-Encoding"))) {
             try {
                 return new GZIPInputStream(in);
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }
 
         return null;
     }
+
 }

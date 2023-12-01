@@ -3,7 +3,7 @@ package com.ajaxjs.data;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.XmlHelper;
 import com.ajaxjs.util.io.Resources;
-import com.ajaxjs.util.logger.LogHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -23,9 +23,8 @@ import java.util.regex.Pattern;
 /**
  * 类似 MyBatis 把 SQL 存储在 XML 中，这个是低配版
  */
+@Slf4j
 public class SmallMyBatis {
-    private static final LogHelper LOGGER = LogHelper.getLog(SmallMyBatis.class);
-
     /**
      * key=id/value=sql
      */
@@ -48,14 +47,14 @@ public class SmallMyBatis {
                         String id = XmlHelper.getNodeAttribute(node, "id");
 
                         if (sqls.containsKey(id))
-                            LOGGER.warning("已有相同 sqlId [{0}]", id);
+                            log.warn("已有相同 sqlId [{}]", id);
 
                         String sql = XmlHelper.getNodeText(node);
                         sqls.put(id, sql);
                     }
                 });
             } else
-                LOGGER.warning("找不到 {0}-XML 资源", xmlFile);
+                log.warn("找不到 {}-XML 资源", xmlFile);
         }
     }
 
@@ -70,7 +69,7 @@ public class SmallMyBatis {
         try {
             resources = new PathMatchingResourcePatternResolver().getResources(sqlLocations);// 扫描目录生成文件
         } catch (IOException e) {
-            LOGGER.warning("文件路径没有 xml", e);
+            log.warn("文件路径没有 xml", e);
         }
 
         if (ObjectUtils.isEmpty(resources))
@@ -160,7 +159,7 @@ public class SmallMyBatis {
         int start = 0, end = sql.indexOf("<forEach>", start);
 
         while (end != -1) {
-            result.append(sql.substring(start, end));
+            result.append(sql, start, end);
             int subStart = end + "<forEach>".length(), subEnd = sql.indexOf("</forEach>", subStart);
             String subSql = sql.substring(subStart, subEnd), varName = sql.substring(end + "<forEach>".length(), subStart - "</forEach>".length() - 1).trim();
             Object list = params.get(varName);

@@ -3,8 +3,8 @@ package com.ajaxjs.framework.spring.scheduled;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
-import com.ajaxjs.util.logger.LogHelper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -21,9 +21,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Data
+@Slf4j
 public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
-    private static final LogHelper LOGGER = LogHelper.getLog(ScheduleHandler.class);
-
     //-----------------Spring 内部处理-----------------------------
 
     private BeanFactory beanFactory;
@@ -58,7 +57,7 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
             registrar.setAccessible(true);
             scheduledTaskRegistrar = (ScheduledTaskRegistrar) registrar.get(scheduledProcessor);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 
@@ -76,7 +75,7 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
      * 初始化
      */
     public void init() {
-        LOGGER.info("初始化定时任务管理器");
+        log.info("初始化定时任务管理器");
         // 获取了所有被 @Scheduled 注解修饰的任务列表
         scheduledTasks = scheduledProcessor.getScheduledTasks();
 
@@ -118,7 +117,7 @@ public class ScheduleHandler implements InitializingBean, BeanFactoryAware {
                     JdbcConn.closeDb();
                 }
             } else if (task instanceof FixedRateTask)
-                LOGGER.info(task + "无法动态修改静态配置任务的状态、暂停/恢复任务，以及终止运行中任务");
+                log.info(task + "无法动态修改静态配置任务的状态、暂停/恢复任务，以及终止运行中任务");
         }
     }
 

@@ -3,14 +3,8 @@ package com.ajaxjs.framework.embeded_tomcat;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.Resources;
-import com.ajaxjs.util.logger.LogHelper;
-import org.apache.catalina.Context;
-import org.apache.catalina.Host;
-import org.apache.catalina.Lifecycle;
-import org.apache.catalina.LifecycleListener;
-import org.apache.catalina.Wrapper;
-import org.apache.catalina.WebResourceRoot;
-import org.apache.catalina.LifecycleException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.*;
 import org.apache.catalina.WebResourceRoot.ResourceSetType;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
@@ -40,9 +34,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 /**
  * Tomcat 的功能
  */
+@Slf4j
 public class TomcatStarter {
-    private static final LogHelper LOGGER = LogHelper.getLog(TomcatStarter.class);
-
     /**
      * 创建一个 TomcatStarter
      *
@@ -119,16 +112,16 @@ public class TomcatStarter {
         try {
             tomcat.start(); // tomcat 启动
         } catch (LifecycleException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             throw new RuntimeException(e);
         }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                LOGGER.info("关闭 Tomcat");
+                log.info("关闭 Tomcat");
                 tomcat.destroy();
             } catch (LifecycleException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }));
 
@@ -138,18 +131,18 @@ public class TomcatStarter {
 
         String tpl = "Web 服务启动完毕。Spring 耗时：%sms，总耗时：%sms 127.0.0.1:" + cfg.getPort() + cfg.getContextPath();
         tpl = String.format(tpl, springTime, System.currentTimeMillis() - startedTime);
-        LOGGER.info(tpl);
+        log.info(tpl);
 
         // 注册关闭端口以进行关闭
         // 可以通过Socket关闭tomcat： telnet 127.0.0.1 8005，输入SHUTDOWN字符串
 //        tomcat.getServer().setPort(cfg.getShutdownPort());
         tomcat.getServer().await(); // 保持主线程不退出，让其阻塞，不让当前线程结束，等待处理请求
-        LOGGER.info("正在关闭 Tomcat，shutdown......");
+        log.info("正在关闭 Tomcat，shutdown......");
 
         try {
             tomcat.stop();
         } catch (LifecycleException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         // 删除 tomcat 临时路径
@@ -330,7 +323,7 @@ public class TomcatStarter {
                         URL root = new URL(webXmlUrlString.substring(0, webXmlUrlString.length() - "WEB-INF/web.xml".length()));
                         resources.createWebResourceSet(ResourceSetType.RESOURCE_JAR, "/WEB-INF", root, "/WEB-INF");
                     } catch (MalformedURLException e) {
-                        LOGGER.warning(e);
+                        log.warn("ERROR>>", e);
                     }
                 }
             }
@@ -393,9 +386,9 @@ public class TomcatStarter {
             );
 
             cs.start();
-            LOGGER.info("成功启动 JMXConnectorServer");
+            log.info("成功启动 JMXConnectorServer");
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
     }
 

@@ -46,21 +46,17 @@ import java.util.function.Function;
  */
 @Slf4j
 public class MapTool {
-    // --------------------------------------------------------------------------------------------------
-    // -----------------------------------------------Map转换---------------------------------------------
-    // --------------------------------------------------------------------------------------------------
-
     /**
      * Map 转换为 String
      *
      * @param map Map 结构，Key 必须为 String 类型
      * @param div 分隔符
      * @param fn  对 Value 的处理函数，返回类型 T
+     * @param <T> Key 的类型
      * @return Map 序列化字符串
      */
     public static <T> String join(Map<String, T> map, String div, Function<T, String> fn) {
         String[] pairs = new String[map.size()];
-
         int i = 0;
 
         for (String key : map.keySet())
@@ -157,11 +153,12 @@ public class MapTool {
     }
 
     /**
-     * 判断 map 非空，然后根据 key 获取 value，若 value 非空则作为参数传入函数接口 s
+     * 判断 Map 非空，然后根据 key 获取 value，若 value 非空则作为参数传入函数接口
      *
-     * @param map 输入的map
+     * @param map 输入的 Map
      * @param key map的键
-     * @param s   如果过非空，那么接着要做什么？在这个回调函数中处理。传入的参数就是map.get(key)的值
+     * @param s   如果过非空，那么接着要做什么？在这个回调函数中处理。传入的参数就是 map.get(key)的值
+     * @param <T> 返回 value 的类型
      */
     public static <T> void getValue(Map<String, T> map, String key, Consumer<T> s) {
         if (map != null) {
@@ -177,6 +174,8 @@ public class MapTool {
      *
      * @param map 原始 Map，key 必须为 String 类型
      * @param fn  转换函数
+     * @param <K> Key 的类型
+     * @param <T> 返回 value 的类型
      * @return 转换后的 map
      */
     public static <T, K> Map<String, T> as(Map<String, K> map, Function<K, T> fn) {
@@ -187,17 +186,22 @@ public class MapTool {
     }
 
     /**
-     * 将给定的 map 转换为 Map<String, Object> 类型的结果
+     * 将给定的 map 转换为 Map&lt;String, Object&gt; 类型的结果
      *
      * @param map 要转换的 map，包含 String 和 String[] 类型的键值对
-     * @return 转换后的 Map<String, Object> 类型的结果
+     * @return 转换后的 Map&lt;String, Object&gt; 类型的结果
      */
     public static Map<String, Object> as(Map<String, String[]> map) {
         return as(map, arr -> ConvertBasicValue.toJavaValue(arr[0]));
     }
 
     /**
-     * Map 深复制操作
+     * 克隆一个 Map 到新的 Map 中， Map 深复制操作
+     *
+     * @param map 需要克隆的映射表
+     * @param <T> 键的类型
+     * @param <K> 值的类型
+     * @return 克隆后的映射表
      */
     public static <T, K> Map<T, K> deepCopy(Map<T, K> map) {
         Map<T, K> newMap = new HashMap<>();

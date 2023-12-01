@@ -28,7 +28,7 @@ import com.ajaxjs.util.ioc.ComponentMgr;
 import com.ajaxjs.util.logger.LogHelper;
 
 /**
- * A action = controller + methods
+ * Action = controller + methods
  *
  * @author sp42 frank@ajaxjs.com
  */

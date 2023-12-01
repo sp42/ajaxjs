@@ -27,57 +27,57 @@ public interface States {
     /**
      * 开始态
      */
-    public static final State BGN = new State(0, "解析开始");
+    State BGN = new State(0, "解析开始");
 
     /**
      * 数组值前态
      */
-    public static final State ARRBV = new State(1, "数组待值");
+    State ARRBV = new State(1, "数组待值");
 
     /**
      * 数组值后态
      */
-    public static final State ARRAV = new State(2, "数组得值", Operator.getMethod("arrav"));
+    State ARRAV = new State(2, "数组得值", Operator.getMethod("arrav"));
 
     /**
      * 对象键前态
      */
-    public static final State OBJBK = new State(3, "对象待键");
+    State OBJBK = new State(3, "对象待键");
 
     /**
      * 对象键后态
      */
-    public static final State OBJAK = new State(4, "对象得键", Operator.getMethod("objak"));
+    State OBJAK = new State(4, "对象得键", Operator.getMethod("objak"));
 
     /**
      * 对象值前态
      */
-    public static final State OBJBV = new State(5, "对象待值");
+    State OBJBV = new State(5, "对象待值");
 
     /**
      * 对象值后态
      */
-    public static final State OBJAV = new State(6, "对象得值", Operator.getMethod("objav"));
+    State OBJAV = new State(6, "对象得值", Operator.getMethod("objav"));
 
     /**
      * 结果态
      */
-    public static final State VAL = new State(7, "得最终值", Operator.getMethod("val"));
+    State VAL = new State(7, "得最终值", Operator.getMethod("val"));
 
     /**
      * 结束态
      */
-    public static final State EOF = new State(8, "解析结束");
+    State EOF = new State(8, "解析结束");
 
     /**
      * 错误态
      */
-    public static final State ERR = new State(9, "异常错误");
+    State ERR = new State(9, "异常错误");
 
     /**
      * 状态矩阵
      */
-    public static final State[][] states = {
+    State[][] states = {
             /*INPUT——    STR NUM DESC SPLIT ARRS OBJS ARRE OBJE FALSE TRUE NIL BGN*/
             /* BGN */  {VAL, VAL, ERR, ERR, ARRBV, OBJBK, ERR, ERR, VAL, VAL, VAL, BGN},
             /* ARRBV */{ARRAV, ARRAV, ERR, ERR, ARRBV, OBJBK, VAL, ERR, ARRAV, ARRAV, ARRAV, ERR},

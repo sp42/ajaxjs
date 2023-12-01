@@ -3,8 +3,8 @@ package com.ajaxjs.data;
 import com.ajaxjs.data.jdbc_helper.JdbcReader;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
-import com.ajaxjs.util.logger.LogHelper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.expression.LongValue;
@@ -21,9 +21,8 @@ import java.util.List;
  * @author Frank Cheung sp42@qq.com
  */
 @Data
+@Slf4j
 public class PageEnhancer {
-    private static final LogHelper LOGGER = LogHelper.getLog(PageEnhancer.class);
-
     /**
      * 统计总数的 SQL
      */
@@ -69,6 +68,13 @@ public class PageEnhancer {
             start = 0;
     }
 
+    /**
+     * 根据 HttpServletRequest 和字符串数组返回一个整数。
+     *
+     * @param req   请求对象
+     * @param maybe 字符串数组，包含可能的参数名
+     * @return 返回一个整数，如果参数存在且为整数，则返回对应的整数值；否则返回 null
+     */
     private static Integer get(HttpServletRequest req, String[] maybe) {
         for (String m : maybe) {
             if (req.getParameter(m) != null)
@@ -78,6 +84,12 @@ public class PageEnhancer {
         return null;
     }
 
+    /**
+     * 初始化分页器
+     *
+     * @param sql SQL语句
+     * @return 初始化后的分页器
+     */
     public PageEnhancer initSql(String sql) {
         getParams();
 
@@ -98,7 +110,7 @@ public class PageEnhancer {
         try {
             selectStatement = (Select) CCJSqlParserUtil.parse(sql);
         } catch (JSQLParserException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         }
 
         assert selectStatement != null;
@@ -115,7 +127,6 @@ public class PageEnhancer {
 
 //            pageSql = selectStatement.toString();
             pageSql = sql + " LIMIT " + start + ", " + limit;
-//			System.out.println(result.pageSql);
 
             // 移除 排序 语句
             if (sql.toUpperCase().contains("ORDER BY")) {
@@ -151,10 +162,10 @@ public class PageEnhancer {
                     limitObj.setOffset(new LongValue(start));
                     plainSelect.setLimit(limitObj);
 
-                    if (plainSelect.getFromItem() != null) {
+//                    if (plainSelect.getFromItem() != null) {
                         // modify the original table by adding an alias
 //						plainSelect.getFromItem().setAlias(new Table("original_table_alias"));
-                    }
+//                    }
                 }
             });
 
@@ -164,6 +175,12 @@ public class PageEnhancer {
         return this;
     }
 
+    /**
+     * 分页查询方法
+     *
+     * @param beanCls 实体类类型
+     * @return 分页结果
+     */
     @SuppressWarnings("unchecked")
     public <T> PageResult<T> page(Class<T> beanCls) {
         PageResult<T> result = new PageResult<>();
@@ -173,6 +190,8 @@ public class PageEnhancer {
         if (total != null && total > 0) {
             List<T> list;
 
+            // 如果 beanCls 为 null，则将查询结果作为 Map 列表返回
+            // 否则将查询结果转换为指定实体类的列表
             if (beanCls == null) list = (List<T>) jdbcReader.queryAsMapList(pageSql);
             else list = jdbcReader.queryAsBeanList(beanCls, pageSql);
 
@@ -190,6 +209,14 @@ public class PageEnhancer {
         return result;
     }
 
+    /**
+     * 分页方法
+     *
+     * @param sql     数据库查询语句
+     * @param beanClz 分页结果对应的实体类
+     * @param <T>     实体类类型
+     * @return 分页结果
+     */
     public static <T> PageResult<T> page(String sql, Class<T> beanClz) {
         PageEnhancer p = new PageEnhancer();
         p.initSql(sql);
@@ -197,9 +224,13 @@ public class PageEnhancer {
         return p.page(beanClz);
     }
 
-
     /**
+     * 将页码和每页数量转换为起始位置
      * pageSize 转换为 MySQL 的 start 分页
+     *
+     * @param pageNo 页码
+     * @param limit  每页数量
+     * @return 起始位置
      */
     public static int pageNo2start(int pageNo, int limit) {
         int start = (pageNo - 1) * limit;

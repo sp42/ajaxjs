@@ -34,7 +34,7 @@ public interface IamConstants {
      * 应用类型 1.html web应用；2.API service应用；3.Web APi混合应用；4.原生应用；5.其他应用
      */
     enum SystemAppType {
-        HTML, API_SERVICE, RPC_SERVICE, DESKTOP, NATIVE, MISC;
+        HTML, API_SERVICE, RPC_SERVICE, DESKTOP, NATIVE, MISC
     }
 
     /**
@@ -49,14 +49,14 @@ public interface IamConstants {
         /**
          * 页面元素，如按钮
          */
-        ELEMENT;
+        ELEMENT
     }
 
     /**
      * 权限类型
      */
     enum PermissionType {
-        FUNCTION, API;
+        FUNCTION, API
     }
 
     /**
