@@ -37,7 +37,7 @@ public class DecisionModel extends NodeModel {
 
     /**
      * 决策处理类，对于复杂的分支条件，可通过 handleLambda 来处理。 实现 lambda 需要根据执行对象做处理，并返回后置流转的 name
-     * Function<execution 执行对象,String 后置流转的 name>
+     * Function &lt;execution 执行对象, String 后置流转的 name&gt;
      */
     private Function<Execution, String> handleLambda;
 
@@ -107,6 +107,11 @@ public class DecisionModel extends NodeModel {
             throw new WfException(exec.getOrder().getId() + "->decision 节点无法确定下一步执行路线");
     }
 
+    /**
+     * 设置 handleClass 属性
+     *
+     * @param handleClass handleClass 属性值
+     */
     public void setHandleClass(String handleClass) {
         this.handleClass = handleClass;
 

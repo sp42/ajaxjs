@@ -14,6 +14,12 @@ import java.util.regex.Pattern;
  * @author sp42@qq.com
  */
 public class WfUtils {
+    /**
+     * 将 Object 类型的数组转换为 Long 类型的数组
+     *
+     * @param arr 原始的 Object 类型的数组
+     * @return 转换后的 Long 类型的数组
+     */
     public static Long[] cast(Object[] arr) {
         Long[] ids = new Long[arr.length];
         int i = 0;
@@ -22,9 +28,15 @@ public class WfUtils {
             ids[i++] = Long.parseLong(s.toString());
 
         return ids;
-
     }
 
+
+    /**
+     * 将数组中的元素以逗号连接起来并返回结果
+     *
+     * @param arr 要连接的数组对象
+     * @return 连接后的字符串结果
+     */
     public static String join(Object[] arr) {
         StringBuilder sb = new StringBuilder();
         for (Object o : arr)
@@ -34,6 +46,7 @@ public class WfUtils {
 
         return str.substring(0, str.length() - 1);
     }
+
 
     /**
      * 默认的流程实例编号生成器 编号生成规则为:yyyyMMdd-HH:mm:ss-SSS-random
@@ -47,6 +60,12 @@ public class WfUtils {
 
     private static final Pattern pattern = Pattern.compile("[0-9]*");
 
+    /**
+     * 判断给定的字符串是否是数字
+     *
+     * @param str 字符串
+     * @return 是否是数字
+     */
     public static boolean isNumeric(String str) {
         return pattern.matcher(str).matches();
     }
@@ -106,7 +125,7 @@ public class WfUtils {
      * @param array   the array to add the element to, may be <code>null</code>
      * @param index   the position of the new object
      * @param element the object to add
-     * @param clz    the type of the element being added
+     * @param clz     the type of the element being added
      * @return A new array containing the existing elements and the new element
      */
     private static Object add(Object array, int index, Object element, Class<?> clz) {
