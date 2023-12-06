@@ -4,23 +4,23 @@ import { dateFormat } from '../../util/utils';
 export default {
     afterDelete(cb?: Function): Function {
         return function (j: RepsonseResult) {
-            if (j.isOk) {
+            if (j.status) {
                 cb && cb(j);
                 this.$Message.success('删除成功');
             }
             else
-                this.$Message.info('删除失败。' + j.msg);
+                this.$Message.info('删除失败。' + j.message);
         }
     },
 
     delInfo(index: number) {
         xhr_del(`${this.API}/${this.list.data[index].id}`, (j: RepsonseResult) => {
-            if (j.isOk) {
+            if (j.status) {
                 this.list.data.splice(index, 1);
                 this.list.total--;
                 this.$Message.success('删除成功');
             } else
-                this.$Message.info('删除失败。' + j.msg);
+                this.$Message.info('删除失败。' + j.message);
         });
     },
 

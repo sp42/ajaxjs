@@ -44,7 +44,7 @@ export default {
                     this.$refs.FromRenderer.data = j;
                     this.$refs.FromRenderer.$forceUpdate();
                 } else {
-                    let r: any = j.result;
+                    let r: any = j.data;
 
                     if (r) {
                         this.$refs.FromRenderer.data = r;

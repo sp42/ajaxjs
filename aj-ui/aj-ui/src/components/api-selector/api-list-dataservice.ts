@@ -17,8 +17,8 @@ export default {
                 let DataServiceTreeData: any[] = [];
                 // let i: number = 0;
 
-                if (j.result) {
-                    j.result.forEach((item: any) => {
+                if (j.data) {
+                    j.data.forEach((item: any) => {
                         DataServiceTreeData.push({
                             title: '数据源：' + item.name,
                             loading: false,
@@ -41,12 +41,12 @@ export default {
             let datasourceId: number = item.datasourceId;
 
             xhr_get(`${this.API}/data_service?datasourceId=${datasourceId}`, (j: RepsonseResult) => {
-                if (j.result) {
-                    this.list = j.result;
+                if (j.status) {
+                    this.list = j.data;
                     let data: any[] = [];
                     let i: number = 0;
 
-                    j.result.forEach((item: any) => {
+                    j.data.forEach((item: any) => {
                         let children: any[] = [];
                         let urlDir: string = item.urlDir; // 配置目录
 

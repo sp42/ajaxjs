@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { xhr_get, xhr_del } from "../../util/xhr";
+import { xhr_get } from "../../util/xhr";
 
 export default {
   props: {},
@@ -53,13 +53,10 @@ export default {
     };
   },
   mounted() {
-    xhr_get(
-      "http://127.0.0.1:8080/cms/api/ApiHelper/env/list",
-      (j: RepsonseResult) => {
-        let r: any = j.result;
-        if (r) {
-          this.envs = r;
-        } else this.$Message.warning(j.msg);
+    xhr_get("http://127.0.0.1:8080/cms/api/ApiHelper/env/list", (j: RepsonseResult) => {
+        if (j.status) 
+          this.envs = j.data;
+        else this.$Message.warning(j.message);
       }
     );
   },
@@ -88,8 +85,8 @@ export default {
      */
     del(id: number, e: Event): void {
       e.stopPropagation();
-
       let index: number;
+      
       for (let i = 0; i < this.envs.length; i++) {
         let env: API_HELPER_ENV = this.envs[i];
 

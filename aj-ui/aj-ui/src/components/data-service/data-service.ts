@@ -75,7 +75,7 @@ export default {
         },
         getData(): void {
             const url: string = this.isEmbed ? this.API : `${this.API}?datasourceId=${this.datasource.id}`;
-            
+
             xhr_get(url, getPageList(this, this.list), {
                 start: this.list.start,
                 limit: this.list.limit
@@ -106,12 +106,12 @@ export default {
                 Object.assign(param, { datasourceId: this.datasource.id });
 
             xhr_post(this.API, (j: RepsonseResult) => {
-                if (j.isOk) {
+                if (j.status) {
                     this.$Message.success('创建成功');
                     this.getData();
                     this.$refs.selectTable.close();
                 } else
-                    this.$Message.error('创建失败，原因：' + j.msg);
+                    this.$Message.error('创建失败，原因：' + j.message);
             }, param);
         },
         handleDelete(index: number): void {
@@ -135,10 +135,10 @@ export default {
          */
         refreshServerSide(): void {
             xhr_get(`${this.API}/reload`, (j: RepsonseResult) => {
-                if (j.isOk)
-                    this.$Message.success(j.msg);
+                if (j.status)
+                    this.$Message.success(j.message);
                 else
-                    this.$Message.error('刷新失败，原因：' + j.msg);
+                    this.$Message.error('刷新失败，原因：' + j.message);
             });
         }
     },

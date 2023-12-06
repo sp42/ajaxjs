@@ -181,42 +181,42 @@ export default {
                 obj.parentId = this.$refs.selectParent.selectId;
 
                 xhr_put(`${this.api.update}`, (j: RepsonseResult) => {
-                    if (j.isOk) {
+                    if (j.status) {
                         this.getData()
-                        this.$Message.success(j.msg)
+                        this.$Message.success(j.message)
                     } else
-                        this.$Message.error(j.msg || '修改失败');
+                        this.$Message.error(j.message || '修改失败');
                 }, obj);
             } else if (this.isCreateTop) {
                 this.edit.row.parentId = 0;
 
                 xhr_post(`${this.api.create}`, (j: RepsonseResult) => {
-                    if (j.isOk) {
+                    if (j.status) {
                         this.getData()
-                        this.$Message.success(j.msg)
+                        this.$Message.success(j.message)
                     } else
-                        this.$Message.error(j.msg || '创建失败');
+                        this.$Message.error(j.message || '创建失败');
                 }, this.edit.row);
             } else {
                 let obj: any = Object.assign({}, this.edit.row);
                 obj.parentId = this.$refs.selectParent.selectId;
 
                 xhr_post(`${this.api.create}`, (j: RepsonseResult) => {
-                    if (j.isOk) {
+                    if (j.status) {
                         this.getData()
-                        this.$Message.success(j.msg)
+                        this.$Message.success(j.message)
                     } else
-                        this.$Message.error(j.msg || '创建失败');
+                        this.$Message.error(j.message || '创建失败');
                 }, obj);
             }
         },
         delTreeNode({ id }) {
             xhr_del(`${this.api.delete}`, (j: RepsonseResult) => {
-                if (j.isOk) {
+                if (j.status) {
                     this.getData()
-                    this.$Message.success(j.msg)
+                    this.$Message.success(j.message)
                 } else
-                    this.$Message.error(j.msg || '创建失败');
+                    this.$Message.error(j.message || '创建失败');
             }, { id: id });
         },
         delAllTreeNode() { alert(9) },

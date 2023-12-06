@@ -160,8 +160,8 @@ export default {
         xhr_get(
           this.$parent.$parent.API + "/getDatabases",
           (j: RepsonseResult) => {
-            if (j.result) {
-              this.databaseList = j.result;
+            if (j.status) {
+              this.databaseList = j.data;
             } else this.$Message.warning("获取数据库名失败");
           },
           { datasourceId: this.dsid }

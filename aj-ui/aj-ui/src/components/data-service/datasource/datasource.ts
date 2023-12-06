@@ -109,16 +109,16 @@ export default {
                         this.form.data.stat = 1; // 创建状态总是可用的
 
                         xhr_post(this.API, (j: RepsonseResult) => {
-                            if (j.isOk) {
+                            if (j.status) {
                                 this.$Message.success('创建成功');
                                 this.getData();
-                            } else this.$Message.info('创建失败。原因：' + j.msg);
+                            } else this.$Message.info('创建失败。原因：' + j.message);
 
                             this.form.isShow = this.form.isLoading = false;
                         }, this.form.data);
                     } else {  // 修改
                         xhr_put(`${this.API}/${this.form.data.id}`, (j: RepsonseResult) => {
-                            if (j.isOk) {
+                            if (j.status) {
                                 this.$Message.success('修改成功');
 
                                 let updateIndex: number;
@@ -130,7 +130,7 @@ export default {
                                 });
 
                                 Object.assign(this.list.data[updateIndex], this.form.data);
-                            } else this.$Message.info('修改失败。原因：' + j.msg);
+                            } else this.$Message.info('修改失败。原因：' + j.message);
 
                             this.form.isShow = this.form.isLoading = false;
                         },

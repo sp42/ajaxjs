@@ -39,13 +39,13 @@ export default {
             let cfg: FormFactory_Config = this.cfg, api: DataBinding;
 
             let callback = (j: RepsonseResult) => {
-                if (j.isOk) {
-                    this.$Message.success(j.msg);
+                if (j.status) {
+                    this.$Message.success(j.message);
                     setTimeout(() => {
                         location.hash = location.hash + '&entityId=' + j.newlyId;
                     }, 2000);
                 } else
-                    this.$Message.error(j.msg || '创建失败，原因未知！');
+                    this.$Message.error(j.message || '创建失败，原因未知！');
             };
 
             if (cfg.isRESTful_writeApi) {
@@ -95,10 +95,10 @@ export default {
                 let r: ManagedRequest = this._initParams(api, this.$refs.FromRenderer.data, this);
 
                 xhr_put(r.url, (j: RepsonseResult) => {
-                    if (j.isOk)
-                        this.$Message.success(j.msg);
+                    if (j.status)
+                        this.$Message.success(j.message);
                     else
-                        this.$Message.error(j.msg || '更新失败，原因未知！');
+                        this.$Message.error(j.message || '更新失败，原因未知！');
                 }, r.params);
             }
         },
