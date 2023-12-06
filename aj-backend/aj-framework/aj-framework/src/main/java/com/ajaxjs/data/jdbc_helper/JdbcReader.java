@@ -233,9 +233,9 @@ public class JdbcReader extends JdbcConn {
                     try {
                         value = ConvertBasicValue.basicConvert(_value, propertyType);
                     } catch (NumberFormatException e) {
-//                        String input = (value == null ? " 空值 " : value.getClass().toString());
+//                        String input = value.getClass().toString();
 //                        String expect = property.getPropertyType().toString();
-//                        LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, value, input, expect);
+//                        LOGGER.warning(e, "保存数据到 bean 的 {0} 字段时，转换失败，输入值：{1}，输入类型 ：{2}， 期待类型：{3}", key, "", "", expect);
                         continue; // 转换失败，继续下一个字段
                     }
 //					}

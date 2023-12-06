@@ -47,18 +47,18 @@ export default {
                 valueObj.id = this.id;
 
                 xhr_put(this.API, (j: RepsonseResult) => {
-                    if (j.isOk)
+                    if (j.status)
                         this.$Message.success('修改成功');
                     else
-                        this.$Message.warning(j.msg);
+                        this.$Message.warning(j.message);
                 }, valueObj);
             } else
                 xhr_post(this.API, (j: RepsonseResult) => {
-                    if (j.isOk) {
+                    if (j.status) {
                         this.$Message.success('创建成功');
                         setTimeout(() => this.id = j.newlyId, 800);
                     } else
-                        this.$Message.warning(j.msg);
+                        this.$Message.warning(j.message);
                 }, valueObj);
         }
     },

@@ -102,10 +102,6 @@ export default {
     },
   },
 };
-
-var oReq = new XMLHttpRequest();
-oReq.open("GET", "https://www.qq.com/");
-oReq.send();
 </script>
 
 <style>

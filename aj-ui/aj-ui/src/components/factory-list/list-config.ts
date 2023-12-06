@@ -62,6 +62,7 @@ export default {
          */
         getFormConfig(): string {
             let cfg: ListFactory_ListConfig = this.listCfg;
+            
             if (cfg.bindingForm && cfg.bindingForm.id)
                 return (cfg.bindingForm.name || "") + "#" + cfg.bindingForm.id;
             else return "未绑定";

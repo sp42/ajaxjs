@@ -49,16 +49,20 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
 
     @Override
     protected boolean supports(Class<?> clazz /* 控制器方法的参数 */) {
+        // 判断是否是容器类型，包括 Map、List、IBaseModel 或者 Result 类型
         boolean isContainerType = Map.class.isAssignableFrom(clazz) || List.class.isAssignableFrom(clazz) || IBaseModel.class.isAssignableFrom(clazz) || clazz == Result.class;
 
+        // 如果是容器类型，则返回 true
         if (isContainerType) // 优化：出现频率较高，放在前面
             return true;
 
+        // 判断是否是布尔类型或者整数类型，包括 Boolean、boolean、Integer、int、Long、long 类型
         boolean isBolType = clazz == Boolean.class || clazz == boolean.class;
         boolean isIntType = clazz == Integer.class || clazz == int.class;
         boolean isLongType = clazz == Long.class || clazz == long.class;
         boolean isString = clazz == String.class;
 
+        // 返回是否是布尔类型、整数类型、字符串类型中的一种
         return isBolType || isIntType || isLongType || isString;
     }
 
@@ -89,7 +93,6 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
                     throw new IllegalArgumentException("提交了空的字符串");
 
                 str = WebHelper.uriDecode(str);
-
                 Map<String, Object> parseMap = MapTool.toMap(str.split("&"), null);
 
                 return EntityConvert.map2Bean(parseMap, clazz, true);

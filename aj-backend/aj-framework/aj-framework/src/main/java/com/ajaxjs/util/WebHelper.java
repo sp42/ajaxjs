@@ -192,21 +192,21 @@ public class WebHelper {
      *
      * @param req 请求对象
      */
-    public static Map<String, Object> getParameterMap(HttpServletRequest req) {
-        Map<String, Object> map;
-        Map<String, String[]> parameterMap = req.getParameterMap();
-
-        if (parameterMap.size() > 0) {
-            // 德金的可以
-//			map = MapTool.as(parameterMap, arr -> MappingValue.toJavaValue(arr[0]));
-            map = MapTool.as(parameterMap);
-        } else {
-            // 旧的方式
-            return getPutRequestData(req);
-        }
-
-        return map;
-    }
+//    public static Map<String, Object> getParameterMap(HttpServletRequest req) {
+//        Map<String, Object> map;
+//        Map<String, String[]> parameterMap = req.getParameterMap();
+//
+//        if (parameterMap.size() > 0) {
+//            // 德金的可以
+////			map = MapTool.as(parameterMap, arr -> MappingValue.toJavaValue(arr[0]));
+//            map = MapTool.as(parameterMap);
+//        } else {
+//            // 旧的方式
+//            return getPutRequestData(req);
+//        }
+//
+//        return map;
+//    }
 
     public static String getRawBody(HttpServletRequest req) {
         try (InputStream in = req.getInputStream()) {
@@ -249,27 +249,27 @@ public class WebHelper {
      *
      * @return 参数、值集合
      */
-    public static Map<String, Object> getPutRequestData(HttpServletRequest req) {
-        try (InputStream in = req.getInputStream()) {
-            String params = StreamHelper.byteStream2string(in);
-
-            return MapTool.toMap(params.split("&"), v -> ConvertBasicValue.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public static Map<String, Object> getPutRequestData(HttpServletRequest req) {
+//        try (InputStream in = req.getInputStream()) {
+//            String params = StreamHelper.byteStream2string(in);
+//
+//            return MapTool.toMap(params.split("&"), v -> ConvertBasicValue.toJavaValue(StringUtils.uriDecode(v, StandardCharsets.UTF_8)));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     /**
      * 支持自动获取请求参数并封装到 Bean 内
      */
-    public static <T> T getParameterBean(HttpServletRequest req, Class<T> clz) {
-        /*
-         * 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的， 要求的是 string 因为 map 从 request
-         * 所以最后一个参数为 true
-         */
-        return EntityConvert.map2Bean(getParameterMap(req), clz, true);
-    }
+//    public static <T> T getParameterBean(HttpServletRequest req, Class<T> clz) {
+//        /*
+//         * 抛出 IllegalArgumentException 这个异常 有可能是参数类型不一致造成的， 要求的是 string 因为 map 从 request
+//         * 所以最后一个参数为 true
+//         */
+//        return EntityConvert.map2Bean(getParameterMap(req), clz, true);
+//    }
 
     /**
      * 提示 HTML 模板

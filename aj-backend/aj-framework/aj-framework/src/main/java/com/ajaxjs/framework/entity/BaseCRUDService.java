@@ -1,10 +1,12 @@
 package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.DataUtils;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public abstract class BaseCRUDService implements BaseCRUDController {
     public final Map<String, BaseCRUD<?, Long>> namespaces = new HashMap<>();
 
@@ -45,18 +48,31 @@ public abstract class BaseCRUDService implements BaseCRUDController {
 
     @Override
     public Long create(String namespace, Map<String, Object> params) {
-        if (!namespaces.containsKey(namespace))
-            throw new BusinessException("没有配置 BaseCRUD");
+        params = init(namespace, params);
 
         return namespaces.get(namespace).create(params);
     }
 
     @Override
     public Boolean update(String namespace, Map<String, Object> params) {
+        params = init(namespace, params);
+
+        return namespaces.get(namespace).update(params);
+    }
+
+    @Override
+    public Boolean updatePut(String namespace, Map<String, Object> params) {
+        return update(namespace, params);
+    }
+
+    private Map<String, Object> init(String namespace, Map<String, Object> params) {
         if (!namespaces.containsKey(namespace))
             throw new BusinessException("没有配置 BaseCRUD");
 
-        return namespaces.get(namespace).update(params);
+        Map<String, Object> _params = new HashMap<>();
+        params.forEach((key, value) -> _params.put(DataUtils.changeFieldToColumnName(key), value));
+
+        return _params;
     }
 
     @Override

@@ -1,7 +1,7 @@
-package com.ajaxjs.base.service;
+package com.ajaxjs.iam.server.service;
 
-import com.ajaxjs.base.controller.CommonApiController;
 import com.ajaxjs.framework.entity.BaseCRUDService;
+import com.ajaxjs.iam.server.controller.CommonApiController;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

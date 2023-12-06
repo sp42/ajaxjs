@@ -7,6 +7,9 @@ import Config from '../data-service/all-dml';
 import ConfigTable from '../widget/config-table.vue';
 import InfoMixins from '../widget/factory-info-common';
 
+/**
+ * 内页
+ */
 export default {
     components: { ListRenderer, ConfigTable, ConfigPanel, MoreAttrib },
     mixins: [InfoMixins],
@@ -77,7 +80,8 @@ export default {
                 datasourceId: this.datasourceId,
                 datasourceName: this.datasourceName,
                 tableName: this.tableName,
-                listCfg: JSON.stringify(this.cfg, null, 1)
+                type: 'LIST',
+                config: JSON.stringify(this.cfg, null, 1)
             });
         },
 
@@ -161,8 +165,6 @@ export default {
             });
 
             this.$refs.renderer.getData(); // 手动加载数据
-        },
-
-
-    },
+        }
+    }
 }

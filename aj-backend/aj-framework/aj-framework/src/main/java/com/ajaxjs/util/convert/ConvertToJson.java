@@ -5,6 +5,7 @@ import com.ajaxjs.framework.IBaseModel;
 import com.ajaxjs.util.DateUtil;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
@@ -41,6 +42,8 @@ public class ConvertToJson {
             return '\"' + jsonStringConvert((String) obj) + '\"';
         else if (obj instanceof Date)
             return '\"' + DateUtil.simpleDateFormatFactory(DateUtil.DATE_FORMAT).format((Date) obj) + '\"';
+        else if (obj instanceof LocalDateTime)  /* 新版 MySQL Driver 返回 LocalDateTime 类型 */
+            return '\"' + ((LocalDateTime) obj).format(java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME) + '\"';
         else if (obj instanceof BaseModel || obj instanceof IBaseModel)
             return EntityConvert.beanToJson(obj);
         else if (obj instanceof Map)

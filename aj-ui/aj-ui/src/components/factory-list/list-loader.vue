@@ -34,9 +34,8 @@ export default {
       let dummyData = ListFactoryCode.data.call(dummyProps);
       dummyData.id = this.id || Number(this.$route.query.id);
       Object.assign(this, dummyData);
-      ListFactoryCode.methods.getData.call(this, () =>
-        ListFactoryCode.methods.doRenderer.call(this)
-      ); // 加载元数据之后转换为 iview 配置
+      
+      ListFactoryCode.methods.getData.call(this, () => ListFactoryCode.methods.doRenderer.call(this)); // 加载元数据之后转换为 iview 配置
     },
   },
   watch: {

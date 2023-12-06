@@ -1,14 +1,15 @@
 <template>
   <div class="main">
-    <Menu :theme="theme2" style="float: left;">
-
-      <Submenu name="1">
+   <!--  <h3>{{SHOW_MOUDLE.title}}</h3> -->
+    <Menu style="float: left;" :open-names="[SHOW_MOUDLE.expandMenu]" v-if="SHOW_MOUDLE">
+      <h3>{{SHOW_MOUDLE.title}}</h3>
+      <Submenu name="1" v-if="SHOW_MOUDLE.portal">
         <template slot="title">网站管理</template>
         <MenuItem name="1-1" @click.native="load='WebsiteConfig'">站点管理</MenuItem>
         <MenuItem name="1-2" @click.native="load='OrgIndex'">栏目管理</MenuItem>
       </Submenu>
 
-      <Submenu name="2">
+      <Submenu name="2" v-if="SHOW_MOUDLE.portal">
         <template slot="title">内容管理</template>
         <MenuItem name="2-1" @click.native="showList(103, '图文')">图文列表</MenuItem>
         <MenuItem name="8-5" @click.native="routeTo('list?id=103&title=图文')">CMS 图文</MenuItem>
@@ -16,20 +17,26 @@
         <MenuItem name="2-3" @click.native="load='TagMgr'">标签/点赞/收藏管理</MenuItem>
       </Submenu>
 
-      <Submenu name="3">
+    <!--   <Submenu name="3">
         <template slot="title">商城管理</template>
         <MenuItem name="3-1" @click.native="load='UserListIndex'">商品管理</MenuItem>
         <MenuItem name="3-2" @click.native="load='OrgIndex'">订单管理</MenuItem>
-      </Submenu>
+      </Submenu> -->
 
-      <Submenu name="4">
+      <Submenu name="4" v-if="SHOW_MOUDLE.user">
         <template slot="title">用户组织管理</template>
         <MenuItem name="4-1" @click.native="load='UserListIndex'">用户列表管理</MenuItem>
         <MenuItem name="4-2" @click.native="load='OrgIndex'">组织机构管理</MenuItem>
         <MenuItem name="4-3" @click.native="load='RBAC'">权限管理</MenuItem>
       </Submenu>
+      <Submenu name="4-2" v-if="SHOW_MOUDLE.user">
+        <template slot="title">登录管理</template>
+        <MenuItem name="4-1" @click.native="load='UserListIndex'">用户列表管理</MenuItem>
+        <MenuItem name="4-2" @click.native="load='OrgIndex'">组织机构管理</MenuItem>
+        <MenuItem name="4-3" @click.native="load='RBAC'">权限管理</MenuItem>
+      </Submenu>
 
-      <Submenu name="5">
+      <Submenu name="5" v-if="SHOW_MOUDLE.system">
         <template slot="title">系统管理</template>
         <MenuItem name="5-1" @click.native="load='DataDict'">数据字典</MenuItem>
         <MenuItem name="5-2" @click.native="showList(125)">操作日志</MenuItem>
@@ -37,7 +44,7 @@
         <MenuItem name="5-4" @click.native="load='DeveloperTools'">开发者工具</MenuItem>
       </Submenu>
 
-      <Submenu name="6">
+      <Submenu name="6" v-if="SHOW_MOUDLE.model">
         <template slot="title">业务建模</template>
         <MenuItem name="6-1" @click.native="load='DataSource'">数据源</MenuItem>
         <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem>
@@ -67,7 +74,6 @@
       <OrgIndex v-if="load == 'OrgIndex'" />
       <ApiHelper v-if="load == 'api-helper'" />
       <DataServiceIndex v-if="load == 'DataServiceIndex'" />
-
     </div>
   </div>
 </template>
@@ -87,14 +93,58 @@ import OrgIndex from '../components/admin-page/user/org/index.vue';
 import WebsiteConfig from '../components/admin-page/website/config.vue';
 import ApiHelper from '../components/api-helper/api-helper.vue';
 
+let SHOW_MOUDLE; // 显示的模块
+
+function getQueryString() {
+  var url = new URL(window.location.href);
+  // 创建 URLSearchParams 对象
+  var params = new URLSearchParams(url.search);
+
+  switch(params.get('m')) {
+    case 'portal':
+      SHOW_MOUDLE = {
+        portal: true, title: '门户管理'
+      };
+      break;
+    case 'model':
+      SHOW_MOUDLE = {
+        model: true, title: '业务建模', expandMenu: '6', load: 'DataSource'
+      };
+      break;
+    case 'user':
+      SHOW_MOUDLE = {
+        user: true, title: 'AJ-IAM 管理后台', expandMenu: '4', load: 'UserListIndex'
+      };
+      break;
+  }
+}
+
+getQueryString();
+
 export default {
   components: { DataServiceIndex, DataSource, DataService,  FactoryList, FactoryListLoader,  ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
-      load: 'ModelMgr',
+      load: SHOW_MOUDLE.load,
       apiRoot: window.config.dsApiRoot,
-      theme2: 'light',
-      listId: 0
+      listId: 0,
+      SHOW_MOUDLE: SHOW_MOUDLE
+    }
+  },
+  mounted(){
+    let menu = document.querySelector('.ivu-menu.ivu-menu-vertical');
+    
+    if (menu) {
+      let style = '';
+      
+      if (this.SHOW_MOUDLE.portal)
+        style = 'portal';
+      else if (this.SHOW_MOUDLE.model)
+        style = 'model';
+      else if (this.SHOW_MOUDLE.user)
+        style = 'user';
+
+      menu.classList.add(style);
     }
   },
   methods: {
@@ -113,17 +163,52 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+h3{
+  padding:30px 22px;
+  box-sizing: border-box;
+  color:#2f518c;
+  width:240px; 
+  border-right:1px solid lightgray;
+  font-size: 1.3em;font-weight:bold;
+  letter-spacing: 1px;
+  height: 9%;
+}
+</style>
 
+<style>
 .home h2,
 .home p {
   max-width: 800px;
   margin: 10px auto;
 }
 
-html, body, .main, .main > .ivu-menu {
+html, body, .main,.main > .ivu-menu {
   height: 100%;
 }
 
+.ivu-menu-submenu-title {
+  border-top: 1px solid #eee;
+}
 
+.ivu-menu.ivu-menu-vertical.user {
+  background: url(~@/assets/user.png) no-repeat 110px bottom;
+  background-size: 72%;
+}
+
+.ivu-menu.ivu-menu-vertical.portal {
+  background: url(~@/assets/portal.jpg) no-repeat 100px bottom;
+  background-size: 92%;
+}
+
+.ivu-menu.ivu-menu-vertical.model {
+  background: url(~@/assets/model.jpg) no-repeat 100px bottom;
+  background-size: 68%;
+}
+
+/* 分页控件有点问题，修改下 */
+.ivu-mt.ivu-text-right {
+  text-align: right;
+  margin-top: 20px;
+}
 </style>

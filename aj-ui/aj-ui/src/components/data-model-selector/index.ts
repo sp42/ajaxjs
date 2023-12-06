@@ -1,5 +1,4 @@
 import { xhr_get } from '../../util/xhr';
-import { getCookie } from '../../util/cookies';
 
 export default {
     props: {
@@ -55,14 +54,14 @@ export default {
          * 获取表
          */
         getTables(): void {
-            let url: string = `${this.API}/${this.datasource.id}/getAllTables`;
+            let url: string = `${this.API}/${this.datasource.id}/all_tables_comment`;
 
             if (this.database.isShow)
                 url += '?dbName=' + this.database.name;
 
             xhr_get(url, (j: RepsonseResult) => {
-                if (j.result) {
-                    let arr: any[] = j.result as any[];
+                if (j.status) {
+                    let arr: any[] = j.data as any[];
                     arr.sort(sortFn);
 
                     this.tables = arr;
@@ -77,14 +76,14 @@ export default {
          * 获取字段
          */
         getFields(): void {
-            let url: string = `${this.API}/${this.datasource.id}/getFields/${this.selectedTableName}`;
+            let url: string = `${this.API}/${this.datasource.id}/table_all_column/${this.selectedTableName}`;
 
             if (this.database.isShow)
                 url += '?dbName=' + this.database.name;
 
             xhr_get(url, (j: RepsonseResult) => {
-                if (j.result) {
-                    let arr: any[] = j.result as any[];
+                if (j.status) {
+                    let arr: any[] = j.data as any[];
                     arr.sort(sortFn);
 
                     this.fields = arr.map((item: CheckableDataBaseColumnMeta) => {
@@ -130,8 +129,8 @@ export default {
         },
         getDatabase(id: number): void {
             xhr_get(this.API + '/../data_service/getDatabases', (j: RepsonseResult) => {
-                if (j.result) {
-                    this.database.list = j.result;
+                if (j.status) {
+                    this.database.list = j.data;
                     this.database.name = this.database.list[0]; // 默认显示第一个数据库的
                 } else
                     this.$Message.warning('获取数据库名失败');
@@ -140,7 +139,7 @@ export default {
     },
     watch: {
         'datasource.id'(v: number): void {
-            // this.getTables(); // 会重复执行，没有 库名 FIXME
+            this.getTables(); // 会重复执行，没有 库名 FIXME
 
             // 为了获取 getDatasourceName
             this.datasource.list.forEach((item: any) => {
@@ -167,6 +166,7 @@ export default {
 const sortFn = (a: any, b: any) => {
     if (a.tableName > b.tableName)
         return 1;
+
     if (a.tableName < b.tableName)
         return -1;
 

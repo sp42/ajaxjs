@@ -50,6 +50,7 @@
   white-space: nowrap;
   vertical-align: middle;
 }
+
 .box {
   width: 400px;
   height: 400px;
@@ -78,6 +79,7 @@
     background-color: #f0f0f0;
   }
 }
+
 .box.odd {
   li:nth-child(odd) {
     background-color: #f0f0f0;

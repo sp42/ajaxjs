@@ -1,10 +1,7 @@
 package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.framework.PageResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -41,11 +38,14 @@ public interface BaseCRUDController {
     @GetMapping("/{namespace}/page")
     PageResult<Map<String, Object>> page(@PathVariable String namespace);
 
-    @PostMapping("/{namespace}/create")
+    @PostMapping("/{namespace}")
     Long create(@PathVariable String namespace, @RequestParam Map<String, Object> params);
 
     @PostMapping("/{namespace}/update")
     Boolean update(@PathVariable String namespace, @RequestParam Map<String, Object> params);
+
+    @PutMapping("/{namespace}")
+    Boolean updatePut(@PathVariable String namespace, @RequestParam Map<String, Object> params);
 
     @PostMapping("/{namespace}/delete/{id}")
     Boolean delete(@PathVariable String namespace, @PathVariable Long id);

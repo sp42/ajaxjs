@@ -3,6 +3,10 @@ import FormLoaderMethod from '../factory-form/loader';
 import { xhr_get, xhr_del } from '../../util/xhr';
 import { prepareRequest } from '../widget/data-binding';
 
+/**
+ * 列表渲染器
+ * 调用器
+ */
 export default {
     components: { FromRenderer },
     props: {
@@ -44,22 +48,17 @@ export default {
                 params.where = `name LIKE '%${this.list.search.name}%'`;
 
             let listCfg: ListFactory_ListConfig = this.cfg;
-
             let r: ManagedRequest = prepareRequest(listCfg.dataBinding, params, this);
-
             this.list.data = []; // 清空数据
-            xhr_get(r.url, (j: RepsonseResult) => {
-                this.list.loading = false;
-                let r: any = j.result;
 
-                if (j.isOk) {
-                    this.list.data = r;
-                    // @ts-ignore
-                    this.list.total = j.total;
-                } else this.$Message.warning(j.msg);
-            },
-                r.params
-            );
+            xhr_get(r.url, (j: RepsonseResult) => {                
+                if (j.status) {
+                    this.list.data = j.data.rows;
+                    this.list.total = j.data.total;
+                } else this.$Message.warning(j.message);
+
+                this.list.loading = false;
+            }, r.params);
         },
 
         viewEntity(row: any, rowId: number): void {
@@ -74,7 +73,6 @@ export default {
             this._openForm(row, rowId, 2);
         },
 
-
         /**
          * 删除
          * 
@@ -86,12 +84,12 @@ export default {
                 title: "确认删除",
                 content: "是否删除" + text + "？",
                 onOk: () => {
-                    xhr_del(url, (j: any) => {
-                        if (j && j.isOk) {
+                    xhr_del(url, (j: RepsonseResult) => {
+                        if (j && j.status) {
                             this.$Message.success('删除成功');
                             this.getData();
                         } else
-                            this.$Message.error(j.msg);
+                            this.$Message.error(j.message);
                     });
                 },
             });
@@ -119,11 +117,9 @@ export default {
             }
 
             xhr_get(`${apiRoot}/api/cms/form-factory?id=${formCfgId}`, (j: RepsonseResult) => {
-                let r: any = j.result;
-
-                if (r) {
+                if (j.status) {
                     this.isShowForm = true;
-                    this.form.cfg = JSON.parse(r.json);// 数据库记录转换到 配置对象;
+                    this.form.cfg = j.data;// 数据库记录转换到 配置对象;
                     let cfg: FormFactory_Config = this.form.cfg;
                     this.form.fields = cfg.fields;
                     this.$refs.FromRenderer.status = formMode;
@@ -134,9 +130,8 @@ export default {
                             $refs: { FromRenderer: this.$refs.FromRenderer }
                         }, rowId);
                     }
-                } else {
+                } else
                     this.$Message.error('未有任何配置');
-                }
             });
         },
         btnClk(js: string, entity?: object, index?: number): void {

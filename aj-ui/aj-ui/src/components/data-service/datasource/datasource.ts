@@ -1,7 +1,8 @@
 import { xhr_get, xhr_post, xhr_put, getPageList } from '../../../util/xhr';
 import List from '../../widget/list';
 
-const DBType: {} = { 1: 'MySQL', 2: 'Oracle', 3: 'SqlServer', 4: 'Spark', 5: 'SQLite' };
+// const DBType: {} = { 1: 'MySQL', 2: 'Oracle', 3: 'SqlServer', 4: 'Spark', 5: 'SQLite' };
+const DBType: {} = { MY_SQL: 'MySQL', 2: 'Oracle', 3: 'SqlServer', 4: 'Spark', 5: 'SQLite' };
 const DBTypeName = { MySql: 1, Oracle: 2, SqlServer: 3, Spark: 4, SQLite: 5 };
 
 /**
@@ -38,12 +39,16 @@ export default {
                     {
                         title: '数据库类型', width: 150, align: 'center',
                         render(h: Function, params: any) {
-                            return h('div', DBType[params.row.type]);
+                            return h('span', DBType[params.row.type]);
                         }
                     },
                     { title: '链接地址', minWidth: 190, key: 'url', ellipsis: true, tooltip: true },
                     { title: '登录用户', width: 100, key: 'username', align: 'center' },
-                    { title: '是否跨库', width: 100, key: 'crossDB', align: 'center' },
+                    { title: '是否跨库', width: 100, key: 'crossDb', align: 'center',
+                        render(h: Function, params: any) {
+                            return h('span', params.row.crossDb ? '是' : '否');
+                        }
+                    },
                     List.createDate,
                     { title: '操作', slot: 'action', align: 'center', width: 260 }
                 ],

@@ -1,4 +1,4 @@
-package com.ajaxjs.base.controller;
+package com.ajaxjs.iam.server.controller;
 
 import com.ajaxjs.framework.entity.BaseCRUDController;
 import org.springframework.web.bind.annotation.RequestMapping;
