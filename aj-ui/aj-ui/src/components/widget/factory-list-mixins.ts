@@ -28,6 +28,10 @@ export default {
         current(v: number): void {
             this.start = (v - 1) * this.list.limit;
             this.getData();
+        },
+        'list.pageNo'(v: number): void {
+            this.list.start = (v - 1) * this.list.limit;
+            this.getData();
         }
     },
     methods: {
@@ -124,8 +128,9 @@ export default {
         /**
          * 分页记录数
          */
-        handleChangePageSize(): void {
-
+        handleChangePageSize(pageSize: number): void {
+            this.list.limit = pageSize;
+            this.getData();
         },
 
         /**

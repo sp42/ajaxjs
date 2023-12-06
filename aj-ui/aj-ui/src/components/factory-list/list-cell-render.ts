@@ -124,10 +124,26 @@ function long_date(h: Function, params: any) {
     return value ? h('span', value) : '';
 }
 
+const isoDateTimeRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:.\d*)?)$/;
+
+function convertDate(isoDate) {
+    let date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes()===0? '00': date.getMinutes();
+    
+    return `${year}-${month}-${day} ${hour}:${minute}`;
+}
+
 function short_date(h: Function, params: any) {
     let value: string = params.row[params.column.key]; // 取出当前值
 
     if (value) {
+        if (isoDateTimeRegex.test(value)) // 先判断是否 ISO 8601 格式的日期和时间 的字符串
+            return h('span', convertDate(value));
+
         let arr: string[] = value.split(':');
         arr.pop();
 

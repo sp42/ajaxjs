@@ -1,15 +1,15 @@
 <template>
   <div class="main">
    <!--  <h3>{{SHOW_MOUDLE.title}}</h3> -->
-    <Menu style="float: left;" :open-names="[SHOW_MOUDLE.expandMenu]" v-if="SHOW_MOUDLE">
+    <Menu style="float: left;" :open-names="SHOW_MOUDLE.expandMenu" v-if="SHOW_MOUDLE">
       <h3>{{SHOW_MOUDLE.title}}</h3>
-      <Submenu name="1" v-if="SHOW_MOUDLE.portal">
+      <Submenu name="portal-1" v-if="SHOW_MOUDLE.portal">
         <template slot="title">网站管理</template>
         <MenuItem name="1-1" @click.native="load='WebsiteConfig'">站点管理</MenuItem>
         <MenuItem name="1-2" @click.native="load='OrgIndex'">栏目管理</MenuItem>
       </Submenu>
 
-      <Submenu name="2" v-if="SHOW_MOUDLE.portal">
+      <Submenu name="portal-2" v-if="SHOW_MOUDLE.portal">
         <template slot="title">内容管理</template>
         <MenuItem name="2-1" @click.native="showList(103, '图文')">图文列表</MenuItem>
         <MenuItem name="8-5" @click.native="routeTo('list?id=103&title=图文')">CMS 图文</MenuItem>
@@ -23,17 +23,18 @@
         <MenuItem name="3-2" @click.native="load='OrgIndex'">订单管理</MenuItem>
       </Submenu> -->
 
-      <Submenu name="4" v-if="SHOW_MOUDLE.user">
+      <Submenu name="user-1" v-if="SHOW_MOUDLE.user">
         <template slot="title">用户组织管理</template>
         <MenuItem name="4-1" @click.native="load='UserListIndex'">用户列表管理</MenuItem>
         <MenuItem name="4-2" @click.native="load='OrgIndex'">组织机构管理</MenuItem>
         <MenuItem name="4-3" @click.native="load='RBAC'">权限管理</MenuItem>
       </Submenu>
-      <Submenu name="4-2" v-if="SHOW_MOUDLE.user">
-        <template slot="title">登录管理</template>
-        <MenuItem name="4-1" @click.native="load='UserListIndex'">用户列表管理</MenuItem>
-        <MenuItem name="4-2" @click.native="load='OrgIndex'">组织机构管理</MenuItem>
-        <MenuItem name="4-3" @click.native="load='RBAC'">权限管理</MenuItem>
+      <Submenu name="user-2" v-if="SHOW_MOUDLE.user">
+        <template slot="title">认证管理</template>
+        <MenuItem name="user-2-1" @click.native="showList(130, '客户端应用')">客户端应用</MenuItem>
+        <MenuItem name="user-2-2" @click.native="showList(129, '租户管理')">租户管理</MenuItem>
+        <MenuItem name="user-2-3" @click.native="showList(130, 'Token 列表')">Token 列表</MenuItem>
+        <MenuItem name="user-2-4" @click.native="showList(131, 'IAM API 管理')">IAM API 管理</MenuItem>
       </Submenu>
 
       <Submenu name="5" v-if="SHOW_MOUDLE.system">
@@ -44,14 +45,15 @@
         <MenuItem name="5-4" @click.native="load='DeveloperTools'">开发者工具</MenuItem>
       </Submenu>
 
-      <Submenu name="6" v-if="SHOW_MOUDLE.model">
+      <Submenu name="model" v-if="SHOW_MOUDLE.model">
         <template slot="title">业务建模</template>
         <MenuItem name="6-1" @click.native="load='DataSource'">数据源</MenuItem>
         <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem>
-        <MenuItem name="6-2" @click.native="load='DataServiceIndex'">数据服务 New</MenuItem>
         <MenuItem name="6-3" @click.native="load='ModelMgr'">模型管理</MenuItem>
         <MenuItem name="6-4" @click.native="load='FactoryList'">列表生成器</MenuItem>
+        <MenuItem name="6-5" @click.native="load='DataServiceIndex'">Api Selector</MenuItem>
         <MenuItem name="6-8" @click.native="routeTo('api-helper')">Api Helper</MenuItem>
+        <MenuItem name="6-7" @click.native="assign('../database-doc')">DB 文档</MenuItem>
       </Submenu>
     </Menu>
     <div style="float:left;width:83%;height: 100%;padding-top:3%">
@@ -63,7 +65,11 @@
 
       <FactoryListLoader v-if="load === 'UserList'" id="5" />
       <FactoryListLoader v-if="load === 'UserLog'" id="6" />
-      <FactoryListLoader v-if="load === 'showList'" :id="listId" style="margin:1%;" />
+
+      <span v-if="load === 'showList'">
+         <h1>{{listTitle}}</h1>
+         <FactoryListLoader :id="listId"  style="margin:1%;" />
+      </span>
 
       <WebsiteConfig v-if="load == 'WebsiteConfig'" />
       <DataDict v-if="load == 'DataDict'" />
@@ -103,17 +109,18 @@ function getQueryString() {
   switch(params.get('m')) {
     case 'portal':
       SHOW_MOUDLE = {
-        portal: true, title: '门户管理'
+        portal: true, title: '门户管理', expandMenu: ['portal-1', 'portal-2'], load: 'WebsiteConfig'
       };
       break;
     case 'model':
       SHOW_MOUDLE = {
-        model: true, title: '业务建模', expandMenu: '6', load: 'DataSource'
+        model: true, title: '业务建模', expandMenu: ['model'], load: 'DataSource'
       };
       break;
+    default:
     case 'user':
       SHOW_MOUDLE = {
-        user: true, title: 'AJ-IAM 管理后台', expandMenu: '4', load: 'UserListIndex'
+        user: true, title: 'AJ-IAM 管理后台', expandMenu: ['user-1', 'user-2'], load: 'UserListIndex'
       };
       break;
   }
@@ -125,9 +132,10 @@ export default {
   components: { DataServiceIndex, DataSource, DataService,  FactoryList, FactoryListLoader,  ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
   data() {
     return {
-      load: SHOW_MOUDLE.load,
+      load: SHOW_MOUDLE.load || 'ModelMgr',
       apiRoot: window.config.dsApiRoot,
       listId: 0,
+      listTitle: '',
       SHOW_MOUDLE: SHOW_MOUDLE
     }
   },
@@ -157,6 +165,10 @@ export default {
     showList(id, title) {
       this.load = 'showList';
       this.listId = id;
+      this.listTitle = title;
+    },
+    assign(url) {
+     location.assign(url);
     }
   }
 
@@ -164,6 +176,14 @@ export default {
 </script>
 
 <style scoped>
+h1{
+  margin: 0 0 2% 1%;
+  padding-bottom: 1%;
+  border-bottom: 1px solid lightgray;
+  color: #2f518c;
+  letter-spacing: 2px;
+}
+
 h3{
   padding:30px 22px;
   box-sizing: border-box;

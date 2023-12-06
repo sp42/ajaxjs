@@ -50,6 +50,9 @@ public interface BaseCRUDController {
     @PostMapping("/{namespace}/delete/{id}")
     Boolean delete(@PathVariable String namespace, @PathVariable Long id);
 
+    @DeleteMapping("/{namespace}/{id}")
+    Boolean deleteById(@PathVariable String namespace, @PathVariable Long id);
+
     /**
      * 重新加载数据库的配置
      *

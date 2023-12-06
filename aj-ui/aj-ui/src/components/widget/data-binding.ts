@@ -15,12 +15,12 @@ const API_ROOT_PREFIX = '{API_ROOT_PREFIX}';
  */
 export function prepareRequest(dataBinding: DataBinding, params?: any, cmp?: any): ManagedRequest {
     if (!dataBinding) {
-        this.$Message.warning("未有数据绑定！");
+        alert("未有数据绑定！");
         return;
     }
 
     if (!dataBinding.url) {
-        this.$Message.warning("未有 API 地址接口");
+        alert("未有 API 地址接口");
         return;
     }
 

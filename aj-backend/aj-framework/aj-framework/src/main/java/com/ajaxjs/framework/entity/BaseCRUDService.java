@@ -9,6 +9,7 @@ import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -81,6 +82,11 @@ public abstract class BaseCRUDService implements BaseCRUDController {
             throw new BusinessException("没有配置 BaseCRUD");
 
         return namespaces.get(namespace).delete(id);
+    }
+
+    @Override
+    public Boolean deleteById(@PathVariable String namespace, @PathVariable Long id) {
+        return delete(namespace, id);
     }
 
     /**

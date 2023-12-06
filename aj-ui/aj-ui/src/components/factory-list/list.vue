@@ -81,6 +81,7 @@ export default {
                 total: 0,
                 start: 0,
                 limit: 9,
+                pageNo: 1,
                 loading: false,
                 search: { name: '' },
             } as TableListConfig
