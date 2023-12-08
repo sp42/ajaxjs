@@ -9,25 +9,47 @@ document.querySelectorAll('menu li').forEach(item => {
     item.onclick = onSelect;
 });
 
-const loginUrl = 'http://127.0.0.1:8302/user/login?web_url=http://192.168.1.107:8080/dev-plat/';
-const token = getQueryParam("token");
-let accessToken = localStorage.getItem("accessToken");
+/**
+ * 获取登录信息
+ * 
+ * @param {String} loginUrl 跳转地址
+ * @returns 
+ */
+function getLoginInfo(loginUrl) {
+    const token = getQueryParam("token");
+    let accessToken = localStorage.getItem("accessToken");
 
-if (!accessToken && !token) {
-    alert('你未登录！');
-    // location.assign(loginUrl);
+    if (!accessToken && !token) {
+        alert('你未登录！');
+        location.assign(loginUrl);
+    }
+
+    if (token) {
+        accessToken = decodeURIComponent(token);
+        localStorage.setItem("accessToken", accessToken);
+    }
+
+    window.JWT_TOKEN = JSON.parse(accessToken);
+
+    // 将JWT Token拆分为三个部分
+    const tokenParts = window.JWT_TOKEN.id_token.split('.')
+    const payload = JSON.parse(atob(tokenParts[1])); // 解析载荷
+
+    return payload;
 }
 
-if (token) {
-    accessToken = decodeURIComponent(token);
-    localStorage.setItem("accessToken", accessToken);
+let loginUrl = 'http://127.0.0.1:8088/user/login?web_url=http://127.0.0.1:8080/dev-plat/';
+
+// 链接：生产 or 调试
+if (location.origin.indexOf('admin.ajaxjs.com') != -1) {
+    document.querySelector("a.portal-link").href = '../admin?m=portal';
+    document.querySelector("a.model-link").href = '../admin?m=model';
+    document.querySelector("a.iam-link").href = '../admin?m=user';
+
+    loginUrl = 'https://base.gzdesign.cc/user/login?web_url=https://admin.ajaxjs.com/plat';
 }
 
-window.JWT_TOKEN = JSON.parse(accessToken);
-
-// 将JWT Token拆分为三个部分
-const tokenParts = window.JWT_TOKEN.id_token.split('.')
-const payload = JSON.parse(atob(tokenParts[1])); // 解析载荷
+const payload = getLoginInfo(loginUrl);
 
 new Vue({
     el: '#user-bar',
@@ -42,3 +64,4 @@ new Vue({
         }
     }
 });
+

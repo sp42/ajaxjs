@@ -15,7 +15,7 @@ export default {
             perview: {          // 预览
                 isShow: false,
                 title: '',
-                data: {}        // 配置对象
+                data: {},        // 配置对象
             }
         };
     },

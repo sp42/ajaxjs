@@ -1,6 +1,7 @@
 module.exports = {
     publicPath: './', // vue_cli 打包后的项目，默认使用的是绝对路径。改为相对路径
     runtimeCompiler: true,
+    indexPath: "index.html",
     pluginOptions: {
         'style-resources-loader': {
             preProcessor: 'less',

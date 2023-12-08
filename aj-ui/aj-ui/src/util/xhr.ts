@@ -57,8 +57,20 @@ function getOrDel(getOrDel: 'get' | 'delete', url: string, cb: XhrCallback, para
     if (BASE_HEAD_PARAMS)// 设置自定义请求头
         for (let key in BASE_HEAD_PARAMS)
             xhr.setRequestHeader(key, BASE_HEAD_PARAMS[key]);
+            
+    setAuthHeader(xhr);
 
     xhr.send();
+}
+
+function setAuthHeader(xhr: XMLHttpRequest) {
+    const token: string = localStorage.getItem("accessToken");
+
+    if (token){
+        const json = JSON.parse(token);
+        console.log(json);
+        xhr.setRequestHeader("Authorization", "Bearer " + json.id_token);
+    }
 }
 
 /**
@@ -87,6 +99,7 @@ function postOrPut(method: 'post' | 'put', url: string, cb: XhrCallback, params:
     else
         xhr.setRequestHeader("Content-Type", cfg.contentType);
 
+    setAuthHeader(xhr);
 
     let _params: string = typeof params != 'string' ? toParams(params) : <string>params;
 

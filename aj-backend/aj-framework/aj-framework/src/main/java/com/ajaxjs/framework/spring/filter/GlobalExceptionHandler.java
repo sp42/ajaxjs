@@ -76,7 +76,7 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
                 resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
 
-            resultWrapper.setMessage(msg);
+            resultWrapper.setMessage(javaValue2jsonValue(msg));
 
             try {
                 resp.getWriter().write(resultWrapper.toString());

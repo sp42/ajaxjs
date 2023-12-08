@@ -8,7 +8,8 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Home',
-    component: () => import(/* webpackChunkName: "about" */ '../pages/index.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../pages/index.vue'),
+
   },
   {
     path: '/data-service/info',
@@ -18,7 +19,8 @@ const routes: Array<RouteConfig> = [
 
   {
     path: '/factory-list-info',
-    component: () => import('../pages/factory-list-info.vue')
+    component: () => import('../pages/factory-list-info.vue'),
+
   },
   {
     path: '/factory-form-info',

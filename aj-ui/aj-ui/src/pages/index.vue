@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-   <!--  <h3>{{SHOW_MOUDLE.title}}</h3> -->
+
     <Menu style="float: left;" :open-names="SHOW_MOUDLE.expandMenu" v-if="SHOW_MOUDLE">
       <h3>{{SHOW_MOUDLE.title}}</h3>
       <Submenu name="portal-1" v-if="SHOW_MOUDLE.portal">
@@ -17,7 +17,7 @@
         <MenuItem name="2-3" @click.native="load='TagMgr'">标签/点赞/收藏管理</MenuItem>
       </Submenu>
 
-    <!--   <Submenu name="3">
+      <!--   <Submenu name="3">
         <template slot="title">商城管理</template>
         <MenuItem name="3-1" @click.native="load='UserListIndex'">商品管理</MenuItem>
         <MenuItem name="3-2" @click.native="load='OrgIndex'">订单管理</MenuItem>
@@ -47,28 +47,41 @@
 
       <Submenu name="model" v-if="SHOW_MOUDLE.model">
         <template slot="title">业务建模</template>
-        <MenuItem name="6-1" @click.native="load='DataSource'">数据源</MenuItem>
+        <MenuItem name="6-1" @click.native="load='DataSource'">数据源管理</MenuItem>
         <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem>
         <MenuItem name="6-3" @click.native="load='ModelMgr'">模型管理</MenuItem>
         <MenuItem name="6-4" @click.native="load='FactoryList'">列表生成器</MenuItem>
-        <MenuItem name="6-5" @click.native="load='DataServiceIndex'">Api Selector</MenuItem>
-        <MenuItem name="6-8" @click.native="routeTo('api-helper')">Api Helper</MenuItem>
-        <MenuItem name="6-7" @click.native="assign('../database-doc')">DB 文档</MenuItem>
+        <!--         <MenuItem name="6-5" @click.native="load='DataServiceIndex'">Api Selector</MenuItem>
+        <MenuItem name="6-8" @click.native="routeTo('api-helper')">Api Helper</MenuItem> -->
       </Submenu>
     </Menu>
-    <div style="float:left;width:83%;height: 100%;padding-top:3%">
-      <div v-if="!load" class="center" style="text-align:center;margin-top:25%;">Welcome!</div>
-      <DataSource v-if="load == 'DataSource'" :api-root="apiRoot" />
-      <DataService v-if="load == 'DataService'" :api-root="apiRoot" />
-      <FactoryList v-if="load == 'FactoryList'" :api-root="apiRoot" />
-      <ModelMgr v-if="load == 'ModelMgr'" :api-root="apiRoot" />
 
+    <div style="float:left;width:82%;height: 100%;">
+      <div v-if="!load" class="center" style="text-align:center;margin-top:25%;">Welcome!</div>
+      
+      <span v-if="load == 'DataSource'">
+        <h1 class="page-title">数据源管理</h1>
+        <DataSource :api-root="apiRoot" />
+      </span>
+
+      <DataService v-if="load == 'DataService'" :api-root="apiRoot" />
+
+      <span v-if="load == 'ModelMgr'">
+        <h1 class="page-title">模型管理</h1>
+        <ModelMgr :api-root="apiRoot" />
+      </span>
+
+      <span v-if="load == 'FactoryList'">
+        <h1 class="page-title">列表生成器</h1>
+        <FactoryList :api-root="apiRoot" />
+      </span>
+      
       <FactoryListLoader v-if="load === 'UserList'" id="5" />
       <FactoryListLoader v-if="load === 'UserLog'" id="6" />
 
       <span v-if="load === 'showList'">
-         <h1>{{listTitle}}</h1>
-         <FactoryListLoader :id="listId"  style="margin:1%;" />
+        <h1 class="page-title">{{listTitle}}</h1>
+        <FactoryListLoader :id="listId" style="margin:1%;" />
       </span>
 
       <WebsiteConfig v-if="load == 'WebsiteConfig'" />
@@ -76,28 +89,73 @@
       <SysConfig v-if="load == 'SysConfig'" />
       <RBAC v-if="load == 'RBAC'" />
       <DeveloperTools v-if="load == 'DeveloperTools'" />
-      <UserListIndex v-if="load == 'UserListIndex'" />
+
+      <span v-if="load == 'UserListIndex'">
+        <h1 class="page-title">用户列表管理</h1>
+        <UserListIndex v-if="load == 'UserListIndex'" />
+      </span>
+
+      
       <OrgIndex v-if="load == 'OrgIndex'" />
       <ApiHelper v-if="load == 'api-helper'" />
       <DataServiceIndex v-if="load == 'DataServiceIndex'" />
     </div>
   </div>
 </template>
+
 <script>
-import DataSource from '../components/data-service/datasource/datasource.vue';
-import DataService from '../components/data-service/data-service.vue';
-import DataServiceIndex from '../components/data-service/index/index.vue';
-import FactoryList from '../components/factory-list/list.vue';
-import FactoryListLoader from '../components/factory-list/list-loader.vue';
-import ModelMgr from '../components/factory-form/list.vue';
-import DeveloperTools from '../components/admin-page/developer-tools/index.vue';
-import DataDict from '../components/admin-page/system/data-dict.vue';
-import SysConfig from '../components/admin-page/system/config.vue';
-import RBAC from '../components/admin-page/user/rbac/rbac.vue';
-import UserListIndex from '../components/admin-page/user/user-list-index.vue';
-import OrgIndex from '../components/admin-page/user/org/index.vue';
-import WebsiteConfig from '../components/admin-page/website/config.vue';
-import ApiHelper from '../components/api-helper/api-helper.vue';
+import DataSource from "../components/data-service/datasource/datasource.vue";
+import DataService from "../components/data-service/data-service.vue";
+import DataServiceIndex from "../components/data-service/index/index.vue";
+import FactoryList from "../components/factory-list/list.vue";
+import FactoryListLoader from "../components/factory-list/list-loader.vue";
+import ModelMgr from "../components/factory-form/list.vue";
+import DeveloperTools from "../components/admin-page/developer-tools/index.vue";
+import DataDict from "../components/admin-page/system/data-dict.vue";
+import SysConfig from "../components/admin-page/system/config.vue";
+import RBAC from "../components/admin-page/user/rbac/rbac.vue";
+import UserListIndex from "../components/admin-page/user/user-list-index.vue";
+import OrgIndex from "../components/admin-page/user/org/index.vue";
+import WebsiteConfig from "../components/admin-page/website/config.vue";
+import ApiHelper from "../components/api-helper/api-helper.vue";
+
+function getQueryParam(variable, isParent) {
+  var query = (isParent ? parent.location : window.location).search.substring(
+    1
+  );
+  var vars = query.split("&");
+
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    if (pair[0] == variable) {
+      return pair[1];
+    }
+  }
+
+  return false;
+}
+
+const loginUrl =
+  "http://127.0.0.1:8088/user/login?web_url=http://localhost:8081";
+const token = getQueryParam("token");
+let accessToken = localStorage.getItem("accessToken");
+
+if (!accessToken && !token) {
+  alert("你未登录！");
+  location.assign(loginUrl);
+}
+
+if (token) {
+  accessToken = decodeURIComponent(token);
+  localStorage.setItem("accessToken", accessToken);
+}
+
+window.JWT_TOKEN = JSON.parse(accessToken);
+
+// 将JWT Token拆分为三个部分
+const tokenParts = window.JWT_TOKEN.id_token.split(".");
+const payload = JSON.parse(atob(tokenParts[1])); // 解析载荷
+console.log(payload);
 
 let SHOW_MOUDLE; // 显示的模块
 
@@ -106,21 +164,30 @@ function getQueryString() {
   // 创建 URLSearchParams 对象
   var params = new URLSearchParams(url.search);
 
-  switch(params.get('m')) {
-    case 'portal':
+  switch (params.get("m")) {
+    case "portal":
       SHOW_MOUDLE = {
-        portal: true, title: '门户管理', expandMenu: ['portal-1', 'portal-2'], load: 'WebsiteConfig'
+        portal: true,
+        title: "门户管理",
+        expandMenu: ["portal-1", "portal-2"],
+        load: "WebsiteConfig",
       };
       break;
-    case 'model':
+    case "model":
       SHOW_MOUDLE = {
-        model: true, title: '业务建模', expandMenu: ['model'], load: 'DataSource'
+        model: true,
+        title: "业务建模",
+        expandMenu: ["model"],
+        load: "DataSource",
       };
       break;
     default:
-    case 'user':
+    case "user":
       SHOW_MOUDLE = {
-        user: true, title: 'AJ-IAM 管理后台', expandMenu: ['user-1', 'user-2'], load: 'UserListIndex'
+        user: true,
+        title: "AJ-IAM 管理后台",
+        expandMenu: ["user-1", "user-2"],
+        load: "UserListIndex",
       };
       break;
   }
@@ -129,68 +196,69 @@ function getQueryString() {
 getQueryString();
 
 export default {
-  components: { DataServiceIndex, DataSource, DataService,  FactoryList, FactoryListLoader,  ModelMgr, WebsiteConfig, DeveloperTools, DataDict, SysConfig, RBAC, UserListIndex, OrgIndex,ApiHelper },
+  components: {
+    DataServiceIndex,
+    DataSource,
+    DataService,
+    FactoryList,
+    FactoryListLoader,
+    ModelMgr,
+    WebsiteConfig,
+    DeveloperTools,
+    DataDict,
+    SysConfig,
+    RBAC,
+    UserListIndex,
+    OrgIndex,
+    ApiHelper,
+  },
   data() {
     return {
-      load: SHOW_MOUDLE.load || 'ModelMgr',
+      load: SHOW_MOUDLE.load || "ModelMgr",
       apiRoot: window.config.dsApiRoot,
       listId: 0,
-      listTitle: '',
-      SHOW_MOUDLE: SHOW_MOUDLE
-    }
+      listTitle: "",
+      SHOW_MOUDLE: SHOW_MOUDLE,
+    };
   },
-  mounted(){
-    let menu = document.querySelector('.ivu-menu.ivu-menu-vertical');
-    
+  mounted() {
+    let menu = document.querySelector(".ivu-menu.ivu-menu-vertical");
+
     if (menu) {
-      let style = '';
-      
-      if (this.SHOW_MOUDLE.portal)
-        style = 'portal';
-      else if (this.SHOW_MOUDLE.model)
-        style = 'model';
-      else if (this.SHOW_MOUDLE.user)
-        style = 'user';
+      let style = "";
+
+      if (this.SHOW_MOUDLE.portal) style = "portal";
+      else if (this.SHOW_MOUDLE.model) style = "model";
+      else if (this.SHOW_MOUDLE.user) style = "user";
 
       menu.classList.add(style);
     }
   },
   methods: {
     routeTo(route) {
-      location.hash = '#/' + route;
+      location.hash = "#/" + route;
     },
     open(route) {
-      window.open('#/' + route);
+      window.open("#/" + route);
     },
     showList(id, title) {
-      this.load = 'showList';
+      this.load = "showList";
       this.listId = id;
       this.listTitle = title;
     },
-    assign(url) {
-     location.assign(url);
-    }
-  }
-
-}
+  },
+};
 </script>
 
 <style scoped>
-h1{
-  margin: 0 0 2% 1%;
-  padding-bottom: 1%;
-  border-bottom: 1px solid lightgray;
-  color: #2f518c;
-  letter-spacing: 2px;
-}
-
-h3{
-  padding:30px 22px;
+h3 {
+  padding: 30px 22px;
   box-sizing: border-box;
-  color:#2f518c;
-  width:240px; 
-  border-right:1px solid lightgray;
-  font-size: 1.3em;font-weight:bold;
+  color: #2f518c;
+  width: 240px;
+  border-right: 1px solid lightgray;
+  font-size: 1.3em;
+  font-weight: bold;
   letter-spacing: 1px;
   height: 9%;
 }
@@ -203,7 +271,10 @@ h3{
   margin: 10px auto;
 }
 
-html, body, .main,.main > .ivu-menu {
+html,
+body,
+.main,
+.main > .ivu-menu {
   height: 100%;
 }
 
@@ -230,5 +301,15 @@ html, body, .main,.main > .ivu-menu {
 .ivu-mt.ivu-text-right {
   text-align: right;
   margin-top: 20px;
+}
+
+h1.page-title {
+  margin: 0 0 2% 1%;
+  padding-bottom: 1%;
+  border-bottom: 1px solid #eee;
+  color: #2f518c;
+  letter-spacing: 2px;
+  height: 9%;
+  line-height: 100px;
 }
 </style>

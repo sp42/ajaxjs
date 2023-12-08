@@ -37,6 +37,16 @@ public class ConfigPO {
     private String clzName;
 
     /**
+     * 查询详情的 SQL（可选的）
+     */
+    private String infoSql;
+
+    /**
+     * 查询列表的 SQL（可选的）
+     */
+    private String listSql;
+
+    /**
      * 是否有逻辑删除标记
      */
     private boolean hasIsDeleted;

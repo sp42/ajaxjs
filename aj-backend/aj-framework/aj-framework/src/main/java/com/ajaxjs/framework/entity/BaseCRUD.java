@@ -5,6 +5,7 @@ import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,6 +38,16 @@ public class BaseCRUD<T, K extends Serializable> {
     private Class<T> clz;
 
     /**
+     * 查询详情的 SQL（可选的）
+     */
+    private String infoSql;
+
+    /**
+     * 查询列表的 SQL（可选的）
+     */
+    private String listSql;
+
+    /**
      * 是否有逻辑删除标记
      */
     private boolean hasIsDeleted;
@@ -53,7 +64,7 @@ public class BaseCRUD<T, K extends Serializable> {
      */
     private Integer idType = BaseEntityConstants.IdType.AUTO_INC;
 
-    private final static String SELECT_SQL = "SELECT * FROM %s WHERE 1=1 ";
+    private final static String SELECT_SQL = "SELECT * FROM %s WHERE 1=1 ORDER BY create_date DESC"; // 日期暂时写死
 
     private String getInfoSql() {
         String sql = String.format(SELECT_SQL, tableName) + " AND " + idField + " = ?";
@@ -96,7 +107,12 @@ public class BaseCRUD<T, K extends Serializable> {
     }
 
     private String getListSql(String where) {
-        String sql = String.format(SELECT_SQL, tableName);
+        String sql;
+
+        if (StringUtils.hasText(listSql)) {
+            sql = listSql;
+        } else
+            sql = String.format(SELECT_SQL, tableName);
 
         if (hasIsDeleted)
             sql += " AND " + delField + " = 0";
