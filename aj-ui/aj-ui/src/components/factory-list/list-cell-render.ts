@@ -121,6 +121,9 @@ function date(h: Function, params: any) {
 function long_date(h: Function, params: any) {
     let value: string = params.row[params.column.key]; // 取出当前值
 
+    if (value && isoDateTimeRegex.test(value)) // 先判断是否 ISO 8601 格式的日期和时间 的字符串
+        return h('span', convertDateLong(value));
+
     return value ? h('span', value) : '';
 }
 
@@ -135,6 +138,18 @@ function convertDate(isoDate) {
     const minute = date.getMinutes()===0? '00': date.getMinutes();
     
     return `${year}-${month}-${day} ${hour}:${minute}`;
+}
+
+function convertDateLong(isoDate) {
+    let date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes()===0? '00': date.getMinutes();
+    const seconds = date.getSeconds();
+    
+    return `${year}-${month}-${day} ${hour}:${minute}:${seconds}`;
 }
 
 function short_date(h: Function, params: any) {

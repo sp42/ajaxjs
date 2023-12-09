@@ -31,9 +31,8 @@ public class NewInstance {
             }
         }
 
-        // 获取构造器
         assert args != null;
-        Constructor<T> constructor = getConstructor(clz, Clazz.args2class(args));
+        Constructor<T> constructor = getConstructor(clz, Clazz.args2class(args));// 获取构造器
 
         assert constructor != null;
         return newInstance(constructor, args);
@@ -64,6 +63,7 @@ public class NewInstance {
      */
     public static boolean hasArgsCon(Class<?> clz) {
         Constructor<?>[] constructors = clz.getConstructors();
+
         for (Constructor<?> constructor : constructors) {
             if (constructor.getParameterTypes().length != 0)
                 return true;
@@ -93,6 +93,7 @@ public class NewInstance {
      */
     public static Object newInstance(String clzName, Object... args) {
         Class<?> clazz = Clazz.getClassByName(clzName);
+
         return clazz != null ? newInstance(clazz, args) : null;
     }
 

@@ -162,21 +162,23 @@ public class Clazz {
      */
     public static void eachField(Object bean, PropertyDescriptor[] props, EachFieldArg fn) {
         try {
-            if (!ObjectUtils.isEmpty(props))
-                for (PropertyDescriptor property : props) {
-                    String key = property.getName();
-                    Method getter = property.getReadMethod();// 得到 property 对应的 getter 方法
+            if (ObjectUtils.isEmpty(props))
+                return;
 
-                    if (getter.getAnnotation(IgnoreDB.class) != null)
-                        continue;
+            for (PropertyDescriptor property : props) {
+                String key = property.getName();
+                Method getter = property.getReadMethod();// 得到 property 对应的 getter 方法
 
-                    Object value = getter.invoke(bean); // 原始默认值，不过通常是没有指定的
+                if (getter.getAnnotation(IgnoreDB.class) != null)
+                    continue;
 
-                    if (value != null && value.equals("class"))  // 过滤 class 属性
-                        continue;
+                Object value = getter.invoke(bean); // 原始默认值，不过通常是没有指定的
 
-                    fn.item(key, value, property);
-                }
+                if (value != null && value.equals("class"))  // 过滤 class 属性
+                    continue;
+
+                fn.item(key, value, property);
+            }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             log.warn("ERROR>>", e);
         }

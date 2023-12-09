@@ -259,7 +259,7 @@
         </dependency>
 
         <!-- 编译为 jar 包时依赖的 -->
-        <dependency>
+ <!--       <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
@@ -278,7 +278,7 @@
             <artifactId>javax.websocket-api</artifactId>
             <version>1.1</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
 
         <!-- Tomcat JNDI 数据源 -->
         <dependency>

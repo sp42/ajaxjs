@@ -14,6 +14,13 @@ import java.util.List;
  */
 @Slf4j
 public class Methods {
+    /**
+     * 根据类和方法名获取该类声明的方法
+     *
+     * @param clz        要查找方法的类
+     * @param methodName 方法名
+     * @return 声明的方法，如果方法不存在则返回 null
+     */
     public static Method getDeclaredMethod(Class<?> clz, String methodName) {
         try {
             return clz.getDeclaredMethod(methodName);
@@ -38,6 +45,7 @@ public class Methods {
             return ObjectUtils.isEmpty(args) ? cls.getMethod(method) : cls.getMethod(method, args);
         } catch (NoSuchMethodException | SecurityException e) {
             StringBuilder str = new StringBuilder();
+
             for (Class<?> clz : args)
                 str.append(clz.getName());
 
@@ -150,9 +158,8 @@ public class Methods {
     public static Method getSuperClassDeclaredMethod(Class<?> clz, String method) {
         for (; clz != Object.class; clz = clz.getSuperclass()) {
             for (Method m : clz.getDeclaredMethods()) {
-                if (m.toString().contains(method)) {
+                if (m.toString().contains(method))
                     return m;
-                }
             }
         }
 

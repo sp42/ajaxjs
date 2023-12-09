@@ -26,7 +26,7 @@ public class BeanUtils {
     }
 
     /**
-     * 调用 bean 对象的 setter 方法 参考 Spring 的 ReflectionUtils.setField(null, null, null);
+     * 调用 bean 对象的 setter 方法 参考 Spring 的 <code>ReflectionUtils.setField(null, null, null);</code>
      *
      * @param bean  Bean 对象
      * @param name  属性名称，前缀不要带 set
@@ -62,8 +62,7 @@ public class BeanUtils {
      * @return 常量的 Map 格式
      */
     public static Map<String, Integer> getConstantsInt(Class<?> clz) {
-        // 创建一个空的 HashMap 对象，用于存储常量名称和值的映射关系
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> map = new HashMap<>();// 创建一个空的 HashMap 对象，用于存储常量名称和值的映射关系
 
         Field[] fields = clz.getDeclaredFields();
         Object instance = NewInstance.newInstance(clz);
