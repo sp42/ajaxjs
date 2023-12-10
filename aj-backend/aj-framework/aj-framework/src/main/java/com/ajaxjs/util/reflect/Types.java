@@ -26,7 +26,7 @@ public class Types {
     }
 
     /**
-     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     * 获取方法返回值里面的泛型，如 List&lt;String&gt; 里面的 String，而不是 T。
      *
      * @param method 方法
      * @return 实际类型，可能多个
@@ -36,7 +36,7 @@ public class Types {
     }
 
     /**
-     * 获取方法返回值里面的泛型，如 List<String> 里面的 String，而不是 T。
+     * 获取方法返回值里面的泛型，如 List&lt;String&gt; 里面的 String，而不是 T。
      * 这个方法获取第一个类型，并转换为 Class
      *
      * @param method 方法
@@ -49,7 +49,7 @@ public class Types {
     }
 
     /**
-     * 获取如 List<String> 里面的泛型类型
+     * 获取如 List&lt;String&gt; 里面的泛型类型
      *
      * @param clz 类必须先指向一个实例，参见
      *            <a href="https://stackoverflow.com/questions/8436055/how-to-get-class-of-generic-type-when-there-is-no-parameter-of-it">...</a>
@@ -61,6 +61,7 @@ public class Types {
 
     /**
      * 获取实际类
+     *
      * @param clz 类型
      * @return 实际类
      */
@@ -69,7 +70,6 @@ public class Types {
 
         return type2class(actualType[0]);
     }
-
 
     /**
      * Type 接口转换为 Class

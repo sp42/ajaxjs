@@ -1,5 +1,6 @@
 package com.ajaxjs.data.sql_controller;
 
+import com.ajaxjs.util.reflect.Clazz;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -107,13 +108,13 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
             for (Resource resource : resources) {
                 if (resource.isReadable()) {
                     String clzName = metadataReaderFactory.getMetadataReader(resource).getClassMetadata().getClassName();
-                    Class<?> clazz = Class.forName(clzName);
+                    Class<?> clazz = Clazz.getClassByName(clzName);
 
                     if (clazz.isInterface() && clazz.getAnnotation(RestController.class) != null)
                         set.add((Class<RestController>) clazz);
                 }
             }
-        } catch (ClassNotFoundException | IOException e) {
+        } catch (IOException e) {
             log.warn("ERROR>>", e);
         }
 

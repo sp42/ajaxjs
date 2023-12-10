@@ -45,11 +45,14 @@ public class Clazz {
     @SuppressWarnings("unchecked")
     public static <T> Class<T> getClassByName(String clzName, Class<T> clz) {
         Class<?> c = getClassByName(clzName);
+
         return c == null ? null : (Class<T>) c;
     }
 
     /**
      * 把参数转换为类对象列表
+     * 这个 Java 函数将一个可变参数列表转换为一个类对象列表。它接受一个可变参数 args，返回一个 Class 类型的数组 clazz，
+     * 数组长度与参数列表的长度相同，并且每个元素的类型与对应参数的类型相同。
      *
      * @param args 可变参数列表
      * @return 类对象列表
