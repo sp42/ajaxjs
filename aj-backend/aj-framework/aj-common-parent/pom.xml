@@ -2,22 +2,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>aj-common-parent</artifactId>
-    <name>aj-common-parent</name>
-    <version>1.2</version>
-    <packaging>pom</packaging>
-    <description>常见项目的依赖</description>
-
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
-        <version>1.11</version>
-        <relativePath>../../pom.xml</relativePath>
+        <version>1.16</version>
+        <relativePath />
     </parent>
+    <artifactId>aj-common-parent</artifactId>
+    <version>1.6</version>
+    <packaging>pom</packaging>
+    <description>常见项目的依赖</description>
 
     <properties>
-        <!-- 当发生javadoc编译错误时继续执行 -->
-        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 
@@ -92,21 +88,38 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- 生成 META-INF/MANIFEST.MF 文件的部分内容 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- 这里是项目主类运行入口 -->
+                            <mainClass>${project.mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <!-- 公共依赖 -->
     <dependencies>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
 
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-framework</artifactId>
-            <version>1.1.4</version>
+            <version>1.1.6</version>
         </dependency>
 
         <dependency>
@@ -126,7 +139,7 @@
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
-            <version>8.5.69</version>
+            <version>${tomcat.version}</version>
         </dependency>
     </dependencies>
 </project>

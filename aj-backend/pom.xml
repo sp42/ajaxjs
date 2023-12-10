@@ -5,22 +5,34 @@
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-parent</artifactId>
     <name>ajaxjs-parent</name>
-    <version>1.11</version>
-    <modules>
-        <module>aj-framework/aj-json</module>
-        <!--<module>aj-framework/aj-net</module>-->
-        <module>aj-framework/aj-web</module>
-        <module>aj-framework/aj-framework</module>
-        <module>aj-framework/aj-common-parent</module>
-    </modules>
+    <version>1.16</version>
     <packaging>pom</packaging>
-    <description>Top pom.xml, public config</description>
-    <!--Maven 的基本使用终结版 https://segmentfault.com/a/1190000020380580 -->
+    <description>Public config for OpenSource Library</description>
 
-    <!-- Common Start -->
+   <modules>
+        <module>aj-framework/aj-common-parent</module>
+        <module>aj-framework/aj-json</module>
+        <module>aj-framework/aj-framework</module>
+        <module>aj-framework/aj-web</module>
+
+        <module>aj-workflow</module>
+        <module>aj-iam</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version><!-- IDEA Maven 插件默认 Java 1.5 编译，这里强制声明一下 -->
+        <tomcat.version>8.5.96</tomcat.version>
+        <!--<tomcat.version>8.5.84</tomcat.version>-->
+        <spring.version>5.3.24</spring.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <failOnMissingWebXml>false</failOnMissingWebXml><!-- Servlet3 不需要 web.xml 问题 -->
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError><!-- 当发生 JavaDoc 编译错误时继续执行 -->
+    </properties>
+
     <url>https://framework.ajaxjs.com</url>
-    <inceptionYear>2013</inceptionYear>
-
+    <inceptionYear>2014</inceptionYear>
     <organization>
         <name>AJAXJS</name>
         <url>https://framework.ajaxjs.com</url>
@@ -61,36 +73,6 @@
         <url>https://gitee.com/sp42_admin/ajaxjs/issues</url>
     </issueManagement>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- IDEA Maven 插件默认 Java 1.5 编译，这里强制声明一下 -->
-        <java.version>1.8</java.version>
-        <tomcat.version>8.5.84</tomcat.version>
-        <spring.version>5.3.24</spring.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- servlet3 不需要 web.xml 问题 -->
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-
-        <!-- 当发生javadoc编译错误时继续执行 -->
-        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
-        <!-- <maven.javadoc.skip>true</maven.javadoc.skip> -->
-    </properties>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <!-- <distributionManagement> <repository> <id>rdc</id> <name>releases</name>
-        <url>https://packages.aliyun.com/maven/repository/2190421-release-MPawzZ/</url>
-        </repository> <snapshotRepository> <id>rdc-snapshots-local</id> <name>snapshots</name>
-        <url>https://packages.aliyun.com/maven/repository/2190421-snapshot-2w5sDL/</url>
-        </snapshotRepository> </distributionManagement> -->
-
     <!-- maven 的 pom.xml 多个仓库配置 -->
     <profiles>
         <profile>
@@ -101,25 +83,87 @@
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
             </distributionManagement>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
 
-        <profile>
-            <id>rdc</id>
-            <distributionManagement>
-                <repository>
-                    <id>rdc-releases</id>
-                    <name>releases</name>
-                    <url>https://packages.aliyun.com/maven/repository/2190421-release-MPawzZ/</url>
-                </repository>
-                <snapshotRepository>
-                    <id>rdc-snapshots-local</id>
-                    <name>snapshots</name>
-                    <url>https://packages.aliyun.com/maven/repository/2190421-snapshot-2w5sDL/</url>
-                </snapshotRepository>
-            </distributionManagement>
+            <build>
+                <plugins>
+                    <!-- 发布到中央库 -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.13</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+
+                    <!-- 加密签名 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <!--<version>3.0.1</version>-->
+                        <!--  <configuration>
+                              <skip>true</skip>
+                          </configuration>-->
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- 生成 JavaDoc 文档 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.6.3</version>
+                        <!--<version>3.4.0</version>-->
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- add this to disable checking -->
+                                    <!--<additionalparam>-Xdoclint:none</additionalparam>-->
+                                    <charset>UTF-8</charset><!-- utf-8 读取文件 -->
+                                    <encoding>UTF-8</encoding><!-- utf-8 进行编码代码 -->
+                                    <docencoding>UTF-8</docencoding><!-- utf-8 进行编码文档 -->
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- 打包带上 Java 源码 -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.0</version>
+                        <!-- <version>3.2.1</version>-->
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- 打包时跳过测试 -->
+                    <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.0.0-M5</version> <configuration> <skipTests>true</skipTests> </configuration>
+                        </plugin> -->
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -137,19 +181,6 @@
                 </configuration>
             </plugin>
 
-            <!-- 发布到中央库 -->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-
             <!-- 复制 META-INF 目录 不让 Maven 打包时生成 maven 自己的描述文件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -161,68 +192,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
-            <!-- 加密签名 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
-              <!--  <configuration>
-                    <skip>true</skip>
-                </configuration>-->
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- 打包带上 Java 源码 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- 生成 javadoc 文档 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-
-                        <configuration>
-                            <!-- add this to disable checking -->
-                            <!--<additionalparam>-Xdoclint:none</additionalparam>-->
-                            <charset>UTF-8</charset><!-- utf-8读取文件 -->
-                            <encoding>UTF-8</encoding><!-- utf-8进行编码代码 -->
-                            <docencoding>UTF-8</docencoding><!-- utf-8进行编码文档 -->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- 打包时跳过测试 -->
-            <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version> <configuration> <skipTests>true</skipTests> </configuration>
-                </plugin> -->
         </plugins>
     </build>
 
@@ -256,36 +225,6 @@
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- 编译为 jar 包时依赖的 -->
- <!--       <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.3.3</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.websocket</groupId>
-            <artifactId>javax.websocket-api</artifactId>
-            <version>1.1</version>
-            <scope>provided</scope>
-        </dependency>-->
-
-        <!-- Tomcat JNDI 数据源 -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-            <version>8.5.69</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

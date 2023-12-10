@@ -2,15 +2,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>aj-json</artifactId>
-    <version>1.1</version>
-    <description>JSON 反序列化</description>
-    <packaging>jar</packaging>
-
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
-        <version>1.11</version>
-        <relativePath>../../pom.xml</relativePath>
+        <version>1.16</version>
+        <relativePath/>
     </parent>
+    <artifactId>aj-json</artifactId>
+    <version>1.2</version>
+    <description>JSON 反序列化</description>
+    <packaging>jar</packaging>
 </project>

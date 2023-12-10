@@ -2,38 +2,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.ajaxjs</groupId>
+        <artifactId>aj-common-parent</artifactId>
+        <version>1.4</version>
+        <relativePath/>
+    </parent>
     <artifactId>aj-iam-server</artifactId>
     <version>1.0</version>
     <description>AJ-IAM Server</description>
     <packaging>jar</packaging>
 
-    <parent>
-        <groupId>com.ajaxjs</groupId>
-        <artifactId>aj-common-parent</artifactId>
-        <version>1.2</version>
-        <relativePath/>
-    </parent>
+    <properties>
+        <!-- 这里是项目主类运行入口 -->
+        <project.mainClass>com.ajaxjs.iam.server.IamServerApp</project.mainClass>
+    </properties>
 
     <build>
         <plugins>
-            <!-- 生成 META-INF/MANIFEST.MF 文件的部分内容 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.3.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <!-- 这里是项目主类运行入口 -->
-                            <mainClass>com.ajaxjs.iam.server.IamServerApp</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <!--一键部署到服务器 SSH-->
+             <!--一键部署到服务器 SSH-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>wagon-maven-plugin</artifactId>
