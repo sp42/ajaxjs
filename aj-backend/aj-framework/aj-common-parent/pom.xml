@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
-        <version>1.16</version>
+        <version>1.17</version>
         <relativePath />
     </parent>
     <artifactId>aj-common-parent</artifactId>
-    <version>1.6</version>
+    <version>1.7</version>
     <packaging>pom</packaging>
     <description>常见项目的依赖</description>
 
@@ -100,6 +100,7 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                             <!-- 这里是项目主类运行入口 -->
+                            <!--suppress UnresolvedMavenProperty -->
                             <mainClass>${project.mainClass}</mainClass>
                         </manifest>
                     </archive>
@@ -119,7 +120,7 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-framework</artifactId>
-            <version>1.1.6</version>
+            <version>1.1.7</version>
         </dependency>
 
         <dependency>

@@ -5,11 +5,11 @@
     <groupId>com.ajaxjs</groupId>
     <artifactId>ajaxjs-parent</artifactId>
     <name>ajaxjs-parent</name>
-    <version>1.16</version>
+    <version>1.17</version>
     <packaging>pom</packaging>
     <description>Public config for OpenSource Library</description>
 
-   <modules>
+    <modules>
         <module>aj-framework/aj-common-parent</module>
         <module>aj-framework/aj-json</module>
         <module>aj-framework/aj-framework</module>
@@ -24,7 +24,8 @@
         <java.version>1.8</java.version><!-- IDEA Maven 插件默认 Java 1.5 编译，这里强制声明一下 -->
         <tomcat.version>8.5.96</tomcat.version>
         <!--<tomcat.version>8.5.84</tomcat.version>-->
-        <spring.version>5.3.24</spring.version>
+       <!-- <spring.version>5.3.24</spring.version>-->
+        <spring.version>5.3.31</spring.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml><!-- Servlet3 不需要 web.xml 问题 -->
@@ -104,7 +105,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.1.0</version>
-                        <!--<version>3.0.1</version>-->
                         <!--  <configuration>
                               <skip>true</skip>
                           </configuration>-->
@@ -124,7 +124,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.6.3</version>
-                        <!--<version>3.4.0</version>-->
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -147,7 +146,6 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                         <version>3.3.0</version>
-                        <!-- <version>3.2.1</version>-->
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -197,6 +195,13 @@
 
     <!-- 公共依赖 -->
     <dependencies>
+        <!-- 通用日志接口-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.36</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

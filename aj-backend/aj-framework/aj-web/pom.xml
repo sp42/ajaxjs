@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
-        <version>1.16</version>
+        <version>1.17</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <artifactId>ajaxjs-web</artifactId>
@@ -35,12 +35,11 @@
         </plugins>
     </build>
 
-
     <dependencies>
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-framework</artifactId>
-            <version>1.1.2</version>
+            <version>1.1.7</version>
         </dependency>
     </dependencies>
 </project>

@@ -5,11 +5,11 @@
     <parent>
         <groupId>com.ajaxjs</groupId>
         <artifactId>ajaxjs-parent</artifactId>
-        <version>1.16</version>
+        <version>1.17</version>
         <relativePath/>
     </parent>
     <artifactId>aj-iam-resource-server</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <description>资源服务器 Resource Server 的 SDK</description>
     <packaging>jar</packaging>
 
