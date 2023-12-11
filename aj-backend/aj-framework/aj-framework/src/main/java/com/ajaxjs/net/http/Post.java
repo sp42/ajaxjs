@@ -17,6 +17,7 @@ import com.ajaxjs.util.io.FileHelper;
 import com.ajaxjs.util.io.StreamHelper;
 import com.ajaxjs.util.convert.MapTool;
 import com.ajaxjs.util.regexp.RegExpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,7 @@ import java.util.function.Consumer;
  *
  * @author Frank Cheung
  */
+@Slf4j
 public class Post extends Base implements HttpConstants {
     /**
      * POST 或 PUT 请求
@@ -63,23 +65,22 @@ public class Post extends Base implements HttpConstants {
     public static ResponseEntity any(String method, String url, Object params, Consumer<HttpURLConnection> fn) {
         final byte[] _params;
 
-        if (params instanceof String) {
+        if (params instanceof String)
             _params = ((String) params).getBytes(StandardCharsets.UTF_8);
-        } else if (params instanceof Map) {
+        else if (params instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) params;
 
             if (map.size() > 0) {
                 String str = MapTool.join(map, v -> v == null ? null : StrUtil.urlEncode(v.toString()));
                 _params = str.getBytes(StandardCharsets.UTF_8);
-            } else {
+            } else
                 _params = null;
-            }
-        } else if (params instanceof byte[]) {
+
+        } else if (params instanceof byte[])
             _params = (byte[]) params;
-        } else {
+        else
             _params = null;
-        }
 
         return connect(url, method, conn -> {
             conn.setDoOutput(true); // 允许写入输出流
@@ -93,8 +94,7 @@ public class Post extends Base implements HttpConstants {
                     out.write(_params); // 通过输出流写入字节数据
                     out.flush();
                 } catch (IOException e) {
-                    e.printStackTrace();
-//					LOGGER.warning("写入数据时失败！[{0}]", e);
+                    log.warn("写入数据时失败！", e);
                 }
             }
         });
@@ -105,7 +105,7 @@ public class Post extends Base implements HttpConstants {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
+     *               <pre>byte[]、String、Map&lt;String, Object&gt;</pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -120,7 +120,7 @@ public class Post extends Base implements HttpConstants {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
+     *               <pre>byte[]、String、Map&lt;String, Object&gt;</pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应消息体
@@ -134,7 +134,7 @@ public class Post extends Base implements HttpConstants {
      *
      * @param url    请求目标地址
      * @param params 请求参数，可以是
-     *               <pre>byte[]、String、Map<String, Object></pre>
+     *               <pre>byte[]、String、Map&lt;String, Object&gt;</pre>
      *               <p>
      *               类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
@@ -148,7 +148,7 @@ public class Post extends Base implements HttpConstants {
      * PUT 请求
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map&lt;String, Object&gt;</pre>类型，实际表示了表单数据 KeyValue 的请求数据
      */
     public static ResponseEntity put(String url, Object params) {
         return put(url, params, null);
@@ -158,7 +158,7 @@ public class Post extends Base implements HttpConstants {
      * PUT API 请求，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map&lt;String, Object&gt;</pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
      * @return 响应消息体
      */
@@ -170,7 +170,7 @@ public class Post extends Base implements HttpConstants {
      * PUT API 请求，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map&lt;String, Object&gt;</pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应消息体
      */
     public static Map<String, Object> putApi(String url, Object params) {
@@ -181,7 +181,7 @@ public class Post extends Base implements HttpConstants {
      * POST API，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map&lt;String, Object&gt;</pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
      * @return 响应的 JSON，Map 格式
      */
@@ -195,28 +195,29 @@ public class Post extends Base implements HttpConstants {
      * POST JSON as RawBody
      */
     public static Map<String, Object> apiJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
-        String json = ConvertToJson.toJson(params);
-        json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
-        System.out.println("JSON>>>" + json);
-
-        return api(url, json, fn);
+        return api(url, toJsonStr(params), fn);
     }
 
     /**
      * PUT JSON as RawBody
      */
     public static Map<String, Object> putJsonBody(String url, Object params, Consumer<HttpURLConnection> fn) {
-        String json = ConvertToJson.toJson(params);
-        json = json.replaceAll("\\r|\\n", ""); // 不要换行，否则会不承认这个格式
+        return putApi(url, toJsonStr(params), fn);
+    }
 
-        return putApi(url, json, fn);
+    static String toJsonStr(Object params) {
+        String json = ConvertToJson.toJson(params);
+        json = json.replaceAll("[\\r\\n]", ""); // 不要换行，否则会不承认这个格式
+        log.info(json);
+
+        return json;
     }
 
     /**
      * POST API，返回 JSON
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map&lt;String, Object&gt;</pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应的 JSON，Map 格式
      */
     public static Map<String, Object> api(String url, Object params) {
@@ -237,7 +238,7 @@ public class Post extends Base implements HttpConstants {
      * POST API，返回 XML
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map&lt;String, Object&gt;</pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @param fn     自定义 HTTP 头的时候可设置，可选的
      * @return 响应的 XML，Map 格式
      */
@@ -251,7 +252,7 @@ public class Post extends Base implements HttpConstants {
      * POST API，返回 XML
      *
      * @param url    请求目标地址
-     * @param params 请求参数，可以是<pre>byte[]、String、Map<String, Object></pre>类型，实际表示了表单数据 KeyValue 的请求数据
+     * @param params 请求参数，可以是<pre>byte[]、String、Map&lt;String, Object&gt;</pre>类型，实际表示了表单数据 KeyValue 的请求数据
      * @return 响应的 XML，Map 格式
      */
     public static Map<String, String> apiXML(String url, Object params) {
@@ -403,6 +404,7 @@ public class Post extends Base implements HttpConstants {
         try (OutputStream out = response.getOutputStream()) {
             StreamHelper.write(resp.getIn(), out, true);
         } catch (IOException e) {
+            log.warn("ERR>>>", e);
             throw new RuntimeException(e);
         }
     }

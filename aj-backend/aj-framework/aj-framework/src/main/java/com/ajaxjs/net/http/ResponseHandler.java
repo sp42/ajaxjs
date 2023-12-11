@@ -35,6 +35,8 @@ import java.util.zip.GZIPInputStream;
  */
 @Slf4j
 public abstract class ResponseHandler {
+    private static final int MAX_LENGTH_TO_PRINT = 500;
+
     /**
      * 响应数据转换为文本
      *
@@ -46,8 +48,7 @@ public abstract class ResponseHandler {
             String result = StreamHelper.byteStream2string(resp.getIn());
             resp.setResponseText(result.trim());
 
-            int maxLength = 500;
-            String resultMsg = (result.length() > maxLength) ? result.substring(0, maxLength) + " ..." : result;
+            String resultMsg = (result.length() > MAX_LENGTH_TO_PRINT) ? result.substring(0, MAX_LENGTH_TO_PRINT) + " ..." : result;
             log.info("{} {} 响应状态：{}，请求结果\n{}", resp.getHttpMethod(), resp.getUrl(), resultMsg, resp.getHttpCode());
         }
 
@@ -105,8 +106,7 @@ public abstract class ResponseHandler {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else
-                map = EntityConvert.json2map(resp.getResponseText());
+            } else map = EntityConvert.json2map(resp.getResponseText());
 
             list = new ArrayList<>();
             list.add(map);
@@ -134,8 +134,7 @@ public abstract class ResponseHandler {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else
-                map = EntityConvert.json2map(resp.getResponseText());
+            } else map = EntityConvert.json2map(resp.getResponseText());
         }
 
         return map;
@@ -160,8 +159,7 @@ public abstract class ResponseHandler {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else
-                map = MapTool.xmlToMap(resp.getResponseText());
+            } else map = MapTool.xmlToMap(resp.getResponseText());
         }
 
         return map;

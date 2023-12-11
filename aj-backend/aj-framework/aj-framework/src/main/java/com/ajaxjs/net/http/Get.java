@@ -158,6 +158,7 @@ public class Get extends Base {
             fn.accept(conn);
 
         String fileName = FileHelper.getFileNameFromUrl(url);
+
         if (newFileName != null)
             fileName = newFileName + RegExpUtils.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
 

@@ -68,9 +68,8 @@ public abstract class SetConnection {
      */
     public static Consumer<HttpURLConnection> map2header(Map<String, ?> map) {
         return conn -> {
-            for (String key : map.keySet()) {
+            for (String key : map.keySet())
                 conn.setRequestProperty(key, map.get(key).toString());
-            }
         };
     }
 }

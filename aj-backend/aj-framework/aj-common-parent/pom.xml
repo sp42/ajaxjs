@@ -111,25 +111,21 @@
 
     <!-- 公共依赖 -->
     <dependencies>
+        <!-- MySQL 数据库驱动 -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.ajaxjs</groupId>
-            <artifactId>ajaxjs-framework</artifactId>
-            <version>1.1.7</version>
-        </dependency>
-
+        <!-- 嵌入式 Tomcat -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
             <version>${tomcat.version}</version>
         </dependency>
 
-        <!-- tomcat 对 jsp 支持 -->
+        <!-- Tomcat 对 JSP 支持 -->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jasper</artifactId>
@@ -141,6 +137,12 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
             <version>${tomcat.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>ajaxjs-framework</artifactId>
+            <version>1.1.7</version>
         </dependency>
     </dependencies>
 </project>
