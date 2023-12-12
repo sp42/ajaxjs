@@ -30,11 +30,22 @@ public abstract class BaseCRUDService implements BaseCRUDController {
     }
 
     @Override
+    public Map<String, Object> info(String namespace, String namespace2, Long id) {
+        System.out.println(namespace2);
+        return null;
+    }
+
+    @Override
     public List<Map<String, Object>> list(String namespace) {
         if (!namespaces.containsKey(namespace))
             throw new BusinessException("没有配置 BaseCRUD");
 
         return namespaces.get(namespace).listMap();
+    }
+
+    @Override
+    public List<Map<String, Object>> list(String namespace, String namespace2) {
+        return null;
     }
 
     @Override
@@ -48,10 +59,20 @@ public abstract class BaseCRUDService implements BaseCRUDController {
     }
 
     @Override
+    public PageResult<Map<String, Object>> page(String namespace, String namespace2) {
+        return null;
+    }
+
+    @Override
     public Long create(String namespace, Map<String, Object> params) {
         params = init(namespace, params);
 
         return namespaces.get(namespace).create(params);
+    }
+
+    @Override
+    public Long create(String namespace, String namespace2, Map<String, Object> params) {
+        return null;
     }
 
     @Override
@@ -62,7 +83,7 @@ public abstract class BaseCRUDService implements BaseCRUDController {
     }
 
     @Override
-    public Boolean updatePut(String namespace, Map<String, Object> params) {
+    public Boolean update(String namespace, String namespace2, Map<String, Object> params) {
         return update(namespace, params);
     }
 
@@ -85,7 +106,7 @@ public abstract class BaseCRUDService implements BaseCRUDController {
     }
 
     @Override
-    public Boolean deleteById(@PathVariable String namespace, @PathVariable Long id) {
+    public Boolean delete(String namespace, String namespace2, @PathVariable Long id) {
         return delete(namespace, id);
     }
 

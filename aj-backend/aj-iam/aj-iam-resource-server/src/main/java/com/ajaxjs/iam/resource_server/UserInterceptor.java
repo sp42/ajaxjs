@@ -66,9 +66,24 @@ public class UserInterceptor implements HandlerInterceptor {
         return mgr;
     }
 
+    /*
+     * 是否调试模式（开发模式）
+     * 有两种模式：本地模式和远程模式（自动判断） 返回 true 表示是非 linux 环境，为开发调试的环境，即 isDebug = true； 返回
+     * false 表示在部署的 linux 环境下。 Linux 的为远程模式
+     */
+
+    public static boolean isDebug;
+
+    static {
+        final String OS_NAME = System.getProperty("os.name").toLowerCase();
+        isDebug = !(OS_NAME.contains("nix") || OS_NAME.contains("nux") || OS_NAME.indexOf("aix") > 0);
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (StringUtils.hasText(run) && Boolean.parseBoolean(run)) {
+        if (isDebug && "1".equals(request.getParameter("allow"))) // 方便开发
+            return true;
+        else if (StringUtils.hasText(run) && Boolean.parseBoolean(run)) {
             String token = extractToken(request);
 
             if (!StringUtils.hasText(token))

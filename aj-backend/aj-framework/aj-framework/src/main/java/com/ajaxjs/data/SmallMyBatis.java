@@ -46,15 +46,13 @@ public class SmallMyBatis {
                     if ("sql".equals(node.getNodeName())) {
                         String id = XmlHelper.getNodeAttribute(node, "id");
 
-                        if (sqls.containsKey(id))
-                            log.warn("已有相同 sqlId [{}]", id);
+                        if (sqls.containsKey(id)) log.warn("已有相同 sqlId [{}]", id);
 
                         String sql = XmlHelper.getNodeText(node);
                         sqls.put(id, sql);
                     }
                 });
-            } else
-                log.warn("找不到 {}-XML 资源", xmlFile);
+            } else log.warn("找不到 {}-XML 资源", xmlFile);
         }
     }
 
@@ -72,8 +70,7 @@ public class SmallMyBatis {
             log.warn("文件路径没有 xml", e);
         }
 
-        if (ObjectUtils.isEmpty(resources))
-            throw new RuntimeException("文件路径[" + sqlLocations + "]没有 xml");
+        if (ObjectUtils.isEmpty(resources)) throw new RuntimeException("文件路径[" + sqlLocations + "]没有 xml");
 
         // 写死 sql 目录下。Resource 不能返回相对目录
         String[] xmlArray = Arrays.stream(resources).map(n -> "sql/" + n.getFilename()).toArray(String[]::new);
@@ -89,8 +86,7 @@ public class SmallMyBatis {
     public String getSqlById(String id) {
         String sql = sqls.get(id);
 
-        if (!StringUtils.hasText(sql))
-            throw new IllegalArgumentException("查询 id 为 " + id + "　的 SQL 为空");
+        if (!StringUtils.hasText(sql)) throw new IllegalArgumentException("查询 id 为 " + id + "　的 SQL 为空");
 
         return sql;
     }
@@ -114,8 +110,7 @@ public class SmallMyBatis {
                 sb.delete(startIdx, endIdx + 5);
                 String content = ifBlock.substring(ifBlock.indexOf(">") + 1, ifBlock.lastIndexOf("<"));
                 sb.insert(startIdx, content);
-            } else
-                sb.delete(startIdx, endIdx + 5);
+            } else sb.delete(startIdx, endIdx + 5);
 
             startIdx = sb.indexOf("<if", startIdx);
         }
@@ -209,14 +204,10 @@ public class SmallMyBatis {
                     if (matcher.group(1).equals("#{")) {
                         // 使用 PreparedStatement 设置参数，自动转换类型
 
-                        if (value instanceof Number)
-                            strValue = String.valueOf(value);
-                        else if (value.equals(true))
-                            strValue = "1";
-                        else if (value.equals(false))
-                            strValue = "0";
-                        else
-                            strValue = "'" + value + "'"; // 如果是非数字类型，加上单引号
+                        if (value instanceof Number) strValue = String.valueOf(value);
+                        else if (value.equals(true)) strValue = "1";
+                        else if (value.equals(false)) strValue = "0";
+                        else strValue = "'" + value + "'"; // 如果是非数字类型，加上单引号
                     }
                 }
             }
@@ -228,15 +219,32 @@ public class SmallMyBatis {
         return sb.toString();
     }
 
+    /**
+     * 处理SQL语句
+     *
+     * @param paramsMap 参数映射关系
+     * @param sqlId     SQL ID
+     * @return 处理后的SQL语句
+     */
     public static String handleSql(Map<String, Object> paramsMap, String sqlId) {
+        // 获取SQL语句
         String sql = Objects.requireNonNull(DiContextUtil.getBean(SmallMyBatis.class)).getSqlById(sqlId);
 
+        // 处理SQL语句
         return handleSql(sql, paramsMap);
     }
 
+    private static final Map<String, Object> EMPTY_PARAMS_MAP = new HashMap<>();
+
+    /**
+     * 处理SQL语句
+     *
+     * @param sql       SQL语句
+     * @param paramsMap 参数映射关系
+     * @return 处理后的SQL语句
+     */
     public static String handleSql(String sql, Map<String, Object> paramsMap) {
-        if (paramsMap == null)
-            paramsMap = new HashMap<>();
+        if (paramsMap == null) paramsMap = EMPTY_PARAMS_MAP;
 
         sql = generateIfBlock(sql, paramsMap);
         //        sql = parseForEach(sql, paramsMap);

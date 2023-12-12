@@ -1,10 +1,13 @@
 package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.CRUD;
+import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.data.util.SnowflakeId;
+import com.ajaxjs.framework.entity.model.BaseDataServiceConfig;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -16,17 +19,8 @@ import java.util.function.Consumer;
  * 通用实体快速的 CRUD
  */
 @Data
-public class BaseCRUD<T, K extends Serializable> {
-    /**
-     * 主键名称
-     */
-    private String idField = "id";
-
-    /**
-     * 表名
-     */
-    private String tableName;
-
+@EqualsAndHashCode(callSuper = true)
+public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     /**
      * Bean 实体
      */
@@ -38,52 +32,43 @@ public class BaseCRUD<T, K extends Serializable> {
     private Class<T> clz;
 
     /**
-     * 查询详情的 SQL（可选的）
+     * 子配置
      */
-    private String infoSql;
-
-    /**
-     * 查询列表的 SQL（可选的）
-     */
-    private String listSql;
-
-    /**
-     * 是否有逻辑删除标记
-     */
-    private boolean hasIsDeleted;
-
-    /**
-     * 是否加入租户数据隔离
-     */
-    private boolean isTenantIsolation;
-
-    private String delField = "is_deleted";
+    private Map<String, BaseCRUD<?, Long>> children;
 
     /**
      * 1=自增；2=雪花；3=UUID
      */
     private Integer idType = BaseEntityConstants.IdType.AUTO_INC;
 
+    private final static String DUMMY_STR = "1=1";
+
     private final static String SELECT_SQL = "SELECT * FROM %s WHERE 1=1 ORDER BY create_date DESC"; // 日期暂时写死
 
-    private String getInfoSql() {
-        String sql = String.format(SELECT_SQL, tableName) + " AND " + idField + " = ?";
+    private String getManagedInfoSql() {
+        String sql = getInfoSql();
 
-        return isTenantIsolation ? TenantService.addTenantIdQuery(sql) : sql;
+        if (StringUtils.hasText(sql)) {
+            Map<String, Object> queryStringParams = DataServiceUtils.getQueryStringParams();
+            sql = SmallMyBatis.handleSql(sql, queryStringParams);
+        } else
+            sql = String.format(SELECT_SQL, getTableName()).replace(DUMMY_STR, getIdField() + " = ?");
+
+        return isTenantIsolation() ? TenantService.addTenantIdQuery(sql) : sql;
     }
 
     /**
      * 获取单笔记录
      */
     public T info(K id) {
-        return CRUD.info(clz, getInfoSql(), id);
+        return CRUD.info(clz, getManagedInfoSql(), id);
     }
 
     /**
      * 获取单笔记录
      */
     public Map<String, Object> infoMap(K id) {
-        return CRUD.infoMap(getInfoSql(), id);
+        return CRUD.infoMap(getManagedInfoSql(), id);
     }
 
     /**
@@ -107,17 +92,17 @@ public class BaseCRUD<T, K extends Serializable> {
     }
 
     private String getListSql(String where) {
-        String sql;
+        String sql = getListSql();
 
-        if (StringUtils.hasText(listSql)) {
-            sql = listSql;
+        if (StringUtils.hasText(sql)) {
+            sql = SmallMyBatis.handleSql(sql, DataServiceUtils.getQueryStringParams());
         } else
-            sql = String.format(SELECT_SQL, tableName);
+            sql = String.format(SELECT_SQL, getTableName());
 
-        if (hasIsDeleted)
-            sql += " AND " + delField + " = 0";
+        if (isHasIsDeleted())
+            sql += " AND " + getDelField() + " = 0";
 
-        if (isTenantIsolation)
+        if (isTenantIsolation())
             sql = TenantService.addTenantIdQuery(sql);
 
         if (where != null)
@@ -148,10 +133,10 @@ public class BaseCRUD<T, K extends Serializable> {
     }
 
     public boolean delete(K id) {
-        if (hasIsDeleted)
-            CRUD.jdbcWriterFactory().write("UPDATE " + tableName + " SET " + delField + " = 1 WHERE " + idField + " = ?", id);
+        if (isHasIsDeleted())
+            CRUD.jdbcWriterFactory().write("UPDATE " + getTableName() + " SET " + getIdField() + " = 1 WHERE " + getIdField() + " = ?", id);
         else
-            CRUD.jdbcWriterFactory().write("DELETE FROM " + tableName + " WHERE " + idField + " = ?", id);
+            CRUD.jdbcWriterFactory().write("DELETE FROM " + getTableName() + " WHERE " + getIdField() + " = ?", id);
 
         return true;
     }
@@ -170,10 +155,10 @@ public class BaseCRUD<T, K extends Serializable> {
     @SuppressWarnings("unchecked")
     public K create(Map<String, Object> params) {
         if (idType == 2)
-            params.put(idField, SnowflakeId.get());
+            params.put(getIdField(), SnowflakeId.get());
 
         if (idType == 3)
-            params.put(idField, StrUtil.uuid());
+            params.put(getIdField(), StrUtil.uuid());
 
         if (beforeCreate != null)
             beforeCreate.accept(params);
@@ -183,10 +168,10 @@ public class BaseCRUD<T, K extends Serializable> {
         if (tenantId != null)
             params.put("tenant_id", tenantId);
 
-        return (K) CRUD.create(tableName, params, idField);
+        return (K) CRUD.create(getTableName(), params, getIdField());
     }
 
     public Boolean update(Map<String, Object> params) {
-        return CRUD.update(tableName, params, idField);
+        return CRUD.update(getTableName(), params, getIdField());
     }
 }
