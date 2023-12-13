@@ -1,4 +1,4 @@
 // 数据服务 UI 配置
 DS_CONFIG = {
-    API_ROOT: 'http://localhost:8080/adp/data_service',
+    API_ROOT: 'http://127.0.0.1:8888/iam',
 };

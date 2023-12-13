@@ -75,8 +75,11 @@ public class JdbcReader extends JdbcConn {
 
 //            log.debug(columnName+"::"+columnTypeName);
             /* mysql 8 json 字段对应 jdbc 的类型是？有没有办法让 jdbc 得知这个是一个 json 类型的字段？ */
-            if (value != null && JSON_TYPE_MYSQL8.equals(metaData.getColumnTypeName(i)))
-                value = EntityConvert.json2map(value.toString());
+            if (value != null && JSON_TYPE_MYSQL8.equals(metaData.getColumnTypeName(i))) {
+                String jsonStr = value.toString();
+
+                value = jsonStr.startsWith("[") ? EntityConvert.json2MapList(jsonStr) : EntityConvert.json2map(jsonStr);
+            }
 
             map.put(key, value);
         }

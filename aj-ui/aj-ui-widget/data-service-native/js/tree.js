@@ -30,10 +30,8 @@ ds_tree = {
                         let nodeCfg = { // 节点事件的配置
                             on: {
                                 click: () => {
+                                    debugger
                                     this.allData.every(dml => {
-                                        console.log(dml)
-                                        console.log(dml.id)
-                                        console.log(id)
 
                                         if (dml.id == id) {
                                             this.currentData = dml;

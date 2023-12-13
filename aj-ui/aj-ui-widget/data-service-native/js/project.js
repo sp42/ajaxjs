@@ -25,6 +25,10 @@ project = {
         };
     },
     methods: {
+        openTab(a, data) {
+            this.currentData = data.data;
+            this.editorData.type = 'info';
+        },
         handleContextMenuEdit() {
             this.project.isShowEditProjectWin = true;
         },
@@ -53,18 +57,33 @@ project = {
         },
 
         loadTreeProejct() {
-            aj.xhr.get(DS_CONFIG.API_ROOT + '/admin/project', j => {
-                // console.log(j)
+            aj.xhr.get(DS_CONFIG.API_ROOT + '/common_api/common_api/list?allow=1', j => {
                 if (j.status == 1) {
+                    let data = [];
                     // 添加 iView 树节点的字段
                     j.data.forEach(item => {
-                        item.title = item.name;
-                        item.loading = false;
-                        item.contextmenu = true;
-                        item.children = [];
+                        let node = {
+                            title: item.name || item.namespace,
+                            contextmenu: true,
+                            data: item
+                        };
+
+                        if (item.children) {
+                            node.expand = true;
+                            node.children = [];
+
+                            item.children.forEach(item2 => {
+                                node.children.push({
+                                    title: item2.name || item2.namespace,
+                                    data: item2
+                                });
+                            });
+                        }
+
+                        data.push(node);
                     });
 
-                    this.project.treeData = j.data;
+                    this.project.treeData = data;
                 }
             });
         },

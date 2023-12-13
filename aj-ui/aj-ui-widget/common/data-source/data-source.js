@@ -28,7 +28,7 @@ Vue.component('Datasource', {
 		};
 	},
 	mounted() {
-		this.getList();
+		// this.getList();
 	},
 	methods: {
 		active(item) {

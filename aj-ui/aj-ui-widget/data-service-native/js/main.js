@@ -29,6 +29,11 @@ new Vue({
             currentDML: {}, // 当前编辑的数据（DML）
             currentType: '',
             activeTab: "tab1",
+            editorData: {// 当前编辑器数据，根据不同类型的
+                type: 'info',
+                isCustomSql: true,
+                sql: ''
+            },
             mainTabs: [
                 {
                     label: "数据服务",
@@ -98,6 +103,9 @@ new Vue({
             }
         },
 
+        selectCmd() {
+
+        },
 
         // 选择 DML
         selectItem(item, index, type) {
@@ -154,14 +162,64 @@ new Vue({
             delete dml.datasourceName;
             delete dml.extractData;
 
-            console.log(dml)
-
-
             aj.xhr.putJson(DATA_SERVICE_API, dml, j => {
                 if (j.status === 1) {
                     this.$Message.success('修改命令成功');
                 }
             });
         }
+    },
+    watch: {
+        'editorData.type'(v) {
+            let key;
+
+            switch (v) {
+                case 'info':
+                    key = 'infoSql';
+                    break;
+                case 'list':
+                    key = 'listSql';
+                    break;
+                case 'create':
+                    key = 'createSql';
+                    break;
+                case 'update':
+                    key = 'updateSql';
+                    break;
+                case 'delete':
+                    key = 'deleteSql';
+                    break;
+            }
+
+            this.editorData.isCustomSql = !!this.currentData[key];
+            this.editorData.sql = this.currentData[key];
+        },
+        'editorData.isCustomSql'(v) {
+            if (!v) {
+                let key;
+
+                switch (this.editorData.type) {
+                    case 'info':
+                        key = 'infoSql';
+                        break; v
+                    case 'list':
+                        key = 'listSql';
+                        break;
+                    case 'create':
+                        key = 'createSql';
+                        break;
+                    case 'update':
+                        key = 'updateSql';
+                        break;
+                    case 'delete':
+                        key = 'deleteSql';
+                        break;
+                }
+
+                this.currentData[key] = null;
+                this.editorData.sql = '';
+            }
+        }
     }
+
 });

@@ -8,7 +8,8 @@
     <!--  <script src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script> -->
     <script src="../libs/vue.js"></script>
     <!-- import stylesheet -->
-    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/view-design/4.7.0/styles/iview.css" /> -->
+    <link rel="stylesheet" href="https://file.iviewui.com/dist/main.fcad1cf4cfd66b95481e.css" />
     <!-- import iView -->
     <script src="../libs/iview.js"></script>
     <script src="../common/utils.js"></script>
@@ -28,7 +29,7 @@
 
     <link rel="icon" type="image/x-icon" href="asset/favicon.ico" />
     <script>
-        window.API_ROOT = 'http://localhost:8080/adp';
+        window.API_ROOT = 'http://127.0.0.1:8888/iam';
     </script>
 </head>
 
@@ -61,8 +62,7 @@
                     <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{ item.name }}</Option>
                 </i-Select> -->
                 <div style="height: 93%;overflow-y: auto;">
-                    <Tree :data="project.treeData" :load-data="loadTreeData" style="margin-left: 10px;"
-                        @on-contextmenu="handleContextMenu">
+                    <Tree :data="project.treeData" style="margin-left: 10px;" @on-contextmenu="handleContextMenu" @on-select-change="openTab">
                         <template slot="contextMenu">
                             <Dropdown-Item @click.native="handleContextMenuCreate"
                                 style="color:green">新建项目</Dropdown-Item>
@@ -159,15 +159,16 @@
                                     </i-Select> -->
                                 </li>
                                 <li>
-                                    <i-input ref="inputName" placeholder="必填的" v-model="currentData.name">
-                                        <span slot="prepend">命令名称</span>
+                                    <i-input placeholder="相当于接口的 URL 目录，必填的" v-model="currentData.namespace" size="80">
+                                        <span slot="prepend">命名空间</span>
                                     </i-input>
                                 </li>
                                 <li>
-                                    <i-input ref="inputName" placeholder="实体的 URL 目录，必填的" v-model="currentData.urlDir">
-                                        <span slot="prepend">URL 目录</span>
+                                    <i-input placeholder="接口的说明" v-model="currentData.name">
+                                        <span slot="prepend">说明</span>
                                     </i-input>
                                 </li>
+       
                                 <li style="padding-top: 5px;">
                                     数据源： {{currentData.datasourceName}}
                                 </li>
@@ -181,8 +182,9 @@
                                     <Icon type="ios-arrow-down" style="cursor: pointer;" @click="togglePanel" />
                                 </legend>
                             </fieldset>
-                            <div class="config" style="height:300px">
-                                <Row type="flex" justify="center" align="middle">
+                            <div class="config" style="height:0px">
+                                <i-Form>
+         <!--                        <Row type="flex" justify="center" align="middle">
                                     <i-Col span="10" style="padding-right:20px;">
                                         <i-input placeholder="不填则按照项目的设置。以 http://…… 开头" v-model="currentData.urlRoot">
                                             <span slot="prepend">API 地址前缀</span>
@@ -196,7 +198,7 @@
                                         <i-input v-model="currentData.content" maxlength="200" show-word-limit
                                             type="textarea" :rows="4" placeholder="描述" />
                                     </i-Col>
-                                </Row>
+                                </Row> -->
 
                                 <!--       <FormItem label="主键生成策略：" prop="keyGen">
                                         <Select v-model="table.keyGen">
@@ -206,7 +208,7 @@
                                         </Select>
                                     </FormItem> -->
                                 <br />
-                                <Divider style="color:gray" size="small">通用字段/参数映射 Mapping</Divider>
+<!--                                 <Divider style="color:gray" size="small">通用字段/参数映射 Mapping</Divider>
                                 <br />
                                 <Row type="flex" justify="center" align="middle" :gutter="16">
                                     <i-Col span="8">
@@ -224,13 +226,14 @@
                                             <span slot="prepend">修改日期字段</span>
                                         </i-input>
                                     </i-Col>
-                                </Row>
+                                </Row> -->
                                 <br />
                                 <Row type="flex" justify="center" align="middle" :gutter="16">
                                     <i-Col span="8">
                                         <i-input placeholder="不填写则默认为 id" v-model="table.fieldsMapping.id">
                                             <span slot="prepend">唯一主键</span>
                                         </i-input>
+                                        <a @click="showFields=true; toField = 'id'" style="float:right">选择字段&nbsp;&nbsp;</a>
                                     </i-Col>
                                     <i-Col span="8">
                                         <i-input placeholder="不填写则默认为 createDate" v-model="table.fieldsMapping.createDate">
@@ -242,12 +245,12 @@
                                     </i-Col>
                                 </Row>
 
-              <!--                   <FormItem label="唯一主键" prop="idField">
-                                    <i-input v-model="currentData.fieldsMapping.id" type="text" placeholder="不填写则默认为 id"
-                                        style="width:260px;" />
-                                    <a @click="showFields=true; toField = 'id'" style="float:right">选择字段
-                                        &nbsp;&nbsp;</a>
-                                </FormItem> -->
+                <!--                 <FormItem label="唯一主键" prop="idField">
+                                    <i-input v-model="currentData.idField" type="text" placeholder="不填写则默认为 id" style="width:260px;">
+                                        <span slot="prepend">命名空间</span>
+                                    </i-input>
+                                    
+                                </FormItem>  -->
          <!--                        <FormItem label="创建日期的字段" prop="idField">
                                     <i-input v-model="table.fieldsMapping.createDate" type="text"
                                         placeholder="不填写则默认为 createDate" style="width:260px;"
@@ -296,65 +299,57 @@
                                     <ul class="showFieldsList">
                                         <li v-for="(v, k) in fields" :key="k">
                                             <label>
-                                                <div class="fieldsComments">{{table.fieldsComments[k]}}</div> <a
-                                                    @click="table.fieldsMapping[toField] = k; showFields = false;">{{k}}</a>
+                                                <div class="fieldsComments">{{table.fieldsComments[k]}}</div> 
+                                                <a @click="table.fieldsMapping[toField] = k; showFields = false;">{{k}}</a>
                                             </label>
                                         </li>
                                     </ul>
                                 </Modal>
 
-
                                 <div style="margin-top: 15px;text-align: right;color:lightgray;">
                                     id#{{currentData.id}} 创建人： admin 创建日期：{{currentData.createDate}} 修改人： admin 修改日期
                                     {{currentData.updateDate}}
                                 </div>
+                                </i-Form>
                             </div>
 
                             <div class="main-edit-panel">
-                                <ul class="command-list">
-                                    <li v-for="(item, k, index) in currentData.data" :key="index" v-if="k != 'others'"
-                                        v-html="getDml(item, k)" :class="{selected: dmlSelected == index}"
-                                        @click="selectItem(item, index, k)">
+                                <ul class="command-list" @click="selectCmd($event)">
+                                    <li @click="editorData.type = 'info'" :class="{selected: editorData.type == 'info'}">
+                                        <span style="color: green;">GET</span> Info
                                     </li>
-
-                                    <li v-for="(item, k, index) in currentData.others" :key="index"
-                                        v-html="getDml(item, k)" :class="{selected: dmlSelected == index}"
-                                        @click="selectItem(item, index, k)">
+                                    <li @click="editorData.type = 'list'" :class="{selected: editorData.type == 'list'}">
+                                        <span style="color: green;">GET</span> List
                                     </li>
-                                    <!--                           <li>
-                                        GET /foo
+                                    <li @click="editorData.type = 'create'" :class="{selected: editorData.type == 'create'}">
+                                        <span style="color: burlywood;">POST</span> Create
                                     </li>
-                                    <li>
-                                        POST /foo
+                                    <li @click="editorData.type = 'update'" :class="{selected: editorData.type == 'update'}">
+                                        <span style="color: blueviolet;">PUT</span> Update
                                     </li>
-                                    <li>
-                                        GET /foo
-                                    </li>
-                                    <li>
-                                        POST /foo
-                                    </li>
-                                    <li>
-                                        GET /foo
-                                    </li> -->
-                                    <li>
-                                        + 新建命令
-                                    </li>
-
+                                    <li @click="editorData.type = 'delete'" :class="{selected: editorData.type == 'delete'}">
+                                        <span style="color: red;">DELETE</span> Delete
+                                    </li> 
                                 </ul>
                                 <div class="code-panel">
                                     <!-- SQL 源码编辑器-->
-                                    <codemirror class="code-editor" ref="cm" v-model="code" :options="cmOption">
-                                    </codemirror>
-                                    <!-- {{currentType}}----
-                                    {{currentDML}}--------- -->
-
+                                    <codemirror class="code-editor" ref="cm" v-model="editorData.sql" :options="cmOption" v-show="editorData.isCustomSql"></codemirror>
+                                    <!-- {{currentType}}----  {{currentDML}}--------- -->
                                     <div>
-                                        <span style="float: right;"><label><input type="checkbox"
-                                                    v-model="currentDML.enable" /> 启用</label></span>
-                                        命令名称 <i-input type="text" placeholder="自定义命令必填" style="width:200px"
-                                            size="small"></i-input>
+                                        <span style="float: right;"><label><input type="checkbox" v-model="currentDML.enable" /> 启用</label></span>
+
+                                    <!-- 用不了 iview 的 RadioGroup -->
+                                    <label><input type="radio" v-model="editorData.isCustomSql" :value="true" /> 自定义 SQL</label> 
+                                    <label><input type="radio" v-model="editorData.isCustomSql" :value="false" /> 默认逻辑</label>
                                         <br />
                                         <br />
+    
+
+                                    <span v-if="editorData.type == 'delete'">
+                                        <label><input type="radio" v-model="editorData.isCustomSql" :value="true" /> 逻辑删除</label> &nbsp;
+                                        <label><input type="radio" v-model="editorData.isCustomSql" :value="false" /> 物理删除</label>
+                                    </span>
+
 
                                         <span v-if="currentType == 'create'">
                                             <label>
@@ -382,14 +377,14 @@
                                             <a @click="copySql">复制</a>
                                         </div>
 
-                                        命令类型
+<!--                                         命令类型
                                         <Radio-Group type="button">
                                             <Radio label="单个查询" title="查询单笔记录，通常返回一个记录的详细信息（info）。"></Radio>
                                             <Radio label="列表查询" title="返回列表记录（list）"></Radio>
                                             <Radio label="创建记录" title="执行 SQL INSERT 操作新增一笔记录（CREATE）。"></Radio>
                                             <Radio label="修改记录" title="指定记录 id，修改记录字段（UPDATE）。"></Radio>
                                             <Radio label="删除记录" title="删除单笔记录，若成功返回 true。"></Radio>
-                                        </Radio-Group>
+                                        </Radio-Group> -->
 
                                         <div style="margin:20px 0">
 
@@ -437,8 +432,7 @@
 
         <Modal title="从数据库的表定义选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
             <!--选择表格-->
-            <table-selector :dsid="1" :is-cross-db="dataSource.crossDb"
-                :data-source-id="dataSource.id"></table-selector>
+            <table-selector :dsid="1" :is-cross-db="dataSource.crossDb" :data-source-id="dataSource.id"></table-selector>
         </Modal>
     </div>
 
