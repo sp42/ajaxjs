@@ -180,7 +180,7 @@ function getQueryString() {
         model: true,
         title: "业务建模",
         expandMenu: ["model"],
-        load: "DataSource",
+        load: "DataService2",
       };
       break;
     default:

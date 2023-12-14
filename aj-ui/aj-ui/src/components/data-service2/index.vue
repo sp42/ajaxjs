@@ -5,14 +5,14 @@
         数据源：<span>{{dataSource.name}}</span> | <a href="https://framework.ajaxjs.com" target="_blank">帮助</a> | <a @click="showAbout">关于</a>
       </div>
       <img src="~@/assets/icon.png" width="16" style="vertical-align: middle;" /> 数据服务 Data Service
-    </nav>
+    </nav> 
     <Split v-model="split1" style="border-top: 1px solid lightgray;">
       <div slot="left" class="split-pane-left">
         <div class="search-panel ">
           <i-Input suffix="ios-search" placeholder="搜索数据服务……" style="width: 90%" />
         </div>
         <div style="height: 93%;overflow-y: auto;">
-          <Tree :data="treeData" style="margin-left: 10px;" @on-contextmenu="handleContextMenu" @on-select-change="openTab">
+       <Tree :data="treeData" style="margin-left: 10px;" @on-contextmenu="handleContextMenu" @on-select-change="openTab">
             <template slot="contextMenu">
               <Dropdown-Item @click.native="handleContextMenuCreate" style="color:green">新建项目</Dropdown-Item>
               <Dropdown-Item @click.native="handleContextMenuEdit">编辑项目</Dropdown-Item>
@@ -74,7 +74,7 @@
         </ul>
         <div class="content">
           <Tabs class="mainTab" name="mainTab" :value="activeTab" :animated="false" type="card" @on-click="ifAdd">
-            <tab-pane label="首页" name="index" index="a" :closable="true" tab="mainTab" style="padding: 0 10px">
+            <tab-pane label="首页" name="index" :index="0" :closable="true" tab="mainTab" style="padding: 0 10px">
               <h1> Welcome to DataService</h1>
             </tab-pane>
             <tab-pane v-for="tab in mainTabs" :key="tab.label" :label="tab.label" :name="tab.name" :index="tab.index" :closable="tab.closable" tab="mainTab" style="padding: 0 10px;">
@@ -87,7 +87,7 @@
                                     </i-Select> -->
                 </li>
                 <li>
-                  <i-input placeholder="相当于接口的 URL 目录，必填的" v-model="currentData.namespace" size="80">
+                  <i-input placeholder="相当于接口的 URL 目录，必填的" v-model="currentData.namespace">
                     <span slot="prepend">命名空间</span>
                   </i-input>
                 </li>
@@ -152,7 +152,7 @@
                                     </i-Col>
                                 </Row> -->
                   <br />
-                  <Row type="flex" justify="center" align="middle" :gutter="16">
+<!--                   <Row type="flex" justify="center" align="middle" :gutter="16">
                     <i-Col span="8">
                       <i-input placeholder="不填写则默认为 id" v-model="table.fieldsMapping.id">
                         <span slot="prepend">唯一主键</span>
@@ -167,7 +167,7 @@
                     <i-Col span="8">
                       <a>复制项目设置</a>
                     </i-Col>
-                  </Row>
+                  </Row> -->
 
                   <!--                 <FormItem label="唯一主键" prop="idField">
                                     <i-input v-model="currentData.idField" type="text" placeholder="不填写则默认为 id" style="width:260px;">
@@ -218,7 +218,7 @@
                                       <TagsPicker />
                                     </FormItem> -->
 
-                  <Modal v-model="showFields" title="选择字段" cancel-text="" width="370">
+    <!--               <Modal v-model="showFields" title="选择字段" cancel-text="" width="370">
                     <ul class="showFieldsList">
                       <li v-for="(v, k) in fields" :key="k">
                         <label>
@@ -227,17 +227,17 @@
                         </label>
                       </li>
                     </ul>
-                  </Modal>
+                  </Modal> -->
 
-                  <div style="margin-top: 15px;text-align: right;color:lightgray;">
+         <!--          <div style="margin-top: 15px;text-align: right;color:lightgray;">
                     id#{{currentData.id}} 创建人： admin 创建日期：{{currentData.createDate}} 修改人： admin 修改日期
                     {{currentData.updateDate}}
-                  </div>
+                  </div> -->
                 </i-Form>
               </div>
 
               <div class="main-edit-panel">
-                <ul class="command-list">
+   <!--              <ul class="command-list">
                   <li @click="editorData.type = 'info'" :class="{selected: editorData.type == 'info'}">
                     <span style="color: green;">GET</span> Info
                   </li>
@@ -253,10 +253,10 @@
                   <li @click="editorData.type = 'delete'" :class="{selected: editorData.type == 'delete'}">
                     <span style="color: red;">DELETE</span> Delete
                   </li>
-                </ul>
+                </ul> -->
                 <div class="code-panel">
                   <!-- SQL 源码编辑器-->
-                  <codemirror class="code-editor" ref="cm" v-model="editorData.sql" :options="cmOption" v-show="editorData.isCustomSql"></codemirror>
+                  <!-- <codemirror class="code-editor" ref="cm" v-model="editorData.sql" :options="cmOption" v-show="editorData.isCustomSql"></codemirror> -->
                   <!-- {{currentType}}----  {{currentDML}}--------- -->
                   <div>
                     <span style="float: right;"><label><input type="checkbox" v-model="currentDML.enable" /> 启用</label></span>
@@ -316,9 +316,9 @@
                                             </label> -->
                       <br />
                       <br />
-                      <Divider style="color:gray" size="small">API 接口</Divider>
+                    <!--   <Divider style="color:gray" size="small">API 接口</Divider> -->
 
-                      <api></api>
+                     <!--  <api></api> -->
                     </div>
                   </div>
                 </div>
@@ -342,16 +342,16 @@
           <i-Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" v-model="project.form.data.content" />
         </form-item>
       </i-Form>
-    </Modal>
+    </Modal> 
 
+    <!--选择表格-->
     <Modal title="从数据库的表定义选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
-      <!--选择表格-->
       <table-selector :dsid="1" :is-cross-db="dataSource.crossDb" :data-source-id="dataSource.id"></table-selector>
     </Modal>
   </div>
 
 </template>
 
-<script src="./index.js"></script>
+<script src="./data-service.js"></script>
 
-<style lang="less" scoped src="./index.less"></style>
+<style lang="less" scoped src="./data-service.less"></style>

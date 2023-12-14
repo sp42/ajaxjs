@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { xhr_get, xhr_post, getPageList } from '../../util/xhr';
+
 // 选择表
 export default {
   data() {
@@ -68,26 +70,26 @@ export default {
     };
   },
   props: {
-    apiUrl: { type: String, required: true },
     isCrossDb: { type: Boolean, required: true },
     dataSourceId: { type: Number, required: true },
   },
   mounted() {
     // this.isCrossDb = true;
-    // this.getData();
+    this.getData();
   },
   methods: {
     getData() {
       this.loading = true;
-      let url = `${DS_CONFIG.API_ROOT}/admin/${this.dataSourceId}/getAllTables?start=${this.start}&limit=${this.pageSize}`;
+      let url =`${window.config.dsApiRoot}/datasource/${this.dataSourceId}/get_all_tables?start=${this.start}&limit=${this.pageSize}`;
+      // let url = `${DS_CONFIG.API_ROOT}/admin0/${this.dataSourceId}/getAllTables?start=${this.start}&limit=${this.pageSize}`;
 
-      if (this.searchKeyword) url += `&tablename=${this.searchKeyword}`;
+      if (this.searchKeyword) url += `&tableName=${this.searchKeyword}`;
       if (this.databaseName) url += `&dbName=${this.databaseName}`;
 
-      aj.xhr.get(url, (j) => {
+     xhr_get(url, (j) => {
         if (j.status) {
-          this.data = j.data;
-          this.total = j.total;
+          this.data = j.data.rows;
+          this.total = j.data.total;
         } else this.$Message.error(j.message);
 
         this.loading = false;

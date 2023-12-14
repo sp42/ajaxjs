@@ -68,7 +68,6 @@ function setAuthHeader(xhr: XMLHttpRequest) {
 
     if (token){
         const json = JSON.parse(token);
-        console.log(json);
         xhr.setRequestHeader("Authorization", "Bearer " + json.id_token);
     }
 }

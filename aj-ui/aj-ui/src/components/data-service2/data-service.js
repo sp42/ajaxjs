@@ -1,10 +1,11 @@
 import tree from "./tree.js";
 import tips from "../widget/tips.vue";
 import tableSelector from "../widget/table-selector.vue";
+import Datasource from "../widget/data-source/data-source.vue";
 
 export default {
     mixins: [tree],
-    components: { tips, tableSelector },
+    components: { tips, tableSelector, Datasource },
     data() {
         return {
             treeData: [],
@@ -13,7 +14,7 @@ export default {
             dataSource: {
                 isShowDataSource: false,
                 isMulti: true, // 是否多个数据源
-                id: null,
+                id: 1,
                 name: null,
                 crossDb: false
             },
@@ -32,6 +33,7 @@ export default {
                     label: "数据服务",
                     name: "tab1",
                     closable: true,
+                    index: 0
                 }
             ],
             table: {
