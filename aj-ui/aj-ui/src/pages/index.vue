@@ -1,7 +1,6 @@
 <template>
   <div class="main">
-
-    <Menu style="float: left;" :open-names="SHOW_MOUDLE.expandMenu" v-if="SHOW_MOUDLE">
+    <Menu class="left-panel" :open-names="SHOW_MOUDLE.expandMenu" v-if="SHOW_MOUDLE">
       <h3>{{SHOW_MOUDLE.title}}</h3>
       <Submenu name="portal-1" v-if="SHOW_MOUDLE.portal">
         <template slot="title">网站管理</template>
@@ -48,7 +47,8 @@
       <Submenu name="model" v-if="SHOW_MOUDLE.model">
         <template slot="title">业务建模</template>
         <MenuItem name="6-1" @click.native="load='DataSource'">数据源管理</MenuItem>
-        <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem>
+<!--         <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem> -->
+        <MenuItem name="6-5" @click.native="load='DataService2'">数据服务</MenuItem>
         <MenuItem name="6-3" @click.native="load='ModelMgr'">模型管理</MenuItem>
         <MenuItem name="6-4" @click.native="load='FactoryList'">列表生成器</MenuItem>
         <!--         <MenuItem name="6-5" @click.native="load='DataServiceIndex'">Api Selector</MenuItem>
@@ -56,15 +56,17 @@
       </Submenu>
     </Menu>
 
-    <div style="float:left;width:82%;height: 100%;">
+    <div class="right-panel">
       <div v-if="!load" class="center" style="text-align:center;margin-top:25%;">Welcome!</div>
-      
+
       <span v-if="load == 'DataSource'">
         <h1 class="page-title">数据源管理</h1>
         <DataSource :api-root="apiRoot" />
       </span>
 
-      <DataService v-if="load == 'DataService'" :api-root="apiRoot" />
+      <!-- <DataService v-if="load == 'DataService'" :api-root="apiRoot" /> -->
+
+      <DataService2 v-if="load == 'DataService2'" />
 
       <span v-if="load == 'ModelMgr'">
         <h1 class="page-title">模型管理</h1>
@@ -75,7 +77,7 @@
         <h1 class="page-title">列表生成器</h1>
         <FactoryList :api-root="apiRoot" />
       </span>
-      
+
       <FactoryListLoader v-if="load === 'UserList'" id="5" />
       <FactoryListLoader v-if="load === 'UserLog'" id="6" />
 
@@ -95,7 +97,6 @@
         <UserListIndex v-if="load == 'UserListIndex'" />
       </span>
 
-      
       <OrgIndex v-if="load == 'OrgIndex'" />
       <ApiHelper v-if="load == 'api-helper'" />
       <DataServiceIndex v-if="load == 'DataServiceIndex'" />
@@ -106,6 +107,7 @@
 <script>
 import DataSource from "../components/data-service/datasource/datasource.vue";
 import DataService from "../components/data-service/data-service.vue";
+import DataService2 from "../components/data-service2/index.vue";
 import DataServiceIndex from "../components/data-service/index/index.vue";
 import FactoryList from "../components/factory-list/list.vue";
 import FactoryListLoader from "../components/factory-list/list-loader.vue";
@@ -200,6 +202,7 @@ export default {
     DataServiceIndex,
     DataSource,
     DataService,
+    DataService2,
     FactoryList,
     FactoryListLoader,
     ModelMgr,
@@ -250,20 +253,6 @@ export default {
 };
 </script>
 
-<style scoped>
-h3 {
-  padding: 30px 22px;
-  box-sizing: border-box;
-  color: #2f518c;
-  width: 240px;
-  border-right: 1px solid lightgray;
-  font-size: 1.3em;
-  font-weight: bold;
-  letter-spacing: 1px;
-  height: 9%;
-}
-</style>
-
 <style>
 .home h2,
 .home p {
@@ -273,28 +262,8 @@ h3 {
 
 html,
 body,
-.main,
 .main > .ivu-menu {
   height: 100%;
-}
-
-.ivu-menu-submenu-title {
-  border-top: 1px solid #eee;
-}
-
-.ivu-menu.ivu-menu-vertical.user {
-  background: url(~@/assets/user.png) no-repeat 110px bottom;
-  background-size: 72%;
-}
-
-.ivu-menu.ivu-menu-vertical.portal {
-  background: url(~@/assets/portal.jpg) no-repeat 100px bottom;
-  background-size: 92%;
-}
-
-.ivu-menu.ivu-menu-vertical.model {
-  background: url(~@/assets/model.jpg) no-repeat 100px bottom;
-  background-size: 68%;
 }
 
 /* 分页控件有点问题，修改下 */
@@ -313,3 +282,5 @@ h1.page-title {
   line-height: 100px;
 }
 </style>
+
+<style lang="less" scoped src="./index.less"></style>

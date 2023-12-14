@@ -69,7 +69,8 @@ public class OidcService extends OAuthCommon implements OidcController {
             tokenUser.setAccessToken(accessToken);
 
             // 生成 JWT Token
-            String jWebToken = jWebTokenMgr.tokenFactory(String.valueOf(user.getId()), user.getName(), scope, Utils.setExpire(jwtExpireHours)).toString();
+            // TODO user.getName() 中文名会乱码
+            String jWebToken = jWebTokenMgr.tokenFactory(String.valueOf(user.getId()), user.getLoginId(), scope, Utils.setExpire(jwtExpireHours)).toString();
             accessToken.setId_token(jWebToken);
 
             String key = JWT_TOKEN_USER_KEY + "-" + jWebToken;

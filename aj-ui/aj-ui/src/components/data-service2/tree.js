@@ -1,4 +1,4 @@
-project = {
+export default {
     data() {
         return {
             project: {
@@ -110,5 +110,4 @@ project = {
             }
         }
     }
-
 };

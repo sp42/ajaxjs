@@ -1,20 +1,13 @@
-myHTMLInclude();
+import tree from "./tree.js";
+import tips from "../widget/tips.vue";
+import tableSelector from "../widget/table-selector.vue";
 
-Vue.use(VueCodemirror);
-const addTabBtn = { label: "+", name: "addTab", closable: false };
-
-Vue.component('tips', {
-    template: `<i style="cursor: pointer;" class="ivu-icon ivu-icon-ios-help-circle-outline" :title="text"></i>`,
-    props: {
-        text: { type: String, required: true }
-    }
-});
-
-new Vue({
-    el: document.querySelector('.data-service'),
-    mixins: [project, ds_tree],
+export default {
+    mixins: [tree],
+    components: { tips, tableSelector },
     data() {
         return {
+            treeData: [],
             isShowSelectTable: false,
             split1: 0.2,
             dataSource: {
@@ -66,10 +59,6 @@ new Vue({
                 // theme: "monokai"
             }
         }
-    },
-    mounted() {
-        // getTreeData.call(this);
-        this.loadTreeProejct();
     },
     methods: {
         showAbout() {
@@ -165,57 +154,4 @@ new Vue({
             });
         }
     },
-    watch: {
-        'editorData.type'(v) {
-            let key;
-
-            switch (v) {
-                case 'info':
-                    key = 'infoSql';
-                    break;
-                case 'list':
-                    key = 'listSql';
-                    break;
-                case 'create':
-                    key = 'createSql';
-                    break;
-                case 'update':
-                    key = 'updateSql';
-                    break;
-                case 'delete':
-                    key = 'deleteSql';
-                    break;
-            }
-
-            this.editorData.isCustomSql = !!this.currentData[key];
-            this.editorData.sql = this.currentData[key];
-        },
-        'editorData.isCustomSql'(v) {
-            if (!v) {
-                let key;
-
-                switch (this.editorData.type) {
-                    case 'info':
-                        key = 'infoSql';
-                        break; v
-                    case 'list':
-                        key = 'listSql';
-                        break;
-                    case 'create':
-                        key = 'createSql';
-                        break;
-                    case 'update':
-                        key = 'updateSql';
-                        break;
-                    case 'delete':
-                        key = 'deleteSql';
-                        break;
-                }
-
-                this.currentData[key] = null;
-                this.editorData.sql = '';
-            }
-        }
-    }
-
-});
+};
