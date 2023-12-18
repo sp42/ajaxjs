@@ -47,8 +47,8 @@
       <Submenu name="model" v-if="SHOW_MOUDLE.model">
         <template slot="title">业务建模</template>
         <MenuItem name="6-1" @click.native="load='DataSource'">数据源管理</MenuItem>
-<!--         <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem> -->
-        <MenuItem name="6-5" @click.native="load='DataService2'">数据服务</MenuItem>
+        <!--         <MenuItem name="6-2" @click.native="load='DataService'">数据服务</MenuItem> -->
+        <MenuItem name="6-5" @click.native="load='DataService'">数据服务</MenuItem>
         <MenuItem name="6-3" @click.native="load='ModelMgr'">模型管理</MenuItem>
         <MenuItem name="6-4" @click.native="load='FactoryList'">列表生成器</MenuItem>
         <!--         <MenuItem name="6-5" @click.native="load='DataServiceIndex'">Api Selector</MenuItem>
@@ -66,7 +66,7 @@
 
       <!-- <DataService v-if="load == 'DataService'" :api-root="apiRoot" /> -->
 
-      <DataService2 v-if="load == 'DataService2'" />
+      <DataService v-if="load == 'DataService'" />
 
       <span v-if="load == 'ModelMgr'">
         <h1 class="page-title">模型管理</h1>
@@ -106,8 +106,8 @@
 
 <script>
 import DataSource from "../components/data-service/datasource/datasource.vue";
-import DataService from "../components/data-service/data-service.vue";
-import DataService2 from "../components/data-service2/index.vue";
+// import DataService from "../components/data-service/data-service.vue";
+import DataService from "../components/data-service2/data-service.vue";
 import DataServiceIndex from "../components/data-service/index/index.vue";
 import FactoryList from "../components/factory-list/list.vue";
 import FactoryListLoader from "../components/factory-list/list-loader.vue";
@@ -137,8 +137,7 @@ function getQueryParam(variable, isParent) {
   return false;
 }
 
-const loginUrl =
-  "http://127.0.0.1:8088/user/login?web_url=http://localhost:8081";
+const loginUrl = "http://127.0.0.1:8088/base/user/login?web_url=http://localhost:8081";
 const token = getQueryParam("token");
 let accessToken = localStorage.getItem("accessToken");
 
@@ -180,7 +179,7 @@ function getQueryString() {
         model: true,
         title: "业务建模",
         expandMenu: ["model"],
-        load: "DataService2",
+        load: "DataService",
       };
       break;
     default:
@@ -202,7 +201,6 @@ export default {
     DataServiceIndex,
     DataSource,
     DataService,
-    DataService2,
     FactoryList,
     FactoryListLoader,
     ModelMgr,

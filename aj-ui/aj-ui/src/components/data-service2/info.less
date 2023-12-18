@@ -1,0 +1,83 @@
+ul.line-layout {
+    li {
+        display: inline-block;
+        min-width: 100px;
+        vertical-align: top;
+        margin-right: 20px;
+    }
+}
+
+fieldset {
+    margin-top: 20px;
+    margin-bottom: 0px;
+    border: 0;
+    border-top: 1px solid lightgray;
+    padding: 10px 20px 0 20px;
+
+    legend {
+        margin-left: 8px;
+        font-weight: bold;
+        letter-spacing: 5px;
+    }
+}
+
+.config {
+    transition: height 200ms ease;
+    overflow: hidden;
+}
+
+.main-edit-panel {
+    overflow: hidden;
+    min-height: 400px;
+    height: 100%;
+
+    .command-list {
+        float: left;
+        height: 100%;
+        width: 16%;
+        border-top: 1px solid lightgray;
+        border-right: 1px solid lightgray;
+        border-radius: 0 5px 0 0;
+        min-height: 600px;
+
+        li {
+            overflow: hidden;
+            height: 35px;
+            line-height: 35px;
+            // margin-bottom: 10px;
+            border-bottom: 1px solid #e3e3e3;
+            margin-left: 10px;
+            cursor: pointer;
+            padding-left: 5px;
+
+            span {
+                font-weight: bold;
+            }
+
+            &.selected {
+                background-color: #eee;
+            }
+
+            &:hover {
+                background-color: #e3e3e3;
+            }
+        }
+    }
+
+    .code-panel {
+        float: left;
+        width: 83%;
+        padding-left: 15px;
+    }
+
+    .code-editor {
+        border: 1px solid #e3e3e3;
+        margin-bottom: 20px;
+    }
+}
+
+.top_namespace {
+    padding-top: 5px;
+    text-align: right;
+    margin-right: 5px!important;
+}

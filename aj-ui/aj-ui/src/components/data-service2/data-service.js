@@ -1,11 +1,13 @@
 import tree from "./tree.js";
 import tips from "../widget/tips.vue";
 import tableSelector from "../widget/table-selector.vue";
+import info from "./info.vue";
 import Datasource from "../widget/data-source/data-source.vue";
+import { xhr_get, xhr_post } from '../../util/xhr';
 
 export default {
     mixins: [tree],
-    components: { tips, tableSelector, Datasource },
+    components: { info, tips, tableSelector, Datasource },
     data() {
         return {
             treeData: [],
@@ -18,115 +20,75 @@ export default {
                 name: null,
                 crossDb: false
             },
-            allData: [], // 所有的数据
-            currentData: {}, // 当前编辑的数据（总数据）
-            currentDML: {}, // 当前编辑的数据（DML）
-            currentType: '',
-            activeTab: "tab1",
-            editorData: {// 当前编辑器数据，根据不同类型的
-                type: 'info',
-                isCustomSql: true,
-                sql: ''
-            },
+            activeTab: "index",
             mainTabs: [
-                {
-                    label: "数据服务",
-                    name: "tab1",
-                    closable: true,
-                    index: 0
-                }
+                // {
+                //     label: "数据服务",
+                //     name: "tab1",
+                //     closable: true,
+                //     index: 0
+                // },
             ],
             table: {
                 createRule: {},
                 fieldsMapping: {
-
                 }
-            },
-            allDml: {
-                create: {},
-                update: {},
-                create: {},
-                delete: {}
             },
             showFields: false,
             fields: [],
-
             dmlSelected: null, // 命令选中高亮显示
-            code: `SELECT * FROM user\n`,
-            cmOption: {
-                tabSize: 4,
-                styleActiveLine: true,
-                lineNumbers: true,
-                mode: 'text/x-mysql',
-                // theme: "monokai"
-            }
         }
+    },
+    mounted() {
+        this.loadTreeProejct();
     },
     methods: {
         showAbout() {
             this.$Modal.confirm({
                 title: '关于 DataService',
-                content: '<p>DataService：用数据库管理 SQL 语句，快捷生成 API 接口</p><p>Powered by MyBatis + AJAXJS Framework.</p><p>ver 2022.10.31</p>',
-
+                content: '<p>DataService：用数据库管理 SQL 语句，快捷生成 API 接口</p><p>Powered by MyBatis + AJAXJS Framework.</p><p>ver 2023.10.31</p>'
             });
         },
         refreshConfig() {
-            aj.xhr.get(DS_CONFIG.API_ROOT + '/common_api/reload_config?allow=1', j => {
+            xhr_get(`${window.config.dsApiRoot}/common_api/reload_config`, j => {
                 if (j.status)
                     this.$Message.success('刷新成功');
             });
         },
-        ifAdd(name) {
-            if (name === "addTab") {
-                this.mainTabs.pop(); // 先删除，再增加
+        openTab(a, data) {
+            let name = data.title + ' ' + data.id;
+            let hasTab = false;
 
-                let tabName = "tab" + (this.mainTabs.length + 1);
+            this.mainTabs.forEach(tab => {
+                if (tab.name === name)
+                    hasTab = true;
+            });
+
+            if (!hasTab)
                 this.mainTabs.push({
-                    label: "新 API",
-                    name: tabName,
+                    label: name,
+                    name: name,
                     closable: true,
+                    data: data
                 });
 
-                setTimeout(() => {
-                    this.mainTabs.push(addTabBtn);
-                    this.activeTab = tabName;
-                }, 100);
-            }
+            setTimeout(() => this.activeTab = name, 100);
         },
+        onTabClose(tabName) {
+            let index = -1;
 
-        // 选择 DML
-        selectItem(item, index, type) {
-            this.code = item.sql;
-            this.dmlSelected = index;
-            this.currentDML = item;
-            this.currentType = type;
-        },
-
-        togglePanel() {
-            let config = this.$el.querySelector('.config');
-            if (config.style.height == '300px') {
-                config.style.height = '0';
-            } else
-                config.style.height = '300px';
-
-        },
-        getDml(item, key) {
-            let method = 'UNKNOW', path = '/' + this.currentData.urlDir, id = this.currentData.id;
-
-            if (key == 'create')
-                method = '<span style="color:green;">POST</span>';
-            else if (key == 'update')
-                method = 'PUT';
-            else if (key == 'list' || key == 'info')
-                method = 'GET';
-            else if (key == 'delete') {
-                path += '/{id}'
-                method = 'DELETE';
-            } else if (key == 'others') {
-                return null;
+            for (let i = 0; i < this.mainTabs.length; i++) {
+                if (this.mainTabs[i].name === tabName) {
+                    index = i;
+                    break;
+                }
             }
 
-            return method + ' ' + path;
+            if (index != -1) {
+                this.$delete(this.mainTabs, index);
+                if (this.mainTabs[0])
+                    this.activeTab = this.mainTabs[0].name;
+            }
         },
         changeDatasource(ds) {
             this.dataSource.id = ds.id;
@@ -134,10 +96,7 @@ export default {
             this.dataSource.crossDb = ds.crossDb;
             this.dataSource.isShowDataSource = false;
         },
-        copySql() {
-            aj.copyToClipboard(this.code);
-            this.$Message.success('复制 SQL 代码成功');
-        },
+
         // 保存命令
         saveDML() {
             let dml = Object.assign({}, this.currentData);
@@ -154,6 +113,15 @@ export default {
                     this.$Message.success('修改命令成功');
                 }
             });
-        }
+        },
+        del(e) {
+            let li = e.currentTarget;
+
+            if(li.classList.contains('disabled'))
+                return;
+
+            var current = this.$refs.tab.value;
+            alert(current)
+        }   
     },
 };

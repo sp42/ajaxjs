@@ -1,3 +1,5 @@
+import { xhr_get, xhr_del } from '../../util/xhr';
+
 export default {
     data() {
         return {
@@ -25,10 +27,6 @@ export default {
         };
     },
     methods: {
-        openTab(a, data) {
-            this.currentData = data.data;
-            this.editorData.type = 'info';
-        },
         handleContextMenuEdit() {
             this.project.isShowEditProjectWin = true;
         },
@@ -46,7 +44,7 @@ export default {
                 title: '确定删除吗？',
                 content: `<p>删除<b>工程 ${this.project.form.data.name}</b> 以及其所有的<b>命令</b>？</p>`,
                 onOk: () => {
-                    aj.xhr.del(`${DS_CONFIG.API_ROOT}/admin/project/${this.project.form.data.id}`, j => {
+                    xhr_del(`${window.config.dsApiRoot}/admin/project/${this.project.form.data.id}`, j => {
                         if (j.status) {
                             this.$Message.info('删除成功');
                             this.loadTreeProejct();
@@ -57,17 +55,17 @@ export default {
         },
 
         loadTreeProejct() {
-            aj.xhr.get(DS_CONFIG.API_ROOT + '/common_api/common_api/list?allow=1', j => {
+            xhr_get(`${window.config.IAM_ApiRoot}/common_api/common_api/list`, j => {
                 if (j.status == 1) {
                     let data = [];
                     // 添加 iView 树节点的字段
                     j.data.forEach(item => {
-                        let id = item.name || item.namespace;
+                        let title = item.name || item.namespace;
                         let node = {
-                            title: id,
+                            title: title,
                             contextmenu: true,
                             data: item,
-                            id: id
+                            id: item.namespace
                         };
 
                         if (item.children) {
@@ -75,12 +73,12 @@ export default {
                             node.children = [];
 
                             item.children.forEach(item2 => {
-                                let id2 = item2.name || item2.namespace;
+                                let title = item2.name || item2.namespace;
                                 node.children.push({
-                                    title: id2,
+                                    title: title,
                                     contextmenu: true,
                                     data: item2,
-                                    id: id + '/' + id2
+                                    id: item.namespace + '/' + item2.namespace
                                 });
                             });
                         }
@@ -88,14 +86,14 @@ export default {
                         data.push(node);
                     });
 
-                    this.project.treeData = data;
+                    this.treeData = data;
                 }
             });
         },
 
         // 异步加载树数据
         loadTreeData(item, callback) {
-            aj.xhr.get(DS_CONFIG.API_ROOT + '/admin?projectId=' + item.id, j => {
+            xhr_get(`${window.config.dsApiRoot}/admin?projectId=` + item.id, j => {
                 if (j.status == 1) {
                     getTreeData2.call(this, j, callback);
                 }
