@@ -178,7 +178,9 @@
           <div style="margin:20px 0">
             <Divider style="color:gray" size="small">API 接口</Divider>
 
-            <!--  <api></api> -->
+            <api />
+            <br />
+            <api :page="true" v-if="editorData.type == 'list'" />
           </div>
         </div>
       </div>

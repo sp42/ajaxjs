@@ -88,7 +88,10 @@ public abstract class OAuthCommon implements IamConstants {
         return getApp(clientId, clientSecret);
     }
 
-    @Value("${oauth.token.client_expires: 120}")
+    /**
+     * Token 的有效期，单位：分钟  默认两天
+     */
+    @Value("${oauth.token.client_expires: 2880}")
     private Integer clientExpires;
 
     public long getTokenExpires(App app) {

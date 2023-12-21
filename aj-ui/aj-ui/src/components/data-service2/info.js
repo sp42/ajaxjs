@@ -9,11 +9,12 @@ import 'codemirror/theme/base16-light.css'
 import './code-prettify';
 import { copyToClipboard } from '../../util/utils';
 import tips from "../widget/tips.vue";
+import api from "./api.vue";
 
 import { formatSql } from './format-sql.js';
 
 export default {
-    components: { codemirror, tips },
+    components: { codemirror, tips, api },
     props: {
         data: {
             type: Object,
@@ -27,7 +28,6 @@ export default {
     },
     data() {
         return {
-            currentType: "",
             currentData: this.data.data,
             editorData: {
                 // 当前编辑器数据，根据不同类型的
