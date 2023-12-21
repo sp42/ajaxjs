@@ -10,7 +10,7 @@ import './code-prettify';
 import { copyToClipboard } from '../../util/utils';
 import tips from "../widget/tips.vue";
 import api from "./api.vue";
-
+import { isDev } from '../../util/utils';
 import { formatSql } from './format-sql.js';
 
 export default {
@@ -18,22 +18,28 @@ export default {
     props: {
         data: {
             type: Object,
-            require: true,
+            required: true,
             default() {
                 return {
                     data: {},
                 };
             },
         },
+        type: {
+            type: String,
+            required: false
+        },
     },
     data() {
+        let data = this.data.data;
+        console.log(data)
         return {
-            currentData: this.data.data,
+            currentData: data,
             editorData: {
                 // 当前编辑器数据，根据不同类型的
                 type: "info",
                 isCustomSql: true,
-                sql: "",
+                sql: data.type && data.type === 'SINGLE' ? data.sql : "",
             },
             cmOption: {
                 tabSize: 4,
@@ -47,9 +53,8 @@ export default {
     methods: {
         togglePanel() {
             let config = this.$el.querySelector(".config");
-            if (config.style.height == "300px") {
-                config.style.height = "0";
-            } else config.style.height = "300px";
+            if (config.style.height == "300px") config.style.height = "0";
+            else config.style.height = "300px";
         },
         copySql() {
             copyToClipboard(this.editorData.sql);
@@ -58,7 +63,6 @@ export default {
         formatSql() {
             let key = this.getTypeKey();
             this.currentData[key] = this.editorData.sql = formatSql(this.editorData.sql);
-            // console.log();
         },
 
         getTypeKey() {
@@ -83,8 +87,22 @@ export default {
             }
 
             return key;
-        }
+        },
+        getApiPrefix() {
+            let obj;
 
+            if (this.data.id.indexOf('/') != -1)
+                obj = this.data.parentNode.parentNode;
+            else
+                obj = this.data.parentNode;
+
+            let url = isDev ? obj.apiPrefixDev : obj.apiPrefixProd;
+
+            if (!url.endsWith("/")) url += "/";
+            url += "common_api/";
+
+            return url;
+        }
     },
     watch: {
         "editorData.type"(v) {

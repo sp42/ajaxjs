@@ -18,6 +18,10 @@ export default {
       type: Boolean,
       require: false,
     },
+    apiPrefix: {
+      type: String,
+      require: false,
+    },
   },
   data() {
     return {
@@ -26,7 +30,7 @@ export default {
   },
   methods: {
     getUrl() {
-      let url = "http://localhost/" + this.$parent.data.id;
+      let url = this.apiPrefix + this.$parent.data.id;
 
       if (this.page) url += "/page";
       else {

@@ -1,29 +1,30 @@
 <template>
   <div style="height:100%">
     <ul class="line-layout">
-      <li>
-        <!--         <i-Select v-model="datasource.id" placeholder="请选择数据源">
-                                        <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{
+      <!--       <li>
+        <i-Select v-model="datasource.id" placeholder="请选择数据源">
+          <Option v-for="item in datasource.list" :key="item.id" :value="item.id">{{
                                             item.name }}</Option>
-                                    </i-Select> -->
-      </li>
+        </i-Select>
+      </li> -->
       <li class="top_namespace" v-if="data.id.indexOf('/') != -1 ">
         {{data.id.split('/')[0]}}/
       </li>
 
       <li>
-        <i-input placeholder="相当于接口的 URL 目录，必填的" v-model="currentData.namespace">
+        <i-input placeholder="相当于接口的 URL 目录，必填的" v-model="currentData.namespace" size="small">
           <span slot="prepend">命名空间</span>
         </i-input>
+        {{type}}
       </li>
       <li>
-        <i-input placeholder="接口的说明" v-model="currentData.name">
+        <i-input placeholder="接口的说明" v-model="currentData.name" size="small">
           <span slot="prepend">说明</span>
         </i-input>
       </li>
       <!-- <li style="padding-top: 5px;">数据源： {{currentData.datasourceName}}</li> -->
       <li>
-        <i-input placeholder="数据库表名" v-model="currentData.tableName">
+        <i-input placeholder="数据库表名" v-model="currentData.tableName" size="small">
           <span slot="prepend">数据库表名</span>
         </i-input>
       </li>
@@ -93,7 +94,7 @@
     </div>
 
     <div class="main-edit-panel">
-      <ul class="command-list">
+      <ul class="command-list" v-if="'SINGLE' != data.data.type">
         <li @click="editorData.type = 'info'" :class="{selected: editorData.type == 'info'}">
           <span style="color: green;">GET</span> Info
           <tips text="查询单笔记录，通常返回一个记录的详细信息（info）。" />
@@ -116,7 +117,7 @@
         </li>
       </ul>
 
-      <div class="code-panel">
+      <div :class="{'code-panel': true, 'all-width': 'SINGLE' === data.data.type}">
         <!-- SQL 源码编辑器-->
         <codemirror class="code-editor" ref="cm" v-model="editorData.sql" :options="cmOption" v-show="editorData.isCustomSql"></codemirror>
         <!--  {{editorData.sql}} -->
@@ -124,8 +125,10 @@
           <span style="float: right;"><label><input type="checkbox" /> 启用</label></span>
 
           <!-- 用不了 iview 的 RadioGroup -->
-          <label><input type="radio" v-model="editorData.isCustomSql" :value="true" /> 自定义 SQL</label>&nbsp;&nbsp;
-          <label><input type="radio" v-model="editorData.isCustomSql" :value="false" /> 默认逻辑</label>
+          <span v-if="'SINGLE' != data.data.type">
+            <label><input type="radio" v-model="editorData.isCustomSql" :value="true" /> 自定义 SQL</label>&nbsp;&nbsp;
+            <label><input type="radio" v-model="editorData.isCustomSql" :value="false" /> 默认逻辑</label>
+          </span>
           <br />
           <br />
 
@@ -164,7 +167,7 @@
             <label title="在逻辑上数据是被删除的，但数据本身依然存在库中（仅仅是更新状态字段为已删除）"><input type="radio" v-model="currentData.hasIsDeleted" :value="true" /> 逻辑删除</label> &nbsp;
 
             <span v-if="currentData.hasIsDeleted"> 删除的字段
-              <Input type="text" v-model="currentData.delField" style="width:80px" />
+              <Input type="text" v-model="currentData.delField" style="width:80px" size="small" />
             </span>
           </span>
 
@@ -178,9 +181,9 @@
           <div style="margin:20px 0">
             <Divider style="color:gray" size="small">API 接口</Divider>
 
-            <api />
+            <api :api-prefix="getApiPrefix()" />
             <br />
-            <api :page="true" v-if="editorData.type == 'list'" />
+            <api :api-prefix="getApiPrefix()" :page="true" v-if="editorData.type == 'list'" />
           </div>
         </div>
       </div>
