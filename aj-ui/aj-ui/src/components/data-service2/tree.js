@@ -1,17 +1,14 @@
 import { xhr_get, xhr_del } from '../../util/xhr';
+import { isDev } from '../../util/utils';
 
 export default {
     data() {
         return {
+            treeData: [],
             project: {
                 isShowEditProjectWin: false,
                 treeData: [
-                    {
-                        title: 'parent',
-                        expand: true,
-                        loading: false,
-                        children: []
-                    }
+
                 ],
                 form: {
                     data: {
@@ -25,6 +22,10 @@ export default {
                 }
             }
         };
+    },
+
+    created() {
+        this.refreshTree();
     },
     methods: {
         handleContextMenuEdit() {
@@ -54,18 +55,77 @@ export default {
             });
         },
 
-        loadTreeProejct() {
-            xhr_get(`${window.config.IAM_ApiRoot}/common_api/common_api/list`, j => {
+        /**
+         * 获取当前树选中的工程
+         */
+        getSelectedProject() {
+            let selectedNodes = this.$refs.treeCmp.getSelectedNodes();
+
+            if (selectedNodes.length === 0) {
+                this.$Message.warning('请先选择一个树节点');
+                return null;
+            }
+
+            let selectedNode = selectedNodes[0];
+            let project = selectedNode.parentNode;
+
+            if (project) {
+                if (project.parentNode)  // sub node
+                    project = project.parentNode;
+            } else  // project node
+                project = selectedNode.projectData;
+
+            return isDev() ? project.apiPrefixDev : project.apiPrefixProd;
+        },
+
+        refreshTree() {
+            this.loadTreeData(null, data => {
+                this.treeData = data; // 更新根节点的数据
+            });
+        },
+
+        // 异步加载树数据
+        loadTreeData(item, callback) {
+            xhr_get(`${window.config.dsApiRoot}/common_api/project/list`, j => {
+                if (j.status == 1) {
+                    let data = [];
+
+                    j.data.forEach(project => {
+                        let projectTreeNode = {
+                            title: project.name,
+                            loading: false,
+                            expand: true,
+                            children: [],
+                            contextmenu: true,
+                            projectData: project,
+                            render: renderProjectTreeNode
+                        };
+
+                        this.loadTreeProejct2(isDev() ? project.apiPrefixDev : project.apiPrefixProd, projectTreeNode)
+
+                        data.push(projectTreeNode);
+                    });
+
+                    callback(data);
+                }
+            });
+        },
+
+        loadTreeProejct2(apiPrefix, projectTreeNode) {
+            xhr_get(`${apiPrefix}/common_api/common_api/list`, j => {
                 if (j.status == 1) {
                     let data = [];
                     // 添加 iView 树节点的字段
                     j.data.forEach(item => {
                         let title = item.name || item.namespace;
+                        let id = projectTreeNode.title + ':' + item.namespace;
                         let node = {
                             title: title,
                             contextmenu: true,
                             data: item,
-                            id: item.namespace
+                            id: id,
+                            parentNode: projectTreeNode.projectData,
+                            render: renderCrudTreeNode
                         };
 
                         if (item.children) {
@@ -78,7 +138,9 @@ export default {
                                     title: title,
                                     contextmenu: true,
                                     data: item2,
-                                    id: item.namespace + '/' + item2.namespace
+                                    id: id + '/' + item2.namespace,
+                                    parentNode: node,
+                                    render: renderCrudTreeNode
                                 });
                             });
                         }
@@ -86,16 +148,7 @@ export default {
                         data.push(node);
                     });
 
-                    this.treeData = data;
-                }
-            });
-        },
-
-        // 异步加载树数据
-        loadTreeData(item, callback) {
-            xhr_get(`${window.config.dsApiRoot}/admin?projectId=` + item.id, j => {
-                if (j.status == 1) {
-                    getTreeData2.call(this, j, callback);
+                    projectTreeNode.children = data;
                 }
             });
         },
@@ -108,4 +161,24 @@ export default {
             }
         }
     }
+};
+
+const renderProjectTreeNode = (h, { root, node, data }) => {
+    return [
+        h("span", { class: "http-method get" }, "P"),
+        h("span", { style: 'font-weight:bold' }, data.title),
+    ];
+};
+
+const renderCrudTreeNode = (h, { root, node, data }) => {
+    if (data.data.type && 'SINGLE' === data.data.type)
+        return [
+            h("span", { class: "http-method put" }, 'S'),
+            h("span", data.title),
+        ];
+    else
+        return [
+            h("span", { class: "http-method post" }, 'C'),
+            h("span", data.title),
+        ];
 };

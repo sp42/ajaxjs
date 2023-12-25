@@ -11,7 +11,7 @@
         <div class="search-panel ">
           <i-Input suffix="ios-search" placeholder="搜索数据服务……" style="width: 90%" />
         </div>
-        <Tree :data="treeData" style="height: 93%;overflow-y: auto;margin-left: 10px;" @on-contextmenu="handleContextMenu" @on-select-change="openTab">
+        <Tree ref="treeCmp" :data="treeData" :load-data="loadTreeData" style="height: 93%;overflow-y: auto;margin-left: 10px;" @on-contextmenu="handleContextMenu" @on-select-change="openTab">
           <template slot="contextMenu">
             <Dropdown-Item @click.native="handleContextMenuCreate" style="color:green">新建项目</Dropdown-Item>
             <Dropdown-Item @click.native="handleContextMenuEdit">编辑项目</Dropdown-Item>
@@ -53,7 +53,7 @@
               <span class="text">删除</span>
             </div>
           </li>
-          <li @click="saveDML">
+          <li @click="saveDML" :class="{disabled: activeTab == 'index'}">
             <div>
               <div class="icon">
                 <Icon type="ios-create" size="25" style="color:#f90" />
@@ -61,8 +61,17 @@
               <span class="text">保存</span>
             </div>
           </li>
+
+          <li @click="refreshTree">
+            <div>
+              <div class="icon">
+                <Icon type="md-refresh" size="25" style="color:burlywood" />
+              </div>
+              <span class="text">重新加载</span>
+            </div>
+          </li>
         </ul>
-        <Tabs ref="tab" class="content mainTab" name="mainTab" :value="activeTab" :animated="false" type="card" @on-tab-remove="onTabClose">
+        <Tabs ref="tab" class="content mainTab" name="mainTab" :value="activeTab" :animated="false" type="card" @on-click="onTabClick" @on-tab-remove="onTabClose">
           <tab-pane label="首页" name="index" :index="0" :closable="false" tab="mainTab" style="padding: 0 10px">
             <h1> Welcome to DataService</h1>
           </tab-pane>
@@ -111,3 +120,32 @@
 <script src="./data-service.js"></script>
 
 <style lang="less" scoped src="./data-service.less"></style>
+<style lang="less">
+.http-method {
+  padding: 0px 2px;
+  margin-right: 5px;
+  border-radius: 3px;
+  font-size: 8px;
+  vertical-align: middle;
+
+  &.get {
+    color: #3175fe;
+    border: 1px solid #3175fe;
+  }
+
+  &.post {
+    color: green;
+    border: 1px solid green;
+  }
+
+  &.put {
+    color: rgb(224, 60, 254);
+    border: 1px solid rgb(224, 60, 254);
+  }
+
+  &.delete {
+    color: red;
+    border: 1px solid red;
+  }
+}
+</style>

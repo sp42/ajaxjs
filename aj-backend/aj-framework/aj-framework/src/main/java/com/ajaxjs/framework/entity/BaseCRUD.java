@@ -134,7 +134,7 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
 
     public boolean delete(K id) {
         if (isHasIsDeleted())
-            CRUD.jdbcWriterFactory().write("UPDATE " + getTableName() + " SET " + getIdField() + " = 1 WHERE " + getIdField() + " = ?", id);
+            CRUD.jdbcWriterFactory().write("UPDATE " + getTableName() + " SET " + getDelField() + " = 1 WHERE " + getIdField() + " = ?", id);
         else
             CRUD.jdbcWriterFactory().write("DELETE FROM " + getTableName() + " WHERE " + getIdField() + " = ?", id);
 

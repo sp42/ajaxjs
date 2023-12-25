@@ -36,7 +36,7 @@
 </template>
 <script lang="ts" src="./api-list.ts"></script>
 
-<style lang="less">
+<style lang="less" scoped>
 .api-selector {
     .add:hover {
         color: #2d8cf0;
@@ -74,7 +74,7 @@
 }
 
 .http-method {
-    padding: 1px 6px;
+    padding: 1px 5px;
     margin-right: 5px;
     border-radius: 3px;
     font-size: 8px;

@@ -176,3 +176,10 @@ export function copyToClipboard(text) {
         document.body.removeChild(textarea);
     }
 }
+
+export function isDev(): boolean {
+    let currentHostname: string = window.location.hostname;
+
+    // 判断主机名是否是内网地址
+    return (currentHostname.startsWith('192.168.') || currentHostname.startsWith('10.') || currentHostname === 'localhost');
+}

@@ -173,7 +173,7 @@ public abstract class BaseCRUDService implements BaseCRUDController {
         namespaces.clear();
 
         try {
-            List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM common_api WHERE stat != 1");
+            List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM ds_common_api WHERE stat != 1");
 
             if (!CollectionUtils.isEmpty(list)) {
                 for (ConfigPO config : list) {

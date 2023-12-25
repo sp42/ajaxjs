@@ -3,14 +3,14 @@ import tips from "../widget/tips.vue";
 import tableSelector from "../widget/table-selector.vue";
 import info from "./info.vue";
 import Datasource from "../widget/data-source/data-source.vue";
-import { xhr_get, xhr_post } from '../../util/xhr';
+import { isDev } from '../../util/utils';
+import { xhr_get, xhr_post, xhr_put, xhr_del } from '../../util/xhr';
 
 export default {
     mixins: [tree],
     components: { info, tips, tableSelector, Datasource },
     data() {
         return {
-            treeData: [],
             isShowSelectTable: false,
             split1: 0.2,
             dataSource: {
@@ -21,6 +21,7 @@ export default {
                 crossDb: false
             },
             activeTab: "index",
+            activeTabData: null,
             mainTabs: [
                 // {
                 //     label: "数据服务",
@@ -40,7 +41,6 @@ export default {
         }
     },
     mounted() {
-        this.loadTreeProejct();
     },
     methods: {
         showAbout() {
@@ -50,18 +50,24 @@ export default {
             });
         },
         refreshConfig() {
-            xhr_get(`${window.config.dsApiRoot}/common_api/reload_config`, j => {
-                if (j.status)
-                    this.$Message.success('刷新成功');
-            });
+            let prefix = this.getSelectedProject();
+
+            if (prefix)
+                xhr_get(`${prefix}/common_api/reload_config`, j => {
+                    if (j.status)
+                        this.$Message.success('刷新成功');
+                });
         },
         openTab(a, data) {
+            if (data.projectData)
+                return;
+
             let name = data.title + ' ' + data.id;
-            let hasTab = false;
+            let hasTab = null;
 
             this.mainTabs.forEach(tab => {
                 if (tab.name === name)
-                    hasTab = true;
+                    hasTab = tab;
             });
 
             if (!hasTab)
@@ -72,7 +78,21 @@ export default {
                     data: data
                 });
 
-            setTimeout(() => this.activeTab = name, 100);
+            setTimeout(() => {
+                this.activeTab = name;
+                this.activeTabData = data;
+            }, 100);
+        },
+        onTabClick(tabName) {
+            this.activeTab = tabName;
+
+            for (let i = 0; i < this.mainTabs.length; i++) {
+                if (this.mainTabs[i].name === tabName) {
+
+                    this.activeTabData = this.mainTabs[i].data;
+                    break;
+                }
+            }
         },
         onTabClose(tabName) {
             let index = -1;
@@ -108,20 +128,60 @@ export default {
             delete dml.datasourceName;
             delete dml.extractData;
 
-            aj.xhr.putJson(DATA_SERVICE_API, dml, j => {
+            xhr_put(DATA_SERVICE_API, dml, j => {
                 if (j.status === 1) {
                     this.$Message.success('修改命令成功');
                 }
             });
         },
+
+        /**
+         * 获取当前工程的 API 前缀
+         */
+        getCurrentApiPrefix() {
+            let current = this.activeTabData;
+
+            if (!current) {
+                this.$Message.warning('请先选择一个 tab');
+                return null;
+            }
+
+            let project;
+
+            if (current.id.indexOf('/') != -1)
+                project = current.parentNode.parentNode;
+            else
+                project = current.parentNode;
+
+            let prefix = isDev() ? project.apiPrefixDev : project.apiPrefixProd;
+
+            return prefix;
+        },
         del(e) {
             let li = e.currentTarget;
 
-            if(li.classList.contains('disabled'))
+            if (li.classList.contains('disabled'))
                 return;
 
-            var current = this.$refs.tab.value;
-            alert(current)
-        }   
+            let prefix = this.getCurrentApiPrefix();
+
+            if (prefix) {
+                this.$Modal.confirm({
+                    title: '删除服务',
+                    content: '<p>确定删除 ' + current.data.name + ' 这个服务吗？</p>',
+                    onOk: () => {
+                        xhr_del(`${prefix}/common_api/common_api/${current.data.id}/`, j => {
+                            if (j.status == 1) {
+                                this.$Message.success('删除成功');
+                                this.onTabClose(this.activeTab);
+                                this.activeTab = 'index';
+                                this.activeTabData = null;
+                                this.refreshTree();
+                            }
+                        });
+                    }
+                });
+            }
+        }
     },
 };
