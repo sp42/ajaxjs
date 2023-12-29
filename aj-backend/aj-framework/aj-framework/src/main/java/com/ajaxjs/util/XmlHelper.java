@@ -41,22 +41,13 @@ import java.util.function.Consumer;
 @Slf4j
 public class XmlHelper {
     /**
-     * 创建 DocumentBuilderFactory 实例
-     *
-     * @return DocumentBuilderFactory 实例
-     */
-    public static DocumentBuilderFactory initBuilderFactory() {
-        return DocumentBuilderFactory.newInstance();
-    }
-
-    /**
      * XML 转换需要的对象
      *
      * @return XML 转换需要的对象
      */
     public static DocumentBuilder initBuilder() {
         try {
-            return initBuilderFactory().newDocumentBuilder();
+            return DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             log.warn("WARN>>>>>", e);
             return null;
@@ -71,7 +62,7 @@ public class XmlHelper {
      * @param fn    处理节点的函数，传入 Node 类型节点
      */
     public static void xPath(String xml, String xpath, Consumer<Node> fn) {
-        DocumentBuilderFactory factory = initBuilderFactory();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
 
         try {
@@ -100,12 +91,17 @@ public class XmlHelper {
                 Node node = nodeList.item(i);
                 fn.accept(node, nodeList);
             }
-
         } catch (SAXException | IOException e) {
             log.warn("WARN>>>>>", e);
         }
     }
 
+    /**
+     * 根据给定的 XML 字符串获取根元素
+     *
+     * @param xml XML字符串
+     * @return 根元素
+     */
     public static Element getRoot(String xml) {
         try (InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))) {
             return Objects.requireNonNull(initBuilder()).parse(in).getDocumentElement();
@@ -137,8 +133,7 @@ public class XmlHelper {
             }
         });
 
-        if (map.size() == 0)
-            return null;
+        if (map.size() == 0) return null;
 
         return map;
     }
@@ -175,9 +170,7 @@ public class XmlHelper {
 
         for (int i = 0; i < attrs.getLength(); i++) {
             Attr attr = (Attr) attrs.item(i);
-            if (attr.getNodeName().equals(attrName))
-                return attr.getValue();
-
+            if (attr.getNodeName().equals(attrName)) return attr.getValue();
         }
 
         return null;
@@ -196,13 +189,9 @@ public class XmlHelper {
         if (attributes != null && attributes.getLength() > 0) {
             Node namedItem = attributes.getNamedItem(attrName);
 
-            if (namedItem != null)
-                return namedItem.getNodeValue();
-            else {
-//                LOGGER.warning("找不到属性 " + attrName);
-                return null;
-            }
-        } else
-            return null;
+            if (namedItem != null) return namedItem.getNodeValue();
+            else return null;// LOGGER.warning("找不到属性 " + attrName);
+
+        } else return null;
     }
 }

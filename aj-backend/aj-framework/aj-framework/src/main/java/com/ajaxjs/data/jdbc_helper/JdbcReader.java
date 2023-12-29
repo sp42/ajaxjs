@@ -303,5 +303,4 @@ public class JdbcReader extends JdbcConn {
     public <T> List<T> queryAsBeanList(Class<T> beanClz, String sql, Object... params) {
         return executeQuery(rs -> forEachRs(rs, getResultBean(beanClz)), sql, params);
     }
-
 }
