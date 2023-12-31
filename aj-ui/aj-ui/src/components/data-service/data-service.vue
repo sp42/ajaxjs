@@ -44,7 +44,7 @@
     </div>
 
     <!-- 选择表的窗体 -->
-    <Modal v-model="selectTable.isShowDlg" title="选择表" width="800" cancel-text="" ref="selectTable">
+    <Modal v-model="selectTable.isShowDlg" title="选择77表" width="800" cancel-text="" ref="selectTable">
       <list-filter ref="selectTableList" :list-column="selectTable.column" :api-url="selectTable.api" @on-select="create" :dsid="datasource.id" />
     </Modal>
   </div>

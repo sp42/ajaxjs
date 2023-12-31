@@ -57,7 +57,7 @@ function getOrDel(getOrDel: 'get' | 'delete', url: string, cb: XhrCallback, para
     if (BASE_HEAD_PARAMS)// 设置自定义请求头
         for (let key in BASE_HEAD_PARAMS)
             xhr.setRequestHeader(key, BASE_HEAD_PARAMS[key]);
-            
+
     setAuthHeader(xhr);
 
     xhr.send();
@@ -66,7 +66,7 @@ function getOrDel(getOrDel: 'get' | 'delete', url: string, cb: XhrCallback, para
 function setAuthHeader(xhr: XMLHttpRequest) {
     const token: string = localStorage.getItem("accessToken");
 
-    if (token){
+    if (token) {
         const json = JSON.parse(token);
         xhr.setRequestHeader("Authorization", "Bearer " + json.id_token);
     }
@@ -214,10 +214,23 @@ function errHandle(xhr: XMLHttpRequest): void {
     else
         msg = `未知异常，HTTP code:${xhr.status}。`;
 
-    if (!xhr.responseText)
+    let respText: string = xhr.responseText;
+
+    if (!respText)
         msg += " 服务端返回空的字符串！";
 
-    console.error(msg, xhr.responseText);
+    if (respText[0] == '{') {
+        // json
+        let r: any = JSON.parse(respText);
+        // @ts-ignore
+        let loginUrl: string | null = window.loginUrl;
+
+        if (loginUrl && xhr.status === 403 && r.error === 'forbidden' && confirm('token 已失效，是否跳到重新登录？')) {
+            location.assign(loginUrl);
+        } else
+            r.error_description && console.error(msg, r.error_description);
+    } else
+        console.error(msg, respText);
 }
 
 /**

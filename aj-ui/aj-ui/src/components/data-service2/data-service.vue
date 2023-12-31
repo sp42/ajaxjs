@@ -98,6 +98,18 @@
       </i-Form>
     </Modal>
 
+    <Modal v-model="createSelect" title="选择创建服务的类型" :footer-hide="true" width="500">
+      <div style="margin: 5% auto;width: 240px;">
+        <Button type="primary">新建 CRUD 服务（从表中选择）</Button>
+        <br />
+        <br />
+        <Button type="primary">新建 CRUD 服务</Button>
+        <br />
+        <br />
+        <Button type="primary">新建 自定义 SQL 服务</Button>
+      </div>
+    </Modal>
+
     <!--选择表格-->
     <Modal title="从数据库的表定义选择" v-model="isShowSelectTable" ok-text="保存" cancel-text="" width="900">
       <table-selector :dsid="1" :is-cross-db="dataSource.crossDb" :data-source-id="dataSource.id"></table-selector>

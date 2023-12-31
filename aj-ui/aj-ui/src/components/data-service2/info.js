@@ -38,8 +38,8 @@ export default {
             editorData: {
                 // 当前编辑器数据，根据不同类型的
                 type: "info",
-                isCustomSql: true,
-                sql: data.type && data.type === 'SINGLE' ? data.sql : "",
+                isCustomSql: !!data.infoSql,
+                sql: data.type && data.type === 'SINGLE' ? data.sql : data.infoSql,
             },
             cmOption: {
                 tabSize: 4,
@@ -67,6 +67,7 @@ export default {
 
         getTypeKey() {
             let key;
+
             switch (this.editorData.type) {
                 case "info":
                     key = "infoSql";
@@ -141,6 +142,10 @@ export default {
                 this.editorData.sql = "";
             }
         },
+        "editorData.sql"(v) {
+            let key = this.getTypeKey();
+            this.currentData[key] = this.editorData.sql;
+        }
     },
 };
 

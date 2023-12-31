@@ -12,6 +12,7 @@ export default {
     data() {
         return {
             isShowSelectTable: false,
+            createSelect: true, // 是否显示创建选择的类型
             split1: 0.2,
             dataSource: {
                 isShowDataSource: false,
@@ -119,20 +120,32 @@ export default {
 
         // 保存命令
         saveDML() {
-            let dml = Object.assign({}, this.currentData);
-            dml.json = JSON.stringify(dml.data);
+            let current = this.activeTabData;
+            let dml = Object.assign({}, current.data);
+            console.log(dml);
 
             delete dml.createDate;
-            delete dml.data;
+            delete dml.children;
             delete dml.updateDate;
-            delete dml.datasourceName;
-            delete dml.extractData;
 
-            xhr_put(DATA_SERVICE_API, dml, j => {
-                if (j.status === 1) {
+            for (let i in dml) {
+                let v = dml[i];
+                if (v === null)
+                    delete dml[i];
+
+                if (v === true)
+                    dml[i] = 1;
+                else if (v === false)
+                    dml[i] = 0;
+            }
+
+            let prefix = this.getCurrentApiPrefix();
+
+            xhr_put(`${prefix}/common_api/common_api`, j => {
+                if (j.status == 1) {
                     this.$Message.success('修改命令成功');
                 }
-            });
+            }, dml);
         },
 
         /**

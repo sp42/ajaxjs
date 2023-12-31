@@ -137,7 +137,7 @@ function getQueryParam(variable, isParent) {
   return false;
 }
 
-const loginUrl = "http://127.0.0.1:8088/base/user/login?web_url=http://localhost:8081";
+window.loginUrl = "http://127.0.0.1:8088/base/user/login?web_url=http://localhost:8081";
 const token = getQueryParam("token");
 let accessToken = localStorage.getItem("accessToken");
 

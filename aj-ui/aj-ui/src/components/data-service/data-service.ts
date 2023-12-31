@@ -21,6 +21,7 @@ export default {
     data(): {} {
         return {
             API: `${this.apiRoot}/admin/data_service`,
+            createSelect: true, // 是否显示创建选择的类型
             selectTable: {
                 isShowDlg: false, // 是否弹出选择表
                 api: '',
