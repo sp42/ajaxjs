@@ -35,8 +35,7 @@ public class JdbcConn {
      * @return 数据库连接
      */
     public Connection getConn() {
-        if (conn == null)
-            log.warn("未准备好数据库连接");
+        if (conn == null) log.warn("未准备好数据库连接");
 
         return conn;
     }
@@ -54,8 +53,7 @@ public class JdbcConn {
     public Connection getConnection(String jdbcUrl, String userName, String password) {
         try {
 
-            if (StringUtils.hasText(userName) && StringUtils.hasText(password))
-                conn = DriverManager.getConnection(jdbcUrl, userName, password);
+            if (StringUtils.hasText(userName) && StringUtils.hasText(password)) conn = DriverManager.getConnection(jdbcUrl, userName, password);
             else conn = DriverManager.getConnection(jdbcUrl);
 
             log.info("数据库连接成功： " + conn.getMetaData().getURL());
@@ -79,8 +77,7 @@ public class JdbcConn {
     /**
      * 一般情况用的数据库连接字符串
      */
-    public static final String JDBC_TPL = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&" +
-            "allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai";
+    public static final String JDBC_TPL = "jdbc:mysql://%s/%s?characterEncoding=utf-8&useSSL=false&autoReconnect=true&" + "allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai";
 
     /**
      * 连接数据库
@@ -104,11 +101,8 @@ public class JdbcConn {
     public Connection getConnection(DataSource source) {
         try {
             conn = source.getConnection();
-
             if (conn == null) log.warn("DataSource 不能建立数据库连接");
-
-            if (Version.isDebug)
-                log.info("数据库连接成功： " + conn.getMetaData().getURL());
+            if (Version.isDebug) log.info("数据库连接成功： " + conn.getMetaData().getURL());
         } catch (SQLException e) {
             log.warn("通过数据源对象获得数据库连接对象失败！", e);
         }
@@ -164,8 +158,7 @@ public class JdbcConn {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
-                if (Version.isDebug)
-                    log.info("关闭数据库连接成功！ Closed database OK！");
+                if (Version.isDebug) log.info("关闭数据库连接成功！ Closed database OK！");
             }
         } catch (SQLException e) {
             log.warn("ERROR>>", e);
@@ -237,5 +230,4 @@ public class JdbcConn {
                 ps.setObject(i + 1, params[i]);
         }
     }
-
 }

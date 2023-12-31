@@ -34,6 +34,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
+ * XML 处理工具类
+ *
  * <a href="https://blog.csdn.net/axman/article/details/420910">...</a>
  *
  * @author sp42 frank@ajaxjs.com

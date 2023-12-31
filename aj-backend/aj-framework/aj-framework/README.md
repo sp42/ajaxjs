@@ -1,6 +1,8 @@
-# Aj-framework 
+# AJ-Framework 
 
 业务的封装
+
+文档地址：https://framework.ajaxjs.com/docs/aj/
 
 
 # 安装

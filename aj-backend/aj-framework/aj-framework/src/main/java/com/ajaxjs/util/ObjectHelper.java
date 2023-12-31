@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 处理值的一些相关函数
+ * 处理对象一些相关函数
  */
 public class ObjectHelper {
     /**

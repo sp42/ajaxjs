@@ -9,6 +9,7 @@ import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.beans.BeanInfo;
@@ -30,6 +31,7 @@ import java.util.function.BiConsumer;
  * 基本 JDBC 写入数据操作的封装
  */
 @Data
+@Slf4j
 @EqualsAndHashCode(callSuper = true)
 public class JdbcWriter extends JdbcConn implements JdbcConstants {
     private static final LogHelper LOGGER = LogHelper.getLog(JdbcWriter.class);
@@ -105,7 +107,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>", e);
             throw new RuntimeException(e.getMessage());
         }
 
@@ -126,7 +128,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
 
             return ps.executeUpdate();
         } catch (SQLException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>", e);
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -186,7 +188,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
                 }
             }
         } catch (IntrospectionException | InvocationTargetException | IllegalAccessException e) {
-            LOGGER.warning(e);
+            log.warn("WARN>>", e);
         }
     }
 
@@ -343,7 +345,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
                         Methods.executeMethod(entity, setIdMethod, newlyId);
                     } else Methods.executeMethod(entity, setIdMethod, newlyId); // 直接保存
                 } catch (Throwable e) {
-                    LOGGER.warning(e);
+                    log.warn("WARN>>", e);
                 }
             }
         }
@@ -394,7 +396,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
      * @param values 批量插入的数据列表，每个元素代表一条记录，格式为"('value1', 'value2', 'value3', ... , 'valueN')"
      */
     public void createBatch(String fields, List<String> values) {
-        LOGGER.info("批量插入 " + values.size() + " 条数据");
+        log.info("批量插入 {} 条数据", values.size());
         createBatch(fields, String.join(",", values));
     }
 
@@ -408,7 +410,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
     public void createBatch(String fields, String values) {
         long start = System.currentTimeMillis();
         String sql = "INSERT INTO " + tableName + " (" + fields + ") VALUE " + values;
-        LOGGER.info(sql);
+        log.info(sql);
 
         int[] result = null;
 
@@ -424,14 +426,14 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             try {
                 conn.rollback();// 回滚事务
             } catch (SQLException ex) {
-                LOGGER.warning(ex);
+                log.warn("WARN>>>", ex);
             }
 
-            LOGGER.warning(e);
+            log.warn("WARN>>>", e);
         }
 
-        System.out.println(Arrays.toString(result));
-        LOGGER.info("批量插入完毕 " + (System.currentTimeMillis() - start) + "ms");
+        log.info("result>>" + Arrays.toString(result));
+        log.info("批量插入完毕 " + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
@@ -512,7 +514,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         sb.deleteCharAt(sb.length() - 1);// 删除最后一个
 
         String sql = sb.toString();
-        LOGGER.info("批量插入：：" + sql);
+        log.info("批量插入：：" + sql);
         int[] result;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -523,7 +525,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
             throw new RuntimeException(e);
         }
 
-        LOGGER.info("批量插入完成。" + Arrays.toString(result));
+        log.info("批量插入完成。" + Arrays.toString(result));
     }
 
     /**
@@ -561,5 +563,4 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
 
         return write(sb.toString(), params.toArray()) > 0;
     }
-
 }

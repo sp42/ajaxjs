@@ -36,7 +36,7 @@ import org.springframework.util.Base64Utils;
 import org.springframework.util.DigestUtils;
 
 /**
- * 普通未分类的工具类
+ * 字符串工具类
  *
  * @author sp42 frank@ajaxjs.com
  */
