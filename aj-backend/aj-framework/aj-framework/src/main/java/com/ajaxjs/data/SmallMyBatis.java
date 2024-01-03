@@ -180,7 +180,10 @@ public class SmallMyBatis {
         return result.toString();
     }
 
-    private static final Pattern PATTERN = Pattern.compile("(#\\{|\\$\\{)(.*?)(})"); // 匹配占位符的正则表达式
+    /**
+     * 匹配占位符的正则表达式
+     */
+    private static final Pattern PATTERN = Pattern.compile("(#\\{|\\$\\{)(.*?)(})");
 
     public static String getValuedSQL(String template, Map<String, Object> paramMap) {
         Matcher matcher = PATTERN.matcher(template);
