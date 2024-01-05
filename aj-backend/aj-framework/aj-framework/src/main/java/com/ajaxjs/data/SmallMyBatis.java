@@ -143,12 +143,25 @@ public class SmallMyBatis {
 
     private static final ExpressionParser EXP_PARSER = new SpelExpressionParser();
 
+    /**
+     * 判断 ifBlock 是否满足条件，满足则返回 true，否则返回 false
+     */
     private static boolean evalIfBlock(String ifBlock, Map<String, Object> params) {
+        // 从 ifBlock 中截取出 test= 后面的字符串，并去掉双引号
         String test = ifBlock.substring(ifBlock.indexOf("test=") + 6, ifBlock.lastIndexOf("\""));
 
+        // 调用 BOL_EXP_PARSER 解析 test 字符串，传入 params 参数，返回解析结果的布尔值
         return BOL_EXP_PARSER.get(test, params);
     }
 
+
+    /**
+     * 解析 SQL 中的 forEach 语句
+     *
+     * @param sql    原始 SQL 语句
+     * @param params 参数集合
+     * @return 解析后的 SQL 语句
+     */
     private static String parseForEach(String sql, Map<String, Object> params) {
         StringBuilder result = new StringBuilder(sql.length());
         int start = 0, end = sql.indexOf("<forEach>", start);
@@ -180,11 +193,19 @@ public class SmallMyBatis {
         return result.toString();
     }
 
+
     /**
      * 匹配占位符的正则表达式
      */
     private static final Pattern PATTERN = Pattern.compile("(#\\{|\\$\\{)(.*?)(})");
 
+    /**
+     * 根据传入的模板和参数映射，生成带值的 SQL 语句
+     *
+     * @param template SQL 语句模板
+     * @param paramMap 参数映射，键为占位符，值为对应的参数值
+     * @return 生成的带值的 SQL 语句
+     */
     public static String getValuedSQL(String template, Map<String, Object> paramMap) {
         Matcher matcher = PATTERN.matcher(template);
         StringBuffer sb = new StringBuffer();
@@ -221,6 +242,7 @@ public class SmallMyBatis {
         matcher.appendTail(sb);
         return sb.toString();
     }
+
 
     /**
      * 处理SQL语句

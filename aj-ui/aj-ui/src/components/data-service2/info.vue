@@ -8,7 +8,7 @@
         </i-Select>
       </li> -->
       <li class="top_namespace" v-if="data.id.indexOf('/') != -1 ">
-        {{data.id.split('/')[0]}}/
+        {{parentDir()}}/
       </li>
 
       <li>

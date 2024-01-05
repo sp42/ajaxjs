@@ -30,7 +30,17 @@ export default {
   },
   methods: {
     getUrl() {
-      let url = this.apiPrefix + this.$parent.data.id;
+      let data = this.$parent.data;
+      let url = data.data.namespace;
+
+        // debugger;
+      if (data.parentNode.apiPrefixDev) {
+        // project node
+      } else {
+        url = data.parentNode.data.namespace + "/" + url;
+      }
+
+      url = this.apiPrefix + url;
 
       if (this.page) url += "/page";
       else {

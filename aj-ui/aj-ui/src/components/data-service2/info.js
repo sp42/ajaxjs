@@ -51,6 +51,16 @@ export default {
         };
     },
     methods: {
+        parentDir() {
+            let dir = this.data.id.split('/')[0];
+
+            if (dir.indexOf(':') != -1) {
+                let arr = dir.split(':');
+                dir = arr.pop();
+            }
+
+            return dir;
+        },
         togglePanel() {
             let config = this.$el.querySelector(".config");
             if (config.style.height == "300px") config.style.height = "0";

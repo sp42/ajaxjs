@@ -23,8 +23,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version><!-- IDEA Maven 插件默认 Java 1.5 编译，这里强制声明一下 -->
         <tomcat.version>8.5.96</tomcat.version>
-        <!--<tomcat.version>8.5.84</tomcat.version>-->
-       <!-- <spring.version>5.3.24</spring.version>-->
         <spring.version>5.3.31</spring.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -42,7 +40,7 @@
     <!--项目开发者列表 -->
     <developers>
         <developer>
-            <!--SCM里项目开发者的唯一标识符 -->
+            <!--SCM 里项目开发者的唯一标识符 -->
             <id>sp42</id>
             <name>Frank Cheung</name>
             <email>frank@ajaxjs.com</email>
@@ -131,11 +129,10 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <!-- add this to disable checking -->
-                                    <!--<additionalparam>-Xdoclint:none</additionalparam>-->
-                                    <charset>UTF-8</charset><!-- utf-8 读取文件 -->
-                                    <encoding>UTF-8</encoding><!-- utf-8 进行编码代码 -->
-                                    <docencoding>UTF-8</docencoding><!-- utf-8 进行编码文档 -->
+                                    <!--<additionalparam>-Xdoclint:none</additionalparam>-->  <!-- add this to disable checking -->
+                                    <charset>UTF-8</charset>
+                                    <encoding>UTF-8</encoding>
+                                    <docencoding>UTF-8</docencoding>
                                 </configuration>
                             </execution>
                         </executions>
@@ -179,14 +176,14 @@
                 </configuration>
             </plugin>
 
-            <!-- 复制 META-INF 目录 不让 Maven 打包时生成 maven 自己的描述文件 -->
+            <!-- 复制 META-INF 目录 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
                     <archive>
-                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <addMavenDescriptor>false</addMavenDescriptor><!-- 不让 Maven 打包时生成自己的描述文件 -->
                     </archive>
                 </configuration>
             </plugin>
@@ -202,6 +199,7 @@
             <version>1.7.36</version>
         </dependency>
 
+        <!-- LOMBOK 注解 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -225,6 +223,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Spring 测试 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>

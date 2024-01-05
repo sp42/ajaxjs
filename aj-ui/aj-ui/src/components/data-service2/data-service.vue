@@ -37,7 +37,7 @@
               <span class="text">数据源</span>
             </div>
           </li>
-          <li @click="isShowSelectTable=true">
+          <li @click="createService">
             <div>
               <div class="icon">
                 <Icon type="md-add" size="25" style="color:green" />
@@ -65,7 +65,7 @@
           <li @click="refreshTree">
             <div>
               <div class="icon">
-                <Icon type="md-refresh" size="25" style="color:burlywood" />
+                <Icon type="md-refresh" size="25" style="color:#f90" />
               </div>
               <span class="text">重新加载</span>
             </div>
@@ -99,14 +99,15 @@
     </Modal>
 
     <Modal v-model="createSelect" title="选择创建服务的类型" :footer-hide="true" width="500">
+      在项目 <b>{{project.name}}{{project.parentServiceName ? '/' + project.parentServiceName : ''}}</b> 下新建……
       <div style="margin: 5% auto;width: 240px;">
-        <Button type="primary">新建 CRUD 服务（从表中选择）</Button>
+        <Button type="primary" @click="addNewByTable">新建 CRUD 服务（从表中选择）</Button>
         <br />
         <br />
-        <Button type="primary">新建 CRUD 服务</Button>
+        <Button type="primary" @click="addNew">新建 CRUD 服务</Button>
         <br />
         <br />
-        <Button type="primary">新建 自定义 SQL 服务</Button>
+        <Button type="primary" @click="addNew(true)">新建 自定义 SQL 服务</Button>
       </div>
     </Modal>
 
@@ -129,7 +130,7 @@
 
 </template>
 
-<script src="./data-service.js"></script>
+<script lang="ts" src="./data-service.ts"></script>
 
 <style lang="less" scoped src="./data-service.less"></style>
 <style lang="less">

@@ -22,6 +22,11 @@ import java.util.Map;
 @Data
 @Accessors(chain = true)
 public class CRUD<T> {
+    /**
+     * 创建一个JdbcReader对象并返回
+     *
+     * @return JdbcReader对象
+     */
     public static JdbcReader jdbcReaderFactory() {
         JdbcReader reader = new JdbcReader();
         reader.setConn(JdbcConn.getConnection());
@@ -29,6 +34,12 @@ public class CRUD<T> {
         return reader;
     }
 
+    /**
+     * 创建一个 JdbcWriter 实例并配置相关参数
+     * JdbcWriter 类有很多前期的全局配置，一般在注入阶段进行配置获取 JdbcWriter 类的实例，并设置连接池
+     *
+     * @return 配置好的 JdbcWriter 实例
+     */
     public static JdbcWriter jdbcWriterFactory() {
         //  JdbcWriter 有较多前期的全局配置，故一般在注入阶段配置好
         JdbcWriter writer = DiContextUtil.getBean(JdbcWriter.class);
@@ -253,7 +264,7 @@ public class CRUD<T> {
      */
     public static <T> PageResult<T> pageBySqlId(Class<T> beanClz, String sqlId, Map<String, Object> paramsMap) {
         String sql = SmallMyBatis.handleSql(paramsMap, sqlId);
-//        LOGGER.warning(new Exception("ffifi"));
+
         return PageEnhancer.page(sql, beanClz);
     }
 
@@ -284,13 +295,21 @@ public class CRUD<T> {
         return annotation.value();
     }
 
+    /**
+     * 创建数据并返回创建的记录数量
+     *
+     * @param talebName 数据表名
+     * @param entity    待创建的实体对象
+     * @param idField   ID字段名
+     * @return 创建的记录数量，类型为Long
+     */
     public static Long create(String talebName, Object entity, String idField) {
         JdbcWriter jdbcWriter = jdbcWriterFactory();
-        jdbcWriter.setTableName(talebName);
+        jdbcWriter.setTableName(talebName); // 设置数据表名
 
-        if (StringUtils.hasText(idField)) jdbcWriter.setIdField(idField);
+        if (StringUtils.hasText(idField)) jdbcWriter.setIdField(idField); // 如果ID字段名不为空，则设置ID字段名
 
-        return (Long) jdbcWriter.create(entity);
+        return (Long) jdbcWriter.create(entity);   // 调用JdbcWriter的create方法创建数据，并将结果转换为Long类型返回
     }
 
     public static Long createWithIdField(Object entity, String idField) {

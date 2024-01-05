@@ -1,4 +1,4 @@
-import tree from "./tree.js";
+import tree from "./tree";
 import tips from "../widget/tips.vue";
 import tableSelector from "../widget/table-selector.vue";
 import info from "./info.vue";
@@ -6,13 +6,16 @@ import Datasource from "../widget/data-source/data-source.vue";
 import { isDev } from '../../util/utils';
 import { xhr_get, xhr_post, xhr_put, xhr_del } from '../../util/xhr';
 
+// 新建 tab 的 index
+let NEW_TAB: number = 1;
+
 export default {
     mixins: [tree],
     components: { info, tips, tableSelector, Datasource },
     data() {
         return {
             isShowSelectTable: false,
-            createSelect: true, // 是否显示创建选择的类型
+            createSelect: false, // 是否显示创建选择的类型
             split1: 0.2,
             dataSource: {
                 isShowDataSource: false,
@@ -22,7 +25,7 @@ export default {
                 crossDb: false
             },
             activeTab: "index",
-            activeTabData: null,
+            activeTabData: null as DS_TreeNode_Service,
             mainTabs: [
                 // {
                 //     label: "数据服务",
@@ -50,18 +53,28 @@ export default {
                 content: '<p>DataService：用数据库管理 SQL 语句，快捷生成 API 接口</p><p>Powered by MyBatis + AJAXJS Framework.</p><p>ver 2023.10.31</p>'
             });
         },
+        createService(): void {
+            let prefix = this.getSelectedProject();
+
+            if (prefix) {
+                this.createSelect = true;
+            }
+        },
         refreshConfig() {
             let prefix = this.getSelectedProject();
 
             if (prefix)
-                xhr_get(`${prefix}/common_api/reload_config`, j => {
+                xhr_get(`${prefix}/common_api/reload_config`, (j: RepsonseResult) => {
                     if (j.status)
                         this.$Message.success('刷新成功');
                 });
         },
-        openTab(a, data) {
-            if (data.projectData)
+        // 打开 tab
+        openTab(a, _data: any): void {
+            if (_data.projectData)
                 return;
+
+            let data: DS_TreeNode_Service = <DS_TreeNode_Service>_data;
 
             let name = data.title + ' ' + data.id;
             let hasTab = null;
@@ -71,9 +84,14 @@ export default {
                     hasTab = tab;
             });
 
+            let label: string = name; // tab label 太长
+
+            if (label.length > 10)
+                label = label.substring(0, 25) + '...';
+
             if (!hasTab)
                 this.mainTabs.push({
-                    label: name,
+                    label: label,
                     name: name,
                     closable: true,
                     data: data
@@ -84,7 +102,40 @@ export default {
                 this.activeTabData = data;
             }, 100);
         },
-        onTabClick(tabName) {
+        // 新建
+        addNew(isCustomSQL: boolean) {
+            // debugger
+            let data: DS_TreeNode_Service = {
+                title: '新建服务',
+                contextmenu: true,
+                data: {
+                    namespace: ''
+                },
+                id: this.project.parentNode.data ? this.project.parentNode.data.namespace + "/" : "",
+                isCreate: true,
+                parentNode: this.project.parentNode,
+                // render: renderCrudTreeNode
+            };
+
+            let name: string = '新建服务-'+ NEW_TAB++;
+            this.mainTabs.push({
+                label: name,
+                name: name,
+                closable: true,
+                // @ts-ignore
+                data: data
+            });
+
+            this.activeTab = name;
+            this.activeTabData = data;
+            this.createSelect = false;
+        },
+
+        addNewByTable(): void {
+            this.isShowSelectTable = true;
+            this.createSelect = false;
+        },
+        onTabClick(tabName: string): void {
             this.activeTab = tabName;
 
             for (let i = 0; i < this.mainTabs.length; i++) {
@@ -95,7 +146,7 @@ export default {
                 }
             }
         },
-        onTabClose(tabName) {
+        onTabClose(tabName: string) {
             let index = -1;
 
             for (let i = 0; i < this.mainTabs.length; i++) {
@@ -120,7 +171,8 @@ export default {
 
         // 保存命令
         saveDML() {
-            let current = this.activeTabData;
+            let current: DS_TreeNode_Service = this.activeTabData;
+            alert(current.isCreate)
             let dml = Object.assign({}, current.data);
             console.log(dml);
 
@@ -139,19 +191,18 @@ export default {
                     dml[i] = 0;
             }
 
-            let prefix = this.getCurrentApiPrefix();
+            let prefix: string = this.getCurrentApiPrefix();
 
-            xhr_put(`${prefix}/common_api/common_api`, j => {
-                if (j.status == 1) {
+            xhr_put(`${prefix}/common_api/common_api`, (j: RepsonseResult) => {
+                if (j.status)
                     this.$Message.success('修改命令成功');
-                }
             }, dml);
         },
 
         /**
          * 获取当前工程的 API 前缀
          */
-        getCurrentApiPrefix() {
+        getCurrentApiPrefix(): string {
             let current = this.activeTabData;
 
             if (!current) {
@@ -166,25 +217,26 @@ export default {
             else
                 project = current.parentNode;
 
-            let prefix = isDev() ? project.apiPrefixDev : project.apiPrefixProd;
+            let prefix: string = isDev() ? project.apiPrefixDev : project.apiPrefixProd;
 
             return prefix;
         },
-        del(e) {
-            let li = e.currentTarget;
+        del(e: MouseEvent): void {
+            let li: HTMLElement = e.currentTarget as HTMLElement;
 
             if (li.classList.contains('disabled'))
                 return;
 
-            let prefix = this.getCurrentApiPrefix();
+            let current = this.activeTabData;
+            let prefix: string | null = this.getCurrentApiPrefix();
 
             if (prefix) {
                 this.$Modal.confirm({
                     title: '删除服务',
                     content: '<p>确定删除 ' + current.data.name + ' 这个服务吗？</p>',
                     onOk: () => {
-                        xhr_del(`${prefix}/common_api/common_api/${current.data.id}/`, j => {
-                            if (j.status == 1) {
+                        xhr_del(`${prefix}/common_api/common_api/${current.data.id}/`, (j: RepsonseResult) => {
+                            if (j.status) {
                                 this.$Message.success('删除成功');
                                 this.onTabClose(this.activeTab);
                                 this.activeTab = 'index';
