@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class TestMyConvert {
     @Data
-    public static class A implements IBaseModel {
+    public static class A {
         private Integer a;
     }
 

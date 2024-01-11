@@ -86,8 +86,8 @@ export default {
 
             let label: string = name; // tab label 太长
 
-            if (label.length > 10)
-                label = label.substring(0, 25) + '...';
+            // if (label.length > 10)
+            //     label = label.substring(0, 25) + '...';
 
             if (!hasTab)
                 this.mainTabs.push({
@@ -104,20 +104,24 @@ export default {
         },
         // 新建
         addNew(isCustomSQL: boolean) {
-            // debugger
+            let parentNode = this.project.parentNode.data;
+            let hasParent: boolean = !!parentNode; // 是否有父节点
+
             let data: DS_TreeNode_Service = {
                 title: '新建服务',
                 contextmenu: true,
                 data: {
-                    namespace: ''
+                    type: isCustomSQL ? 'SINGLE' : "CRUD",
+                    namespace: '',
+                    pid: hasParent ? parentNode.id : -1
                 },
-                id: this.project.parentNode.data ? this.project.parentNode.data.namespace + "/" : "",
+                id: hasParent ? parentNode.namespace + "/" : "",
                 isCreate: true,
                 parentNode: this.project.parentNode,
                 // render: renderCrudTreeNode
             };
 
-            let name: string = '新建服务-'+ NEW_TAB++;
+            let name: string = '新建服务-' + NEW_TAB++;
             this.mainTabs.push({
                 label: name,
                 name: name,
@@ -158,8 +162,11 @@ export default {
 
             if (index != -1) {
                 this.$delete(this.mainTabs, index);
+
                 if (this.mainTabs[0])
                     this.activeTab = this.mainTabs[0].name;
+                else
+                    this.activeTab = 'index';
             }
         },
         changeDatasource(ds) {
@@ -172,9 +179,7 @@ export default {
         // 保存命令
         saveDML() {
             let current: DS_TreeNode_Service = this.activeTabData;
-            alert(current.isCreate)
             let dml = Object.assign({}, current.data);
-            console.log(dml);
 
             delete dml.createDate;
             delete dml.children;
@@ -193,10 +198,54 @@ export default {
 
             let prefix: string = this.getCurrentApiPrefix();
 
-            xhr_put(`${prefix}/common_api/common_api`, (j: RepsonseResult) => {
-                if (j.status)
-                    this.$Message.success('修改命令成功');
-            }, dml);
+            if (current.isCreate) {
+                xhr_post(`${prefix}/common_api/common_api`, (j: RepsonseResult) => {
+                    if (j.status) {
+                        this.$Message.success('创建命令成功');
+                        this.refreshTree();
+
+                        let newlyId: number = j.data;
+                        current.data.id = newlyId;
+                        current.isCreate = false;
+
+                        let parentNode = this.project.parentNode.data;
+                        let hasParent: boolean = !!parentNode; // 是否有父节点
+                        let projectName: string = this.project.name;
+
+                        if (hasParent) {
+                            current.id = projectName + ":" + parentNode.namespace + "/" + dml.namespace;
+                        } else
+                            current.id = projectName + ":" + dml.namespace;
+
+
+                        // 获取 tab
+                        for (let i = 0; i < this.mainTabs.length; i++) {
+                            let tab: any = this.mainTabs[i];
+
+                            if (tab.name === this.activeTab) {
+                                // debugger
+                                tab.name = current.id;
+                                // this.$set(tab, 'label', name);
+                                this.activeTab = current.id;
+                                break;
+                            }
+                        }
+
+
+                        // iview tab 改名会导致 tab 内容消失，于是改为关闭了再打开
+                        // this.onTabClose(this.activeTab);
+
+                    } else
+                        this.$Message.error(j.message);
+                }, dml);
+            } else {
+                xhr_put(`${prefix}/common_api/common_api`, (j: RepsonseResult) => {
+                    if (j.status)
+                        this.$Message.success('修改命令成功');
+                    else
+                        this.$Message.error(j.message);
+                }, dml);
+            }
         },
 
         /**

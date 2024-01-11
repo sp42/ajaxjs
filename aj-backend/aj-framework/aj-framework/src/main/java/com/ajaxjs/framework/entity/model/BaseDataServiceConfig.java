@@ -9,10 +9,16 @@ import lombok.Data;
 public class BaseDataServiceConfig {
     private Integer id;
 
+    private Integer pid;
+
     /**
      * 说明
      */
     private String name;
+    /**
+     * 类型 SINGLE | CRUD
+     */
+    private String type;
 
     /**
      * 命名空间，标识
@@ -33,6 +39,11 @@ public class BaseDataServiceConfig {
      * 实体类引用名称
      */
     private String clzName;
+
+    /**
+     * 单条 SQL 命令
+     */
+    private String sql;
 
     /**
      * 查询详情的 SQL（可选的）

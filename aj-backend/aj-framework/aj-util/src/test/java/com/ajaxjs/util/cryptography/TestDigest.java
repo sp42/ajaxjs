@@ -1,6 +1,6 @@
 package com.ajaxjs.util.cryptography;
 
-import static com.ajaxjs.util.cryptography.Digest.*;
+import static com.ajaxjs.util.Digest.*;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

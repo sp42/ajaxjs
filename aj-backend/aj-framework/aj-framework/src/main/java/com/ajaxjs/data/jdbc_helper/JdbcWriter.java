@@ -2,8 +2,9 @@ package com.ajaxjs.data.jdbc_helper;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.DataUtils;
-import com.ajaxjs.data.jdbc_helper.common.IgnoreDB;
 import com.ajaxjs.data.jdbc_helper.common.TableName;
+import com.ajaxjs.framework.BusinessException;
+import com.ajaxjs.framework.IgnoreDB;
 import com.ajaxjs.util.DateUtil;
 import com.ajaxjs.util.logger.LogHelper;
 import com.ajaxjs.util.reflect.Methods;
@@ -365,10 +366,19 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
         if (entity instanceof Map) {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) entity;
-            sp = entity2UpdateSql(tableName, map, idField, map.get(idField));
+            Object id = map.get(idField);
+
+            if (id == null)
+                throw new BusinessException("未指定 id，这将会是批量全体更新！");
+
+            sp = entity2UpdateSql(tableName, map, idField, id);
         } else {
             String getId = DataUtils.changeColumnToFieldName("get_" + idField);
             Object id = Methods.executeMethod(entity, getId);
+
+            if (id == null)
+                throw new BusinessException("未指定 id，这将会是批量全体更新！");
+
             sp = entity2UpdateSql(tableName, entity, idField, id);
         }
 

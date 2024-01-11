@@ -1,5 +1,6 @@
 import { codemirror } from "vue-codemirror";
 import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/display/autorefresh';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/mode/sql/sql.js'
 import 'codemirror/addon/selection/active-line.js'
@@ -32,23 +33,31 @@ export default {
     },
     data() {
         let data = this.data.data;
+        let isSignle = data.type && data.type === 'SINGLE';
         console.log(data)
+
         return {
+            isSignle: isSignle,
             currentData: data,
             editorData: {
                 // 当前编辑器数据，根据不同类型的
-                type: "info",
-                isCustomSql: !!data.infoSql,
-                sql: data.type && data.type === 'SINGLE' ? data.sql : data.infoSql,
+                type: isSignle ? "sql" : "infoSql",
+                isCustomSql: isSignle ? true : !!data.infoSql,
+                sql: isSignle ? data.sql : data.infoSql,
             },
             cmOption: {
                 tabSize: 4,
                 styleActiveLine: true,
                 lineNumbers: true,
                 mode: "text/x-mysql",
+                autoRefresh: true, // 重点是这句，为true
                 // theme: "monokai"
             },
         };
+    },
+    mounted() {
+        // 加载codemirror编辑器必须点击一下代码才能正常显示并且代码向左偏移
+        setTimeout(() => this.$refs.cm.refresh(), 500);
     },
     methods: {
         parentDir() {
@@ -71,33 +80,7 @@ export default {
             this.$Message.success("复制 SQL 代码成功");
         },
         formatSql() {
-            let key = this.getTypeKey();
-            this.currentData[key] = this.editorData.sql = formatSql(this.editorData.sql);
-        },
-
-        getTypeKey() {
-            let key;
-
-            switch (this.editorData.type) {
-                case "info":
-                    key = "infoSql";
-                    break;
-                    v;
-                case "list":
-                    key = "listSql";
-                    break;
-                case "create":
-                    key = "createSql";
-                    break;
-                case "update":
-                    key = "updateSql";
-                    break;
-                case "delete":
-                    key = "deleteSql";
-                    break;
-            }
-
-            return key;
+            this.editorData.sql = formatSql(this.editorData.sql);
         },
         getApiPrefix() {
             let obj;
@@ -113,48 +96,52 @@ export default {
             url += "common_api/";
 
             return url;
+        },
+
+        /**
+         * 切换编辑器不同的类型
+         * 
+         * @param {String} type 
+         */
+        setEditorData(type) {
+            this.editorData.type = type;
+            let sql = this.currentData[type];
+
+            if (sql) {
+                this.editorData.sql = sql;
+                this.editorData.isCustomSql = true;
+            } else
+                this.editorData.sql = "";
         }
     },
     watch: {
-        "editorData.type"(v) {
-            let key = this.getTypeKey();
-            this.editorData.isCustomSql = !!this.currentData[key];
-
-            if (this.editorData.isCustomSql)
-                this.editorData.sql = this.currentData[key];
-            else
-                this.editorData.sql = "";
-        },
-        "editorData.isCustomSql"(v) {
-            let key = this.getTypeKey();
-
-            if (v) {
-                switch (this.editorData.type) {
-                    case "info":
-                        this.currentData[key] = this.editorData.sql = "SELECT * FROM xxx";
-                        break;
-                        v;
-                    case "list":
-                        this.currentData[key] = this.editorData.sql = "SELECT * FROM xxx";
-                        break;
-                    case "create":
-                        this.currentData[key] = this.editorData.sql = "SELECT * FROM xxx";
-                        break;
-                    case "update":
-                        this.currentData[key] = this.editorData.sql = "SELECT * FROM xxx";
-                        break;
-                    case "delete":
-                        this.currentData[key] = this.editorData.sql = "DELETE * FROM xxx";
-                        break;
-                }
-            } else {
-                this.currentData[key] = null;
-                this.editorData.sql = "";
-            }
-        },
+        // "editorData.isCustomSql"(v) {
+        //     if (v) {
+        //         switch (this.editorData.type) {
+        //             case "infoSql":
+        //                 this.editorData.sql = "SELECT * FROM xxx";
+        //                 break;
+        //             case "listSql":
+        //                 this.editorData.sql = "SELECT * FROM xxx";
+        //                 break;
+        //             case "createSql":
+        //                 this.editorData.sql = "SELECT * FROM xxx";
+        //                 break;
+        //             case "updateSql":
+        //                 this.editorData.sql = "SELECT * FROM xxx";
+        //                 break;
+        //             case "deleteSql":
+        //                 this.editorData.sql = "DELETE * FROM xxx";
+        //                 break;
+        //         }
+        //     } else {
+        //         this.currentData[key] = null;
+        //         this.editorData.sql = "";
+        //     }
+        // },
+        // 同步到 data
         "editorData.sql"(v) {
-            let key = this.getTypeKey();
-            this.currentData[key] = this.editorData.sql;
+            this.currentData[this.editorData.type] = this.editorData.sql;
         }
     },
 };

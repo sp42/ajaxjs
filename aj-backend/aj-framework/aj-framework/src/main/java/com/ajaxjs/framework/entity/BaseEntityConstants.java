@@ -42,6 +42,7 @@ public interface BaseEntityConstants {
         int AUTO_INC = 1;
 
         /**
+         *
          */
         int SNOW = 2;
 
@@ -49,5 +50,11 @@ public interface BaseEntityConstants {
          * UUID
          */
         int UUID = 3;
+    }
+
+    interface CMD_TYPE {
+        String SINGLE = "SINGLE";
+
+        String CRUD = "CRUD";
     }
 }

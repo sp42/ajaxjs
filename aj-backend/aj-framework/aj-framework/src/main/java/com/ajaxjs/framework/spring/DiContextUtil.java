@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ajaxjs.util.WebHelper;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -166,7 +167,7 @@ public class DiContextUtil implements ApplicationContextAware {
 
         if (requestAttributes == null) {
             if (TestHelper.isRunningTest())
-                return TestHelper.request;
+                return WebHelper.request;
             else
                 return null;
         }

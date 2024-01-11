@@ -11,52 +11,49 @@ import java.util.Calendar;
 import org.junit.Test;
 
 public class TestFileHelper {
-	String dir = Resources.getResourcesFromClass(TestFileHelper.class, "");
-	String fullpath = dir + File.separator + "bar.txt";
+    String dir = Resources.getResourcesFromClass(TestFileHelper.class, "");
+    String fullPath = dir + File.separator + "bar.txt";
 
-	@Test
-	public void testCreateRead() {
-		// create and update
-		FileHelper.saveText(fullpath, "hihi");
+    @Test
+    public void testCreateRead() {
+        // create and update
+        FileHelper.saveText(fullPath, "hihi");
 
-		// read
-		String result = FileHelper.openAsText(fullpath);
+        // read
+        String result = FileHelper.openAsText(fullPath);
 
-		assertTrue(result.startsWith("hihi"));
+        assertTrue(result.startsWith("hihi"));
 
-		FileHelper.saveText(fullpath, "hihi2");
-		assertTrue(FileHelper.openAsText(fullpath).startsWith("hihi2"));
+        FileHelper.saveText(fullPath, "hihi2");
+        assertTrue(FileHelper.openAsText(fullPath).startsWith("hihi2"));
 
-		// delete
-		FileHelper.delete(fullpath);
-	}
+        // delete
+        FileHelper.delete(fullPath);
+    }
 
-	@Test
-	public void testGetFileName() {
-		assertEquals("bar.java", FileHelper.getFileName("c:/foo/bar.java"));
-	}
+    @Test
+    public void testGetFileName() {
+        assertEquals("bar.java", FileHelper.getFileName("c:\\foo\\bar.java"));
+        assertEquals("bar.java", FileHelper.getFileName("c:/foo/bar.java"));
+    }
 
-	@Test
-	public void testGetFileSuffix() {
-		assertEquals("java", FileHelper.getFileSuffix("c:/foo/bar.java"));
-	}
+    @Test
+    public void testGetFileSuffix() {
+        assertEquals("java", FileHelper.getFileSuffix("c:/foo/bar.java"));
+    }
 
-	@Test
-	public void testGetDirNameByDate() {
-		assertTrue(FileHelper.getDirNameByDate().startsWith("\\" + Calendar.getInstance().get(Calendar.YEAR)));
-	}
+    @Test
+    public void testGetDirNameByDate() {
+        assertTrue(FileHelper.getDirNameByDate().startsWith("\\" + Calendar.getInstance().get(Calendar.YEAR)));
+    }
 
-	@Test
-	public void testCreateFile() {
-		try {
-			assertNotNull(FileHelper.createFile(fullpath, true));
-			FileHelper.delete(fullpath);
-		} catch (IOException e) {
-		}
-	}
+    @Test
+    public void testCreateFile() {
+        try {
+            assertNotNull(FileHelper.createFile(fullPath, true));
+            FileHelper.delete(fullPath);
+        } catch (IOException e) {
+        }
+    }
 
-	@Test
-	public void testZip() {
-		ZipHelper.zip("C:\\temp\\ajaxjs-security", "C:\\temp\\dd.zip");
-	}
 }

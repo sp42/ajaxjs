@@ -30,6 +30,11 @@ import java.util.Set;
  */
 public class WebHelper {
     /**
+     * For static-way to get request in UNIT TEST
+     */
+    public static HttpServletRequest request;
+
+    /**
      * 获取请求 ip
      *
      * @return 客户端 ip

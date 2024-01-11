@@ -10,9 +10,11 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.JsonTools;
-import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.convert.EntityConvert;
+import com.ajaxjs.util.convert.MapTool;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.StreamHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +33,9 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Frank Cheung
  */
+@Slf4j
 public abstract class ResponseHandler {
-    private static final LogHelper LOGGER = LogHelper.getLog(ResponseHandler.class);
+    private static final int MAX_LENGTH_TO_PRINT = 500;
 
     /**
      * 响应数据转换为文本
@@ -42,12 +45,11 @@ public abstract class ResponseHandler {
      */
     public static ResponseEntity stream2Str(ResponseEntity resp) {
         if (resp.getIn() != null) {
-            String result = StringUtil.byteStream2string(resp.getIn());
+            String result = StreamHelper.byteStream2string(resp.getIn());
             resp.setResponseText(result.trim());
 
-            int maxLength = 500;
-            String resultMsg = (result.length() > maxLength) ? result.substring(0, maxLength) + " ..." : result;
-            LOGGER.info("{0} {1} 响应状态：{3}，请求结果\n{2}", resp.getHttpMethod(), resp.getUrl(), resultMsg, resp.getHttpCode());
+            String resultMsg = (result.length() > MAX_LENGTH_TO_PRINT) ? result.substring(0, MAX_LENGTH_TO_PRINT) + " ..." : result;
+            log.info("{} {} 响应状态：{}，请求结果\n{}", resp.getHttpMethod(), resp.getUrl(), resultMsg, resp.getHttpCode());
         }
 
         return resp;
@@ -62,20 +64,20 @@ public abstract class ResponseHandler {
      * @return 下载文件的完整磁盘路径
      */
     public static String download(ResponseEntity resp, String saveDir, String fileName) {
-        File file = StringUtil.createFile(saveDir, fileName);
+        File file = FileHelper.createFile(saveDir, fileName);
 
         try (OutputStream out = Files.newOutputStream(file.toPath())) {
-            StringUtil.write(resp.getIn(), out, true);
-            LOGGER.info("文件 [{0}]写入成功", file.toString());
+            StreamHelper.write(resp.getIn(), out, true);
+            log.info("文件 [{}]写入成功", file);
 
             return file.toString();
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
         } finally {
             try {
                 resp.getIn().close();
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }
 
@@ -93,18 +95,18 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                list = JsonTools.jsonToListOfMap(resp.toString());
+                list = EntityConvert.json2MapList(resp.toString());
             } catch (Exception e) {
-                LOGGER.warning(e, "解析 JSON 时候发生异常");
+                log.warn("解析 JSON 时候发生异常", e);
             }
         } else {
             // TODO 列表如何返回错误信息？
             Map<String, Object> map;
+
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else
-                map = JsonTools.json2map(resp.getResponseText());
+            } else map = EntityConvert.json2map(resp.getResponseText());
 
             list = new ArrayList<>();
             list.add(map);
@@ -124,16 +126,15 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-                map = JsonTools.json2map(resp.toString());
+                map = EntityConvert.json2map(resp.toString());
             } catch (Exception e) {
-                LOGGER.warning(e, "解析 JSON 时候发生异常");
+                log.warn("解析 JSON 时候发生异常", e);
             }
         } else {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            } else
-                map = JsonTools.json2map(resp.getResponseText());
+            } else map = EntityConvert.json2map(resp.getResponseText());
         }
 
         return map;
@@ -150,38 +151,50 @@ public abstract class ResponseHandler {
 
         if (resp.isOk()) {
             try {
-//                map = MapTool.xmlToMap(resp.toString());
+                map = MapTool.xmlToMap(resp.toString());
             } catch (Exception e) {
-                LOGGER.warning(e, "解析 XML 时候发生异常");
+                log.warn("解析 XML 时候发生异常", e);
             }
         } else {
             if (resp.getEx() != null) {
                 map = new HashMap<>();
                 map.put(Base.ERR_MSG, resp.getEx().getMessage());
-            }
-//            else
-//                map = MapTool.xmlToMap(resp.getResponseText());
+            } else map = MapTool.xmlToMap(resp.getResponseText());
         }
 
         return map;
     }
 
+    /**
+     * 将 ResponseEntity 响应对象转换为指定类型的对象
+     *
+     * @param resp ResponseEntity 响应对象
+     * @param clz  要转换为的类型
+     * @param <T>  转换后的类型
+     * @return 转换后的对象
+     */
     public static <T> T toBean(ResponseEntity resp, Class<T> clz) {
-        return JsonTools.map2bean(toJson(resp), clz);
+        return EntityConvert.map2Bean(toJson(resp), clz);
     }
 
     /**
+     * 判断是否为 GZip 格式的输入流并返回相应的输入流
      * 有些网站强制加入 Content-Encoding:gzip，而不管之前的是否有 GZip 的请求
+     *
+     * @param conn HTTP 连接
+     * @param in   输入流
+     * @return 如果Content-Encoding为gzip，则返回  GZIPInputStream 输入流，否则返回 null
      */
     public static InputStream gzip(HttpURLConnection conn, InputStream in) {
         if ("gzip".equals(conn.getHeaderField("Content-Encoding"))) {
             try {
                 return new GZIPInputStream(in);
             } catch (IOException e) {
-                LOGGER.warning(e);
+                log.warn("ERROR>>", e);
             }
         }
 
         return null;
     }
+
 }

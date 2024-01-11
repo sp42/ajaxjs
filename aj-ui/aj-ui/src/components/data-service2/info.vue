@@ -23,7 +23,7 @@
         </i-input>
       </li>
       <!-- <li style="padding-top: 5px;">数据源： {{currentData.datasourceName}}</li> -->
-      <li>
+      <li v-if="!isSignle">
         <i-input placeholder="数据库表名" v-model="currentData.tableName" size="small">
           <span slot="prepend">数据库表名</span>
         </i-input>
@@ -95,23 +95,23 @@
 
     <div class="main-edit-panel">
       <ul class="command-list" v-if="'SINGLE' != data.data.type">
-        <li @click="editorData.type = 'info'" :class="{selected: editorData.type == 'info'}">
+        <li @click="setEditorData('infoSql')" :class="{selected: editorData.type == 'infoSql'}">
           <span style="color: green;">GET</span> Info
           <tips text="查询单笔记录，通常返回一个记录的详细信息（info）。" />
         </li>
-        <li @click="editorData.type = 'list'" :class="{selected: editorData.type == 'list'}">
+        <li @click="setEditorData('listSql')" :class="{selected: editorData.type == 'listSql'}">
           <span style="color: green;">GET</span> List
           <tips text="返回列表记录（list），也可作自动分页。" />
         </li>
-        <li @click="editorData.type = 'create'" :class="{selected: editorData.type == 'create'}">
+        <li @click="setEditorData('createSql')" :class="{selected: editorData.type == 'createSql'}">
           <span style="color: burlywood;">POST</span> Create
           <tips text="执行 SQL INSERT 操作新增一笔记录（CREATE）。" />
         </li>
-        <li @click="editorData.type = 'update'" :class="{selected: editorData.type == 'update'}">
+        <li @click="setEditorData('updateSql')" :class="{selected: editorData.type == 'updateSql'}">
           <span style="color: blueviolet;">PUT</span> Update
           <tips text="指定记录 id，修改记录字段（UPDATE）。" />
         </li>
-        <li @click="editorData.type = 'delete'" :class="{selected: editorData.type == 'delete'}">
+        <li @click="setEditorData('deleteSql')" :class="{selected: editorData.type == 'deleteSql'}">
           <span style="color: red;">DELETE</span> Delete
           <tips text="删除单笔记录，若成功返回 true。" />
         </li>
@@ -122,7 +122,7 @@
         <codemirror class="code-editor" ref="cm" v-model="editorData.sql" :options="cmOption" v-show="editorData.isCustomSql"></codemirror>
         <!--  {{editorData.sql}} -->
         <div>
-          <span style="float: right;"><label><input type="checkbox" /> 启用</label></span>
+          <span v-if="!isSignle" style="float: right;"><label><input type="checkbox" /> 启用</label></span>
 
           <!-- 用不了 iview 的 RadioGroup -->
           <span v-if="'SINGLE' != data.data.type">
@@ -132,7 +132,7 @@
           <br />
           <br />
 
-          <span v-if="editorData.type == 'create' && !editorData.isCustomSql">
+          <span v-if="editorData.type == 'createSql' && !editorData.isCustomSql">
             <label><input type="checkbox" :value="true" /> 记录创建日期</label> &nbsp;&nbsp;
             <label><input type="checkbox" :value="true" /> 记录创建人</label> &nbsp;&nbsp;
             <br />
@@ -157,12 +157,12 @@
             </Select>
           </span>
 
-          <span v-if="editorData.type == 'update' && !editorData.isCustomSql">
+          <span v-if="editorData.type == 'updateSql' && !editorData.isCustomSql">
             <label><input type="checkbox" :value="true" /> 记录修改日期</label> &nbsp;&nbsp;
             <label><input type="checkbox" :value="true" /> 记录修改人</label>
           </span>
 
-          <span v-if="editorData.type == 'delete' && !editorData.isCustomSql">
+          <span v-if="editorData.type == 'deleteSql' && !editorData.isCustomSql">
             <label title="物理删除"><input type="radio" v-model="currentData.hasIsDeleted" :value="false" /> 物理删除</label>
             <label title="在逻辑上数据是被删除的，但数据本身依然存在库中（仅仅是更新状态字段为已删除）"><input type="radio" v-model="currentData.hasIsDeleted" :value="true" /> 逻辑删除</label> &nbsp;
 
@@ -183,7 +183,7 @@
 
             <api :api-prefix="getApiPrefix()" />
             <br />
-            <api :api-prefix="getApiPrefix()" :page="true" v-if="editorData.type == 'list'" />
+            <api :api-prefix="getApiPrefix()" :page="true" v-if="editorData.type == 'listSql'" />
           </div>
         </div>
       </div>

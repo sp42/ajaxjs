@@ -10,9 +10,11 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.JsonTools;
-import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.convert.EntityConvert;
+import com.ajaxjs.util.io.FileHelper;
+import com.ajaxjs.util.io.StreamHelper;
+import com.ajaxjs.util.regexp.RegExpUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -26,9 +28,8 @@ import java.util.function.Consumer;
  *
  * @author Frank Cheung
  */
+@Slf4j
 public class Get extends Base {
-    private static final LogHelper LOGGER = LogHelper.getLog(Get.class);
-
     /**
      * 简单 GET 请求（原始 API 版），返回文本。
      *
@@ -37,9 +38,9 @@ public class Get extends Base {
      */
     public static String simpleGET(String url) {
         try {
-            return StringUtil.byteStream2string(new URL(url).openStream());
+            return StreamHelper.byteStream2string(new URL(url).openStream());
         } catch (IOException e) {
-            LOGGER.warning(e);
+            log.warn("ERROR>>", e);
             return null;
         }
     }
@@ -79,7 +80,7 @@ public class Get extends Base {
     }
 
     public static <T> T api2bean(String url, Class<T> beanClz) {
-        return JsonTools.map2bean(api(url), beanClz);
+        return EntityConvert.map2Bean(api(url), beanClz);
     }
 
     /**
@@ -149,16 +150,17 @@ public class Get extends Base {
      */
     public static String download(String url, Consumer<HttpURLConnection> fn, String saveDir, String newFileName) {
         HttpURLConnection conn = initHttpConnection(url, "GET");
-        SetConnection.SET_USERAGENT_DEFAULT.accept(conn);
+        SetConnection.SET_USER_AGENT_DEFAULT.accept(conn);
         conn.setDoInput(true);// for conn.getOutputStream().write(someBytes); 需要吗？
         conn.setDoOutput(true);
 
         if (fn != null)
             fn.accept(conn);
 
-        String fileName = StringUtil.getFileNameFromUrl(url);
+        String fileName = FileHelper.getFileNameFromUrl(url);
+
         if (newFileName != null)
-            fileName = newFileName + StringUtil.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
+            fileName = newFileName + RegExpUtils.regMatch("\\.\\w+$", fileName);// 新文件名 + 旧扩展名
 
         ResponseEntity resp = connect(conn);
 

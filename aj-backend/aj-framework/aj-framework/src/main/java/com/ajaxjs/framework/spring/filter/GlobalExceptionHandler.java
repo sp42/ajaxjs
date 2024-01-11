@@ -40,18 +40,16 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         Throwable _ex = ex.getCause() != null ? ex.getCause() : ex;
         String msg = _ex.getMessage();
 
-        if (msg == null)
-            msg = _ex.toString();
+        if (msg == null) msg = _ex.toString();
 
         req.setAttribute(EXCEPTION_CXT_KEY, _ex);
 
         resp.setCharacterEncoding(StrUtil.UTF8_SYMBOL); // 避免乱码
         resp.setHeader("Cache-Control", "no-cache, must-revalidate");
 
-        if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError || _ex instanceof IllegalAccessException)// 设置状态码
-            resp.setStatus(HttpStatus.UNAUTHORIZED.value());
-        else
-            resp.setStatus(HttpStatus.OK.value());
+//        if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError || _ex instanceof IllegalAccessException)// 设置状态码
+//            resp.setStatus(HttpStatus.UNAUTHORIZED.value());
+//        else resp.setStatus(HttpStatus.OK.value());
 
         if (req.getAttribute("SHOW_HTML_ERR") != null && ((boolean) req.getAttribute("SHOW_HTML_ERR"))) {
             try {
@@ -71,6 +69,9 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
                 int errCode = ((ICustomException) _ex).getErrCode();
                 resultWrapper.setErrorCode(String.valueOf(errCode));
                 resp.setStatus(errCode);
+            } else if (_ex instanceof SecurityException || _ex instanceof IllegalAccessError || _ex instanceof IllegalAccessException) {// 设置状态码
+                resultWrapper.setErrorCode("403");
+                resp.setStatus(HttpStatus.FORBIDDEN.value());
             } else {
                 resultWrapper.setErrorCode("500");
                 resp.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());

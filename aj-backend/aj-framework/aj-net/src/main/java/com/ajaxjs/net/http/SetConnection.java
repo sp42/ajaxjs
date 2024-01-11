@@ -10,12 +10,12 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.StringUtil;
-
 import java.net.HttpURLConnection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+
+import com.ajaxjs.util.convert.MapTool;
 
 /**
  * 为初始化 HTTP Connection 所准备的函数。该类不能创建实例 你可以链式调用这些 lambda，xxx.andThen(xxx)
@@ -26,7 +26,7 @@ public abstract class SetConnection {
     /**
      * 设置 cookies
      */
-    public final static BiConsumer<HttpURLConnection, Map<String, String>> SET_COOKIES = (conn, map) -> conn.addRequestProperty("Cookie", StringUtil.join(map, ";"));
+    public final static BiConsumer<HttpURLConnection, Map<String, String>> SET_COOKIES = (conn, map) -> conn.addRequestProperty("Cookie", MapTool.join(map, ";"));
 
     /**
      * 请求来源
@@ -41,17 +41,17 @@ public abstract class SetConnection {
     /**
      * 设置客户端识别
      */
-    public final static BiConsumer<HttpURLConnection, String> SET_USERAGENT = (conn, url) -> conn.addRequestProperty("User-Agent", url);
+    public final static BiConsumer<HttpURLConnection, String> SET_USER_AGENT = (conn, url) -> conn.addRequestProperty("User-Agent", url);
 
     /**
      * 默认的客户端识别
      */
-    public final static Consumer<HttpURLConnection> SET_USERAGENT_DEFAULT = conn -> SET_USERAGENT.accept(conn, "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+    public final static Consumer<HttpURLConnection> SET_USER_AGENT_DEFAULT = conn -> SET_USER_AGENT.accept(conn, "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 
     /**
      * 设置启动 GZip 请求
      */
-    public final static Consumer<HttpURLConnection> SET_GIZPREQUEST = conn -> conn.addRequestProperty("Accept-Encoding", "gzip, deflate");
+    public final static Consumer<HttpURLConnection> SET_GZIP_REQUEST = conn -> conn.addRequestProperty("Accept-Encoding", "gzip, deflate");
 
     /**
      * 设置 POST 方式

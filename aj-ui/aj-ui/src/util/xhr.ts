@@ -225,7 +225,7 @@ function errHandle(xhr: XMLHttpRequest): void {
         // @ts-ignore
         let loginUrl: string | null = window.loginUrl;
 
-        if (loginUrl && xhr.status === 403 && r.error === 'forbidden' && confirm('token 已失效，是否跳到重新登录？')) {
+        if (loginUrl && xhr.status === 403 && confirm('token 已失效，是否跳到重新登录？')) {
             location.assign(loginUrl);
         } else
             r.error_description && console.error(msg, r.error_description);

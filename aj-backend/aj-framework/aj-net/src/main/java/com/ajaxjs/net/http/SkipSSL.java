@@ -11,8 +11,6 @@ import java.util.Objects;
 
 /**
  * 全局忽略 HTTPS 证书
- *
- * @author Frank Cheung
  */
 public class SkipSSL {
     private static class MyX509TrustManager implements X509TrustManager {
@@ -38,22 +36,20 @@ public class SkipSSL {
      */
     public static SSLSocketFactory getSocketFactory(KeyManager[] kms) {
         TrustManager[] trustAllCerts = new TrustManager[]{new MyX509TrustManager()};
-        SSLContext sc;
 
         try {
-            sc = SSLContext.getInstance("SSL"); // 有人用 SSLContext.getInstance("TLS");
-
+            SSLContext sc = SSLContext.getInstance("SSL"); // 有人用 SSLContext.getInstance("TLS");
             /*
-             * 第一个参数是授权的密钥管理器，用来授权验证，参数1为 null，则不上传客户端证书（通常情况都是如此）； TrustManager[]
+             * 第一个参数是授权的密钥管理器，用来授权验证，参数1为 null，则不上传客户端证书（通常情况都是如此）；
              * 第二个是被授权的证书管理器，用来验证服务器端的证书。第三个参数是一个随机数值，可以填写 null
              */
             sc.init(kms, trustAllCerts, null);
+
+            return sc.getSocketFactory();
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             e.printStackTrace();
             return null;
         }
-
-        return sc.getSocketFactory();
     }
 
     /**

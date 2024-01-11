@@ -10,8 +10,8 @@
  */
 package com.ajaxjs.net.http;
 
-import com.ajaxjs.util.StringUtil;
-import com.ajaxjs.util.logger.LogHelper;
+import com.ajaxjs.util.io.StreamHelper;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +26,8 @@ import java.util.function.Consumer;
  *
  * @author Frank Cheung
  */
+@Slf4j
 public abstract class Base {
-    private static final LogHelper LOGGER = LogHelper.getLog(Base.class);
-
     /**
      * 链接超时时间
      */
@@ -47,13 +46,13 @@ public abstract class Base {
      * @return 请求连接对象
      */
     public static HttpURLConnection initHttpConnection(String url, String method) {
-        LOGGER.info("准备连接： " + method + " " + url);
+        log.info("准备连接： " + method + " " + url);
         URL httpUrl = null;
 
         try {
             httpUrl = new URL(url);
         } catch (MalformedURLException e) {
-            LOGGER.warning(e, "初始化连接出错！URL[{0}]格式不对！", url);
+            log.warn("初始化连接出错！URL[" + url + "]格式不对！", e);
         }
 
         HttpURLConnection conn = null;
@@ -62,7 +61,7 @@ public abstract class Base {
             assert httpUrl != null;
             conn = (HttpURLConnection) httpUrl.openConnection();
         } catch (IOException e) {
-            LOGGER.warning(e, "初始化连接出错！URL[{0}]。", url);
+            log.warn("初始化连接出错！URL[" + url + "]", e);
         }
 
         try {
@@ -72,7 +71,7 @@ public abstract class Base {
                 conn.setReadTimeout(READ_TIMEOUT);
             }
         } catch (ProtocolException e) {
-            LOGGER.warning(e, "不能设置 HTTP 方法 " + method);
+            log.warn("不能设置 HTTP 方法 " + method, e);
         }
 
         return conn;
@@ -110,18 +109,18 @@ public abstract class Base {
 
                 String result = null;
                 if (in != null) {
-                    result = StringUtil.byteStream2string(in);
+                    result = StreamHelper.byteStream2string(in);
                     resp.setResponseText(result);
                 }
 
-                LOGGER.info("{0} {1} 请求正常但结果异常 HTTP CODE {2}，返回结果：\n{3}", resp.getHttpMethod(), resp.getUrl(), resp.getHttpCode(), result == null ? "未知" : result);
+                log.info("{} {} 请求正常但结果异常 HTTP CODE {}，返回结果：\n{}", resp.getHttpMethod(), resp.getUrl(), resp.getHttpCode(), result == null ? "未知" : result);
             } else {
                 resp.setOk(true);
                 in = conn.getInputStream();// 发起请求，接收响应
                 resp.setIn(in);
             }
         } catch (IOException e) {
-            LOGGER.warning(e, "请求异常：{0} {1}", resp.getHttpMethod(), resp.getUrl());
+            log.warn("请求异常： " + resp.getHttpMethod() + " " + resp.getUrl(), e);
             resp.setOk(false);
             resp.setEx(e);
         }

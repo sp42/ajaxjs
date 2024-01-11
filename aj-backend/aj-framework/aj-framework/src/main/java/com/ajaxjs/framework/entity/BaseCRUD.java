@@ -154,11 +154,15 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
      */
     @SuppressWarnings("unchecked")
     public K create(Map<String, Object> params) {
-        if (idType == 2)
-            params.put(getIdField(), SnowflakeId.get());
+        if (idType != null) { // auto increment by default
+            if (idType == 2) {
+                params.put(getIdField(), SnowflakeId.get());
+            }
 
-        if (idType == 3)
-            params.put(getIdField(), StrUtil.uuid());
+            if (idType == 3) {
+                params.put(getIdField(), StrUtil.uuid());
+            }
+        }
 
         if (beforeCreate != null)
             beforeCreate.accept(params);
@@ -172,6 +176,9 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     }
 
     public Boolean update(Map<String, Object> params) {
-        return CRUD.update(getTableName(), params, getIdField());
+        String tableName = getTableName();
+        String idField = getIdField();
+
+        return CRUD.update(tableName, params, idField);
     }
 }

@@ -2,6 +2,7 @@ package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.DataUtils;
+import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
@@ -12,50 +13,63 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
 
 @Slf4j
-public abstract class BaseCRUDService implements BaseCRUDController {
+public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityConstants {
     public final Map<String, BaseCRUD<?, Long>> namespaces = new HashMap<>();
 
     @Override
     public Map<String, Object> info(String namespace, Long id) {
-        if (!namespaces.containsKey(namespace))
-            throw new BusinessException("没有配置 BaseCRUD");
-
-        return namespaces.get(namespace).infoMap(id);
+        return getCRUD(namespace, crud -> CRUD.infoMap(crud.getSql()), crud -> crud.infoMap(id));
     }
 
     @Override
     public Map<String, Object> info(String namespace, String namespace2, Long id) {
-        System.out.println(namespace2);
-        return null;
+        BaseCRUD<?, Long> crud = getCrudChild(namespace, namespace2);
+
+        return isSingle(crud) ? CRUD.infoMap(crud.getSql()) : crud.infoMap(id);
     }
 
     @Override
     public List<Map<String, Object>> list(String namespace) {
-        if (!namespaces.containsKey(namespace))
-            throw new BusinessException("没有配置 BaseCRUD");
+        return getCRUD(namespace, crud -> CRUD.listMap(crud.getSql()), BaseCRUD::listMap);
+    }
 
-        return namespaces.get(namespace).listMap();
+    private BaseCRUD<?, Long> getCrudChild(String namespace, String namespace2) {
+        if (!namespaces.containsKey(namespace))
+            throw new IllegalStateException("命名空间 " + namespace + " 没有配置 BaseCRUD");
+
+        BaseCRUD<?, Long> parentCrud = namespaces.get(namespace);
+        BaseCRUD<?, Long> crud = parentCrud.getChildren().get(namespace2);
+
+        if (crud == null)
+            throw new IllegalStateException("命名空间 " + namespace2 + " 没有配置 BaseCRUD");
+
+        return crud;
     }
 
     @Override
     public List<Map<String, Object>> list(String namespace, String namespace2) {
-        return null;
+        BaseCRUD<?, Long> crud = getCrudChild(namespace, namespace2);
+
+        return isSingle(crud) ? CRUD.listMap(crud.getSql()) : crud.listMap();
+    }
+
+    private static boolean isSingle(BaseCRUD<?, Long> crud) {
+        return CMD_TYPE.SINGLE.equals(crud.getType());
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public PageResult<Map<String, Object>> page(String namespace) {
-        if (!namespaces.containsKey(namespace))
-            throw new BusinessException("没有配置 BaseCRUD");
-
         String where = getWhereClause(Objects.requireNonNull(DiContextUtil.getRequest()));
 
-        return (PageResult<Map<String, Object>>) namespaces.get(namespace).page(where);
+        return (PageResult<Map<String, Object>>) getCRUD(namespace, crud -> {
+            // TODO, handle WHERE
+            return CRUD.page(null, crud.getSql(), null);
+        }, crud -> crud.page(where));
     }
 
     @Override
@@ -65,9 +79,12 @@ public abstract class BaseCRUDService implements BaseCRUDController {
 
     @Override
     public Long create(String namespace, Map<String, Object> params) {
-        params = init(namespace, params);
+        final Map<String, Object> _params = initParams(namespace, params);
 
-        return namespaces.get(namespace).create(params);
+        return (Long) getCRUD(namespace, crud -> {
+            String sql = SmallMyBatis.handleSql(crud.getSql(), _params);
+            return CRUD.jdbcWriterFactory().insert(sql);
+        }, crud -> crud.create(_params));
     }
 
     @Override
@@ -77,9 +94,12 @@ public abstract class BaseCRUDService implements BaseCRUDController {
 
     @Override
     public Boolean update(String namespace, Map<String, Object> params) {
-        params = init(namespace, params);
+        final Map<String, Object> _params = initParams(namespace, params);
 
-        return namespaces.get(namespace).update(params);
+        return getCRUD(namespace, crud -> {
+            String sql = SmallMyBatis.handleSql(crud.getSql(), _params);
+            return CRUD.jdbcWriterFactory().write(sql) > 0;
+        }, crud -> crud.update(_params));
     }
 
     @Override
@@ -87,10 +107,25 @@ public abstract class BaseCRUDService implements BaseCRUDController {
         return update(namespace, params);
     }
 
-    private Map<String, Object> init(String namespace, Map<String, Object> params) {
+    /**
+     * 执行 CRUD 操作
+     *
+     * @param namespace 命名空间
+     * @param singleCMD 单个命令操作的函数
+     * @param crudCMD   CRUD 操作的函数
+     * @param <R>       返回值类型
+     * @return 执行结果
+     */
+    private <R> R getCRUD(String namespace, Function<BaseCRUD<?, Long>, R> singleCMD, Function<BaseCRUD<?, Long>, R> crudCMD) {
         if (!namespaces.containsKey(namespace))
-            throw new BusinessException("没有配置 BaseCRUD");
+            throw new IllegalStateException("命名空间 " + namespace + " 没有配置 BaseCRUD");
 
+        BaseCRUD<?, Long> crud = namespaces.get(namespace);
+
+        return isSingle(crud) ? singleCMD.apply(crud) : crudCMD.apply(crud);
+    }
+
+    private Map<String, Object> initParams(String namespace, Map<String, Object> params) {
         Map<String, Object> _params = new HashMap<>();
         params.forEach((key, value) -> _params.put(DataUtils.changeFieldToColumnName(key), value));
 
@@ -175,13 +210,30 @@ public abstract class BaseCRUDService implements BaseCRUDController {
         try {
             List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM ds_common_api WHERE stat != 1");
 
+            // sort by pid，-1 first
+            list.sort(Comparator.comparingInt(ConfigPO::getPid));
+            Map<Integer, BaseCRUD<Map<String, Object>, Long>> configMap = new HashMap<>();
+
             if (!CollectionUtils.isEmpty(list)) {
                 for (ConfigPO config : list) {
                     // 定义表的 CRUD
                     BaseCRUD<Map<String, Object>, Long> app = new BaseCRUD<>();
                     BeanUtils.copyProperties(config, app);
 
-                    namespaces.put(config.getNamespace(), app);
+                    if (app.getPid() == -1) {
+                        namespaces.put(config.getNamespace(), app);
+
+                        configMap.put(app.getId(), app);
+                        app.setChildren(new HashMap<>());
+                    } else {
+                        // find parent
+                        BaseCRUD<Map<String, Object>, Long> crud = configMap.get(app.getPid());
+
+                        if (crud == null)
+                            throw new IllegalStateException("程序错误：没有找到父级");
+
+                        crud.getChildren().put(app.getNamespace(), app);
+                    }
                 }
             }
         } finally {
