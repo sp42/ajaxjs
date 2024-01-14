@@ -29,7 +29,7 @@
 |aj-entity  |通用业务实体服务|[README](aj-entity)|war|
 |aj-upload  |统一文件上传服务|[README](aj-upload)|war|
 |aj-message  |统一邮件、短信发送服务|[README](aj-message)|war|
-|aj-workflow  |工作流|[README](aj-backend/aj-workflow)|war|
+|aj-workflow  |工作流|[README](aj-backend/aj-workflow)|https://framework.ajaxjs.com/docs/workflow/|
 |aj-playground  |实验室|[README](aj-playground)|war|
 |aj-ui|前端组件|[README](aj-ui)|npm|
 
