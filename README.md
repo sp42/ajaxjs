@@ -20,12 +20,12 @@
 |项目名称|简介|README|文档|
 |------|-----|----|------|
 |aj-parent  |后端 Maven 根 POM|[README](aj-backend/)||
-|aj-common-parent  |封装各种依赖的根 POM|[README](aj-backend/aj-common-parent )||
-|aj-util|轻便灵巧的工具，有丰富的工具类和常用组件|[README](aj-backend/aj-util)|jar|
-|aj-framework|AJ Framework|[README](aj-backend/aj-framework)|jar|
-|aj-web|网站作为独立客户端|[README](aj-web)|jar|
-|aj-sso|单点登录 SSO 中心|[README](aj-sso)|war|
-|aj-sso-client |单点登录客户端|[README](aj-sso-client)|jar|
+|aj-common-parent  |封装各种依赖的根 POM|[README](aj-backend/aj-framework/aj-common-parent )||
+|aj-util|轻便灵巧的工具，有丰富的工具类和常用组件|[README](aj-backend/aj-framework/aj-util)|[文档](https://framework.ajaxjs.com/docs/aj/)|
+|aj-framework|AJ Framework|[README](aj-backend/aj-framework/aj-framework)|[文档](https://framework.ajaxjs.com/docs/aj/)|
+|aj-web|网站作为独立客户端|[README](aj-backend/aj-framework/aj-web)|[文档](https://framework.ajaxjs.com/docs/aj/)|
+|aj-iam|AJ-IAM|[README](aj-sso)|[文档](https://framework.ajaxjs.com/docs/aj/)|
+|aj-sso-client |单点登录客户端|[文档](https://framework.ajaxjs.com/docs/aj/)|
 |aj-workflow  |轻量级的工作流引擎|[README](aj-backend/aj-workflow)|[文档](https://framework.ajaxjs.com/docs/workflow/)|
 |aj-playground  |实验室|[README](aj-playground)|war|
 |aj-ui|前端组件|[README](aj-ui)|npm|
