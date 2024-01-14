@@ -22,10 +22,13 @@
 |aj-parent  |后端 Maven 根 POM|[README](aj-backend/)||
 |aj-common-parent  |封装各种依赖的根 POM|[README](aj-backend/aj-framework/aj-common-parent )||
 |aj-util|轻便灵巧的工具，有丰富的工具类和常用组件|[README](aj-backend/aj-framework/aj-util)|[文档](https://framework.ajaxjs.com/docs/aj/)|
+|aj-json|轻量级 JSON 序列化/反序列化|[README](aj-backend/aj-framework/aj-json)|[文档](https://framework.ajaxjs.com/docs/aj/)|
+|aj-net|轻量级 HTTP 请求组件|[README](aj-backend/aj-framework/aj-net)|[文档](https://framework.ajaxjs.com/docs/aj/)|
 |aj-framework|AJ Framework|[README](aj-backend/aj-framework/aj-framework)|[文档](https://framework.ajaxjs.com/docs/aj/)|
 |aj-web|网站作为独立客户端|[README](aj-backend/aj-framework/aj-web)|[文档](https://framework.ajaxjs.com/docs/aj/)|
-|aj-iam|AJ-IAM|[README](aj-sso)|[文档](https://framework.ajaxjs.com/docs/aj/)|
-|aj-sso-client |单点登录客户端|[文档](https://framework.ajaxjs.com/docs/aj/)|
+|aj-iam|AJ-IAM 轻量级 OIDC 用户认证系统，授权服务器|[README](aj-backend/aj-iam/aj-iam-server)|[文档](https://framework.ajaxjs.com/docs/iam/)|
+|aj-iam-client|AJ-IAM OAuth  的 客户端 Client  |[README](aj-backend/aj-iam/aj-iam-client)|[文档](https://framework.ajaxjs.com/docs/iam/)|
+|aj-iam-resource-server|AJ-IAM OAuth  的 ResourceServer 资源服务器的 SDK，主要提供一个拦截器保护资源|[README](aj-backend/aj-iam/aj-iam-resource-server)|[文档](https://framework.ajaxjs.com/docs/iam/)|
 |aj-workflow  |轻量级的工作流引擎|[README](aj-backend/aj-workflow)|[文档](https://framework.ajaxjs.com/docs/workflow/)|
 |aj-playground  |实验室|[README](aj-playground)|war|
 |aj-ui|前端组件|[README](aj-ui)|npm|
