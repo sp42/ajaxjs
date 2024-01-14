@@ -28,7 +28,7 @@
 |aj-web|网站作为独立客户端|[Source](aj-backend/aj-framework/aj-web)|[文档](https://framework.ajaxjs.com/docs/aj/)|
 |aj-iam|AJ-IAM 轻量级 OIDC 用户认证系统，授权服务器|[Source](aj-backend/aj-iam/aj-iam-server)|[文档](https://framework.ajaxjs.com/docs/iam/)|
 |aj-iam-client|AJ-IAM OAuth  的 客户端 Client  |[Source](aj-backend/aj-iam/aj-iam-client)|[文档](https://framework.ajaxjs.com/docs/iam/)|
-|aj-iam-resource-server|AJ-IAM OAuth  的 ResourceServer 资源服务器的 SDK，主要提供一个拦截器保护资源|[Source](aj-backend/aj-iam/aj-iam-resource-server)|[文档](https://framework.ajaxjs.com/docs/iam/)|
+|aj-iam-resource-server|AJ-IAM OAuth  的 ResourceServer 资源服务器的 SDK|[Source](aj-backend/aj-iam/aj-iam-resource-server)|[文档](https://framework.ajaxjs.com/docs/iam/)|
 |aj-workflow  |轻量级的工作流引擎|[Source](aj-backend/aj-workflow)|[文档](https://framework.ajaxjs.com/docs/workflow/)|
 |aj-playground  |实验室|[Source](aj-playground)||
 |aj-ui|前端组件， NPM 工程|[Source](aj-ui)||
