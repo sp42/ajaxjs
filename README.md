@@ -17,19 +17,16 @@
 
 这是用一个源码空间（支持 Git/Svn）存放着多个项目，包含以下各个项目。
 
-|项目名称|简介|README|打包|
+|项目名称|简介|README|文档|
 |------|-----|----|------|
-|aj-parent  |Maven 根 POM|[README](aj-parent)|文档|
-|aj-util|轻便灵巧的工具，有丰富的工具类和常用组件|[README](aj-util)|jar|
-|aj-framework|常见的业务组件封装|[README](aj-framework)|jar|
+|aj-parent  |后端 Maven 根 POM|[README](aj-backend/)||
+|aj-common-parent  |封装各种依赖的根 POM|[README](aj-backend/aj-common-parent )||
+|aj-util|轻便灵巧的工具，有丰富的工具类和常用组件|[README](aj-backend/aj-util)|jar|
+|aj-framework|AJ Framework|[README](aj-backend/aj-framework)|jar|
 |aj-web|网站作为独立客户端|[README](aj-web)|jar|
-|aj-developer-tools |开发者工具|[README](aj-developer-tools)|jar|
 |aj-sso|单点登录 SSO 中心|[README](aj-sso)|war|
 |aj-sso-client |单点登录客户端|[README](aj-sso-client)|jar|
-|aj-entity  |通用业务实体服务|[README](aj-entity)|war|
-|aj-upload  |统一文件上传服务|[README](aj-upload)|war|
-|aj-message  |统一邮件、短信发送服务|[README](aj-message)|war|
-|aj-workflow  |工作流|[README](aj-backend/aj-workflow)|https://framework.ajaxjs.com/docs/workflow/|
+|aj-workflow  |轻量级的工作流引擎|[README](aj-backend/aj-workflow)|[文档](https://framework.ajaxjs.com/docs/workflow/)|
 |aj-playground  |实验室|[README](aj-playground)|war|
 |aj-ui|前端组件|[README](aj-ui)|npm|
 
