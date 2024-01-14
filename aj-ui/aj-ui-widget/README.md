@@ -3,3 +3,4 @@
 
 安装 `npm install --global http-server`
 运行 `http-server -c-1`
+http-server -c-1

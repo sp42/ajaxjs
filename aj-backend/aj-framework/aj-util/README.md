@@ -5,7 +5,6 @@
 [![Email](https://img.shields.io/badge/Contact--me-Email-orange.svg)](mailto:frank@ajaxjs.com)
 [![QQ群](https://framework.ajaxjs.com/static/qq.svg)](https://shang.qq.com/wpa/qunwpa?idkey=3877893a4ed3a5f0be01e809e7ac120e346102bd550deb6692239bb42de38e22) 
 
-****** 已整合到 framework 中，此库不再单独更新。********
 
 # AJAXJS Util 工具包
 工具库/助手包是框架的基础构成部分之一，英文多见于 Utils、Helpers、Tools。本项目定位为轻量级工具库，jar 体积不过 200k 左右，尽量避免第三方依赖。鉴于 Spring 普及，于是就依赖他的工具方法（仅依赖 `Spring Core`）直接使用，如常见的 `StringUtils.isEmpty()` 等等。
@@ -31,7 +30,7 @@
 <dependency>
   <groupId>com.ajaxjs</groupId>
   <artifactId>ajaxjs-util</artifactId>
-  <version>1.0.9-SNAPSHOT</version>
+  <version>1.1.3</version>
 </dependency>
 ```
 

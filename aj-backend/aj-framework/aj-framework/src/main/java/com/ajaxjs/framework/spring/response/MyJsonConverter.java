@@ -146,7 +146,6 @@ public class MyJsonConverter extends AbstractHttpMessageConverter<Object> {
             } else if (result.equals(Collections.emptyList())) {
                 msg = "找不到数据，查询为空";
                 resultWrapper.setData("[]");
-
             } else {
                 String json = ConvertToJson.toJson(result);
                 resultWrapper.setData(json);

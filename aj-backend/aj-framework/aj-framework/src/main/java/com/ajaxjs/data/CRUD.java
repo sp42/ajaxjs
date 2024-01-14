@@ -18,7 +18,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-
 @Data
 @Accessors(chain = true)
 public class CRUD<T> {
