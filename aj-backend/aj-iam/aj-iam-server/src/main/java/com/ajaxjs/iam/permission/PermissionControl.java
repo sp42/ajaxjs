@@ -38,4 +38,23 @@ public class PermissionControl {
 
         return num;
     }
+
+    /**
+     * 删除二进制数的某一位（右起开始算）
+     * 不会用位运算做，于是改用字符串的操作
+     *
+     * @param num      二进制数，long 形式
+     * @param position 右起开始算，从 0 开始
+     * @return 二进制数，long 形式
+     */
+    public static long removeBit(long num, int position) {
+        String binaryString = Long.toBinaryString(num);
+
+        StringBuilder sb = new StringBuilder(binaryString);
+        int actualIndex = binaryString.length() - position;
+        sb.deleteCharAt(actualIndex);
+
+        return Long.parseLong(sb.toString(), 2);
+    }
+
 }

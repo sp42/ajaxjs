@@ -100,6 +100,7 @@
       <OrgIndex v-if="load == 'OrgIndex'" />
       <ApiHelper v-if="load == 'api-helper'" />
       <DataServiceIndex v-if="load == 'DataServiceIndex'" />
+      <Permission v-if="load == 'Permission'" />
     </div>
   </div>
 </template>
@@ -120,6 +121,7 @@ import UserListIndex from "../components/admin-page/user/user-list-index.vue";
 import OrgIndex from "../components/admin-page/user/org/index.vue";
 import WebsiteConfig from "../components/admin-page/website/config.vue";
 import ApiHelper from "../components/api-helper/api-helper.vue";
+import Permission from "../components/permission/permission-index.vue";
 
 function getQueryParam(variable, isParent) {
   var query = (isParent ? parent.location : window.location).search.substring(
@@ -212,10 +214,11 @@ export default {
     UserListIndex,
     OrgIndex,
     ApiHelper,
+    Permission
   },
   data() {
     return {
-      load: SHOW_MOUDLE.load || "ModelMgr",
+      load: 'Permission' || SHOW_MOUDLE.load || "ModelMgr",
       apiRoot: window.config.dsApiRoot,
       listId: 0,
       listTitle: "",
