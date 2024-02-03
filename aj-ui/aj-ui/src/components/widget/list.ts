@@ -1,6 +1,11 @@
 import { xhr_del } from '../../util/xhr';
 import { dateFormat } from '../../util/utils';
 
+/**
+ * 处理响应的回调函数
+ */
+type XhrCallback = (json: {}, text: string) => void;
+
 export default {
     afterDelete(cb?: Function): Function {
         return function (j: RepsonseResult) {
@@ -33,7 +38,7 @@ export default {
      * 创建日期
      */
     createDate: {
-        title: '创建日期',/*  key: 'createDate', */ width: 220, align: 'center', render(h: Function, params: any) {
+        title: '创建日期',/*  key: 'createDate', */ width: 160, align: 'center', render(h: Function, params: any) {
             return h('div', dateFormat.call(new Date(params.row.createDate), 'yyyy-MM-dd hh:mm'));
         }
     },
@@ -44,25 +49,61 @@ export default {
     tags: { title: '分类标签', minWidth: 100, key: 'tagsNames', align: 'center', ellipsis: true },
 
     status: {
-        title: '状态', width: 70,
+        title: '状态', width: 80,
         render(h: Function, params: any) {
-            let str = '';
+            let str: string = '', color: string = '';
 
             switch (params.row.stat) {
-                case null:
-                case 1:
-                    str = '启用';
-                    break;
-                case 0:
-                    str = '禁用';
+                case -1:
+                    str = '草稿';
+                    color = 'gray';
                     break;
                 case 2:
+                    color = 'red';
+                    str = '禁用';
+                    break;
+                case 1:
+                    color = 'red';
                     str = '已删除';
+                    break
+                case null:
+                case 0:
                 default:
+                    color = 'green';
                     str = "启用";
             }
 
-            return h('div', str);
+            return h('div', {
+                style: {
+                    color: color
+                }
+            }, str);
         }
+    },
+    getPageList(self: any, listArray: any, callback?: Function): XhrCallback {
+        return (j: JsonResponse) => {
+            if (j.status) {
+                listArray.total = j.data.total;
+                listArray.data = j.data.rows;
+
+                callback && callback();
+            } else
+                self.$Message.warning(j.message || '获取数据失败');
+        }
+    },
+
+    copyBeanClean(bean: {}): {} {
+        const deepCopy: any = JSON.parse(JSON.stringify(bean));
+
+        delete deepCopy.createDate;
+        delete deepCopy.updateDate;
+        delete deepCopy.updateDate;
+        delete deepCopy.creatorId;
+        delete deepCopy.updaterId;
+        delete deepCopy.creator;
+        delete deepCopy.updater;
+        delete deepCopy.extend;
+
+        return deepCopy;
     }
 };

@@ -7,12 +7,15 @@ import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
+import com.ajaxjs.util.convert.ConvertBasicValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
@@ -79,7 +82,7 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
 
     @Override
     public Long create(String namespace, Map<String, Object> params) {
-        final Map<String, Object> _params = initParams(namespace, params);
+        final Map<String, Object> _params = initParams(namespace, params, true);
 
         return (Long) getCRUD(namespace, crud -> {
             String sql = SmallMyBatis.handleSql(crud.getSql(), _params);
@@ -126,8 +129,35 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
     }
 
     private Map<String, Object> initParams(String namespace, Map<String, Object> params) {
+        return initParams(namespace, params, false);
+    }
+
+    /**
+     * @param namespace
+     * @param params
+     * @param isFormSubmitOnly 是否只是表单提交的参数
+     * @return
+     */
+    private Map<String, Object> initParams(String namespace, Map<String, Object> params, boolean isFormSubmitOnly) {
+        if (isFormSubmitOnly) {
+            HttpServletRequest req = DiContextUtil.getRequest();
+            assert req != null;
+            String queryString = req.getQueryString();
+
+            // get the key of query string
+            if (StringUtils.hasText(queryString)) {
+                queryString = StringUtils.uriDecode(queryString, StandardCharsets.UTF_8);
+                String[] parameters = queryString.split("&");
+
+                for (String parameter : parameters) {
+                    String[] keyValuePair = parameter.split("=");
+                    params.remove(keyValuePair[0]);
+                }
+            }
+        }
+
         Map<String, Object> _params = new HashMap<>();
-        params.forEach((key, value) -> _params.put(DataUtils.changeFieldToColumnName(key), value));
+        params.forEach((key, value) -> _params.put(DataUtils.changeFieldToColumnName(key), ConvertBasicValue.toJavaValue(value.toString())));
 
         return _params;
     }

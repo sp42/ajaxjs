@@ -8,9 +8,10 @@ public interface BaseEntityConstants {
         private static final long serialVersionUID = -873485978038563365L;
 
         {
+            put(-1, "草稿");
             put(0, "正常");
-            put(1, "禁用");
-            put(2, "已删除");
+            put(1, "已删除");
+            put(2, "禁用");
         }
     };
 

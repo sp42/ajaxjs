@@ -100,7 +100,7 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
             sql = String.format(SELECT_SQL, getTableName());
 
         if (isHasIsDeleted())
-            sql = sql.replace(DUMMY_STR, DUMMY_STR + " AND " + getDelField() + " = 0");
+            sql = sql.replace(DUMMY_STR, DUMMY_STR + " AND " + getDelField() + " != 1");
 
         if (isTenantIsolation())
             sql = TenantService.addTenantIdQuery(sql);

@@ -14,7 +14,7 @@
         <h2>角色管理</h2>
 
         <div class="tree">
-          <Tree :data="data1" @on-select-change="onTreeNodeClk" @on-contextmenu="handleContextMenu">
+          <Tree :data="roleTreeData" @on-select-change="onTreeNodeClk" @on-contextmenu="handleContextMenu">
             <template slot="contextMenu">
               <DropdownItem @click.native="editRole" style="color: cornflowerblue">▶ 编辑角色</DropdownItem>
               <DropdownItem @click.native="addSubNode" style="color: green">
@@ -55,32 +55,35 @@
               <br />
               <Button :disabled="currentRole == null" type="success" icon="ios-add-circle-outline" @click="savePermission">&nbsp;&nbsp;&nbsp;保 存&nbsp;&nbsp;&nbsp;</Button>
             </div>
-            <p>增加、删除权限请到<a>权限管理</a>。</p>
+            <p>增加、删除权限请到<a @click="showPermissionMgr(false)">权限管理</a>。</p>
           </div>
         </div>
       </div>
     </div>
+
     <Modal v-model="isShisShowRoleEditForm" :title="'角色'+ (!roleForm.isCreate ? ' #' + currentRole.id : '' )" @on-ok="saveRole">
       <Form :model="currentRole" :label-width="100" style="margin-right: 10%;margin-left: 3%;">
         <FormItem label="角色名称">
           <Input v-model="currentRole.name" placeholder="Enter something..."></Input>
         </FormItem>
         <FormItem label="角色说明">
-          <Input type="textarea" :rows="4" v-model="currentRole.name" placeholder="Enter something..."></Input>
+          <Input type="textarea" :rows="4" v-model="currentRole.content" placeholder="Enter something..."></Input>
         </FormItem>
         <FormItem v-if="!roleForm.isTop">
-          <Checkbox v-model="currentRole.name">继承父级权限</Checkbox>
+          <Checkbox v-model="currentRole.isInheritedParent">继承父级权限</Checkbox>
         </FormItem>
         <FormItem label="角色状态">
-          <RadioGroup v-model="currentRole.name">
-            <Radio label="启用"></Radio>
-            <Radio label="禁用"></Radio>
-          </RadioGroup>
+          <label><input type="radio" v-model="currentRole.stat" value="0" /> 启用</label> &nbsp;
+          <label><input type="radio" v-model="currentRole.stat" value="2" /> 禁用</label>
         </FormItem>
         <FormItem v-if="!roleForm.isCreate" style="color:gray;">
-          创建于 2020-3-2 12:30 修改于 2020-3-2 12:30
+          创建于 {{ currentRole.createDate | formatDate }} 修改于 {{ currentRole.updateDate | formatDate }}
         </FormItem>
       </Form>
+    </Modal>
+
+    <Modal v-model="isShowPermissionMgr" width="1000" title="权限管理列表">
+      <PermissionMgr :is-pickup="isPermissionMgrPickup" :on-pickup="pickupPermission" />
     </Modal>
   </div>
 </template>
