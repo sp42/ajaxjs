@@ -14,6 +14,11 @@ public class Permission {
     public String content;
 
     /**
+     * 角色名称，在显示父级权限时候，有需要显示一下
+     */
+    public String roleName;
+
+    /**
      * 是否继承权限
      */
     public Boolean isInherit;
