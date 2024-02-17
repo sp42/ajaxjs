@@ -1,59 +1,59 @@
-//package com.ajaxjs.util.cryptography;
-//
-//import static com.ajaxjs.util.EncryptUtil.DES;
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertTrue;
-//
-//import java.security.Security;
-//import java.util.Map;
-//
-//import org.junit.Test;
-//
-//
-//public class TestCryptography {
-//	@Test
-//	public void testDES() {
-//		String key = DES.init(null);
-//		String word = "123", encWord = DES.encryptDES(word, key);
-//
-//		assertEquals(word, DES.decryptDES(encWord, key));
-//
-//		assertEquals(word, SymmetriCipher.DES_Decrypt(SymmetriCipher.DES_Encrypt(word, key), key));
-//	}
-//
-//	@SuppressWarnings("restriction")
-//	@Test
-//	public void test3DES() {
-//		// 添加新安全算法,如果用JCE就要把它添加进去
-//		// 这里addProvider方法是增加一个新的加密算法提供者(个人理解没有找到好的答案,求补充)
-//		Security.addProvider(new com.sun.crypto.provider.SunJCE());
-//		// byte数组(用来生成密钥的)
-//		final byte[] keyBytes = { 0x11, 0x22, 0x4F, 0x58, (byte) 0x88, 0x10, 0x40, 0x38, 0x28, 0x25, 0x79, 0x51, (byte) 0xCB, (byte) 0xDD, 0x55, 0x66, 0x77, 0x29, 0x74,
-//				(byte) 0x98, 0x30, 0x40, 0x36, (byte) 0xE2 };
-//		String word = "This is a 3DES test. 测试";
-//
+package com.ajaxjs.util;
+
+import static com.ajaxjs.util.EncryptUtil.DES;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.security.Security;
+import java.util.Map;
+
+import org.junit.Test;
+
+
+public class TestCryptography {
+    String key = "abc";
+    String word = "123";
+    @Test
+    public void testAES() {
+        String encWord = EncryptUtil.getInstance().AES_encode(word, key);
+        assertEquals(word, EncryptUtil.getInstance().AES_decode(encWord, key));
+    }
+
+    @Test
+    public void testDES() {
+        String encWord = EncryptUtil.getInstance().DES_encode(word, key);
+        assertEquals(word, EncryptUtil.getInstance().DES_decode(encWord, key));
+    }
+
+    @SuppressWarnings("restriction")
+    @Test
+    public void test3DES() {
+		// 添加新安全算法,如果用JCE就要把它添加进去
+		// 这里addProvider方法是增加一个新的加密算法提供者(个人理解没有找到好的答案,求补充)
+		Security.addProvider(new com.sun.crypto.provider.SunJCE());
+		// byte数组(用来生成密钥的)
+		final byte[] keyBytes = { 0x11, 0x22, 0x4F, 0x58, (byte) 0x88, 0x10, 0x40, 0x38, 0x28, 0x25, 0x79, 0x51, (byte) 0xCB, (byte) 0xDD, 0x55, 0x66, 0x77, 0x29, 0x74,
+				(byte) 0x98, 0x30, 0x40, 0x36, (byte) 0xE2 };
+		String word = "This is a 3DES test. 测试";
+
 //		byte[] encoded = SymmetriCipher.encryptTripleDES(keyBytes, word);
-//
+
 //		assertEquals(word, SymmetriCipher.decryptTripleDES(keyBytes, encoded));
-//	}
-//
-//	@Test
-//	public void testAES() {
-//	}
-//
-//	@Test
-//	public void testPBE() {
-//		// 加密前的原文
-//		String word = "hello world !!!";
-//		// 口令
-//		String key = "qwert";
+    }
+
+    @Test
+    public void testPBE() {
+		// 加密前的原文
+		String word = "hello world !!!";
+		// 口令
+		String key = "qwert";
 //
 //		// 初始化盐
 //		byte[] salt = SymmetriCipher.init();
 //		byte[] encData = SymmetriCipher.encryptPBE(key, salt, word);
 //		assertEquals(word, SymmetriCipher.decryptPBE(key, salt, encData));
-//	}
-//
+    }
+
 //	@Test
 //	public void testRSA() {
 //		// 生成公钥私钥
@@ -87,9 +87,9 @@
 //		// 验证签名
 //		assertTrue(RSA.verify(encEnglish, publicKey, sign));
 //	}
-//
-////	@Test
-//	public void testDH() {
+
+    @Test
+    public void testDH() {
 //		// 生成甲方密钥对
 //		Map<String, byte[]> mapA = DH.init();
 //		String publicKeyA = DH.getPublicKey(mapA);
@@ -113,5 +113,5 @@
 //		// 由乙方公钥，甲方私钥解密
 //		byte[] decWord = DH.decryptDH(encWord, publicKeyB, privateKeyA);
 //		System.out.println("解密: " + new String(decWord));
-//	}
-//}
+    }
+}

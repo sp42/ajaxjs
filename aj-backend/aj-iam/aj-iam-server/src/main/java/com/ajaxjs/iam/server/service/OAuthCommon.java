@@ -9,7 +9,7 @@ import com.ajaxjs.iam.server.model.po.AccessTokenPo;
 import com.ajaxjs.iam.server.model.po.App;
 import com.ajaxjs.iam.user.common.session.UserSession;
 import com.ajaxjs.iam.user.model.User;
-import com.ajaxjs.util.Digest;
+import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public abstract class OAuthCommon implements IamConstants {
             StringBuilder sb = new StringBuilder();
             sb.append("?state=").append(state);
             // 生成授权码（Authorization Code）
-            String code = Digest.getSHA1(clientId + StrUtil.getRandomString(6));
+            String code = MessageDigestHelper.getSHA1(clientId + StrUtil.getRandomString(6));
             sb.append("&code=").append(code);
 
             if (StringUtils.hasText(webUrl))

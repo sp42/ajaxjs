@@ -7,8 +7,8 @@ import com.ajaxjs.iam.user.common.util.SendEmail;
 import com.ajaxjs.iam.user.controller.ResetPasswordController;
 import com.ajaxjs.iam.user.model.User;
 import com.ajaxjs.iam.user.model.UserAccount;
-import com.ajaxjs.util.Digest;
 import com.ajaxjs.util.EncryptUtil;
+import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -129,7 +129,7 @@ public class ResetPasswordService implements ResetPasswordController {
      */
     public String makeEmailToken(String email, Integer tenantId) {
         String expireHex = Long.toHexString(System.currentTimeMillis());
-        String emailToken = Digest.getSHA1(encryptKey + email), timeToken = EncryptUtil.getInstance().AES_encode(expireHex, encryptKey);
+        String emailToken = MessageDigestHelper.getSHA1(encryptKey + email), timeToken = EncryptUtil.getInstance().AES_encode(expireHex, encryptKey);
 
         return emailToken + timeToken;
     }
@@ -144,7 +144,7 @@ public class ResetPasswordService implements ResetPasswordController {
     public boolean checkEmailToken(String token, String email) {
         String emailToken = token.substring(0, 40), timeToken = token.substring(40);
 
-        if (!Digest.getSHA1(encryptKey + email).equals(emailToken))
+        if (!MessageDigestHelper.getSHA1(encryptKey + email).equals(emailToken))
             throw new SecurityException("非法 email 账号！ " + email);
 
         String expireHex = EncryptUtil.getInstance().AES_decode(timeToken, encryptKey);
