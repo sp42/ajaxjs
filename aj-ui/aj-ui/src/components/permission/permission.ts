@@ -1,6 +1,6 @@
 import Role from './role';
 import PermissionMgr from './permission-list.vue';
-import { xhr_get } from '../../util/xhr';
+import { xhr_get, xhr_post, xhr_put } from '../../util/xhr';
 
 export default {
     mixins: [Role],
@@ -19,7 +19,8 @@ export default {
             permission: {
                 inheritPermissionList: [],
                 permissionList: []
-            }
+            },
+            selectedPermissions: []
         }
     },
     mounted() {
@@ -30,13 +31,30 @@ export default {
             this.showPermissionMgr(true);
         },
         removePermission(): void {
+            for (const id of this.selectedPermissions) {
+                const index = this.permission.permissionList.findIndex(element => element.id === id);
 
+                if (index !== -1)
+                    this.permission.permissionList.splice(index, 1);
+            }
         },
         clearPermission(): void {
             this.permission.permissionList = [];
         },
+
         savePermission(): void {
-            this.permission.permissionList = [];
+            let arr: string[] = [];
+            this.permission.permissionList.forEach((item: any) => arr.push(item.id));
+
+            let data: any = {
+                roleId: this.currentRole.id,
+                permissionIds: arr.join(',')
+            };
+
+            xhr_post(`${this.permissionApi}/add_permissions_to_role`, (j: RepsonseResult) => {
+                if (j.status)
+                    this.$Message.success('保存权限成功');
+            }, data);
         },
         showPermissionMgr(isPermissionMgrPickup: boolean): void {
             this.isShowPermissionMgr = true;
@@ -57,6 +75,8 @@ export default {
                 id: data.id,
                 name: data.name
             });
+
+            this.$Message.success(`添加权限[${data.name}]成功`);
             // debugger
         },
         handlePermissionList(data: any): void {
@@ -78,7 +98,7 @@ export default {
     watch: {
         currentRole(currentRole): void {
             if (currentRole && currentRole.id) {
-                xhr_get(`${this.permissionApi}/permission_list_by_role/${currentRole.id}?allow=1`, (j: RepsonseResult) => {
+                xhr_get(`${this.permissionApi}/permission_list_by_role/${currentRole.id}`, (j: RepsonseResult) => {
                     if (j.status) {
                         this.handlePermissionList(j.data);
                     } else

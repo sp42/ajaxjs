@@ -1,24 +1,15 @@
-package com.ajaxjs.util.cryptography.asymmetric;
+package com.ajaxjs.util.cryptography;
 
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.SignatureException;
+import com.ajaxjs.util.EncryptUtil;
+import com.ajaxjs.util.logger.LogHelper;
+import org.springframework.util.Base64Utils;
+
+import javax.crypto.Cipher;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Map;
-
-import javax.crypto.Cipher;
-
-import org.springframework.util.Base64Utils;
-
-import com.ajaxjs.util.cryptography.encryption.SymmetriCipherInfo;
-import com.ajaxjs.util.logger.LogHelper;
 
 /**
  * RSA 非对称加密/解密
@@ -39,12 +30,12 @@ public class RSA extends Common {
 	/**
 	 * 定义公钥算法
 	 */
-	private final static String KEY_RSA_PUBLICKEY = "RSAPublicKey";
+	private final static String KEY_RSA_PUBLIC_KEY = "RSAPublicKey";
 
 	/**
 	 * 定义私钥算法
 	 */
-	private final static String KEY_RSA_PRIVATEKEY = "RSAPrivateKey";
+	private final static String KEY_RSA_PRIVATE_KEY = "RSAPrivateKey";
 
 	/**
 	 * 初始化密钥
@@ -54,7 +45,7 @@ public class RSA extends Common {
 	 * @return 密钥对
 	 */
 	public static Map<String, byte[]> init() {
-		return getKeyPair(KEY_RSA, 1024, KEY_RSA_PUBLICKEY, KEY_RSA_PRIVATEKEY);
+		return getKeyPair(KEY_RSA, 1024, KEY_RSA_PUBLIC_KEY, KEY_RSA_PRIVATE_KEY);
 	}
 
 	/**
@@ -132,7 +123,7 @@ public class RSA extends Common {
 	 */
 	private static byte[] action(boolean isEncrypt, boolean isPublic, byte[] data, String key) {
 		int mode = isEncrypt ? Cipher.ENCRYPT_MODE : Cipher.DECRYPT_MODE;
-		return SymmetriCipherInfo.doCipher(KEY_RSA, mode, restoreKey(isPublic, key), null, data);
+		return EncryptUtil.doCipher(KEY_RSA, mode, restoreKey(isPublic, key), null, data);
 	}
 
 	/**
@@ -190,7 +181,7 @@ public class RSA extends Common {
 	 * @return
 	 */
 	public static String getPublicKey(Map<String, byte[]> map) {
-		return getKey(KEY_RSA_PUBLICKEY, map);
+		return getKey(KEY_RSA_PUBLIC_KEY, map);
 	}
 
 	/**
@@ -200,7 +191,7 @@ public class RSA extends Common {
 	 * @return
 	 */
 	public static String getPrivateKey(Map<String, byte[]> map) {
-		return getKey(KEY_RSA_PRIVATEKEY, map);
+		return getKey(KEY_RSA_PRIVATE_KEY, map);
 	}
 
 }

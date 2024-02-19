@@ -3,14 +3,17 @@ package com.ajaxjs.iam.permission;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.entity.tree.FlatArrayToTree;
 import com.ajaxjs.iam.server.controller.PermissionController;
+import com.ajaxjs.util.ListUtils;
+import com.ajaxjs.util.ObjectHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class PermissionService implements PermissionController {
     @Override
     public List<Map<String, Object>> getRoleTree() {
@@ -37,16 +40,16 @@ public class PermissionService implements PermissionController {
     @Override
     public List<Permission> getPermissionListByRole(Integer roleId) {
         Role role = CRUD.info(Role.class, "SELECT * FROM per_role WHERE id = ?", roleId);
+        List<Permission> result = new ArrayList<>();
+        // get all permission list
+        List<Permission> allPermissionList = getAllPermissionList();
         Long permissionValue = role.getPermissionValue();
 
-        if (permissionValue == null || permissionValue == 0)
-            throw new NullPointerException("没有 permissionValue");
-
-        // get all permission list
-        List<Permission> allPermissionList = CRUD.list(Permission.class, "SELECT * FROM per_permission WHERE stat = 0 ORDER BY id ASC");
-
-        List<Permission> result = new ArrayList<>();
-        getPermissionList(result, allPermissionList, permissionValue, false, null);
+        if (permissionValue == null || permissionValue == 0) {
+//            throw new NullPointerException("没有 permissionValue");
+//            return null;
+        } else
+            getPermissionList(result, allPermissionList, permissionValue, false, null);
 
         // find parents
         if (role.getIsInheritedParent()) {
@@ -69,6 +72,55 @@ public class PermissionService implements PermissionController {
         return removeDuplicates(result);
     }
 
+    private List<Permission> getAllPermissionList() {
+        return CRUD.list(Permission.class, "SELECT * FROM per_permission WHERE stat = 0 ORDER BY id ASC");
+    }
+
+    @Override
+    public boolean addPermissionsToRole(Integer roleId, List<Integer> permissionIds) {
+        List<Integer> allPermissionIIdList = CRUD.list(Integer.class, "SELECT id FROM per_permission WHERE stat = 0 ORDER BY id ASC");
+        int[] indexes = findIndexes(permissionIds, allPermissionIIdList);
+//        System.out.println(allPermissionIIdList);
+//        System.out.println(Arrays.toString(indexes));
+
+
+        long num = 0L;
+        for (int index : indexes) {
+            if (index == -1)
+                throw new IllegalStateException("找不到权限");
+
+            num = PermissionControl.set(num, index, true);//设置[权限项 index]为true
+        }
+        log.info("permissionValue: " + num);
+
+        return CRUD.update("per_role", ObjectHelper.hashMap("id", roleId, "permission_value", num), "id");
+    }
+
+    private static int[] findIndexes(List<Integer> ids, List<Integer> allPermissionIIdList) {
+        int[] result = new int[ids.size()];
+
+        for (int i = 0; i < ids.size(); i++) {
+            Integer id = ids.get(i);
+            int index = allPermissionIIdList.indexOf(id);
+
+            result[i] = index;
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        List<Long> ids = new ArrayList<>();
+        ids.add(1L);
+        ids.add(2L);
+        ids.add(3L);
+
+        int i = ids.indexOf(2L);
+        System.out.println(i);
+
+    }
+
+
     // 去重
     private static List<Permission> removeDuplicates(List<Permission> list) {
         return list.stream().collect(Collectors.collectingAndThen(
@@ -77,6 +129,15 @@ public class PermissionService implements PermissionController {
         ));
     }
 
+    /**
+     * 获取权限列表
+     *
+     * @param result            返回权限列表
+     * @param allPermissionList 所有权限列表
+     * @param permissionValue   权限值
+     * @param isInherited       是否继承
+     * @param roleName          父角色名称
+     */
     private void getPermissionList(List<Permission> result, List<Permission> allPermissionList, Long permissionValue, boolean isInherited, String roleName) {
         int i = 0;
 

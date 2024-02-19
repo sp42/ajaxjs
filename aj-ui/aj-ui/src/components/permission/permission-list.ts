@@ -9,6 +9,10 @@ export default {
         },
         onPickup: {
             type: Function
+        },
+        simpleApi: {
+            type: String,
+            required: true
         }
     },
     data(): {} {
@@ -35,28 +39,7 @@ export default {
                     width: 120,
                 },
             ],
-            listData: [
-                {
-                    name: "John Brown",
-                    age: 18,
-                    address: "New York No. 1 Lake Park",
-                },
-                {
-                    name: "Jim Green",
-                    age: 24,
-                    address: "London No. 1 Lake Park",
-                },
-                {
-                    name: "Joe Black",
-                    age: 30,
-                    address: "Sydney No. 1 Lake Park",
-                },
-                {
-                    name: "Jon Snow",
-                    age: 26,
-                    address: "Ottawa No. 2 Lake Park",
-                },
-            ],
+            listData: [],
             list: {
                 total: 0,
                 limit: 5,
@@ -75,7 +58,11 @@ export default {
     },
     methods: {
         getData(): void {
-            xhr_get('http://localhost:8888/iam/simple_api/permission/page?allow=1', List.getPageList(this, this.list), {
+            let api: string = this.simpleApi + '/permission/page';
+            if (this.isPickup)
+                api += '?q_stat=0';
+
+            xhr_get(api, List.getPageList(this, this.list), {
                 limit: this.list.limit,
                 pageNo: this.list.current,
             });
@@ -90,7 +77,7 @@ export default {
             this.isCreate = true;
         },
         doDelete(id: number): void {
-            xhr_del(`http://localhost:8888/iam/simple_api/permission/${id}?allow=1`, (j: RepsonseResult) => {
+            xhr_del(`${this.simpleApi}/permission/${id}`, (j: RepsonseResult) => {
                 if (j.status) {
                     this.$Message.success('删除成功');
                     this.getData();
@@ -101,10 +88,9 @@ export default {
             this.isShowEditWin = true;
             this.isCreate = false;
 
-            xhr_get(`http://localhost:8888/iam/simple_api/permission/${id}?allow=1`, (j: RepsonseResult) => {
-                if (j.status) {
+            xhr_get(`${this.simpleApi}/permission/${id}`, (j: RepsonseResult) => {
+                if (j.status) 
                     this.permissionData = j.data;
-                }
             });
         },
         handleChangePageSize(p: number): void {
@@ -115,14 +101,14 @@ export default {
             let data: any = List.copyBeanClean(this.permissionData);
 
             if (this.isCreate) {
-                xhr_post(`http://localhost:8888/iam/simple_api/permission?allow=1`, (j: RepsonseResult) => {
+                xhr_post(`${this.simpleApi}/permission`, (j: RepsonseResult) => {
                     if (j.status) {
                         this.$Message.success('创建成功');
                         this.getData();
                     }
                 }, data);
             } else {
-                xhr_put(`http://localhost:8888/iam/simple_api/permission/${this.permissionData.id}?allow=1`, (j: RepsonseResult) => {
+                xhr_put(`${this.simpleApi}/permission/${this.permissionData.id}`, (j: RepsonseResult) => {
                     if (j.status) {
                         this.$Message.success('修改成功');
                         this.getData();
@@ -140,6 +126,18 @@ export default {
         'list.current'(v: number): void {
             this.getData();
         },
+        isPickup(v: boolean): void {
+            this.getData();
+
+            if (v) {
+                for (let i: number = 0; i < this.columnsDef.length; i++)
+                    if (this.columnsDef[i].title === '状态') {
+                        this.columnsDef.splice(i, 1);
+                        break;
+                    }
+            } else
+                this.columnsDef.splice(3, 0, List.status);
+        }
     }
 };
 
