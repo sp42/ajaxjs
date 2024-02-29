@@ -46,7 +46,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- 编译为 jar 包时依赖的 -->

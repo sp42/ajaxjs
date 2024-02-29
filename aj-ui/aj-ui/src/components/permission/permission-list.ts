@@ -27,8 +27,8 @@ export default {
                     key: "name",
                 },
                 {
-                    title: "权限说明",
-                    key: "content",
+                    title: "权限编码",
+                    key: "code",
                     ellipsis: true
                 },
                 List.status,
@@ -48,6 +48,9 @@ export default {
             },
             ruleValidate: {
                 name: [
+                    { required: true, message: '该字段非空约束', trigger: 'blur' }
+                ],
+                code: [
                     { required: true, message: '该字段非空约束', trigger: 'blur' }
                 ],
             }

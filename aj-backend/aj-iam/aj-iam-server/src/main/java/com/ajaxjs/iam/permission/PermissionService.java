@@ -3,7 +3,6 @@ package com.ajaxjs.iam.permission;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.entity.tree.FlatArrayToTree;
 import com.ajaxjs.iam.server.controller.PermissionController;
-import com.ajaxjs.util.ListUtils;
 import com.ajaxjs.util.ObjectHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,10 +44,7 @@ public class PermissionService implements PermissionController {
         List<Permission> allPermissionList = getAllPermissionList();
         Long permissionValue = role.getPermissionValue();
 
-        if (permissionValue == null || permissionValue == 0) {
-//            throw new NullPointerException("没有 permissionValue");
-//            return null;
-        } else
+        if (permissionValue != null && permissionValue != 0)
             getPermissionList(result, allPermissionList, permissionValue, false, null);
 
         // find parents
@@ -78,12 +74,11 @@ public class PermissionService implements PermissionController {
 
     @Override
     public boolean addPermissionsToRole(Integer roleId, List<Integer> permissionIds) {
-        List<Integer> allPermissionIIdList = CRUD.list(Integer.class, "SELECT id FROM per_permission WHERE stat = 0 ORDER BY id ASC");
+        List<Integer> allPermissionIIdList = CRUD.list(Integer.class,
+                "SELECT id FROM per_permission WHERE stat = 0 ORDER BY id ASC");
         int[] indexes = findIndexes(permissionIds, allPermissionIIdList);
 //        System.out.println(allPermissionIIdList);
 //        System.out.println(Arrays.toString(indexes));
-
-
         long num = 0L;
         for (int index : indexes) {
             if (index == -1)
@@ -96,30 +91,23 @@ public class PermissionService implements PermissionController {
         return CRUD.update("per_role", ObjectHelper.hashMap("id", roleId, "permission_value", num), "id");
     }
 
+    /**
+     * 查找索引
+     *
+     * @param ids                  需要查找的 ID 列表
+     * @param allPermissionIIdList 所有权限 ID 列表
+     * @return 包含索引的数组
+     */
     private static int[] findIndexes(List<Integer> ids, List<Integer> allPermissionIIdList) {
         int[] result = new int[ids.size()];
 
         for (int i = 0; i < ids.size(); i++) {
             Integer id = ids.get(i);
-            int index = allPermissionIIdList.indexOf(id);
-
-            result[i] = index;
+            result[i] = allPermissionIIdList.indexOf(id);
         }
 
         return result;
     }
-
-    public static void main(String[] args) {
-        List<Long> ids = new ArrayList<>();
-        ids.add(1L);
-        ids.add(2L);
-        ids.add(3L);
-
-        int i = ids.indexOf(2L);
-        System.out.println(i);
-
-    }
-
 
     // 去重
     private static List<Permission> removeDuplicates(List<Permission> list) {
@@ -138,7 +126,8 @@ public class PermissionService implements PermissionController {
      * @param isInherited       是否继承
      * @param roleName          父角色名称
      */
-    private void getPermissionList(List<Permission> result, List<Permission> allPermissionList, Long permissionValue, boolean isInherited, String roleName) {
+    private void getPermissionList(List<Permission> result, List<Permission> allPermissionList,
+                                   Long permissionValue, boolean isInherited, String roleName) {
         int i = 0;
 
         for (Permission p : allPermissionList) {
@@ -208,9 +197,8 @@ public class PermissionService implements PermissionController {
             if (_children != null) {
                 List<Map<String, Object>> children = (List<Map<String, Object>>) _children;
 
-                if (children.size() > 0) {
+                if (children.size() > 0)
                     iViewMap.put("children", transformToTreeStructure(children));
-                }
             }
 
             iView.add(iViewMap);

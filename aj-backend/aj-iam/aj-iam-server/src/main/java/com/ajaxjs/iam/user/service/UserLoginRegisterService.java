@@ -3,6 +3,7 @@ package com.ajaxjs.iam.user.service;
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.framework.BusinessException;
 import com.ajaxjs.framework.spring.DiContextUtil;
+import com.ajaxjs.framework.spring.filter.google_captcha.GoogleCaptchaCheck;
 import com.ajaxjs.iam.server.common.IamUtils;
 import com.ajaxjs.iam.user.common.UserConstants;
 import com.ajaxjs.iam.user.common.UserUtils;
@@ -43,6 +44,7 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
     LogLoginService logLoginService;
 
     @Override
+    @GoogleCaptchaCheck
     public boolean login(String loginId, String password, String returnUrl, HttpServletRequest req, HttpServletResponse resp) {
         loginId = loginId.trim();
 

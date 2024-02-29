@@ -7,7 +7,7 @@
       </span>
       <Input style="width: 30%;" @on-search="doSearch" search enter-button placeholder="搜索权限的名称或者说明" />
     </div>
-    <Table border :columns="columnsDef" :data="list.data">
+    <Table border :columns="columnsDef" :data="list.data" style="min-height:250px">
       <template slot-scope="{ row }" slot="action">
         <a v-if="isPickup" style="margin-right: 5px" @click="onPickup(row)">选择</a>
         <span v-if="!isPickup">
@@ -27,7 +27,7 @@
         <FormItem label="权限名称" prop="name">
           <Input v-model="permissionData.name" placeholder="请输入权限名称……"></Input>
         </FormItem>
-        <FormItem label="权限编码">
+        <FormItem label="权限编码" prop="code">
           <Input v-model="permissionData.code" placeholder="请输入权限编码……"></Input>
         </FormItem>
         <FormItem label="权限说明">

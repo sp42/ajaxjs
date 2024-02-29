@@ -1,6 +1,7 @@
 package com.ajaxjs.iam.jwt;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 /**
  * JWT Token
@@ -15,7 +16,12 @@ public class JWebToken {
     /**
      * 头部的 Base64 编码
      */
-    public static final String encodedHeader = JwtUtils.encode(JWT_HEADER);
+//    public static final String encodedHeader = JwtUtils.encode(JWT_HEADER);
+    public static final String encodedHeader = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+
+    public static void main(String[] args) {
+        System.out.println(encodedHeader);
+    }
 
     /**
      * 载荷
@@ -44,6 +50,9 @@ public class JWebToken {
      * @return 头部 + Payload
      */
     public String headerPayload() {
+        if (!StringUtils.hasText(payloadJson))
+            throw new IllegalArgumentException("头 Payload 参数有问题");
+
         String p = JwtUtils.encode(payloadJson);
 
         return encodedHeader + "." + p;

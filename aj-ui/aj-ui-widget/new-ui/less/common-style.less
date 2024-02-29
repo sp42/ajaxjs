@@ -1,0 +1,215 @@
+/* AJAXJS RESET CSS */
+body,dl,dt,dd,ul,li,pre,form,fieldset,input,p,blockquote,th,td,h1,h2,h3,h4,h5{margin:0;padding:0;}
+h1,h2,h3,h4,h5{font-weight: normal;}img{border:0;}ul li{list-style-type:none}.hide{display:none}
+body {-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing: grayscale;
+    font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;}
+a{text-decoration:none;color:#666;transition:color .4s ease-in-out;}
+a:hover{color:#000;}
+button{border:none;outline:0;cursor:pointer;letter-spacing:2px;text-align:center;-webkit-user-select:none;-moz-user-select:none;user-select:none}
+input[type=password],input[type=text],select,textarea{outline:0;-moz-appearance:none;}
+
+/* 手机端浏览器所显示的网页 CSS */
+@media screen and (max-width:480px) {
+    * {
+        -webkit-tap-highlight-color: transparent; /* 很多 Android 浏览器的 a 链接有边框，这里取消它  */
+        -webkit-touch-callout: none; /* 在 iOS 浏览器里面，假如用户长按 a 标签，都会出现默认的弹出菜单事件 */
+        /* -webkit-user-select:none; */
+    }
+}	
+ol, ul {
+    list-style: none;
+}
+button {
+    outline:none;
+    border: 0;
+}
+legend {
+        padding: 0 20px;
+}
+
+.eBusiness { 
+    margin-bottom: 10px!important;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    padding: 40px 0px 0 30px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:visited, a:hover {
+    color:black;
+}
+
+// 正文内容
+.article-content() {
+    h1 {
+        margin: 5%;
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        letter-spacing: 3px;
+    }
+
+    h2 {
+        margin: 4% 0;
+    }
+
+    .createDate {
+        text-align: right;
+        color: gray;
+        margin: 3% 0;
+    }
+    
+    p,
+    li {
+        text-align: justify;
+        color: gray;
+        font-size: 16px;
+        text-indent: 2em;
+        line-height: 190%;
+        margin-top: 1%;
+        margin-bottom: 2%;
+        color: black;
+    }
+
+    li {
+        list-style-type: disc;
+        text-indent: 0;
+        margin-left: 30px;
+    }
+
+    img {
+        max-width: 600px;
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+// 分页
+.pagination {
+	text-align: center;
+	padding: 3% 0;
+	clear: both;
+	width: 80%;
+	font-size: 14px;
+	margin: 0 auto;
+
+	li {
+		display: inline-block;
+		padding: 5px 3px;
+	}
+
+	.current {
+		border: 1px solid gray;
+		border-radius: 3px;
+		padding: 5px 10px;
+	}
+}
+
+fieldset.aj-fieldset {
+	border-radius: 5px;
+	border: 1px solid gray;
+	padding: 2%;
+	margin: 1% 0;
+
+	legend {
+		font-weight: bold;
+		letter-spacing: 2px;
+	}
+
+	li {
+		list-style: disc;
+		list-style-position: inside;
+	}
+}
+
+// 网页页脚
+footer {
+	border-top: 1px solid lightgray;
+	background-color: #eee;
+	clear: both;
+	margin-top: 1%;
+	height: 180px;
+	color: gray;
+	padding-top: 2%;
+
+	&>div {
+		width: @pageWidth;
+		margin: 0 auto;
+	}
+
+	.siteMap {
+		td {
+			vertical-align: top;
+			color: white;
+			width: 15.5%;
+
+			&:first-child {
+				display: none;
+			}
+
+			.indentBlock_0 {
+				color: #6a7076;
+				padding: 10px 0;
+				display: block;
+				font-weight: bold;
+				font-size: 15px;
+				letter-spacing: 2px;
+
+				span.dot {
+					display: none;
+				}
+			}
+
+			.indentBlock_1 {
+				font-size: .9rem;
+				display: block;
+				margin: 4px 0;
+				color: #333;
+				letter-spacing: 1px;
+
+				span.dot {
+					color: #8c97a0;
+					font-size: 16px;
+					font-weight: bold;
+					padding-right: 3px;
+				}
+			}
+		}
+	}
+}
+
+.user {
+	&.register {
+		margin: 4% auto;
+		width: 500px;
+
+		.form-group {
+			margin-bottom: 20px;
+		}
+
+		.form-input {
+			width:250px;
+			padding: 5px;
+		  }
+
+		.form-label {
+			display: inline-block;
+			margin-bottom: 5px;
+			width: 100px;
+		}
+
+		input[type=text],
+		input[type=password],
+		input[type=email] {
+			.aj-input-base();
+		}
+
+		button {
+			.aj-btn-base();
+		}
+	}
+}

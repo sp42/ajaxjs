@@ -1,0 +1,108 @@
+/**
+ * 轮播图（透明渐变）
+ */
+.carousel-opacity {
+    position: relative;
+    overflow: hidden;
+
+    .carousel-inner {
+        width: 100%;
+        height: 400px;
+        position: relative;
+        overflow: hidden;
+
+        .carousel-item {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+
+            &.active {
+                opacity: 1;
+            }
+        }
+    }
+
+    .carousel-indicators {
+        position: absolute;
+        bottom: 0;
+        left: 46%;
+        right: 0;
+        z-index: 10;
+
+        .carousel-indicator {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            border-radius: 50%;
+            background-color: #ccc;
+            opacity: 0.5;
+            transition: opacity 0.5s ease-in-out;
+
+            &.active {
+                opacity: 1;
+            }
+        }
+    }
+
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        position: absolute;
+        top: 50%;
+        z-index: 10;
+        width: 40px;
+        height: 40px;
+        margin-top: -20px;
+        border-radius: 50%;
+        background-color: #ccc;
+        opacity: 0.5;
+        transition: opacity 0.5s ease-in-out;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        opacity: 1;
+    }
+
+    .carousel-control-prev {
+        left: 0;
+    }
+
+    .carousel-control-next {
+        right: 0;
+    }
+}
+
+
+.aj-adjust-font-size {
+    width: 180px;
+    font-size: 0.8rem;
+    padding: 10px;
+    float: right;
+    background-color: #e3e3e3;
+    text-align: right;
+    border-radius: 5px;
+
+    span {
+        float: left;
+        width: 35%;
+        display: block;
+    }
+
+    ul {
+        width: 65%;
+        float: right;
+
+        li {
+            cursor: pointer;
+            display: block;
+            float: right;
+            width: 33%;
+        }
+    }
+}

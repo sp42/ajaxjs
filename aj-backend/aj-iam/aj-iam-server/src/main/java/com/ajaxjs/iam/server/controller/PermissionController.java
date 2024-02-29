@@ -1,7 +1,6 @@
 package com.ajaxjs.iam.server.controller;
 
 import com.ajaxjs.iam.permission.Permission;
-import com.ajaxjs.iam.permission.PermissionRoleVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

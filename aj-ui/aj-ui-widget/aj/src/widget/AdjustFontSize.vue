@@ -29,7 +29,6 @@ export default {
       if (el.tagName == "LABEL" || el.tagName == "INPUT") {
         if (el.tagName != "LABEL") el = el.parentNode as Element;
 
-        console.log(el);
         if (el.innerHTML.indexOf("大") != -1) setFontSize("12pt");
         else if (el.innerHTML.indexOf("中") != -1) setFontSize("10.5pt");
         else if (el.innerHTML.indexOf("小") != -1) setFontSize("9pt");

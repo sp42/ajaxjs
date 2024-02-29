@@ -1,19 +1,16 @@
 package com.ajaxjs.web.website;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.ajaxjs.json_db.SimpleJsonDB;
+import com.ajaxjs.json_db.map_traveler.MapUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import com.ajaxjs.json_db.SimpleJsonDB;
-import com.ajaxjs.json_db.map_traveler.MapUtils;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 网站结构的配置
@@ -73,8 +70,7 @@ public class SiteStru extends SimpleJsonDB {
 
 //			System.out.println(path);
 //			System.out.println(map);
-        } else
-            map = (Map<String, Object>) obj;
+        } else map = (Map<String, Object>) obj;
 
         return map;
     }
@@ -90,8 +86,7 @@ public class SiteStru extends SimpleJsonDB {
      * @return true 表示为是当前节点
      */
     public boolean isCurrentNode(Map<String, ?> node, HttpServletRequest request) {
-        if (node == null || node.get(MapUtils.PATH) == null)
-            return false;
+        if (node == null || node.get(MapUtils.PATH) == null) return false;
 
         String uri = request.getRequestURI(), contextPath = request.getContextPath();
         String fullPath = node.get(MapUtils.PATH).toString(), ui = contextPath.concat("/").concat(fullPath).concat("/");
@@ -119,8 +114,7 @@ public class SiteStru extends SimpleJsonDB {
         if (request.getAttribute("secondLevel_Node") == null) {
             String path = getPath(request);
 
-            if (!StringUtils.hasText(path))
-                return null;
+            if (!StringUtils.hasText(path)) return null;
 
             path = path.substring(1);
             String second = path.split("/")[0];
@@ -128,8 +122,7 @@ public class SiteStru extends SimpleJsonDB {
             request.setAttribute("secondLevel_Node", map); // 保存二级栏目节点之数据
 
             return map;
-        } else
-            return (Map<String, Object>) request.getAttribute("secondLevel_Node");
+        } else return (Map<String, Object>) request.getAttribute("secondLevel_Node");
     }
 
     /**
@@ -142,14 +135,10 @@ public class SiteStru extends SimpleJsonDB {
     public List<Map<String, Object>> getMenu(HttpServletRequest request) {
         Map<String, Object> map = getSecondLevelNode(request);
 
-        return map != null && map.get(MapUtils.CHILDREN) != null
-                ? (List<Map<String, Object>>) map.get(MapUtils.CHILDREN)
-                : null;
+        return map != null && map.get(MapUtils.CHILDREN) != null ? (List<Map<String, Object>>) map.get(MapUtils.CHILDREN) : null;
     }
 
-    private static final String TABLE = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
-            A_LINK = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ",
-            NEW_COL = "\n\t</td>\n\t<td>\n\t\t";
+    private static final String TABLE = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>", A_LINK = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ", NEW_COL = "\n\t</td>\n\t<td>\n\t\t";
 
     private String siteMapCache;
 
@@ -184,22 +173,17 @@ public class SiteStru extends SimpleJsonDB {
                 if (0 == (int) map.get(MapUtils.LEVEL)) // 新的一列
                     sb.append(NEW_COL);
 
-                sb.append(String.format(A_LINK, cxtPath + map.get(MapUtils.PATH).toString(),
-                        map.get(MapUtils.LEVEL).toString(), map.get("name").toString()));
+                sb.append(String.format(A_LINK, cxtPath + map.get(MapUtils.PATH).toString(), map.get(MapUtils.LEVEL).toString(), map.get("name").toString()));
 
                 Object children = map.get(MapUtils.CHILDREN);
 
-                if (children != null && children instanceof List)
-                    getSiteMap((List<Map<String, Object>>) children, sb, cxtPath);
+                if (children instanceof List) getSiteMap((List<Map<String, Object>>) children, sb, cxtPath);
             }
         }
     }
 
     /**
      * 面包屑导航
-     *
-     * @param request
-     * @return
      */
     public String buildBreadCrumb(HttpServletRequest request) {
         String ctx = request.getContextPath(), uri = request.getRequestURI();
@@ -220,7 +204,7 @@ public class SiteStru extends SimpleJsonDB {
 
         String tpl = " » <a href=\"%s\">%s</a>";
 
-        if (node == null && uri.indexOf(ctx + "/index") != -1) {
+        if (node == null && uri.contains(ctx + "/index")) {
 
         } else if (node != null) {
             if (node.get("supers") != null) {
@@ -230,8 +214,7 @@ public class SiteStru extends SimpleJsonDB {
                 for (String _super : supers) {
                     String[] arr = _super.split(":");
 
-                    if (!ObjectUtils.isEmpty(arr) && arr.length >= 2)
-                        sb.append(String.format(tpl, ctx + arr[0], arr[1]));
+                    if (!ObjectUtils.isEmpty(arr) && arr.length >= 2) sb.append(String.format(tpl, ctx + arr[0], arr[1]));
                 }
             }
 
@@ -262,16 +245,15 @@ public class SiteStru extends SimpleJsonDB {
     /**
      * 导航条
      *
-     * @param request
-     * @return
+     * @param request 请求对象
+     * @return 导航条的 HTML 代码
      */
     public String buildNav(HttpServletRequest request) {
         String ctx = request.getContextPath();
         StringBuilder sb = new StringBuilder();
         boolean hasSelected = false;
         Object _customNavLi = request.getAttribute("customNavLi");
-        boolean showNavSubMenu = request.getAttribute("showNavSubMenu") != null
-                && (boolean) request.getAttribute("showNavSubMenu");
+        boolean showNavSubMenu = request.getAttribute("showNavSubMenu") != null && (boolean) request.getAttribute("showNavSubMenu");
         boolean customSubMenu = false;
         String showNavSubMenuUl = null, showNavSubMenuLi = null;
 
@@ -297,8 +279,7 @@ public class SiteStru extends SimpleJsonDB {
                 String url = ctx + "/" + item.get(MapUtils.ID);
                 url = addParam(url, item);
 
-                if (_customNavLi == null)
-                    sb.append(String.format(LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+                if (_customNavLi == null) sb.append(String.format(LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
                 else {
                     String _li = _customNavLi.toString();
                     if (isSelected) {
@@ -307,45 +288,39 @@ public class SiteStru extends SimpleJsonDB {
 
                     if (showNavSubMenu) {
                         if (customSubMenu)
-                            sb.append(String.format(_li, url, item.get("name"),
-                                    buildSubMenu(showNavSubMenuUl, showNavSubMenuLi, item, ctx)));
+                            sb.append(String.format(_li, url, item.get("name"), buildSubMenu(showNavSubMenuUl, showNavSubMenuLi, item, ctx)));
                         else {
                             // 默认标签的菜单
                         }
-                    } else
-                        sb.append(String.format(_li, url, item.get("name")));
+                    } else sb.append(String.format(_li, url, item.get("name")));
                 }
 
-                if (isSelected)
-                    hasSelected = true;
+                if (isSelected) hasSelected = true;
             }
         }
-        if (_customNavLi == null) {
-            return String.format(LI, !hasSelected ? " class=\"home selected\"" : " class=\"home\"",
-                    "".equals(ctx) ? "" : ctx, "首页") + sb;
-        } else {
+
+
+        if (_customNavLi == null)
+            return String.format(LI, !hasSelected ? " class=\"home selected\"" : " class=\"home\"", "".equals(ctx) ? "" : ctx, "首页") + sb;
+        else {
             String _li = _customNavLi.toString();
-            if (showNavSubMenu)
-                return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页", "")
-                        + sb;
-            else
-                return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页")
-                        + sb;
+            if (showNavSubMenu) return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页", "") + sb;
+            else return String.format(_li.replace("class=\"", "class=\"home "), "".equals(ctx) ? "/" : ctx, "首页") + sb;
         }
     }
 
     /**
-     * @param showNavSubMenuUl
-     * @param showNavSubMenuLi
-     * @param item
-     * @param ctx
-     * @return
+     * 构建子菜单
+     *
+     * @param showNavSubMenuUl 子菜单的 ul 标签
+     * @param showNavSubMenuLi 子菜单的 li 标签
+     * @param item             子菜单的 item
+     * @param ctx              基础路径
+     * @return 构建好的子菜单
      */
-    private String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item,
-                                String ctx) {
+    private String buildSubMenu(String showNavSubMenuUl, String showNavSubMenuLi, Map<String, Object> item, String ctx) {
         StringBuilder sb = new StringBuilder();
-        @SuppressWarnings("unchecked")
-        List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(MapUtils.CHILDREN);
+        @SuppressWarnings("unchecked") List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(MapUtils.CHILDREN);
 
         for (Map<String, Object> m : menu) {
             String url = ctx + m.get("fullPath").toString();
@@ -365,30 +340,29 @@ public class SiteStru extends SimpleJsonDB {
     private static String addParam(String url, Map<String, Object> item) {
         Object param = item.get("param");
 
-        if (param != null)
-            url += (String) param;
+        if (param != null) url += (String) param;
 
         return url;
     }
 
     /**
-     * 次级菜单，只是该节点下面的 children
+     * 构建子菜单，只是该节点下面的 children
      *
-     * @param request
-     * @return
+     * @param request 请求对象
+     * @return 子菜单的 HTML 代码
      */
     @SuppressWarnings("unchecked")
     public String buildSubMenu(HttpServletRequest request) {
         String ctx = request.getContextPath();
         StringBuilder sb = new StringBuilder();
 
-        // node 在 head.jsp 中保存
+        // 获取保存在head.jsp中的节点
         Map<String, Object> node = getPageNode(request);
         List<Map<String, Object>> nodes = (List<Map<String, Object>>) node.get(MapUtils.CHILDREN);
 
         for (Map<String, Object> item : nodes) {
             Object isHidden = item.get("isHidden");
-            if (isHidden != null && ((boolean) isHidden)) // 隐藏的
+            if (isHidden != null && ((boolean) isHidden)) // 隐藏的节点
                 continue;
 
             String url = ctx + item.get(MapUtils.PATH);
@@ -404,16 +378,18 @@ public class SiteStru extends SimpleJsonDB {
     /**
      * 二级菜单
      *
-     * @param request
-     * @return
+     * @param request 请求对象
+     * @return 二级菜单的 HTML 代码
      */
     public String buildSecondLevelMenu(HttpServletRequest request) {
         String ctx = request.getContextPath();
         StringBuilder sb = new StringBuilder();
 
+        // 获取菜单列表
         if (getMenu(request) != null) {
             boolean showSubMenu = request.getAttribute("showSubMenu") != null;
 
+            // 遍历菜单列表
             for (Map<String, Object> item : getMenu(request)) {
                 Object isHidden = item.get("isHidden");
                 if (isHidden != null && ((boolean) isHidden)) // 隐藏的
@@ -425,23 +401,22 @@ public class SiteStru extends SimpleJsonDB {
 
                 if (showSubMenu) {
                     StringBuilder subMenu = new StringBuilder();
-                    @SuppressWarnings("unchecked")
-                    List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(MapUtils.CHILDREN);
+                    @SuppressWarnings("unchecked") List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(MapUtils.CHILDREN);
 
-                    if (!CollectionUtils.isEmpty(menu))
-                        for (Map<String, Object> m : menu) {
-                            String _url = ctx + m.get("fullPath").toString();
-                            subMenu.append(String.format(LI, "", _url, "» " + m.get("name").toString()));
-                        }
+                    // 如果子菜单不为空，则遍历子菜单并生成子菜单的HTML代码
+                    if (!CollectionUtils.isEmpty(menu)) for (Map<String, Object> m : menu) {
+                        String _url = ctx + m.get("fullPath").toString();
+                        subMenu.append(String.format(LI, "", _url, "» " + m.get("name").toString()));
+                    }
 
+                    // 生成带有子菜单的HTML代码
                     sb.append(String.format(LI_EXT, isSelected ? " class=\"selected\"" : "", url, item.get("name"), subMenu));
                 } else
-                    sb.append(String.format(url.contains("?") ? LI_NO_END : LI,
-                            isSelected ? " class=\"selected\"" : "", url, item.get("name")));
+                    // 生成不带子菜单的HTML代码
+                    sb.append(String.format(url.contains("?") ? LI_NO_END : LI, isSelected ? " class=\"selected\"" : "", url, item.get("name")));
             }
         }
 
         return sb.toString();
     }
-
 }

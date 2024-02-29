@@ -8,14 +8,14 @@ import java.util.Map;
  * @author sp42 frank@ajaxjs.com
  */
 @FunctionalInterface
-interface MapHandler {
-	/**
-	 * 执行回调函数
-	 *
-	 * @param map      当前 Map
-	 * @param superMap 父级 Map
-	 * @param level    深度
-	 * @return true 表示为跳出遍历
-	 */
-	boolean execute(Map<String, Object> map, Map<String, Object> superMap, int level);
+public interface MapHandler {
+    /**
+     * 执行回调函数
+     *
+     * @param map      当前 Map
+     * @param superMap 父级 Map
+     * @param level    深度
+     * @return true 表示为跳出遍历
+     */
+    boolean execute(Map<String, Object> map, Map<String, Object> superMap, int level);
 }

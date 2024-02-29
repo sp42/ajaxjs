@@ -2,7 +2,7 @@ package com.ajaxjs.iam.resource_server;
 
 import com.ajaxjs.iam.jwt.JWebToken;
 import com.ajaxjs.iam.jwt.JWebTokenMgr;
-import com.ajaxjs.iam.model.User;
+import com.ajaxjs.iam.model.SimpleUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +52,7 @@ public class UserInterceptor implements HandlerInterceptor {
     /**
      * JWT 验证的密钥
      */
-    @Value("${auth.jwtSecretKey}")
+    @Value("${User.oidc.jwtSecretKey}")
     private String jwtSecretKey;
 
     /**
@@ -104,18 +104,6 @@ public class UserInterceptor implements HandlerInterceptor {
                         jsonUser = getUserFromJvmHash.apply(token);
                     break;
                 case "jwt":
-                    JWebTokenMgr mgr = jWebTokenMgr();
-                    JWebToken jwt = mgr.parse(token);
-
-                    if (mgr.isValid(jwt)) {
-                        jsonUser = "{\"id\": %s, \"name\": \"%s\"}";
-                        jsonUser = String.format(jsonUser, jwt.getPayload().getSub(), jwt.getPayload().getName());
-                    } else {
-//                        throw new SecurityException("返回非法 JWT Token");
-                        returnErrorMsg(403, response);
-
-                        return false;
-                    }
 
                     break;
                 default:
@@ -123,10 +111,25 @@ public class UserInterceptor implements HandlerInterceptor {
 
                     return false;
             }
+
+            JWebTokenMgr mgr = jWebTokenMgr();
+            JWebToken jwt = mgr.parse(token);
+
+            System.out.println(">>>>>>>>>>>>>>>>>::::::" + jwtSecretKey);
+
+            if (mgr.isValid(jwt)) {
+                jsonUser = "{\"id\": %s, \"name\": \"%s\"}";
+                jsonUser = String.format(jsonUser, jwt.getPayload().getSub(), jwt.getPayload().getName());
+            } else {
+//                        throw new SecurityException("返回非法 JWT Token");
+                returnErrorMsg(403, response);
+
+                return false;
+            }
 //                LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
 
             if (StringUtils.hasText(jsonUser)) {
-                User user = Utils.jsonStr2Bean(jsonUser, User.class);
+                SimpleUser user = Utils.jsonStr2Bean(jsonUser, SimpleUser.class);
                 request.setAttribute(UserConstants.USER_KEY_IN_REQUEST, user);
 
                 return true;

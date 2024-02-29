@@ -1,5 +1,6 @@
 package com.ajaxjs.iam.user.controller;
 
+import com.ajaxjs.framework.spring.filter.google_captcha.GoogleCaptchaCheck;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,6 +31,7 @@ public interface UserLoginRegisterController {
      * @return 若成功登录跳转
      */
     @PostMapping("/login")
+    @GoogleCaptchaCheck
     boolean login(@RequestParam String loginId, @RequestParam String password, @RequestParam(required = false) String returnUrl, HttpServletRequest req, HttpServletResponse resp);
 
     /**

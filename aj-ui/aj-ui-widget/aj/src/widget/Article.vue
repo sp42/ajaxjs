@@ -22,7 +22,7 @@
 <script>
 import FontSize from './AdjustFontSize.vue';
 
-export default {
+export default {老王爱学习 
   props: {
     title: String, author: String, source: String
   },
