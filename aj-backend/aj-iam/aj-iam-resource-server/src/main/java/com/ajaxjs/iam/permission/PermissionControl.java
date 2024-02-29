@@ -56,5 +56,4 @@ public class PermissionControl {
 
         return Long.parseLong(sb.toString(), 2);
     }
-
 }
