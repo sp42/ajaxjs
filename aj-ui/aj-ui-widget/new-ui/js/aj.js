@@ -129,3 +129,6 @@ function convertKeysToUnderscore(obj) {
 
     return convertedObj;
 }
+
+// VS Code 高亮 HTML 用
+var html = String;

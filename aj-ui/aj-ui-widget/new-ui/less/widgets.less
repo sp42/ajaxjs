@@ -1,3 +1,68 @@
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-wrapper {
+    display: inline-block;
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.modal-container {
+    display: inline-block;
+    overflow-y: auto;
+    position: relative;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+    padding: 20px;
+    font-size: 14px;
+    /* max-width: 600px;
+    max-height: 600px; */
+    overflow: hidden;
+}
+
+.modal-container.comfirm {
+    min-width: 300px;
+    min-height: 60px;
+
+    p {
+        padding: 8% 0;
+        font-size: 16px;
+        text-align: center;
+    }
+}
+
+.confirm-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+
+    button {
+        margin-left: 10px;
+        border-radius: 3px;
+        padding: 5px 15px;
+        border: 1px solid lightgray;
+
+        &:hover {
+            border-color: gray;
+        }
+    }
+}
+
+
 /**
  * 轮播图（透明渐变）
  */
@@ -104,5 +169,151 @@
             float: right;
             width: 33%;
         }
+    }
+}
+
+.aj-process-line {
+    display: flex;
+    padding: 5%;
+    justify-content: center;
+
+    .process-line {
+        font-size: 18px;
+        color: lightgray;
+        font-weight: bold;
+
+        &>div {
+            float: left;
+            width: 156px;
+            text-align: center;
+            position: relative;
+
+            &.current {
+                color: black;
+
+                span {
+                    background-color: gray;
+                }
+            }
+
+            &.done {
+
+                //				color: lighten(@mainColor, 80%);
+                span {
+                    //					background-color: lighten(@mainColor, 50%);
+                }
+
+                &::after {
+                    //					background-color: lighten(@mainColor, 50%);
+                }
+            }
+
+            p {
+                font-size: 1rem;
+                letter-spacing: 3px;
+                padding-top: 5%;
+            }
+
+            span {
+                display: inline-block;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                color: #fff;
+                line-height: 32px;
+                font-size: 16px;
+                background-color: lightgray;
+                position: relative;
+                z-index: 1;
+            }
+
+            &:last-child::after {
+                display: none;
+            }
+
+            &::after {
+                content: "";
+                position: absolute;
+                top: 14px;
+                left: 94px;
+                width: 124px;
+                height: 4px;
+                background-color: lightgray;
+            }
+        }
+    }
+}
+
+// 分页
+.aj-list {
+    >table {
+        min-width: 800px;
+        margin-bottom: 50px;
+        width: 100%;
+
+        th,
+        td {
+            padding: 15px 0;
+            text-align: center;
+            border-bottom: 1px solid lightgray;
+            font-size: 14px;
+        }
+
+        th {
+            border-bottom: 2px solid gray;
+            font-size: 16px;
+            letter-spacing: 3px;
+        }
+    }
+
+    ul.pager {
+        width: 90%;
+        margin: 0 auto;
+
+        li {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 3px;
+            border: 1px solid lightgray;
+            margin: 3px 5px;
+            color: gray;
+            font-size: 14px;
+
+            a {
+                display: block;
+            }
+
+            &:hover {
+                border-color: gray;
+            }
+
+            &.actived {
+                background-color: lightgray;
+
+                a {
+                    color: white;
+                }
+            }
+
+            &.disabled {
+                a {
+                    color: lightgray;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+    .b {
+        text-align: center;
+        padding: 10px;
+        color: gray;
+    }
+
+    input {
+        text-align: center;
+        border: 1px solid gray;
+        margin: 0 2px;
+        height: 20px;
     }
 }

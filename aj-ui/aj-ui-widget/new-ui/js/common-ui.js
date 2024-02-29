@@ -1,8 +1,69 @@
+Vue.component('aj-layer', {
+    template: html`<div class="modal-mask">
+      <div class="modal-container">
+        <!-- 弹出层内容 -->
+        <slot></slot>
+      </div>
+  </div>`
+});
+
+Vue.component('aj-confirm', {
+    template: html`<div class="modal-mask">
+	      <div class="modal-container comfirm">
+	        	<h2>{{ title }}</h2>
+		        <p>{{ message }}</p>
+		        <div class="confirm-buttons">
+		          <button @click="confirm">确定</button>
+		          <button @click="cancel">取消</button>
+		        </div>
+	        </div>
+	      </div>
+	  </div>`,
+    props: {
+        title: {
+            type: String,
+            default: '确认'
+        },
+        message: {
+            type: String,
+            default: '确定执行此操作吗？'
+        },
+        confirmHandler: { // 执行函数名称
+            type: Function
+        },
+        state: { // 执行函数名称
+            type: String
+        }
+    },
+    data() {
+        return {
+            isShow: false
+        };
+    },
+    methods: {
+        confirm() {
+            if (this.confirmHandler)
+                this.confirmHandler();
+            else
+                this.$parent.confirm();
+
+            this.cancel();
+
+        },
+        cancel() {
+            if (this.state)
+                this.$parent[this.state] = false;
+            else
+                this.$parent.isShow = false;
+        }
+    }
+});
+
 /**
  * 轮播图（透明渐变）
  */
 Vue.component('aj-carousel', {
-    template: `<div class="carousel">
+    template: html`<div class="carousel">
     <div class="carousel-inner">
         <div class="carousel-item" v-for="(slide, index) in items" :key="index" :class="{ active: index === currentIndex }">
             <img :src="slide.image" :alt="slide.alt" />
@@ -91,4 +152,149 @@ Vue.component('aj-adjust-font-size', {
             }
         }
     }
+});
+
+
+Vue.component('aj-process-line', {
+    template: html`<div class="aj-process-line">
+    <div class="process-line">
+      <div v-for="(item, index) in items" :key="index" :class="{current: index == current, done: index < current}">
+        <span>{{index + 1}}</span>
+        <p>{{item}}</p>
+      </div>
+    </div>
+  </div>`,
+    props: {
+        items: {
+            type: Array,
+            default() {
+                return ["Step 1", "Step 2", "Step 3"];
+            },
+        },
+    },
+    data() {
+        return {
+            current: 0,
+        };
+    },
+    methods: {
+        /**
+         *
+         * @param i
+         */
+        go(i) {
+            this.current = i;
+        },
+
+        /**
+         *
+         */
+        perv() {
+            let perv = this.current - 1;
+            if (perv < 0) perv = this.items.length - 1;
+
+            this.go(perv);
+        },
+
+        /**
+         *
+         */
+        next() {
+            let next = this.current + 1;
+            if (this.items.length == next) next = 0; // 循环
+
+            this.go(next);
+        },
+    },
+});
+
+Vue.component('aj-list', {
+    template: html`<div class="aj-list">
+        <table align="center">
+            <thead>
+                <tr>
+                    <slot name="header"></slot>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item) in data" :key="item.id">
+                    <slot :data="item"></slot>
+                </tr>
+            <tbody>
+        </table>
+     <ul class="pager">
+        <li :class="{disabled: currentPage === 1}">
+            <a href="###" @click="goToPreviousPage">上一页</a>
+        </li>
+        <li v-for="(item, index) in paginatedData" :key="index" :class="{actived: currentPage === (index + 1)}">
+            <a href="###" @click="setPageNo(index + 1)">{{index + 1}}</a>
+        </li>
+        <li :class="{disabled: currentPage === totalPages}">
+            <a href="###" @click="goToNextPage">下一页</a>
+        </li>
+    </ul>
+    <div class="b">共{{total}}条记录，每页<input type="text" v-model="itemsPerPage" size="1" />记录，</div>
+  </div>`,
+    props: {
+        items: {
+            type: Array,
+            default() {
+                return ["Step 1", "Step 2", "Step 3"];
+            },
+        },
+    },
+    data() {
+        return {
+            total: 200,
+            data: [], // 从MySQL获取的所有数据
+            itemsPerPage: 10, // 每页显示条目数
+            currentPage: 1, // 当前页数
+            start: 0,
+        };
+    },
+    computed: {
+        paginatedData() {
+            if (this.itemsPerPage <= 0)
+                this.itemsPerPage = 5;
+
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+
+            this.start = start;
+
+            return new Array(this.totalPages);
+        },
+        totalPages() {
+            return Math.ceil(this.total / this.itemsPerPage);
+        },
+    },
+    methods: {
+        goToPreviousPage() {
+            if (this.currentPage > 1)
+                // this.currentPage -= 1;
+                this.setPageNo(this.currentPage - 1);
+
+        },
+        goToNextPage() {
+            if (this.currentPage < this.totalPages)
+                // this.currentPage += 1;
+                this.setPageNo(this.currentPage + 1);
+
+        },
+        setPageNo(pageNo) {
+            this.currentPage = pageNo;
+            this.fetchDataFromMySQL();
+        },
+        fetchDataFromMySQL() {
+            const start = (this.currentPage - 1) * this.itemsPerPage;
+
+            aj.xhr.get(`https://iam.ajaxjs.com/iam/common_api/user_login_log/page?start=${start}&limit=${this.itemsPerPage}`, (j) => {
+                this.data = j.data.rows;
+                this.total = j.data.total;
+            }, new aj.aj_iam.Sdk().getAuthHeader());
+        },
+    },
+    mounted() {
+        this.fetchDataFromMySQL();
+    },
 });
