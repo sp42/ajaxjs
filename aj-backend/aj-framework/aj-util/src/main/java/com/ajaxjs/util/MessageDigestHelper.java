@@ -186,6 +186,14 @@ public class MessageDigestHelper {
         return new MessageDigestHelper().setAlgorithmName("HmacMD5").setKey(key).setValue(str).setIsHexStr(false).getResult();
     }
 
+    public static String getHmacSHA1AsBase64(String key, String str) {
+        return new MessageDigestHelper().setAlgorithmName("HmacSHA1").setKey(key).setValue(str).setIsHexStr(false).getResult();
+    }
+
+    public static String getHmacSHA256AsBase64(String key, String str) {
+        return new MessageDigestHelper().setAlgorithmName("HmacSHA256").setKey(key).setValue(str).setIsHexStr(false).getResult();
+    }
+
     /**
      * 计算文件 MD5
      *

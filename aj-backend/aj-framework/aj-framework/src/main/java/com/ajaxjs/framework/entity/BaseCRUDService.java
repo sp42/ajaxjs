@@ -87,7 +87,13 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
         return (Long) getCRUD(namespace, crud -> {
             String sql = SmallMyBatis.handleSql(crud.getSql(), _params);
             return CRUD.jdbcWriterFactory().insert(sql);
-        }, crud -> crud.create(_params));
+        }, crud -> {
+            if (StringUtils.hasText(crud.getCreateSql())) {
+                String _sql = SmallMyBatis.handleSql(crud.getCreateSql(), _params);
+                return CRUD.jdbcWriterFactory().insert(_sql);
+            } else
+                return crud.create(_params);
+        });
     }
 
     @Override

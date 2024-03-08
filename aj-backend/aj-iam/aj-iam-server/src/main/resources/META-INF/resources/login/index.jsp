@@ -14,14 +14,7 @@
             }
 		</style>
 		<script>
-            window.onloadTurnstileCallback = function () {
-                turnstile.render('#captcha-el', {
-                    sitekey: '0x4AAAAAAAA2NqTaXauncxkr',
-                    callback: function(token) {
-                        console.log(`Challenge Success ${token}`);
-                    },
-                });
-            };
+
         </script>
 	</head>
 

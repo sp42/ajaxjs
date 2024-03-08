@@ -11,12 +11,12 @@ import com.ajaxjs.util.convert.EntityConvert;
 public class GetData {
     private static final String BASE_API = "http://127.0.0.1:8088/base";
 
-    private static final String PAGE_API = "/common_api/article/page?auth_tenant_id=%s&start=%s&limit=%s";
+    private static final String PAGE_API = "/common_api/%s/page?auth_tenant_id=%s&start=%s&limit=%s";
 
     public static void getPageList(HttpServletRequest req, int tenantId, String namespace, String accessToken) {
         String start = req.getParameter("start") == null ? "0" : req.getParameter("start");
         String limit = req.getParameter("pageSize") == null ? "10" : req.getParameter("pageSize");
-        String url = BASE_API + String.format(PAGE_API, tenantId, start, limit);
+        String url = BASE_API + String.format(PAGE_API, namespace, tenantId, start, limit);
 
         Map<String, Object> resultMap = Get.api(url,
                 conn -> conn.addRequestProperty("Authorization", "Bearer " + accessToken));
@@ -32,14 +32,13 @@ public class GetData {
         }
     }
 
-    private static final String INFO_API = "/common_api/article/%s?auth_tenant_id=%s";
+    private static final String INFO_API = "/common_api/%s/%s?auth_tenant_id=%s";
 
     public static void getInfo(HttpServletRequest req, int tenantId, String namespace, String accessToken) {
         String id = req.getParameter("id");
-        String url = BASE_API + String.format(INFO_API, id, tenantId);
+        String url = BASE_API + String.format(INFO_API, namespace, id, tenantId);
 
-        Map<String, Object> resultMap = Get.api(url,
-                conn -> conn.addRequestProperty("Authorization", "Bearer " + accessToken));
+        Map<String, Object> resultMap = Get.api(url, conn -> conn.addRequestProperty("Authorization", "Bearer " + accessToken));
         ResponseResult result = EntityConvert.map2Bean(resultMap, ResponseResult.class);
 
         if (result.getStatus() == 1) {

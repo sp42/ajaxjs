@@ -1,5 +1,6 @@
 package com.ajaxjs.framework.spring.filter.google_captcha;
 
+import com.ajaxjs.Version;
 import com.ajaxjs.net.http.Post;
 import lombok.Data;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,9 @@ public class GoogleCaptchaInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
-        if (handler instanceof HandlerMethod) {
+        if (Version.isDebug)
+            return true;
+        else if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
             String httpMethod = req.getMethod();

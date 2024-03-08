@@ -67,8 +67,8 @@ public class JWebTokenMgr {
         else {
             boolean isExp = exp > JwtUtils.now(); // token not expired
 
-            if (!isExp)
-                System.out.println("超时");
+            if (isExp)
+                log.debug("超时:" + exp + ", now:" + JwtUtils.now());
 
             return isExp && isMatch;
         }

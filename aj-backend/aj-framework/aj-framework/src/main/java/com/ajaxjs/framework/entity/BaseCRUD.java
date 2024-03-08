@@ -5,14 +5,18 @@ import com.ajaxjs.data.SmallMyBatis;
 import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.data.util.SnowflakeId;
 import com.ajaxjs.framework.entity.model.BaseDataServiceConfig;
+import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.StrUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -51,8 +55,9 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
         if (StringUtils.hasText(sql)) {
             Map<String, Object> queryStringParams = DataServiceUtils.getQueryStringParams();
             sql = SmallMyBatis.handleSql(sql, queryStringParams);
-        } else
-            sql = String.format(SELECT_SQL, getTableName()).replace(DUMMY_STR, getIdField() + " = ?");
+        } else sql = String.format(SELECT_SQL, getTableName()).replace(DUMMY_STR, DUMMY_STR + " AND " + getIdField() + " = ?");
+
+        sql = limitToCurrentUser(sql);
 
         return isTenantIsolation() ? TenantService.addTenantIdQuery(sql) : sql;
     }
@@ -96,17 +101,15 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
 
         if (StringUtils.hasText(sql)) {
             sql = SmallMyBatis.handleSql(sql, DataServiceUtils.getQueryStringParams());
-        } else
-            sql = String.format(SELECT_SQL, getTableName());
+        } else sql = String.format(SELECT_SQL, getTableName());
 
-        if (isHasIsDeleted())
-            sql = sql.replace(DUMMY_STR, DUMMY_STR + " AND " + getDelField() + " != 1");
+        if (isHasIsDeleted()) sql = sql.replace(DUMMY_STR, DUMMY_STR + " AND " + getDelField() + " != 1");
 
-        if (isTenantIsolation())
-            sql = TenantService.addTenantIdQuery(sql);
+        sql = limitToCurrentUser(sql);
 
-        if (where != null)
-            sql = sql.replace(DUMMY_STR, DUMMY_STR + where);
+        if (isTenantIsolation()) sql = TenantService.addTenantIdQuery(sql);
+
+        if (where != null) sql = sql.replace(DUMMY_STR, DUMMY_STR + where);
 
         return sql;
     }
@@ -133,12 +136,47 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     }
 
     public boolean delete(K id) {
-        if (isHasIsDeleted())
-            CRUD.jdbcWriterFactory().write("UPDATE " + getTableName() + " SET " + getDelField() + " = 1 WHERE " + getIdField() + " = ?", id);
-        else
-            CRUD.jdbcWriterFactory().write("DELETE FROM " + getTableName() + " WHERE " + getIdField() + " = ?", id);
+        String sql;
+
+        if (isHasIsDeleted()) sql = "UPDATE " + getTableName() + " SET " + getDelField() + " = 1 WHERE " + getIdField() + " = ?";
+        else sql = "DELETE FROM " + getTableName() + " WHERE " + getIdField() + " = ?";
+
+        sql = limitToCurrentUser(sql);
+        CRUD.jdbcWriterFactory().write(sql, id);
 
         return true;
+    }
+
+    public static long getCurrentUserId() {
+        Object simpleUser = Objects.requireNonNull(DiContextUtil.getRequest()).getAttribute("USER_KEY_IN_REQUEST");
+        if (simpleUser == null) throw new NullPointerException("用户不存在");
+
+        return executeMethod(simpleUser, "getId", long.class);
+    }
+
+    // user_id locks
+    private String limitToCurrentUser(String sql) {
+        if (isCurrentUserOnly()) {
+            String add = " AND user_id = " + getCurrentUserId();
+
+            if (sql.contains(DUMMY_STR))
+                sql = sql.replace(DUMMY_STR, DUMMY_STR + add);
+            else
+                sql += add;
+        }
+
+        return sql;
+    }
+
+    public static <T> T executeMethod(Object obj, String methodName, Class<T> clz) {
+        try {
+            Method method = obj.getClass().getMethod(methodName);
+            Object result = method.invoke(obj);
+
+            return (T) result;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -164,13 +202,14 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
             }
         }
 
-        if (beforeCreate != null)
-            beforeCreate.accept(params);
+        if (beforeCreate != null) beforeCreate.accept(params);
 
         Integer tenantId = TenantService.getTenantId();
 
-        if (tenantId != null)
-            params.put("tenant_id", tenantId);
+        if (tenantId != null) params.put("tenant_id", tenantId);
+
+        if (isCurrentUserOnly())
+            params.put("user_id", getCurrentUserId());
 
         return (K) CRUD.create(getTableName(), params, getIdField());
     }
@@ -178,6 +217,14 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     public Boolean update(Map<String, Object> params) {
         String tableName = getTableName();
         String idField = getIdField();
+
+        if (isCurrentUserOnly()) {
+            Object id = params.get(idField);
+            T info = info((K) id);
+
+            if (info == null)
+                throw new SecurityException("不能修改实体，id：" + id);
+        }
 
         return CRUD.update(tableName, params, idField);
     }
