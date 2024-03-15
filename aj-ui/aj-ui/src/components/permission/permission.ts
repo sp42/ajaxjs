@@ -1,6 +1,6 @@
 import Role from './role';
 import PermissionMgr from './permission-list.vue';
-import { xhr_get, xhr_post, xhr_put } from '../../util/xhr';
+import { xhr_get, xhr_post } from '../../util/xhr';
 
 export default {
     mixins: [Role],

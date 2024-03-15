@@ -65,12 +65,14 @@ public class JWebTokenMgr {
         if (exp == 0L) /* 0 表示永不过期，不用检查是否超时 */
             return isMatch;
         else {
-            boolean isExp = exp > JwtUtils.now(); // token not expired
+            boolean isExp = exp < JwtUtils.now(); // true = token expired
 
-            if (isExp)
+            if (isExp) {
                 log.debug("超时:" + exp + ", now:" + JwtUtils.now());
+                log.debug("超时:" + JwtUtils.toRealTime(exp) + ", now:" + JwtUtils.toRealTime(JwtUtils.now()));
+            }
 
-            return isExp && isMatch;
+            return !isExp && isMatch;
         }
     }
 

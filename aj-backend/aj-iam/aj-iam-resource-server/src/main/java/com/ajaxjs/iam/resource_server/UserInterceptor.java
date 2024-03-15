@@ -115,7 +115,7 @@ public class UserInterceptor implements HandlerInterceptor {
             JWebTokenMgr mgr = jWebTokenMgr();
             JWebToken jwt = mgr.parse(token);
 
-            System.out.println(">>>>>>>>>>>>>>>>>::::::" + jwtSecretKey);
+//            System.out.println(">>>>>>>>>>>>>>>>>::::::" + jwtSecretKey);
 
             if (mgr.isValid(jwt)) {
                 jsonUser = "{\"id\": %s, \"name\": \"%s\"}";

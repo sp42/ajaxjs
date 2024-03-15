@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">权限管理</h1>
+    <h1 class="page-title">权限管理87887</h1>
 
     <div class="main">
       <div class="left">

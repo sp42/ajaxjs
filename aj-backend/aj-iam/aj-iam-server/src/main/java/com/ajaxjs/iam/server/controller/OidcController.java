@@ -18,9 +18,14 @@ public interface OidcController {
      * 1、发现用户未登录，返回 303，通过浏览器重定向到登录页面
      * 2、用户已登录，于是执行授权逻辑，签发授权码
      *
-     * @param webUrl 前端页面地址，用于跳到这里以便获取 Token
-     * @param req    请求对象
-     * @param resp   响应对象
+     * @param responseType 该值只能是 code
+     * @param clientId     应用 id
+     * @param redirectUri
+     * @param scope
+     * @param state
+     * @param webUrl       前端页面地址，用于跳到这里以便获取 Token
+     * @param req          请求对象
+     * @param resp         响应对象
      */
     @GetMapping("/authorization")
     void authorization(@RequestParam("response_type") String responseType,

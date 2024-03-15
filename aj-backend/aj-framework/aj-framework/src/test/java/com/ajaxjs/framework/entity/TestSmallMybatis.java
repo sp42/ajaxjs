@@ -14,11 +14,6 @@ public class TestSmallMybatis {
         xmlSqlHelper.loadXML();
     }
 
-    public static int p(){
-        System.out.println("hi");
-        return 10;
-    }
-
     @Test
     public void loadIf() {
         String sql = "SELECT * FROM user WHERE name LIKE #{name} AND " +

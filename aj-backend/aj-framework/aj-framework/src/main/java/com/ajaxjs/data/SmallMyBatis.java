@@ -245,7 +245,7 @@ public class SmallMyBatis {
 
 
     /**
-     * 处理SQL语句
+     * 处理 SQL 语句
      *
      * @param paramsMap 参数映射关系
      * @param sqlId     SQL ID
@@ -262,11 +262,11 @@ public class SmallMyBatis {
     private static final Map<String, Object> EMPTY_PARAMS_MAP = new HashMap<>();
 
     /**
-     * 处理SQL语句
+     * 处理 SQL 语句
      *
-     * @param sql       SQL语句
+     * @param sql       SQL 语句
      * @param paramsMap 参数映射关系
-     * @return 处理后的SQL语句
+     * @return 处理后的 SQL 语句
      */
     public static String handleSql(String sql, Map<String, Object> paramsMap) {
         if (paramsMap == null) paramsMap = EMPTY_PARAMS_MAP;

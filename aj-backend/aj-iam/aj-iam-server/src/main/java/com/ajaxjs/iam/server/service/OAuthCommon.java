@@ -30,8 +30,7 @@ public abstract class OAuthCommon implements IamConstants {
     /**
      * @param webUrl 前端页面地址，用于跳到这里以便获取 Token
      */
-    public void sendAuthCode(String responseType, String clientId, String redirectUri, String scope, String state,
-                             String webUrl,
+    public void sendAuthCode(String responseType, String clientId, String redirectUri, String scope, String state, String webUrl,
                              HttpServletRequest req, HttpServletResponse resp, Cache<String, Object> cache) {
         if (!"code".equals(responseType))
             throw new IllegalArgumentException("参数 response_type 只能是 code");
