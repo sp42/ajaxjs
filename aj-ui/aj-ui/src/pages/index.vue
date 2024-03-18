@@ -198,10 +198,11 @@ if (token) {
   localStorage.setItem("accessToken", accessToken);
 }
 
-window.JWT_TOKEN = JSON.parse(accessToken);
+// window.JWT_TOKEN = JSON.parse(accessToken);
 
 // 将JWT Token拆分为三个部分
-const tokenParts = window.JWT_TOKEN.id_token.split(".");
+// const tokenParts = window.JWT_TOKEN.id_token.split(".");
+const tokenParts = accessToken.split(".");
 const payload = JSON.parse(atob(tokenParts[1])); // 解析载荷
 console.log(payload);
 

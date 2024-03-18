@@ -67,8 +67,8 @@ function setAuthHeader(xhr: XMLHttpRequest) {
     const token: string = localStorage.getItem("accessToken");
 
     if (token) {
-        const json = JSON.parse(token);
-        xhr.setRequestHeader("Authorization", "Bearer " + json.id_token);
+        // const json = JSON.parse(token);
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
     }
 }
 

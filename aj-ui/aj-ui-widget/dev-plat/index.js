@@ -29,16 +29,16 @@ function getLoginInfo(loginUrl) {
         localStorage.setItem("accessToken", accessToken);
     }
 
-    window.JWT_TOKEN = JSON.parse(accessToken);
+    // window.JWT_TOKEN = JSON.parse(accessToken);
 
     // 将 JWT Token 拆分为三个部分
-    const tokenParts = window.JWT_TOKEN.id_token.split('.')
+    const tokenParts = accessToken.split('.')
     const payload = JSON.parse(atob(tokenParts[1])); // 解析载荷
 
     return payload;
 }
 // 后台服务登录地址，由 AJ-IAM SDK 提供的接口
-let loginUrl = 'http://127.0.0.1:8302/user/login?web_url=http://127.0.0.1:8080/dev-plat/';
+let loginUrl = 'http://localhost:8302/user/login?web_url=http://127.0.0.1:8080/dev-plat/';
 
 // 链接：生产 or 调试
 if (location.origin.indexOf('admin.ajaxjs.com') != -1) {
