@@ -5,11 +5,19 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ajaxjs.net.http.Get;
+import com.ajaxjs.net.http.SkipSSL;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.convert.EntityConvert;
 
 public class GetData {
-    private static final String BASE_API = "http://127.0.0.1:8088/base";
+    private static String BASE_API;
+
+    public static void setBaseApi(String baseApi) {
+        if (BASE_API == null) {
+            BASE_API = baseApi;
+            SkipSSL.init();
+        }
+    }
 
     private static final String PAGE_API = "/common_api/%s/page?auth_tenant_id=%s&start=%s&limit=%s";
 

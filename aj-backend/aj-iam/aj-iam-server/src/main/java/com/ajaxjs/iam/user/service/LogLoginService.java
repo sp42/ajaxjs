@@ -28,6 +28,7 @@ public class LogLoginService implements LogLoginController, UserConstants {
         LogLogin userLoginLog = new LogLogin();
         userLoginLog.setUserId(user.getId());
         userLoginLog.setLoginType(LoginType.PASSWORD);
+        userLoginLog.setUserName(user.getLoginId());
         saveIp(userLoginLog, req);
 
         Long id = CRUD.create(userLoginLog);

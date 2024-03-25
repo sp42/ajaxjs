@@ -60,6 +60,8 @@ function sex(h: Function, params: any) {
     let value: number = params.row[params.column.key]; // 取出当前值
     let str: string = '';
 
+    console.log(value)
+
     switch (value) {
         case 1:
             str = '男';

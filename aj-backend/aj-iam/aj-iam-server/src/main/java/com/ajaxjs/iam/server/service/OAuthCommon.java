@@ -63,7 +63,7 @@ public abstract class OAuthCommon implements IamConstants {
     }
 
     public App getApp(String clientId, String clientSecret) {
-        App app = CRUD.info(App.class, "SELECT * FROM app WHERE stat = 1 AND client_id = ? AND client_secret = ?", clientId, clientSecret);
+        App app = CRUD.info(App.class, "SELECT * FROM app WHERE stat = 0 AND client_id = ? AND client_secret = ?", clientId, clientSecret);
 
         if (app == null)
             throw new BusinessException("应用不存在或非法密钥");

@@ -25,8 +25,7 @@
           >CMS 图文</MenuItem
         >
         <MenuItem name="2-2" @click.native="showList(123)">附件列表</MenuItem>
-        <MenuItem name="2-3" @click.native="load = 'TagMgr'"
-          >标签/点赞/收藏管理</MenuItem
+        <MenuItem name="2-3" @click.native="load = 'TagMgr'">标签/点赞/收藏管理</MenuItem
         >
       </Submenu>
 
@@ -38,14 +37,11 @@
 
       <Submenu name="user-1" v-if="SHOW_MOUDLE.user">
         <template slot="title">用户组织管理</template>
-        <MenuItem name="4-1" @click.native="load = 'UserListIndex'"
-          >用户列表管理</MenuItem
-        >
-        <MenuItem name="4-2" @click.native="load = 'OrgIndex'"
-          >组织机构管理</MenuItem
-        >
+        <MenuItem name="4-1" @click.native="load = 'UserListIndex'">用户列表管理</MenuItem>
+        <MenuItem name="4-2" @click.native="load = 'OrgIndex'">组织机构管理</MenuItem>
         <MenuItem name="4-3" @click.native="load = 'RBAC'">权限管理</MenuItem>
       </Submenu>
+
       <Submenu name="user-2" v-if="SHOW_MOUDLE.user">
         <template slot="title">认证管理</template>
         <MenuItem name="user-2-1" @click.native="showList(130, '客户端应用')"
@@ -54,11 +50,8 @@
         <MenuItem name="user-2-2" @click.native="showList(129, '租户管理')"
           >租户管理</MenuItem
         >
-        <MenuItem name="user-2-3" @click.native="showList(130, 'Token 列表')"
-          >Token 列表</MenuItem
-        >
-        <MenuItem name="user-2-4" @click.native="showList(131, 'IAM API 管理')"
-          >IAM API 管理</MenuItem
+        <MenuItem name="user-2-3" @click.native="showList(131, 'Token 列表')"
+          >Token 管理</MenuItem
         >
       </Submenu>
 
@@ -97,11 +90,7 @@
     </Menu>
 
     <div class="right-panel">
-      <div
-        v-if="!load"
-        class="center"
-        style="text-align: center; margin-top: 25%"
-      >
+      <div v-if="!load" class="center" style="text-align: center; margin-top: 25%">
         Welcome!
       </div>
 
@@ -264,7 +253,7 @@ export default {
   },
   data() {
     return {
-      load: "Permission" || SHOW_MOUDLE.load || "ModelMgr",
+      load: SHOW_MOUDLE.load || "ModelMgr",
       apiRoot: window.config.dsApiRoot,
       listId: 0,
       listTitle: "",
