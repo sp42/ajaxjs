@@ -59,15 +59,29 @@ a {
     text-decoration: none;
 }
 
+.dark-theme a {
+    color: lightgray;
+}
+
 a:visited,
 a:hover {
     color: black;
+}
+
+.dark-theme a:visited,
+.dark-theme a:hover {
+    color: white;
 }
 
 .aj-title-1,
 .aj-title-2 {
     font-weight: 700;
     font-optical-sizing: auto;
+}
+
+.dark-theme .aj-title-1,
+.dark-theme .aj-title-2 {
+    color: white;
 }
 
 .aj-title-1 {
@@ -91,6 +105,11 @@ a:hover {
     text-rendering: optimizelegibility;
     hyphens: auto;
     font-family: PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;
+}
+
+.dark-theme p,
+.dark-theme li {
+    color: white;
 }
 
 /* 楷体字体 */
