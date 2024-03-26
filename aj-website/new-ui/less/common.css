@@ -41,6 +41,7 @@ body {
 }
 
 .aj-title-1 {
-
-    
+    font-weight: 700;
+    font-optical-sizing: auto;
+    font-family: "Noto Serif SC", "source-han-serif-tc", serif;
 }
