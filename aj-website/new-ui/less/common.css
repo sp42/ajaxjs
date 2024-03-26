@@ -32,6 +32,25 @@ ul li {
     list-style-type: none
 }
 
+button {
+    border: none;
+    outline: 0;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+input[type=password],
+input[type=text],
+select,
+textarea {
+    outline: 0;
+    -moz-appearance: none;
+}
+
 .hide {
     display: none
 }
