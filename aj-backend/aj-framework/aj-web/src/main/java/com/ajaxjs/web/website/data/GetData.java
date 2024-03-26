@@ -19,12 +19,23 @@ public class GetData {
         }
     }
 
-    private static final String PAGE_API = "/common_api/%s/page?auth_tenant_id=%s&start=%s&limit=%s";
+    private static final String PAGE_API_TENANT = "/common_api/%s/page?auth_tenant_id=%s&start=%s&limit=%s";
+
+    private static final String PAGE_API = "/common_api/%s/page?start=%s&limit=%s";
+
+    public static void getPageList(HttpServletRequest req, String namespace, String accessToken) {
+        getPageList(req, 0, namespace, accessToken);
+    }
 
     public static void getPageList(HttpServletRequest req, int tenantId, String namespace, String accessToken) {
         String start = req.getParameter("start") == null ? "0" : req.getParameter("start");
         String limit = req.getParameter("pageSize") == null ? "10" : req.getParameter("pageSize");
-        String url = BASE_API + String.format(PAGE_API, namespace, tenantId, start, limit);
+        String url;
+
+        if (tenantId == 0)
+            url = BASE_API + String.format(PAGE_API, namespace, start, limit);
+        else
+            url = BASE_API + String.format(PAGE_API_TENANT, namespace, tenantId, start, limit);
 
         Map<String, Object> resultMap = Get.api(url,
                 conn -> conn.addRequestProperty("Authorization", "Bearer " + accessToken));

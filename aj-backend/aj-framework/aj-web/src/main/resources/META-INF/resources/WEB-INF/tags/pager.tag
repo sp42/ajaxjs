@@ -37,8 +37,9 @@
         }
         %>
         <li><a
-            href="?start=<%=(start + pageSize) < totalPage ? (start + pageSize) : totalPage%>&pageSize=<%=pageSize%><%=params%>">下一页</a></li>
+            href="?start=<%=(start + pageSize) < total ? (start + pageSize) : total%>&pageSize=<%=pageSize%><%=params%>">下一页</a></li>
         <li><a
             href="?start=<%=totalPage * pageSize - 1%>&pageSize=<%=pageSize%><%=params%>">尾页</a></li>
+        <li>共<%=totalPage%>页，全部<%=total%>条记录</li>
     </ul>
 </div>
