@@ -42,8 +42,30 @@ body {
     font-family: "Lantinghei SC", "Open Sans", Arial, "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
 }
 
-.aj-title-1 {
+.aj-title-1,
+.aj-title-2 {
     font-weight: 700;
     font-optical-sizing: auto;
+}
+
+.aj-title-1 {
     font-family: "Noto Serif SC", "source-han-serif-tc", serif;
+}
+
+.aj-title-2 {
+    font-family: "Noto Sans SC", sans-serif;
+}
+
+.aj-article-p {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 5px;
+    text-align: justify;
+    text-indent: 2em;
+    line-height: 2;
+    letter-spacing: 1px;
+    /* word-wrap: break-word; */
+    text-rendering: optimizelegibility;
+    hyphens: auto;
+    font-family: PingFang SC, Lantinghei SC, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans;
 }
