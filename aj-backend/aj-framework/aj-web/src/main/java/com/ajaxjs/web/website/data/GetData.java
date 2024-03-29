@@ -1,13 +1,15 @@
 package com.ajaxjs.web.website.data;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.ajaxjs.net.http.Get;
+import com.ajaxjs.net.http.Head;
 import com.ajaxjs.net.http.SkipSSL;
 import com.ajaxjs.util.StrUtil;
 import com.ajaxjs.util.convert.EntityConvert;
+import com.ajaxjs.web.website.SiteStruStartUp;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 public class GetData {
     private static String BASE_API;
@@ -37,17 +39,17 @@ public class GetData {
         else
             url = BASE_API + String.format(PAGE_API_TENANT, namespace, tenantId, start, limit);
 
-        Map<String, Object> resultMap = Get.api(url,
-                conn -> conn.addRequestProperty("Authorization", "Bearer " + accessToken));
+        if (req.getParameter("type") != null)
+            url += "&type=" + req.getParameter("type");
+
+        Map<String, Object> resultMap = Get.api(url, Head.oauth(accessToken));
         ResponseResult result = EntityConvert.map2Bean(resultMap, ResponseResult.class);
 
         if (result.getStatus() == 1) {
             Map<String, Object> data = result.getData();
 
-            if (req != null) {
-                req.setAttribute("LIST", data.get("rows"));
-                req.setAttribute("PAGE_TOTAL", data.get("total"));
-            }
+            req.setAttribute("LIST", data.get("rows"));
+            req.setAttribute("PAGE_TOTAL", data.get("total"));
         }
     }
 
@@ -57,23 +59,17 @@ public class GetData {
         String id = req.getParameter("id");
         String url = BASE_API + String.format(INFO_API, namespace, id, tenantId);
 
-        Map<String, Object> resultMap = Get.api(url, conn -> conn.addRequestProperty("Authorization", "Bearer " + accessToken));
+        Map<String, Object> resultMap = Get.api(url, Head.oauth(accessToken));
         ResponseResult result = EntityConvert.map2Bean(resultMap, ResponseResult.class);
 
         if (result.getStatus() == 1) {
             Map<String, Object> data = result.getData();
-
-            if (req != null) {
-                req.setAttribute("info", data);
-            }
+            req.setAttribute("info", data);
         }
     }
 
     /**
      * 获取其他 QueryString 参数
-     *
-     * @param request
-     * @return
      */
     public static String getQueryString(HttpServletRequest request) {
         Map<String, String[]> parameterMap = request.getParameterMap();
@@ -100,5 +96,14 @@ public class GetData {
         if (str.length() < length)
             return str;
         else return str.substring(0, length);
+    }
+
+    public static void setDataToServletCache(String name, String apiUrl, String token, HttpServletRequest req) {
+        if (req.getServletContext().getAttribute(name) == null) {
+            SkipSSL.init();
+            Map<String, Object> result = Get.api(apiUrl, Head.oauth(token));
+            List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("data");
+            SiteStruStartUp.setDataToServletCache(name, list, req.getServletContext());
+        } 
     }
 }

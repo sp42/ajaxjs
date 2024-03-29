@@ -1,5 +1,7 @@
 package com.ajaxjs.json_db.map_traveler;
 
+import com.ajaxjs.web.website.SiteStruStartUp;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -80,7 +82,12 @@ public class MapUtils {
 
         traveler.setOnMap((map, superMap, _level) -> {
             String superPath = superMap == null ? "" : superMap.get(path).toString();
-            map.put(path, superPath + "/" + map.get(id));
+
+            if (map.containsKey(SiteStruStartUp.isQueryParams))
+                map.put(path, superPath + "/?type=" + map.get(id)); // 写死 type 参数名。另外这个逻辑写在这里是不合理的，不过当前也没有更好的办法
+            else
+                map.put(path, superPath + "/" + map.get(id));
+
             map.put(level, _level);
 
             if (saveSupers && superMap != null) {

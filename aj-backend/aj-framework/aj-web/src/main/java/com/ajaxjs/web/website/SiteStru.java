@@ -138,7 +138,8 @@ public class SiteStru extends SimpleJsonDB {
         return map != null && map.get(MapUtils.CHILDREN) != null ? (List<Map<String, Object>>) map.get(MapUtils.CHILDREN) : null;
     }
 
-    private static final String TABLE = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>", A_LINK = "<a href=\"%s/\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ", NEW_COL = "\n\t</td>\n\t<td>\n\t\t";
+    private static final String TABLE = "<table class=\"siteMap\"><tr><td>%s</td></tr></table>",
+            A_LINK = "<a href=\"%s\" class=\"indentBlock_%s\"><span class=\"dot\">·</span>%s</a>\n ", NEW_COL = "\n\t</td>\n\t<td>\n\t\t";
 
     private String siteMapCache;
 
@@ -323,7 +324,7 @@ public class SiteStru extends SimpleJsonDB {
         @SuppressWarnings("unchecked") List<Map<String, Object>> menu = (List<Map<String, Object>>) item.get(MapUtils.CHILDREN);
 
         for (Map<String, Object> m : menu) {
-            String url = ctx + m.get("fullPath").toString();
+            String url = ctx + m.get(MapUtils.PATH).toString();
             sb.append(String.format(showNavSubMenuLi, url, m.get("name").toString()));
         }
 
@@ -405,7 +406,7 @@ public class SiteStru extends SimpleJsonDB {
 
                     // 如果子菜单不为空，则遍历子菜单并生成子菜单的HTML代码
                     if (!CollectionUtils.isEmpty(menu)) for (Map<String, Object> m : menu) {
-                        String _url = ctx + m.get("fullPath").toString();
+                        String _url = ctx + m.get(MapUtils.PATH).toString();
                         subMenu.append(String.format(LI, "", _url, "» " + m.get("name").toString()));
                     }
 
