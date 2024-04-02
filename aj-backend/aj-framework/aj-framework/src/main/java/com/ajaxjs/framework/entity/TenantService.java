@@ -51,6 +51,10 @@ public class TenantService {
             return null;
     }
 
+//    private static void checkUserPrivilege(HttpServletRequest request, Integer tenantId) {
+//        SimpleUser user = UserService.getUserFromRequestCxt();
+//    }
+
     /**
      * 添加租户 id 的过滤
      *

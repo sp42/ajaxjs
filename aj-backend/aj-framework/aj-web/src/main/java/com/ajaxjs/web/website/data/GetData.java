@@ -104,6 +104,6 @@ public class GetData {
             Map<String, Object> result = Get.api(apiUrl, Head.oauth(token));
             List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("data");
             SiteStruStartUp.setDataToServletCache(name, list, req.getServletContext());
-        } 
+        }
     }
 }

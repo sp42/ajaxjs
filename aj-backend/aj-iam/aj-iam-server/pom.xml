@@ -74,5 +74,12 @@
             <artifactId>lettuce-core</artifactId>
             <version>6.2.3.RELEASE</version>
         </dependency>
+
+        <!-- JSP 页面所需 -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
     </dependencies>
 </project>

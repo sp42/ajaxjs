@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.function.Function;
+
+import static com.ajaxjs.iam.resource_server.UserConstants.USER_KEY_IN_REQUEST;
 
 @Service
 public class UserService implements UserController, UserConstants {
@@ -28,11 +31,28 @@ public class UserService implements UserController, UserConstants {
         return CRUD.info(User.class, sql, id);
     }
 
+    /**
+     * 在 Request 上下文中获取 User 对象
+     *
+     * @return User 对象
+     */
+    public static SimpleUser getUserFromRequestCxt() {
+        return getUserFromRequestCxt(Objects.requireNonNull(DiContextUtil.getRequest()));
+    }
+
+    /**
+     * 在 Request 上下文中获取 User 对象
+     *
+     * @param req 请求对象
+     * @return User 对象
+     */
+    public static SimpleUser getUserFromRequestCxt(HttpServletRequest req) {
+        return (SimpleUser) req.getAttribute(USER_KEY_IN_REQUEST);
+    }
+
     @Override
     public User info() {
-        SimpleUser user = (SimpleUser) Objects.requireNonNull(DiContextUtil.getRequest()).getAttribute(com.ajaxjs.iam.resource_server.UserConstants.USER_KEY_IN_REQUEST);
-
-        return info(user.getId());
+        return info(getUserFromRequestCxt().getId());
     }
 
     @Override

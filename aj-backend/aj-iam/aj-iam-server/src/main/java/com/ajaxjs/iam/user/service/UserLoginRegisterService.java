@@ -47,7 +47,6 @@ public class UserLoginRegisterService implements UserLoginRegisterController, Us
     @GoogleCaptchaCheck
     public boolean login(String loginId, String password, String returnUrl, HttpServletRequest req, HttpServletResponse resp) {
         loginId = loginId.trim();
-
         User user = getUserLoginByPassword(loginId, password);
 
         // 会员登录之后的动作，会保存 userId 和 userName 在 Session 中
