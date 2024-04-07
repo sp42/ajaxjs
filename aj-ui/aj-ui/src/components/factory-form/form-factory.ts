@@ -111,7 +111,8 @@ export default {
                 datasourceId: this.datasourceId,
                 datasourceName: this.datasourceName,
                 tableName: this.tableName,
-                json: JSON.stringify(cfg, null, 2)
+                config: JSON.stringify(cfg, null, 2),
+                type: 'FORM'
             };
 
             if (this.extraDataOnSave) // 额外的数据

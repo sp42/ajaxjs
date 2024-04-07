@@ -150,9 +150,9 @@ export default {
                             if (this.entityId) {// 加载单笔内容
 
                                 this.$refs.FromRenderer.data = {};
-                                let r: ManagedRequest = prepareRequest.call(this, dataBinding, { id: this.entityId });
+                                let r: ManagedRequest = prepareRequest.call(this, dataBinding/* , { id: this.entityId } */);
 
-                                xhr_get(`${r.url}`, (j: RepsonseResult) => {
+                                xhr_get(`${r.url}/${this.entityId}`, (j: RepsonseResult) => {
                                     if (isJsonBased) {
                                         this.$refs.FromRenderer.data = j;
                                         this.$refs.FromRenderer.$forceUpdate();
@@ -164,7 +164,7 @@ export default {
                                             this.$refs.FromRenderer.$forceUpdate();
                                         } else this.$Message.warning("获取单笔内容失败");
                                     }
-                                }, r.params);
+                                }/* , r.params */);
                             }
                         }
                     } else this.$Message.error("获取表单配置失败");

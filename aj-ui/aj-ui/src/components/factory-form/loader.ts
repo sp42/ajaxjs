@@ -37,9 +37,10 @@ export default {
             // let dataBinding: DataBinding = this.cfg.dataBinding;
             let dataBinding = this.cfg.dataBinding;
             let params: any = { id: id };
+            // debugger
             let r: ManagedRequest = prepareRequest(dataBinding, params, this);
 
-            xhr_get(r.url, (j: RepsonseResult) => {
+            xhr_get(r.url + '/' + id, (j: RepsonseResult) => {
                 if (isJsonBased) {
                     this.$refs.FromRenderer.data = j;
                     this.$refs.FromRenderer.$forceUpdate();
@@ -51,9 +52,7 @@ export default {
                         this.$refs.FromRenderer.$forceUpdate();
                     } else this.$Message.warning("获取单笔内容失败");
                 }
-            },
-                r.params
-            );
+            });
         },
     },
 };

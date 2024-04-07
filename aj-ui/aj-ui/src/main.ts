@@ -15,6 +15,11 @@ Vue.filter('formatDate', function (value: string) {
     return formatDate(String(value));
 });
 
+Vue.filter('formatDateLong', function (value: string) { // TODO
+  if (value)
+    return formatDate(String(value));
+});
+
 
 new Vue({
   router,

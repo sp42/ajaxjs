@@ -5,6 +5,7 @@ import com.ajaxjs.iam.jwt.JWebTokenMgr;
 import com.ajaxjs.iam.model.SimpleUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,6 +21,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Enumeration;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 资源拦截器
@@ -47,6 +50,7 @@ public class UserInterceptor implements HandlerInterceptor {
      * 这个回调函数决定如何获取
      */
     @Autowired(required = false)
+    @Qualifier("getuserfromjvmhash")
     private Function<String, String> getUserFromJvmHash;
 
     /**
@@ -114,16 +118,28 @@ public class UserInterceptor implements HandlerInterceptor {
             JWebToken jwt = mgr.parse(token);
 
             if (mgr.isValid(jwt)) {
-                jsonUser = "{\"id\": %s, \"name\": \"%s\"}";
-                jsonUser = String.format(jsonUser, jwt.getPayload().getSub(), jwt.getPayload().getName());
+                jsonUser = "{\"id\": %s, \"name\": \"%s\", \"tenantId\":%s}";
+
+                Integer tenantId = null;
+                String aud = jwt.getPayload().getAud();
+
+                if (StringUtils.hasText(aud)) {
+                    Matcher matcher = Pattern.compile("tenantId=(\\d+)").matcher(aud);
+
+                    if (matcher.find())
+                        tenantId = Integer.parseInt(matcher.group(1));
+                }
+
+                jsonUser = String.format(jsonUser, jwt.getPayload().getSub(), jwt.getPayload().getName(), tenantId);
             } else {
                 returnErrorMsg(403, response);
 
                 return false;
             }
-//                LOGGER.info("AuthInterceptor token={0}, jsonUser={1}", token, jsonUser);
 
             if (StringUtils.hasText(jsonUser)) {
+                log.debug(jsonUser);
+                log.debug(new SimpleUser().toString());
                 SimpleUser user = Utils.jsonStr2Bean(jsonUser, SimpleUser.class);
                 request.setAttribute(UserConstants.USER_KEY_IN_REQUEST, user);
 
@@ -131,6 +147,8 @@ public class UserInterceptor implements HandlerInterceptor {
             } else return returnErrorMsg(401, response);
         } else return true; // 关掉了认证
     }
+
+
 
     /**
      * 根据错误代码返回响应的信息

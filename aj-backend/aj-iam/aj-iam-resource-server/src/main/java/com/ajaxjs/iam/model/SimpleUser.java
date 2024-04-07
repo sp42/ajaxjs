@@ -4,7 +4,9 @@ import lombok.Data;
 
 @Data
 public class SimpleUser {
-	private Long id;
+    private Long id;
 
-	private String name;
+    private String name;
+
+    private Integer tenantId;
 }

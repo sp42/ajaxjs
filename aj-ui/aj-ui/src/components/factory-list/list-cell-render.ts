@@ -37,6 +37,9 @@ export default function (rendererColDef: iViewTableColumn, item: TableColumn): v
         if (item.render == 'thumb')
             rendererColDef.render = thumb;
 
+        if (item.render == 'stat')
+            rendererColDef.render = state;
+
         if (item.render == 'clk_event' && item.clkEvent)
             try {
                 rendererColDef.render = clk_event(eval(item.clkEvent));
@@ -53,6 +56,45 @@ export default function (rendererColDef: iViewTableColumn, item: TableColumn): v
             }
         }
 
+    }
+}
+
+function state(h: Function, params: any) {
+    let value = params.row[params.column.key]; // 取出当前值
+    const dot = '•';
+    switch (value) {
+        case 0:
+            return h('div', {
+                style: {
+                    color: 'green',
+                    fontSize: '20px'
+                },
+                attrs: {
+                    title: '正常'
+                }
+            }, dot);
+            break;
+        case -1:
+            return h('div', {
+                style: {
+                    color: 'red',
+                    fontSize: '20px'
+                },
+                attrs: {
+                    title: '已删除'
+                }
+            }, dot);
+            break;
+        default:
+            return h('div', {
+                style: {
+                    color: 'yellow',
+                    fontSize: '20px'
+                },
+                attrs: {
+                    title: '已禁用/已下线'
+                }
+            }, dot);
     }
 }
 
@@ -137,8 +179,8 @@ function convertDate(isoDate) {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const hour = date.getHours();
-    const minute = date.getMinutes()===0? '00': date.getMinutes();
-    
+    const minute = date.getMinutes() === 0 ? '00' : date.getMinutes();
+
     return `${year}-${month}-${day} ${hour}:${minute}`;
 }
 
@@ -148,9 +190,9 @@ function convertDateLong(isoDate) {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const hour = date.getHours();
-    const minute = date.getMinutes()===0? '00': date.getMinutes();
+    const minute = date.getMinutes() === 0 ? '00' : date.getMinutes();
     const seconds = date.getSeconds();
-    
+
     return `${year}-${month}-${day} ${hour}:${minute}:${seconds}`;
 }
 

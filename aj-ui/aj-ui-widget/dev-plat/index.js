@@ -51,6 +51,15 @@ if (location.origin.indexOf('admin.ajaxjs.com') != -1) {
 
 const payload = getLoginInfo(loginUrl);
 
+// 用户租户 id，如果没有则为 superAdmin
+let tenantId = null;
+let r = payload.aud.match(/(?<=tenantId=)\d+/);
+
+if (r && r[0]) {
+    tenantId = Number(r[0]);
+    
+}
+
 new Vue({
     el: '#user-bar',
     data: {

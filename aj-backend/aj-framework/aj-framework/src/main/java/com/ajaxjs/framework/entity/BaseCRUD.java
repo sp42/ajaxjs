@@ -2,8 +2,8 @@ package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.data.CRUD;
 import com.ajaxjs.data.SmallMyBatis;
-import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.data.util.SnowflakeId;
+import com.ajaxjs.framework.PageResult;
 import com.ajaxjs.framework.entity.model.BaseDataServiceConfig;
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.StrUtil;
@@ -147,35 +147,81 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
         return true;
     }
 
-    public static long getCurrentUserId() {
+    /**
+     * 获取上下文当前用户
+     * IAM 的 SimpleUser 这里不通用于是用反射获取（一个方案是用 map，但麻烦）
+     * 该方法会从请求中获取名为"USER_KEY_IN_REQUEST"的属性，该属性预期为一个简单的用户对象。
+     * 如果该属性不存在会抛出 NullPointerException。
+     *
+     * @return 上下文当前用户
+     * @throws NullPointerException 如果请求中不存在名为"USER_KEY_IN_REQUEST"的属性，表示用户不存在。
+     */
+    public static Object getCurrentUser() {
+        // 从请求中获取名为"USER_KEY_IN_REQUEST"的属性，确保该属性不为空
         Object simpleUser = Objects.requireNonNull(DiContextUtil.getRequest()).getAttribute("USER_KEY_IN_REQUEST");
-        if (simpleUser == null) throw new NullPointerException("用户不存在");
+        if (simpleUser == null) throw new NullPointerException("上下文的用户不存在"); // 如果用户对象为空，则抛出异常
 
-        return executeMethod(simpleUser, "getId", long.class);
+        return simpleUser;
     }
 
-    // user_id locks
-    private String limitToCurrentUser(String sql) {
-        if (isCurrentUserOnly()) {
-            String add = " AND user_id = " + getCurrentUserId();
+    /**
+     * 获取当前用户的 ID。
+     *
+     * @return 当前用户的 ID，类型为 long。
+     */
+    public static long getCurrentUserId() {
+        return executeMethod(getCurrentUser(), "getId", long.class);// 调用用户对象的 getId 方法，返回用户的 ID
+    }
 
-            if (sql.contains(DUMMY_STR))
-                sql = sql.replace(DUMMY_STR, DUMMY_STR + add);
+    /**
+     * 获取当前用户的租户 ID。
+     *
+     * @return 当前用户的租户 ID，类型为 long。
+     */
+    public static Integer getCurrentUserTenantId() {
+        return executeMethod(getCurrentUser(), "getTenantId", Integer.class);// 调用用户对象的 getId 方法，返回用户的 ID
+    }
+
+    /**
+     * 对给定的 SQL 查询语句进行限制，确保只查询当前用户的数据。
+     * 如果当前配置为只查询当前用户的数据，将在 SQL 语句中添加条件“user_id = 当前用户 ID”。
+     * 如果提供的 SQL 语句中已包含特定的占位符（DUMMY_STR），则会将条件追加到该占位符之后，
+     * 否则，将条件直接追加到 SQL 语句末尾。
+     *
+     * @param sql 初始的 SQL 查询语句。
+     * @return 经过限制条件添加后的 SQL 查询语句。
+     */
+    private String limitToCurrentUser(String sql) {
+        if (isCurrentUserOnly()) { // 检查是否配置为只查询当前用户的数据
+            String add = " AND user_id = " + getCurrentUserId(); // 构造添加的查询条件
+
+            if (sql.contains(DUMMY_STR)) // 检查SQL语句中是否已包含占位符
+                sql = sql.replace(DUMMY_STR, DUMMY_STR + add); // 将条件插入到占位符之后
             else
-                sql += add;
+                sql += add; // 直接将条件追加到SQL语句末尾
         }
 
-        return sql;
+        return sql; // 返回修改后的SQL语句
     }
 
+    /**
+     * 执行对象上的指定方法，并返回方法的执行结果。
+     *
+     * @param obj        要执行方法的对象实例。
+     * @param methodName 要执行的方法的名称。
+     * @param clz        期望的返回类型。
+     * @return 方法执行的结果，其类型为参数 clz 指定的类型。
+     * @throws RuntimeException 如果无法找到方法、访问方法失败或方法调用抛出异常，则抛出此运行时异常。
+     */
+    @SuppressWarnings("unchecked")
     public static <T> T executeMethod(Object obj, String methodName, Class<T> clz) {
         try {
-            Method method = obj.getClass().getMethod(methodName);
-            Object result = method.invoke(obj);
+            Method method = obj.getClass().getMethod(methodName);// 获取对象的类，然后通过方法名查找并返回方法对象。
+            Object result = method.invoke(obj); // 调用方法并获取结果
 
-            return (T) result;
+            return (T) result;// 将结果强制转换为期望的类型并返回
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e); // 如果在执行过程中遇到异常，则将其封装并抛出为运行时异常
         }
     }
 

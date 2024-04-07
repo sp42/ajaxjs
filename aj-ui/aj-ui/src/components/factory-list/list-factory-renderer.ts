@@ -26,7 +26,7 @@ export default {
                 data: this.initTableData,
                 total: 0,
                 pageNo: 1,
-                pageSize: 6,
+                pageSize: 10,
                 loading: false,
                 search: {
                     name: ''
@@ -51,7 +51,7 @@ export default {
             let r: ManagedRequest = prepareRequest(listCfg.dataBinding, params, this);
             this.list.data = []; // 清空数据
 
-            xhr_get(r.url, (j: RepsonseResult) => {                
+            xhr_get(r.url, (j: RepsonseResult) => {
                 if (j.status) {
                     this.list.data = j.data.rows;
                     this.list.total = j.data.total;
@@ -66,6 +66,8 @@ export default {
         },
 
         createEntity(): void {
+            this.$refs.FromRenderer.data = {};
+            this.$refs.FromRenderer.$forceUpdate();
             this._openForm(null, null, 1);
         },
 
@@ -109,17 +111,18 @@ export default {
             else if (formMode == 2)
                 this.form.title = `编辑 ${row.name}`;
 
-            // let formCfgId: number = 5;// 写死 表单配置
-            let formCfgId: number = this.cfg.formCfgId;//  表单配置
-            if (!formCfgId) {
+            let formCfgId: number;//  表单配置
+
+            if (!this.cfg.bindingForm || !this.cfg.bindingForm.id) {
                 alert('未绑定表单，无法打开');
                 return;
-            }
+            } else
+                formCfgId = this.cfg.bindingForm.id;//  表单配置
 
-            xhr_get(`${apiRoot}/api/cms/form-factory?id=${formCfgId}`, (j: RepsonseResult) => {
+            xhr_get(`${apiRoot}/common_api/widget_config/${formCfgId}`, (j: RepsonseResult) => {
                 if (j.status) {
                     this.isShowForm = true;
-                    this.form.cfg = j.data;// 数据库记录转换到 配置对象;
+                    this.form.cfg = j.data.config;// 数据库记录转换到 配置对象;
                     let cfg: FormFactory_Config = this.form.cfg;
                     this.form.fields = cfg.fields;
                     this.$refs.FromRenderer.status = formMode;

@@ -4,15 +4,18 @@ import com.ajaxjs.base.Sdk;
 import com.ajaxjs.data.jdbc_helper.JdbcConn;
 import com.ajaxjs.data.jdbc_helper.JdbcWriter;
 import com.ajaxjs.framework.spring.filter.google_captcha.GoogleCaptchaInterceptor;
+import com.ajaxjs.iam.model.SimpleUser;
 import com.ajaxjs.iam.resource_server.UserInterceptor;
 import com.ajaxjs.iam.server.service.OidcService;
 import com.ajaxjs.iam.user.common.session.ServletUserSession;
 import com.ajaxjs.iam.user.common.session.UserSession;
+import com.ajaxjs.iam.user.service.UserService;
 import com.ajaxjs.util.cache.Cache;
 import com.ajaxjs.util.cache.expiry.ExpiryCache;
 import com.ajaxjs.util.convert.ConvertToJson;
 import com.ajaxjs.util.logger.LogHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.util.function.Function;
 
@@ -66,6 +70,7 @@ public class IamConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @Qualifier("getuserfromjvmhash")
     Function<String, String> getUserFromJvmHash() {
         return token -> {
             Cache<String, Object> cache = simpleJvmCache();

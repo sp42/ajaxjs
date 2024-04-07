@@ -52,6 +52,24 @@
         </Radio>
       </RadioGroup>
 
+      <RadioGroup v-if="item.uiType == 19" v-model="data[item.name]">
+        <Radio :label="-1">
+          <span>草稿</span>
+        </Radio>
+        <Radio :label="0">
+          <span>正常</span>
+        </Radio>
+        <Radio :label="1">
+          <span>已删除</span>
+        </Radio>
+        <Radio :label="2">
+          <span>已禁用</span>
+        </Radio>
+      </RadioGroup>
+
+      <span v-if="item.uiType == 20">{{data[item.name] | formatDate}}</span>
+      <span v-if="item.uiType == 21">{{data[item.name] | formatDateLong}}</span>
+
       <CheckboxGroup v-if="item.uiType == 4 && item.ext_attribs" v-model="data[item.name]">
         <Checkbox v-for="(item, index) in item.ext_attribs.candidateData" :key="index" :label="item.value">{{item.name}}</Checkbox>
       </CheckboxGroup>

@@ -85,6 +85,8 @@
             <Option :value="8">富文本编辑器 HTML Editor</Option>
             <Option :value="17">图片上传器 Img Uploader</Option>
             <Option :value="9">文件上传器 File Uploader</Option>
+            <Option :value="20">只读的短日期</Option>
+            <Option :value="21">只读的长日期</Option>
           </OptionGroup>
           <OptionGroup label="业务组件">
             <Option :value="16">手机输入框</Option>
@@ -92,6 +94,7 @@
             <Option :value="15">性别选择</Option>
             <Option :value="13">身份证输入框</Option>
             <Option :value="14">省市区联动</Option>
+            <Option :value="19">实体状态</Option>
           </OptionGroup>
         </Select>
       </div>
@@ -142,7 +145,7 @@
       <p>或者直接粘贴 JSON 也可以</p>
       <Input type="textarea" v-model="jsonBased.jsonStr" :rows="15" style="width:86%;" />
       <p>JSON 为多层结构，须指定某个对象，这里指定一个字段</p>
-      <Input type="text" v-model="cfg.jsonBased.key" style="width:86%;" size="small" placeholder="JSON 里面的某个 key，如 foo.bar.xyz" />
+      <!-- <Input type="text" v-model="cfg.jsonBased.key" style="width:86%;" size="small" placeholder="JSON 里面的某个 key，如 foo.bar.xyz" /> -->
     </Modal>
   </ConfigTable>
 
