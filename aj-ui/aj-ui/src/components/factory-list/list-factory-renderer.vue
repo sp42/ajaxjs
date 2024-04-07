@@ -38,7 +38,7 @@
       <Page :total="list.total" :current.sync="list.pageNo" show-total show-sizer :page-size="list.pageSize" />
     </div>
 
-    <Modal v-model="isShowForm" :title="form.title" width="1100">
+    <Modal v-model="isShowForm" :title="form.title" width="1100" ok-text="保存" @on-ok="formSave">
       <FromRenderer ref="FromRenderer" :cfg="form.cfg" :fields="form.fields" />
     </Modal>
   </div>

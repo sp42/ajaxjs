@@ -137,6 +137,9 @@ export default {
                     this.$Message.error('未有任何配置');
             });
         },
+        formSave(): void { 
+           
+        },
         btnClk(js: string, entity?: object, index?: number): void {
             if (entity) {
                 let fn: Function = new Function('row', 'index', js);

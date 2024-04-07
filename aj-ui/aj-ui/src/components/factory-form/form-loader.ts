@@ -21,7 +21,7 @@ export default {
             oldJson: null                       // JSON Based 下的旧 JSON 完整数据。因为 data 只有部分
         };
     },
-    mounted() {
+    mounted(): void {
         this.load();
     },
     methods: {
@@ -88,9 +88,7 @@ export default {
 
                 xhr_post(r.url, (j: RepsonseResult) => {
                     console.log(j)
-                }, json, {
-                    contentType: 'application/json'
-                });
+                }, json, { contentType: 'application/json' });
             } else {
                 let r: ManagedRequest = this._initParams(api, this.$refs.FromRenderer.data, this);
 
@@ -194,7 +192,7 @@ function deleteFieldIfNull(params: any): void {
 function date2str(params: any): void {
     for (let i in params) {
         let v = params[i];
-        
+
         if (v instanceof Date)
             params[i] = dateFormat.call(v, 'yyyy-MM-dd hh:mm:ss');
     }
