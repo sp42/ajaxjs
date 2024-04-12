@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
@@ -45,7 +46,7 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
      */
     private Integer idType = BaseEntityConstants.IdType.AUTO_INC;
 
-    private final static String DUMMY_STR = "1=1";
+    public final static String DUMMY_STR = "1=1";
 
     private final static String SELECT_SQL = "SELECT * FROM %s WHERE 1=1 ORDER BY create_date DESC"; // 日期暂时写死
 
@@ -115,34 +116,57 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
     }
 
     /**
-     * 获取列表
+     * 根据条件查询列表数据
      *
-     * @param where 查询条件
-     * @return 列表
+     * @param where 查询条件，用于筛选数据
+     * @return 返回查询结果列表，列表元素类型为泛型 T
      */
     public List<T> list(String where) {
-        String sql = getListSql(where);
+        String sql = getListSql(where);  // 构造查询SQL语句
 
-        return CRUD.list(clz, sql);
+        return CRUD.list(clz, sql); // 执行查询操作，并返回结果列表
     }
 
     /**
-     * 分页列表
+     * 根据指定的查询条件进行分页查询
+     *
+     * @param where 查询条件，用于筛选数据
+     * @return PageResult<T> 分页查询结果，包含查询到的数据及分页信息
      */
     public PageResult<T> page(String where) {
-        String sql = getListSql(where);
+        String sql = getListSql(where); // 构造查询 SQL 语句
 
-        return CRUD.page(clz, sql, null);
+        return CRUD.page(clz, sql, null); // 执行分页查询，并返回结果
     }
 
+    /**
+     * 更新之前的执行的回调函数，可以设置 updateBy 等的字段
+     */
+    private BiFunction<Boolean, String, String> beforeDelete;
+
+    /**
+     * 根据给定的 ID 删除记录。
+     * 如果表中有标记删除字段（isDeleted），则更新该字段为删除状态（通常为 1）；
+     * 否则，直接从表中删除对应的记录。
+     *
+     * @param id 要删除的记录的 ID，类型为泛型 K。
+     * @return 总是返回 true，表示删除操作已执行。
+     */
     public boolean delete(K id) {
         String sql;
 
-        if (isHasIsDeleted()) sql = "UPDATE " + getTableName() + " SET " + getDelField() + " = 1 WHERE " + getIdField() + " = ?";
-        else sql = "DELETE FROM " + getTableName() + " WHERE " + getIdField() + " = ?";
+        // 根据是否有删除标记字段来构造不同的 SQL 语句
+        if (isHasIsDeleted())
+            sql = "UPDATE " + getTableName() + " SET " + getDelField() + " = 1";
+        else sql = "DELETE FROM " + getTableName();
 
-        sql = limitToCurrentUser(sql);
-        CRUD.jdbcWriterFactory().write(sql, id);
+        sql += " WHERE " + DUMMY_STR + " AND " + getIdField() + " = ?";
+        sql = limitToCurrentUser(sql); // 对 SQL 语句添加当前用户限制，确保操作的安全性
+
+        if (beforeDelete != null)
+            sql = beforeDelete.apply(isHasIsDeleted(), sql);
+
+        CRUD.jdbcWriterFactory().write(sql, id);// 执行 SQL 语句
 
         return true;
     }
@@ -260,18 +284,33 @@ public class BaseCRUD<T, K extends Serializable> extends BaseDataServiceConfig {
         return (K) CRUD.create(getTableName(), params, getIdField());
     }
 
+    /**
+     * 更新之前的执行的回调函数，可以设置 updateDate, updateBy 等字段
+     */
+    private Consumer<Map<String, Object>> beforeUpdate;
+
+    /**
+     * 更新数据库中的实体信息
+     *
+     * @param params 包含要更新的字段及其新值的 Map
+     * @return 返回更新操作的成功与否
+     * @throws SecurityException 如果尝试修改不存在的实体或仅允许当前用户修改时，会抛出此异常
+     */
     public Boolean update(Map<String, Object> params) {
-        String tableName = getTableName();
-        String idField = getIdField();
+        String tableName = getTableName(); // 获取表名
+        String idField = getIdField(); // 获取主键字段名
 
+        // 检查是否仅允许当前用户修改
         if (isCurrentUserOnly()) {
-            Object id = params.get(idField);
-            T info = info((K) id);
+            Object id = params.get(idField); // 获取尝试修改的实体的 ID
+            T info = info((K) id); // 根据 ID 获取实体信息
 
-            if (info == null)
+            if (info == null) // 如果尝试修改的实体不存在，抛出安全异常
                 throw new SecurityException("不能修改实体，id：" + id);
         }
 
-        return CRUD.update(tableName, params, idField);
+        if (beforeUpdate != null) beforeUpdate.accept(params);
+
+        return CRUD.update(tableName, params, idField);// 执行更新操作
     }
 }

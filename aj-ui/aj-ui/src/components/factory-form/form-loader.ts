@@ -3,6 +3,7 @@ import { xhr_get, xhr_post, xhr_put } from "../../util/xhr";
 import { prepareRequest } from "../widget/data-binding";
 import { findNode } from "./form-factory";
 import { dateFormat } from '../../util/utils';
+import List from "../widget/list";
 
 export default {
     components: { FromRenderer },
@@ -41,9 +42,7 @@ export default {
             let callback = (j: RepsonseResult) => {
                 if (j.status) {
                     this.$Message.success(j.message);
-                    setTimeout(() => {
-                        location.hash = location.hash + '&entityId=' + j.newlyId;
-                    }, 2000);
+                    setTimeout(() => location.hash = location.hash + '&entityId=' + j.data, 2000);
                 } else
                     this.$Message.error(j.message || '创建失败，原因未知！');
             };
@@ -66,6 +65,7 @@ export default {
 
             deleteFieldIfNull(r.params);
             date2str(r.params);
+            r.params = List.copyBeanClean(r.params);
 
             return r;
         },
@@ -114,14 +114,14 @@ export default {
                 return;
             }
 
-            let entityId: string = this.$route.query.entityId;
-            if (entityId)
-                this.entityId = entityId;
+            this.entityId = this.$route.query.entityId;;
 
             if (this.entityId)          // 有 id 表示修改状态
                 this.status = 2;
-            else
+            else {
                 this.status = 1;
+                this.$refs.FromRenderer.data = {};
+            }
 
             xhr_get(`${window["config"].dsApiRoot}/common_api/widget_config/${this.formId}`,
                 (j: RepsonseResult) => {

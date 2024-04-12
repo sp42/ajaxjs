@@ -10,6 +10,8 @@ import com.ajaxjs.framework.spring.filter.dbconnection.DataBaseConnection;
 import com.ajaxjs.util.convert.ConvertBasicValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Slf4j
@@ -134,39 +138,50 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
         return isSingle(crud) ? singleCMD.apply(crud) : crudCMD.apply(crud);
     }
 
+    /**
+     * 初始化参数的封装方法。
+     * 这是一个重载方法，调用的是另一个具有三个参数的 initParams 方法，其中最后一个参数默认为 false。
+     *
+     * @param namespace 命名空间，用于区分不同的参数集合。
+     * @param params    参数集合，以键值对的形式存储不同的参数。
+     * @return 返回一个初始化后的参数集合 Map。
+     */
     private Map<String, Object> initParams(String namespace, Map<String, Object> params) {
         return initParams(namespace, params, false);
     }
 
     /**
-     * @param namespace
-     * @param params
-     * @param isFormSubmitOnly 是否只是表单提交的参数
-     * @return
+     * 初始化参数
+     *
+     * @param namespace        命名空间
+     * @param params           原始参数映射
+     * @param isFormSubmitOnly 是否仅处理表单提交的参数
+     * @return 处理后的参数映射
      */
     private Map<String, Object> initParams(String namespace, Map<String, Object> params, boolean isFormSubmitOnly) {
         if (isFormSubmitOnly) {
             HttpServletRequest req = DiContextUtil.getRequest();
             assert req != null;
-            String queryString = req.getQueryString();
+            String queryString = req.getQueryString(); // 获取查询字符串
 
-            // get the key of query string
+            // 解码查询字符串并处理参数
             if (StringUtils.hasText(queryString)) {
                 queryString = StringUtils.uriDecode(queryString, StandardCharsets.UTF_8);
                 String[] parameters = queryString.split("&");
 
-                for (String parameter : parameters) {
+                for (String parameter : parameters) {// 从 params 中移除查询字符串中的参数
                     String[] keyValuePair = parameter.split("=");
                     params.remove(keyValuePair[0]);
                 }
             }
         }
 
-        Map<String, Object> _params = new HashMap<>();
+        Map<String, Object> _params = new HashMap<>(); // 创建新的参数映射，并将原始参数转换为指定格式
         params.forEach((key, value) -> _params.put(DataUtils.changeFieldToColumnName(key), ConvertBasicValue.toJavaValue(value.toString())));
 
         return _params;
     }
+
 
     @Override
     public Boolean delete(String namespace, Long id) {
@@ -237,43 +252,76 @@ public abstract class BaseCRUDService implements BaseCRUDController, BaseEntityC
     }
 
     /**
-     * 从数据库中加载配置
+     * 创建之前的执行的回调函数，可以设置 createDate, createBy 等字段
+     */
+    @Autowired(required = false)
+    @Qualifier("CRUD_beforeCreate")
+    private Consumer<Map<String, Object>> beforeCreate;
+
+    /**
+     * 创建之前的执行的回调函数，可以设置 updateDate, updateBy 等字段
+     */
+    @Autowired(required = false)
+    @Qualifier("beforeUpdate")
+    private Consumer<Map<String, Object>> beforeUpdate;
+
+    /**
+     * 删除之前的执行的回调函数，可以设置 updateDate, updateBy 等字段
+     */
+    @Autowired(required = false)
+    @Qualifier("beforeDelete")
+    private BiFunction<Boolean, String, String> beforeDelete;
+
+    /**
+     * 从数据库中加载配置。
+     * 此方法首先初始化数据库连接，然后清除现有的配置命名空间。接着，它从数据库中查询所有状态不为1的配置项，并进行处理：
+     * - 对查询结果进行排序（按照 pid，以 pid 为-1的项首先排列）；
+     * - 遍历排序后的结果，为每个配置项创建一个 CRUD 对象，并根据配置项的 pid 来建立父子关系；
+     * - 最后，将所有的配置项按照其所属的命名空间保存到 namespaces 中。
+     * 在整个过程完成后，会关闭数据库连接。
      */
     public void loadConfigFromDatabase() {
         DataBaseConnection.initDb();
         namespaces.clear();
 
         try {
-            List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM ds_common_api WHERE stat != 1");
-
-            // sort by pid，-1 first
-            list.sort(Comparator.comparingInt(ConfigPO::getPid));
+            List<ConfigPO> list = CRUD.list(ConfigPO.class, "SELECT * FROM ds_common_api WHERE stat != 1");// 从数据库中查询所有状态不为1的配置项
+            list.sort(Comparator.comparingInt(ConfigPO::getPid)); // 根据pid对配置项进行排序
             Map<Integer, BaseCRUD<Map<String, Object>, Long>> configMap = new HashMap<>();
 
             if (!CollectionUtils.isEmpty(list)) {
                 for (ConfigPO config : list) {
-                    // 定义表的 CRUD
-                    BaseCRUD<Map<String, Object>, Long> app = new BaseCRUD<>();
-                    BeanUtils.copyProperties(config, app);
+                    BaseCRUD<Map<String, Object>, Long> crud = new BaseCRUD<>(); // 为每个配置项创建CRUD对象，并复制配置项的属性到CRUD对象中
+                    BeanUtils.copyProperties(config, crud);
 
-                    if (app.getPid() == -1) {
-                        namespaces.put(config.getNamespace(), app);
+                    if (beforeCreate != null)  // 如果存在 beforeCreate 回调，则设置到 CRUD 对象中
+                        crud.setBeforeCreate(beforeCreate);
 
-                        configMap.put(app.getId(), app);
-                        app.setChildren(new HashMap<>());
+                    if (beforeUpdate != null)  // 如果存在 beforeUpdate 回调，则设置到 CRUD 对象中
+                        crud.setBeforeCreate(beforeUpdate);
+
+                    if (beforeDelete != null)  // 如果存在 beforeUpdate 回调，则设置到 CRUD 对象中
+                        crud.setBeforeDelete(beforeDelete);
+
+                    // 如果 pid 为 -1，表示为顶级配置，将其添加到 namespaces 中，并初始化其 children 属性
+                    if (crud.getPid() == -1) {
+                        namespaces.put(config.getNamespace(), crud);
+
+                        configMap.put(crud.getId(), crud);
+                        crud.setChildren(new HashMap<>());
                     } else {
-                        // find parent
-                        BaseCRUD<Map<String, Object>, Long> crud = configMap.get(app.getPid());
+                        BaseCRUD<Map<String, Object>, Long> _crud = configMap.get(crud.getPid()); // 查找并添加父级配置项的子配置项
 
-                        if (crud == null)
+                        if (_crud == null)
                             throw new IllegalStateException("程序错误：没有找到父级");
 
-                        crud.getChildren().put(app.getNamespace(), app);
+                        _crud.getChildren().put(crud.getNamespace(), crud);
                     }
                 }
             }
         } finally {
-            DataBaseConnection.closeDb();
+            DataBaseConnection.closeDb(); // 执行完毕后关闭数据库连接
         }
     }
+
 }

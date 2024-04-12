@@ -97,6 +97,15 @@ export default {
             });
         },
 
+        // 打开表单，这是全屏的方式
+        _openCreateFormFull(formId: number, name: string): void {
+            location.hash = `#/form?formId=${formId}&title=${name}`;
+        },
+        _openEditFormFull(formId: number, name: string, entityId: number): void {
+            location.hash = `#/form?formId=${formId}&title=${name}&entityId=${entityId}`;
+        },
+
+
         _openForm(row: any, rowId: number, formMode: number): void {
             // 加载表单配置
             let apiRoot: string = this.apiRoot || this.$parent.$parent.$parent.apiRoot;
@@ -118,6 +127,7 @@ export default {
                 return;
             } else
                 formCfgId = this.cfg.bindingForm.id;//  表单配置
+                debugger
 
             xhr_get(`${apiRoot}/common_api/widget_config/${formCfgId}`, (j: RepsonseResult) => {
                 if (j.status) {
@@ -137,8 +147,26 @@ export default {
                     this.$Message.error('未有任何配置');
             });
         },
-        formSave(): void { 
-           
+
+        _delete(row: any, api: string): void {
+            this.$Modal.confirm({
+                title: '删除实体',
+                content: `<p>确定删除 ${row.name || '记录'} #${row.id}？</p>`,
+                onOk: () => {
+                    xhr_del(`${api}/${row.id}`, (j: RepsonseResult) => {
+                        if (j.status) {
+                            this.$Message.info('删除成功');
+                            this.getData();
+                        } else
+                            this.$Message.warning(j.message);
+                    });
+                },
+                okText: '删除'
+            });
+        },
+
+        formSave(): void {
+
         },
         btnClk(js: string, entity?: object, index?: number): void {
             if (entity) {

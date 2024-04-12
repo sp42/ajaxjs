@@ -66,7 +66,7 @@ function state(h: Function, params: any) {
         case 0:
             return h('div', {
                 style: {
-                    color: 'green',
+                    color: '#52c41a',
                     fontSize: '20px'
                 },
                 attrs: {

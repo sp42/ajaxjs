@@ -55,7 +55,7 @@ public class TenantService {
 
             return tenantId;
         } else
-            return null;
+            return BaseCRUD.getCurrentUserTenantId();// 从用户获取，一般在后台操作时候会这样。也有可能最终找不到，为 null
     }
 
     private static void checkUserPrivilegeOfTenant(HttpServletRequest request, Integer tenantId) {
