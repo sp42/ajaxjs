@@ -1,7 +1,8 @@
 package com.ajaxjs.web.website;
 
-import com.ajaxjs.json_db.map_traveler.MapTraveler;
-import com.ajaxjs.json_db.map_traveler.MapUtils;
+
+import com.ajaxjs.util.map_traveler.MapTraveler;
+import com.ajaxjs.util.map_traveler.MapUtils;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -51,9 +52,9 @@ public abstract class SiteStruStartUp implements ServletContextListener {
                         // 应用自定义的子节点生成逻辑
                         List<Map<String, Object>> children = makeChildren.apply(map.get("dbNode").toString(), context);
 
-                        if (map.containsKey(MapUtils.CHILDREN)) {
+                        if (map.containsKey(MapUtils.CHILDREN))
                             ((List<Map<String, Object>>) map.get(MapUtils.CHILDREN)).addAll(children);
-                        } else
+                        else
                             map.put(MapUtils.CHILDREN, children); // 将生成的子节点添加到当前节点
 //
 //                        System.out.println(map.get("name")); // 打印当前节点名称，用于调试

@@ -1,10 +1,10 @@
-package com.ajaxjs.json_db.map_traveler;
+package com.ajaxjs.util.map_traveler;
+
+import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import lombok.Data;
 
 /**
  * 遍历 ListMap 或 MapList
@@ -51,10 +51,10 @@ public class MapTraveler {
                 if (value instanceof Map)
                     traveler((Map<String, Object>) value, map, level + 1);
 
-                if (value instanceof List) {// 如果value是List类型
+                if (value instanceof List) {// 如果 value 是 List 类型
                     List<?> list = (List<?>) value;
 
-                    // 如果list的大小大于0且第一个元素是Map类型，则递归调用traveler方法，并传入list作为参数，level加1
+                    // 如果list的大小大于0且第一个元素是 Map 类型，则递归调用traveler方法，并传入 list 作为参数，level 加1
                     if (list.size() > 0 && (list.get(0) instanceof Map))
                         traveler((List<Map<String, Object>>) value, map, level + 1);
                 }

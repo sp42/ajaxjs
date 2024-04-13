@@ -1,14 +1,6 @@
-package com.ajaxjs.json_db.map_traveler;
+package com.ajaxjs.util.map_traveler;
 
-import com.ajaxjs.web.website.SiteStruStartUp;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.*;
 
 public class MapUtils {
     /**
@@ -86,6 +78,8 @@ public class MapUtils {
         buildPath(list, id, path, level, false);
     }
 
+    public final static String IS_QUERY_PARAMS = "isQueryParams";
+
     /**
      * 为每个 Map 加上 path 和 level 字段，分别是路径和深度
      *
@@ -100,7 +94,7 @@ public class MapUtils {
         traveler.setOnMap((map, superMap, _level) -> {
             String superPath = superMap == null ? "" : superMap.get(path).toString();
 
-            if (map.containsKey(SiteStruStartUp.isQueryParams))
+            if (map.containsKey(IS_QUERY_PARAMS))
                 map.put(path, superPath + "/?type=" + map.get(id)); // 写死 type 参数名。另外这个逻辑写在这里是不合理的，不过当前也没有更好的办法
             else map.put(path, superPath + "/" + map.get(id));
 
@@ -119,6 +113,7 @@ public class MapUtils {
             // LOGGER.info(map.get(id) + "@" + _level + ":" + map.get(path));
             return true;
         });
+
         traveler.traveler(list);
     }
 
@@ -138,8 +133,8 @@ public class MapUtils {
      * 根据给定的路径查找队列中对应的元素在列表中的位置并返回其对应的 Map 对象。
      *
      * @param queue 一个队列，包含需要查找的元素路径。
-     * @param list  一个包含多个Map对象的列表，每个Map对象代表一个节点，其中包含元素的ID和子元素信息。
-     * @return 返回找到的元素对应的Map对象，如果没有找到则返回null。
+     * @param list  一个包含多个 Map 对象的列表，每个 Map 对象代表一个节点，其中包含元素的 ID和子元素信息。
+     * @return 返回找到的元素对应的 Map 对象，如果没有找到则返回 null。
      */
     @SuppressWarnings("unchecked")
     private static Map<String, Object> findByPath(Queue<String> queue, List<Map<String, Object>> list) {

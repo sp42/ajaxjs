@@ -7,16 +7,10 @@ import com.ajaxjs.s3client.factory.NeteaseOSS;
 import com.ajaxjs.s3client.model.Config;
 import com.ajaxjs.util.MessageDigestHelper;
 import com.ajaxjs.util.io.FileHelper;
-import com.ajaxjs.util.io.Resources;
 import org.junit.Test;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
-
-import static org.junit.Assert.assertTrue;
 
 public class TestFactory {
     Config nsoCfg = new Config();
@@ -27,35 +21,21 @@ public class TestFactory {
     AliyunOSS ali = new AliyunOSS();
 
     {
-//        String someValue = (String) config.get("key1");
-//        int anotherValue = (int) config.get("key2");
-        Map<String, Object> cfg = getConfigFromYml("application.yml");
-        System.out.println(cfg);
-        nsoCfg.setEndPoint("nos-eastchina1.126.net");
-        nsoCfg.setAccessKey("4c2396f706744a74ba6b8319e1099b60");
-        nsoCfg.setSecretKey("67f070468939410491c54d6979614980");
-        nsoCfg.setBucketName("leidong");
+        Map<String, Object> cfg = TestBase.getConfigFromYml("application.yml");
+        nsoCfg.setEndPoint((String) cfg.get("S3Storage_Nso_api"));
+        nsoCfg.setAccessKey((String) cfg.get("S3Storage_Nso_accessKeyId"));
+        nsoCfg.setSecretKey((String) cfg.get("S3Storage_Nso_accessSecret"));
+        nsoCfg.setBucketName((String) cfg.get("S3Storage_Nso_bucket"));
         nsoCfg.setRemark("NOS");
         nso.setConfig(nsoCfg);
 
-        aliCfg.setEndPoint("oss-cn-beijing.aliyuncs.com");
-        aliCfg.setAccessKey("LTAI4FtWXD5P4cCAxPcb7apP");
-        aliCfg.setSecretKey("i6HPqz4AlTZUPkVQSj7Pr74yQsK69Q");
-        aliCfg.setBucketName("leyou-cxk");
+        aliCfg.setEndPoint((String) cfg.get("S3Storage_Oss_endpoint"));
+        aliCfg.setAccessKey((String) cfg.get("S3Storage_Oss_accessKeyId"));
+        aliCfg.setSecretKey((String) cfg.get("S3Storage_Oss_secretAccessKey"));
+        aliCfg.setBucketName((String) cfg.get("S3Storage_Oss_bucket"));
         aliCfg.setRemark("OSS");
 
         ali.setConfig(aliCfg);
-    }
-
-    static Map<String, Object> getConfigFromYml(String configFile) {
-        Yaml yaml = new Yaml();
-
-        try (InputStream resourceAsStream = Resources.getResource(configFile)) {
-            Map<String, Object> m = yaml.load(resourceAsStream);
-            return m;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
 

@@ -1,4 +1,4 @@
-package com.ajaxjs.json_db.map_traveler;
+package com.ajaxjs.util.map_traveler;
 
 import java.util.Map;
 

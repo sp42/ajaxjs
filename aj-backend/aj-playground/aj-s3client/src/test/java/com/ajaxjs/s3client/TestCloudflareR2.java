@@ -15,10 +15,15 @@ public class TestCloudflareR2 {
     CloudflareR2 client = new CloudflareR2();
 
     {
+        Map<String, Object> _cfg = TestBase.getConfigFromYml("application.yml");
+        System.out.println(_cfg);
+
         Config cfg = new Config();
-        cfg.setEndPoint("https://a4d2252636e737ac1ced6ec8f0c9c68e.r2.cloudflarestorage.com");
-        cfg.setAccessKey("6d3ae3ce9ce81caf42f093a31592e3da");
-        cfg.setSecretKey("d388a9fa87fe69990601ffb498c486442657747fc0f00f5ec1f38ffb1df468f3");
+        cfg.setEndPoint((String) _cfg.get("S3Storage_R2_endpoint"));
+        cfg.setAccessKey((String) _cfg.get("S3Storage_R2_accessKeyId"));
+        cfg.setSecretKey((String) _cfg.get("S3Storage_R2_secretAccessKey"));
+        cfg.setBucketName((String) _cfg.get("S3Storage_R2_bucket"));
+
         client.setConfig(cfg);
     }
 
