@@ -29,7 +29,7 @@ public class TestFactory {
     {
 //        String someValue = (String) config.get("key1");
 //        int anotherValue = (int) config.get("key2");
-        Map<String, Object> cfg = getConfigFromYml("config.yml");
+        Map<String, Object> cfg = getConfigFromYml("application.yml");
         System.out.println(cfg);
         nsoCfg.setEndPoint("nos-eastchina1.126.net");
         nsoCfg.setAccessKey("4c2396f706744a74ba6b8319e1099b60");
