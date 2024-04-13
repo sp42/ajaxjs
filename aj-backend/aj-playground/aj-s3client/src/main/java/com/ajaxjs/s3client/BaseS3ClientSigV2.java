@@ -30,9 +30,7 @@ public abstract class BaseS3ClientSigV2 extends BaseS3Client {
         String data = "PUT\n" + getCanonicalResource(now, bucketName, "");
         String url = getFullEndPoint(bucketName);
 
-        ResponseEntity result = Post.put(url, null, setRequestHead(now, data));
-
-        return result.getHttpCode() == 200 || result.getHttpCode() == 204;
+        return check(Post.put(url, null, setRequestHead(now, data)));
     }
 
     @Override
@@ -41,9 +39,7 @@ public abstract class BaseS3ClientSigV2 extends BaseS3Client {
         String data = "DELETE\n" + getCanonicalResource(now, bucketName, "");
         String url = getFullEndPoint(bucketName);
 
-        ResponseEntity result = Delete.del(url, setRequestHead(now, data));
-
-        return result.getHttpCode() == 200 || result.getHttpCode() == 204;
+        return check(Delete.del(url, setRequestHead(now, data)));
     }
 
     @Override
@@ -83,9 +79,7 @@ public abstract class BaseS3ClientSigV2 extends BaseS3Client {
         String data = "DELETE\n" + getCanonicalResource(now, bucketName, objectName);
         String url = getFullEndPoint(bucketName) + "/" + objectName;
 
-        ResponseEntity result = Delete.del(url, setRequestHead(now, data));
-
-        return result.getHttpCode() == 200 || result.getHttpCode() == 204;
+        return check(Delete.del(url, setRequestHead(now, data)));
     }
 
     protected String getAuthSignature(BiFunction<String, String, String> callback, String data) {
@@ -136,7 +130,7 @@ public abstract class BaseS3ClientSigV2 extends BaseS3Client {
     }
 
     public Consumer<HttpURLConnection> setRequestHead(String now, String data) {
-        return conn -> { // 发起 DELETE 请求删除文件
+        return conn -> {
             conn.addRequestProperty(DATE, now);
             conn.addRequestProperty(AUTHORIZATION, getAuthSignature(data));   // 设置请求授权头和日期头
         };

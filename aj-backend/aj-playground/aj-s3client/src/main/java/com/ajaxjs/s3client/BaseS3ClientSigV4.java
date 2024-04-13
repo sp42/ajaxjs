@@ -5,8 +5,10 @@ import com.ajaxjs.s3client.signer_v4.CanonicalRequest;
 import com.ajaxjs.s3client.signer_v4.SignBuilder;
 import com.ajaxjs.util.MessageDigestHelper;
 
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.function.Consumer;
 
 public abstract class BaseS3ClientSigV4 extends BaseS3Client {
     /**
@@ -14,10 +16,13 @@ public abstract class BaseS3ClientSigV4 extends BaseS3Client {
      */
     public final static String EMPTY_SHA256 = MessageDigestHelper.getSHA256("");
 
-    public SignBuilder initSignatureBuilder() {
+    public SignBuilder initSignatureBuilder(String date, String hash) {
         String accessKey = getConfig().getAccessKey(), secretKey = getConfig().getSecretKey();
 
-        return new SignBuilder().setAwsCredentials(new AwsCredentials(accessKey, secretKey)).setRegion("auto");
+        return new SignBuilder().setAwsCredentials(new AwsCredentials(accessKey, secretKey))
+                .setRegion("auto")
+                .header("x-amz-date", date)
+                .header("x-amz-content-sha256", hash);
     }
 
     /**
@@ -34,5 +39,13 @@ public abstract class BaseS3ClientSigV4 extends BaseS3Client {
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Consumer<HttpURLConnection> setRequestHead(String date, String signature, String hash) {
+        return conn -> {
+            conn.setRequestProperty("x-amz-date", date); // 设置请求头 Date
+            conn.setRequestProperty("x-amz-content-sha256", hash); // 设置请求头
+            conn.setRequestProperty(AUTHORIZATION, signature); // 设置请求头 Authorization
+        };
     }
 }

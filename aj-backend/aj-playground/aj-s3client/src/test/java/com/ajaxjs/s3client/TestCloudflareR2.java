@@ -6,11 +6,12 @@ import com.ajaxjs.util.io.FileHelper;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class TestBase {
+public class TestCloudflareR2 {
     CloudflareR2 client = new CloudflareR2();
 
     {
@@ -25,6 +26,8 @@ public class TestBase {
     public void testListBucket() {
         String s = client.listBucket();
         assertNotNull(s);
+        Map<String, String> stringStringMap = client.listBucketXml();
+        System.out.println(stringStringMap);
     }
 
     @Test
