@@ -213,7 +213,7 @@ public class MapTool {
     }
 
     /**
-     * 将给定的对象转换为XML格式的字符串
+     * 将给定的对象转换为 XML 格式的字符串
      *
      * @param bean 要转换的对象
      * @return 转换后的XML格式的字符串

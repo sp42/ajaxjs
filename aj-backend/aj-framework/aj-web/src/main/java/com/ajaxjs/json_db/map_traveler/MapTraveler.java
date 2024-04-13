@@ -51,8 +51,7 @@ public class MapTraveler {
                 if (value instanceof Map)
                     traveler((Map<String, Object>) value, map, level + 1);
 
-                // 如果value是List类型
-                if (value instanceof List) {
+                if (value instanceof List) {// 如果value是List类型
                     List<?> list = (List<?>) value;
 
                     // 如果list的大小大于0且第一个元素是Map类型，则递归调用traveler方法，并传入list作为参数，level加1
@@ -111,5 +110,4 @@ public class MapTraveler {
      * 当遇到一个节点的时候的回调
      */
     private MapEntryHandler onNode;
-
 }

@@ -27,6 +27,14 @@ function getLoginInfo(loginUrl) {
     if (token) {
         accessToken = decodeURIComponent(token);
         localStorage.setItem("accessToken", accessToken);
+
+        // 只需要第一次的参数，之后不需要，现在清除       
+        const url = new URL(location.href); // 创建一个包含查询参数的URL
+        const params = new URLSearchParams(url.search);// 获取URL中的查询参数
+        params.delete('token');// 删除名为'b'的参数
+        url.search = params.toString();// 更新URL的查询参数
+
+        location.assign(url.href);
     }
 
     // window.JWT_TOKEN = JSON.parse(accessToken);
@@ -57,7 +65,6 @@ let r = payload.aud.match(/(?<=tenantId=)\d+/);
 
 if (r && r[0]) {
     tenantId = Number(r[0]);
-    
 }
 
 new Vue({
@@ -68,6 +75,10 @@ new Vue({
     },
     methods: {
         logout() {
+            // 通知内嵌的网页登出
+            let iframe = document.querySelector('iframe');
+            iframe.contentWindow.postMessage('doLogout', '*');
+
             localStorage.removeItem("accessToken");
             location.assign(loginUrl);
         }
