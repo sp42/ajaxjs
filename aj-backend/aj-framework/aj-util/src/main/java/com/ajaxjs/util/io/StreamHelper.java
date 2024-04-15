@@ -58,10 +58,22 @@ public class StreamHelper {
         return result.toString();
     }
 
+    /**
+     * 从输入流中读取数据，并对每行数据应用提供的消费函数。
+     *
+     * @param in 输入流，从中读取数据。
+     * @param fn 消费函数，用于处理读取到的每行数据。
+     */
     public static void read(InputStream in, Consumer<String> fn) {
         read(new InputStreamReader(in, StandardCharsets.UTF_8), fn);
     }
 
+    /**
+     * 从 InputStreamReader 中读取数据，并逐行消费。
+     *
+     * @param inReader 输入流读取器，用于读取数据。
+     * @param fn       消费函数，接收一行数据作为参数，对每行数据进行处理。
+     */
     public static void read(InputStreamReader inReader, Consumer<String> fn) {
         try (
                 /*
@@ -296,5 +308,4 @@ public class StreamHelper {
 
         return bytes;
     }
-
 }

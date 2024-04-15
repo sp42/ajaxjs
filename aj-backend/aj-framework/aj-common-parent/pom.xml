@@ -9,7 +9,7 @@
         <relativePath />
     </parent>
     <artifactId>aj-common-parent</artifactId>
-    <version>1.8</version>
+    <version>1.9</version>
     <packaging>pom</packaging>
     <description>常见项目的依赖</description>
 
@@ -148,7 +148,7 @@
         <dependency>
             <groupId>com.ajaxjs</groupId>
             <artifactId>ajaxjs-framework</artifactId>
-            <version>1.1.8</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
 </project>
