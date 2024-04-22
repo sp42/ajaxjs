@@ -16,14 +16,13 @@ public class TextRankWithMultiWin {
     private static int keywordNum = 5;
 
     /**
-     * set the number of keywords to extract
+     * 设置要提取的关键字数量
      *
-     * @param sysKeywordNum(int): number of keywords to extractt
+     * @param sysKeywordNum 整数类型，指定要提取的关键字的数量
      */
     public static void setKeywordNumber(int sysKeywordNum) {
         keywordNum = sysKeywordNum;
     }
-
 
     /**
      * integrate the results of TextRank algorithm  with different co-occurance window
@@ -49,10 +48,8 @@ public class TextRankWithMultiWin {
                 Map.Entry<String, Float> entry = it.next();
                 key = entry.getKey();
                 value = entry.getValue();
-                if (allKeywordScore.containsKey(key))
-                    allKeywordScore.put(key, allKeywordScore.get(key) + value);
-                else
-                    allKeywordScore.put(key, value);
+                if (allKeywordScore.containsKey(key)) allKeywordScore.put(key, allKeywordScore.get(key) + value);
+                else allKeywordScore.put(key, value);
             }
         }
         // sort the result in terms of the score of each word

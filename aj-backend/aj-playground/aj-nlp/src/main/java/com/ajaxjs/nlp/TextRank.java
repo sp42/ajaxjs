@@ -11,6 +11,10 @@
  */
 package com.ajaxjs.nlp;
 
+import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.dictionary.stopword.CoreStopWordDictionary;
+import com.hankcs.hanlp.seg.common.Term;
+
 import java.util.*;
 
 
@@ -26,7 +30,6 @@ public class TextRank {
         nKeyword = sysKeywordNum;
     }
 
-
     public static void setWindowSize(int window) {
         coOccuranceWindow = window;
     }
@@ -34,10 +37,11 @@ public class TextRank {
 
     /**
      * extract keywords in terms of title and content of document
-     * @param title(String): title of document
+     *
+     * @param title(String):   title of document
      * @param content(String): content of document
-//     * @param sysKeywordCount(int): number of keywords to extract,default 5
-//     * @param window(int): size of the co-occur window, default 3
+     *                         //     * @param sysKeywordCount(int): number of keywords to extract,default 5
+     *                         //     * @param window(int): size of the co-occur window, default 3
      * @return (List < String >): list of keywords
      */
     public static List<String> getKeyword(String title, String content) {
@@ -46,24 +50,21 @@ public class TextRank {
         //rank keywords in terms of their score
         List<Map.Entry<String, Float>> entryList = new ArrayList<>(score.entrySet());
         Collections.sort(entryList, new Comparator<Map.Entry<String, Float>>() {
-                    @Override
-                    public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
-                        return (o1.getValue() - o2.getValue() > 0 ? -1 : 1);
-                    }
-                }
-        );
+            @Override
+            public int compare(Map.Entry<String, Float> o1, Map.Entry<String, Float> o2) {
+                return (o1.getValue() - o2.getValue() > 0 ? -1 : 1);
+            }
+        });
 
         //System.out.println("After sorting: "+entryList);
 
-        List<String> sysKeywordList = new ArrayList<String>();
-
+        List<String> sysKeywordList = new ArrayList<>();
         //List<String>  unmergedList=new ArrayList<String>();
         for (int i = 0; i < nKeyword; ++i) {
             try {
                 //unmergedList.add(entryList.get(i).getKey());
                 sysKeywordList.add(entryList.get(i).getKey());
             } catch (IndexOutOfBoundsException e) {
-                continue;
             }
         }
 
@@ -74,6 +75,7 @@ public class TextRank {
 
     /**
      * judge whether a word belongs to stop words
+     *
      * @param term(Term): word needed to be judged
      * @return if the word is a stop word,return false;otherwise return true
      */
@@ -83,17 +85,17 @@ public class TextRank {
 
     /**
      * return score of each word after TextRank algorithm
-     * @param title(String): title of document
+     *
+     * @param title(String):   title of document
      * @param content(String): content of document
-//     * @param window(int): size of the co-occur window, default 3
-     * @return (Map < String, Float >):  score of each word
+     *                         //     * @param window(int): size of the co-occur window, default 3
+     * @return score of each word
      */
     public static Map<String, Float> getWordScore(String title, String content) {
         //segment text into words
         List<Term> termList = HanLP.segment(title + content);
         int count = 1;  //position of each word
         Map<String, Integer> wordPosition = new HashMap<>();
-
         List<String> wordList = new ArrayList<>();
 
         //filter stop words
@@ -122,9 +124,8 @@ public class TextRank {
 
             for (String w1 : que) {
                 for (String w2 : que) {
-                    if (w1.equals(w2)) {
+                    if (w1.equals(w2))
                         continue;
-                    }
 
                     words.get(w1).add(w2);
                     words.get(w2).add(w1);
@@ -156,8 +157,7 @@ public class TextRank {
             score = m;
 
             //exit once recurse
-            if (max_diff <= min_diff)
-                break;
+            if (max_diff <= min_diff) break;
         }
 
         return score;
