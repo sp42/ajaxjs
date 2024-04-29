@@ -47,7 +47,7 @@ public class SchedulerInterceptor implements WorkflowInterceptor {
             // 如果有期望完成时间则设置限期
             Date expireDate = task.getExpireDate();
             if (expireDate != null)
-                schedule(id, task, expireDate, JobType.EXECUTER.ordinal(), exec.getArgs());
+                schedule(id, task, expireDate, JobType.EXECUTOR.ordinal(), exec.getArgs());
 
             // 如果有提醒时间则设置提醒
             Date remindDate = task.getRemindDate();
