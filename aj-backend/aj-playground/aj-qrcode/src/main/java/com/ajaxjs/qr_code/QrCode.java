@@ -52,8 +52,6 @@ import java.util.Objects;
  */
 public final class QrCode {
 
-    /*---- Static factory functions (high level) ----*/
-
     /**
      * Returns a QR Code representing the specified Unicode text string at the specified error correction level.
      * As a conservative upper bound, this function is guaranteed to succeed for strings that have 738 or fewer
@@ -65,8 +63,7 @@ public final class QrCode {
      * @param ecl  the error correction level to use (not {@code null}) (boostable)
      * @return a QR Code (not {@code null}) representing the text
      * @throws NullPointerException if the text or error correction level is {@code null}
-     * @throws DataTooLongException if the text fails to fit in the
-     *                              largest version QR Code at the ECL, which means it is too long
+     * @throws DataTooLongException if the text fails to fit in the largest version QR Code at the ECL, which means it is too long
      */
     public static QrCode encodeText(CharSequence text, Ecc ecl) {
         Objects.requireNonNull(text);
@@ -87,8 +84,7 @@ public final class QrCode {
      * @param ecl  the error correction level to use (not {@code null}) (boostable)
      * @return a QR Code (not {@code null}) representing the data
      * @throws NullPointerException if the data or error correction level is {@code null}
-     * @throws DataTooLongException if the data fails to fit in the
-     *                              largest version QR Code at the ECL, which means it is too long
+     * @throws DataTooLongException if the data fails to fit in the largest version QR Code at the ECL, which means it is too long
      */
     public static QrCode encodeBinary(byte[] data, Ecc ecl) {
         Objects.requireNonNull(data);
@@ -772,7 +768,7 @@ public final class QrCode {
     }
 
     // Returns true iff the i'th bit of x is set to 1.
-    static boolean getBit(int x, int i) {
+    public static boolean getBit(int x, int i) {
         return ((x >>> i) & 1) != 0;
     }
 

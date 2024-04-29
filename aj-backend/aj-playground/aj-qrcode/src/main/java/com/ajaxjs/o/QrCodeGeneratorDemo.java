@@ -1,11 +1,11 @@
-/*
- * Fast QR Code generator demo
+package com.ajaxjs.o;/*
+ * QR Code generator demo (Java)
  *
  * Run this command-line program with no arguments. The program creates/overwrites a bunch of
  * PNG and SVG files in the current working directory to demonstrate the creation of QR Codes.
  *
  * Copyright (c) Project Nayuki. (MIT License)
- * https://www.nayuki.io/page/fast-qr-code-generator-library
+ * https://www.nayuki.io/page/qr-code-generator-library
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -24,8 +24,6 @@
  *   Software.
  */
 
-package com.ajaxjs.qr_code_fast;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,19 +36,6 @@ import javax.imageio.ImageIO;
 
 
 public final class QrCodeGeneratorDemo {
-
-    // The main application program.
-    public static void main(String[] args) throws IOException {
-        doBasicDemo();
-        doVarietyDemo();
-        doSegmentDemo();
-        doMaskDemo();
-    }
-
-
-
-    /*---- Demo suite ----*/
-
     // Creates a single QR Code, then writes it to a PNG file and an SVG file.
     private static void doBasicDemo() throws IOException {
         String text = "Hello, world!";          // User-supplied Unicode text
@@ -86,14 +71,7 @@ public final class QrCodeGeneratorDemo {
         writePng(toImage(qr, 10, 3), "unicode-QR.png");
 
         // Moderately large QR Code using longer text (from Lewis Carroll's Alice in Wonderland)
-        qr = QrCode.encodeText(
-                "Alice was beginning to get very tired of sitting by her sister on the bank, "
-                        + "and of having nothing to do: once or twice she had peeped into the book her sister was reading, "
-                        + "but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice "
-                        + "'without pictures or conversations?' So she was considering in her own mind (as well as she could, "
-                        + "for the hot day made her feel very sleepy and stupid), whether the pleasure of making a "
-                        + "daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly "
-                        + "a White Rabbit with pink eyes ran close by her.", QrCode.Ecc.HIGH);
+        qr = QrCode.encodeText("Alice was beginning to get very tired of sitting by her sister on the bank, " + "and of having nothing to do: once or twice she had peeped into the book her sister was reading, " + "but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice " + "'without pictures or conversations?' So she was considering in her own mind (as well as she could, " + "for the hot day made her feel very sleepy and stupid), whether the pleasure of making a " + "daisy-chain would be worth the trouble of getting up and picking the daisies, when suddenly " + "a White Rabbit with pink eyes ran close by her.", QrCode.Ecc.HIGH);
         writePng(toImage(qr, 6, 10), "alice-wonderland-QR.png");
     }
 
@@ -109,9 +87,7 @@ public final class QrCodeGeneratorDemo {
         qr = QrCode.encodeText(silver0 + silver1, QrCode.Ecc.LOW);
         writePng(toImage(qr, 10, 3), "sqrt2-monolithic-QR.png");
 
-        segs = Arrays.asList(
-                QrSegment.makeAlphanumeric(silver0),
-                QrSegment.makeNumeric(silver1));
+        segs = Arrays.asList(QrSegment.makeAlphanumeric(silver0), QrSegment.makeNumeric(silver1));
         qr = QrCode.encodeSegments(segs, QrCode.Ecc.LOW);
         writePng(toImage(qr, 10, 3), "sqrt2-segmented-QR.png");
 
@@ -122,10 +98,7 @@ public final class QrCodeGeneratorDemo {
         qr = QrCode.encodeText(golden0 + golden1 + golden2, QrCode.Ecc.LOW);
         writePng(toImage(qr, 8, 5), "phi-monolithic-QR.png");
 
-        segs = Arrays.asList(
-                QrSegment.makeBytes(golden0.getBytes(StandardCharsets.UTF_8)),
-                QrSegment.makeNumeric(golden1),
-                QrSegment.makeAlphanumeric(golden2));
+        segs = Arrays.asList(QrSegment.makeBytes(golden0.getBytes(StandardCharsets.UTF_8)), QrSegment.makeNumeric(golden1), QrSegment.makeAlphanumeric(golden2));
         qr = QrCode.encodeSegments(segs, QrCode.Ecc.LOW);
         writePng(toImage(qr, 8, 5), "phi-segmented-QR.png");
 
@@ -191,8 +164,7 @@ public final class QrCodeGeneratorDemo {
      */
     private static BufferedImage toImage(QrCode qr, int scale, int border, int lightColor, int darkColor) {
         Objects.requireNonNull(qr);
-        if (scale <= 0 || border < 0)
-            throw new IllegalArgumentException("Value out of range");
+        if (scale <= 0 || border < 0) throw new IllegalArgumentException("Value out of range");
         if (border > Integer.MAX_VALUE / 2 || qr.size + border * 2L > Integer.MAX_VALUE / scale)
             throw new IllegalArgumentException("Scale or border too large");
 
@@ -229,28 +201,18 @@ public final class QrCodeGeneratorDemo {
         Objects.requireNonNull(qr);
         Objects.requireNonNull(lightColor);
         Objects.requireNonNull(darkColor);
-        if (border < 0)
-            throw new IllegalArgumentException("Border must be non-negative");
+        if (border < 0) throw new IllegalArgumentException("Border must be non-negative");
         long brd = border;
-        StringBuilder sb = new StringBuilder()
-                .append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-                .append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n")
-                .append(String.format("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 %1$d %1$d\" stroke=\"none\">\n",
-                        qr.size + brd * 2))
-                .append("\t<rect width=\"100%\" height=\"100%\" fill=\"" + lightColor + "\"/>\n")
-                .append("\t<path d=\"");
+        StringBuilder sb = new StringBuilder().append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n").append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n").append(String.format("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 %1$d %1$d\" stroke=\"none\">\n", qr.size + brd * 2)).append("\t<rect width=\"100%\" height=\"100%\" fill=\"" + lightColor + "\"/>\n").append("\t<path d=\"");
         for (int y = 0; y < qr.size; y++) {
             for (int x = 0; x < qr.size; x++) {
                 if (qr.getModule(x, y)) {
-                    if (x != 0 || y != 0)
-                        sb.append(" ");
+                    if (x != 0 || y != 0) sb.append(" ");
                     sb.append(String.format("M%d,%dh1v1h-1z", x + brd, y + brd));
                 }
             }
         }
-        return sb.append("\" fill=\"").append(darkColor).append("\"/>\n")
-                .append("</svg>\n")
-                .toString();
+        return sb.append("\" fill=\"" + darkColor + "\"/>\n").append("</svg>\n").toString();
     }
 
 }

@@ -32,25 +32,27 @@ public class SchedulerInterceptor implements WorkflowInterceptor {
 
     /**
      * 时限控制拦截方法
+     *
+     * @param exec 任务执行的上下文对象，包含多个任务信息
      */
     @Override
-    public void intercept(Execution execution) {
+    public void intercept(Execution exec) {
         if (!isScheduled)
             return;
 
-        for (Task task : execution.getTasks()) {
+        for (Task task : exec.getTasks()) {
             // 流程 id + 流程实例 id + 任务 id
-            String id = execution.getProcess().getId() + "-" + execution.getOrder().getId() + "-" + task.getId();
+            String id = exec.getProcess().getId() + "-" + exec.getOrder().getId() + "-" + task.getId();
 
             // 如果有期望完成时间则设置限期
             Date expireDate = task.getExpireDate();
             if (expireDate != null)
-                schedule(id, task, expireDate, JobType.EXECUTER.ordinal(), execution.getArgs());
+                schedule(id, task, expireDate, JobType.EXECUTER.ordinal(), exec.getArgs());
 
             // 如果有提醒时间则设置提醒
             Date remindDate = task.getRemindDate();
             if (remindDate != null)
-                schedule(id, task, remindDate, JobType.REMINDER.ordinal(), execution.getArgs());
+                schedule(id, task, remindDate, JobType.REMINDER.ordinal(), exec.getArgs());
         }
     }
 

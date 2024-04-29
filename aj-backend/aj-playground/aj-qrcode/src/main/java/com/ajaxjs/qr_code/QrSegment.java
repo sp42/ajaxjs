@@ -134,7 +134,6 @@ public final class QrSegment {
         return result;
     }
 
-
     /**
      * Returns a segment representing an Extended Channel Interpretation
      * (ECI) designator with the specified assignment value.

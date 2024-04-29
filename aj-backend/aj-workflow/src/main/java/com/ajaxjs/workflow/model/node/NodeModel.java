@@ -106,13 +106,25 @@ public abstract class NodeModel extends BaseWfModel {
         return models;
     }
 
+    /**
+     * 将符合条件的下一个模型添加到模型列表中。
+     * 该方法递归地检查给定转换模型的目标节点，如果目标节点是特定类的实例，则将其添加到模型列表中。
+     * 如果目标节点不是该类的实例，则递归地检查目标节点的所有输出转换模型。
+     *
+     * @param models 模型列表，用于收集符合条件的模型。
+     * @param tm 当前检查的转换模型。
+     * @param clazz 需要匹配的目标类。
+     * @param <T> 模型的类型参数。
+     */
     @SuppressWarnings("unchecked")
     protected <T> void addNextModels(List<T> models, TransitionModel tm, Class<T> clazz) {
         NodeModel next = tm.getTarget();
 
+        // 检查当前节点是否为目标类的实例，是则添加到模型列表中
         if (clazz.isInstance(next))
             models.add((T) next);
         else {
+            // 如果不是目标类的实例，则递归检查该节点的所有输出转换模型
             for (TransitionModel tm2 : next.getOutputs())
                 addNextModels(models, tm2, clazz);
         }

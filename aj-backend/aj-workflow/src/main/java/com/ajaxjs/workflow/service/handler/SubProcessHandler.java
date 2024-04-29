@@ -35,7 +35,9 @@ public class SubProcessHandler implements IHandler {
     }
 
     /**
-     * 子流程执行的处理
+     * 处理子流程的执行逻辑。
+     *
+     * @param exec 表示当前执行流程的对象，用于获取流程引擎和其他相关信息并进行操作。
      */
     @Override
     public void handle(Execution exec) {
@@ -46,23 +48,29 @@ public class SubProcessHandler implements IHandler {
         Order order;
 
         if (isFutureRunning) {
-            // 创建单个线程执行器来执行启动子流程的任务
+            // 使用单线程执行器异步执行启动子流程的任务
             ExecutorService es = Executors.newSingleThreadExecutor();
             // 提交执行任务，并返回 future
             Future<Order> future = es.submit(new ExecuteTask(exec, process, model.getName()));
 
             try {
-                es.shutdown();
-                order = future.get();
+                es.shutdown(); // 关闭执行器
+                order = future.get(); // 等待任务完成并获取结果
             } catch (InterruptedException e) {
+                // 处理线程被中断的异常
                 throw new WfException("创建子流程线程被强制终止执行", e.getCause());
             } catch (ExecutionException e) {
+                // 处理执行任务时产生的异常
                 throw new WfException("创建子流程线程执行异常.", e.getCause());
             }
         } else
+            // 否则，直接同步方式启动子流程
             order = engine.startInstanceByExecution(child);
 
+        // 验证子流程创建是否成功
         Objects.requireNonNull(order, "子流程创建失败");
+        // 将子流程中的任务添加到当前执行流程的任务列表中
         exec.addTasks(WfData.findTasksByOrderId(order.getId()));
     }
+
 }

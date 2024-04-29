@@ -21,7 +21,7 @@
  *   Software.
  */
 
-package com.ajaxjs.qr_code_fast;
+package com.ajaxjs.qr_code.fast;
 
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ import java.util.function.Function;
 
 
 // A thread-safe cache based on soft references.
-final class Memoizer<T, R> {
+public final class Memoizer<T, R> {
     private final Function<T, R> function;
     Map<T, SoftReference<R>> cache = new ConcurrentHashMap<>();
     private Set<T> pending = new HashSet<>();

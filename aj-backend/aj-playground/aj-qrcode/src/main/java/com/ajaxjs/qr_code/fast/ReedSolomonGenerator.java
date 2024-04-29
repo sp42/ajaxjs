@@ -21,14 +21,14 @@
  *   Software.
  */
 
-package com.ajaxjs.qr_code_fast;
+package com.ajaxjs.qr_code.fast;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 
 // Computes Reed-Solomon error correction codewords for given data codewords.
-final class ReedSolomonGenerator {
+public final class ReedSolomonGenerator {
 	
 	// Use this memoizer to get instances of this class.
 	public static final Memoizer<Integer,ReedSolomonGenerator> MEMOIZER
@@ -100,6 +100,7 @@ final class ReedSolomonGenerator {
 			z ^= ((y >>> i) & 1) * x;
 		}
 		assert z >>> 8 == 0;
+
 		return z;
 	}
 	
