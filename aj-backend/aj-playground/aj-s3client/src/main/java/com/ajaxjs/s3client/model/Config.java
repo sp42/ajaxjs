@@ -31,4 +31,9 @@ public class Config {
      * 签名中的标识，每个厂商不同
      */
     private String remark;
+
+    /**
+     * 地区
+     */
+    private String region = "auto";
 }

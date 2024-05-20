@@ -1,6 +1,6 @@
 package com.ajaxjs.s3client;
 
-import com.ajaxjs.s3client.factory.CloudflareR2;
+import com.ajaxjs.s3client.factory.Backblaze;
 import com.ajaxjs.s3client.model.Config;
 import com.ajaxjs.util.io.FileHelper;
 import org.junit.Test;
@@ -11,17 +11,18 @@ import java.util.Map;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class TestCloudflareR2 {
-    CloudflareR2 client = new CloudflareR2();
+public class TestBackblaze {
+    Backblaze client = new Backblaze();
 
     {
         Map<String, Object> _cfg = TestBase.getConfigFromYml("application.yml");
 
         Config cfg = new Config();
-        cfg.setEndPoint((String) _cfg.get("S3Storage_R2_endpoint"));
-        cfg.setAccessKey((String) _cfg.get("S3Storage_R2_accessKeyId"));
-        cfg.setSecretKey((String) _cfg.get("S3Storage_R2_secretAccessKey"));
-        cfg.setBucketName((String) _cfg.get("S3Storage_R2_bucket"));
+        cfg.setEndPoint((String) _cfg.get("S3Storage_Backblaze_endpoint"));
+        cfg.setAccessKey((String) _cfg.get("S3Storage_Backblaze_accessKeyId"));
+        cfg.setSecretKey((String) _cfg.get("S3Storage_Backblaze_secretAccessKey"));
+        cfg.setBucketName((String) _cfg.get("S3Storage_Backblaze_bucket"));
+        cfg.setRegion((String) _cfg.get("S3Storage_Backblaze_region"));
 
         client.setConfig(cfg);
     }

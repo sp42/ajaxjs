@@ -1,7 +1,7 @@
 package com.ajaxjs.s3client;
 
-import com.ajaxjs.s3client.model.Config;
 import com.ajaxjs.net.http.ResponseEntity;
+import com.ajaxjs.s3client.model.Config;
 import lombok.Data;
 
 @Data
@@ -12,7 +12,14 @@ public abstract class BaseS3Client implements S3Client {
 
     public static final String HTTPS = "https://";
 
+    public static final String ACL_PUBLIC_READ = "public-read";
+
     private Config config;
+
+    /**
+     * 是否设置 HOST 字段到 请求头，如 true 则是 endpoint 去掉 http 后的地址
+     */
+    private boolean isSetHost;
 
     @Override
     public boolean putObject(String objectName, byte[] fileBytes) {

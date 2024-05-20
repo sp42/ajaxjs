@@ -4,10 +4,12 @@ import com.ajaxjs.s3client.signer_v4.AwsCredentials;
 import com.ajaxjs.s3client.signer_v4.CanonicalRequest;
 import com.ajaxjs.s3client.signer_v4.SignBuilder;
 import com.ajaxjs.util.MessageDigestHelper;
+import org.springframework.util.ObjectUtils;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class BaseS3ClientSigV4 extends BaseS3Client {
@@ -17,12 +19,35 @@ public abstract class BaseS3ClientSigV4 extends BaseS3Client {
     public final static String EMPTY_SHA256 = MessageDigestHelper.getSHA256("");
 
     public SignBuilder initSignatureBuilder(String date, String hash) {
+        return initSignatureBuilder(date, hash, null);
+    }
+
+    /**
+     * @param date
+     * @param hash
+     * @param extraRequestHeaders 其他自定义的字段，参与签名和实际 HTTP 头请求
+     * @return
+     */
+    public SignBuilder initSignatureBuilder(String date, String hash, Map<String, String> extraRequestHeaders) {
         String accessKey = getConfig().getAccessKey(), secretKey = getConfig().getSecretKey();
 
-        return new SignBuilder().setAwsCredentials(new AwsCredentials(accessKey, secretKey))
-                .setRegion("auto")
+        SignBuilder builder = new SignBuilder().setAwsCredentials(new AwsCredentials(accessKey, secretKey))
+                .setRegion(getConfig().getRegion())
                 .header("x-amz-date", date)
+//                .header("host", "s3.us-west-002.backblazeb2.com")
                 .header("x-amz-content-sha256", hash);
+
+        if (isSetHost()) {
+            String host = getConfig().getEndPoint().replaceAll("http(s?)://", "");
+            builder.header("host", host);
+        }
+
+        if (!ObjectUtils.isEmpty(extraRequestHeaders)) {
+            for (String key : extraRequestHeaders.keySet())
+                builder.header(key, extraRequestHeaders.get(key));
+        }
+
+        return builder;
     }
 
     /**
@@ -42,10 +67,24 @@ public abstract class BaseS3ClientSigV4 extends BaseS3Client {
     }
 
     public Consumer<HttpURLConnection> setRequestHead(String date, String signature, String hash) {
+        return setRequestHead(date, signature, hash, null);
+    }
+
+    public Consumer<HttpURLConnection> setRequestHead(String date, String signature, String hash, Map<String, String> extraRequestHeaders) {
         return conn -> {
             conn.setRequestProperty("x-amz-date", date); // 设置请求头 Date
             conn.setRequestProperty("x-amz-content-sha256", hash); // 设置请求头
             conn.setRequestProperty(AUTHORIZATION, signature); // 设置请求头 Authorization
+
+            if (isSetHost()) {
+                String host = getConfig().getEndPoint().replaceAll("http(s?)://", "");
+                conn.setRequestProperty("host", host);
+            }
+
+            if (!ObjectUtils.isEmpty(extraRequestHeaders)) {
+                for (String key : extraRequestHeaders.keySet())
+                    conn.setRequestProperty(key, extraRequestHeaders.get(key));
+            }
         };
     }
 }
