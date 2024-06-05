@@ -59,6 +59,8 @@
       <li><a target="iframepage" href="../job/job.jsp">招聘管理</a></li>
     </OpacityBanner>
 
+        <br />
+    <br />
     <br />
     <br />
     <br />
@@ -128,35 +130,6 @@
 
     <br />
     <br />
-    <br />
-
-    <h2>Baidu 自定义搜索</h2>
-    <table class="aj-table" align="center">
-      <thead>
-        <tr>
-          <th>属性</th>
-          <th>含义</th>
-          <th>类型</th>
-          <th>是否必填，默认值</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>siteDomainName</td>
-          <td>搜索网站之域名</td>
-          <td>String</td>
-          <td>n, 通过 js 返回域名</td>
-        </tr>
-      </tbody>
-    </table>
-    <br />
-    <br />
-    <div style="margin:0 auto;width:600px;">
-      <BaiduSearch />
-    </div>
-
-    <br />
-    <br />
 
     <h2>文章 Article</h2>
         <Article title="新股上市首日破发并非坏事 警示投资者打新风险" author="张三" source="http://qq.com" style="max-width:700px;margin:0 auto">
@@ -180,9 +153,8 @@
 import OpacityBanner from "@/widget/OpacityBanner.vue";
 import ProcessLine from "@/widget/ProcessLine.vue";
 import AccordionMenu from "@/widget/AccordionMenu.vue";
-import Expander from "@/widget/Expander.vue";
-import BaiduSearch from "@/widget/BaiduSearch.vue";
-import ImageEnlarger from "@/widget/ImageEnlarger.vue";
+import Expander from "@/widget/Expander";
+import ImageEnlarger from "@/widget/ImageEnlarger";
 import Article from '@/widget/Article.vue';
 
 export default {
@@ -191,7 +163,6 @@ export default {
     ProcessLine,
     AccordionMenu,
     Expander,
-    BaiduSearch,
     ImageEnlarger,
     Article
   },

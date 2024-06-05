@@ -95,7 +95,7 @@ public class Filter {
 	 * @param type
 	 * @return
 	 */
-	public static String cleanXSS(String str, Handle type) {
+	public static String --------(String str, Handle type) {
 		return clean(str, XSS_Pattern, matcher -> {
 			if (type == Handle.TYPE_DELETE)
 				return matcher.replaceAll("");

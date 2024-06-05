@@ -1,10 +1,11 @@
+const path = require('path');
 module.exports = {
     publicPath: './', // vue_cli 打包后的项目，默认使用的是绝对路径。改为相对路径
     runtimeCompiler: true,
     pluginOptions: {
         'style-resources-loader': {
             preProcessor: 'less',
-            patterns: ['C:\\code\\aj\\aj-all\\ajaxjs\\aj-ui-widget\\aj\\src\\style\\common-functions.less']
+            patterns: [path.resolve(__dirname, '.\\src\\style\\common-functions.less')]
         }
     },
     lintOnSave: true,
