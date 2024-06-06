@@ -8,9 +8,9 @@ import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/theme/monokai.css'// 编辑的主题文件
 import 'codemirror/theme/base16-light.css'
 import './code-prettify';
-import { copyToClipboard } from '../../util/utils';
 import tips from "../widget/tips.vue";
 import api from "./api.vue";
+import { copyToClipboard } from '../../util/utils';
 import { isDev } from '../../util/utils';
 import { formatSql } from './format-sql.js';
 
@@ -56,8 +56,7 @@ export default {
         };
     },
     mounted() {
-        // 加载codemirror编辑器必须点击一下代码才能正常显示并且代码向左偏移
-        setTimeout(() => this.$refs.cm.refresh(), 500);
+        setTimeout(() => this.$refs.cm.refresh(), 500);// 加载codemirror编辑器必须点击一下代码才能正常显示并且代码向左偏移
     },
     methods: {
         parentDir() {
@@ -115,30 +114,15 @@ export default {
         }
     },
     watch: {
-        // "editorData.isCustomSql"(v) {
-        //     if (v) {
-        //         switch (this.editorData.type) {
-        //             case "infoSql":
-        //                 this.editorData.sql = "SELECT * FROM xxx";
-        //                 break;
-        //             case "listSql":
-        //                 this.editorData.sql = "SELECT * FROM xxx";
-        //                 break;
-        //             case "createSql":
-        //                 this.editorData.sql = "SELECT * FROM xxx";
-        //                 break;
-        //             case "updateSql":
-        //                 this.editorData.sql = "SELECT * FROM xxx";
-        //                 break;
-        //             case "deleteSql":
-        //                 this.editorData.sql = "DELETE * FROM xxx";
-        //                 break;
-        //         }
-        //     } else {
-        //         this.currentData[key] = null;
-        //         this.editorData.sql = "";
-        //     }
-        // },
+        "editorData.isCustomSql"(v) {
+            if (v) {
+
+            } else {
+                this.editorData.sql = "";
+                if (this.currentData[this.editorData.type])
+                    this.currentData[this.editorData.type] = '__NULL_STRING__';
+            }
+        },
         // 同步到 data
         "editorData.sql"(v) {
             this.currentData[this.editorData.type] = this.editorData.sql;

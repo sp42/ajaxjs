@@ -13,7 +13,7 @@ public class ClientUtils {
 	/**
 	 * 返回 HTTP 403
 	 * 
-	 * @param response
+	 * @param response 响应对象
 	 */
 	public static void returnForbidden(HttpServletResponse response) {
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);

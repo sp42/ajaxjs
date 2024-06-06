@@ -26,7 +26,7 @@ export default {
                 data: this.initTableData,
                 total: 0,
                 pageNo: 1,
-                pageSize: 6,
+                pageSize: 10,
                 loading: false,
                 search: {
                     name: ''
@@ -51,7 +51,7 @@ export default {
             let r: ManagedRequest = prepareRequest(listCfg.dataBinding, params, this);
             this.list.data = []; // 清空数据
 
-            xhr_get(r.url, (j: RepsonseResult) => {                
+            xhr_get(r.url, (j: RepsonseResult) => {
                 if (j.status) {
                     this.list.data = j.data.rows;
                     this.list.total = j.data.total;
@@ -66,6 +66,8 @@ export default {
         },
 
         createEntity(): void {
+            this.$refs.FromRenderer.data = {};
+            this.$refs.FromRenderer.$forceUpdate();
             this._openForm(null, null, 1);
         },
 
@@ -95,6 +97,15 @@ export default {
             });
         },
 
+        // 打开表单，这是全屏的方式
+        _openCreateFormFull(formId: number, name: string): void {
+            location.hash = `#/form?formId=${formId}&title=${name}`;
+        },
+        _openEditFormFull(formId: number, name: string, entityId: number): void {
+            location.hash = `#/form?formId=${formId}&title=${name}&entityId=${entityId}`;
+        },
+
+
         _openForm(row: any, rowId: number, formMode: number): void {
             // 加载表单配置
             let apiRoot: string = this.apiRoot || this.$parent.$parent.$parent.apiRoot;
@@ -109,17 +120,19 @@ export default {
             else if (formMode == 2)
                 this.form.title = `编辑 ${row.name}`;
 
-            // let formCfgId: number = 5;// 写死 表单配置
-            let formCfgId: number = this.cfg.formCfgId;//  表单配置
-            if (!formCfgId) {
+            let formCfgId: number;//  表单配置
+
+            if (!this.cfg.bindingForm || !this.cfg.bindingForm.id) {
                 alert('未绑定表单，无法打开');
                 return;
-            }
+            } else
+                formCfgId = this.cfg.bindingForm.id;//  表单配置
+                debugger
 
-            xhr_get(`${apiRoot}/api/cms/form-factory?id=${formCfgId}`, (j: RepsonseResult) => {
+            xhr_get(`${apiRoot}/common_api/widget_config/${formCfgId}`, (j: RepsonseResult) => {
                 if (j.status) {
                     this.isShowForm = true;
-                    this.form.cfg = j.data;// 数据库记录转换到 配置对象;
+                    this.form.cfg = j.data.config;// 数据库记录转换到 配置对象;
                     let cfg: FormFactory_Config = this.form.cfg;
                     this.form.fields = cfg.fields;
                     this.$refs.FromRenderer.status = formMode;
@@ -133,6 +146,27 @@ export default {
                 } else
                     this.$Message.error('未有任何配置');
             });
+        },
+
+        _delete(row: any, api: string): void {
+            this.$Modal.confirm({
+                title: '删除实体',
+                content: `<p>确定删除 ${row.name || '记录'} #${row.id}？</p>`,
+                onOk: () => {
+                    xhr_del(`${api}/${row.id}`, (j: RepsonseResult) => {
+                        if (j.status) {
+                            this.$Message.info('删除成功');
+                            this.getData();
+                        } else
+                            this.$Message.warning(j.message);
+                    });
+                },
+                okText: '删除'
+            });
+        },
+
+        formSave(): void {
+
         },
         btnClk(js: string, entity?: object, index?: number): void {
             if (entity) {

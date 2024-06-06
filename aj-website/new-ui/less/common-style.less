@@ -1,0 +1,196 @@
+@import url("https://sp42_admin.gitee.io/ajaxjs/new-ui/less/common.css");
+
+legend {
+	padding: 0 20px;
+}
+
+.eBusiness {
+	margin-bottom: 10px !important;
+	overflow: hidden;
+	background-color: #f0f0f0;
+	padding: 40px 0px 0 30px;
+}
+
+// 正文内容
+.article-content() {
+	h1 {
+		margin-bottom: 5%;
+		text-align: center;
+		font-size: 30px;
+		font-weight: bold;
+		letter-spacing: 3px;
+	}
+
+	h2 {
+		margin: 4% 0;
+	}
+
+	.createDate {
+		text-align: right;
+		color: gray;
+		margin: 3% 0;
+		font-weight: normal;
+	}
+
+	p,
+	li {
+		margin-top: 1%;
+		margin-bottom: 2%;
+	}
+
+	li {
+		list-style-type: disc;
+		text-indent: 0;
+		margin-left: 30px;
+	}
+
+	img {
+		max-width: 600px;
+		margin: 0 auto;
+		display: block;
+	}
+}
+
+// 分页
+.pagination {
+	text-align: center;
+	padding: 3% 0;
+	clear: both;
+	width: 80%;
+	font-size: 14px;
+	margin: 0 auto;
+
+	li {
+		display: inline-block;
+		padding: 5px 3px;
+	}
+
+	.current {
+		border: 1px solid gray;
+		border-radius: 3px;
+		padding: 5px 10px;
+	}
+}
+
+fieldset.aj-fieldset {
+	border-radius: 5px;
+	border: 1px solid gray;
+	padding: 2%;
+	margin: 1% 0;
+
+	legend {
+		font-weight: bold;
+		letter-spacing: 2px;
+	}
+
+	li {
+		list-style: disc;
+		list-style-position: inside;
+	}
+}
+
+// 网页页脚
+footer {
+	border-top: 1px solid lightgray;
+	background-color: #eee;
+	clear: both;
+	margin-top: 1%;
+	height: 180px;
+	color: gray;
+	padding-top: 2%;
+
+	&>div {
+		width: @pageWidth;
+		margin: 0 auto;
+	}
+
+	.siteMap {
+		td {
+			vertical-align: top;
+			color: white;
+			width: 15.5%;
+
+			&:first-child {
+				display: none;
+			}
+
+			.indentBlock_0 {
+				color: #6a7076;
+				padding: 10px 0;
+				display: block;
+				font-weight: bold;
+				font-size: 15px;
+				letter-spacing: 2px;
+
+				span.dot {
+					display: none;
+				}
+			}
+
+			.indentBlock_1 {
+				font-size: .9rem;
+				display: block;
+				margin: 4px 0;
+				color: #333;
+				letter-spacing: 1px;
+
+				span.dot {
+					color: #8c97a0;
+					font-size: 16px;
+					font-weight: bold;
+					padding-right: 3px;
+				}
+			}
+		}
+	}
+}
+
+.ajaxjs-hr,
+.aj-hr {
+	margin: 1% auto;
+	border: 0;
+	border-top: 1px solid lightgray;
+	border-bottom: 1px solid #fff;
+	clear: both;
+}
+
+.aj-center-title {
+	text-align: center;
+	font-size: 1.3rem;
+	font-weight: bold;
+	letter-spacing: 5px;
+	padding: 5% 0;
+}
+
+.user {
+	&.register {
+		margin: 4% auto;
+		width: 500px;
+		margin-top: 12%;
+
+		.form-group {
+			margin-bottom: 20px;
+		}
+
+		.form-input {
+			width: 250px;
+			padding: 5px;
+		}
+
+		.form-label {
+			display: inline-block;
+			margin-bottom: 5px;
+			width: 100px;
+		}
+
+		input[type=text],
+		input[type=password],
+		input[type=email] {
+			.aj-input-base();
+		}
+
+		button {
+			.aj-btn-base();
+		}
+	}
+}

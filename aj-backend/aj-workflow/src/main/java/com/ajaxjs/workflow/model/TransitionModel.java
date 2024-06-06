@@ -59,6 +59,12 @@ public class TransitionModel extends BaseWfModel {
      */
     private boolean enabled = false;
 
+    /**
+     * 执行与给定执行对象相关联的操作。
+     * 如果当前实例未启用，则该方法直接返回。根据目标对象的类型，可能会创建任务、启动子流程或执行其他操作
+     *
+     * @param exec 执行对象，携带执行上下文信息
+     */
     public void execute(Execution exec) {
         if (!enabled)
             return;

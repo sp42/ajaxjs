@@ -25,7 +25,7 @@ export default {
       apiRoot: window["config"].dsApiRoot,
     };
   },
-  mounted() {
+  mounted(): void {
     this.load();
   },
   methods: {

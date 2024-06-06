@@ -27,6 +27,7 @@
           <Option value="long_date">长日期</Option>
           <Option value="short_date">短日期</Option>
           <Option value="sex">性别</Option>
+          <Option value="stat">实体状态</Option>
           <Option value="render">自定义渲染函数</Option>
           <Option value="clk_event">自定义点击事件</Option>
         </Select>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="page-title">权限管理</h1>
+    <h1 class="page-title">权限管理87887</h1>
 
     <div class="main">
       <div class="left">
@@ -43,18 +43,21 @@
         <br />
         <br />
         <div>
-          <h2>{{currentRole ? '角色 ' + currentRole.name + ' 的权限' : '请选择一个角色'}}</h2>
+          <h2>{{currentRole ? '角色 ' + currentRole.name + ' 的权限' : '请选择一个角色'}}
+
+            <span style="font-weight:normal;font-size:14px;" v-if="currentRole.id == null">请从左侧选择一个角色以继续操作</span>
+          </h2>
 
           <div class="permission-list">
-            <select multiple>
-              <option v-for="item in permission.permissionList" :key="item.name">{{item.name}}</option>
+            <select multiple v-model="selectedPermissions">
+              <option v-for="item in permission.permissionList" :key="item.name" :value="item.id">{{item.name}}</option>
             </select>
             <div class="permission-bts">
-              <Button :disabled="currentRole == null" type="primary" icon="ios-add" @click="addPermission">添加权限</Button>
-              <Button :disabled="currentRole == null" type="warning" icon="ios-remove" @click="removePermission">移除权限</Button>
-              <Button :disabled="currentRole == null" type="error" icon="ios-close" @click="clearPermission">清空权限</Button>
+              <Button :disabled="currentRole.id == null" type="primary" icon="ios-add" @click="addPermission">添加权限</Button>
+              <Button :disabled="!selectedPermissions.length" type="warning" icon="ios-remove" @click="removePermission">移除权限</Button>
+              <Button :disabled="currentRole.id == null" type="error" icon="ios-close" @click="clearPermission">清空权限</Button>
               <br />
-              <Button :disabled="currentRole == null" type="success" icon="ios-add-circle-outline" @click="savePermission">&nbsp;&nbsp;&nbsp;保 存&nbsp;&nbsp;&nbsp;</Button>
+              <Button :disabled="currentRole.id == null" type="success" icon="ios-add-circle-outline" @click="savePermission">&nbsp;&nbsp;&nbsp;保 存&nbsp;&nbsp;&nbsp;</Button>
             </div>
             <p>增加、删除权限请到<a @click="showPermissionMgr(false)">权限管理</a>。</p>
           </div>
@@ -84,7 +87,7 @@
     </Modal>
 
     <Modal v-model="isShowPermissionMgr" width="1000" title="权限管理列表">
-      <PermissionMgr :is-pickup="isPermissionMgrPickup" :on-pickup="pickupPermission" />
+      <PermissionMgr :is-pickup="isPermissionMgrPickup" :on-pickup="pickupPermission" :simple-api="simpleApi" />
     </Modal>
   </div>
 </template>

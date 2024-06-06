@@ -278,7 +278,7 @@ public class JdbcWriter extends JdbcConn implements JdbcConstants {
                     return;
 
                 sb.append(" `").append(field).append("` = ?,");
-                values.add(value);
+                values.add(beanValue2SqlValue(value));
             });
         } else { // Java Bean
             everyBeanField(entity, (field, value) -> {

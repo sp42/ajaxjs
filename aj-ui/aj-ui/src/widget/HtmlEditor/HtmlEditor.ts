@@ -14,24 +14,6 @@ export default {
     mounted(): void {
         this.iframeEl = <HTMLIFrameElement>this.$el.querySelector('iframe');
         this.sourceEditor = <HTMLTextAreaElement>this.$el.querySelector('textarea');
-
-        (<Window>this.iframeEl.contentWindow).onload = (ev: Event) => { // 这个方法只能写在 onload 事件里面， 不写 onload 里还不执行
-            this.iframeDoc = (<Window>this.iframeEl.contentWindow).document;
-            this.iframeDoc.designMode = 'on';
-            this.iframeDoc.addEventListener('paste', onImagePaste.bind(this));// 直接剪切板粘贴上传图片
-
-            new MutationObserver((mutationsList: MutationRecord[], observer: MutationObserver) => {// 监听DOM树变化
-                if (!this.isShowCode) {
-                    this.sourceEditor.value = this.iframeDoc.body.innerHTML;
-                    this.$emit('on-change', this.sourceEditor.value)
-                }
-
-            }).observe(this.iframeDoc.body, { attributes: true, childList: true, subtree: true, characterData: true });
-
-            this.vModel && this.setIframeBody(this.vModel);
-            // this.sourceEditor.value && this.setIframeBody(this.sourceEditor.value);// 有内容
-        }
-
         this.sourceEditor.oninput = (ev: Event) => {
             if (this.isShowCode && this.sourceEditor.value) {
                 this.setIframeBody(this.sourceEditor.value);
@@ -39,17 +21,52 @@ export default {
             }
         }
 
+        (<Window>this.iframeEl.contentWindow).onload = (ev: Event) => {// 这个方法只能写在 onload 事件里面， 不写 onload 里还不执行
+            this.initDocBody();
+        }
+
+        this.initDocBody();
+
         // this.uploadImgMgr = this.$refs.uploadLayer;
     },
     methods: {
+        getIframeDoc(): Document | {} {
+            if (this.iframeEl.contentWindow)
+                return (<Window>this.iframeEl.contentWindow).document;
+            else return {};
+        },
+        getIframeDocBody(): HTMLElement {
+            return this.getIframeDoc().body;
+        },
+
+        initDocBody(): void {
+            this.iframeDoc = this.getIframeDoc();
+            this.iframeDoc.designMode = 'on';
+            this.iframeDoc.addEventListener('paste', onImagePaste.bind(this));// 直接剪切板粘贴上传图片
+
+            new MutationObserver((mutationsList: MutationRecord[], observer: MutationObserver) => {// 监听DOM树变化
+                if (!this.isShowCode) {
+                    this.sourceEditor.value = this.getIframeDocBody().innerHTML;
+                    this.$emit('on-change', this.sourceEditor.value)
+                }
+
+            }).observe(this.getIframeDocBody(), { attributes: true, childList: true, subtree: true, characterData: true });
+
+            this.vModel && this.setIframeBody(this.vModel);
+            // this.sourceEditor.value && this.setIframeBody(this.sourceEditor.value);// 有内容
+
+        },
+        
         /**
          * 输入 HTML 内容
          * 
          * @param html 
          */
         setIframeBody(html: string): void {
-            if (this.iframeDoc && this.iframeDoc.body)
-                this.iframeDoc.body.innerHTML = html;
+            if (this.iframeEl.contentWindow) {// this.iframeDoc 要重新获取
+                // this.iframeEl.contentWindow.document.body.innerHTML =  this.iframeDoc.body.innerHTML = html;
+                this.getIframeDocBody().innerHTML = this.sourceEditor.value = html;
+            }
         },
 
         /**
@@ -59,7 +76,7 @@ export default {
         * @param encode     是否 URL 编码
         */
         getValue(cleanWord: boolean, encode: boolean): string {
-            let result: string = this.iframeDoc.body.innerHTML;
+            let result: string = this.getIframeDocBody().innerHTML;
 
             if (cleanWord)
                 result = cleanPaste(result);
@@ -93,7 +110,7 @@ export default {
          */
         cleanHTML(): void {
             // @ts-ignore
-            this.setIframeBody(HtmlSanitizer.SanitizeHtml(this.iframeDoc.body.innerHTML));
+            this.setIframeBody(HtmlSanitizer.SanitizeHtml(this.getIframeDocBody().innerHTML));
         },
 
         saveRemoteImage2Local(): void {
@@ -200,10 +217,14 @@ export default {
 
     watch: {
         vModel(newHtml: string, oldHtml: string): void {
+            // debugger
             // if (!html)
             //     html = '';
             if (!oldHtml) // 当没有值的时候输入，就是在初始化的时候（第一次）
                 this.setIframeBody(newHtml);
+
+            if (this.getIframeDoc().designMode === 'off')
+                this.initDocBody();
         },
 
         /**

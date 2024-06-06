@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class Resources {
     /**
-     * 获取 Classpath 根目录下的资源文件
+     * 获取 Classpath 根目录下的资源文件的路径
      *
      * @param resource 文件名称，输入空字符串这返回 Classpath 根目录
      * @param isDecode 是否解码
@@ -179,7 +179,7 @@ public class Resources {
     }
 
     /**
-     * 执行 OS  命令
+     * 执行 OS 命令
      *
      * @param cmd 命令
      * @param fn  回调函数

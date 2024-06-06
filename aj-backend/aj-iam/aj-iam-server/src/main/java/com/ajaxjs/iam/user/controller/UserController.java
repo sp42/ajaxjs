@@ -19,6 +19,23 @@ public interface UserController {
     User info(@PathVariable Long id);
 
     /**
+     * 获取用户详情（根据登录用户 Session）
+     *
+     * @return 用户详情
+     */
+    @GetMapping
+    User info();
+
+    /**
+     * 修改用户（根据登录用户 Session）
+     *
+     * @param user 用户详情
+     * @return 是否成功
+     */
+    @PostMapping("/update")
+    Boolean updateBySession(User user);
+
+    /**
      * 修改用户
      *
      * @param user 用户详情

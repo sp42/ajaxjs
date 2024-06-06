@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.ajaxjs</groupId>
+        <artifactId>ajaxjs-parent</artifactId>
+        <version>1.17</version>
+        <relativePath/>
+    </parent>
+
+    <artifactId>aj-nlp</artifactId>
+    <name>aj-nlp</name>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <description>A Simple NLP Library</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ajaxjs</groupId>
+            <artifactId>ajaxjs-net</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.33</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.7.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wltea</groupId>  <!--自定义-->
+            <artifactId>IKAnalyzer2012</artifactId>    <!--自定义-->
+            <version>1.0</version> <!--自定义-->
+            <scope>system</scope> <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
+            <systemPath>${basedir}/jar/IKAnalyzer2012.jar</systemPath> <!--项目根目录下的lib文件夹下，也可以是本机其它目录的绝对路径-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.wltea</groupId>  <!--自定义-->
+            <artifactId>lucene</artifactId>    <!--自定义-->
+            <version>1.0</version> <!--自定义-->
+            <scope>system</scope> <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
+            <systemPath>${basedir}/jar/lucene-core-3.6.0.jar</systemPath> <!--项目根目录下的lib文件夹下，也可以是本机其它目录的绝对路径-->
+        </dependency>
+    </dependencies>
+</project>

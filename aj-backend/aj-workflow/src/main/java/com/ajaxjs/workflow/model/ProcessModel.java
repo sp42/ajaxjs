@@ -96,11 +96,21 @@ public class ProcessModel extends BaseWfModel {
         return models;
     }
 
+    /**
+     * 递归构建模型列表。
+     * 从给定的 nextModels 开始，将所有未包含在 models 中的元素添加到 models 中，并递归地添加它们的后续模型。
+     *
+     * @param models     当前已构建的模型列表，初始时为空。
+     * @param nextModels 待添加到 models 中的新模型列表。
+     * @param clazz      模型的类类型，用于强制转换。
+     * @param <T>        模型的类型参数。
+     */
     private <T> void buildModels(List<T> models, List<T> nextModels, Class<T> clazz) {
+        // 遍历 nextModels，将未包含在 models 中的元素添加到 models 中
         for (T nextModel : nextModels) {
             if (!models.contains(nextModel)) {
                 models.add(nextModel);
-                buildModels(models, ((NodeModel) nextModel).getNextModels(clazz), clazz);
+                buildModels(models, ((NodeModel) nextModel).getNextModels(clazz), clazz);// 递归调用，为新添加的模型添加它们的后续模型
             }
         }
     }

@@ -5,7 +5,6 @@
 		<meta charset="UTF-8" />
 		<title>统一用户管理</title>
 		<%@ include file="../pages/common.jsp" %>
-		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" defer></script>
 		<style>
             html,
             body {
@@ -14,14 +13,7 @@
             }
 		</style>
 		<script>
-            window.onloadTurnstileCallback = function () {
-                turnstile.render('#captcha-el', {
-                    sitekey: '0x4AAAAAAAA2NqTaXauncxkr',
-                    callback: function(token) {
-                        console.log(`Challenge Success ${token}`);
-                    },
-                });
-            };
+
         </script>
 	</head>
 

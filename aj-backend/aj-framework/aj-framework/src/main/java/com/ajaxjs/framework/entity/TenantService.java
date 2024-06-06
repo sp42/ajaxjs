@@ -2,10 +2,15 @@ package com.ajaxjs.framework.entity;
 
 import com.ajaxjs.framework.spring.DiContextUtil;
 import com.ajaxjs.util.TestHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * 租户管理
@@ -46,9 +51,21 @@ public class TenantService {
             Integer tenantId = Integer.parseInt(tenantIdStr);
             request.setAttribute(AUTH_TENANT_ID, tenantId);
 
+            checkUserPrivilegeOfTenant(request, tenantId);
+
             return tenantId;
         } else
-            return null;
+            return BaseCRUD.getCurrentUserTenantId();// 从用户获取，一般在后台操作时候会这样。也有可能最终找不到，为 null
+    }
+
+    private static void checkUserPrivilegeOfTenant(HttpServletRequest request, Integer tenantId) {
+        Integer userTenantId = BaseCRUD.getCurrentUserTenantId();
+
+        if (userTenantId == null || userTenantId == 0) // 没设租户 id，则是管理员，可访问所有租户
+            return;
+
+        if (!Objects.equals(tenantId, userTenantId))
+            throw new SecurityException("当前用户租户 id 为 " + userTenantId + ", 不能越权访问");
     }
 
     /**

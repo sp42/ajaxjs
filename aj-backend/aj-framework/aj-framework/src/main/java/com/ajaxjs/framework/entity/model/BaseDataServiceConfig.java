@@ -81,6 +81,11 @@ public class BaseDataServiceConfig {
     private boolean isTenantIsolation;
 
     /**
+     * 当前用户的约束
+     */
+    private boolean isCurrentUserOnly;
+
+    /**
      * 删除字段名称
      */
     private String delField = "is_deleted";

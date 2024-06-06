@@ -108,7 +108,11 @@ public class DateUtilTag extends SimpleTagSupport {
             if (str.isEmpty())
                 return null;
 
+
             try {
+                if (str.indexOf("T") != 1)
+                    return simpleDateFormatFactory("yyyy-MM-dd'T'HH:mm:ss").parse(str);
+                
                 if (DATE_PATTERN.matcher(str).matches())
                     return simpleDateFormatFactory(DATE_FORMAT).parse(str);
                 else if (DATE_YEAR_PATTERN.matcher(str).matches())

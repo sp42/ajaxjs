@@ -3,6 +3,7 @@ import { xhr_get, xhr_post, xhr_put } from "../../util/xhr";
 import { prepareRequest } from "../widget/data-binding";
 import { findNode } from "./form-factory";
 import { dateFormat } from '../../util/utils';
+import List from "../widget/list";
 
 export default {
     components: { FromRenderer },
@@ -21,7 +22,7 @@ export default {
             oldJson: null                       // JSON Based 下的旧 JSON 完整数据。因为 data 只有部分
         };
     },
-    mounted() {
+    mounted(): void {
         this.load();
     },
     methods: {
@@ -41,9 +42,7 @@ export default {
             let callback = (j: RepsonseResult) => {
                 if (j.status) {
                     this.$Message.success(j.message);
-                    setTimeout(() => {
-                        location.hash = location.hash + '&entityId=' + j.newlyId;
-                    }, 2000);
+                    setTimeout(() => location.hash = location.hash + '&entityId=' + j.data, 2000);
                 } else
                     this.$Message.error(j.message || '创建失败，原因未知！');
             };
@@ -66,6 +65,7 @@ export default {
 
             deleteFieldIfNull(r.params);
             date2str(r.params);
+            r.params = List.copyBeanClean(r.params);
 
             return r;
         },
@@ -88,9 +88,7 @@ export default {
 
                 xhr_post(r.url, (j: RepsonseResult) => {
                     console.log(j)
-                }, json, {
-                    contentType: 'application/json'
-                });
+                }, json, { contentType: 'application/json' });
             } else {
                 let r: ManagedRequest = this._initParams(api, this.$refs.FromRenderer.data, this);
 
@@ -116,14 +114,14 @@ export default {
                 return;
             }
 
-            let entityId: string = this.$route.query.entityId;
-            if (entityId)
-                this.entityId = entityId;
+            this.entityId = this.$route.query.entityId;;
 
             if (this.entityId)          // 有 id 表示修改状态
                 this.status = 2;
-            else
+            else {
                 this.status = 1;
+                this.$refs.FromRenderer.data = {};
+            }
 
             xhr_get(`${window["config"].dsApiRoot}/common_api/widget_config/${this.formId}`,
                 (j: RepsonseResult) => {
@@ -150,9 +148,9 @@ export default {
                             if (this.entityId) {// 加载单笔内容
 
                                 this.$refs.FromRenderer.data = {};
-                                let r: ManagedRequest = prepareRequest.call(this, dataBinding, { id: this.entityId });
+                                let r: ManagedRequest = prepareRequest.call(this, dataBinding/* , { id: this.entityId } */);
 
-                                xhr_get(`${r.url}`, (j: RepsonseResult) => {
+                                xhr_get(`${r.url}/${this.entityId}`, (j: RepsonseResult) => {
                                     if (isJsonBased) {
                                         this.$refs.FromRenderer.data = j;
                                         this.$refs.FromRenderer.$forceUpdate();
@@ -164,7 +162,7 @@ export default {
                                             this.$refs.FromRenderer.$forceUpdate();
                                         } else this.$Message.warning("获取单笔内容失败");
                                     }
-                                }, r.params);
+                                }/* , r.params */);
                             }
                         }
                     } else this.$Message.error("获取表单配置失败");
@@ -194,7 +192,7 @@ function deleteFieldIfNull(params: any): void {
 function date2str(params: any): void {
     for (let i in params) {
         let v = params[i];
-        
+
         if (v instanceof Date)
             params[i] = dateFormat.call(v, 'yyyy-MM-dd hh:mm:ss');
     }

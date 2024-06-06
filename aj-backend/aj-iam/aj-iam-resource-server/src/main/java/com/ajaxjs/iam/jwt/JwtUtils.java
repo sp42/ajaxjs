@@ -8,7 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Random;
@@ -89,5 +91,20 @@ public class JwtUtils {
      */
     public static long setExpire(int hours) {
         return LocalDateTime.now().plus(hours, ChronoUnit.HOURS).toEpochSecond(ZoneOffset.UTC);
+    }
+
+    /**
+     * EpochSecond 时间戳转换为真实的时间
+     *
+     * @return 真实的时间
+     */
+    public static String toRealTime(long timestamp) {
+        ZoneId zoneId = ZoneId.of("Asia/Shanghai");
+        LocalDateTime localDateTime = java.time.Instant.ofEpochSecond(timestamp).atZone(zoneId).toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = formatter.format(localDateTime);
+        System.out.println("formattedTime: " + formattedTime);
+
+        return formattedTime;
     }
 }

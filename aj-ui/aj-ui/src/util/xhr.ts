@@ -32,6 +32,23 @@ export function setBaseHeadParams(params: any): void {
 }
 
 /**
+ * 全局请求的 QueryString 参数
+ */
+let BASE_QUERY_STRING = null;
+
+/**
+ * 设置全局请求的 QueryString 参数
+ *
+ * @param param
+ */
+export function setBaseQueryString(params: any): void {
+    if (BASE_QUERY_STRING === null)
+        BASE_QUERY_STRING = {};
+
+    Object.assign(BASE_QUERY_STRING, params);
+}
+
+/**
  * 
  * @param getOrDel 
  * @param url 
@@ -42,12 +59,7 @@ export function setBaseHeadParams(params: any): void {
 function getOrDel(getOrDel: 'get' | 'delete', url: string, cb: XhrCallback, params?: {}, cfg: XhrConfig = DEFAULT_XHR_CFG): void {
     let xhr: XMLHttpRequest = initXhr(cfg);
 
-    if (params != null) {
-        if (url.indexOf('?') != -1)
-            url += '&' + toParams(params);
-        else
-            url += '?' + toParams(params);
-    }
+    url = setQueryString(params, url);
 
     xhr.open(getOrDel.toUpperCase(), url, true);
     xhr.onreadystatechange = function () {
@@ -63,12 +75,29 @@ function getOrDel(getOrDel: 'get' | 'delete', url: string, cb: XhrCallback, para
     xhr.send();
 }
 
-function setAuthHeader(xhr: XMLHttpRequest) {
+function setQueryString(params: any, url: string): string {
+    if (!params)
+        params = {};
+
+    if (BASE_QUERY_STRING)// 设置自定义 QueryString
+        Object.assign(params, BASE_QUERY_STRING);
+
+    if (Object.keys(params).length) {
+        if (url.indexOf('?') != -1)
+            url += '&' + toParams(params);
+        else
+            url += '?' + toParams(params);
+    }
+
+    return url;
+}
+
+function setAuthHeader(xhr: XMLHttpRequest): void {
     const token: string = localStorage.getItem("accessToken");
 
     if (token) {
-        const json = JSON.parse(token);
-        xhr.setRequestHeader("Authorization", "Bearer " + json.id_token);
+        // const json = JSON.parse(token);
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
     }
 }
 
@@ -81,6 +110,13 @@ function setAuthHeader(xhr: XMLHttpRequest) {
  * @param cfg 
  */
 function postOrPut(method: 'post' | 'put', url: string, cb: XhrCallback, params: string | {}, cfg: XhrConfig = DEFAULT_XHR_CFG): void {
+    if (BASE_QUERY_STRING) {// 设置自定义 QueryString
+        if (url.indexOf('?') != -1)
+            url += '&' + toParams(BASE_QUERY_STRING);
+        else
+            url += '?' + toParams(BASE_QUERY_STRING);
+    }
+
     let xhr: XMLHttpRequest = initXhr(cfg);
     xhr.open(method, url, true);
     xhr.onreadystatechange = function () {
@@ -227,7 +263,7 @@ function errHandle(xhr: XMLHttpRequest): void {
 
         if (loginUrl && xhr.status === 403 && confirm('token 已失效，是否跳到重新登录？')) {
             location.assign(loginUrl);
-        } if(r.message) 
+        } if (r.message)
             console.error(r.message);
         else
             r.error_description && console.error(msg, r.error_description);

@@ -164,6 +164,7 @@ export default {
                 }
             });
 
+            this.$refs.renderer.list.pageNo = 1; // 复位分页
             this.$refs.renderer.getData(); // 手动加载数据
         }
     }

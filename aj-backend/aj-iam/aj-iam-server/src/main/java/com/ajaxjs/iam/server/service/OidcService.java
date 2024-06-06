@@ -28,6 +28,10 @@ public class OidcService extends OAuthCommon implements OidcController {
     @Autowired(required = false)
     Cache<String, Object> cache;
 
+    public Cache<String, Object> getCache() {
+        return cache;
+    }
+
     @Autowired
     JWebTokenMgr jWebTokenMgr;
 

@@ -2,6 +2,7 @@ package com.ajaxjs.iam.resource_server;
 
 import com.ajaxjs.iam.jwt.JWebToken;
 import com.ajaxjs.iam.jwt.JWebTokenMgr;
+import com.ajaxjs.iam.model.SimpleUser;
 import org.junit.Test;
 
 public class TestUserInterceptor {

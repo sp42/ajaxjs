@@ -58,10 +58,22 @@ public class StreamHelper {
         return result.toString();
     }
 
+    /**
+     * 从输入流中读取数据，并对每行数据应用提供的消费函数。
+     *
+     * @param in 输入流，从中读取数据。
+     * @param fn 消费函数，用于处理读取到的每行数据。
+     */
     public static void read(InputStream in, Consumer<String> fn) {
         read(new InputStreamReader(in, StandardCharsets.UTF_8), fn);
     }
 
+    /**
+     * 从 InputStreamReader 中读取数据，并逐行消费。
+     *
+     * @param inReader 输入流读取器，用于读取数据。
+     * @param fn       消费函数，接收一行数据作为参数，对每行数据进行处理。
+     */
     public static void read(InputStreamReader inReader, Consumer<String> fn) {
         try (
                 /*
@@ -264,6 +276,27 @@ public class StreamHelper {
     }
 
     /**
+     * 将16进制转换为二进制
+     *
+     * @param hexStr 16进制字符串
+     * @return 二进制数组
+     */
+    public static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1) return null;
+        byte[] result = new byte[hexStr.length() / 2];
+
+        for (int i = 0; i < hexStr.length() / 2; i++) {
+            // 获取高位和低位的16进制数
+            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
+            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
+            // 计算二进制数
+            result[i] = (byte) (high * 16 + low);
+        }
+
+        return result;
+    }
+
+    /**
      * char 数组转 byte 数组
      * 将char数组转换为byte数组需要考虑编码方式的问题
      * <a href="https://houbb.github.io/2023/06/05/java-perf-02-chars-to-bytes">...</a>
@@ -275,5 +308,4 @@ public class StreamHelper {
 
         return bytes;
     }
-
 }

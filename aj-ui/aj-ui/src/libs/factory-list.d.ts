@@ -55,7 +55,7 @@ declare type TableColumn = BaseCol & {
     /**
      * 渲染器
      */
-    render?: 'raw' | 'link' | 'link_http' | 'thumb' | 'email' | 'date' | 'short_date' | 'long_date' | 'sex' | 'render' | 'clk_event';
+    render?: 'raw' | 'link' | 'link_http' | 'thumb' | 'email' | 'date' | 'short_date' | 'long_date' | 'sex' | 'render' | 'clk_event' | 'stat';
 
     /**
      * true = 不换行，一行

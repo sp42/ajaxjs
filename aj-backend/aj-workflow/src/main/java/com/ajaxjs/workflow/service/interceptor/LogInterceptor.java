@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LogInterceptor implements WorkflowInterceptor {
     /**
      * 拦截产生的任务对象，打印日志
+     *
+     * @param exec 任务执行的上下文对象，包含多个任务信息
      */
     @Override
     public void intercept(Execution exec) {

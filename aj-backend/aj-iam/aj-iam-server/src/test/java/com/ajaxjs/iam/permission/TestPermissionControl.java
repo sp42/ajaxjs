@@ -23,7 +23,6 @@ public class TestPermissionControl {
         String binaryString = Long.toBinaryString(value);
         System.out.println(binaryString);
 
-
         System.out.println("1001001100101100000001011010010".length());
     }
 
