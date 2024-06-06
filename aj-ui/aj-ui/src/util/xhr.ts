@@ -227,7 +227,9 @@ function errHandle(xhr: XMLHttpRequest): void {
 
         if (loginUrl && xhr.status === 403 && confirm('token 已失效，是否跳到重新登录？')) {
             location.assign(loginUrl);
-        } else
+        } if(r.message) 
+            console.error(r.message);
+        else
             r.error_description && console.error(msg, r.error_description);
     } else
         console.error(msg, respText);

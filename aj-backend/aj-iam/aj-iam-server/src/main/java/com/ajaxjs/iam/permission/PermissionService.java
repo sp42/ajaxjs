@@ -8,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PermissionService implements PermissionController {
@@ -45,7 +46,7 @@ public class PermissionService implements PermissionController {
         List<Permission> allPermissionList = CRUD.list(Permission.class, "SELECT * FROM per_permission WHERE stat = 0 ORDER BY id ASC");
 
         List<Permission> result = new ArrayList<>();
-        getPermissionList(result, allPermissionList, permissionValue, false);
+        getPermissionList(result, allPermissionList, permissionValue, false, null);
 
         // find parents
         if (role.getIsInheritedParent()) {
@@ -61,20 +62,30 @@ public class PermissionService implements PermissionController {
 
             if (!CollectionUtils.isEmpty(parentRoles)) {
                 for (Role r : parentRoles)
-                    getPermissionList(result, allPermissionList, r.getPermissionValue(), true);
+                    getPermissionList(result, allPermissionList, r.getPermissionValue(), true, r.getName());
             }
         }
 
-        return result;
+        return removeDuplicates(result);
     }
 
-    private void getPermissionList(List<Permission> result, List<Permission> allPermissionList, Long permissionValue, boolean isInherited) {
+    // 去重
+    private static List<Permission> removeDuplicates(List<Permission> list) {
+        return list.stream().collect(Collectors.collectingAndThen(
+                Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(Permission::getId))),
+                ArrayList::new
+        ));
+    }
+
+    private void getPermissionList(List<Permission> result, List<Permission> allPermissionList, Long permissionValue, boolean isInherited, String roleName) {
         int i = 0;
 
         for (Permission p : allPermissionList) {
             if (PermissionControl.check(permissionValue, i++)) {
-                if (isInherited)
+                if (isInherited) {
                     p.setIsInherit(true);
+                    p.setRoleName(roleName);
+                }
 
                 result.add(p);
             }

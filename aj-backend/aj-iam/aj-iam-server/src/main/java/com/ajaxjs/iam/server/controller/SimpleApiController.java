@@ -23,9 +23,9 @@ public class SimpleApiController extends BaseCRUDService implements BaseCRUDCont
         namespaces.put("permission", permission);
 
         BaseCRUD<Map<String, Object>, Long> role = new BaseCRUD<>();
-        permission.setTableName("per_role");
-        permission.setHasIsDeleted(true);
-        permission.setDelField("stat");
-        namespaces.put("role", permission);
+        role.setTableName("per_role");
+        role.setHasIsDeleted(true);
+        role.setDelField("stat");
+        namespaces.put("role", role);
     }
 }

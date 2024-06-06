@@ -91,7 +91,7 @@ export default {
 
         onTreeNodeClk(nodeArr: any[], node: any): void {
             // debugger
-            this.currentRole = { name: node.title };
+            this.currentRole = { name: node.title, id: node.id };
         }
     }
 }
