@@ -45,6 +45,7 @@ function getLoginInfo(loginUrl) {
 
     return payload;
 }
+
 // 后台服务登录地址，由 AJ-IAM SDK 提供的接口
 let loginUrl = 'http://localhost:8302/user/login?web_url=http://127.0.0.1:8080/dev-plat/';
 

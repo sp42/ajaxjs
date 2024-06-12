@@ -39,8 +39,7 @@ public class OidcService extends OAuthCommon implements OidcController {
     int jwtExpireHours;
 
     @Override
-    public void authorization(String responseType, String clientId, String redirectUri, String scope, String state,
-                              String webUrl, HttpServletRequest req, HttpServletResponse resp) {
+    public void authorization(String responseType, String clientId, String redirectUri, String scope, String state, String webUrl, HttpServletRequest req, HttpServletResponse resp) {
         sendAuthCode(responseType, clientId, redirectUri, scope, state, webUrl, req, resp, cache);
     }
 

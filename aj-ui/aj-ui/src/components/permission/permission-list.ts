@@ -92,7 +92,7 @@ export default {
             this.isCreate = false;
 
             xhr_get(`${this.simpleApi}/permission/${id}`, (j: RepsonseResult) => {
-                if (j.status) 
+                if (j.status)
                     this.permissionData = j.data;
             });
         },

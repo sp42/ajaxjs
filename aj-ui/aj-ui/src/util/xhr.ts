@@ -38,8 +38,8 @@ let BASE_QUERY_STRING = null;
 
 /**
  * 设置全局请求的 QueryString 参数
- * 
- * @param param 
+ *
+ * @param param
  */
 export function setBaseQueryString(params: any): void {
     if (BASE_QUERY_STRING === null)

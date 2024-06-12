@@ -29,7 +29,7 @@
       </div>
 
       <div class="right">
-        <p style="text-indent:2em;">你可以维护角色的权限，可以给角色分配权限，也可以给角色分配子角色。一个角色对应多个权限；角色可以继承，拥有父级的所有权限。
+        <p style="text-indent:2em;">---你可以维护角色的权限，可以给角色分配权限，也可以给角色分配子角色。一个角色对应多个权限；角色可以继承，拥有父级的所有权限。
         </p>
         <fieldset class="panel">
           <legend>继承的父级权限：</legend>

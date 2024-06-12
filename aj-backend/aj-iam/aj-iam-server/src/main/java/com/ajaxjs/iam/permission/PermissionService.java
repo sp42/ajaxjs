@@ -197,8 +197,9 @@ public class PermissionService implements PermissionController {
             if (_children != null) {
                 List<Map<String, Object>> children = (List<Map<String, Object>>) _children;
 
-                if (children.size() > 0)
+                if (children.size() > 0) {
                     iViewMap.put("children", transformToTreeStructure(children));
+                }
             }
 
             iView.add(iViewMap);
